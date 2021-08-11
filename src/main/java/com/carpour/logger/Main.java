@@ -15,7 +15,6 @@ public class Main extends JavaPlugin {
 
     private static Main instance;
 
-//    private Database db;
     public FileHandler FH;
     public MySQL SQL;
     public MySQLData Data;
@@ -36,9 +35,6 @@ public class Main extends JavaPlugin {
         DiscordFile.save();
         discord = new Discord();
         discord.run();
-
-//        this.db = new SQLite(this);
-//        this.db.load();
 
         if (getConfig().getBoolean("MySQL.Enable")) {
             SQL = new MySQL();
