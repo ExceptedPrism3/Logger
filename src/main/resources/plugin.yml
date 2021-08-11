@@ -1,0 +1,23 @@
+name: Logger
+version: ${project.version}
+main: com.carpour.logger.Main
+api-version: 1.16
+authors: [ Prism3 ]
+description: Log all Activities from Commands, Chat, Player Join, Player Leave, Player Death and even Server's RAM, TPS and Much More!
+commands:
+  logger:
+    description: Plugin Command.
+  logger reload:
+    description: Reloads the plugin Configs.
+permissions:
+  logger.reload:
+    description: Allows to Reload the Plugin.
+    default: op
+  logger.staff:
+    description: Logs Staff Members.
+  logger.exempt:
+    description: Prevents the Player from Getting Logged.
+    default: op
+  logger.cmdspy:
+    description: Ability to see other player's Commands.
+    default: op
