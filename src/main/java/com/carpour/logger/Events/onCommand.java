@@ -45,6 +45,20 @@ public class onCommand implements Listener {
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Commands"))){
 
+            /*if (main.getConfig().getBoolean("Player-Commands.Specific-Commands")){
+
+                for (String m : main.getConfig().getStringList("Player-Commands.Commands")){
+
+                    if (msg2.contains(m)){
+
+
+
+                    }
+
+                }
+
+            }*/
+
             if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")){
 
                 for (String m : main.getConfig().getStringList("Player-Commands.Commands-to-Log")) {

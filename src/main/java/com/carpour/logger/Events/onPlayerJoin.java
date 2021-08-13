@@ -38,13 +38,15 @@ public class onPlayerJoin implements Listener {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (player.hasPermission("logger.exempt")){ return; }
+        if (player.hasPermission("logger.exempt")) return;
 
-            if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Join"))) {
+        if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Join"))) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")) {
 
-                    Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false, Color.red );
+                if (main.getConfig().getBoolean("Player-Join.Player-IP")) {
+
+                    Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false, Color.red);
 
                     try {
 
@@ -65,12 +67,40 @@ public class onPlayerJoin implements Listener {
                         e.printStackTrace();
 
                     }
+                } else
+                {
 
-                    return;
+                    Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
+
+                    try {
+
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                        out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has logged in at X = " + x + " Y = " + y + " Z = " + z + "\n");
+                        out.close();
+
+                        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Join")) && (main.sql.isConnected())) {
+
+                            assert ip != null;
+                            MySQLData.playerJoin(serverName, worldName, playerName, x, y, z, ip, true);
+
+                        }
+
+                    } catch (IOException e) {
+
+                        System.out.println("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
+
+                    }
 
                 }
 
-                Discord.playerJoin(player, "\uD83D\uDC4B [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false, Color.red );
+                return;
+
+            }
+
+            if (main.getConfig().getBoolean("Player-Join.Player-IP")) {
+
+                Discord.playerJoin(player, "\uD83D\uDC4B [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false, Color.red);
 
                 try {
 
@@ -84,8 +114,27 @@ public class onPlayerJoin implements Listener {
                     e.printStackTrace();
 
                 }
+            } else
+            {
+
+                Discord.playerJoin(player, "\uD83D\uDC4B [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
+
+                try {
+
+                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerJoinLogFile(), true));
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has logged in at X = " + x + " Y = " + y + " Z = " + z + "\n");
+                    out.close();
+
+                } catch (IOException e) {
+
+                    System.out.println("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
+
+                }
 
             }
+
+        }
 
         if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Join")) && (main.sql.isConnected())){
 
