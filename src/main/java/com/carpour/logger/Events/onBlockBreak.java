@@ -35,7 +35,6 @@ public class onBlockBreak implements Listener {
         String blockname;
         blockname = event.getBlock().getType().toString();
         blockname = blockname.replaceAll("_", " ");
-        String staff = "false";
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -56,9 +55,8 @@ public class onBlockBreak implements Listener {
 
                     if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Block-Break")) && (main.SQL.isConnected())) {
 
-                        staff = "true";
 
-                        MySQLData.blockBreak(serverName, worldname, playername, blockname, x, y, z, staff);
+                        MySQLData.blockBreak(serverName, worldname, playername, blockname, x, y, z, true);
 
                     }
 
@@ -93,7 +91,7 @@ public class onBlockBreak implements Listener {
 
             try {
 
-                MySQLData.blockBreak(serverName, worldname, playername, blockname, x, y, z, staff);
+                MySQLData.blockBreak(serverName, worldname, playername, blockname, x, y, z, false);
 
             }catch (Exception e){
 

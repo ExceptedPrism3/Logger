@@ -29,7 +29,6 @@ public class onPlayerLevel implements Listener {
         String playername = player.getName();
         int Level = main.getConfig().getInt("Player-Level.Log-Above");
         double plevel = event.getNewLevel();
-        String staff = "false";
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -52,8 +51,7 @@ public class onPlayerLevel implements Listener {
 
                         if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Level")) && (main.SQL.isConnected())) {
 
-                            staff = "true";
-                            MySQLData.levelChange(serverName, playername, staff);
+                            MySQLData.levelChange(serverName, playername,true);
 
                         }
 
@@ -95,7 +93,7 @@ public class onPlayerLevel implements Listener {
 
                 try {
 
-                    MySQLData.levelChange(serverName, playername, staff);
+                    MySQLData.levelChange(serverName, playername, false);
 
                 } catch (Exception e) {
 

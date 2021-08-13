@@ -37,7 +37,7 @@ public class onPlayerTeleport implements Listener {
         double ox = Math.floor(player.getLocation().getX());
         double oy = Math.floor(player.getLocation().getY());
         double oz = Math.floor(player.getLocation().getZ());
-        String staff = "false";
+
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -58,8 +58,8 @@ public class onPlayerTeleport implements Listener {
 
                     if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Teleport")) && (main.SQL.isConnected())) {
 
-                        staff = "true";
-                        MySQLData.playerTeleport(serverName, worldname, playername, ox, oy, oz, tx, ty, tz, staff);
+
+                        MySQLData.playerTeleport(serverName, worldname, playername, ox, oy, oz, tx, ty, tz, true);
 
                     }
 
@@ -95,7 +95,7 @@ public class onPlayerTeleport implements Listener {
 
             try {
 
-                MySQLData.playerTeleport(serverName, worldname, playername, ox, oy, oz, tx, ty, tz, staff);
+                MySQLData.playerTeleport(serverName, worldname, playername, ox, oy, oz, tx, ty, tz, false);
 
             }catch (Exception e){
 

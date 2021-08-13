@@ -34,7 +34,6 @@ public class onPlayerJoin implements Listener {
         double x = player.getLocation().getBlockX();
         double y = player.getLocation().getBlockY();
         double z = player.getLocation().getBlockZ();
-        String staff = "false";
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -55,9 +54,8 @@ public class onPlayerJoin implements Listener {
 
                         if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Join")) && (main.SQL.isConnected())) {
 
-                            staff = "true";
                             assert ip != null;
-                            MySQLData.playerJoin(serverName, worldname, playername, x, y, z, ip, staff);
+                            MySQLData.playerJoin(serverName, worldname, playername, x, y, z, ip, true);
 
                         }
 
@@ -94,7 +92,7 @@ public class onPlayerJoin implements Listener {
             try {
 
                 assert ip != null;
-                MySQLData.playerJoin(serverName, worldname, playername, x, y, z, ip, staff);
+                MySQLData.playerJoin(serverName, worldname, playername, x, y, z, ip, false);
 
             }catch (Exception e) {
 

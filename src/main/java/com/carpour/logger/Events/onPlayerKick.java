@@ -32,7 +32,6 @@ public class onPlayerKick implements Listener {
         double x = Math.floor(player.getLocation().getX());
         double y = Math.floor(player.getLocation().getY());
         double z = Math.floor(player.getLocation().getZ());
-        String staff = "false";
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -53,8 +52,7 @@ public class onPlayerKick implements Listener {
 
                     if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Kick")) && (main.SQL.isConnected())) {
 
-                        staff = "true";
-                        MySQLData.playerKick(serverName, worldname, playername, x, y, z, reason, staff);
+                        MySQLData.playerKick(serverName, worldname, playername, x, y, z, reason, true);
 
                     }
 
@@ -90,7 +88,7 @@ public class onPlayerKick implements Listener {
 
             try {
 
-                MySQLData.playerKick(serverName, worldname, playername, x, y, z, reason, staff);
+                MySQLData.playerKick(serverName, worldname, playername, x, y, z, reason, false);
 
             }catch (Exception e){
 

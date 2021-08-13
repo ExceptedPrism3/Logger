@@ -37,7 +37,6 @@ public class onBlockPlace implements Listener {
         String blockname;
         blockname = event.getBlock().getType().toString();
         blockname = blockname.replaceAll("_", " ");
-        String staff = "false";
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -58,9 +57,8 @@ public class onBlockPlace implements Listener {
 
                     if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Block-Place")) && (main.SQL.isConnected())) {
 
-                        staff = "true";
 
-                        MySQLData.blockPlace(serverName, worldname, playername, blockname, x, y, z, staff);
+                        MySQLData.blockPlace(serverName, worldname, playername, blockname, x, y, z, true);
 
                     }
 
@@ -95,7 +93,7 @@ public class onBlockPlace implements Listener {
 
             try {
 
-                MySQLData.blockPlace(serverName, worldname, playername, blockname, x, y, z, staff);
+                MySQLData.blockPlace(serverName, worldname, playername, blockname, x, y, z, false);
 
             }catch (Exception e){
 

@@ -31,7 +31,6 @@ public class onAnvil implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
 
         Player playero = (Player) event.getWhoClicked();
-        String staff = "false";
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -78,9 +77,8 @@ public class onAnvil implements Listener {
 
                                                 if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Anvil")) && (main.SQL.isConnected())) {
 
-                                                    staff = "true";
 
-                                                    MySQLData.anvil(serverName, playername, displayName, staff);
+                                                    MySQLData.anvil(serverName, playername, displayName, true);
 
                                                 }
 
@@ -116,7 +114,7 @@ public class onAnvil implements Listener {
 
                                             try {
 
-                                                MySQLData.anvil(serverName, playername, displayName, staff);
+                                                MySQLData.anvil(serverName, playername, displayName, false);
 
                                             } catch (Exception e) {
 

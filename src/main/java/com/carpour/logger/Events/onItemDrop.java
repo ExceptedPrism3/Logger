@@ -31,7 +31,6 @@ public class onItemDrop implements Listener {
         final String worldname = world.getName();
         final String playername = player.getName();
         String item = event.getItemDrop().getName();
-        String staff = "false";
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -52,8 +51,7 @@ public class onItemDrop implements Listener {
 
                     if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Item-Drop")) && (main.SQL.isConnected())) {
 
-                        staff = "true";
-                        MySQLData.itemDrop(serverName, worldname, playername, item, staff);
+                        MySQLData.itemDrop(serverName, worldname, playername, item, true);
 
                     }
 
@@ -88,7 +86,7 @@ public class onItemDrop implements Listener {
 
             try {
 
-                MySQLData.itemDrop(serverName, worldname, playername, item, staff);
+                MySQLData.itemDrop(serverName, worldname, playername, item, false);
 
             }catch (Exception e){
 

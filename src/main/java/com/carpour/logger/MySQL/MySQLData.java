@@ -23,55 +23,55 @@ public class MySQLData {
         try {
 
             playerChat = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Chat "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Message VARCHAR(200),Is_Staff VARCHAR(5),PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Message VARCHAR(200),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             playerCommands = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Commands "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Command VARCHAR(50),Is_Staff VARCHAR(5),PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Command VARCHAR(50),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             consoleCommands = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Console_Commands "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Command VARCHAR(50),PRIMARY KEY (Date))");
 
             playerSignText = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Sign_Text "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),X INT(50),Y INT(50),Z INT(50),Playername VARCHAR(100),Line VARCHAR(60),Is_Staff VARCHAR(5),PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),X INT,Y INT,Z INT,Playername VARCHAR(100),Line VARCHAR(60),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             playerDeath = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Death "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT(50),Y INT(50),Z INT(50),Is_Staff VARCHAR(5),PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             playerTeleport = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Teleport "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),From_X INT(50),From_Y INT(50),From_Z INT(50),To_X INT(50),To_Y INT(50),To_Z INT(50),Is_Staff VARCHAR(5),PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),From_X INT,From_Y INT,From_Z INT,To_X INT,To_Y INT,To_Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             playerJoin = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Join "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT(50),Y INT(50),Z INT(50),IP VARCHAR(50),Is_Staff VARCHAR(5),PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT,Y INT,Z INT,IP INT UNSIGNED,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             playerLeave = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Leave "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT(50),Y INT(50),Z INT(50),Is_Staff VARCHAR(5),PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             blockPlace = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Block_Place "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Block VARCHAR(40),X INT(50),Y INT(50),Z INT(50),Is_Staff VARCHAR(5),PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Block VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             blockBreak = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Block_Break "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Block VARCHAR(40),X INT(50),Y INT(50),Z INT(50),Is_Staff VARCHAR(5),PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Block VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             TPS = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS TPS "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),TPS INT(20),PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),TPS INT,PRIMARY KEY (Date))");
 
             RAM = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS RAM "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Total_Memory INT(100),Used_Memory INT(100),Free_Memory INT(100),PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Total_Memory INT,Used_Memory INT,Free_Memory INT,PRIMARY KEY (Date))");
 
             playerKick = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Kick "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT(50),Y INT(50),Z INT(50),Reason VARCHAR(50),Is_Staff VARCHAR(5),PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT,Y INT,Z INT,Reason VARCHAR(50),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             portalCreation = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Portal_Creation "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Caused_By VARCHAR(50),PRIMARY KEY (Date))");
 
             playerLevel = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Level "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Playername VARCHAR(100),Is_Staff VARCHAR(5),PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Playername VARCHAR(100),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             bucketPlace = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Bucket_Place "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Bucket VARCHAR(40),X INT(50),Y INT(50),Z INT(50),Is_Staff VARCHAR(5),PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Bucket VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             anvil = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Anvil "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Playername VARCHAR(100),New_name VARCHAR(100),Is_Staff VARCHAR(5),PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Playername VARCHAR(100),New_name VARCHAR(100),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             serverStart = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Server_Start "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),PRIMARY KEY (Date))");
@@ -80,10 +80,10 @@ public class MySQLData {
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),PRIMARY KEY (Date))");
 
             itemDrop = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Item_Drop "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Item VARCHAR(50),Is_Staff VARCHAR(5),PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Item VARCHAR(50),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             enchant = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Enchanting "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT(50),Y INT(50),Z INT(50),Enchantment VARCHAR(50),Item VARCHAR(50),Cost INT(5),Is_Staff VARCHAR(5),PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT(50),Y INT(50),Z INT(50),Enchantment VARCHAR(50),Item VARCHAR(50),Cost INT(5),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             playerChat.executeUpdate();
             playerCommands.executeUpdate();
@@ -115,7 +115,7 @@ public class MySQLData {
 
     }
 
-    public static void playerChat(String serverName, String worldname, String playername, String msg, String staff){
+    public static void playerChat(String serverName, String worldname, String playername, String msg, boolean staff){
         try {
             String database = "Player_Chat";
             PreparedStatement Player_Chat = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Message,Is_Staff) VALUES(?,?,?,?,?)");
@@ -123,7 +123,7 @@ public class MySQLData {
             Player_Chat.setString(2, worldname);
             Player_Chat.setString(3, playername);
             Player_Chat.setString(4, msg);
-            Player_Chat.setString(5, staff);
+            Player_Chat.setBoolean(5, staff);
             Player_Chat.executeUpdate();
 
         } catch (SQLException e){
@@ -131,7 +131,7 @@ public class MySQLData {
         }
     }
 
-    public static void playerCommands(String serverName, String worldname, String playername, String msg, String staff){
+    public static void playerCommands(String serverName, String worldname, String playername, String msg, boolean staff){
         try {
             String database = "Player_Commands";
             PreparedStatement Player_Commands = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Command,Is_Staff) VALUES(?,?,?,?,?)");
@@ -139,7 +139,7 @@ public class MySQLData {
             Player_Commands.setString(2, worldname);
             Player_Commands.setString(3, playername);
             Player_Commands.setString(4, msg);
-            Player_Commands.setString(5, staff);
+            Player_Commands.setBoolean(5, staff);
             Player_Commands.executeUpdate();
 
         } catch (SQLException e){
@@ -160,7 +160,7 @@ public class MySQLData {
         }
     }
 
-    public static void playerSignText(String serverName, String worldname, double x, double y, double z, String playername, String Lines, String staff){
+    public static void playerSignText(String serverName, String worldname, double x, double y, double z, String playername, String Lines, boolean staff){
         try {
             String database = "Player_Sign_Text";
             PreparedStatement Player_Sign_Text = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,X,Y,Z,Playername,Line,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
@@ -171,7 +171,7 @@ public class MySQLData {
             Player_Sign_Text.setDouble(5, z);
             Player_Sign_Text.setString(6, playername);
             Player_Sign_Text.setString(7, Lines);
-            Player_Sign_Text.setString(8, staff);
+            Player_Sign_Text.setBoolean(8, staff);
             Player_Sign_Text.executeUpdate();
 
         } catch (SQLException e){
@@ -179,7 +179,7 @@ public class MySQLData {
         }
     }
 
-    public static void playerDeath(String serverName, String worldname, String playername, double x, double y, double z,String staff){
+    public static void playerDeath(String serverName, String worldname, String playername, double x, double y, double z,boolean staff){
         try {
             String database = "Player_Death";
             PreparedStatement Player_Death= plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?)");
@@ -189,7 +189,7 @@ public class MySQLData {
             Player_Death.setDouble(4, x);
             Player_Death.setDouble(5, y);
             Player_Death.setDouble(6, z);
-            Player_Death.setString(7, staff);
+            Player_Death.setBoolean(7, staff);
             Player_Death.executeUpdate();
 
         } catch (SQLException e){
@@ -197,7 +197,7 @@ public class MySQLData {
         }
     }
 
-    public static void playerTeleport(String serverName, String worldname, String playername, double ox, double oy, double oz, double tx, double ty, double tz, String staff){
+    public static void playerTeleport(String serverName, String worldname, String playername, double ox, double oy, double oz, double tx, double ty, double tz, boolean staff){
         try {
             String database = "Player_Teleport";
             PreparedStatement Player_Teleport = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,From_X,From_Y,From_Z,To_X,To_Y,To_Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
@@ -210,7 +210,7 @@ public class MySQLData {
             Player_Teleport.setDouble(7, tx);
             Player_Teleport.setDouble(8, ty);
             Player_Teleport.setDouble(9, tz);
-            Player_Teleport.setString(10, staff);
+            Player_Teleport.setBoolean(10, staff);
             Player_Teleport.executeUpdate();
 
         } catch (SQLException e){
@@ -218,26 +218,26 @@ public class MySQLData {
         }
     }
 
-    public static void playerJoin(String serverName, String worldname, String playername, double x, double y, double z, InetSocketAddress IP, String staff){
+    public static void playerJoin(String serverName, String worldname, String playername, double x, double y, double z, InetSocketAddress IP, boolean staff) {
         try {
             String database = "Player_Join";
-            PreparedStatement Player_Join = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,IP,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+            PreparedStatement Player_Join = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,IP,Is_Staff) VALUES(?,?,?,?,?,?,INET_ATON(?),?)");
             Player_Join.setString(1, serverName);
             Player_Join.setString(2, worldname);
             Player_Join.setString(3, playername);
             Player_Join.setDouble(4, x);
             Player_Join.setDouble(5, y);
             Player_Join.setDouble(6, z);
-            Player_Join.setString(7, IP.toString());
-            Player_Join.setString(8, staff);
+            Player_Join.setString(7, IP.getHostString());
+            Player_Join.setBoolean(8, staff);
             Player_Join.executeUpdate();
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void playerLeave(String serverName, String worldname, String playername, double x, double y, double z, String staff){
+    public static void playerLeave(String serverName, String worldname, String playername, double x, double y, double z, boolean staff){
         try {
             String database = "Player_Leave";
             PreparedStatement Player_Leave = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?)");
@@ -247,7 +247,7 @@ public class MySQLData {
             Player_Leave.setDouble(4, x);
             Player_Leave.setDouble(5, y);
             Player_Leave.setDouble(6, z);
-            Player_Leave.setString(7, staff);
+            Player_Leave.setBoolean(7, staff);
             Player_Leave.executeUpdate();
 
         } catch (SQLException e){
@@ -255,8 +255,8 @@ public class MySQLData {
         }
     }
 
-    public static void blockPlace(String serverName, String worldname, String playername, String block, double x, double y, double z, String staff){
-        try {
+    public static void blockPlace(String serverName, String worldname, String playername, String block, double x, double y, double z, boolean staff){
+        try {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
             String database = "Block_Place";
             PreparedStatement Block_Place = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Block,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
             Block_Place.setString(1, serverName);
@@ -266,7 +266,7 @@ public class MySQLData {
             Block_Place.setDouble(5, x);
             Block_Place.setDouble(6, y);
             Block_Place.setDouble(7, z);
-            Block_Place.setString(8, staff);
+            Block_Place.setBoolean(8, staff);
             Block_Place.executeUpdate();
 
         } catch (SQLException e){
@@ -274,7 +274,7 @@ public class MySQLData {
         }
     }
 
-    public static void blockBreak(String serverName, String worldname, String playername, String blockname, double x, double y, double z,String staff){
+    public static void blockBreak(String serverName, String worldname, String playername, String blockname, double x, double y, double z,boolean staff){
         try {
             String database = "Block_Break";
             PreparedStatement Block_Break = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Block,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
@@ -285,7 +285,7 @@ public class MySQLData {
             Block_Break.setDouble(5, x);
             Block_Break.setDouble(6, y);
             Block_Break.setDouble(7, z);
-            Block_Break.setString(8, staff);
+            Block_Break.setBoolean(8, staff);
             Block_Break.executeUpdate();
 
         } catch (SQLException e){
@@ -321,7 +321,7 @@ public class MySQLData {
         }
     }
 
-    public static void playerKick(String serverName, String worldname, String playername, double x, double y, double z, String reason, String staff){
+    public static void playerKick(String serverName, String worldname, String playername, double x, double y, double z, String reason, boolean staff){
         try {
             String database = "Player_Kick";
             PreparedStatement Player_Kick = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Reason,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
@@ -332,7 +332,7 @@ public class MySQLData {
             Player_Kick.setDouble(5, y);
             Player_Kick.setDouble(6, z);
             Player_Kick.setString(7, reason);
-            Player_Kick.setString(8, staff);
+            Player_Kick.setBoolean(8, staff);
             Player_Kick.executeUpdate();
 
         } catch (SQLException e){
@@ -354,13 +354,13 @@ public class MySQLData {
         }
     }
 
-    public static void levelChange(String serverName, String playername, String staff){
+    public static void levelChange(String serverName, String playername, boolean staff){
         try {
             String database = "Player_Level";
             PreparedStatement Player_Level = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Playername,Is_Staff) VALUES(?,?,?)");
             Player_Level.setString(1, serverName);
             Player_Level.setString(2, playername);
-            Player_Level.setString(3, staff);
+            Player_Level.setBoolean(3, staff);
             Player_Level.executeUpdate();
 
         } catch (SQLException e){
@@ -370,7 +370,7 @@ public class MySQLData {
         }
     }
 
-    public static void bucketPlace(String serverName, String worldname, String playername, String bucket, double x, double y, double z, String staff){
+    public static void bucketPlace(String serverName, String worldname, String playername, String bucket, double x, double y, double z, boolean staff){
         try {
             String database = "Bucket_Place";
             PreparedStatement Bucket_Place = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Bucket,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
@@ -381,7 +381,7 @@ public class MySQLData {
             Bucket_Place.setDouble(5, x);
             Bucket_Place.setDouble(6, y);
             Bucket_Place.setDouble(7, z);
-            Bucket_Place.setString(8, staff);
+            Bucket_Place.setBoolean(8, staff);
             Bucket_Place.executeUpdate();
 
         } catch (SQLException e){
@@ -391,14 +391,14 @@ public class MySQLData {
         }
     }
 
-    public static void anvil(String serverName, String playername, String newname, String staff){
+    public static void anvil(String serverName, String playername, String newname, boolean staff){
         try {
             String database = "Anvil";
             PreparedStatement Anvil = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Playername,New_name,Is_Staff) VALUES(?,?,?,?)");
             Anvil.setString(1, serverName);
             Anvil.setString(2, playername);
             Anvil.setString(3, newname);
-            Anvil.setString(4, staff);
+            Anvil.setBoolean(4, staff);
             Anvil.executeUpdate();
 
         } catch (SQLException e){
@@ -436,7 +436,7 @@ public class MySQLData {
         }
     }
 
-    public static void itemDrop(String serverName, String world, String playername, String item, String staff){
+    public static void itemDrop(String serverName, String world, String playername, String item, boolean staff){
         try {
             String database = "Item_Drop";
             PreparedStatement Item_Drop = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Item,Is_Staff) VALUES(?,?,?,?,?)");
@@ -444,7 +444,7 @@ public class MySQLData {
             Item_Drop.setString(2, world);
             Item_Drop.setString(3, playername);
             Item_Drop.setString(4, item);
-            Item_Drop.setString(5, staff);
+            Item_Drop.setBoolean(5, staff);
             Item_Drop.executeUpdate();
 
         } catch (SQLException e){
@@ -454,7 +454,7 @@ public class MySQLData {
         }
     }
 
-    public static void enchant(String serverName, String world, String playername, double x, double y, double z, String enchantment, String item, int cost ,String staff){
+    public static void enchant(String serverName, String world, String playername, double x, double y, double z, String enchantment, String item, int cost ,boolean staff){
         try {
             String database = "Enchanting";
             PreparedStatement Enchanting = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Enchantment,Item,Cost,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
@@ -467,7 +467,7 @@ public class MySQLData {
             Enchanting.setString(7, enchantment);
             Enchanting.setString(8, item);
             Enchanting.setInt(9, cost);
-            Enchanting.setString(10, staff);
+            Enchanting.setBoolean(10, staff);
             Enchanting.executeUpdate();
 
         } catch (SQLException e){

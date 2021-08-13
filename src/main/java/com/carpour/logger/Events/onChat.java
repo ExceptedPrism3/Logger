@@ -31,7 +31,6 @@ public class onChat implements Listener {
             final String worldname = world.getName();
             final String playername = player.getName();
             String msg = event.getMessage();
-            String staff = "false";
             String serverName = main.getConfig().getString("Server-Name");
             Date date = new Date();
             DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -52,8 +51,8 @@ public class onChat implements Listener {
 
                     if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Chat")) && (main.SQL.isConnected())) {
 
-                        staff = "true";
-                        MySQLData.playerChat(serverName, worldname, playername, msg, staff);
+
+                        MySQLData.playerChat(serverName, worldname, playername, msg, true);
 
                     }
 
@@ -88,7 +87,7 @@ public class onChat implements Listener {
 
             try {
 
-                MySQLData.playerChat(serverName, worldname, playername, msg, staff);
+                MySQLData.playerChat(serverName, worldname, playername, msg, false);
 
             }catch (Exception e){
 

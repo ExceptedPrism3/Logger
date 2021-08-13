@@ -36,7 +36,6 @@ public class onBucketPlace implements Listener {
         double x = Math.floor(player.getLocation().getX());
         double y = Math.floor(player.getLocation().getY());
         double z = Math.floor(player.getLocation().getZ());
-        String staff = "false";
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -57,8 +56,7 @@ public class onBucketPlace implements Listener {
 
                     if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Bucket-Place")) && (main.SQL.isConnected())) {
 
-                        staff = "true";
-                        MySQLData.bucketPlace(serverName, worldname, playername, bucket, x, y, z, staff);
+                        MySQLData.bucketPlace(serverName, worldname, playername, bucket, x, y, z, true);
 
                     }
 
@@ -94,7 +92,7 @@ public class onBucketPlace implements Listener {
 
             try {
 
-                MySQLData.bucketPlace(serverName, worldname, playername, bucket, x, y, z, staff);
+                MySQLData.bucketPlace(serverName, worldname, playername, bucket, x, y, z, false);
 
             }catch (Exception e){
 

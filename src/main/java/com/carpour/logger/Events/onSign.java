@@ -34,7 +34,6 @@ public class onSign implements Listener {
         double x = Math.floor(player.getLocation().getX());
         double y = Math.floor(player.getLocation().getY());
         double z = Math.floor(player.getLocation().getZ());
-        String staff = "false";
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -55,8 +54,7 @@ public class onSign implements Listener {
 
                     if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Sign-Text")) && (main.SQL.isConnected())) {
 
-                        staff = "true";
-                        MySQLData.playerSignText(serverName, worldname, x, y, z, playername, "[" + lines[0] + "] " + "[" + lines[1] + "] " + "[" + lines[2] + "] " + "[" + lines[3] + "]", staff);
+                        MySQLData.playerSignText(serverName, worldname, x, y, z, playername, "[" + lines[0] + "] " + "[" + lines[1] + "] " + "[" + lines[2] + "] " + "[" + lines[3] + "]", true);
 
                     }
 
@@ -91,7 +89,7 @@ public class onSign implements Listener {
 
             try {
 
-                MySQLData.playerSignText(serverName, worldname, x, y, z, playername, "[" + lines[0] + "] " + "[" + lines[1] + "] " + "[" + lines[2] + "] " + "[" + lines[3] + "]", staff);
+                MySQLData.playerSignText(serverName, worldname, x, y, z, playername, "[" + lines[0] + "] " + "[" + lines[1] + "] " + "[" + lines[2] + "] " + "[" + lines[3] + "]", false);
 
             }catch (Exception e){
 

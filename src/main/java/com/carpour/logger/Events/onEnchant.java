@@ -37,7 +37,6 @@ public class onEnchant implements Listener {
         double x = player.getLocation().getBlockX();
         double y = player.getLocation().getBlockY();
         double z = player.getLocation().getBlockZ();
-        String staff = "false";
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -58,8 +57,7 @@ public class onEnchant implements Listener {
 
                         if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Enchanting")) && (main.SQL.isConnected())) {
 
-                            staff = "true";
-                            MySQLData.enchant(serverName, worldname, playername, x, y, z, entry.getKey().getName(), item, cost, staff);
+                            MySQLData.enchant(serverName, worldname, playername, x, y, z, entry.getKey().getName(), item, cost, true);
 
                         }
 
@@ -94,7 +92,7 @@ public class onEnchant implements Listener {
 
                     try {
 
-                        MySQLData.enchant(serverName, worldname, playername, x, y, z, entry.getKey().getName(), item, cost, staff);
+                        MySQLData.enchant(serverName, worldname, playername, x, y, z, entry.getKey().getName(), item, cost, false);
 
                     }catch (Exception e){
 

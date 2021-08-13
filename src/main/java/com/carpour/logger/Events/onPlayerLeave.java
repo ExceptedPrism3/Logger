@@ -34,7 +34,6 @@ public class onPlayerLeave implements Listener {
         double x = Math.floor(player.getLocation().getX());
         double y = Math.floor(player.getLocation().getY());
         double z = Math.floor(player.getLocation().getZ());
-        String staff = "false";
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -55,8 +54,8 @@ public class onPlayerLeave implements Listener {
 
                     if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Leave")) && (main.SQL.isConnected())) {
 
-                        staff = "true";
-                        MySQLData.playerLeave(serverName, worldname, playername, x, y, z, staff);
+
+                        MySQLData.playerLeave(serverName, worldname, playername, x, y, z, true);
 
                     }
 
@@ -92,7 +91,7 @@ public class onPlayerLeave implements Listener {
 
             try {
 
-                MySQLData.playerLeave(serverName, worldname, playername, x, y, z, staff);
+                MySQLData.playerLeave(serverName, worldname, playername, x, y, z, false);
 
             }catch (Exception e){
 

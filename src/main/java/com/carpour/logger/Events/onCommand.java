@@ -37,7 +37,6 @@ public class onCommand implements Listener {
         String playername = player.getName();
         String msg = event.getMessage();
         String[] msg2 = event.getMessage().split(" ");
-        String staff = "false";
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -62,8 +61,7 @@ public class onCommand implements Listener {
 
                                 if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.SQL.isConnected())) {
 
-                                    staff = "true";
-                                    MySQLData.playerCommands(serverName, worldname, playername, msg, staff);
+                                    MySQLData.playerCommands(serverName, worldname, playername, msg, true);
 
                                 }
 
@@ -123,8 +121,8 @@ public class onCommand implements Listener {
 
                     if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.SQL.isConnected())) {
 
-                        staff = "true";
-                        MySQLData.playerCommands(serverName, worldname, playername, msg, staff);
+
+                        MySQLData.playerCommands(serverName, worldname, playername, msg, true);
 
                     }
 
@@ -160,7 +158,7 @@ public class onCommand implements Listener {
 
             try {
 
-                MySQLData.playerCommands(serverName, worldname, playername, msg, staff);
+                MySQLData.playerCommands(serverName, worldname, playername, msg, false);
 
             }catch (Exception e){
 
