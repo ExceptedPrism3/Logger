@@ -65,7 +65,7 @@ public class onAnvil implements Listener {
                                         String displayName = meta.getDisplayName();
                                         String playername = player.getName();
 
-                                        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")) {
+                                        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
                                             Discord.staffChat(player, "\uD83D\uDD28 **|** \uD83D\uDC6E\u200D♂️ Has renamed an Item to **" + displayName + "**", false, Color.red);
 

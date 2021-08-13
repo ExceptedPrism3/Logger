@@ -46,7 +46,7 @@ public class onPlayerTeleport implements Listener {
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Teleport"))) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
                 Discord.staffChat(player, "\uD83D\uDDFA **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "]" + " From X = " + ox + " Y = " + oy + " Z = " + oz + " **To** X = " + tx + " Y = " + ty + " Z = " + tz, false, Color.green);
 

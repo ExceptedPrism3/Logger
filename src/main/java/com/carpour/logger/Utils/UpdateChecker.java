@@ -44,7 +44,7 @@ public class UpdateChecker {
                     )
                     public void onPlayerJoin(PlayerJoinEvent event) {
                         Player player = event.getPlayer();
-                        if (player.isOp() || player.hasPermission("logger.staff")) {
+                        if (player.isOp() || player.hasPermission("logger.staff.log")) {
                             player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f[Logger] |&e A New Version &a" + UpdateChecker.this.spigotPluginVersion + " &eis Available at: &6https://www.spigotmc.org/resources/" + ID + "/updates"));
                         }
                     }

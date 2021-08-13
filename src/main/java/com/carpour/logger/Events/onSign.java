@@ -42,7 +42,7 @@ public class onSign implements Listener {
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Sign-Text"))) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
                 Discord.staffChat(player, "\uD83E\uDEA7 **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines[0] + " **|** " + lines[1] + " **|** " + lines[2] + " **|** " + lines[3],false, Color.red);
 

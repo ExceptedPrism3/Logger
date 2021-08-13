@@ -50,18 +50,13 @@ public class onCommand implements Listener {
         //Logging to File if logging to File and Command Logging is enabled
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Commands"))){
 
-
             if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")){
-
-
 
                 for (String m : main.getConfig().getStringList("Player-Commands.Commands-to-Log")) {
 
-
-
                     if (messageParts.get(0).equalsIgnoreCase(m)) {
 
-                        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")) {
+                        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
                             try {
 
@@ -119,7 +114,7 @@ public class onCommand implements Listener {
                 }
             }
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
                 Discord.staffChat(player, "\uD83D\uDC7E **|** \uD83D\uDC6E\u200D♂️ " +  message, false, Color.red);
 
@@ -214,8 +209,6 @@ public class onCommand implements Listener {
                     exception.printStackTrace();
                 }
             }
-
-
         }
 
         if (main.getConfig().getBoolean("Log.Player-Commands") && main.getConfig().getBoolean("Player-Commands.Commands-Spy.Enable")) {
