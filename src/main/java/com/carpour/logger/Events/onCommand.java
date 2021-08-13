@@ -19,6 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -35,33 +36,42 @@ public class onCommand implements Listener {
         World world = player.getWorld();
         String worldName = world.getName();
         String playerName = player.getName();
-        String msg = event.getMessage();
-        String[] msg2 = event.getMessage().split(" ");
+        String message = event.getMessage();
+        List<String> messageParts = Arrays.asList(event.getMessage().split("\\s+"));
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
+
+        //Stop Adding Message to Log if the Player has the correct Permissions
         if (player.hasPermission("logger.exempt")){ return; }
 
+
+        //Logging to File if logging to File and Command Logging is enabled
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Commands"))){
+
 
             if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")){
 
+
+
                 for (String m : main.getConfig().getStringList("Player-Commands.Commands-to-Log")) {
 
-                    if (msg2[0].equalsIgnoreCase(m)) {
 
-                        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
+
+                    if (messageParts.get(0).equalsIgnoreCase(m)) {
+
+                        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")) {
 
                             try {
 
                                 BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has executed => " + msg + "\n");
+                                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has executed => " + message + "\n");
                                 out.close();
 
                                 if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.sql.isConnected())) {
 
-                                    MySQLData.playerCommands(serverName, worldName, playerName, msg, true);
+                                    MySQLData.playerCommands(serverName, worldName, playerName, message, true);
 
                                 }
 
@@ -74,12 +84,12 @@ public class onCommand implements Listener {
 
                         }
 
-                        Discord.playerCommand(player, "\uD83D\uDC7E " +   msg, false, Color.red);
+                        Discord.playerCommand(player, "\uD83D\uDC7E " + message, false, Color.red);
 
                         try {
 
                             BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true));
-                            out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has executed => " + msg + "\n");
+                            out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has executed => " + message + "\n");
                             out.close();
 
                         } catch (IOException e) {
@@ -102,7 +112,7 @@ public class onCommand implements Listener {
 
                 for (String m : main.getConfig().getStringList("Player-Commands.Commands-to-Block")) {
 
-                    if (msg2[0].equalsIgnoreCase(m)) {
+                    if (messageParts.get(0).equalsIgnoreCase(m)) {
 
                         return;
                     }
@@ -111,18 +121,18 @@ public class onCommand implements Listener {
 
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
 
-                Discord.staffChat(player, "\uD83D\uDC7E **|** \uD83D\uDC6E\u200D♂️ " +  msg, false, Color.red);
+                Discord.staffChat(player, "\uD83D\uDC7E **|** \uD83D\uDC6E\u200D♂️ " +  message, false, Color.red);
 
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has executed => " + msg + "\n");
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has executed => " + message + "\n");
                     out.close();
 
                     if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.sql.isConnected())) {
 
 
-                        MySQLData.playerCommands(serverName, worldName, playerName, msg, true);
+                        MySQLData.playerCommands(serverName, worldName, playerName, message, true);
 
                     }
 
@@ -137,12 +147,12 @@ public class onCommand implements Listener {
 
             }
 
-            Discord.playerCommand(player, "\uD83D\uDC7E " +  msg, false, Color.red);
+            Discord.playerCommand(player, "\uD83D\uDC7E " +  message, false, Color.red);
 
             try {
 
                 BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true));
-                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has executed => " + msg + "\n");
+                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has executed => " + message + "\n");
                 out.close();
 
             } catch (IOException e) {
@@ -154,27 +164,68 @@ public class onCommand implements Listener {
 
         }
 
+        //Logging to MySQL if logging to MySQL and Command Logging is enabled
         if ((main.getConfig().getBoolean("MySQL.Enable")) && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.sql.isConnected())){
 
-            try {
 
-                MySQLData.playerCommands(serverName, worldName, playerName, msg, false);
 
-            }catch (Exception e){
+            //Command Whitelist
+            if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")) {
 
-                e.printStackTrace();
+                if (main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
+                    return;
+                }
 
+                for (String command : main.getConfig().getStringList("Player-Commands.Commands-to-Log")) {
+
+                    List<String> commandParts = Arrays.asList(command.split("\\s+"));
+
+
+                    if (messageParts.containsAll(commandParts)) {
+
+                        try {
+                            MySQLData.playerCommands(serverName, worldName, playerName, message, false);
+                        } catch (Exception exception) {
+                            exception.printStackTrace();
+                        }
+                    }
+                }
             }
+            //Command Blacklist
+            if (main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
+
+                if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")) {
+                    return;
+                }
+
+                for (String command : main.getConfig().getStringList("Player-Commands.Commands-to-Block")) {
+                    List<String> commandParts = Arrays.asList(command.split("\\s+"));
+
+                    if (messageParts.containsAll(commandParts)) {
+                        return;
+                    }
+                }
+
+
+                try {
+                    player.sendMessage("YAA");
+                    MySQLData.playerCommands(serverName, worldName, playerName, message, false);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+
+
         }
 
         if (main.getConfig().getBoolean("Log.Player-Commands") && main.getConfig().getBoolean("Player-Commands.Commands-Spy.Enable")) {
 
-            List<String> hcmds = main.getConfig().getStringList("Player-Commands.Blacklist-Commands");
+            List<String> blackListCommands = main.getConfig().getStringList("Player-Commands.Blacklist-Commands");
             if (!(event.getPlayer().hasPermission("logger.exempt") || player.isOp())) {
 
-                for (String hcmd : hcmds) {
+                for (String command : blackListCommands) {
 
-                    if (event.getMessage().split(" ")[0].replaceFirst("/", "").equalsIgnoreCase(hcmd)) return;
+                    if (event.getMessage().split(" ")[0].replaceFirst("/", "").equalsIgnoreCase(command)) return;
 
                 }
 

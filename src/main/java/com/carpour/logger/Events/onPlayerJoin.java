@@ -3,6 +3,7 @@ import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.MySQL.MySQLData;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -37,6 +38,16 @@ public class onPlayerJoin implements Listener {
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+
+        if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")
+                && main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
+            if (player.hasPermission("logger.warning")) {
+                player.sendMessage(ChatColor.GRAY + "[" +
+                        ChatColor.AQUA + "Logger" + ChatColor.GRAY + "] " +
+                        ChatColor.RED + "Enabling both Whitelist and Blacklist isn't supported. " +
+                        "Please disable one of them to continue logging Player Commands");
+            }
+        }
 
         if (player.hasPermission("logger.exempt")){ return; }
 

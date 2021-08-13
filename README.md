@@ -32,3 +32,12 @@ With more than **20 Features** to choose from, nothing is left without monitorin
 * Server Stop
 * Item Drop
 * Enchanting
+
+## Info
+If you use MySQL, the IP that gets stored in the Database when a Player joins
+isn't storing a clear IP, but a number representation of the IP.
+To convert it back, just execute the following SQL Command:
+
+```mysql
+SELECT INET_NTOA("value");
+```

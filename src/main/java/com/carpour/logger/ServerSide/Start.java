@@ -54,5 +54,11 @@ public class Start {
 
             }
         }
+
+        if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")
+                && main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
+            main.getLogger().warning("Enabling both Whitelist and Blacklist isn't supported. " +
+                    "Please disable one of them to continue logging Player Commands");
+        }
     }
 }
