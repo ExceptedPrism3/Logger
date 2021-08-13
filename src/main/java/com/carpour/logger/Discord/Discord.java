@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import javax.security.auth.login.LoginException;
 import java.awt.*;
 
-import static sun.management.Agent.error;
 
 public class Discord {
 
@@ -503,17 +502,17 @@ public class Discord {
         if (jda != null)
             try {
 
-            jda.shutdown();
-            jda = null;
-            Bukkit.getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.GREEN + "Discord Bot has been successfully turned off!");
+                jda.shutdown();
+                jda = null;
+                Bukkit.getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.GREEN + "Discord Bot has been successfully turned off!");
 
-        } catch (Exception e) {
+            } catch (Exception e) {
 
                 Bukkit.getServer().getLogger().warning("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
                         "If this Issue Persists, Contact the Author!");
 
-            error(e);
+                e.printStackTrace();
 
-        }
+            }
     }
 }

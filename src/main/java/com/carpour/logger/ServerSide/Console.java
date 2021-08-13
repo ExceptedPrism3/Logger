@@ -48,7 +48,7 @@ public class Console implements Listener {
 
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Console-Commands")) && (main.SQL.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Console-Commands")) && (main.sql.isConnected())){
 
             try {
 

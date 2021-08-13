@@ -26,10 +26,9 @@ public class onPlayerLevel implements Listener {
     public void onLevelChange(PlayerLevelChangeEvent event){
 
         Player player = event.getPlayer();
-        String playername = player.getName();
+        String playerName = player.getName();
         int Level = main.getConfig().getInt("Player-Level.Log-Above");
-        double plevel = event.getNewLevel();
-        String staff = "false";
+        double pLevel= event.getNewLevel();
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -40,20 +39,19 @@ public class onPlayerLevel implements Listener {
 
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
 
-                if (plevel == Level) {
+                if (pLevel == Level) {
 
                     Discord.staffChat(player, "⬆️ **|** \uD83D\uDC6E\u200D♂ Has arrived to the set amount of Level which is **" + Level + "**", false, Color.green);
 
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write("[" + dateFormat.format(date) + "] The Level of the Staff <" + playername + "> has arrived to the set amount which is " + Level + "\n");
+                        out.write("[" + dateFormat.format(date) + "] The Level of the Staff <" + playerName + "> has arrived to the set amount which is " + Level + "\n");
                         out.close();
 
-                        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Level")) && (main.SQL.isConnected())) {
+                        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Level")) && (main.sql.isConnected())) {
 
-                            staff = "true";
-                            MySQLData.levelChange(serverName, playername, staff);
+                            MySQLData.levelChange(serverName, playerName,true);
 
                         }
 
@@ -69,14 +67,14 @@ public class onPlayerLevel implements Listener {
 
             }
 
-            if (plevel == Level) {
+            if (pLevel == Level) {
 
                 Discord.playerLevel(player, "⬆️ Has arrived to the set amount of Level which is **" + Level + "**", false, Color.green);
 
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerLevelFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] The Level of the Player <" + playername + "> has arrived to the set amount which is " + Level + "\n");
+                    out.write("[" + dateFormat.format(date) + "] The Level of the Player <" + playerName + "> has arrived to the set amount which is " + Level + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -89,13 +87,13 @@ public class onPlayerLevel implements Listener {
 
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Level")) && (main.SQL.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Level")) && (main.sql.isConnected())){
 
-            if (plevel == Level) {
+            if (pLevel == Level) {
 
                 try {
 
-                    MySQLData.levelChange(serverName, playername, staff);
+                    MySQLData.levelChange(serverName, playerName, false);
 
                 } catch (Exception e) {
 

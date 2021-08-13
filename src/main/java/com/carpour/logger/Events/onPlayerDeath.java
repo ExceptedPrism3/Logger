@@ -29,12 +29,11 @@ public class onPlayerDeath implements Listener {
 
         Player player = event.getEntity();
         World world = player.getWorld();
-        String worldname = world.getName();
-        String playername = player.getName();
+        String worldName = world.getName();
+        String playerName = player.getName();
         double x = Math.floor(player.getLocation().getX());
         double y = Math.floor(player.getLocation().getY());
         double z = Math.floor(player.getLocation().getZ());
-        String staff = "false";
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -45,18 +44,18 @@ public class onPlayerDeath implements Listener {
 
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
 
-                Discord.staffChat(player, "☠️ **|** \uD83D\uDC6E\u200D♂️ [" + worldname + "]" + " X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
+                Discord.staffChat(player, "☠️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
 
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + "] The Staff <" + playername + "> has died at X = " + x + " Y = " + y + " Z = " + z + "\n");
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has died at X = " + x + " Y = " + y + " Z = " + z + "\n");
                     out.close();
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Death")) && (main.SQL.isConnected())) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Death")) && (main.sql.isConnected())) {
 
-                        staff = "true";
-                        MySQLData.playerDeath(serverName, worldname, playername, x, y, z, staff);
+
+                        MySQLData.playerDeath(serverName, worldName, playerName, x, y, z, true);
 
                     }
 
@@ -71,12 +70,12 @@ public class onPlayerDeath implements Listener {
 
             }
 
-            Discord.playerDeath(player, "☠️ [" + worldname + "]" + " X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
+            Discord.playerDeath(player, "☠️ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
 
             try {
 
                 BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerDeathLogFile(), true));
-                out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + "] The Player <" + playername + "> has died at X = " + x + " Y = " + y + " Z = " + z + "\n");
+                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has died at X = " + x + " Y = " + y + " Z = " + z + "\n");
                 out.close();
 
             } catch (IOException e) {
@@ -88,11 +87,11 @@ public class onPlayerDeath implements Listener {
 
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Death")) && (main.SQL.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Death")) && (main.sql.isConnected())){
 
             try {
 
-                MySQLData.playerDeath(serverName, worldname, playername, x, y, z, staff);
+                MySQLData.playerDeath(serverName, worldName, playerName, x, y, z, false);
 
             }catch (Exception e){
 

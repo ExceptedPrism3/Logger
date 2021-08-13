@@ -33,11 +33,10 @@ public class onCommand implements Listener {
 
         Player player = event.getPlayer();
         World world = player.getWorld();
-        String worldname = world.getName();
-        String playername = player.getName();
+        String worldName = world.getName();
+        String playerName = player.getName();
         String msg = event.getMessage();
         String[] msg2 = event.getMessage().split(" ");
-        String staff = "false";
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -57,13 +56,12 @@ public class onCommand implements Listener {
                             try {
 
                                 BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                                out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + "] The Staff <" + playername + "> has executed => " + msg + "\n");
+                                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has executed => " + msg + "\n");
                                 out.close();
 
-                                if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.SQL.isConnected())) {
+                                if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.sql.isConnected())) {
 
-                                    staff = "true";
-                                    MySQLData.playerCommands(serverName, worldname, playername, msg, staff);
+                                    MySQLData.playerCommands(serverName, worldName, playerName, msg, true);
 
                                 }
 
@@ -81,7 +79,7 @@ public class onCommand implements Listener {
                         try {
 
                             BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true));
-                            out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + "] The Player <" + playername + "> has executed => " + msg + "\n");
+                            out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has executed => " + msg + "\n");
                             out.close();
 
                         } catch (IOException e) {
@@ -118,13 +116,13 @@ public class onCommand implements Listener {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + "] The Staff <" + playername + "> has executed => " + msg + "\n");
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has executed => " + msg + "\n");
                     out.close();
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.SQL.isConnected())) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.sql.isConnected())) {
 
-                        staff = "true";
-                        MySQLData.playerCommands(serverName, worldname, playername, msg, staff);
+
+                        MySQLData.playerCommands(serverName, worldName, playerName, msg, true);
 
                     }
 
@@ -144,7 +142,7 @@ public class onCommand implements Listener {
             try {
 
                 BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true));
-                out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + "] The Player <" + playername + "> has executed => " + msg + "\n");
+                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has executed => " + msg + "\n");
                 out.close();
 
             } catch (IOException e) {
@@ -156,11 +154,11 @@ public class onCommand implements Listener {
 
         }
 
-        if ((main.getConfig().getBoolean("MySQL.Enable")) && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.SQL.isConnected())){
+        if ((main.getConfig().getBoolean("MySQL.Enable")) && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.sql.isConnected())){
 
             try {
 
-                MySQLData.playerCommands(serverName, worldname, playername, msg, staff);
+                MySQLData.playerCommands(serverName, worldName, playerName, msg, false);
 
             }catch (Exception e){
 

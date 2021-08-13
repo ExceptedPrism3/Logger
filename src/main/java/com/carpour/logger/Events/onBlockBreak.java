@@ -26,16 +26,15 @@ public class onBlockBreak implements Listener {
     public void onBreak(BlockBreakEvent event) {
 
         Player player = event.getPlayer();
-        String playername = player.getName();
+        String playerName = player.getName();
         World world = player.getWorld();
-        String worldname = world.getName();
+        String worldName = world.getName();
         int x = event.getBlock().getLocation().getBlockX();
         int y = event.getBlock().getLocation().getBlockY();
         int z = event.getBlock().getLocation().getBlockZ();
-        String blockname;
-        blockname = event.getBlock().getType().toString();
-        blockname = blockname.replaceAll("_", " ");
-        String staff = "false";
+        String blockName;
+        blockName = event.getBlock().getType().toString();
+        blockName = blockName.replaceAll("_", " ");
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -46,19 +45,18 @@ public class onBlockBreak implements Listener {
 
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
 
-                Discord.staffChat(player, "⛏️ **|** \uD83D\uDC6E\u200D♂️ [" + worldname + "] Has broke **" + blockname + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
+                Discord.staffChat(player, "⛏️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has broke **" + blockName + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
 
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + "] The Staff <" + playername + "> has broke " + blockname + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has broke " + blockName + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
                     out.close();
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Block-Break")) && (main.SQL.isConnected())) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Block-Break")) && (main.sql.isConnected())) {
 
-                        staff = "true";
 
-                        MySQLData.blockBreak(serverName, worldname, playername, blockname, x, y, z, staff);
+                        MySQLData.blockBreak(serverName, worldName, playerName, blockName, x, y, z, true);
 
                     }
 
@@ -73,12 +71,12 @@ public class onBlockBreak implements Listener {
 
             }
 
-            Discord.blockBreak(player, "⛏️ [" + worldname + "] Has broke **" + blockname + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
+            Discord.blockBreak(player, "⛏️ [" + worldName + "] Has broke **" + blockName + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
 
             try {
 
                 BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBlockBreakLogFile(), true));
-                out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + "] The Player <" + playername + "> has broke " + blockname + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
+                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has broke " + blockName + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
                 out.close();
 
             } catch (IOException e) {
@@ -89,11 +87,11 @@ public class onBlockBreak implements Listener {
             }
         }
 
-        if ((main.getConfig().getBoolean("MySQL.Enable")) && (main.getConfig().getBoolean("Log.Block-Break")) && (main.SQL.isConnected())){
+        if ((main.getConfig().getBoolean("MySQL.Enable")) && (main.getConfig().getBoolean("Log.Block-Break")) && (main.sql.isConnected())){
 
             try {
 
-                MySQLData.blockBreak(serverName, worldname, playername, blockname, x, y, z, staff);
+                MySQLData.blockBreak(serverName, worldName, playerName, blockName, x, y, z, false);
 
             }catch (Exception e){
 

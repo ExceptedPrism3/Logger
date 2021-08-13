@@ -41,7 +41,7 @@ public class Stop {
 
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Server-Stop")) && (main.SQL.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Server-Stop")) && (main.sql.isConnected())){
 
             String serverName = main.getConfig().getString("Server-Name");
 
