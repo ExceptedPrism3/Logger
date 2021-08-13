@@ -72,6 +72,11 @@ Player-Level:
 # Only Log Specified Commands
 # Block Commands from getting Logged
 Player-Commands:
+  Specific-Commands: false
+  Commands:
+    - /is level
+    - /about
+    - /butcher all
   Whitelist-Commands: false
   Commands-to-Log:
     - /msg
@@ -87,6 +92,10 @@ Player-Commands:
   Commands-Spy:
     Enable: false
     Message: '&8[&6Spy&8] &7%player% >> %cmd%'
+
+# Disable this if you want to hide Player's IPs
+Player-Join:
+  Player-IP: true
 
 # MySQL Feature
 # Data-Deletion Value in Days
