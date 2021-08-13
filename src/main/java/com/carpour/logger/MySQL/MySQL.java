@@ -29,7 +29,7 @@ public class MySQL {
 
                 try {
 
-                    Class.forName("com.mysql.jdbc.Driver");
+                    Class.forName("com.mysql.cj.jdbc.Driver");
                     connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false&jdbcCompliantTruncation=false", username, password);
                     Bukkit.getConsoleSender().sendMessage("[Logger] " + ChatColor.GREEN + "MySQL Connection has been established!");
 
