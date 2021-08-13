@@ -15,10 +15,10 @@ public class Main extends JavaPlugin {
 
     private static Main instance;
 
-    public FileHandler FH;
-    public MySQL SQL;
-    public MySQLData Data;
-    public ASCIIArt Icon;
+    public FileHandler fileHandler;
+    public MySQL sql;
+    public MySQLData data;
+    public ASCIIArt icon;
     public Start start;
     public Stop stop;
     public Discord discord;
@@ -37,16 +37,16 @@ public class Main extends JavaPlugin {
         discord.run();
 
         if (getConfig().getBoolean("MySQL.Enable")) {
-            SQL = new MySQL();
-            SQL.connect();
-            Data = new MySQLData(this);
-            if (SQL.isConnected()) Data.createTable();
-            Data.emptyTable();
+            sql = new MySQL();
+            sql.connect();
+            data = new MySQLData(this);
+            if (sql.isConnected()) data.createTable();
+            data.emptyTable();
         }
 
         new FileHandler(getDataFolder());
-        FH = new FileHandler(getDataFolder());
-        FH.deleteFiles();
+        fileHandler = new FileHandler(getDataFolder());
+        fileHandler.deleteFiles();
 
         getServer().getPluginManager().registerEvents(new onChat(), this);
         getServer().getPluginManager().registerEvents(new onCommand(), this);
@@ -71,8 +71,8 @@ public class Main extends JavaPlugin {
 
         Objects.requireNonNull(getCommand("logger")).setExecutor(new LoggerCommand());
 
-        Icon = new ASCIIArt();
-        Icon.Art();
+        icon = new ASCIIArt();
+        icon.Art();
 
         //bstats
 
@@ -98,7 +98,7 @@ public class Main extends JavaPlugin {
         stop = new Stop();
         stop.run();
 
-        if ((getConfig().getBoolean("MySQL.Enable")) && ((SQL.isConnected()))) SQL.disconnect();
+        if ((getConfig().getBoolean("MySQL.Enable")) && ((sql.isConnected()))) sql.disconnect();
 
         discord.disconnect();
 

@@ -27,9 +27,9 @@ public class onBucketPlace implements Listener {
 
     public void onBucket(PlayerBucketEmptyEvent event){
         Player player = event.getPlayer();
-        String playername = player.getName();
+        String playerName = player.getName();
         World world = player.getWorld();
-        String worldname = world.getName();
+        String worldName = world.getName();
         String bucket = event.getBucket().toString();
         bucket = bucket.replaceAll("_", " ");
         bucket = bucket.replaceAll("LEGACY", "");
@@ -46,17 +46,17 @@ public class onBucketPlace implements Listener {
 
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
 
-                Discord.staffChat(player, "\uD83E\uDEA3️ **|** \uD83D\uDC6E\u200D♂️️ [" + worldname + "] Has placed a **" + bucket + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
+                Discord.staffChat(player, "\uD83E\uDEA3️ **|** \uD83D\uDC6E\u200D♂️️ [" + worldName + "] Has placed a **" + bucket + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
 
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + "] The Staff <" + playername + "> has placed " + bucket + " at X = " + x + " Y = " + y + " Z = " + z + "\n");
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has placed " + bucket + " at X = " + x + " Y = " + y + " Z = " + z + "\n");
                     out.close();
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Bucket-Place")) && (main.SQL.isConnected())) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Bucket-Place")) && (main.sql.isConnected())) {
 
-                        MySQLData.bucketPlace(serverName, worldname, playername, bucket, x, y, z, true);
+                        MySQLData.bucketPlace(serverName, worldName, playerName, bucket, x, y, z, true);
 
                     }
 
@@ -71,12 +71,12 @@ public class onBucketPlace implements Listener {
 
             }
 
-            Discord.bucketPlace(player,"\uD83E\uDEA3️ [" + worldname + "] Has placed a **" + bucket + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
+            Discord.bucketPlace(player,"\uD83E\uDEA3️ [" + worldName + "] Has placed a **" + bucket + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
 
             try {
 
                 BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBucketPlaceFile(), true));
-                out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + "] The Player <" + playername + "> has placed " + bucket + " at X = " + x + " Y = " + y + " Z = " + z + "\n");
+                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has placed " + bucket + " at X = " + x + " Y = " + y + " Z = " + z + "\n");
                 out.close();
 
             } catch (IOException e) {
@@ -88,11 +88,11 @@ public class onBucketPlace implements Listener {
 
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Bucket-Place")) && (main.SQL.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Bucket-Place")) && (main.sql.isConnected())){
 
             try {
 
-                MySQLData.bucketPlace(serverName, worldname, playername, bucket, x, y, z, false);
+                MySQLData.bucketPlace(serverName, worldName, playerName, bucket, x, y, z, false);
 
             }catch (Exception e){
 

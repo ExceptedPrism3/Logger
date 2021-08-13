@@ -27,8 +27,8 @@ public class onPlayerKick implements Listener {
 
         Player player = event.getPlayer();
         String reason = event.getReason();
-        String worldname = player.getWorld().getName();
-        String playername = player.getName();
+        String worldName = player.getWorld().getName();
+        String playerName = player.getName();
         double x = Math.floor(player.getLocation().getX());
         double y = Math.floor(player.getLocation().getY());
         double z = Math.floor(player.getLocation().getZ());
@@ -42,17 +42,17 @@ public class onPlayerKick implements Listener {
 
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
 
-                Discord.staffChat(player, "\uD83E\uDD7E **|** \uD83D\uDC6E\u200D♂ [" + worldname + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **Reason** " + reason, false, Color.blue);
+                Discord.staffChat(player, "\uD83E\uDD7E **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **Reason** " + reason, false, Color.blue);
 
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + "] The Staff <" + playername + "> got kicked at X = " + x + " Y = " + y + " Z = " + z + " for " + reason + "\n");
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> got kicked at X = " + x + " Y = " + y + " Z = " + z + " for " + reason + "\n");
                     out.close();
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Kick")) && (main.SQL.isConnected())) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Kick")) && (main.sql.isConnected())) {
 
-                        MySQLData.playerKick(serverName, worldname, playername, x, y, z, reason, true);
+                        MySQLData.playerKick(serverName, worldName, playerName, x, y, z, reason, true);
 
                     }
 
@@ -67,12 +67,12 @@ public class onPlayerKick implements Listener {
 
             }
 
-            Discord.playerKick(player, "\uD83E\uDD7E [" + worldname + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **Reason** " + reason, false, Color.blue);
+            Discord.playerKick(player, "\uD83E\uDD7E [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **Reason** " + reason, false, Color.blue);
 
             try {
 
                 BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerKickLogFile(), true));
-                out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + "] The Player <" + playername + "> got kicked at X = " + x + " Y = " + y + " Z = " + z + " for " + reason + "\n");
+                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> got kicked at X = " + x + " Y = " + y + " Z = " + z + " for " + reason + "\n");
                 out.close();
 
             } catch (IOException e) {
@@ -84,11 +84,11 @@ public class onPlayerKick implements Listener {
 
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Kick")) && (main.SQL.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Kick")) && (main.sql.isConnected())){
 
             try {
 
-                MySQLData.playerKick(serverName, worldname, playername, x, y, z, reason, false);
+                MySQLData.playerKick(serverName, worldName, playerName, x, y, z, reason, false);
 
             }catch (Exception e){
 

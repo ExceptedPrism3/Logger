@@ -11,18 +11,18 @@ import java.util.Objects;
 
 public class DiscordFile {
 
-    private static File DiscordFile;
-    private static FileConfiguration File;
+    private static File discordFile;
+    private static FileConfiguration file;
 
     public static void Setup(){
 
-        DiscordFile = new File(Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("Logger")).getDataFolder(), "discord.yml");
+        discordFile = new File(Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("Logger")).getDataFolder(), "discord.yml");
 
-        if(!DiscordFile.exists()){
+        if(!discordFile.exists()){
 
             try {
 
-                DiscordFile.createNewFile();
+                discordFile.createNewFile();
 
             }catch (IOException E){
 
@@ -32,17 +32,17 @@ public class DiscordFile {
 
         }
 
-        File = YamlConfiguration.loadConfiguration(DiscordFile);
+        file = YamlConfiguration.loadConfiguration(discordFile);
 
     }
 
-    public static FileConfiguration get(){ return File; }
+    public static FileConfiguration get(){ return file; }
 
     public static void save() {
 
         try {
 
-            File.save(DiscordFile);
+            file.save(discordFile);
 
         } catch (IOException e) {
 
@@ -54,13 +54,13 @@ public class DiscordFile {
 
     public static void reload(){
 
-        File = YamlConfiguration.loadConfiguration(DiscordFile);
+        file = YamlConfiguration.loadConfiguration(discordFile);
 
     }
 
     public static void values(){
 
-        File.options().header("#Discord Bridge Configuration for Logger Plugin\n\n#Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX\n\n");
+        file.options().header("#Discord Bridge Configuration for Logger Plugin\n\n#Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX\n\n");
         get().addDefault("Discord.Enable" , false);
         get().addDefault("Discord.Bot-Token", "BOT_KEY");
         get().addDefault("Discord.Staff.Channel-ID", "LINK_HERE");

@@ -30,11 +30,11 @@ public class FileHandler {
     private static File portalCreateFolder;
     private static File bucketPlaceFolder;
     private static File anvilFolder;
-    private static File StaffFolder;
-    private static File ServerStartFolder;
-    private static File ServerStopFolder;
+    private static File staffFolder;
+    private static File serverStartFolder;
+    private static File serverStopFolder;
     private static File itemDropFolder;
-    private static File EnchantFolder;
+    private static File enchantFolder;
 
     private static File chatLogFile;
     private static File commandLogFile;
@@ -119,20 +119,20 @@ public class FileHandler {
         anvilFolder = new File(dataFolder, "Anvil");
         anvilFile = new File(anvilFolder, filenameDateFormat.format(date) + ".log");
 
-        StaffFolder = new File(dataFolder, "Staff");
-        StaffFile = new File(StaffFolder, filenameDateFormat.format(date) + ".log");
+        staffFolder = new File(dataFolder, "Staff");
+        StaffFile = new File(staffFolder, filenameDateFormat.format(date) + ".log");
 
-        ServerStartFolder = new File(dataFolder, "Server Start");
-        ServerStartFile = new File(ServerStartFolder, filenameDateFormat.format(date) + ".log");
+        serverStartFolder = new File(dataFolder, "Server Start");
+        ServerStartFile = new File(serverStartFolder, filenameDateFormat.format(date) + ".log");
 
-        ServerStopFolder = new File(dataFolder, "Server Stop");
-        ServerStopFile = new File(ServerStopFolder, filenameDateFormat.format(date) + ".log");
+        serverStopFolder = new File(dataFolder, "Server Stop");
+        ServerStopFile = new File(serverStopFolder, filenameDateFormat.format(date) + ".log");
 
         itemDropFolder = new File(dataFolder, "Item Drop");
         itemDropFile = new File(itemDropFolder, filenameDateFormat.format(date) + ".log");
 
-        EnchantFolder = new File(dataFolder, "Enchanting");
-        EnchantFile = new File(EnchantFolder, filenameDateFormat.format(date) + ".log");
+        enchantFolder = new File(dataFolder, "Enchanting");
+        EnchantFile = new File(enchantFolder, filenameDateFormat.format(date) + ".log");
 
         try {
 
@@ -155,16 +155,16 @@ public class FileHandler {
             anvilFolder.mkdir();
             if (main.getConfig().getBoolean("Staff.Enabled")){
 
-                StaffFolder.mkdir();
+                staffFolder.mkdir();
 
             }
-            ServerStartFolder.mkdir();
+            serverStartFolder.mkdir();
 
-            ServerStopFolder.mkdir();
+            serverStopFolder.mkdir();
 
             itemDropFolder.mkdir();
 
-            EnchantFolder.mkdir();
+            enchantFolder.mkdir();
 
 
 
@@ -298,17 +298,17 @@ public class FileHandler {
 
         if (main.getConfig().getInt("File-Deletion") < 0 ){ return; }
 
-        for (File ChatLog : Objects.requireNonNull(chatLogFolder.listFiles()))
+        for (File chatLog : Objects.requireNonNull(chatLogFolder.listFiles()))
         {
 
-                deleteFile(ChatLog);
+                deleteFile(chatLog);
 
         }
 
-        for (File CommandLog : Objects.requireNonNull(commandLogFolder.listFiles()))
+        for (File commandLog : Objects.requireNonNull(commandLogFolder.listFiles()))
         {
 
-            deleteFile(CommandLog);
+            deleteFile(commandLog);
 
         }
 
@@ -354,17 +354,17 @@ public class FileHandler {
 
         }
 
-        for (File BlockPlaceLog : Objects.requireNonNull(blockPlaceLogFolder.listFiles()))
+        for (File blockPlaceLog : Objects.requireNonNull(blockPlaceLogFolder.listFiles()))
         {
 
-            deleteFile(BlockPlaceLog);
+            deleteFile(blockPlaceLog);
 
         }
 
-        for (File BlockBreakLog : Objects.requireNonNull(blockBreakLogFolder.listFiles()))
+        for (File blockBreakLog : Objects.requireNonNull(blockBreakLogFolder.listFiles()))
         {
 
-            deleteFile(BlockBreakLog);
+            deleteFile(blockBreakLog);
 
         }
 
@@ -382,75 +382,75 @@ public class FileHandler {
 
         }
 
-        for (File KickLog : Objects.requireNonNull(playerKickLogFolder.listFiles()))
+        for (File kickLog : Objects.requireNonNull(playerKickLogFolder.listFiles()))
         {
 
-            deleteFile(KickLog);
+            deleteFile(kickLog);
 
         }
 
-        for (File PlayerLevelLog : Objects.requireNonNull(playerLevelFolder.listFiles()))
+        for (File playerLevelLog : Objects.requireNonNull(playerLevelFolder.listFiles()))
         {
 
-            deleteFile(PlayerLevelLog);
+            deleteFile(playerLevelLog);
 
         }
 
-        for (File PortalCreate : Objects.requireNonNull(portalCreateFolder.listFiles()))
+        for (File portalCreate : Objects.requireNonNull(portalCreateFolder.listFiles()))
         {
 
-            deleteFile(PortalCreate);
+            deleteFile(portalCreate);
 
         }
 
-        for (File BucketPlace : Objects.requireNonNull(bucketPlaceFolder.listFiles()))
+        for (File bucketPlace : Objects.requireNonNull(bucketPlaceFolder.listFiles()))
         {
 
-            deleteFile(BucketPlace);
+            deleteFile(bucketPlace);
 
         }
 
-        for (File Anvil : Objects.requireNonNull(anvilFolder.listFiles()))
+        for (File anvil : Objects.requireNonNull(anvilFolder.listFiles()))
         {
 
-            deleteFile(Anvil);
+            deleteFile(anvil);
 
         }
 
 
         if (main.getConfig().getBoolean("Staff.Enabled")) {
-            for (File Staff : Objects.requireNonNull(StaffFolder.listFiles())) {
+            for (File Staff : Objects.requireNonNull(staffFolder.listFiles())) {
 
                 deleteFile(Staff);
 
             }
         }
 
-        for (File ServerStart : Objects.requireNonNull(ServerStartFolder.listFiles()))
+        for (File serverStart : Objects.requireNonNull(serverStartFolder.listFiles()))
         {
 
-            deleteFile(ServerStart);
+            deleteFile(serverStart);
 
         }
 
-        for (File ServerStop : Objects.requireNonNull(ServerStopFolder.listFiles()))
+        for (File serverStop : Objects.requireNonNull(serverStopFolder.listFiles()))
         {
 
-            deleteFile(ServerStop);
+            deleteFile(serverStop);
 
         }
 
-        for (File ItemDrop : Objects.requireNonNull(itemDropFolder.listFiles()))
+        for (File itemDrop : Objects.requireNonNull(itemDropFolder.listFiles()))
         {
 
-            deleteFile(ItemDrop);
+            deleteFile(itemDrop);
 
         }
 
-        for (File Enchanting : Objects.requireNonNull(EnchantFolder.listFiles()))
+        for (File enchanting : Objects.requireNonNull(enchantFolder.listFiles()))
         {
 
-            deleteFile(Enchanting);
+            deleteFile(enchanting);
 
         }
 

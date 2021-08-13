@@ -42,7 +42,7 @@ public class Start {
 
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Server-Start")) && (main.SQL.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Server-Start")) && (main.sql.isConnected())){
 
             try {
 

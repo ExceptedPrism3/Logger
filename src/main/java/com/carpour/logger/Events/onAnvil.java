@@ -75,7 +75,7 @@ public class onAnvil implements Listener {
                                                 out.write("[" + dateFormat.format(date) + "] " + "The Staff " + playername + " has renamed an item to " + displayName + "\n");
                                                 out.close();
 
-                                                if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Anvil")) && (main.SQL.isConnected())) {
+                                                if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Anvil")) && (main.sql.isConnected())) {
 
 
                                                     MySQLData.anvil(serverName, playername, displayName, true);
@@ -110,7 +110,7 @@ public class onAnvil implements Listener {
 
                                         }
 
-                                        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Anvil")) && (main.SQL.isConnected())) {
+                                        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Anvil")) && (main.sql.isConnected())) {
 
                                             try {
 

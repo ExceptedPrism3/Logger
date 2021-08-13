@@ -28,8 +28,8 @@ public class onPlayerJoin implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         World world = player.getWorld();
-        String worldname = world.getName();
-        String playername = player.getName();
+        String worldName = world.getName();
+        String playerName = player.getName();
         InetSocketAddress ip = player.getAddress();
         double x = player.getLocation().getBlockX();
         double y = player.getLocation().getBlockY();
@@ -44,18 +44,18 @@ public class onPlayerJoin implements Listener {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
 
-                    Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldname + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false, Color.red );
+                    Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false, Color.red );
 
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + "] The Staff <" + playername + "> has logged in at X = " + x + " Y = " + y + " Z = " + z + " and their IP is " + ip + "\n");
+                        out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has logged in at X = " + x + " Y = " + y + " Z = " + z + " and their IP is " + ip + "\n");
                         out.close();
 
-                        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Join")) && (main.SQL.isConnected())) {
+                        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Join")) && (main.sql.isConnected())) {
 
                             assert ip != null;
-                            MySQLData.playerJoin(serverName, worldname, playername, x, y, z, ip, true);
+                            MySQLData.playerJoin(serverName, worldName, playerName, x, y, z, ip, true);
 
                         }
 
@@ -70,12 +70,12 @@ public class onPlayerJoin implements Listener {
 
                 }
 
-                Discord.playerJoin(player, "\uD83D\uDC4B [" + worldname + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false, Color.red );
+                Discord.playerJoin(player, "\uD83D\uDC4B [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false, Color.red );
 
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerJoinLogFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + "] The Player <" + playername + "> has logged in at X = " + x + " Y = " + y + " Z = " + z + " and their IP is " + ip + "\n");
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has logged in at X = " + x + " Y = " + y + " Z = " + z + " and their IP is " + ip + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -87,12 +87,12 @@ public class onPlayerJoin implements Listener {
 
             }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Join")) && (main.SQL.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Join")) && (main.sql.isConnected())){
 
             try {
 
                 assert ip != null;
-                MySQLData.playerJoin(serverName, worldname, playername, x, y, z, ip, false);
+                MySQLData.playerJoin(serverName, worldName, playerName, x, y, z, ip, false);
 
             }catch (Exception e) {
 

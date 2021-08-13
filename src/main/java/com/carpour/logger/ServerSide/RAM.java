@@ -55,7 +55,7 @@ public class RAM implements Runnable{
             }
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.RAM")) && (main.SQL.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.RAM")) && (main.sql.isConnected())){
 
             try{
 

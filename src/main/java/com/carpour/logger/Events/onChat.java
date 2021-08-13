@@ -28,8 +28,8 @@ public class onChat implements Listener {
 
             final Player player = event.getPlayer();
             World world = player.getWorld();
-            final String worldname = world.getName();
-            final String playername = player.getName();
+            final String worldName = world.getName();
+            final String playerName = player.getName();
             String msg = event.getMessage();
             String serverName = main.getConfig().getString("Server-Name");
             Date date = new Date();
@@ -46,13 +46,13 @@ public class onChat implements Listener {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + "] The Staff <" + playername + "> has said => " + msg +"\n");
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has said => " + msg +"\n");
                     out.close();
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Chat")) && (main.SQL.isConnected())) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Chat")) && (main.sql.isConnected())) {
 
 
-                        MySQLData.playerChat(serverName, worldname, playername, msg, true);
+                        MySQLData.playerChat(serverName, worldName, playerName, msg, true);
 
                     }
 
@@ -72,7 +72,7 @@ public class onChat implements Listener {
             try {
 
                 BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getChatLogFile(), true));
-                out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + "] The Player <" + playername + "> has said => " + msg +"\n");
+                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has said => " + msg +"\n");
                 out.close();
 
             } catch (IOException e) {
@@ -83,11 +83,11 @@ public class onChat implements Listener {
             }
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Chat")) &&(main.SQL.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Chat")) &&(main.sql.isConnected())){
 
             try {
 
-                MySQLData.playerChat(serverName, worldname, playername, msg, false);
+                MySQLData.playerChat(serverName, worldName, playerName, msg, false);
 
             }catch (Exception e){
 

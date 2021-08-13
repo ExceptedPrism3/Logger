@@ -28,15 +28,15 @@ public class onBlockPlace implements Listener {
     public void onPlace(BlockPlaceEvent event) {
 
         Player player = event.getPlayer();
-        String playername = player.getName();
+        String playerName = player.getName();
         World world = player.getWorld();
-        String worldname = world.getName();
+        String worldName = world.getName();
         int x = event.getBlock().getLocation().getBlockX();
         int y = event.getBlock().getLocation().getBlockY();
         int z = event.getBlock().getLocation().getBlockZ();
-        String blockname;
-        blockname = event.getBlock().getType().toString();
-        blockname = blockname.replaceAll("_", " ");
+        String blockName;
+        blockName = event.getBlock().getType().toString();
+        blockName = blockName.replaceAll("_", " ");
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -47,18 +47,18 @@ public class onBlockPlace implements Listener {
 
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
 
-                Discord.staffChat(player, "\uD83E\uDDF1️ **|** \uD83D\uDC6E\u200D♂️ [" + worldname + "] Has placed **" + blockname + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.green);
+                Discord.staffChat(player, "\uD83E\uDDF1️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has placed **" + blockName + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.green);
 
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + "] The Staff <" + playername + "> has placed " + blockname + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has placed " + blockName + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
                     out.close();
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Block-Place")) && (main.SQL.isConnected())) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Block-Place")) && (main.sql.isConnected())) {
 
 
-                        MySQLData.blockPlace(serverName, worldname, playername, blockname, x, y, z, true);
+                        MySQLData.blockPlace(serverName, worldName, playerName, blockName, x, y, z, true);
 
                     }
 
@@ -73,12 +73,12 @@ public class onBlockPlace implements Listener {
 
             }
 
-            Discord.blockPlace(player, "\uD83E\uDDF1️ [" + worldname + "] Has placed **" + blockname + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.green);
+            Discord.blockPlace(player, "\uD83E\uDDF1️ [" + worldName + "] Has placed **" + blockName + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.green);
 
             try {
 
                 BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBlockPlaceLogFile(), true));
-                out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + "] The Player <" + playername + "> has placed " + blockname + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
+                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has placed " + blockName + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
                 out.close();
 
             } catch (IOException e) {
@@ -89,11 +89,11 @@ public class onBlockPlace implements Listener {
             }
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Block-Place")) && (main.SQL.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Block-Place")) && (main.sql.isConnected())){
 
             try {
 
-                MySQLData.blockPlace(serverName, worldname, playername, blockname, x, y, z, false);
+                MySQLData.blockPlace(serverName, worldName, playerName, blockName, x, y, z, false);
 
             }catch (Exception e){
 

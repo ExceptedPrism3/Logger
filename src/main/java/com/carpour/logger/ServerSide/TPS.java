@@ -88,7 +88,7 @@ public class TPS implements Runnable {
             }
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.TPS")) && (main.SQL.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.TPS")) && (main.sql.isConnected())){
 
             if ((main.getConfig().getInt("TPS.Value-Medium")) <= 0 || (main.getConfig().getInt("TPS.Value-Medium") >= 20) ||
                     (main.getConfig().getInt("TPS.Value-Critical")) <= 0 || (main.getConfig().getInt("TPS.Value-Critical") >= 20)){

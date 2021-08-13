@@ -27,10 +27,10 @@ public class onSign implements Listener {
 
     public void onPlayerSign(SignChangeEvent event) {
         Player player = event.getPlayer();
-        String playername = player.getName();
+        String playerName = player.getName();
         World world = player.getWorld();
         String[] lines = event.getLines();
-        String worldname = world.getName();
+        String worldName = world.getName();
         double x = Math.floor(player.getLocation().getX());
         double y = Math.floor(player.getLocation().getY());
         double z = Math.floor(player.getLocation().getZ());
@@ -44,17 +44,17 @@ public class onSign implements Listener {
 
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
 
-                Discord.staffChat(player, "\uD83E\uDEA7 **|** \uD83D\uDC6E\u200D♂ [" + worldname + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines[0] + " **|** " + lines[1] + " **|** " + lines[2] + " **|** " + lines[3],false, Color.red);
+                Discord.staffChat(player, "\uD83E\uDEA7 **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines[0] + " **|** " + lines[1] + " **|** " + lines[2] + " **|** " + lines[3],false, Color.red);
 
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + " | Location X = " + x + " Y = " + y + " Z = " + z + "] <" + playername + "> " + "Line 1: " + lines[0] + " | Line 2: " + lines[1] + " | Line 3: " + lines[2] + " | Line 4: " + lines[3] + "\n");
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + " | Location X = " + x + " Y = " + y + " Z = " + z + "] <" + playerName + "> " + "Line 1: " + lines[0] + " | Line 2: " + lines[1] + " | Line 3: " + lines[2] + " | Line 4: " + lines[3] + "\n");
                     out.close();
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Sign-Text")) && (main.SQL.isConnected())) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Sign-Text")) && (main.sql.isConnected())) {
 
-                        MySQLData.playerSignText(serverName, worldname, x, y, z, playername, "[" + lines[0] + "] " + "[" + lines[1] + "] " + "[" + lines[2] + "] " + "[" + lines[3] + "]", true);
+                        MySQLData.playerSignText(serverName, worldName, x, y, z, playerName, "[" + lines[0] + "] " + "[" + lines[1] + "] " + "[" + lines[2] + "] " + "[" + lines[3] + "]", true);
 
                     }
 
@@ -69,12 +69,12 @@ public class onSign implements Listener {
 
             }
 
-            Discord.playerSignText(player, "\uD83E\uDEA7 [" + worldname + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines[0] + " **|** " + lines[1] + " **|** " + lines[2] + " **|** " + lines[3],false, Color.red);
+            Discord.playerSignText(player, "\uD83E\uDEA7 [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines[0] + " **|** " + lines[1] + " **|** " + lines[2] + " **|** " + lines[3],false, Color.red);
 
             try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getSignLogFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldname + " | Location X = " + x + " Y = " + y + " Z = " + z + "] <" + playername + "> " + "Line 1: " + lines[0] + " | Line 2: " + lines[1] + " | Line 3: " + lines[2] + " | Line 4: " + lines[3] + "\n");
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + " | Location X = " + x + " Y = " + y + " Z = " + z + "] <" + playerName + "> " + "Line 1: " + lines[0] + " | Line 2: " + lines[1] + " | Line 3: " + lines[2] + " | Line 4: " + lines[3] + "\n");
                     out.close();
 
             } catch (IOException e) {
@@ -85,11 +85,11 @@ public class onSign implements Listener {
             }
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Sign-Text")) && (main.SQL.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Sign-Text")) && (main.sql.isConnected())){
 
             try {
 
-                MySQLData.playerSignText(serverName, worldname, x, y, z, playername, "[" + lines[0] + "] " + "[" + lines[1] + "] " + "[" + lines[2] + "] " + "[" + lines[3] + "]", false);
+                MySQLData.playerSignText(serverName, worldName, x, y, z, playerName, "[" + lines[0] + "] " + "[" + lines[1] + "] " + "[" + lines[2] + "] " + "[" + lines[3] + "]", false);
 
             }catch (Exception e){
 

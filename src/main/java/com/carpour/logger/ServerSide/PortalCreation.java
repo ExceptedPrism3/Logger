@@ -24,7 +24,7 @@ public class PortalCreation implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPortalCreate(PortalCreateEvent event) {
 
-        String worldname = event.getWorld().getName();
+        String worldName = event.getWorld().getName();
         PortalCreateEvent.CreateReason reason = event.getReason();
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
@@ -32,12 +32,12 @@ public class PortalCreation implements Listener {
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Portal-Creation"))) {
 
-            Discord.portalCreation("\uD83D\uDEAA A portal has been created in **" + worldname + "** using **" + reason + "**", false, Color.yellow);
+            Discord.portalCreation("\uD83D\uDEAA A portal has been created in **" + worldName + "** using **" + reason + "**", false, Color.yellow);
 
             try {
 
                 BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPortalCreateFile(), true));
-                out.write("[" + dateFormat.format(date) + "] A portal has been created in " + worldname + " using " + reason + "\n");
+                out.write("[" + dateFormat.format(date) + "] A portal has been created in " + worldName + " using " + reason + "\n");
                 out.close();
 
             } catch (IOException e) {
@@ -48,11 +48,11 @@ public class PortalCreation implements Listener {
             }
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Portal-Creation")) && (main.SQL.isConnected())) {
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Portal-Creation")) && (main.sql.isConnected())) {
 
             try {
 
-                MySQLData.portalCreate(serverName, worldname, reason);
+                MySQLData.portalCreate(serverName, worldName, reason);
 
             } catch (Exception e) {
 

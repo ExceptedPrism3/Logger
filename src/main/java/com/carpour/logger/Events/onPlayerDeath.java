@@ -52,7 +52,7 @@ public class onPlayerDeath implements Listener {
                     out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has died at X = " + x + " Y = " + y + " Z = " + z + "\n");
                     out.close();
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Death")) && (main.SQL.isConnected())) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Death")) && (main.sql.isConnected())) {
 
 
                         MySQLData.playerDeath(serverName, worldName, playerName, x, y, z, true);
@@ -87,7 +87,7 @@ public class onPlayerDeath implements Listener {
 
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Death")) && (main.SQL.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Death")) && (main.sql.isConnected())){
 
             try {
 
