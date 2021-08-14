@@ -4,6 +4,7 @@ import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.MySQL.MySQLData;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,7 +27,7 @@ public class onPlayerKick implements Listener {
     public void onTabCompletion(PlayerKickEvent event){
 
         Player player = event.getPlayer();
-        String reason = event.getReason();
+        String reason = PlainTextComponentSerializer.plainText().serialize(event.reason());
         String worldName = player.getWorld().getName();
         String playerName = player.getName();
         double x = Math.floor(player.getLocation().getX());
