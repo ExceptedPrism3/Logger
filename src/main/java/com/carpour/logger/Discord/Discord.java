@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -243,7 +244,7 @@ public class Discord {
 
         if (staffChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : PlainTextComponentSerializer.plainText().serialize(player.displayName()),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
@@ -255,7 +256,7 @@ public class Discord {
 
         if (playerChatChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : PlainTextComponentSerializer.plainText().serialize(player.displayName()),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
@@ -267,7 +268,7 @@ public class Discord {
 
         if (playerCommandsChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : PlainTextComponentSerializer.plainText().serialize(player.displayName()),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
@@ -290,7 +291,7 @@ public class Discord {
 
         if (playerSignTextChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : PlainTextComponentSerializer.plainText().serialize(player.displayName()),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
@@ -302,7 +303,7 @@ public class Discord {
 
         if (playerJoinChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : PlainTextComponentSerializer.plainText().serialize(player.displayName()),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
@@ -314,7 +315,7 @@ public class Discord {
 
         if (playerLeaveChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : PlainTextComponentSerializer.plainText().serialize(player.displayName()),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
@@ -326,7 +327,7 @@ public class Discord {
 
         if (playerKickChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : PlainTextComponentSerializer.plainText().serialize(player.displayName()),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
@@ -338,7 +339,7 @@ public class Discord {
 
         if (playerDeathChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : PlainTextComponentSerializer.plainText().serialize(player.displayName()),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
@@ -350,7 +351,7 @@ public class Discord {
 
         if (playerTeleportChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : PlainTextComponentSerializer.plainText().serialize(player.displayName()),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
@@ -362,7 +363,7 @@ public class Discord {
 
         if (playerLevelChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : PlainTextComponentSerializer.plainText().serialize(player.displayName()),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
@@ -374,7 +375,7 @@ public class Discord {
 
         if (blockPlaceChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : PlainTextComponentSerializer.plainText().serialize(player.displayName()),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
@@ -386,7 +387,7 @@ public class Discord {
 
         if (blockBreakChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : PlainTextComponentSerializer.plainText().serialize(player.displayName()),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
@@ -409,7 +410,7 @@ public class Discord {
 
         if (bucketPlaceChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : PlainTextComponentSerializer.plainText().serialize(player.displayName()),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
@@ -421,7 +422,7 @@ public class Discord {
 
         if (anvilChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : PlainTextComponentSerializer.plainText().serialize(player.displayName()),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
@@ -477,7 +478,7 @@ public class Discord {
 
         if (itemDropChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : PlainTextComponentSerializer.plainText().serialize(player.displayName()),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
@@ -489,7 +490,7 @@ public class Discord {
 
         if (enchantingChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : PlainTextComponentSerializer.plainText().serialize(player.displayName()),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
