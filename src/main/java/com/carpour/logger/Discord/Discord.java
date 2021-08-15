@@ -5,7 +5,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -389,7 +388,7 @@ public class Discord {
     private static void discordUtil(Player player, String content, boolean contentinAuthorLine, TextChannel channel) {
         if (channel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : PlainTextComponentSerializer.plainText().serialize(player.displayName()),
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);

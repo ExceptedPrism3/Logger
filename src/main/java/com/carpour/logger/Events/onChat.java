@@ -2,10 +2,8 @@ package com.carpour.logger.Events;
 
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
-import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.MySQL.MySQLData;
-import io.papermc.paper.event.player.AsyncChatEvent;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import com.carpour.logger.Utils.FileHandler;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,13 +24,13 @@ public class onChat implements Listener {
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerChat(final AsyncChatEvent event) {
+    public void onPlayerChat(final AsyncPlayerChatEvent event) {
 
             final Player player = event.getPlayer();
             World world = player.getWorld();
             final String worldName = world.getName();
             final String playerName = player.getName();
-            String msg = PlainTextComponentSerializer.plainText().serialize(event.message());
+            String msg = event.getMessage();
             String serverName = main.getConfig().getString("Server-Name");
             Date date = new Date();
             DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -41,7 +39,7 @@ public class onChat implements Listener {
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Chat"))) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
 
                 Discord.staffChat(player, "\uD83D\uDCAC **|** \uD83D\uDC6E\u200D♂️ " + msg, false, Color.GREEN);
 

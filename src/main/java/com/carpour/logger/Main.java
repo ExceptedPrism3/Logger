@@ -40,10 +40,8 @@ public class Main extends JavaPlugin {
             sql = new MySQL();
             sql.connect();
             data = new MySQLData(this);
-            if (sql.isConnected()) {
-                data.createTable();
-                data.emptyTable();
-            }
+            if (sql.isConnected()) data.createTable();
+            data.emptyTable();
         }
 
         new FileHandler(getDataFolder());
