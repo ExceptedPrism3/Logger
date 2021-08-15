@@ -4,7 +4,6 @@ import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.MySQL.MySQLData;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -63,7 +62,7 @@ public class onAnvil implements Listener {
 
                                     if (meta.hasDisplayName()) {
 
-                                        String displayName = PlainTextComponentSerializer.plainText().serialize(meta.displayName());
+                                        String displayName = meta.getDisplayName();
                                         String playerName = player.getName();
 
                                         if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")) {
