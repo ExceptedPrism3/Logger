@@ -40,7 +40,7 @@ public class onPlayerKick implements Listener {
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Kick"))) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
 
                 Discord.staffChat(player, "\uD83E\uDD7E **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **Reason** " + reason, false, Color.blue);
 

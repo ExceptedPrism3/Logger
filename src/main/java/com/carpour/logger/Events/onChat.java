@@ -39,7 +39,7 @@ public class onChat implements Listener {
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Chat"))) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
 
                 Discord.staffChat(player, "\uD83D\uDCAC **|** \uD83D\uDC6E\u200D♂️ " + msg, false, Color.GREEN);
 

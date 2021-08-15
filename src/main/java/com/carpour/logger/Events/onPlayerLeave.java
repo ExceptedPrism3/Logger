@@ -42,7 +42,7 @@ public class onPlayerLeave implements Listener {
 
         if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Leave"))) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
 
                 Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
 

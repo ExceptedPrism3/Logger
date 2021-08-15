@@ -45,7 +45,7 @@ public class onEnchant implements Listener {
 
             for (Map.Entry<Enchantment, Integer> entry : ench.entrySet()) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")) {
 
                     Discord.staffChat(player, "\uD83D\uDCD6 **|** \uD83D\uDC6E\u200D♂️️ [" + worldName + "] Has used an **Enchantment table** that's located at X = " + x + " Y = " + y + " Z = " + z + " to Apply **" + entry.getKey().getName() + "** on the item **" + item + "** which cost **" + cost + "**", false, Color.pink);
 

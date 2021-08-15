@@ -45,7 +45,7 @@ public class onBlockPlace implements Listener {
 
         if (!event.isCancelled() && (main.getConfig().getBoolean("Log-to-Files")) && (main.getConfig().getBoolean("Log.Block-Place"))) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
 
                 Discord.staffChat(player, "\uD83E\uDDF1️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has placed **" + blockName + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.green);
 

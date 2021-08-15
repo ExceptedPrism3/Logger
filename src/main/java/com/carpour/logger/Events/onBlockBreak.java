@@ -43,7 +43,7 @@ public class onBlockBreak implements Listener {
 
         if (!event.isCancelled() && (main.getConfig().getBoolean("Log-to-Files")) && (main.getConfig().getBoolean("Log.Block-Break"))) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
 
                 Discord.staffChat(player, "⛏️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has broke **" + blockName + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
 
