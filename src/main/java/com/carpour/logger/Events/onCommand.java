@@ -208,7 +208,6 @@ public class onCommand implements Listener {
 
 
                 try {
-                    player.sendMessage("YAA");
                     MySQLData.playerCommands(serverName, worldName, playerName, message, false);
                 } catch (Exception exception) {
                     exception.printStackTrace();

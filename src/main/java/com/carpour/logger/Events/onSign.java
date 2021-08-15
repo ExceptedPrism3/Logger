@@ -4,12 +4,14 @@ import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.MySQL.MySQLData;
+import net.kyori.adventure.text.Component;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.BufferedWriter;
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class onSign implements Listener {
 
@@ -29,7 +32,7 @@ public class onSign implements Listener {
         Player player = event.getPlayer();
         String playerName = player.getName();
         World world = player.getWorld();
-        String[] lines = event.getLines();
+        @NotNull List<Component> lines = event.lines();
         String worldName = world.getName();
         double x = Math.floor(player.getLocation().getX());
         double y = Math.floor(player.getLocation().getY());
@@ -44,17 +47,18 @@ public class onSign implements Listener {
 
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
 
-                Discord.staffChat(player, "\uD83E\uDEA7 **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines[0] + " **|** " + lines[1] + " **|** " + lines[2] + " **|** " + lines[3],false, Color.red);
+                Discord.staffChat(player, "\uD83E\uDEA7 **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines.get(0) + " **|** " + lines.get(1) + " **|** " + lines.get(2) + " **|** " + lines.get(3), false, Color.red);
 
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + " | Location X = " + x + " Y = " + y + " Z = " + z + "] <" + playerName + "> " + "Line 1: " + lines[0] + " | Line 2: " + lines[1] + " | Line 3: " + lines[2] + " | Line 4: " + lines[3] + "\n");
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + " | Location X = " + x + " Y = " + y + " Z = " + z + "] <" + playerName + "> " + "Line 1: " + lines.get(0) + " | Line 2: " + lines.get(1) + " | Line 3: " + lines.get(2) + " | Line 4: " + lines.get(3) + "\n");
+
                     out.close();
 
                     if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Sign-Text")) && (main.sql.isConnected())) {
 
-                        MySQLData.playerSignText(serverName, worldName, x, y, z, playerName, "[" + lines[0] + "] " + "[" + lines[1] + "] " + "[" + lines[2] + "] " + "[" + lines[3] + "]", true);
+                        MySQLData.playerSignText(serverName, worldName, x, y, z, playerName, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", true);
 
                     }
 
@@ -69,12 +73,12 @@ public class onSign implements Listener {
 
             }
 
-            Discord.playerSignText(player, "\uD83E\uDEA7 [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines[0] + " **|** " + lines[1] + " **|** " + lines[2] + " **|** " + lines[3],false, Color.red);
+            Discord.playerSignText(player, "\uD83E\uDEA7 [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines.get(0) + " **|** " + lines.get(1) + " **|** " + lines.get(2) + " **|** " + lines.get(3),false, Color.red);
 
             try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getSignLogFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + " | Location X = " + x + " Y = " + y + " Z = " + z + "] <" + playerName + "> " + "Line 1: " + lines[0] + " | Line 2: " + lines[1] + " | Line 3: " + lines[2] + " | Line 4: " + lines[3] + "\n");
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + " | Location X = " + x + " Y = " + y + " Z = " + z + "] <" + playerName + "> " + "Line 1: " + lines.get(0) + " | Line 2: " + lines.get(1) + " | Line 3: " + lines.get(2) + " | Line 4: " + lines.get(3) + "\n");
                     out.close();
 
             } catch (IOException e) {
@@ -89,7 +93,7 @@ public class onSign implements Listener {
 
             try {
 
-                MySQLData.playerSignText(serverName, worldName, x, y, z, playerName, "[" + lines[0] + "] " + "[" + lines[1] + "] " + "[" + lines[2] + "] " + "[" + lines[3] + "]", false);
+                MySQLData.playerSignText(serverName, worldName, x, y, z, playerName, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", false);
 
             }catch (Exception e){
 

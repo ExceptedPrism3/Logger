@@ -4,6 +4,7 @@ import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.MySQL.MySQLData;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -62,8 +63,8 @@ public class onAnvil implements Listener {
 
                                     if (meta.hasDisplayName()) {
 
-                                        String displayName = meta.getDisplayName();
-                                        String playername = player.getName();
+                                        String displayName = PlainTextComponentSerializer.plainText().serialize(meta.displayName());
+                                        String playerName = player.getName();
 
                                         if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")) {
 
@@ -72,13 +73,13 @@ public class onAnvil implements Listener {
                                             try {
 
                                                 BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                                                out.write("[" + dateFormat.format(date) + "] " + "The Staff " + playername + " has renamed an item to " + displayName + "\n");
+                                                out.write("[" + dateFormat.format(date) + "] " + "The Staff " + playerName + " has renamed an item to " + displayName + "\n");
                                                 out.close();
 
                                                 if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Anvil")) && (main.sql.isConnected())) {
 
 
-                                                    MySQLData.anvil(serverName, playername, displayName, true);
+                                                    MySQLData.anvil(serverName, playerName, displayName, true);
 
                                                 }
 
@@ -98,7 +99,7 @@ public class onAnvil implements Listener {
                                         try {
 
                                             BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAnvilFile(), true));
-                                            out.write("[" + dateFormat.format(date) + "] " + "The player " + playername + " has renamed an item to " + displayName + "\n");
+                                            out.write("[" + dateFormat.format(date) + "] " + "The player " + playerName + " has renamed an item to " + displayName + "\n");
                                             out.close();
 
                                         } catch (IOException e) {
@@ -114,7 +115,7 @@ public class onAnvil implements Listener {
 
                                             try {
 
-                                                MySQLData.anvil(serverName, playername, displayName, false);
+                                                MySQLData.anvil(serverName, playerName, displayName, false);
 
                                             } catch (Exception e) {
 
