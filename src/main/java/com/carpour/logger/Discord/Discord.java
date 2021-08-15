@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -241,38 +242,17 @@ public class Discord {
 
     public static void staffChat(Player player, String content, boolean contentinAuthorLine, Color color) {
 
-        if (staffChannel == null) return;
-
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
-
-        if (!contentinAuthorLine) builder.setDescription(content);
-
-        staffChannel.sendMessage(builder.build()).queue();
+        discordUtil(player, content, contentinAuthorLine, staffChannel);
     }
 
     public static void playerChat(Player player, String content, boolean contentinAuthorLine, Color color) {
 
-        if (playerChatChannel == null) return;
-
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
-
-        if (!contentinAuthorLine) builder.setDescription(content);
-
-        playerChatChannel.sendMessage(builder.build()).queue();
+        discordUtil(player, content, contentinAuthorLine, playerChatChannel);
     }
 
     public static void playerCommand(Player player, String content, boolean contentinAuthorLine, Color color) {
 
-        if (playerCommandsChannel == null) return;
-
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
-
-        if (!contentinAuthorLine) builder.setDescription(content);
-
-        playerCommandsChannel.sendMessage(builder.build()).queue();
+        discordUtil(player, content, contentinAuthorLine, playerCommandsChannel);
     }
 
     public static void console(String content, boolean contentinAuthorLine, Color color) {
@@ -288,110 +268,47 @@ public class Discord {
 
     public static void playerSignText(Player player, String content, boolean contentinAuthorLine, Color color) {
 
-        if (playerSignTextChannel == null) return;
-
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
-
-        if (!contentinAuthorLine) builder.setDescription(content);
-
-        playerSignTextChannel.sendMessage(builder.build()).queue();
+        discordUtil(player, content, contentinAuthorLine, playerSignTextChannel);
     }
 
     public static void playerJoin(Player player, String content, boolean contentinAuthorLine, Color color) {
 
-        if (playerJoinChannel == null) return;
-
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
-
-        if (!contentinAuthorLine) builder.setDescription(content);
-
-        playerJoinChannel.sendMessage(builder.build()).queue();
+        discordUtil(player, content, contentinAuthorLine, playerJoinChannel);
     }
 
     public static void playerLeave(Player player, String content, boolean contentinAuthorLine, Color color) {
 
-        if (playerLeaveChannel == null) return;
-
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
-
-        if (!contentinAuthorLine) builder.setDescription(content);
-
-        playerLeaveChannel.sendMessage(builder.build()).queue();
+        discordUtil(player, content, contentinAuthorLine, playerLeaveChannel);
     }
 
     public static void playerKick(Player player, String content, boolean contentinAuthorLine, Color color) {
 
-        if (playerKickChannel == null) return;
-
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
-
-        if (!contentinAuthorLine) builder.setDescription(content);
-
-        playerKickChannel.sendMessage(builder.build()).queue();
+        discordUtil(player, content, contentinAuthorLine, playerKickChannel);
     }
 
     public static void playerDeath(Player player, String content, boolean contentinAuthorLine, Color color) {
 
-        if (playerDeathChannel == null) return;
-
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
-
-        if (!contentinAuthorLine) builder.setDescription(content);
-
-        playerDeathChannel.sendMessage(builder.build()).queue();
+        discordUtil(player, content, contentinAuthorLine, playerDeathChannel);
     }
 
     public static void playerTeleport(Player player, String content, boolean contentinAuthorLine, Color color) {
 
-        if (playerTeleportChannel == null) return;
-
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
-
-        if (!contentinAuthorLine) builder.setDescription(content);
-
-        playerTeleportChannel.sendMessage(builder.build()).queue();
+        discordUtil(player, content, contentinAuthorLine, playerTeleportChannel);
     }
 
     public static void playerLevel(Player player, String content, boolean contentinAuthorLine, Color color) {
 
-        if (playerLevelChannel == null) return;
-
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
-
-        if (!contentinAuthorLine) builder.setDescription(content);
-
-        playerLevelChannel.sendMessage(builder.build()).queue();
+        discordUtil(player, content, contentinAuthorLine, playerLevelChannel);
     }
 
     public static void blockPlace(Player player, String content, boolean contentinAuthorLine, Color color) {
 
-        if (blockPlaceChannel == null) return;
-
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
-
-        if (!contentinAuthorLine) builder.setDescription(content);
-
-        blockPlaceChannel.sendMessage(builder.build()).queue();
+        discordUtil(player, content, contentinAuthorLine, blockPlaceChannel);
     }
 
     public static void blockBreak(Player player, String content, boolean contentinAuthorLine, Color color) {
 
-        if (blockBreakChannel == null) return;
-
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
-
-        if (!contentinAuthorLine) builder.setDescription(content);
-
-        blockBreakChannel.sendMessage(builder.build()).queue();
+        discordUtil(player, content, contentinAuthorLine, blockBreakChannel);
     }
 
     public static void portalCreation(String content, boolean contentinAuthorLine, Color color) {
@@ -407,26 +324,12 @@ public class Discord {
 
     public static void bucketPlace(Player player, String content, boolean contentinAuthorLine, Color color) {
 
-        if (bucketPlaceChannel == null) return;
-
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
-
-        if (!contentinAuthorLine) builder.setDescription(content);
-
-        bucketPlaceChannel.sendMessage(builder.build()).queue();
+        discordUtil(player, content, contentinAuthorLine, bucketPlaceChannel);
     }
 
     public static void anvil(Player player, String content, boolean contentinAuthorLine, Color color) {
 
-        if (anvilChannel == null) return;
-
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
-
-        if (!contentinAuthorLine) builder.setDescription(content);
-
-        anvilChannel.sendMessage(builder.build()).queue();
+        discordUtil(player, content, contentinAuthorLine, anvilChannel);
     }
 
     public static void TPS(String content, boolean contentinAuthorLine, Color color) {
@@ -475,26 +378,23 @@ public class Discord {
 
     public static void itemDrop(Player player, String content, boolean contentinAuthorLine, Color color) {
 
-        if (itemDropChannel == null) return;
-
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
-
-        if (!contentinAuthorLine) builder.setDescription(content);
-
-        itemDropChannel.sendMessage(builder.build()).queue();
+        discordUtil(player, content, contentinAuthorLine, itemDropChannel);
     }
 
     public static void enchanting(Player player, String content, boolean contentinAuthorLine, Color color) {
 
-        if (enchantingChannel == null) return;
+        discordUtil(player, content, contentinAuthorLine, enchantingChannel);
+    }
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
+    private static void discordUtil(Player player, String content, boolean contentinAuthorLine, TextChannel channel) {
+        if (channel == null) return;
+
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : PlainTextComponentSerializer.plainText().serialize(player.displayName()),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
 
-        enchantingChannel.sendMessage(builder.build()).queue();
+        channel.sendMessage(builder.build()).queue();
     }
 
     public void disconnect() {

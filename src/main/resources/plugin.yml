@@ -1,8 +1,8 @@
 name: Logger
 version: ${project.version}
 main: com.carpour.logger.Main
-api-version: 1.16
-authors: [ Prism3 ]
+api-version: 1.13
+authors: [ Prism3 , thelooter ]
 description: Log all Activities from Commands, Chat, Player Join, Player Leave, Player Death and even Server's RAM, TPS and Much More!
 commands:
   logger:

@@ -4,6 +4,8 @@ import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.MySQL.MySQLData;
+import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,13 +26,13 @@ public class onChat implements Listener {
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerChat(final AsyncPlayerChatEvent event) {
+    public void onPlayerChat(final AsyncChatEvent event) {
 
             final Player player = event.getPlayer();
             World world = player.getWorld();
             final String worldName = world.getName();
             final String playerName = player.getName();
-            String msg = event.getMessage();
+            String msg = PlainTextComponentSerializer.plainText().serialize(event.message());
             String serverName = main.getConfig().getString("Server-Name");
             Date date = new Date();
             DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
