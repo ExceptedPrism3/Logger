@@ -3,7 +3,8 @@ package com.carpour.logger.ServerSide;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.MySQL.MySQLData;
+import com.carpour.logger.database.MySQL.MySQLData;
+import com.carpour.logger.database.SQLite.SQLiteData;
 
 import java.awt.*;
 import java.io.BufferedWriter;
@@ -13,7 +14,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class RAM implements Runnable{
+public class RAM implements Runnable {
 
     private final Main main = Main.getInstance();
 
@@ -27,7 +28,7 @@ public class RAM implements Runnable{
 
     public void run() {
 
-        if ((main.getConfig().getInt("RAM.Percent")) <= 0 || (main.getConfig().getInt("RAM.Percent") >= 100)){
+        if ((main.getConfig().getInt("RAM.Percent")) <= 0 || (main.getConfig().getInt("RAM.Percent") >= 100)) {
 
             return;
 
@@ -55,16 +56,24 @@ public class RAM implements Runnable{
             }
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.RAM")) && (main.sql.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.RAM")) && (main.mySQL.isConnected())) {
 
-            try{
+            try {
 
-                    MySQLData.RAM(serverName, maxMemory, usedMemory, freeMemory);
+                MySQLData.RAM(serverName, maxMemory, usedMemory, freeMemory);
 
-            }catch (Exception e){
+            } catch (Exception e) {
 
                 e.printStackTrace();
 
+            }
+        }
+        if (main.getConfig().getBoolean("SQLite.Enable") && (main.getConfig().getBoolean("Log.RAM"))
+                && (main.mySQL.isConnected())) {
+            try{
+                SQLiteData.insertRAM(serverName, maxMemory, usedMemory, freeMemory);
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
         }
     }

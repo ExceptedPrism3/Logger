@@ -3,7 +3,7 @@ package com.carpour.logger.Events;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.MySQL.MySQLData;
+import com.carpour.logger.database.MySQL.MySQLData;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -54,7 +54,7 @@ public class onBucketPlace implements Listener {
                     out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has placed " + bucket + " at X = " + x + " Y = " + y + " Z = " + z + "\n");
                     out.close();
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Bucket-Place")) && (main.sql.isConnected())) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Bucket-Place")) && (main.mySQL.isConnected())) {
 
                         MySQLData.bucketPlace(serverName, worldName, playerName, bucket, x, y, z, true);
 
@@ -88,7 +88,7 @@ public class onBucketPlace implements Listener {
 
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Bucket-Place")) && (main.sql.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Bucket-Place")) && (main.mySQL.isConnected())){
 
             try {
 

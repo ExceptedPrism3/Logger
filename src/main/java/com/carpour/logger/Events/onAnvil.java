@@ -3,7 +3,7 @@ package com.carpour.logger.Events;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.MySQL.MySQLData;
+import com.carpour.logger.database.MySQL.MySQLData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -75,7 +75,7 @@ public class onAnvil implements Listener {
                                                 out.write("[" + dateFormat.format(date) + "] " + "The Staff " + playerName + " has renamed an item to " + displayName + "\n");
                                                 out.close();
 
-                                                if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Anvil")) && (main.sql.isConnected())) {
+                                                if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Anvil")) && (main.mySQL.isConnected())) {
 
 
                                                     MySQLData.anvil(serverName, playerName, displayName, true);
@@ -110,7 +110,7 @@ public class onAnvil implements Listener {
 
                                         }
 
-                                        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Anvil")) && (main.sql.isConnected())) {
+                                        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Anvil")) && (main.mySQL.isConnected())) {
 
                                             try {
 

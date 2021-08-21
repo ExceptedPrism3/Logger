@@ -1,4 +1,4 @@
-package com.carpour.logger.MySQL;
+package com.carpour.logger.database.MySQL;
 
 import com.carpour.logger.Main;
 import org.bukkit.ChatColor;
@@ -22,68 +22,68 @@ public class MySQLData {
 
         try {
 
-            playerChat = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Chat "
+            playerChat = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Chat "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Message VARCHAR(200),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
-            playerCommands = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Commands "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Command VARCHAR(50),Is_Staff TINYINT,PRIMARY KEY (Date))");
+            playerCommands = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Commands "
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Command VARCHAR(256),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
-            consoleCommands = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Console_Commands "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Command VARCHAR(50),PRIMARY KEY (Date))");
+            consoleCommands = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Console_Commands "
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Command VARCHAR(256),PRIMARY KEY (Date))");
 
-            playerSignText = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Sign_Text "
+            playerSignText = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Sign_Text "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),X INT,Y INT,Z INT,Playername VARCHAR(100),Line VARCHAR(60),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
-            playerDeath = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Death "
+            playerDeath = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Death "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
-            playerTeleport = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Teleport "
+            playerTeleport = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Teleport "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),From_X INT,From_Y INT,From_Z INT,To_X INT,To_Y INT,To_Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
-            playerJoin = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Join "
+            playerJoin = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Join "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT,Y INT,Z INT,IP INT UNSIGNED,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
-            playerLeave = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Leave "
+            playerLeave = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Leave "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
-            blockPlace = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Block_Place "
+            blockPlace = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Block_Place "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Block VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
-            blockBreak = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Block_Break "
+            blockBreak = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Block_Break "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Block VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
-            TPS = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS TPS "
+            TPS = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS TPS "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),TPS INT,PRIMARY KEY (Date))");
 
-            RAM = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS RAM "
+            RAM = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS RAM "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Total_Memory INT,Used_Memory INT,Free_Memory INT,PRIMARY KEY (Date))");
 
-            playerKick = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Kick "
+            playerKick = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Kick "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT,Y INT,Z INT,Reason VARCHAR(50),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
-            portalCreation = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Portal_Creation "
+            portalCreation = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Portal_Creation "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Caused_By VARCHAR(50),PRIMARY KEY (Date))");
 
-            playerLevel = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Level "
+            playerLevel = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Level "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Playername VARCHAR(100),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
-            bucketPlace = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Bucket_Place "
+            bucketPlace = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Bucket_Place "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Bucket VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
-            anvil = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Anvil "
+            anvil = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Anvil "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Playername VARCHAR(100),New_name VARCHAR(100),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
-            serverStart = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Server_Start "
+            serverStart = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Server_Start "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),PRIMARY KEY (Date))");
 
-            serverStop = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Server_Stop "
+            serverStop = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Server_Stop "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),PRIMARY KEY (Date))");
 
-            itemDrop = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Item_Drop "
+            itemDrop = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Item_Drop "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Item VARCHAR(50),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
-            enchant = plugin.sql.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Enchanting "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT(50),Y INT(50),Z INT(50),Enchantment VARCHAR(50),Item VARCHAR(50),Cost INT(5),Is_Staff TINYINT,PRIMARY KEY (Date))");
+            enchant = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Enchanting "
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT,Y INT,Z INT,Enchantment VARCHAR(50),Item VARCHAR(50),Cost INT(5),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             playerChat.executeUpdate();
             playerCommands.executeUpdate();
@@ -118,7 +118,7 @@ public class MySQLData {
     public static void playerChat(String serverName, String worldname, String playername, String msg, boolean staff){
         try {
             String database = "Player_Chat";
-            PreparedStatement playerChat = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Message,Is_Staff) VALUES(?,?,?,?,?)");
+            PreparedStatement playerChat = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Message,Is_Staff) VALUES(?,?,?,?,?)");
             playerChat.setString(1, serverName);
             playerChat.setString(2, worldname);
             playerChat.setString(3, playername);
@@ -134,7 +134,7 @@ public class MySQLData {
     public static void playerCommands(String serverName, String worldname, String playername, String msg, boolean staff){
         try {
             String database = "Player_Commands";
-            PreparedStatement playerCommands = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Command,Is_Staff) VALUES(?,?,?,?,?)");
+            PreparedStatement playerCommands = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Command,Is_Staff) VALUES(?,?,?,?,?)");
             playerCommands.setString(1, serverName);
             playerCommands.setString(2, worldname);
             playerCommands.setString(3, playername);
@@ -150,7 +150,7 @@ public class MySQLData {
     public static void consoleCommands(String serverName, String msg){
         try {
             String database = "Console_Commands";
-            PreparedStatement consoleCommands = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Command) VALUES(?,?)");
+            PreparedStatement consoleCommands = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Command) VALUES(?,?)");
             consoleCommands.setString(1, serverName);
             consoleCommands.setString(2, msg);
             consoleCommands.executeUpdate();
@@ -163,7 +163,7 @@ public class MySQLData {
     public static void playerSignText(String serverName, String worldname, double x, double y, double z, String playername, String Lines, boolean staff){
         try {
             String database = "Player_Sign_Text";
-            PreparedStatement playerSignText = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,X,Y,Z,Playername,Line,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+            PreparedStatement playerSignText = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,X,Y,Z,Playername,Line,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
             playerSignText.setString(1, serverName);
             playerSignText.setString(2, worldname);
             playerSignText.setDouble(3, x);
@@ -182,7 +182,7 @@ public class MySQLData {
     public static void playerDeath(String serverName, String worldname, String playername, double x, double y, double z,boolean staff){
         try {
             String database = "Player_Death";
-            PreparedStatement playerDeath= plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?)");
+            PreparedStatement playerDeath= plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?)");
             playerDeath.setString(1, serverName);
             playerDeath.setString(2, worldname);
             playerDeath.setString(3, playername);
@@ -200,7 +200,7 @@ public class MySQLData {
     public static void playerTeleport(String serverName, String worldname, String playername, double ox, double oy, double oz, double tx, double ty, double tz, boolean staff){
         try {
             String database = "Player_Teleport";
-            PreparedStatement playerTeleport = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,From_X,From_Y,From_Z,To_X,To_Y,To_Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
+            PreparedStatement playerTeleport = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,From_X,From_Y,From_Z,To_X,To_Y,To_Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
             playerTeleport.setString(1, serverName);
             playerTeleport.setString(2, worldname);
             playerTeleport.setString(3, playername);
@@ -221,7 +221,7 @@ public class MySQLData {
     public static void playerJoin(String serverName, String worldname, String playername, double x, double y, double z, InetSocketAddress IP, boolean staff) {
         try {
             String database = "Player_Join";
-            PreparedStatement playerJoin = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,IP,Is_Staff) VALUES(?,?,?,?,?,?,INET_ATON(?),?)");
+            PreparedStatement playerJoin = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,IP,Is_Staff) VALUES(?,?,?,?,?,?,INET_ATON(?),?)");
             playerJoin.setString(1, serverName);
             playerJoin.setString(2, worldname);
             playerJoin.setString(3, playername);
@@ -245,7 +245,7 @@ public class MySQLData {
     public static void playerLeave(String serverName, String worldname, String playername, double x, double y, double z, boolean staff){
         try {
             String database = "Player_Leave";
-            PreparedStatement playerLeave = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?)");
+            PreparedStatement playerLeave = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?)");
             playerLeave.setString(1, serverName);
             playerLeave.setString(2, worldname);
             playerLeave.setString(3, playername);
@@ -263,7 +263,7 @@ public class MySQLData {
     public static void blockPlace(String serverName, String worldname, String playername, String block, double x, double y, double z, boolean staff){
         try {
             String database = "Block_Place";
-            PreparedStatement blockPlace = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Block,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+            PreparedStatement blockPlace = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Block,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
             blockPlace.setString(1, serverName);
             blockPlace.setString(2, worldname);
             blockPlace.setString(3, playername);
@@ -282,7 +282,7 @@ public class MySQLData {
     public static void blockBreak(String serverName, String worldname, String playername, String blockname, double x, double y, double z,boolean staff){
         try {
             String database = "Block_Break";
-            PreparedStatement blockBreak = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Block,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+            PreparedStatement blockBreak = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Block,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
             blockBreak.setString(1, serverName);
             blockBreak.setString(2, worldname);
             blockBreak.setString(3, playername);
@@ -301,7 +301,7 @@ public class MySQLData {
     public static void TPS(String serverName, double tps){
         try {
             String database = "TPS";
-            PreparedStatement TPS = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,TPS) VALUES(?,?)");
+            PreparedStatement TPS = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,TPS) VALUES(?,?)");
             TPS.setString(1, serverName);
             TPS.setDouble(2, tps);
             TPS.executeUpdate();
@@ -314,7 +314,7 @@ public class MySQLData {
     public static void RAM(String serverName, long TM, long UM, long FM){
         try {
             String database = "RAM";
-            PreparedStatement RAM = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Total_Memory,Used_Memory,Free_Memory) VALUES(?,?,?,?)");
+            PreparedStatement RAM = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Total_Memory,Used_Memory,Free_Memory) VALUES(?,?,?,?)");
             RAM.setString(1, serverName);
             RAM.setDouble(2, TM);
             RAM.setDouble(3, UM);
@@ -329,7 +329,7 @@ public class MySQLData {
     public static void playerKick(String serverName, String worldname, String playername, double x, double y, double z, String reason, boolean staff){
         try {
             String database = "Player_Kick";
-            PreparedStatement playerKick = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Reason,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+            PreparedStatement playerKick = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Reason,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
             playerKick.setString(1, serverName);
             playerKick.setString(2, worldname);
             playerKick.setString(3, playername);
@@ -348,7 +348,7 @@ public class MySQLData {
     public static void portalCreate(String serverName, String worldname, PortalCreateEvent.CreateReason By){
         try {
             String database = "Portal_Creation";
-            PreparedStatement portalCreation = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Caused_By) VALUES(?,?,?)");
+            PreparedStatement portalCreation = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Caused_By) VALUES(?,?,?)");
             portalCreation.setString(1, serverName);
             portalCreation.setString(2, worldname);
             portalCreation.setString(3, By.toString());
@@ -362,7 +362,7 @@ public class MySQLData {
     public static void levelChange(String serverName, String playername, boolean staff){
         try {
             String database = "Player_Level";
-            PreparedStatement playerLevel = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Playername,Is_Staff) VALUES(?,?,?)");
+            PreparedStatement playerLevel = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Playername,Is_Staff) VALUES(?,?,?)");
             playerLevel.setString(1, serverName);
             playerLevel.setString(2, playername);
             playerLevel.setBoolean(3, staff);
@@ -378,7 +378,7 @@ public class MySQLData {
     public static void bucketPlace(String serverName, String worldname, String playername, String bucket, double x, double y, double z, boolean staff){
         try {
             String database = "Bucket_Place";
-            PreparedStatement bucketPlace = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Bucket,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+            PreparedStatement bucketPlace = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Bucket,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
             bucketPlace.setString(1, serverName);
             bucketPlace.setString(2, worldname);
             bucketPlace.setString(3, playername);
@@ -399,7 +399,7 @@ public class MySQLData {
     public static void anvil(String serverName, String playername, String newname, boolean staff){
         try {
             String database = "Anvil";
-            PreparedStatement anvil = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Playername,New_name,Is_Staff) VALUES(?,?,?,?)");
+            PreparedStatement anvil = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Playername,New_name,Is_Staff) VALUES(?,?,?,?)");
             anvil.setString(1, serverName);
             anvil.setString(2, playername);
             anvil.setString(3, newname);
@@ -416,7 +416,7 @@ public class MySQLData {
     public static void serverStart(String serverName){
         try {
             String database = "Server_Start";
-            PreparedStatement serverStart = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name) VALUES(?)");
+            PreparedStatement serverStart = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name) VALUES(?)");
             serverStart.setString(1, serverName);
             serverStart.executeUpdate();
 
@@ -430,7 +430,7 @@ public class MySQLData {
     public static void serverStop(String serverName){
         try {
             String database = "Server_Stop";
-            PreparedStatement serverStop = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name) VALUES(?)");
+            PreparedStatement serverStop = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name) VALUES(?)");
             serverStop.setString(1, serverName);
             serverStop.executeUpdate();
 
@@ -444,7 +444,7 @@ public class MySQLData {
     public static void itemDrop(String serverName, String world, String playername, String item, boolean staff){
         try {
             String database = "Item_Drop";
-            PreparedStatement itemDrop = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Item,Is_Staff) VALUES(?,?,?,?,?)");
+            PreparedStatement itemDrop = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Item,Is_Staff) VALUES(?,?,?,?,?)");
             itemDrop.setString(1, serverName);
             itemDrop.setString(2, world);
             itemDrop.setString(3, playername);
@@ -462,7 +462,7 @@ public class MySQLData {
     public static void enchant(String serverName, String world, String playername, double x, double y, double z, String enchantment, String item, int cost ,boolean staff){
         try {
             String database = "Enchanting";
-            PreparedStatement enchanting = plugin.sql.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Enchantment,Item,Cost,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
+            PreparedStatement enchanting = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Enchantment,Item,Cost,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
             enchanting.setString(1, serverName);
             enchanting.setString(2, world);
             enchanting.setString(3, playername);
@@ -490,47 +490,47 @@ public class MySQLData {
 
         try{
 
-            PreparedStatement player_Chat = plugin.sql.getConnection().prepareStatement("DELETE FROM Player_Chat WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement player_Chat = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Chat WHERE DATE < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement player_Commands = plugin.sql.getConnection().prepareStatement("DELETE FROM Player_Commands WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement player_Commands = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Commands WHERE Date < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement console_Commands = plugin.sql.getConnection().prepareStatement("DELETE FROM Console_Commands WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement console_Commands = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Console_Commands WHERE DATE < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement player_Sign_Text = plugin.sql.getConnection().prepareStatement("DELETE FROM Player_Sign_Text WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement player_Sign_Text = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Sign_Text WHERE Date < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement player_Join = plugin.sql.getConnection().prepareStatement("DELETE FROM Player_Join WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement player_Join = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Join WHERE DATE < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement player_Leave = plugin.sql.getConnection().prepareStatement("DELETE FROM Player_Leave WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement player_Leave = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Leave WHERE Date < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement player_Kick = plugin.sql.getConnection().prepareStatement("DELETE FROM Player_Kick WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement player_Kick = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Kick WHERE DATE < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement player_Death = plugin.sql.getConnection().prepareStatement("DELETE FROM Player_Death WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement player_Death = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Death WHERE Date < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement player_Teleport = plugin.sql.getConnection().prepareStatement("DELETE FROM Player_Teleport WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement player_Teleport = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Teleport WHERE DATE < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement player_Level = plugin.sql.getConnection().prepareStatement("DELETE FROM Player_Level WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement player_Level = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Level WHERE Date < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement block_Place = plugin.sql.getConnection().prepareStatement("DELETE FROM Block_Place WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement block_Place = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Block_Place WHERE DATE < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement block_Break = plugin.sql.getConnection().prepareStatement("DELETE FROM Block_Break WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement block_Break = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Block_Break WHERE Date < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement portal_Creation = plugin.sql.getConnection().prepareStatement("DELETE FROM Portal_Creation WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement portal_Creation = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Portal_Creation WHERE DATE < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement bucket_Place = plugin.sql.getConnection().prepareStatement("DELETE FROM Bucket_Place WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement bucket_Place = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Bucket_Place WHERE Date < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement anvil = plugin.sql.getConnection().prepareStatement("DELETE FROM Anvil WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement anvil = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Anvil WHERE DATE < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement TPS = plugin.sql.getConnection().prepareStatement("DELETE FROM TPS WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement TPS = plugin.mySQL.getConnection().prepareStatement("DELETE FROM TPS WHERE Date < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement RAM = plugin.sql.getConnection().prepareStatement("DELETE FROM RAM WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement RAM = plugin.mySQL.getConnection().prepareStatement("DELETE FROM RAM WHERE DATE < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement server_Start = plugin.sql.getConnection().prepareStatement("DELETE FROM Server_Start WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement server_Start = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Server_Start WHERE Date < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement server_Stop = plugin.sql.getConnection().prepareStatement("DELETE FROM Server_Stop WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement server_Stop = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Server_Stop WHERE DATE < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement item_Drop = plugin.sql.getConnection().prepareStatement("DELETE FROM Item_Drop WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement item_Drop = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Item_Drop WHERE Date < NOW() - INTERVAL " + When + " DAY");
 
-            PreparedStatement enchanting = plugin.sql.getConnection().prepareStatement("DELETE FROM Enchanting WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement enchanting = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Enchanting WHERE DATE < NOW() - INTERVAL " + When + " DAY");
 
             player_Chat.executeUpdate();
             player_Commands.executeUpdate();
