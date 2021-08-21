@@ -2,7 +2,8 @@ package com.carpour.logger.Events;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.MySQL.MySQLData;
+import com.carpour.logger.database.MySQL.MySQLData;
+import com.carpour.logger.database.SQLite.SQLiteData;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -63,7 +64,7 @@ public class onPlayerJoin implements Listener {
                         out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has logged in at X = " + x + " Y = " + y + " Z = " + z + " and their IP is " + ip + "\n");
                         out.close();
 
-                        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Join")) && (main.sql.isConnected())) {
+                        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Join")) && (main.mySQL.isConnected())) {
 
                             assert ip != null;
                             MySQLData.playerJoin(serverName, worldName, playerName, x, y, z, ip, true);
@@ -98,17 +99,23 @@ public class onPlayerJoin implements Listener {
 
             }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Join")) && (main.sql.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Join")) && (main.mySQL.isConnected())){
 
             try {
 
-                assert ip != null;
-                MySQLData.playerJoin(serverName, worldName, playerName, x, y, z, ip, false);
+                MySQLData.playerJoin(serverName, worldName, playerName, x, y, z, ip, player.hasPermission("logger.staff"));
 
             }catch (Exception e) {
 
                 e.printStackTrace();
 
+            }
+        }
+        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Join") && main.getSqLite().isConnected()) {
+            try {
+                SQLiteData.insertPlayerJoin(serverName, player, player.hasPermission("logger.staff"));
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
         }
     }

@@ -3,7 +3,8 @@ package com.carpour.logger.Events;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.MySQL.MySQLData;
+import com.carpour.logger.database.MySQL.MySQLData;
+import com.carpour.logger.database.SQLite.SQLiteData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -69,7 +70,7 @@ public class onCommand implements Listener {
                                 out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has executed => " + message + "\n");
                                 out.close();
 
-                                if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.sql.isConnected())) {
+                                if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.mySQL.isConnected())) {
 
                                     MySQLData.playerCommands(serverName, worldName, playerName, message, true);
 
@@ -129,7 +130,7 @@ public class onCommand implements Listener {
                     out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has executed => " + message + "\n");
                     out.close();
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.sql.isConnected())) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.mySQL.isConnected())) {
 
 
                         MySQLData.playerCommands(serverName, worldName, playerName, message, true);
@@ -165,7 +166,7 @@ public class onCommand implements Listener {
         }
 
         //Logging to MySQL if logging to MySQL and Command Logging is enabled
-        if ((main.getConfig().getBoolean("MySQL.Enable")) && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.sql.isConnected())){
+        if ((main.getConfig().getBoolean("MySQL.Enable")) && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.mySQL.isConnected())){
 
 
 
@@ -179,8 +180,6 @@ public class onCommand implements Listener {
                 for (String command : main.getConfig().getStringList("Player-Commands.Commands-to-Log")) {
 
                     List<String> commandParts = Arrays.asList(command.split("\\s+"));
-
-
                     if (messageParts.containsAll(commandParts)) {
 
                         try {
@@ -215,6 +214,54 @@ public class onCommand implements Listener {
             }
 
 
+        }
+
+        //Logging to SQLite if logging to SQLite and Command Logging is enabled
+        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Commands") && main.getSqLite().isConnected()) {
+            if (!(player.hasPermission("logger.exempt") || player.isOp())) {
+                //Command Whitelist
+                if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")) {
+
+                    if (main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
+                        return;
+                    }
+
+                    for (String command : main.getConfig().getStringList("Player-Commands.Commands-to-Log")) {
+
+                        List<String> commandParts = Arrays.asList(command.split("\\s+"));
+                        if (messageParts.containsAll(commandParts)) {
+
+                            try {
+                                SQLiteData.insertPlayerCommands(serverName, player, message, player.hasPermission("logger.staff"));
+                            } catch (Exception exception) {
+                                exception.printStackTrace();
+                            }
+                        }
+                    }
+                }
+                //Command Blacklist
+                if (main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
+
+                    if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")) {
+                        return;
+                    }
+
+                    for (String command : main.getConfig().getStringList("Player-Commands.Commands-to-Block")) {
+                        List<String> commandParts = Arrays.asList(command.split("\\s+"));
+
+                        if (messageParts.containsAll(commandParts)) {
+                            return;
+                        }
+                    }
+
+                    try {
+                        SQLiteData.insertPlayerCommands(serverName, player, message, player.hasPermission("logger.staff"));
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
+                }
+
+            }
         }
 
         if (main.getConfig().getBoolean("Log.Player-Commands") && main.getConfig().getBoolean("Player-Commands.Commands-Spy.Enable")) {

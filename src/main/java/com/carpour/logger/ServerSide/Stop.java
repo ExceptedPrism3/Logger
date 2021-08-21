@@ -2,7 +2,7 @@ package com.carpour.logger.ServerSide;
 
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
-import com.carpour.logger.MySQL.MySQLData;
+import com.carpour.logger.database.MySQL.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
 
 import java.awt.*;
@@ -41,7 +41,7 @@ public class Stop {
 
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Server-Stop")) && (main.sql.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Server-Stop")) && (main.mySQL.isConnected())){
 
             String serverName = main.getConfig().getString("Server-Name");
 

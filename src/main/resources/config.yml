@@ -108,6 +108,12 @@ MySQL:
   Database: database
   Data-Deletion: 7
 
+# SQLite Feature
+# Data-Delition Value in Days
+SQLite:
+  Enable: false
+  Data-Deletion: 7
+
 Messages:
   No-Permission: '&cYou do not have permission to run this command.'
   Reload-Message: '&aConfigs Reloaded.'

@@ -2,7 +2,7 @@ package com.carpour.logger.Events;
 
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
-import com.carpour.logger.MySQL.MySQLData;
+import com.carpour.logger.database.MySQL.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -50,7 +50,7 @@ public class onPlayerKick implements Listener {
                     out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> got kicked at X = " + x + " Y = " + y + " Z = " + z + " for " + reason + "\n");
                     out.close();
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Kick")) && (main.sql.isConnected())) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Kick")) && (main.mySQL.isConnected())) {
 
                         MySQLData.playerKick(serverName, worldName, playerName, x, y, z, reason, true);
 
@@ -84,7 +84,7 @@ public class onPlayerKick implements Listener {
 
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Kick")) && (main.sql.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Kick")) && (main.mySQL.isConnected())){
 
             try {
 

@@ -3,7 +3,8 @@ package com.carpour.logger.ServerSide;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.MySQL.MySQLData;
+import com.carpour.logger.database.MySQL.MySQLData;
+import com.carpour.logger.database.SQLite.SQLiteData;
 
 import java.awt.*;
 import java.io.BufferedWriter;
@@ -88,7 +89,7 @@ public class TPS implements Runnable {
             }
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.TPS")) && (main.sql.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.TPS")) && (main.mySQL.isConnected())){
 
             if ((main.getConfig().getInt("TPS.Value-Medium")) <= 0 || (main.getConfig().getInt("TPS.Value-Medium") >= 20) ||
                     (main.getConfig().getInt("TPS.Value-Critical")) <= 0 || (main.getConfig().getInt("TPS.Value-Critical") >= 20)){
@@ -114,6 +115,42 @@ public class TPS implements Runnable {
                 try {
 
                     MySQLData.TPS(serverName, getTPS());
+
+                }catch (Exception e){
+
+                    e.printStackTrace();
+
+                }
+            }
+        }
+
+        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.TPS")
+                && main.getSqLite().isConnected()) {
+
+            if ((main.getConfig().getInt("TPS.Value-Medium")) <= 0 || (main.getConfig().getInt("TPS.Value-Medium") >= 20) ||
+                    (main.getConfig().getInt("TPS.Value-Critical")) <= 0 || (main.getConfig().getInt("TPS.Value-Critical") >= 20)){
+
+                return;
+
+            }
+
+            if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
+
+                try {
+
+                    SQLiteData.insertTPS(serverName, getTPS());
+
+                }catch (Exception e){
+
+                    e.printStackTrace();
+
+                }
+
+            } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")){
+
+                try {
+
+                    SQLiteData.insertTPS(serverName, getTPS());
 
                 }catch (Exception e){
 
