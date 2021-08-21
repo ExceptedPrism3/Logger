@@ -3,7 +3,9 @@ package com.carpour.logger.Events;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.MySQL.MySQLData;
+import com.carpour.logger.database.MySQL.MySQLData;
+import com.carpour.logger.database.SQLite.SQLiteData;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,9 +34,7 @@ public class onBlockBreak implements Listener {
         int x = event.getBlock().getLocation().getBlockX();
         int y = event.getBlock().getLocation().getBlockY();
         int z = event.getBlock().getLocation().getBlockZ();
-        String blockName;
-        blockName = event.getBlock().getType().toString();
-        blockName = blockName.replaceAll("_", " ");
+        Material blockType = event.getBlock().getType();
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -43,20 +43,20 @@ public class onBlockBreak implements Listener {
 
         if (!event.isCancelled() && (main.getConfig().getBoolean("Log-to-Files")) && (main.getConfig().getBoolean("Log.Block-Break"))) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
 
-                Discord.staffChat(player, "⛏️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has broke **" + blockName + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
+                Discord.staffChat(player, "⛏️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has broke **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
 
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has broke " + blockName + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has broke " + blockType + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
                     out.close();
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Block-Break")) && (main.sql.isConnected())) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Block-Break")) && (main.mySQL.isConnected())) {
 
 
-                        MySQLData.blockBreak(serverName, worldName, playerName, blockName, x, y, z, true);
+                        MySQLData.blockBreak(serverName, worldName, playerName, blockType.toString(), x, y, z, true);
 
                     }
 
@@ -71,12 +71,12 @@ public class onBlockBreak implements Listener {
 
             }
 
-            Discord.blockBreak(player, "⛏️ [" + worldName + "] Has broke **" + blockName + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
+            Discord.blockBreak(player, "⛏️ [" + worldName + "] Has broke **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
 
             try {
 
                 BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBlockBreakLogFile(), true));
-                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has broke " + blockName + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
+                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has broke " + blockType + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
                 out.close();
 
             } catch (IOException e) {
@@ -87,14 +87,23 @@ public class onBlockBreak implements Listener {
             }
         }
 
-        if ((main.getConfig().getBoolean("MySQL.Enable")) && (main.getConfig().getBoolean("Log.Block-Break")) && (main.sql.isConnected())){
+        if ((main.getConfig().getBoolean("MySQL.Enable")) && (main.getConfig().getBoolean("Log.Block-Break")) && (main.mySQL.isConnected())){
 
             try {
 
-                MySQLData.blockBreak(serverName, worldName, playerName, blockName, x, y, z, false);
+                MySQLData.blockBreak(serverName, worldName, playerName, blockType.toString(), x, y, z, false);
 
             }catch (Exception e){
 
+                e.printStackTrace();
+
+            }
+        }
+        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Block-Break")
+                && main.getSqLite().isConnected()) {
+            try {
+                SQLiteData.insertBlockBreak(serverName, player, blockType, player.hasPermission("logger.staff"));
+            } catch (Exception e) {
                 e.printStackTrace();
 
             }

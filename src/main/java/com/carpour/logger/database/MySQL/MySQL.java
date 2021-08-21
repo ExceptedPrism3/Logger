@@ -1,4 +1,4 @@
-package com.carpour.logger.MySQL;
+package com.carpour.logger.database.MySQL;
 
 import com.carpour.logger.Main;
 import org.bukkit.Bukkit;

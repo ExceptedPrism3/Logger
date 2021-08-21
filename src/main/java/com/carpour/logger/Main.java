@@ -3,8 +3,10 @@ package com.carpour.logger;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Discord.DiscordFile;
 import com.carpour.logger.Events.*;
-import com.carpour.logger.MySQL.*;
+import com.carpour.logger.database.MySQL.*;
 import com.carpour.logger.Utils.*;
+import com.carpour.logger.database.SQLite.SQLite;
+import com.carpour.logger.database.SQLite.SQLiteData;
 import com.carpour.logger.onCommands.LoggerCommand;
 import com.carpour.logger.ServerSide.*;
 import org.bukkit.ChatColor;
@@ -16,34 +18,60 @@ public class Main extends JavaPlugin {
     private static Main instance;
 
     public FileHandler fileHandler;
-    public MySQL sql;
-    public MySQLData data;
+
+    public MySQL mySQL;
+    public MySQLData mySQLData;
+
+    public SQLite sqLite;
+    public SQLiteData sqLiteData;
+
     public ASCIIArt icon;
+
     public Start start;
     public Stop stop;
+
     public Discord discord;
+
+    public SQLite getSqLite() {
+        return sqLite;
+    }
+
+    public SQLiteData getSqLiteData() {
+        return sqLiteData;
+    }
 
     public void onEnable() {
 
         instance = this;
 
-        getConfig().options().copyDefaults();
         saveDefaultConfig();
+        getConfig().options().copyDefaults();
+
+
         DiscordFile.Setup();
         DiscordFile.values();
         DiscordFile.get().options().copyDefaults(true);
         DiscordFile.save();
+
         discord = new Discord();
         discord.run();
 
         if (getConfig().getBoolean("MySQL.Enable")) {
-            sql = new MySQL();
-            sql.connect();
-            data = new MySQLData(this);
-            if (sql.isConnected()) {
-                data.createTable();
-                data.emptyTable();
+            mySQL = new MySQL();
+            mySQL.connect();
+            mySQLData = new MySQLData(this);
+            if (mySQL.isConnected()) mySQLData.createTable();
+            mySQLData.emptyTable();
+        }
+
+        if (getConfig().getBoolean("SQLite.Enable")) {
+            sqLite = new SQLite();
+            sqLite.connect();
+            sqLiteData = new SQLiteData(this);
+            if (sqLite.isConnected()) {
+                sqLiteData.createTable();
             }
+            sqLiteData.emptyTable();
         }
 
         new FileHandler(getDataFolder());
@@ -100,7 +128,7 @@ public class Main extends JavaPlugin {
         stop = new Stop();
         stop.run();
 
-        if ((getConfig().getBoolean("MySQL.Enable")) && ((sql.isConnected()))) sql.disconnect();
+        if ((getConfig().getBoolean("MySQL.Enable")) && ((mySQL.isConnected()))) mySQL.disconnect();
 
         discord.disconnect();
 

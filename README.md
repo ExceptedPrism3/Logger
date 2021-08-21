@@ -1,4 +1,8 @@
 # Logger
+
+![Updated Badge](https://badges.pufler.dev/updated/ExceptedPrism3/Logger)
+![Version](https://img.shields.io/github/v/release/ExceptedPrism3/Logger)
+
 A spigot plugin that logs all Activities from Commands, Chat, Player Join, Player Leave, Player Death and even Server's RAM, TPS and Much More!
 
 This plugin can be found on two locations at the moment [Spigot](https://www.spigotmc.org/resources/logger.94236) and [MC-Market](https://www.mc-market.org/resources/20657/).
