@@ -5,6 +5,8 @@ import com.carpour.logger.Main;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,6 +14,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class FileHandler {
+
 
     private static File chatLogFolder;
     private static File commandLogFolder;
@@ -63,75 +66,79 @@ public class FileHandler {
     private final Main main = Main.getInstance();
 
     public FileHandler(File dataFolder) {
+
         dataFolder.mkdir();
+
+        File logsFolder = new File(dataFolder, "Logs");
+        logsFolder.mkdirs();
 
         Date date = new Date();
         SimpleDateFormat filenameDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-        chatLogFolder = new File(dataFolder, "Player Chat");
+        chatLogFolder = new File(logsFolder, "Player Chat");
         chatLogFile = new File(chatLogFolder, filenameDateFormat.format(date) + ".log");
 
-        commandLogFolder = new File(dataFolder, "Player Commands");
+        commandLogFolder = new File(logsFolder, "Player Commands");
         commandLogFile = new File(commandLogFolder, filenameDateFormat.format(date) + ".log");
 
-        consoleLogFolder = new File(dataFolder, "Console Commands");
+        consoleLogFolder = new File(logsFolder, "Console Commands");
         consoleLogFile = new File(consoleLogFolder, filenameDateFormat.format(date) + ".log");
 
-        signLogFolder = new File(dataFolder, "Player Sign Text");
+        signLogFolder = new File(logsFolder, "Player Sign Text");
         signLogFile = new File(signLogFolder, filenameDateFormat.format(date) + ".log");
 
-        playerJoinLogFolder = new File(dataFolder, "Player Join");
+        playerJoinLogFolder = new File(logsFolder, "Player Join");
         playerJoinLogFile = new File(playerJoinLogFolder, filenameDateFormat.format(date) + ".log");
 
-        playerLeaveLogFolder = new File(dataFolder, "Player Leave");
+        playerLeaveLogFolder = new File(logsFolder, "Player Leave");
         playerLeaveLogFile = new File(playerLeaveLogFolder, filenameDateFormat.format(date) + ".log");
 
-        playerDeathLogFolder = new File(dataFolder, "Player Death");
+        playerDeathLogFolder = new File(logsFolder, "Player Death");
         playerDeathLogFile = new File(playerDeathLogFolder, filenameDateFormat.format(date) + ".log");
 
-        playerTeleportLogFolder = new File(dataFolder, "Player Teleport");
+        playerTeleportLogFolder = new File(logsFolder, "Player Teleport");
         playerTeleportLogFile = new File(playerTeleportLogFolder, filenameDateFormat.format(date) + ".log");
 
-        blockPlaceLogFolder = new File(dataFolder, "Block Place");
+        blockPlaceLogFolder = new File(logsFolder, "Block Place");
         blockPlaceLogFile = new File(blockPlaceLogFolder, filenameDateFormat.format(date) + ".log");
 
-        blockBreakLogFolder = new File(dataFolder, "Block Break");
+        blockBreakLogFolder = new File(logsFolder, "Block Break");
         blockBreakLogFile = new File(blockBreakLogFolder, filenameDateFormat.format(date) + ".log");
 
-        TPSLogFolder = new File(dataFolder, "TPS");
+        TPSLogFolder = new File(logsFolder, "TPS");
         TPSLogFile = new File(TPSLogFolder, filenameDateFormat.format(date) + ".log");
 
-        RAMLogFolder = new File(dataFolder, "RAM");
+        RAMLogFolder = new File(logsFolder, "RAM");
         RAMLogFile = new File(RAMLogFolder, filenameDateFormat.format(date) + ".log");
 
-        playerKickLogFolder = new File(dataFolder, "Player Kick");
+        playerKickLogFolder = new File(logsFolder, "Player Kick");
         playerKickLogFile = new File(playerKickLogFolder, filenameDateFormat.format(date) + ".log");
 
-        playerLevelFolder = new File(dataFolder, "Player Level");
+        playerLevelFolder = new File(logsFolder, "Player Level");
         playerLevelFile = new File(playerLevelFolder, filenameDateFormat.format(date) + ".log");
 
-        portalCreateFolder = new File(dataFolder, "Portal Creation");
+        portalCreateFolder = new File(logsFolder, "Portal Creation");
         portalCreateFile = new File(portalCreateFolder, filenameDateFormat.format(date) + ".log");
 
-        bucketPlaceFolder = new File(dataFolder, "Bucket Place");
+        bucketPlaceFolder = new File(logsFolder, "Bucket Place");
         bucketPlaceFile = new File(bucketPlaceFolder, filenameDateFormat.format(date) + ".log");
 
-        anvilFolder = new File(dataFolder, "Anvil");
+        anvilFolder = new File(logsFolder, "Anvil");
         anvilFile = new File(anvilFolder, filenameDateFormat.format(date) + ".log");
 
-        staffFolder = new File(dataFolder, "Staff");
+        staffFolder = new File(logsFolder, "Staff");
         StaffFile = new File(staffFolder, filenameDateFormat.format(date) + ".log");
 
-        serverStartFolder = new File(dataFolder, "Server Start");
+        serverStartFolder = new File(logsFolder, "Server Start");
         ServerStartFile = new File(serverStartFolder, filenameDateFormat.format(date) + ".log");
 
-        serverStopFolder = new File(dataFolder, "Server Stop");
+        serverStopFolder = new File(logsFolder, "Server Stop");
         ServerStopFile = new File(serverStopFolder, filenameDateFormat.format(date) + ".log");
 
-        itemDropFolder = new File(dataFolder, "Item Drop");
+        itemDropFolder = new File(logsFolder, "Item Drop");
         itemDropFile = new File(itemDropFolder, filenameDateFormat.format(date) + ".log");
 
-        enchantFolder = new File(dataFolder, "Enchanting");
+        enchantFolder = new File(logsFolder, "Enchanting");
         EnchantFile = new File(enchantFolder, filenameDateFormat.format(date) + ".log");
 
         try {
