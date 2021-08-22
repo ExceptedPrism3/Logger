@@ -4,6 +4,7 @@ import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.database.MySQL.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
+import com.carpour.logger.database.SQLite.SQLiteData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -88,13 +89,23 @@ public class onPlayerKick implements Listener {
 
             try {
 
-                MySQLData.playerKick(serverName, worldName, playerName, x, y, z, reason, false);
+                MySQLData.playerKick(serverName, worldName, playerName, x, y, z, reason, player.hasPermission("logger.staff"));
 
             }catch (Exception e){
 
                 e.printStackTrace();
 
             }
+        }
+
+        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Kick") && main.getSqLite().isConnected()) {
+
+            try {
+                SQLiteData.insertPlayerKick(serverName,player,reason,player.hasPermission("logger.staff"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }

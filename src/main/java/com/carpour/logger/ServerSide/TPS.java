@@ -39,6 +39,7 @@ public class TPS implements Runnable {
 
     public void run() {
 
+
         if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.TPS"))) {
 
             if ((main.getConfig().getInt("TPS.Value-Medium")) <= 0 || (main.getConfig().getInt("TPS.Value-Medium") >= 20) ||

@@ -112,7 +112,7 @@ public class MySQLData {
             e.printStackTrace();
 
         }
-
+    
     }
 
     public static void playerChat(String serverName, String worldname, String playername, String msg, boolean staff){

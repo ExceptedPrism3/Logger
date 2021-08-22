@@ -4,6 +4,7 @@ import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.database.MySQL.MySQLData;
+import com.carpour.logger.database.SQLite.SQLiteData;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -58,6 +59,13 @@ public class PortalCreation implements Listener {
 
                 e.printStackTrace();
 
+            }
+        }
+        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Portal-Creation") && main.getSqLite().isConnected()) {
+            try {
+                SQLiteData.insertPortalCreate(serverName, worldName, reason);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

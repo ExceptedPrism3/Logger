@@ -28,6 +28,8 @@ public class RAM implements Runnable {
 
     public void run() {
 
+
+
         if ((main.getConfig().getInt("RAM.Percent")) <= 0 || (main.getConfig().getInt("RAM.Percent") >= 100)) {
 
             return;
@@ -69,7 +71,7 @@ public class RAM implements Runnable {
             }
         }
         if (main.getConfig().getBoolean("SQLite.Enable") && (main.getConfig().getBoolean("Log.RAM"))
-                && (main.mySQL.isConnected())) {
+                && (main.getSqLite().isConnected())) {
             try{
                 SQLiteData.insertRAM(serverName, maxMemory, usedMemory, freeMemory);
             } catch (Exception exception) {
