@@ -24,7 +24,7 @@ public class onBlockBreak implements Listener {
 
     private final Main main = Main.getInstance();
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBreak(BlockBreakEvent event) {
 
         Player player = event.getPlayer();

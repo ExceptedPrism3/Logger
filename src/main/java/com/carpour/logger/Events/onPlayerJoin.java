@@ -25,7 +25,7 @@ public class onPlayerJoin implements Listener {
 
     private final Main main = Main.getInstance();
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
 
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();

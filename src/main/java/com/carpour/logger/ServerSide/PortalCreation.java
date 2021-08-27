@@ -22,7 +22,7 @@ public class PortalCreation implements Listener {
 
     private final Main main = Main.getInstance();
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPortalCreate(PortalCreateEvent event) {
 
         String worldName = event.getWorld().getName();

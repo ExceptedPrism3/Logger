@@ -4,6 +4,8 @@ import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.database.MySQL.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
+import com.carpour.logger.database.SQLite.SQLite;
+import com.carpour.logger.database.SQLite.SQLiteData;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,7 +25,7 @@ public class onItemDrop implements Listener {
 
     private final Main main = Main.getInstance();
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onDrop(PlayerDropItemEvent event){
 
         final Player player = event.getPlayer();
@@ -92,6 +94,13 @@ public class onItemDrop implements Listener {
 
                 e.printStackTrace();
 
+            }
+        }
+        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Item-Drop") && main.getSqLite().isConnected()) {
+            try {
+                SQLiteData.insertItemDrop(serverName, player, item, player.hasPermission("logger.staff"));
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
         }
     }

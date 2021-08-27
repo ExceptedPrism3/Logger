@@ -25,7 +25,7 @@ public class onBlockPlace implements Listener {
 
     private final Main main = Main.getInstance();
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
 
     public void onPlace(BlockPlaceEvent event) {
 

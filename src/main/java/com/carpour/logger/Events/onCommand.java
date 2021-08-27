@@ -29,7 +29,7 @@ public class onCommand implements Listener {
 
     private final Main main = Main.getInstance();
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
 
     public void onPlayerCmd(PlayerCommandPreprocessEvent event) {
 

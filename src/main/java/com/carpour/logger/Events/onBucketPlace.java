@@ -24,7 +24,7 @@ public class onBucketPlace implements Listener {
 
     private final Main main = Main.getInstance();
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
 
     public void onBucket(PlayerBucketEmptyEvent event){
         Player player = event.getPlayer();
@@ -102,6 +102,7 @@ public class onBucketPlace implements Listener {
             }
         }
         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Bucket-Place") && main.getSqLite().isConnected()) {
+
             try {
                 SQLiteData.insertBucketPlace(serverName, player, bucket, player.hasPermission("logger.staff"));
             } catch (Exception e) {

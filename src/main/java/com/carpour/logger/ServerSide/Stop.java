@@ -4,6 +4,7 @@ import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.database.MySQL.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
+import com.carpour.logger.database.SQLite.SQLiteData;
 
 import java.awt.*;
 import java.io.BufferedWriter;
@@ -17,7 +18,7 @@ public class Stop {
 
     private final Main main = Main.getInstance();
 
-    public void run(){
+    public void run() {
 
         if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Server-Stop"))) {
 
@@ -41,7 +42,7 @@ public class Stop {
 
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Server-Stop")) && (main.mySQL.isConnected())){
+        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Server-Stop")) && (main.mySQL.isConnected())) {
 
             String serverName = main.getConfig().getString("Server-Name");
 
@@ -49,10 +50,20 @@ public class Stop {
 
                 MySQLData.serverStop(serverName);
 
-            }catch (Exception e){
+            } catch (Exception e) {
 
                 e.printStackTrace();
 
+            }
+        }
+        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Server-Stop") && main.getSqLite().isConnected()) {
+
+            String serverName = main.getConfig().getString("Server-Name");
+
+            try {
+                SQLiteData.insertServerStop(serverName);
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
         }
     }

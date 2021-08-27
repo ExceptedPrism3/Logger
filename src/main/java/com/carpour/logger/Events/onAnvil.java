@@ -28,7 +28,7 @@ public class onAnvil implements Listener {
 
     private final Main main = Main.getInstance();
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClick(InventoryClickEvent event) {
 
         Player playero = (Player) event.getWhoClicked();
@@ -124,8 +124,9 @@ public class onAnvil implements Listener {
                                             }
                                         }
                                         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Anvil") && main.getSqLite().isConnected()) {
+                                            main.getLogger().info("SQLite Baby");
                                             try {
-                                                SQLiteData.insertAnvil(serverName,player,displayName,player.hasPermission("logger.staff"));
+                                                SQLiteData.insertAnvil(serverName, player, displayName, player.hasPermission("logger.staff"));
                                             } catch (Exception e) {
                                                 e.printStackTrace();
                                             }

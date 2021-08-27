@@ -22,7 +22,7 @@ public class Console implements Listener {
 
     private final Main main = Main.getInstance();
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onConsoleCommand(ServerCommandEvent event) {
 
         String msg = event.getCommand();

@@ -18,8 +18,7 @@ public class SQLiteData {
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss:SSSXXX");
 
 
-
-    public SQLiteData(Main plugin){
+    public SQLiteData(Main plugin) {
         SQLiteData.plugin = plugin;
     }
 
@@ -46,17 +45,17 @@ public class SQLiteData {
                     "Player_Name TEXT(100), Line TEXT(100), Is_Staff INTEGER)");
 
             playerJoin = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Join" +
-                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT  CURRENT_TIMESTAMP PRIMARY KEY , World TEXT(50)," +
+                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%f', 'now'))  PRIMARY KEY , World TEXT(50)," +
                     "X INTEGER, Y INTEGER, Z INTEGER, IP TEXT, Is_Staff INTEGER)");
 
             playerLeave = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS  Player_Leave " +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY ,World TEXT(50), X INTEGER, Y INTEGER, Z INTEGER , Player_Name TEXT(100), Is_Staff INTEGER)");
 
-            playerDeath = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Deaths" +
+            playerDeath = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Death" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(100)," +
                     "X INTEGER, Y INTEGER, Z INTEGER, Is_Staff INTEGER)");
 
-            playerTeleport = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Teleports" +
+            playerTeleport = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Teleport" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(100)," +
                     "From_X INTEGER, From_Y INTEGER, From_Z INTEGER, To_X INTEGER, To_Y INTEGER, To_Z INTEGER, Is_Staff INTEGER)");
 
@@ -75,7 +74,7 @@ public class SQLiteData {
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY," +
                     " Total_Memory INTEGER, Used_Memory INTEGER, Free_Memory INTEGER)");
 
-            playerKick = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Kicks" +
+            playerKick = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Kick" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY,World TEXT(100), Player_Name TEXT(100)," +
                     " X INTEGER, Y INTEGER, Z INTEGER, Reason TEXT(50), Is_Staff INTEGER )");
 
@@ -204,7 +203,7 @@ public class SQLiteData {
 
     public static void insertPlayerDeath(String serverName, Player player, boolean isStaff) {
         try {
-            PreparedStatement playerDeath = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Player_Deaths(Server_Name, Date, World, Player_Name, X, Y, Z, Is_Staff) VALUES (?,?,?,?,?,?,?,?)");
+            PreparedStatement playerDeath = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Player_Death(Server_Name, Date, World, Player_Name, X, Y, Z, Is_Staff) VALUES (?,?,?,?,?,?,?,?)");
             playerDeath.setString(1, serverName);
             playerDeath.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
             playerDeath.setString(3, player.getWorld().getName());
@@ -223,7 +222,7 @@ public class SQLiteData {
 
     public static void insertPlayerTeleport(String serverName, Player player, Location from, Location to, boolean isStaff) {
         try {
-            PreparedStatement playerTeleport = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Player_Teleports(Server_Name, Date, World, Player_Name, From_X, From_Y, From_Z, To_X, To_Y, To_Z, Is_Staff) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+            PreparedStatement playerTeleport = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Player_Teleport(Server_Name, Date, World, Player_Name, From_X, From_Y, From_Z, To_X, To_Y, To_Z, Is_Staff) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
             playerTeleport.setString(1, serverName);
             playerTeleport.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
             playerTeleport.setString(3, player.getWorld().getName());
@@ -234,7 +233,7 @@ public class SQLiteData {
             playerTeleport.setInt(8, to.getBlockX());
             playerTeleport.setInt(9, to.getBlockY());
             playerTeleport.setInt(10, to.getBlockZ());
-            playerTeleport.setBoolean(11,isStaff);
+            playerTeleport.setBoolean(11, isStaff);
 
             playerTeleport.executeUpdate();
         } catch (SQLException exception) {
@@ -244,20 +243,18 @@ public class SQLiteData {
 
     public static void insertPlayerJoin(String serverName, Player player, boolean isStaff) {
         try {
-            PreparedStatement playerJoin = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Player_Join(Server_Name, Date, World, X, Y, Z, IP, Is_Staff) VALUES (?,?,?,?,?,?,?,?)");
+            PreparedStatement playerJoin = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Player_Join(Server_Name, World, X, Y, Z, IP, Is_Staff) VALUES (?,?,?,?,?,?,?)");
             playerJoin.setString(1, serverName);
-            playerJoin.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
-            playerJoin.setString(3, player.getWorld().getName());
-            playerJoin.setInt(4, player.getLocation().getBlockX());
-            playerJoin.setInt(5, player.getLocation().getBlockY());
-            playerJoin.setInt(6, player.getLocation().getBlockZ());
+            playerJoin.setString(2, player.getWorld().getName());
+            playerJoin.setInt(3, player.getLocation().getBlockX());
+            playerJoin.setInt(4, player.getLocation().getBlockY());
+            playerJoin.setInt(5, player.getLocation().getBlockZ());
             if (plugin.getConfig().getBoolean("Player-Join.Player-IP")) {
-                playerJoin.setString(7, player.getAddress().getHostString());
-            }else{
-                playerJoin.setString(7, null);
+                playerJoin.setString(6, player.getAddress().getHostString());
+            } else {
+                playerJoin.setString(6, null);
             }
-            playerJoin.setBoolean(8, isStaff);
-
+            playerJoin.setBoolean(7, isStaff);
 
 
             playerJoin.executeUpdate();
@@ -354,7 +351,7 @@ public class SQLiteData {
 
     public static void insertPlayerKick(String serverName, Player player, String reason, boolean isStaff) {
         try {
-            PreparedStatement playerKickStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Player_Kicks(Server_Name, Date, World, Player_Name, X, Y, Z, Reason, Is_Staff) VALUES (?,?,?,?,?,?,?,?,?)");
+            PreparedStatement playerKickStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Player_Kick(Server_Name, Date, World, Player_Name, X, Y, Z, Reason, Is_Staff) VALUES (?,?,?,?,?,?,?,?,?)");
             playerKickStatement.setString(1, serverName);
             playerKickStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
             playerKickStatement.setString(3, player.getWorld().getName());
@@ -433,14 +430,147 @@ public class SQLiteData {
         }
     }
 
+    public static void insertServerStart(String serverName) {
+        try {
+            PreparedStatement serverStartStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Server_Start(Server_Name, Date) VALUES (?,?)");
+            serverStartStatement.setString(1, serverName);
+            serverStartStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
 
+            serverStartStatement.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
 
+    public static void insertServerStop(String serverName) {
+        try {
+            PreparedStatement serverStopStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Server_Stop(Server_Name, Date) VALUES (?,?)");
+            serverStopStatement.setString(1, serverName);
+            serverStopStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
 
+            serverStopStatement.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
 
+    public static void insertItemDrop(String serverName, Player player, String item, boolean isStaff) {
+        try {
+            PreparedStatement itemDropStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Item_Drop(Server_Name, Date, World, Player_Name, Item, Is_Staff) VALUES (?,?,?,?,?,?)");
+            itemDropStatement.setString(1, serverName);
+            itemDropStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
+            itemDropStatement.setString(3, player.getWorld().getName());
+            itemDropStatement.setString(4, player.getName());
+            itemDropStatement.setString(5, item);
+            itemDropStatement.setBoolean(6, isStaff);
 
+            itemDropStatement.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public static void insertEnchant(String serverName, Player player, String enchantment, String item, int cost, boolean isStaff) {
+        try {
+            PreparedStatement enchantStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Enchanting(Server_Name, Date, World, Player_Name, X, Y, Z, Enchantment, Item, Cost, Is_Staff) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+            enchantStatement.setString(1, serverName);
+            enchantStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
+            enchantStatement.setString(3, player.getWorld().getName());
+            enchantStatement.setString(4, player.getName());
+            enchantStatement.setInt(5, player.getLocation().getBlockX());
+            enchantStatement.setInt(6, player.getLocation().getBlockY());
+            enchantStatement.setInt(7, player.getLocation().getBlockZ());
+            enchantStatement.setString(8, enchantment);
+            enchantStatement.setString(9, item);
+            enchantStatement.setInt(10, cost);
+            enchantStatement.setBoolean(11, isStaff);
+
+            enchantStatement.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
 
 
     public void emptyTable() {
+
+        int when = plugin.getConfig().getInt("SQLite.Data-Deletion");
+
+        if (when <= 0) {
+
+            return;
+        }
+
+        try{
+
+            PreparedStatement player_Chat = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Chat WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement player_Commands = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Commands WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement console_Commands = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Console_Commands WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement player_Sign_Text = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Sign_Text WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement player_Join = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Join WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement player_Leave = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Leave WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement player_Kick = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Kick WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement player_Death = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Death WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement player_Teleport = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Teleport WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement player_Level = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Level WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement block_Place = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Block_Place WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement block_Break = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Block_Break WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement portal_Creation = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Portal_Creation WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement bucket_Place = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Bucket_Place WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement anvil = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Anvil WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement TPS = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM TPS WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement RAM = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM RAM WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement server_Start = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Server_Start WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement server_Stop = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Server_Stop WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement item_Drop = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Item_Drop WHERE Date <= datetime('now','-" + when + " day')");
+
+            PreparedStatement enchanting = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Enchanting WHERE Date <= datetime('now','-" + when + " day')");
+
+            player_Chat.executeUpdate();
+            player_Commands.executeUpdate();
+            console_Commands.executeUpdate();
+            player_Sign_Text.executeUpdate();
+            player_Join.executeUpdate();
+            player_Leave.executeUpdate();
+            player_Kick.executeUpdate();
+            player_Death.executeUpdate();
+            player_Teleport.executeUpdate();
+            player_Level.executeUpdate();
+            block_Place.executeUpdate();
+            block_Break.executeUpdate();
+            portal_Creation.executeUpdate();
+            bucket_Place.executeUpdate();
+            anvil.executeUpdate();
+            TPS.executeUpdate();
+            RAM.executeUpdate();
+            server_Start.executeUpdate();
+            server_Stop.executeUpdate();
+            item_Drop.executeUpdate();
+            enchanting.executeUpdate();
+
+        }catch (SQLException e){
+            plugin.getLogger().severe("An error has occurred while cleaning the tables, if the error persists, contact the Author!");
+
+        }
 
 
     }

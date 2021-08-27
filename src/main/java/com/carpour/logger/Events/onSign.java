@@ -26,7 +26,7 @@ public class onSign implements Listener {
 
     private final Main main = Main.getInstance();
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
 
     public void onPlayerSign(SignChangeEvent event) {
         Player player = event.getPlayer();

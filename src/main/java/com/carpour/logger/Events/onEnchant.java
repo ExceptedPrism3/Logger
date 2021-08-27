@@ -4,6 +4,7 @@ import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.database.MySQL.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
+import com.carpour.logger.database.SQLite.SQLiteData;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -25,7 +26,7 @@ public class onEnchant implements Listener {
 
     private final Main main = Main.getInstance();
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEnchanting(EnchantItemEvent event) {
         Player player = event.getEnchanter();
         String playerName = player.getName();
@@ -98,6 +99,13 @@ public class onEnchant implements Listener {
 
                         e.printStackTrace();
 
+                    }
+                }
+                if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Enchanting") && main.getSqLite().isConnected()) {
+                    try{
+                        SQLiteData.insertEnchant(serverName, player, entry.getKey().getName(), item, cost, player.hasPermission("logger.staff"));
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
                     }
                 }
             }

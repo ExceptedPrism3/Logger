@@ -4,6 +4,7 @@ import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.database.MySQL.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
+import com.carpour.logger.database.SQLite.SQLiteData;
 
 import java.awt.*;
 import java.io.BufferedWriter;
@@ -52,6 +53,13 @@ public class Start {
 
                 e.printStackTrace();
 
+            }
+        }
+        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Server-Start") && main.getSqLite().isConnected()) {
+            try {
+                SQLiteData.insertServerStart(serverName);
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
         }
 

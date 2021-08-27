@@ -10,7 +10,9 @@ import com.carpour.logger.database.SQLite.SQLiteData;
 import com.carpour.logger.onCommands.LoggerCommand;
 import com.carpour.logger.ServerSide.*;
 import org.bukkit.ChatColor;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import java.util.Objects;
 
 public class Main extends JavaPlugin {
@@ -22,8 +24,8 @@ public class Main extends JavaPlugin {
     public MySQL mySQL;
     public MySQLData mySQLData;
 
-    public SQLite sqLite;
-    public SQLiteData sqLiteData;
+    private SQLite sqLite;
+    private SQLiteData sqLiteData;
 
     public ASCIIArt icon;
 
