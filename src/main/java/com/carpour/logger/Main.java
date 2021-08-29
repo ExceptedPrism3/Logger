@@ -10,7 +10,6 @@ import com.carpour.logger.database.SQLite.SQLiteData;
 import com.carpour.logger.onCommands.LoggerCommand;
 import com.carpour.logger.ServerSide.*;
 import org.bukkit.ChatColor;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
@@ -42,6 +41,7 @@ public class Main extends JavaPlugin {
         return sqLiteData;
     }
 
+    @Override
     public void onEnable() {
 
         instance = this;
@@ -125,6 +125,7 @@ public class Main extends JavaPlugin {
 
     public static Main getInstance() { return instance; }
 
+    @Override
     public void onDisable() {
 
         stop = new Stop();
