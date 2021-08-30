@@ -16,7 +16,6 @@ import static org.bukkit.Bukkit.getServer;
 public class LoggerCommand implements CommandExecutor {
 
     private final Main plugin = Main.getInstance();
-//    private Database db;
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
 
@@ -63,23 +62,12 @@ public class LoggerCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.BLUE.toString() + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "|==========|" + ChatColor.RESET + " " +
                     ChatColor.AQUA + ChatColor.BOLD + "Logger" + ChatColor.RESET + " " + ChatColor.BLUE + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "|==========|" +
                     ChatColor.WHITE + "\n\nThis Plugin was made with " + ChatColor.RED + "<3" + ChatColor.WHITE + " by " + ChatColor.GOLD + ChatColor.ITALIC +
-                    "Prism3" + ChatColor.AQUA + "\nspigotmc.org/resources/logger.94236\n\n" +
+                    "Prism3 and thelooter" + ChatColor.AQUA + "\nspigotmc.org/resources/logger.94236\n\n" +
                     ChatColor.BLUE + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "|============================|");
 
             return true;
 
         }
-
-        /*if (args.length == 1 && args[0].equalsIgnoreCase("ChatLog")){
-
-            if (sender instanceof Player){
-
-                sender.sendMessage(db.getPlayerChatLogs("ExceptedPrism3"));
-
-            }
-
-        }*/
-
 
         if (!(sender instanceof Player)){
 

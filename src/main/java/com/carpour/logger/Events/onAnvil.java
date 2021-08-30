@@ -124,7 +124,6 @@ public class onAnvil implements Listener {
                                             }
                                         }
                                         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Anvil") && main.getSqLite().isConnected()) {
-                                            main.getLogger().info("SQLite Baby");
                                             try {
                                                 SQLiteData.insertAnvil(serverName, player, displayName, player.hasPermission("logger.staff"));
                                             } catch (Exception e) {

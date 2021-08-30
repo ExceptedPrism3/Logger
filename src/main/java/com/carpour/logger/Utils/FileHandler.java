@@ -279,7 +279,6 @@ public class FileHandler {
 
         if (main.getConfig().getInt("File-Deletion") < 0 ){ return; }
 
-        // CompletableFuture.runAsync(() -> {
         FileTime creationTime = null;
         try {
             creationTime = (FileTime) Files.getAttribute(file.toPath(), "creationTime");
@@ -297,8 +296,6 @@ public class FileHandler {
             file.delete();
 
         }
-
-        // });
     }
 
     public void deleteFiles(){
@@ -460,7 +457,5 @@ public class FileHandler {
             deleteFile(enchanting);
 
         }
-
     }
-
 }

@@ -114,6 +114,7 @@ public class Main extends JavaPlugin {
         UpdateChecker updater = new UpdateChecker(this);
         updater.checkForUpdate();
 
+        getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.GOLD + "Thank you " + ChatColor.GREEN + ChatColor.BOLD + "thelooter" + ChatColor.GOLD + " for the Contribution!");
         getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.GREEN + "Plugin Enabled!");
 
         start = new Start();

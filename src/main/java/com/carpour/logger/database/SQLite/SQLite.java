@@ -1,7 +1,6 @@
 package com.carpour.logger.database.SQLite;
 
 import com.carpour.logger.Main;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import java.io.File;
@@ -11,27 +10,30 @@ import java.sql.SQLException;
 
 public class SQLite {
 
-    private Main main = Main.getInstance();
+    private final Main main = Main.getInstance();
 
     private Connection connection;
-    File databaseFile = new File(main.getDataFolder(), "loggerData.db");
+    File databaseFile = new File(main.getDataFolder(), "LoggerData.db");
 
     public boolean isConnected() {
         return (connection != null);
     }
 
     public void connect() {
-        if (!main.getConfig().getBoolean("SQLite.Enable")) {
-            return;
-        }
+        if (!main.getConfig().getBoolean("SQLite.Enable")) return;
+
         if (!isConnected()) {
             try {
+
                 Class.forName("org.sqlite.JDBC");
                 connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile.getAbsolutePath());
                 main.getLogger().info(ChatColor.GREEN + "SQLite Connection has been established!");
+
             } catch (ClassNotFoundException | SQLException e) {
-                main.getLogger().warning(ChatColor.RED + "Couldn't load SQLite Database");
+
+                main.getLogger().warning(ChatColor.RED + "Couldn't load SQLite Database, if the issue persists contact the Author!");
                 e.printStackTrace();
+
             }
         }
     }

@@ -109,7 +109,7 @@ MySQL:
   Data-Deletion: 7
 
 # SQLite Feature
-# Data-Delition Value in Days
+# Data-Deletion Value in Days
 SQLite:
   Enable: false
   Data-Deletion: 7
