@@ -126,7 +126,7 @@ public class Main extends JavaPlugin {
 
         }
 
-        getServer().getConsoleSender().sendMessage("\n\n\n[Logger] " + ChatColor.GOLD + "This is a DEV Build, please report any issues at " + ChatColor.BLUE + "https://discord.gg/MfR5mcpVfX\n\n");
+        //getServer().getConsoleSender().sendMessage("\n\n\n[Logger] " + ChatColor.GOLD + "This is a DEV Build, please report any issues at " + ChatColor.BLUE + "https://discord.gg/MfR5mcpVfX\n\n");
 
     }
 
