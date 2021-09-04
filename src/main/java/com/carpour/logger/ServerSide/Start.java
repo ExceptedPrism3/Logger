@@ -40,7 +40,6 @@ public class Start {
                 e.printStackTrace();
 
             }
-
         }
 
         if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Server-Start")) && (main.mySQL.isConnected())){

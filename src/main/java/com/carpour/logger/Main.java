@@ -120,7 +120,13 @@ public class Main extends JavaPlugin {
         start = new Start();
         start.run();
 
-        //getServer().getConsoleSender().sendMessage("\n\n[Logger] " + ChatColor.GOLD + "This is a DEV Build, please report any issues at " + ChatColor.BLUE + "https://discord.gg/MfR5mcpVfX\n\n");
+        if (getConfig().getBoolean("Log-to-Files") && (getConfig().getBoolean("SQLite.Enable"))){
+
+            getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.RED + "Logging to Files and SQLite are both enabled, it might impact your Server's Performance!");
+
+        }
+
+        getServer().getConsoleSender().sendMessage("\n\n\n[Logger] " + ChatColor.GOLD + "This is a DEV Build, please report any issues at " + ChatColor.BLUE + "https://discord.gg/MfR5mcpVfX\n\n");
 
     }
 

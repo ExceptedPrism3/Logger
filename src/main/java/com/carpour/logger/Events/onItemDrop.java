@@ -41,7 +41,7 @@ public class onItemDrop implements Listener {
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Item-Drop"))) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
                 Discord.staffChat(player, "\uD83D\uDEAE **|** \uD83D\uDC6E\u200D♂ [" + worldName + "] Has dropped an item ** " + item  +"**", false, Color.yellow);
 
@@ -98,7 +98,7 @@ public class onItemDrop implements Listener {
         }
         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Item-Drop") && main.getSqLite().isConnected()) {
             try {
-                SQLiteData.insertItemDrop(serverName, player, item, player.hasPermission("logger.staff"));
+                SQLiteData.insertItemDrop(serverName, player, item, player.hasPermission("logger.staff.log"));
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

@@ -43,7 +43,7 @@ public class onBlockBreak implements Listener {
 
         if (!event.isCancelled() && (main.getConfig().getBoolean("Log-to-Files")) && (main.getConfig().getBoolean("Log.Block-Break"))) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
                 Discord.staffChat(player, "⛏️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has broke **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
 
@@ -99,10 +99,11 @@ public class onBlockBreak implements Listener {
 
             }
         }
+
         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Block-Break")
                 && main.getSqLite().isConnected()) {
             try {
-                SQLiteData.insertBlockBreak(serverName, player, blockType, player.hasPermission("logger.staff"));
+                SQLiteData.insertBlockBreak(serverName, player, blockType, player.hasPermission("logger.staff.log"));
             } catch (Exception e) {
                 e.printStackTrace();
 

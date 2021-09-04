@@ -39,7 +39,6 @@ public class Stop {
                 e.printStackTrace();
 
             }
-
         }
 
         if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Server-Stop")) && (main.mySQL.isConnected())) {
@@ -56,6 +55,7 @@ public class Stop {
 
             }
         }
+
         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Server-Stop") && main.getSqLite().isConnected()) {
 
             String serverName = main.getConfig().getString("Server-Name");

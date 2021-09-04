@@ -26,8 +26,6 @@ public class onChat implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(final AsyncPlayerChatEvent event) {
-        System.out.println("YEEHAW");
-
 
             final Player player = event.getPlayer();
             World world = player.getWorld();
@@ -46,9 +44,7 @@ public class onChat implements Listener {
         //Log To Files Handling
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Chat"))) {
 
-
-
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
                 Discord.staffChat(player, "\uD83D\uDCAC **|** \uD83D\uDC6E\u200D♂️ " + msg, false, Color.GREEN);
 
@@ -58,12 +54,12 @@ public class onChat implements Listener {
                     out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has said => " + msg +"\n");
                     out.close();
 
-                    /*if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Chat")) && (main.mySQL.isConnected())) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Chat")) && (main.mySQL.isConnected())) {
 
 
                         MySQLData.playerChat(serverName, worldName, playerName, msg, true);
 
-                    }*/
+                    }
 
                 } catch (IOException e) {
 
@@ -72,7 +68,7 @@ public class onChat implements Listener {
 
                 }
 
-                /*return;*/
+                return;
 
             }
 
@@ -97,7 +93,7 @@ public class onChat implements Listener {
                 && (main.mySQL.isConnected())) {
             try {
 
-                MySQLData.playerChat(serverName, worldName, playerName, msg, player.hasPermission("logger.staff"));
+                MySQLData.playerChat(serverName, worldName, playerName, msg, false);
 
             } catch (Exception e) {
 
@@ -110,7 +106,7 @@ public class onChat implements Listener {
         if (main.getConfig().getBoolean("SQLite.Enable") && (main.getConfig().getBoolean("Log.Player-Chat"))
                 && (main.getSqLite().isConnected())) {
             try {
-                SQLiteData.insertPlayerChat(serverName, player, msg, player.hasPermission("logger.staff"));
+                SQLiteData.insertPlayerChat(serverName, player, msg, player.hasPermission("logger.staff.log"));
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

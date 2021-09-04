@@ -43,7 +43,7 @@ public class onPlayerDeath implements Listener {
 
         if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Death"))) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
                 Discord.staffChat(player, "☠️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
 
@@ -93,7 +93,7 @@ public class onPlayerDeath implements Listener {
 
             try {
 
-                MySQLData.playerDeath(serverName, worldName, playerName, x, y, z, player.hasPermission("logger.staff"));
+                MySQLData.playerDeath(serverName, worldName, playerName, x, y, z, false);
 
             }catch (Exception e){
 
@@ -106,11 +106,10 @@ public class onPlayerDeath implements Listener {
                 && main.getSqLite().isConnected()) {
 
             try {
-                SQLiteData.insertPlayerDeath(serverName, player, player.hasPermission("logger.staff"));
+                SQLiteData.insertPlayerDeath(serverName, player, player.hasPermission("logger.staff.log"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
     }
 }

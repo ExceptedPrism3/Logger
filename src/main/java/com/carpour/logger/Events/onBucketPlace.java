@@ -45,7 +45,7 @@ public class onBucketPlace implements Listener {
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Bucket-Place"))) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
                 Discord.staffChat(player, "\uD83E\uDEA3️ **|** \uD83D\uDC6E\u200D♂️️ [" + worldName + "] Has placed a **" + bucket + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
 
@@ -104,7 +104,7 @@ public class onBucketPlace implements Listener {
         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Bucket-Place") && main.getSqLite().isConnected()) {
 
             try {
-                SQLiteData.insertBucketPlace(serverName, player, bucket, player.hasPermission("logger.staff"));
+                SQLiteData.insertBucketPlace(serverName, player, bucket, player.hasPermission("logger.staff.log"));
             } catch (Exception e) {
                 e.printStackTrace();
             }

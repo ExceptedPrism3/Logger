@@ -41,7 +41,7 @@ public class onPlayerKick implements Listener {
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Kick"))) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
                 Discord.staffChat(player, "\uD83E\uDD7E **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **Reason** " + reason, false, Color.blue);
 
@@ -89,7 +89,7 @@ public class onPlayerKick implements Listener {
 
             try {
 
-                MySQLData.playerKick(serverName, worldName, playerName, x, y, z, reason, player.hasPermission("logger.staff"));
+                MySQLData.playerKick(serverName, worldName, playerName, x, y, z, reason, false);
 
             }catch (Exception e){
 
@@ -101,11 +101,10 @@ public class onPlayerKick implements Listener {
         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Kick") && main.getSqLite().isConnected()) {
 
             try {
-                SQLiteData.insertPlayerKick(serverName,player,reason,player.hasPermission("logger.staff"));
+                SQLiteData.insertPlayerKick(serverName,player,reason,player.hasPermission("logger.staff.log"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
     }
 }

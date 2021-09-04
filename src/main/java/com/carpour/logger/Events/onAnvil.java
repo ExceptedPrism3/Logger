@@ -31,17 +31,16 @@ public class onAnvil implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClick(InventoryClickEvent event) {
 
-        Player playero = (Player) event.getWhoClicked();
+        Player player = (Player) event.getWhoClicked();
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (playero.hasPermission("logger.exempt")){ return; }
+        if (player.hasPermission("logger.exempt")){ return; }
 
         if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Anvil"))) {
 
             if (!event.isCancelled()) {
-                Player player = (Player) event.getWhoClicked();
 
                 Inventory inv = event.getInventory();
 
@@ -66,7 +65,7 @@ public class onAnvil implements Listener {
                                         String displayName = meta.getDisplayName();
                                         String playerName = player.getName();
 
-                                        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")) {
+                                        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
                                             Discord.staffChat(player, "\uD83D\uDD28 **|** \uD83D\uDC6E\u200D♂️ Has renamed an Item to **" + displayName + "**", false, Color.red);
 
@@ -125,7 +124,7 @@ public class onAnvil implements Listener {
                                         }
                                         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Anvil") && main.getSqLite().isConnected()) {
                                             try {
-                                                SQLiteData.insertAnvil(serverName, player, displayName, player.hasPermission("logger.staff"));
+                                                SQLiteData.insertAnvil(serverName, player, displayName, player.hasPermission("logger.staff.log"));
                                             } catch (Exception e) {
                                                 e.printStackTrace();
                                             }

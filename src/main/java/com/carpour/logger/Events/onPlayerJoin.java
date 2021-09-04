@@ -42,7 +42,7 @@ public class onPlayerJoin implements Listener {
 
         if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")
                 && main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
-            if (player.hasPermission("logger.warning")) {
+            if (player.hasPermission("logger.staff")) {
                 player.sendMessage(ChatColor.GRAY + "[" +
                         ChatColor.AQUA + "Logger" + ChatColor.GRAY + "] " +
                         ChatColor.RED + "Enabling both Whitelist and Blacklist isn't supported. " +
@@ -54,7 +54,7 @@ public class onPlayerJoin implements Listener {
 
             if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Join"))) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
+                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
                     Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false, Color.red );
 
@@ -103,7 +103,7 @@ public class onPlayerJoin implements Listener {
 
             try {
 
-                MySQLData.playerJoin(serverName, worldName, playerName, x, y, z, ip, player.hasPermission("logger.staff"));
+                MySQLData.playerJoin(serverName, worldName, playerName, x, y, z, ip, false);
 
             }catch (Exception e) {
 
@@ -113,7 +113,7 @@ public class onPlayerJoin implements Listener {
         }
         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Join") && main.getSqLite().isConnected()) {
             try {
-                SQLiteData.insertPlayerJoin(serverName, player, player.hasPermission("logger.staff"));
+                SQLiteData.insertPlayerJoin(serverName, player, player.hasPermission("logger.staff.log"));
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

@@ -44,7 +44,7 @@ public class onPlayerLeave implements Listener {
 
         if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Leave"))) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
                 Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
 
@@ -93,7 +93,7 @@ public class onPlayerLeave implements Listener {
 
             try {
 
-                MySQLData.playerLeave(serverName, worldName, playerName, x, y, z, player.hasPermission("logger.staff"));
+                MySQLData.playerLeave(serverName, worldName, playerName, x, y, z, false);
 
             }catch (Exception e){
 
@@ -105,9 +105,9 @@ public class onPlayerLeave implements Listener {
         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Leave")
                 && main.getSqLite().isConnected()) {
             try {
-                SQLiteData.insertPlayerLeave(serverName, player, player.hasPermission("logger.staff"));
-            } catch (Exception exception) {
-
+                SQLiteData.insertPlayerLeave(serverName, player, player.hasPermission("logger.staff.log"));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

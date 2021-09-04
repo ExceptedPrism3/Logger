@@ -51,18 +51,13 @@ public class onCommand implements Listener {
         //Logging to File if logging to File and Command Logging is enabled
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Commands"))){
 
-
             if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")){
-
-
 
                 for (String m : main.getConfig().getStringList("Player-Commands.Commands-to-Log")) {
 
-
-
                     if (messageParts.get(0).equalsIgnoreCase(m)) {
 
-                        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")) {
+                        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
                             try {
 
@@ -82,7 +77,6 @@ public class onCommand implements Listener {
                                 e.printStackTrace();
 
                             }
-
                         }
 
                         Discord.playerCommand(player, "\uD83D\uDC7E " + message, false, Color.red);
@@ -120,7 +114,7 @@ public class onCommand implements Listener {
                 }
             }
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
                 Discord.staffChat(player, "\uD83D\uDC7E **|** \uD83D\uDC6E\u200D♂️ " +  message, false, Color.red);
 
@@ -168,8 +162,6 @@ public class onCommand implements Listener {
         //Logging to MySQL if logging to MySQL and Command Logging is enabled
         if ((main.getConfig().getBoolean("MySQL.Enable")) && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.mySQL.isConnected())){
 
-
-
             //Command Whitelist
             if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")) {
 
@@ -212,8 +204,6 @@ public class onCommand implements Listener {
                     exception.printStackTrace();
                 }
             }
-
-
         }
 
         //Logging to SQLite if logging to SQLite and Command Logging is enabled
@@ -232,7 +222,7 @@ public class onCommand implements Listener {
                         if (messageParts.containsAll(commandParts)) {
 
                             try {
-                                SQLiteData.insertPlayerCommands(serverName, player, message, player.hasPermission("logger.staff"));
+                                SQLiteData.insertPlayerCommands(serverName, player, message, player.hasPermission("logger.staff.log"));
                             } catch (Exception exception) {
                                 exception.printStackTrace();
                             }
@@ -255,12 +245,11 @@ public class onCommand implements Listener {
                     }
 
                     try {
-                        SQLiteData.insertPlayerCommands(serverName, player, message, player.hasPermission("logger.staff"));
+                        SQLiteData.insertPlayerCommands(serverName, player, message, player.hasPermission("logger.staff.log"));
                     } catch (Exception exception) {
                         exception.printStackTrace();
                     }
                 }
-
             }
         }
 
