@@ -9,6 +9,8 @@ commands:
     description: Plugin Command.
   logger reload:
     description: Reloads the plugin Configs.
+  logger credits:
+    description: Shows the plugin Authors.
 permissions:
   logger.staff:
     description: Allows the user to view Plugin Updates.
@@ -17,6 +19,7 @@ permissions:
       logger.exempt: true
       logger.reload: true
       logger.cmdspy: true
+      logger.update: true
   logger.exempt:
     description: Prevents the Player from Getting Logged.
     default: op
@@ -28,3 +31,5 @@ permissions:
     default: op
   logger.staff.log:
     description: Logs Staff Members.
+  logger.update:
+    description: Update Message is sent to the Users with this Permission

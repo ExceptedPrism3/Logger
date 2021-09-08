@@ -22,7 +22,7 @@ File-Deletion: 7
 # Log to Files
 Log-to-Files: true
 
-# This will log players with "logger.staff" permission node in their own folder / file
+# This will log players with "logger.staff.log" permission node in their own folder / file
 Staff:
   Enabled: false
 
@@ -98,7 +98,7 @@ Player-Join:
   Player-IP: true
 
 # MySQL Feature
-# Data-Deletion Value in Days
+# Data-Deletion Value in Days, Set it -1 to cancel
 MySQL:
   Enable: false
   Host: localhost
@@ -109,7 +109,7 @@ MySQL:
   Data-Deletion: 7
 
 # SQLite Feature
-# Data-Deletion Value in Days
+# Data-Deletion Value in Days, Set it -1 to cancel
 SQLite:
   Enable: false
   Data-Deletion: 7
@@ -117,7 +117,3 @@ SQLite:
 Messages:
   No-Permission: '&cYou do not have permission to run this command.'
   Reload-Message: '&aConfigs Reloaded.'
-  Invalid-Syntax: '&cInvalid Syntax!'
-
-Credits:
-  Enabled: true

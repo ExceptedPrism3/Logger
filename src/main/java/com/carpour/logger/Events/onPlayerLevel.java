@@ -3,8 +3,8 @@ package com.carpour.logger.Events;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.database.MySQL.MySQLData;
-import com.carpour.logger.database.SQLite.SQLiteData;
+import com.carpour.logger.Database.MySQL.MySQLData;
+import com.carpour.logger.Database.SQLite.SQLiteData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,7 +34,7 @@ public class onPlayerLevel implements Listener {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (player.hasPermission("logger.exempt")){ return; }
+        if (player.hasPermission("logger.exempt")) return;
 
         if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Level"))) {
 
@@ -42,7 +42,7 @@ public class onPlayerLevel implements Listener {
 
                 if (playerLevel == logAbove) {
 
-                    Discord.staffChat(player, "⬆️ **|** \uD83D\uDC6E\u200D♂ Has arrived to the set amount of Level which is **" + logAbove + "**", false, Color.green);
+                    Discord.staffChat(player, "⬆️ **|** \uD83D\uDC6E\u200D♂ Has arrived to the set amount of Level which is **" + logAbove + "**", false, Color.GREEN);
 
                     try {
 
@@ -70,7 +70,7 @@ public class onPlayerLevel implements Listener {
 
             if (playerLevel == logAbove) {
 
-                Discord.playerLevel(player, "⬆️ Has arrived to the set amount of Level which is **" + logAbove + "**", false, Color.green);
+                Discord.playerLevel(player, "⬆️ Has arrived to the set amount of Level which is **" + logAbove + "**", false, Color.GREEN);
 
                 try {
 

@@ -1,4 +1,4 @@
-package com.carpour.logger.database.SQLite;
+package com.carpour.logger.Database.SQLite;
 
 import com.carpour.logger.Main;
 import org.bukkit.ChatColor;
@@ -13,6 +13,7 @@ public class SQLite {
     private final Main main = Main.getInstance();
 
     private Connection connection;
+
     File databaseFile = new File(main.getDataFolder(), "LoggerData.db");
 
     public boolean isConnected() {
@@ -20,6 +21,7 @@ public class SQLite {
     }
 
     public void connect() {
+
         if (!main.getConfig().getBoolean("SQLite.Enable")) return;
 
         if (!isConnected()) {
@@ -37,6 +39,7 @@ public class SQLite {
             }
         }
     }
+
     public void disconnect() {
 
         if (isConnected()) {
@@ -55,6 +58,5 @@ public class SQLite {
     }
 
     public Connection getConnection(){ return connection; }
-
 
 }

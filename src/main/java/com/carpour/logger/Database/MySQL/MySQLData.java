@@ -1,4 +1,4 @@
-package com.carpour.logger.database.MySQL;
+package com.carpour.logger.Database.MySQL;
 
 import com.carpour.logger.Main;
 import org.bukkit.ChatColor;
@@ -6,6 +6,7 @@ import org.bukkit.event.world.PortalCreateEvent;
 
 import java.net.InetSocketAddress;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MySQLData {
@@ -560,7 +561,5 @@ public class MySQLData {
             e.printStackTrace();
 
         }
-
     }
-
 }

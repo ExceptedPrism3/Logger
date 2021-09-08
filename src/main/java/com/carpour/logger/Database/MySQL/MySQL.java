@@ -1,4 +1,4 @@
-package com.carpour.logger.database.MySQL;
+package com.carpour.logger.Database.MySQL;
 
 import com.carpour.logger.Main;
 import org.bukkit.Bukkit;
@@ -41,7 +41,6 @@ public class MySQL {
 
             }
         }
-
     }
 
     public void disconnect() {

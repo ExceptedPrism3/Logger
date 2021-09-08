@@ -1,4 +1,4 @@
-package com.carpour.logger.database.SQLite;
+package com.carpour.logger.Database.SQLite;
 
 import com.carpour.logger.Main;
 import org.bukkit.Location;
@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class SQLiteData {
 
@@ -250,7 +251,7 @@ public class SQLiteData {
             playerJoin.setInt(4, player.getLocation().getBlockY());
             playerJoin.setInt(5, player.getLocation().getBlockZ());
             if (plugin.getConfig().getBoolean("Player-Join.Player-IP")) {
-                playerJoin.setString(6, player.getAddress().getHostString());
+                playerJoin.setString(6, Objects.requireNonNull(player.getAddress()).getHostString());
             } else {
                 playerJoin.setString(6, null);
             }
@@ -496,10 +497,7 @@ public class SQLiteData {
 
         int when = plugin.getConfig().getInt("SQLite.Data-Deletion");
 
-        if (when <= 0) {
-
-            return;
-        }
+        if (when <= 0) return;
 
         try{
 
@@ -571,9 +569,5 @@ public class SQLiteData {
             plugin.getLogger().severe("An error has occurred while cleaning the tables, if the error persists, contact the Author!");
 
         }
-
-
     }
-
-
 }

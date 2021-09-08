@@ -3,8 +3,8 @@ package com.carpour.logger.Events;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.database.MySQL.MySQLData;
-import com.carpour.logger.database.SQLite.SQLiteData;
+import com.carpour.logger.Database.MySQL.MySQLData;
+import com.carpour.logger.Database.SQLite.SQLiteData;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -41,13 +41,13 @@ public class onBlockPlace implements Listener {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (player.hasPermission("logger.exempt")){ return; }
+        if (player.hasPermission("logger.exempt")) return;
 
         if (!event.isCancelled() && (main.getConfig().getBoolean("Log-to-Files")) && (main.getConfig().getBoolean("Log.Block-Place"))) {
 
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
-                Discord.staffChat(player, "\uD83E\uDDF1️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has placed **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.green);
+                Discord.staffChat(player, "\uD83E\uDDF1️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has placed **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.GREEN);
 
                 try {
 
@@ -73,7 +73,7 @@ public class onBlockPlace implements Listener {
 
             }
 
-            Discord.blockPlace(player, "\uD83E\uDDF1️ [" + worldName + "] Has placed **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.green);
+            Discord.blockPlace(player, "\uD83E\uDDF1️ [" + worldName + "] Has placed **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.GREEN);
 
             try {
 

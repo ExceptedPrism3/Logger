@@ -3,8 +3,8 @@ package com.carpour.logger.Events;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.database.MySQL.MySQLData;
-import com.carpour.logger.database.SQLite.SQLiteData;
+import com.carpour.logger.Database.MySQL.MySQLData;
+import com.carpour.logger.Database.SQLite.SQLiteData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -36,7 +36,7 @@ public class onAnvil implements Listener {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (player.hasPermission("logger.exempt")){ return; }
+        if (player.hasPermission("logger.exempt")) return;
 
         if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Anvil"))) {
 
@@ -67,7 +67,7 @@ public class onAnvil implements Listener {
 
                                         if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                                            Discord.staffChat(player, "\uD83D\uDD28 **|** \uD83D\uDC6E\u200D♂️ Has renamed an Item to **" + displayName + "**", false, Color.red);
+                                            Discord.staffChat(player, "\uD83D\uDD28 **|** \uD83D\uDC6E\u200D♂️ Has renamed an Item to **" + displayName + "**", false, Color.RED);
 
                                             try {
 
@@ -93,7 +93,7 @@ public class onAnvil implements Listener {
 
                                         }
 
-                                        Discord.anvil(player, "\uD83D\uDD28️ Has renamed an Item to **" + displayName + "**", false, Color.red);
+                                        Discord.anvil(player, "\uD83D\uDD28️ Has renamed an Item to **" + displayName + "**", false, Color.RED);
 
                                         try {
 

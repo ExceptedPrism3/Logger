@@ -2,9 +2,9 @@ package com.carpour.logger.Events;
 
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
-import com.carpour.logger.database.MySQL.MySQLData;
+import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.database.SQLite.SQLiteData;
+import com.carpour.logger.Database.SQLite.SQLiteData;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,13 +41,13 @@ public class onSign implements Listener {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (player.hasPermission("logger.exempt")){ return; }
+        if (player.hasPermission("logger.exempt")) return;
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Sign-Text"))) {
 
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
-                Discord.staffChat(player, "\uD83E\uDEA7 **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines.get(0) + " **|** " + lines.get(1) + " **|** " + lines.get(2) + " **|** " + lines.get(3), false, Color.red);
+                Discord.staffChat(player, "\uD83E\uDEA7 **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines.get(0) + " **|** " + lines.get(1) + " **|** " + lines.get(2) + " **|** " + lines.get(3), false, Color.RED);
 
                 try {
 
@@ -73,7 +73,7 @@ public class onSign implements Listener {
 
             }
 
-            Discord.playerSignText(player, "\uD83E\uDEA7 [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines.get(0) + " **|** " + lines.get(1) + " **|** " + lines.get(2) + " **|** " + lines.get(3),false, Color.red);
+            Discord.playerSignText(player, "\uD83E\uDEA7 [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines.get(0) + " **|** " + lines.get(1) + " **|** " + lines.get(2) + " **|** " + lines.get(3),false, Color.RED);
 
             try {
 

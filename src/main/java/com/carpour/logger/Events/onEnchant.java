@@ -2,9 +2,9 @@ package com.carpour.logger.Events;
 
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
-import com.carpour.logger.database.MySQL.MySQLData;
+import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.database.SQLite.SQLiteData;
+import com.carpour.logger.Database.SQLite.SQLiteData;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -48,7 +48,7 @@ public class onEnchant implements Listener {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, "\uD83D\uDCD6 **|** \uD83D\uDC6E\u200D♂️️ [" + worldName + "] Has used an **Enchantment table** that's located at X = " + x + " Y = " + y + " Z = " + z + " to Apply **" + entry.getKey().getName() + "** on the item **" + item + "** which cost **" + cost + "**", false, Color.pink);
+                    Discord.staffChat(player, "\uD83D\uDCD6 **|** \uD83D\uDC6E\u200D♂️️ [" + worldName + "] Has used an **Enchantment table** that's located at X = " + x + " Y = " + y + " Z = " + z + " to Apply **" + entry.getKey().getName() + "** on the item **" + item + "** which cost **" + cost + "**", false, Color.PINK);
 
                     try {
 
@@ -73,7 +73,7 @@ public class onEnchant implements Listener {
 
                 }
 
-                Discord.enchanting(player, "\uD83D\uDCD6️ [" + worldName + "] Has used an **Enchantment table** that's located at X = " + x + " Y = " + y + " Z = " + z + " to Apply **" + entry.getKey().getName() + "** on the item **" + item + "** which cost **" + cost + "**", false, Color.pink);
+                Discord.enchanting(player, "\uD83D\uDCD6️ [" + worldName + "] Has used an **Enchantment table** that's located at X = " + x + " Y = " + y + " Z = " + z + " to Apply **" + entry.getKey().getName() + "** on the item **" + item + "** which cost **" + cost + "**", false, Color.PINK);
 
                 try {
 

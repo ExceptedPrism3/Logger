@@ -3,8 +3,8 @@ package com.carpour.logger.ServerSide;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.database.MySQL.MySQLData;
-import com.carpour.logger.database.SQLite.SQLiteData;
+import com.carpour.logger.Database.MySQL.MySQLData;
+import com.carpour.logger.Database.SQLite.SQLiteData;
 
 import java.awt.*;
 import java.io.BufferedWriter;
@@ -54,7 +54,7 @@ public class TPS implements Runnable {
 
             if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
 
-                Discord.TPS("The TPS has dropped to " + getTPS(), false, Color.red);
+                Discord.TPS("The TPS has dropped to " + getTPS(), false, Color.RED);
 
                 try {
 
@@ -71,7 +71,7 @@ public class TPS implements Runnable {
 
             } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
 
-                Discord.TPS("⚠️ WARNING! The TPS has dropped to " + getTPS(), false, Color.red);
+                Discord.TPS("⚠️ WARNING! The TPS has dropped to " + getTPS(), false, Color.RED);
 
                 try {
 

@@ -2,8 +2,8 @@ package com.carpour.logger.Events;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.database.MySQL.MySQLData;
-import com.carpour.logger.database.SQLite.SQLiteData;
+import com.carpour.logger.Database.MySQL.MySQLData;
+import com.carpour.logger.Database.SQLite.SQLiteData;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -50,13 +50,15 @@ public class onPlayerJoin implements Listener {
             }
         }
 
-        if (player.hasPermission("logger.exempt")){ return; }
+        if (main.getConfig().getBoolean("Player-Join.Player-IP")) ip = null;
+
+        if (player.hasPermission("logger.exempt")) return;
 
             if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Join"))) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
-                    Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false, Color.red );
+                    Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false, Color.RED);
 
                     try {
 
@@ -82,7 +84,7 @@ public class onPlayerJoin implements Listener {
 
                 }
 
-                Discord.playerJoin(player, "\uD83D\uDC4B [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false, Color.red );
+                Discord.playerJoin(player, "\uD83D\uDC4B [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false, Color.RED);
 
                 try {
 

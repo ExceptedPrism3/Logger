@@ -2,9 +2,9 @@ package com.carpour.logger.Events;
 
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
-import com.carpour.logger.database.MySQL.MySQLData;
+import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.database.SQLite.SQLiteData;
+import com.carpour.logger.Database.SQLite.SQLiteData;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

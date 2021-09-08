@@ -2,9 +2,9 @@ package com.carpour.logger.ServerSide;
 
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
-import com.carpour.logger.database.MySQL.MySQLData;
+import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.database.SQLite.SQLiteData;
+import com.carpour.logger.Database.SQLite.SQLiteData;
 
 import java.awt.*;
 import java.io.BufferedWriter;
@@ -25,7 +25,7 @@ public class Stop {
             Date date = new Date();
             DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-            Discord.serverStop("\uD83D\uDD34 " + dateFormat.format(date), false, Color.red);
+            Discord.serverStop("\uD83D\uDD34 " + dateFormat.format(date), false, Color.RED);
 
             try {
 

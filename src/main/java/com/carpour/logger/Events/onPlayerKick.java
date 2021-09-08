@@ -2,9 +2,9 @@ package com.carpour.logger.Events;
 
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
-import com.carpour.logger.database.MySQL.MySQLData;
+import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.database.SQLite.SQLiteData;
+import com.carpour.logger.Database.SQLite.SQLiteData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,13 +37,13 @@ public class onPlayerKick implements Listener {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (player.hasPermission("logger.exempt")){ return; }
+        if (player.hasPermission("logger.exempt")) return;
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Kick"))) {
 
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
-                Discord.staffChat(player, "\uD83E\uDD7E **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **Reason** " + reason, false, Color.blue);
+                Discord.staffChat(player, "\uD83E\uDD7E **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **Reason** " + reason, false, Color.BLUE);
 
                 try {
 
@@ -68,7 +68,7 @@ public class onPlayerKick implements Listener {
 
             }
 
-            Discord.playerKick(player, "\uD83E\uDD7E [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **Reason** " + reason, false, Color.blue);
+            Discord.playerKick(player, "\uD83E\uDD7E [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **Reason** " + reason, false, Color.BLUE);
 
             try {
 

@@ -2,6 +2,9 @@
 
 ![Updated Badge](https://badges.pufler.dev/updated/ExceptedPrism3/Logger)
 ![Version](https://img.shields.io/github/v/release/ExceptedPrism3/Logger)
+![Downloads](https://img.shields.io/github/downloads/ExceptedPrism3/Logger/total)
+![Issues](https://img.shields.io/github/issues/ExceptedPrism3/Logger)
+![Discord](https://img.shields.io/discord/850407951629287424)
 
 A spigot plugin that logs all Activities from Commands, Chat, Player Join, Player Leave, Player Death and even Server's RAM, TPS and Much More!
 

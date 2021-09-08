@@ -3,8 +3,8 @@ package com.carpour.logger.Events;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.database.MySQL.MySQLData;
-import com.carpour.logger.database.SQLite.SQLiteData;
+import com.carpour.logger.Database.MySQL.MySQLData;
+import com.carpour.logger.Database.SQLite.SQLiteData;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,13 +41,13 @@ public class onBucketPlace implements Listener {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (player.hasPermission("logger.exempt")){ return; }
+        if (player.hasPermission("logger.exempt")) return;
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Bucket-Place"))) {
 
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
-                Discord.staffChat(player, "\uD83E\uDEA3️ **|** \uD83D\uDC6E\u200D♂️️ [" + worldName + "] Has placed a **" + bucket + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
+                Discord.staffChat(player, "\uD83E\uDEA3️ **|** \uD83D\uDC6E\u200D♂️️ [" + worldName + "] Has placed a **" + bucket + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.RED);
 
                 try {
 
@@ -72,7 +72,7 @@ public class onBucketPlace implements Listener {
 
             }
 
-            Discord.bucketPlace(player,"\uD83E\uDEA3️ [" + worldName + "] Has placed a **" + bucket + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.red);
+            Discord.bucketPlace(player,"\uD83E\uDEA3️ [" + worldName + "] Has placed a **" + bucket + "** at X = " + x + " Y = " + y + " Z = " + z, false, Color.RED);
 
             try {
 

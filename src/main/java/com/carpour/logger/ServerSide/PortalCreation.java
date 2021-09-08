@@ -3,8 +3,8 @@ package com.carpour.logger.ServerSide;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.database.MySQL.MySQLData;
-import com.carpour.logger.database.SQLite.SQLiteData;
+import com.carpour.logger.Database.MySQL.MySQLData;
+import com.carpour.logger.Database.SQLite.SQLiteData;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -33,7 +33,7 @@ public class PortalCreation implements Listener {
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Portal-Creation"))) {
 
-            Discord.portalCreation("\uD83D\uDEAA A portal has been created in **" + worldName + "** using **" + reason + "**", false, Color.yellow);
+            Discord.portalCreation("\uD83D\uDEAA A portal has been created in **" + worldName + "** using **" + reason + "**", false, Color.YELLOW);
 
             try {
 

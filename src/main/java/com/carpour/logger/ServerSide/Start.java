@@ -2,9 +2,9 @@ package com.carpour.logger.ServerSide;
 
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
-import com.carpour.logger.database.MySQL.MySQLData;
+import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.database.SQLite.SQLiteData;
+import com.carpour.logger.Database.SQLite.SQLiteData;
 
 import java.awt.*;
 import java.io.BufferedWriter;
@@ -26,7 +26,7 @@ public class Start {
 
         if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Server-Start"))) {
 
-            Discord.serverStart("\uD83D\uDFE2 " + dateFormat.format(date), false, Color.green);
+            Discord.serverStart("\uD83D\uDFE2 " + dateFormat.format(date), false, Color.GREEN);
 
             try {
 

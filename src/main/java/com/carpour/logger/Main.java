@@ -3,11 +3,11 @@ package com.carpour.logger;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Discord.DiscordFile;
 import com.carpour.logger.Events.*;
-import com.carpour.logger.database.MySQL.*;
+import com.carpour.logger.Database.MySQL.*;
 import com.carpour.logger.Utils.*;
-import com.carpour.logger.database.SQLite.SQLite;
-import com.carpour.logger.database.SQLite.SQLiteData;
-import com.carpour.logger.onCommands.LoggerCommand;
+import com.carpour.logger.Database.SQLite.SQLite;
+import com.carpour.logger.Database.SQLite.SQLiteData;
+import com.carpour.logger.Commands.CommandManager;
 import com.carpour.logger.ServerSide.*;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -76,6 +76,12 @@ public class Main extends JavaPlugin {
             sqLiteData.emptyTable();
         }
 
+        if (getConfig().getBoolean("Log-to-Files") && (getConfig().getBoolean("SQLite.Enable"))){
+
+            getLogger().warning("Logging to Files and SQLite are both enabled, it might impact your Server's Performance!");
+
+        }
+
         new FileHandler(getDataFolder());
         fileHandler = new FileHandler(getDataFolder());
         fileHandler.deleteFiles();
@@ -101,7 +107,7 @@ public class Main extends JavaPlugin {
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new TPS(), 200L, getConfig().getInt("RAM-TPS-Checker"));
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new RAM(), 200L, getConfig().getInt("RAM-TPS-Checker"));
 
-        Objects.requireNonNull(getCommand("logger")).setExecutor(new LoggerCommand());
+        Objects.requireNonNull(getCommand("logger")).setExecutor(new CommandManager());
 
         icon = new ASCIIArt();
         icon.Art();
@@ -115,19 +121,11 @@ public class Main extends JavaPlugin {
         updater.checkForUpdate();
 
         getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.GOLD + "Thank you " + ChatColor.GREEN + ChatColor.BOLD + "thelooter" + ChatColor.GOLD + " for the Contribution!");
+
         getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.GREEN + "Plugin Enabled!");
 
         start = new Start();
         start.run();
-
-        if (getConfig().getBoolean("Log-to-Files") && (getConfig().getBoolean("SQLite.Enable"))){
-
-            getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.RED + "Logging to Files and SQLite are both enabled, it might impact your Server's Performance!");
-
-        }
-
-        //getServer().getConsoleSender().sendMessage("\n\n\n[Logger] " + ChatColor.GOLD + "This is a DEV Build, please report any issues at " + ChatColor.BLUE + "https://discord.gg/MfR5mcpVfX\n\n");
-
     }
 
     public static Main getInstance() { return instance; }
@@ -138,7 +136,9 @@ public class Main extends JavaPlugin {
         stop = new Stop();
         stop.run();
 
-        if ((getConfig().getBoolean("MySQL.Enable")) && ((mySQL.isConnected()))) mySQL.disconnect();
+        if ((getConfig().getBoolean("MySQL.Enable")) && (mySQL.isConnected())) mySQL.disconnect();
+
+        if ((getConfig().getBoolean("SQLite.Enable")) && (sqLite.isConnected())) sqLite.disconnect();
 
         discord.disconnect();
 

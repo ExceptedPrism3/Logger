@@ -3,8 +3,8 @@ package com.carpour.logger.Events;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.database.MySQL.MySQLData;
-import com.carpour.logger.database.SQLite.SQLiteData;
+import com.carpour.logger.Database.MySQL.MySQLData;
+import com.carpour.logger.Database.SQLite.SQLiteData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -45,7 +45,7 @@ public class onCommand implements Listener {
 
 
         //Stop Adding Message to Log if the Player has the correct Permissions
-        if (player.hasPermission("logger.exempt")){ return; }
+        if (player.hasPermission("logger.exempt")) return;
 
 
         //Logging to File if logging to File and Command Logging is enabled
@@ -79,7 +79,7 @@ public class onCommand implements Listener {
                             }
                         }
 
-                        Discord.playerCommand(player, "\uD83D\uDC7E " + message, false, Color.red);
+                        Discord.playerCommand(player, "\uD83D\uDC7E " + message, false, Color.RED);
 
                         try {
 
@@ -116,7 +116,7 @@ public class onCommand implements Listener {
 
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
-                Discord.staffChat(player, "\uD83D\uDC7E **|** \uD83D\uDC6E\u200D♂️ " +  message, false, Color.red);
+                Discord.staffChat(player, "\uD83D\uDC7E **|** \uD83D\uDC6E\u200D♂️ " +  message, false, Color.RED);
 
                 try {
 
@@ -142,7 +142,7 @@ public class onCommand implements Listener {
 
             }
 
-            Discord.playerCommand(player, "\uD83D\uDC7E " +  message, false, Color.red);
+            Discord.playerCommand(player, "\uD83D\uDC7E " +  message, false, Color.RED);
 
             try {
 
