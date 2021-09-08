@@ -28,3 +28,5 @@ permissions:
     default: op
   logger.staff.log:
     description: Logs Staff Members.
+  logger.update:
+    description: Update Message is sent to the Users with this Permission
