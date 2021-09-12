@@ -5,8 +5,6 @@ import com.carpour.logger.Main;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,6 +36,7 @@ public class FileHandler {
     private static File serverStopFolder;
     private static File itemDropFolder;
     private static File enchantFolder;
+    private static File afkFolder;
 
     private static File chatLogFile;
     private static File commandLogFile;
@@ -61,6 +60,7 @@ public class FileHandler {
     private static File ServerStopFile;
     private static File itemDropFile;
     private static File EnchantFile;
+    private static File afkFile;
 
 
     private final Main main = Main.getInstance();
@@ -141,30 +141,47 @@ public class FileHandler {
         enchantFolder = new File(logsFolder, "Enchanting");
         EnchantFile = new File(enchantFolder, filenameDateFormat.format(date) + ".log");
 
+        afkFolder = new File(logsFolder, "AFK");
+        afkFile = new File(afkFolder, filenameDateFormat.format(date) + ".log");
+
         try {
 
             chatLogFolder.mkdir();
+
             commandLogFolder.mkdir();
+
             consoleLogFolder.mkdir();
+
             signLogFolder.mkdir();
+
             playerJoinLogFolder.mkdir();
+
             playerLeaveLogFolder.mkdir();
+
             playerDeathLogFolder.mkdir();
+
             playerTeleportLogFolder.mkdir();
+
             blockPlaceLogFolder.mkdir();
+
             blockBreakLogFolder.mkdir();
+
             TPSLogFolder.mkdir();
+
             RAMLogFolder.mkdir();
+
             playerKickLogFolder.mkdir();
+
             playerLevelFolder.mkdir();
+
             portalCreateFolder.mkdir();
+
             bucketPlaceFolder.mkdir();
+
             anvilFolder.mkdir();
-            if (main.getConfig().getBoolean("Staff.Enabled")){
 
-                staffFolder.mkdir();
+            if (main.getConfig().getBoolean("Staff.Enabled")) staffFolder.mkdir();
 
-            }
             serverStartFolder.mkdir();
 
             serverStopFolder.mkdir();
@@ -172,6 +189,8 @@ public class FileHandler {
             itemDropFolder.mkdir();
 
             enchantFolder.mkdir();
+
+            if (main.getAPI() != null) afkFolder.mkdir();
 
 
 
@@ -209,9 +228,7 @@ public class FileHandler {
 
             bucketPlaceFile.createNewFile();
 
-            if (main.getConfig().getBoolean("Staff.Enabled")){
-                StaffFile.createNewFile();
-            }
+            if (main.getConfig().getBoolean("Staff.Enabled")) StaffFile.createNewFile();
 
             ServerStartFile.createNewFile();
 
@@ -220,6 +237,8 @@ public class FileHandler {
             itemDropFile.createNewFile();
 
             EnchantFile.createNewFile();
+
+            if (main.getAPI() != null) afkFile.createNewFile();
 
 
 
@@ -274,15 +293,21 @@ public class FileHandler {
 
     public static File getEnchantFile() { return EnchantFile; }
 
+    public static File getAfkFile() { return afkFile; }
+
 
     public void deleteFile(File file) {
 
         if (main.getConfig().getInt("File-Deletion") < 0 ){ return; }
 
         FileTime creationTime = null;
+
         try {
+
             creationTime = (FileTime) Files.getAttribute(file.toPath(), "creationTime");
+
         } catch (IOException e) {
+
             e.printStackTrace();
         }
 
@@ -456,6 +481,14 @@ public class FileHandler {
 
             deleteFile(enchanting);
 
+        }
+
+        if (main.getAPI() != null) {
+            for (File afk : Objects.requireNonNull(afkFolder.listFiles())) {
+
+                deleteFile(afk);
+
+            }
         }
     }
 }

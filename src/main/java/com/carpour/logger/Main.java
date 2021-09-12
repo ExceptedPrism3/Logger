@@ -9,6 +9,9 @@ import com.carpour.logger.Database.SQLite.SQLite;
 import com.carpour.logger.Database.SQLite.SQLiteData;
 import com.carpour.logger.Commands.CommandManager;
 import com.carpour.logger.ServerSide.*;
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.IEssentials;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -109,6 +112,14 @@ public class Main extends JavaPlugin {
 
         Objects.requireNonNull(getCommand("logger")).setExecutor(new CommandManager());
 
+        if (getAPI() != null){
+
+            getServer().getPluginManager().registerEvents(new onAFK(), this);
+
+            getServer().getLogger().info("[Logger] Essentials Plugin was Found!");
+
+        }
+
         icon = new ASCIIArt();
         icon.Art();
 
@@ -129,6 +140,21 @@ public class Main extends JavaPlugin {
     }
 
     public static Main getInstance() { return instance; }
+
+    public Essentials getAPI(){
+
+        IEssentials essentials = (IEssentials) Bukkit.getPluginManager().getPlugin("Essentials");
+
+        if (essentials instanceof Essentials){
+
+            return (Essentials) essentials;
+
+        }else{
+
+            return null;
+
+        }
+    }
 
     @Override
     public void onDisable() {

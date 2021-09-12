@@ -43,10 +43,11 @@ public class onCommand implements Listener {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
+        if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")
+                && main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) return;
 
         //Stop Adding Message to Log if the Player has the correct Permissions
         if (player.hasPermission("logger.exempt")) return;
-
 
         //Logging to File if logging to File and Command Logging is enabled
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Commands"))){

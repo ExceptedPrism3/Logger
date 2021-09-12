@@ -16,6 +16,7 @@ public class SQLiteData {
 
 
     private static Main plugin;
+
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss:SSSXXX");
 
 
@@ -25,7 +26,7 @@ public class SQLiteData {
 
     public void createTable() {
 
-        PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave, playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel, bucketPlace, anvil, serverStart, serverStop, itemDrop, enchant;
+        PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave, playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel, bucketPlace, anvil, serverStart, serverStop, itemDrop, enchant, afk;
 
         try {
             playerChat = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Chat " +
@@ -106,6 +107,15 @@ public class SQLiteData {
             enchant = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Enchanting" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(100)," +
                     "X INTEGER, Y INTEGER, Z INTEGER, Enchantment TEXT(50), Item TEXT(50), Cost INTEGER, Is_Staff INTEGER)");
+
+            if (plugin.getAPI() != null) {
+
+                afk = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS AFK" +
+                        "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(100)," +
+                        "X INTEGER, Y INTEGER, Z INTEGER, Is_Staff INTEGER)");
+
+                afk.executeUpdate();
+            }
 
             playerChat.executeUpdate();
             playerCommands.executeUpdate();
@@ -492,6 +502,28 @@ public class SQLiteData {
         }
     }
 
+    public static void insertAFK(String serverName, Player player, boolean isStaff) {
+
+        if (plugin.getAPI() != null) {
+
+            try {
+                PreparedStatement enchantStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO AFK (Server_Name, Date, World, Player_Name, X, Y, Z, Is_Staff) VALUES (?,?,?,?,?,?,?,?)");
+                enchantStatement.setString(1, serverName);
+                enchantStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
+                enchantStatement.setString(3, player.getWorld().getName());
+                enchantStatement.setString(4, player.getName());
+                enchantStatement.setInt(5, player.getLocation().getBlockX());
+                enchantStatement.setInt(6, player.getLocation().getBlockY());
+                enchantStatement.setInt(7, player.getLocation().getBlockZ());
+                enchantStatement.setBoolean(8, isStaff);
+
+                enchantStatement.executeUpdate();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        }
+    }
+
 
     public void emptyTable() {
 
@@ -542,6 +574,14 @@ public class SQLiteData {
             PreparedStatement item_Drop = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Item_Drop WHERE Date <= datetime('now','-" + when + " day')");
 
             PreparedStatement enchanting = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Enchanting WHERE Date <= datetime('now','-" + when + " day')");
+
+            if (plugin.getAPI() != null) {
+
+                PreparedStatement afk = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM AFK WHERE Date <= datetime('now','-" + when + " day')");
+
+                afk.executeUpdate();
+
+            }
 
             player_Chat.executeUpdate();
             player_Commands.executeUpdate();

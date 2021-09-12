@@ -6,7 +6,7 @@
 
     <groupId>com.carpour</groupId>
     <artifactId>Logger</artifactId>
-    <version>1.6.2</version>
+    <version>1.6.3</version>
     <packaging>jar</packaging>
 
     <name>Logger</name>
@@ -48,9 +48,7 @@
                                     </excludes>
                                 </filter>
                             </filters>
-
                         </configuration>
-
                     </execution>
                 </executions>
             </plugin>
@@ -77,6 +75,10 @@
             <name>m2-dv8tion</name>
             <url>https://m2.dv8tion.net/releases</url>
         </repository>
+        <repository>
+            <id>essentials-releases</id>
+            <url>https://repo.essentialsx.net/releases/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -101,6 +103,18 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.26</version>
+        </dependency>
+        <dependency>
+            <groupId>net.essentialsx</groupId>
+            <artifactId>EssentialsX</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bstats</groupId>
+                    <artifactId>bstats-bukkit</artifactId>
+                </exclusion>
+            </exclusions>
+            <version>2.19.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

@@ -27,6 +27,7 @@ Staff:
   Enabled: false
 
 # Logging features
+# AFK Feature depends on Essentials Plugin
 Log:
   Player-Chat: true
   Player-Commands: true
@@ -49,6 +50,7 @@ Log:
   Server-Stop: true
   Item-Drop: true
   Enchanting: true
+  AFK: true
 
 # How often should we check for the Server's TPS and RAM
 # It's better to have it above 1 min to avoid any complications

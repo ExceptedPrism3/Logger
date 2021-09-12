@@ -41,6 +41,7 @@ public class Discord {
     private static TextChannel serverStopChannel;
     private static TextChannel itemDropChannel;
     private static TextChannel enchantingChannel;
+    private static TextChannel afkChannel;
 
     public void run() {
 
@@ -103,6 +104,8 @@ public class Discord {
             String itemdropChannelID = DiscordFile.get().getString("Discord.Item-Drop.Channel-ID");
 
             String enchantingChannelID = DiscordFile.get().getString("Discord.Enchanting.Channel-ID");
+
+            String afkChannelID = DiscordFile.get().getString("Discord.AFK.Channel-ID");
 
 
             if (staffChannelID != null && main.getConfig().getBoolean("Staff.Enabled") && !staffChannelID.equals("LINK_HERE")) {
@@ -234,6 +237,12 @@ public class Discord {
             if (enchantingChannelID != null && main.getConfig().getBoolean("Log.Enchanting") && !enchantingChannelID.equals("LINK_HERE")) {
 
                 enchantingChannel = jda.getTextChannelById(enchantingChannelID);
+
+            }
+
+            if (afkChannelID != null && main.getConfig().getBoolean("Log.AFK") && !afkChannelID.equals("LINK_HERE")) {
+
+                afkChannel = jda.getTextChannelById(afkChannelID);
 
             }
         }
@@ -383,6 +392,11 @@ public class Discord {
     public static void enchanting(Player player, String content, boolean contentinAuthorLine, Color color) {
 
         discordUtil(player, content, contentinAuthorLine, enchantingChannel);
+    }
+
+    public static void afk(Player player, String content, boolean contentinAuthorLine, Color color) {
+
+        discordUtil(player, content, contentinAuthorLine, afkChannel);
     }
 
     private static void discordUtil(Player player, String content, boolean contentinAuthorLine, TextChannel channel) {

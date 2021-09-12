@@ -41,16 +41,16 @@ public class onPlayerJoin implements Listener {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
         if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")
-                && main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
-            if (player.hasPermission("logger.staff")) {
-                player.sendMessage(ChatColor.GRAY + "[" +
-                        ChatColor.AQUA + "Logger" + ChatColor.GRAY + "] " +
-                        ChatColor.RED + "Enabling both Whitelist and Blacklist isn't supported. " +
-                        "Please disable one of them to continue logging Player Commands");
-            }
+                && main.getConfig().getBoolean("Player-Commands.Blacklist-Commands") &&
+            player.hasPermission("logger.staff")) {
+            player.sendMessage(ChatColor.GRAY + "[" +
+                    ChatColor.AQUA + "Logger" + ChatColor.GRAY + "] " +
+                    ChatColor.RED + "Enabling both Whitelist and Blacklist isn't supported. " +
+                    "Please disable one of them to continue logging Player Commands");
+
         }
 
-        if (main.getConfig().getBoolean("Player-Join.Player-IP")) ip = null;
+        if (!main.getConfig().getBoolean("Player-Join.Player-IP")) ip = null;
 
         if (player.hasPermission("logger.exempt")) return;
 

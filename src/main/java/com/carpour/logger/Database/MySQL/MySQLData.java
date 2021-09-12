@@ -6,7 +6,6 @@ import org.bukkit.event.world.PortalCreateEvent;
 
 import java.net.InetSocketAddress;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MySQLData {
@@ -19,7 +18,7 @@ public class MySQLData {
 
     public void createTable(){
 
-        PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave, playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel, bucketPlace, anvil, serverStart, serverStop, itemDrop, enchant;
+        PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave, playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel, bucketPlace, anvil, serverStart, serverStop, itemDrop, enchant, afk;
 
         try {
 
@@ -85,6 +84,15 @@ public class MySQLData {
 
             enchant = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Enchanting "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT,Y INT,Z INT,Enchantment VARCHAR(50),Item VARCHAR(50),Cost INT(5),Is_Staff TINYINT,PRIMARY KEY (Date))");
+
+            if (plugin.getAPI() != null) {
+
+                afk = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS AFK "
+                        + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
+
+
+                afk.executeUpdate();
+            }
 
             playerChat.executeUpdate();
             playerCommands.executeUpdate();
@@ -483,6 +491,30 @@ public class MySQLData {
         }
     }
 
+    public static void afk(String serverName, String world, String playername, double x, double y, double z,boolean staff){
+
+        if (plugin.getAPI() != null) {
+
+            try {
+                String database = "AFK";
+                PreparedStatement afk = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?)");
+                afk.setString(1, serverName);
+                afk.setString(2, world);
+                afk.setString(3, playername);
+                afk.setDouble(4, x);
+                afk.setDouble(5, y);
+                afk.setDouble(6, z);
+                afk.setBoolean(7, staff);
+                afk.executeUpdate();
+
+            } catch (SQLException e) {
+
+                e.printStackTrace();
+
+            }
+        }
+    }
+
     public void emptyTable(){
 
         int When = plugin.getConfig().getInt("MySQL.Data-Deletion");
@@ -532,6 +564,13 @@ public class MySQLData {
             PreparedStatement item_Drop = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Item_Drop WHERE Date < NOW() - INTERVAL " + When + " DAY");
 
             PreparedStatement enchanting = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Enchanting WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+
+            if (plugin.getAPI() != null) {
+
+                PreparedStatement afk = plugin.mySQL.getConnection().prepareStatement("DELETE FROM AFK WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+
+                afk.executeUpdate();
+            }
 
             player_Chat.executeUpdate();
             player_Commands.executeUpdate();
