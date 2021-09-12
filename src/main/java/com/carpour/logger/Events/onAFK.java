@@ -8,6 +8,7 @@ import com.carpour.logger.Utils.FileHandler;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import java.awt.*;
@@ -23,7 +24,7 @@ public class onAFK implements Listener {
 
     private final Main main = Main.getInstance();
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void afk(AfkStatusChangeEvent e) {
 
         boolean afk = e.getAffected().isAfk();

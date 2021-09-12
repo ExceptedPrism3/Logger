@@ -149,11 +149,7 @@ public class Main extends JavaPlugin {
 
             return (Essentials) essentials;
 
-        }else{
-
-            return null;
-
-        }
+        }else return null;
     }
 
     @Override
