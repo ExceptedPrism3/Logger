@@ -12,7 +12,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -37,42 +36,44 @@ public class onChat implements Listener {
             DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
 
-        if (player.hasPermission("logger.exempt")) {
-            return;
-        }
+        if (player.hasPermission("logger.exempt")) return;
 
         //Log To Files Handling
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Chat"))) {
 
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
-                Discord.staffChat(player, "\uD83D\uDCAC **|** \uD83D\uDC6E\u200D♂️ " + msg, false, Color.GREEN);
+                Discord.staffChat(player, "\uD83D\uDCAC **|** \uD83D\uDC6E\u200D♂️ " + msg, false);
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has said => " + msg +"\n");
+                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has said => " + msg + "\n");
                     out.close();
-
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Chat")) && (main.mySQL.isConnected())) {
-
-
-                        MySQLData.playerChat(serverName, worldName, playerName, msg, true);
-
-                    }
 
                 } catch (IOException e) {
 
-                    System.out.println("An error occurred while logging into the appropriate file.");
+                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
+
+                }
+
+                if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Chat") && main.mySQL.isConnected()) {
+
+
+                    MySQLData.playerChat(serverName, worldName, playerName, msg, true);
+
+                }
+
+                if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Chat") && main.getSqLite().isConnected()) {
+
+                    SQLiteData.insertPlayerChat(serverName, player, msg, true);
 
                 }
 
                 return;
 
             }
-
-            Discord.playerChat(player, "\uD83D\uDCAC " + msg, false, Color.GREEN);
 
             try {
 
@@ -82,18 +83,29 @@ public class onChat implements Listener {
 
             } catch (IOException e) {
 
-                System.out.println("An error occurred while logging into the appropriate file.");
+                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                 e.printStackTrace();
 
             }
         }
 
+        //Discord Integration
+        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+            Discord.staffChat(player, "\uD83D\uDCAC **|** \uD83D\uDC6E\u200D♂️ " + msg, false);
+
+        }else {
+
+            Discord.playerChat(player, "\uD83D\uDCAC " + msg, false);
+        }
+
         //MySQL Handling
         if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Chat"))
                 && (main.mySQL.isConnected())) {
+
             try {
 
-                MySQLData.playerChat(serverName, worldName, playerName, msg, false);
+                MySQLData.playerChat(serverName, worldName, playerName, msg, player.hasPermission("logger.staff.log"));
 
             } catch (Exception e) {
 
@@ -105,10 +117,15 @@ public class onChat implements Listener {
         //SQLite Handling
         if (main.getConfig().getBoolean("SQLite.Enable") && (main.getConfig().getBoolean("Log.Player-Chat"))
                 && (main.getSqLite().isConnected())) {
+
             try {
+
                 SQLiteData.insertPlayerChat(serverName, player, msg, player.hasPermission("logger.staff.log"));
+
             } catch (Exception exception) {
+
                 exception.printStackTrace();
+
             }
         }
     }

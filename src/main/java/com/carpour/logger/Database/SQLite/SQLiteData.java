@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Objects;
 
 public class SQLiteData {
@@ -26,7 +27,7 @@ public class SQLiteData {
 
     public void createTable() {
 
-        PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave, playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel, bucketPlace, anvil, serverStart, serverStop, itemDrop, enchant, afk;
+        PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave, playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel, bucketPlace, anvil, serverStart, serverStop, itemDrop, enchant, bookEditing, afk;
 
         try {
             playerChat = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Chat " +
@@ -79,8 +80,7 @@ public class SQLiteData {
             playerKick = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Kick" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY,World TEXT(100), Player_Name TEXT(100)," +
                     " X INTEGER, Y INTEGER, Z INTEGER, Reason TEXT(50), Is_Staff INTEGER )");
-
-
+            
             portalCreation = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Portal_Creation" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(50), Caused_By TEXT(50))");
 
@@ -107,6 +107,10 @@ public class SQLiteData {
             enchant = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Enchanting" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(100)," +
                     "X INTEGER, Y INTEGER, Z INTEGER, Enchantment TEXT(50), Item TEXT(50), Cost INTEGER, Is_Staff INTEGER)");
+
+            bookEditing = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Book_Editing "
+                    + "(Server_Name TEXT(30),Date DATETIME DEFAULT CURRENT_TIMESTAMP() PRIMARY KEY, World TEXT(100),Player_name TEXT(100)" +
+                    ",Page_Count INTEGER,Page_Content TEXT(250),Signed_by TEXT(25),Is_Staff INTEGER)");
 
             if (plugin.getAPI() != null) {
 
@@ -138,6 +142,7 @@ public class SQLiteData {
             serverStop.executeUpdate();
             itemDrop.executeUpdate();
             enchant.executeUpdate();
+            bookEditing.executeUpdate();
 
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -502,6 +507,27 @@ public class SQLiteData {
         }
     }
 
+    public static void insertBook(String serverName, String world, Player playername, int pages, List<String> content, String signed_by, boolean staff){
+        try {
+            String database = "Book_Editing";
+            PreparedStatement book_editing = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name, Date, World, Playername, Page_Count, Page_Content, Signed_by, Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+            book_editing.setString(1, serverName);
+            book_editing.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
+            book_editing.setString(3, world);
+            book_editing.setString(4, String.valueOf(playername));
+            book_editing.setInt(5, pages);
+            book_editing.setString(6, String.valueOf(content));
+            book_editing.setString(7, signed_by);
+            book_editing.setBoolean(8, staff);
+            book_editing.executeUpdate();
+
+        } catch (SQLException e){
+
+            e.printStackTrace();
+
+        }
+    }
+
     public static void insertAFK(String serverName, Player player, boolean isStaff) {
 
         if (plugin.getAPI() != null) {
@@ -575,6 +601,8 @@ public class SQLiteData {
 
             PreparedStatement enchanting = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Enchanting WHERE Date <= datetime('now','-" + when + " day')");
 
+            PreparedStatement book_Editing = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Book_Editing WHERE DATE < NOW() - INTERVAL " + when + " DAY");
+
             if (plugin.getAPI() != null) {
 
                 PreparedStatement afk = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM AFK WHERE Date <= datetime('now','-" + when + " day')");
@@ -604,6 +632,7 @@ public class SQLiteData {
             server_Stop.executeUpdate();
             item_Drop.executeUpdate();
             enchanting.executeUpdate();
+            book_Editing.executeUpdate();
 
         }catch (SQLException e){
             plugin.getLogger().severe("An error has occurred while cleaning the tables, if the error persists, contact the Author!");

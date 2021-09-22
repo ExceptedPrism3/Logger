@@ -12,7 +12,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -44,7 +43,7 @@ public class onPlayerJoin implements Listener {
                 && main.getConfig().getBoolean("Player-Commands.Blacklist-Commands") &&
             player.hasPermission("logger.staff")) {
             player.sendMessage(ChatColor.GRAY + "[" +
-                    ChatColor.AQUA + "Logger" + ChatColor.GRAY + "] " +
+                    ChatColor.AQUA + "Logger" + ChatColor.GRAY + "]" + ChatColor.WHITE + " | " +
                     ChatColor.RED + "Enabling both Whitelist and Blacklist isn't supported. " +
                     "Please disable one of them to continue logging Player Commands");
 
@@ -54,58 +53,71 @@ public class onPlayerJoin implements Listener {
 
         if (player.hasPermission("logger.exempt")) return;
 
-            if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Join"))) {
+        if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Join"))) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
-                    Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false, Color.RED);
-
-                    try {
-
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has logged in at X = " + x + " Y = " + y + " Z = " + z + " and their IP is " + ip + "\n");
-                        out.close();
-
-                        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Join")) && (main.mySQL.isConnected())) {
-
-                            assert ip != null;
-                            MySQLData.playerJoin(serverName, worldName, playerName, x, y, z, ip, true);
-
-                        }
-
-                    } catch (IOException e) {
-
-                        System.out.println("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-
-                    }
-
-                    return;
-
-                }
-
-                Discord.playerJoin(player, "\uD83D\uDC4B [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false, Color.RED);
+                Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false);
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerJoinLogFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has logged in at X = " + x + " Y = " + y + " Z = " + z + " and their IP is " + ip + "\n");
+                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has logged in at X = " + x + " Y = " + y + " Z = " + z + " and their IP is " + ip + "\n");
                     out.close();
 
                 } catch (IOException e) {
 
-                    System.out.println("An error occurred while logging into the appropriate file.");
+                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
 
+                if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Join") && main.mySQL.isConnected()) {
+
+                    assert ip != null;
+                    MySQLData.playerJoin(serverName, worldName, playerName, x, y, z, ip, true);
+
+                }
+
+                if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Join") && main.getSqLite().isConnected()) {
+
+                    SQLiteData.insertPlayerJoin(serverName, player, true);
+
+                }
+
+                return;
+
             }
+
+            try {
+
+                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerJoinLogFile(), true));
+                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has logged in at X = " + x + " Y = " + y + " Z = " + z + " and their IP is " + ip + "\n");
+                out.close();
+
+            } catch (IOException e) {
+
+                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                e.printStackTrace();
+
+            }
+         }
+
+        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+            Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false);
+
+        }else {
+
+            Discord.playerJoin(player, "\uD83D\uDC4B [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false);
+
+        }
 
         if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Join")) && (main.mySQL.isConnected())){
 
             try {
 
-                MySQLData.playerJoin(serverName, worldName, playerName, x, y, z, ip, false);
+                MySQLData.playerJoin(serverName, worldName, playerName, x, y, z, ip, player.hasPermission("logger.staff.log"));
 
             }catch (Exception e) {
 
@@ -113,11 +125,17 @@ public class onPlayerJoin implements Listener {
 
             }
         }
+
         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Join") && main.getSqLite().isConnected()) {
+
             try {
+
                 SQLiteData.insertPlayerJoin(serverName, player, player.hasPermission("logger.staff.log"));
+
             } catch (Exception exception) {
+
                 exception.printStackTrace();
+
             }
         }
     }

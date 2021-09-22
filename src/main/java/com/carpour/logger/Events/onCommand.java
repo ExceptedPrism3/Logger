@@ -14,7 +14,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -49,6 +48,16 @@ public class onCommand implements Listener {
         //Stop Adding Message to Log if the Player has the correct Permissions
         if (player.hasPermission("logger.exempt")) return;
 
+
+        if (main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
+
+            for (String m : main.getConfig().getStringList("Player-Commands.Commands-to-Block")) {
+
+                if (messageParts.get(0).equalsIgnoreCase(m)) return;
+
+            }
+        }
+
         //Logging to File if logging to File and Command Logging is enabled
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Commands"))){
 
@@ -60,27 +69,36 @@ public class onCommand implements Listener {
 
                         if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
+                            Discord.staffChat(player, "\uD83D\uDC7E **|** \uD83D\uDC6E\u200D♂️ " +  message, false);
+
                             try {
 
-                                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
                                 out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has executed => " + message + "\n");
                                 out.close();
 
-                                if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.mySQL.isConnected())) {
-
-                                    MySQLData.playerCommands(serverName, worldName, playerName, message, true);
-
-                                }
-
                             } catch (IOException e) {
 
-                                System.out.println("An error occurred while logging into the appropriate file.");
+                                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                                 e.printStackTrace();
 
                             }
+
+                            if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Commands") && main.mySQL.isConnected()) {
+
+                                MySQLData.playerCommands(serverName, worldName, playerName, message, true);
+
+                            }
+
+                            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Commands") && main.getSqLite().isConnected()) {
+
+                                SQLiteData.insertPlayerCommands(serverName, player, message, true);
+
+                            }
+                            return;
                         }
 
-                        Discord.playerCommand(player, "\uD83D\uDC7E " + message, false, Color.RED);
+                        Discord.playerCommand(player, "\uD83D\uDC7E " + message, false);
 
                         try {
 
@@ -90,7 +108,7 @@ public class onCommand implements Listener {
 
                         } catch (IOException e) {
 
-                            System.out.println("An error occurred while logging into the appropriate file.");
+                            main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
 
                         }
@@ -103,47 +121,38 @@ public class onCommand implements Listener {
 
             }
 
-
-            if (main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
-
-                for (String m : main.getConfig().getStringList("Player-Commands.Commands-to-Block")) {
-
-                    if (messageParts.get(0).equalsIgnoreCase(m)) {
-
-                        return;
-                    }
-                }
-            }
-
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
-                Discord.staffChat(player, "\uD83D\uDC7E **|** \uD83D\uDC6E\u200D♂️ " +  message, false, Color.RED);
+                Discord.staffChat(player, "\uD83D\uDC7E **|** \uD83D\uDC6E\u200D♂️ " +  message, false);
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
                     out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has executed => " + message + "\n");
                     out.close();
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.mySQL.isConnected())) {
-
-
-                        MySQLData.playerCommands(serverName, worldName, playerName, message, true);
-
-                    }
-
                 } catch (IOException e) {
 
-                    System.out.println("An error occurred while logging into the appropriate file.");
+                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
+
+                }
+
+                if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.mySQL.isConnected())) {
+
+                    MySQLData.playerCommands(serverName, worldName, playerName, message, true);
+
+                }
+
+                if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Commands") && main.getSqLite().isConnected()) {
+
+                    SQLiteData.insertPlayerCommands(serverName, player, message, true);
 
                 }
 
                 return;
 
             }
-
-            Discord.playerCommand(player, "\uD83D\uDC7E " +  message, false, Color.RED);
 
             try {
 
@@ -153,10 +162,19 @@ public class onCommand implements Listener {
 
             } catch (IOException e) {
 
-                System.out.println("An error occurred while logging into the appropriate file.");
+                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                 e.printStackTrace();
 
             }
+        }
+
+        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+            Discord.staffChat(player, "\uD83D\uDC7E **|** \uD83D\uDC6E\u200D♂️ " + message, false);
+
+        }else {
+
+            Discord.playerCommand(player, "\uD83D\uDC7E " + message, false);
 
         }
 
@@ -166,9 +184,7 @@ public class onCommand implements Listener {
             //Command Whitelist
             if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")) {
 
-                if (main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
-                    return;
-                }
+                if (main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) return;
 
                 for (String command : main.getConfig().getStringList("Player-Commands.Commands-to-Log")) {
 
@@ -176,79 +192,44 @@ public class onCommand implements Listener {
                     if (messageParts.containsAll(commandParts)) {
 
                         try {
-                            MySQLData.playerCommands(serverName, worldName, playerName, message, false);
+
+                            MySQLData.playerCommands(serverName, worldName, playerName, message, player.hasPermission("logger.staff.log"));
+
                         } catch (Exception exception) {
+
                             exception.printStackTrace();
+
                         }
                     }
-                }
-            }
-            //Command Blacklist
-            if (main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
-
-                if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")) {
-                    return;
-                }
-
-                for (String command : main.getConfig().getStringList("Player-Commands.Commands-to-Block")) {
-                    List<String> commandParts = Arrays.asList(command.split("\\s+"));
-
-                    if (messageParts.containsAll(commandParts)) {
-                        return;
-                    }
-                }
-
-
-                try {
-                    MySQLData.playerCommands(serverName, worldName, playerName, message, false);
-                } catch (Exception exception) {
-                    exception.printStackTrace();
                 }
             }
         }
 
         //Logging to SQLite if logging to SQLite and Command Logging is enabled
         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Commands") && main.getSqLite().isConnected()) {
+
             if (!(player.hasPermission("logger.exempt") || player.isOp())) {
                 //Command Whitelist
                 if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")) {
 
-                    if (main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
-                        return;
-                    }
+                    if (main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) return;
 
                     for (String command : main.getConfig().getStringList("Player-Commands.Commands-to-Log")) {
 
                         List<String> commandParts = Arrays.asList(command.split("\\s+"));
+
                         if (messageParts.containsAll(commandParts)) {
 
                             try {
+
                                 SQLiteData.insertPlayerCommands(serverName, player, message, player.hasPermission("logger.staff.log"));
+
                             } catch (Exception exception) {
+
                                 exception.printStackTrace();
+
                             }
                         }
-                    }
-                }
-                //Command Blacklist
-                if (main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
-
-                    if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")) {
-                        return;
-                    }
-
-                    for (String command : main.getConfig().getStringList("Player-Commands.Commands-to-Block")) {
-                        List<String> commandParts = Arrays.asList(command.split("\\s+"));
-
-                        if (messageParts.containsAll(commandParts)) {
-                            return;
-                        }
-                    }
-
-                    try {
-                        SQLiteData.insertPlayerCommands(serverName, player, message, player.hasPermission("logger.staff.log"));
-                    } catch (Exception exception) {
-                        exception.printStackTrace();
                     }
                 }
             }

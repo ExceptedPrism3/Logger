@@ -85,6 +85,7 @@ public class DiscordFile {
         get().addDefault("Discord.Server-Stop.Channel-ID", "LINK_HERE");
         get().addDefault("Discord.Item-Drop.Channel-ID", "LINK_HERE");
         get().addDefault("Discord.Enchanting.Channel-ID", "LINK_HERE");
+        get().addDefault("Discord.Book-Editing.Channel-ID", "LINK_HERE");
         get().addDefault("Discord.AFK.Channel-ID", "LINK_HERE");
     }
 }

@@ -26,29 +26,41 @@ public class UpdateChecker {
     }
 
     public void checkForUpdate() {
+
         Bukkit.getScheduler().runTaskAsynchronously(this.javaPlugin, () -> Bukkit.getScheduler().runTask(this.javaPlugin, () -> {
+
             try {
+
                 HttpsURLConnection connection = (HttpsURLConnection)(new URL("https://api.spigotmc.org/legacy/update.php?resource=" + ID)).openConnection();
                 connection.setRequestMethod("GET");
                 this.spigotPluginVersion = (new BufferedReader(new InputStreamReader(connection.getInputStream()))).readLine();
+
             } catch (IOException var2) {
+
                 var2.printStackTrace();
                 return;
+
             }
 
             if (!this.localPluginVersion.equals(this.spigotPluginVersion)) {
+
                 Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&f[Logger] |&e A New Version &a" + this.spigotPluginVersion + " &eis Available at: &6https://www.spigotmc.org/resources/" + ID + "/updates"));
                 Bukkit.getScheduler().runTask(this.javaPlugin, () -> Bukkit.getPluginManager().registerEvents(new Listener() {
                     @EventHandler(
                             priority = EventPriority.MONITOR
                     )
                     public void onPlayerJoin(PlayerJoinEvent event) {
+
                         Player player = event.getPlayer();
+
                         if (player.isOp() || player.hasPermission("logger.update")) {
-                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f[Logger] |&e A New Version &a" + UpdateChecker.this.spigotPluginVersion + " &eis Available at: &6https://www.spigotmc.org/resources/" + ID + "/updates"));
+
+                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[&bLogger&7] &f|&e A New Version &a" + UpdateChecker.this.spigotPluginVersion + " &eis Available at: &6https://www.spigotmc.org/resources/" + ID + "/updates"));
+
                         }
                     }
                 }, this.javaPlugin));
+
             }
         }));
     }

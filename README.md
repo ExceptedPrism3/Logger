@@ -38,6 +38,8 @@ With more than **20 Features** to choose from, nothing is left without monitorin
 * Server Start
 * Server Stop
 * Item Drop
+* AFK [ Requires Essentials Plugin ]
+* Book Editing
 * Enchanting
 
 ## Info

@@ -50,11 +50,11 @@ public class MySQL {
             try {
 
                 connection.close();
-                Bukkit.getConsoleSender().sendMessage("[Logger] " + ChatColor.GREEN + "MySQL Connection has been safely shutdown!");
+                Bukkit.getConsoleSender().sendMessage("[Logger] " + ChatColor.GREEN + "MySQL Connection has been closed!");
 
             } catch (SQLException e) {
 
-                Bukkit.getConsoleSender().sendMessage("[Logger] " + ChatColor.RED + "An error has occurred while shutting down the Database!");
+                Bukkit.getConsoleSender().sendMessage("[Logger] " + ChatColor.RED + "MySQL Database couldn't be closed safely, if the issue persists contact the Authors!");
 
             }
         }

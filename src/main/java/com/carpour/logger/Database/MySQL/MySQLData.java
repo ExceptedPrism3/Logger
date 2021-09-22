@@ -7,6 +7,7 @@ import org.bukkit.event.world.PortalCreateEvent;
 import java.net.InetSocketAddress;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 public class MySQLData {
 
@@ -18,7 +19,7 @@ public class MySQLData {
 
     public void createTable(){
 
-        PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave, playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel, bucketPlace, anvil, serverStart, serverStop, itemDrop, enchant, afk;
+        PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave, playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel, bucketPlace, anvil, serverStart, serverStop, itemDrop, enchant, bookEditing, afk;
 
         try {
 
@@ -85,6 +86,9 @@ public class MySQLData {
             enchant = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Enchanting "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT,Y INT,Z INT,Enchantment VARCHAR(50),Item VARCHAR(50),Cost INT(5),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
+            bookEditing = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Book_Editing "
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Page_Count INT,Page_Content VARCHAR(250),Signed_by VARCHAR(25),Is_Staff TINYINT,PRIMARY KEY (Date))");
+
             if (plugin.getAPI() != null) {
 
                 afk = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS AFK "
@@ -114,6 +118,7 @@ public class MySQLData {
             serverStart.executeUpdate();
             serverStop.executeUpdate();
             itemDrop.executeUpdate();
+            bookEditing.executeUpdate();
             enchant.executeUpdate();
 
         }catch (SQLException e){
@@ -491,6 +496,26 @@ public class MySQLData {
         }
     }
 
+    public static void bookEditing(String serverName, String world, String playername, int pages, List<String> content, String signed_by, boolean staff){
+        try {
+            String database = "Book_Editing";
+            PreparedStatement enchanting = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Page_Count,Page_Content,Signed_by,Is_Staff) VALUES(?,?,?,?,?,?,?)");
+            enchanting.setString(1, serverName);
+            enchanting.setString(2, world);
+            enchanting.setString(3, playername);
+            enchanting.setInt(4, pages);
+            enchanting.setString(5, String.valueOf(content));
+            enchanting.setString(6, signed_by);
+            enchanting.setBoolean(7, staff);
+            enchanting.executeUpdate();
+
+        } catch (SQLException e){
+
+            e.printStackTrace();
+
+        }
+    }
+
     public static void afk(String serverName, String world, String playername, double x, double y, double z,boolean staff){
 
         if (plugin.getAPI() != null) {
@@ -517,57 +542,59 @@ public class MySQLData {
 
     public void emptyTable(){
 
-        int When = plugin.getConfig().getInt("MySQL.Data-Deletion");
+        int when = plugin.getConfig().getInt("MySQL.Data-Deletion");
 
-        if (When <= 0) return;
+        if (when <= 0) return;
 
         try{
 
-            PreparedStatement player_Chat = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Chat WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement player_Chat = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Chat WHERE DATE < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement player_Commands = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Commands WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement player_Commands = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Commands WHERE Date < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement console_Commands = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Console_Commands WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement console_Commands = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Console_Commands WHERE DATE < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement player_Sign_Text = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Sign_Text WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement player_Sign_Text = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Sign_Text WHERE Date < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement player_Join = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Join WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement player_Join = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Join WHERE DATE < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement player_Leave = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Leave WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement player_Leave = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Leave WHERE Date < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement player_Kick = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Kick WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement player_Kick = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Kick WHERE DATE < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement player_Death = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Death WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement player_Death = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Death WHERE Date < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement player_Teleport = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Teleport WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement player_Teleport = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Teleport WHERE DATE < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement player_Level = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Level WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement player_Level = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Player_Level WHERE Date < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement block_Place = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Block_Place WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement block_Place = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Block_Place WHERE DATE < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement block_Break = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Block_Break WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement block_Break = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Block_Break WHERE Date < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement portal_Creation = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Portal_Creation WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement portal_Creation = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Portal_Creation WHERE DATE < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement bucket_Place = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Bucket_Place WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement bucket_Place = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Bucket_Place WHERE Date < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement anvil = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Anvil WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement anvil = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Anvil WHERE DATE < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement TPS = plugin.mySQL.getConnection().prepareStatement("DELETE FROM TPS WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement TPS = plugin.mySQL.getConnection().prepareStatement("DELETE FROM TPS WHERE Date < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement RAM = plugin.mySQL.getConnection().prepareStatement("DELETE FROM RAM WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement RAM = plugin.mySQL.getConnection().prepareStatement("DELETE FROM RAM WHERE DATE < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement server_Start = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Server_Start WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement server_Start = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Server_Start WHERE Date < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement server_Stop = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Server_Stop WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement server_Stop = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Server_Stop WHERE DATE < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement item_Drop = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Item_Drop WHERE Date < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement item_Drop = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Item_Drop WHERE Date < NOW() - INTERVAL " + when + " DAY");
 
-            PreparedStatement enchanting = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Enchanting WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+            PreparedStatement enchanting = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Enchanting WHERE DATE < NOW() - INTERVAL " + when + " DAY");
+
+            PreparedStatement book_Editing = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Book_Editing WHERE DATE < NOW() - INTERVAL " + when + " DAY");
 
             if (plugin.getAPI() != null) {
 
-                PreparedStatement afk = plugin.mySQL.getConnection().prepareStatement("DELETE FROM AFK WHERE DATE < NOW() - INTERVAL " + When + " DAY");
+                PreparedStatement afk = plugin.mySQL.getConnection().prepareStatement("DELETE FROM AFK WHERE DATE < NOW() - INTERVAL " + when + " DAY");
 
                 afk.executeUpdate();
             }
@@ -593,6 +620,7 @@ public class MySQLData {
             server_Stop.executeUpdate();
             item_Drop.executeUpdate();
             enchanting.executeUpdate();
+            book_Editing.executeUpdate();
 
         }catch (SQLException e){
 

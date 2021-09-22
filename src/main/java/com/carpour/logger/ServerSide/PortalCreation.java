@@ -10,7 +10,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.PortalCreateEvent;
 
-import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -31,9 +30,7 @@ public class PortalCreation implements Listener {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Portal-Creation"))) {
-
-            Discord.portalCreation("\uD83D\uDEAA A portal has been created in **" + worldName + "** using **" + reason + "**", false, Color.YELLOW);
+        if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && main.getConfig().getBoolean("Log.Portal-Creation")) {
 
             try {
 
@@ -43,13 +40,15 @@ public class PortalCreation implements Listener {
 
             } catch (IOException e) {
 
-                System.out.println("An error occurred while logging into the appropriate file.");
+                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                 e.printStackTrace();
 
             }
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Portal-Creation")) && (main.mySQL.isConnected())) {
+        Discord.portalCreation("\uD83D\uDEAA A portal has been created in **" + worldName + "** using **" + reason + "**", false);
+
+        if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Portal-Creation") && main.mySQL.isConnected()) {
 
             try {
 
@@ -61,11 +60,17 @@ public class PortalCreation implements Listener {
 
             }
         }
+
         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Portal-Creation") && main.getSqLite().isConnected()) {
+
             try {
+
                 SQLiteData.insertPortalCreate(serverName, worldName, reason);
+
             } catch (Exception e) {
+
                 e.printStackTrace();
+
             }
         }
     }

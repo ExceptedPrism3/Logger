@@ -6,7 +6,6 @@ import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.Database.SQLite.SQLiteData;
 
-import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,25 +23,25 @@ public class Start {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Server-Start"))) {
-
-            Discord.serverStart("\uD83D\uDFE2 " + dateFormat.format(date), false, Color.GREEN);
+        if (main.getConfig().getBoolean("Log-to-Files") && main.getConfig().getBoolean("Log.Server-Start")) {
 
             try {
 
-                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStartFile(), true));
+                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getserverStartFile(), true));
                 out.write("[" + dateFormat.format(date) + "]" + "\n");
                 out.close();
 
             } catch (IOException e) {
 
-                System.out.println("An error occurred while logging into the appropriate file.");
+                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                 e.printStackTrace();
 
             }
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Server-Start")) && (main.mySQL.isConnected())){
+        Discord.serverStart("\uD83D\uDFE2 " + dateFormat.format(date), false);
+
+        if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Server-Start") && main.mySQL.isConnected()){
 
             try {
 
@@ -54,18 +53,26 @@ public class Start {
 
             }
         }
+
         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Server-Start") && main.getSqLite().isConnected()) {
+
             try {
+
                 SQLiteData.insertServerStart(serverName);
+
             } catch (Exception exception) {
+
                 exception.printStackTrace();
+
             }
         }
 
         if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")
                 && main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
+
             main.getLogger().warning("Enabling both Whitelist and Blacklist isn't supported. " +
                     "Please disable one of them to continue logging Player Commands");
+
         }
     }
 }

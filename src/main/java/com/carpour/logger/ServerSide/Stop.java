@@ -6,7 +6,6 @@ import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.Database.SQLite.SQLiteData;
 
-import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,30 +19,30 @@ public class Stop {
 
     public void run() {
 
-        if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Server-Stop"))) {
 
-            Date date = new Date();
-            DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        String serverName = main.getConfig().getString("Server-Name");
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-            Discord.serverStop("\uD83D\uDD34 " + dateFormat.format(date), false, Color.RED);
+        if (main.getConfig().getBoolean("Log-to-Files") && main.getConfig().getBoolean("Log.Server-Stop")) {
 
             try {
 
-                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStopFile(), true));
+                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getserverStopFile(), true));
                 out.write("[" + dateFormat.format(date) + "]" + "\n");
                 out.close();
 
             } catch (IOException e) {
 
-                System.out.println("An error occurred while logging into the appropriate file.");
+                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                 e.printStackTrace();
 
             }
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Server-Stop")) && (main.mySQL.isConnected())) {
+        Discord.serverStop("\uD83D\uDD34 " + dateFormat.format(date), false);
 
-            String serverName = main.getConfig().getString("Server-Name");
+        if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Server-Stop") && main.mySQL.isConnected()) {
 
             try {
 
@@ -58,12 +57,14 @@ public class Stop {
 
         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Server-Stop") && main.getSqLite().isConnected()) {
 
-            String serverName = main.getConfig().getString("Server-Name");
-
             try {
+
                 SQLiteData.insertServerStop(serverName);
+
             } catch (Exception exception) {
+
                 exception.printStackTrace();
+
             }
         }
     }

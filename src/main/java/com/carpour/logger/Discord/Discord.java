@@ -10,7 +10,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import javax.security.auth.login.LoginException;
-import java.awt.*;
 
 
 public class Discord {
@@ -41,6 +40,7 @@ public class Discord {
     private static TextChannel serverStopChannel;
     private static TextChannel itemDropChannel;
     private static TextChannel enchantingChannel;
+    private static TextChannel bookEditingChannel;
     private static TextChannel afkChannel;
 
     public void run() {
@@ -101,9 +101,11 @@ public class Discord {
 
             String serverStopChannelID = DiscordFile.get().getString("Discord.Server-Stop.Channel-ID");
 
-            String itemdropChannelID = DiscordFile.get().getString("Discord.Item-Drop.Channel-ID");
+            String itemDropChannelID = DiscordFile.get().getString("Discord.Item-Drop.Channel-ID");
 
             String enchantingChannelID = DiscordFile.get().getString("Discord.Enchanting.Channel-ID");
+
+            String bookEditingChannelID = DiscordFile.get().getString("Discord.Book-Editing.Channel-ID");
 
             String afkChannelID = DiscordFile.get().getString("Discord.AFK.Channel-ID");
 
@@ -228,15 +230,21 @@ public class Discord {
 
             }
 
-            if (itemdropChannelID != null && main.getConfig().getBoolean("Log.Item-Drop") && !itemdropChannelID.equals("LINK_HERE")) {
+            if (itemDropChannelID != null && main.getConfig().getBoolean("Log.Item-Drop") && !itemDropChannelID.equals("LINK_HERE")) {
 
-                itemDropChannel = jda.getTextChannelById(itemdropChannelID);
+                itemDropChannel = jda.getTextChannelById(itemDropChannelID);
 
             }
 
             if (enchantingChannelID != null && main.getConfig().getBoolean("Log.Enchanting") && !enchantingChannelID.equals("LINK_HERE")) {
 
                 enchantingChannel = jda.getTextChannelById(enchantingChannelID);
+
+            }
+
+            if (bookEditingChannelID != null && main.getConfig().getBoolean("Log.Book-Editing") && !bookEditingChannelID.equals("LINK_HERE")) {
+
+                bookEditingChannel = jda.getTextChannelById(bookEditingChannelID);
 
             }
 
@@ -248,22 +256,23 @@ public class Discord {
         }
     }
 
-    public static void staffChat(Player player, String content, boolean contentinAuthorLine, Color color) {
+    public static void staffChat(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, staffChannel);
+
     }
 
-    public static void playerChat(Player player, String content, boolean contentinAuthorLine, Color color) {
+    public static void playerChat(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, playerChatChannel);
     }
 
-    public static void playerCommand(Player player, String content, boolean contentinAuthorLine, Color color) {
+    public static void playerCommand(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, playerCommandsChannel);
     }
 
-    public static void console(String content, boolean contentinAuthorLine, Color color) {
+    public static void console(String content, boolean contentinAuthorLine) {
 
         if (consoleChannel == null) return;
 
@@ -274,52 +283,52 @@ public class Discord {
         consoleChannel.sendMessage(builder.build()).queue();
     }
 
-    public static void playerSignText(Player player, String content, boolean contentinAuthorLine, Color color) {
+    public static void playerSignText(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, playerSignTextChannel);
     }
 
-    public static void playerJoin(Player player, String content, boolean contentinAuthorLine, Color color) {
+    public static void playerJoin(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, playerJoinChannel);
     }
 
-    public static void playerLeave(Player player, String content, boolean contentinAuthorLine, Color color) {
+    public static void playerLeave(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, playerLeaveChannel);
     }
 
-    public static void playerKick(Player player, String content, boolean contentinAuthorLine, Color color) {
+    public static void playerKick(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, playerKickChannel);
     }
 
-    public static void playerDeath(Player player, String content, boolean contentinAuthorLine, Color color) {
+    public static void playerDeath(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, playerDeathChannel);
     }
 
-    public static void playerTeleport(Player player, String content, boolean contentinAuthorLine, Color color) {
+    public static void playerTeleport(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, playerTeleportChannel);
     }
 
-    public static void playerLevel(Player player, String content, boolean contentinAuthorLine, Color color) {
+    public static void playerLevel(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, playerLevelChannel);
     }
 
-    public static void blockPlace(Player player, String content, boolean contentinAuthorLine, Color color) {
+    public static void blockPlace(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, blockPlaceChannel);
     }
 
-    public static void blockBreak(Player player, String content, boolean contentinAuthorLine, Color color) {
+    public static void blockBreak(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, blockBreakChannel);
     }
 
-    public static void portalCreation(String content, boolean contentinAuthorLine, Color color) {
+    public static void portalCreation(String content, boolean contentinAuthorLine) {
 
         if (portalCreationChannel == null) return;
 
@@ -330,17 +339,17 @@ public class Discord {
         portalCreationChannel.sendMessage(builder.build()).queue();
     }
 
-    public static void bucketPlace(Player player, String content, boolean contentinAuthorLine, Color color) {
+    public static void bucketPlace(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, bucketPlaceChannel);
     }
 
-    public static void anvil(Player player, String content, boolean contentinAuthorLine, Color color) {
+    public static void anvil(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, anvilChannel);
     }
 
-    public static void TPS(String content, boolean contentinAuthorLine, Color color) {
+    public static void TPS(String content, boolean contentinAuthorLine) {
 
         if (TPSChannel == null) return;
 
@@ -351,7 +360,7 @@ public class Discord {
         TPSChannel.sendMessage(builder.build()).queue();
     }
 
-    public static void RAM(String content, boolean contentinAuthorLine, Color color) {
+    public static void RAM(String content, boolean contentinAuthorLine) {
 
         if (RAMChannel == null) return;
 
@@ -362,7 +371,7 @@ public class Discord {
         RAMChannel.sendMessage(builder.build()).queue();
     }
 
-    public static void serverStart(String content, boolean contentinAuthorLine, Color color) {
+    public static void serverStart(String content, boolean contentinAuthorLine) {
 
         if (serverStartChannel == null) return;
 
@@ -373,7 +382,7 @@ public class Discord {
         serverStartChannel.sendMessage(builder.build()).queue();
     }
 
-    public static void serverStop(String content, boolean contentinAuthorLine, Color color) {
+    public static void serverStop(String content, boolean contentinAuthorLine) {
 
         if (serverStopChannel == null) return;
 
@@ -384,17 +393,22 @@ public class Discord {
         serverStopChannel.sendMessage(builder.build()).queue();
     }
 
-    public static void itemDrop(Player player, String content, boolean contentinAuthorLine, Color color) {
+    public static void itemDrop(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, itemDropChannel);
     }
 
-    public static void enchanting(Player player, String content, boolean contentinAuthorLine, Color color) {
+    public static void enchanting(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, enchantingChannel);
     }
 
-    public static void afk(Player player, String content, boolean contentinAuthorLine, Color color) {
+    public static void bookEditing(Player player, String content, boolean contentinAuthorLine) {
+
+        discordUtil(player, content, contentinAuthorLine, bookEditingChannel);
+    }
+
+    public static void afk(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, afkChannel);
     }
@@ -412,12 +426,12 @@ public class Discord {
 
     public void disconnect() {
 
-        if (jda != null)
+        if (jda != null) {
             try {
 
                 jda.shutdown();
                 jda = null;
-                Bukkit.getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.GREEN + "Discord Bot has been successfully turned off!");
+                Bukkit.getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.GREEN + "Discord Bot Bridge has been closed!");
 
             } catch (Exception e) {
 
@@ -427,5 +441,6 @@ public class Discord {
                 e.printStackTrace();
 
             }
+        }
     }
 }

@@ -10,7 +10,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerCommandEvent;
 
-import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -30,9 +29,7 @@ public class Console implements Listener {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Console-Commands"))) {
-
-            Discord.console("\uD83D\uDC7E " + msg, false, Color.RED);
+        if (main.getConfig().getBoolean("Log-to-Files") && main.getConfig().getBoolean("Log.Console-Commands")) {
 
             try {
 
@@ -42,15 +39,17 @@ public class Console implements Listener {
 
             } catch (IOException e) {
 
-                System.out.println("An error occurred while logging into the appropriate file.");
+                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                 e.printStackTrace();
 
             }
 
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Console-Commands"))
-                && (main.mySQL.isConnected())){
+        Discord.console("\uD83D\uDC7E " + msg, false);
+
+        if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Console-Commands")
+                && main.mySQL.isConnected()){
 
             try {
 
@@ -62,11 +61,19 @@ public class Console implements Listener {
 
             }
         }
+
         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Console-Commands")
                 && main.getSqLite().isConnected()) {
 
-            SQLiteData.insertConsoleCommands(serverName, msg);
+            try {
 
+                SQLiteData.insertConsoleCommands(serverName, msg);
+
+            }catch (Exception e){
+
+                e.printStackTrace();
+
+            }
         }
     }
 }

@@ -12,7 +12,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
-import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,10 +26,10 @@ public class onItemDrop implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDrop(PlayerDropItemEvent event){
 
-        final Player player = event.getPlayer();
+        Player player = event.getPlayer();
+        String playerName = player.getName();
         World world = player.getWorld();
-        final String worldName = world.getName();
-        final String playerName = player.getName();
+        String worldName = world.getName();
         String item = event.getItemDrop().getName();
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
@@ -42,24 +41,30 @@ public class onItemDrop implements Listener {
 
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
-                Discord.staffChat(player, "\uD83D\uDEAE **|** \uD83D\uDC6E\u200D♂ [" + worldName + "] Has dropped an item ** " + item  +"**", false, Color.YELLOW);
+                Discord.staffChat(player, "\uD83D\uDEAE **|** \uD83D\uDC6E\u200D♂ [" + worldName + "] Has dropped ** " + item + "**", false);
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has dropped an item " + item +"\n");
+                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has dropped " + item +"\n");
                     out.close();
-
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Item-Drop")) && (main.mySQL.isConnected())) {
-
-                        MySQLData.itemDrop(serverName, worldName, playerName, item, true);
-
-                    }
 
                 } catch (IOException e) {
 
-                    System.out.println("An error occurred while logging into the appropriate file.");
+                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
+
+                }
+
+                if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Item-Drop") && main.mySQL.isConnected()) {
+
+                    MySQLData.itemDrop(serverName, worldName, playerName, item, true);
+
+                }
+
+                if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Item-Drop") && main.getSqLite().isConnected()) {
+
+                    SQLiteData.insertItemDrop(serverName, player, item, true);
 
                 }
 
@@ -67,27 +72,35 @@ public class onItemDrop implements Listener {
 
             }
 
-            Discord.itemDrop(player, "\uD83D\uDEAE [" + worldName + "] Has dropped an item ** " + item  +"**", false, Color.YELLOW);
-
             try {
 
                 BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getItemDropFile(), true));
-                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has dropped an item " + item +"\n");
+                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has dropped " + item +"\n");
                 out.close();
 
             } catch (IOException e) {
 
-                System.out.println("An error occurred while logging into the appropriate file.");
+                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                 e.printStackTrace();
 
             }
+        }
+
+        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+            Discord.staffChat(player, "\uD83D\uDEAE **|** \uD83D\uDC6E\u200D♂ [" + worldName + "] Has dropped ** " + item + "**", false);
+
+        }else {
+
+            Discord.itemDrop(player, "\uD83D\uDEAE [" + worldName + "] Has dropped ** " + item + "**", false);
+
         }
 
         if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Item-Drop")) && (main.mySQL.isConnected())){
 
             try {
 
-                MySQLData.itemDrop(serverName, worldName, playerName, item, false);
+                MySQLData.itemDrop(serverName, worldName, playerName, item, player.hasPermission("logger.staff.log"));
 
             }catch (Exception e){
 
@@ -95,11 +108,17 @@ public class onItemDrop implements Listener {
 
             }
         }
+
         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Item-Drop") && main.getSqLite().isConnected()) {
+
             try {
+
                 SQLiteData.insertItemDrop(serverName, player, item, player.hasPermission("logger.staff.log"));
+
             } catch (Exception exception) {
+
                 exception.printStackTrace();
+
             }
         }
     }

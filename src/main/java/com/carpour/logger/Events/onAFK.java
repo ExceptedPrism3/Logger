@@ -11,7 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -47,32 +46,35 @@ public class onAFK implements Listener {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
-                    Discord.afk(player, "\uD83D\uDCA4 **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false, Color.CYAN);
+                    Discord.staffChat(player, "\uD83D\uDCA4 **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false);
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
                         out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> went AFK at X = " + x + " Y = " + y + " Z = " + z + "\n");
                         out.close();
 
-                        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.AFK")) && (main.mySQL.isConnected())) {
-
-                            MySQLData.afk(serverName, worldName, playerName, x, y, z, true);
-
-                        }
-
                     } catch (IOException event) {
 
-                        System.out.println("An error occurred while logging into the appropriate file.");
+                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                         event.printStackTrace();
 
+                    }
+
+                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.AFK")) && (main.mySQL.isConnected())) {
+
+                        MySQLData.afk(serverName, worldName, playerName, x, y, z, true);
+
+                    }
+
+                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.AFK") && main.getSqLite().isConnected()) {
+
+                        SQLiteData.insertAFK(serverName, player, true);
                     }
 
                     return;
 
                 }
-
-                Discord.afk(player, "\uD83D\uDCA4 [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false, Color.RED);
 
                 try {
 
@@ -82,18 +84,27 @@ public class onAFK implements Listener {
 
                 } catch (IOException event) {
 
-                    System.out.println("An error occurred while logging into the appropriate file.");
+                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     event.printStackTrace();
 
                 }
 
             }
 
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+                Discord.staffChat(player, "\uD83D\uDCA4 **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false);
+
+            }else {
+
+                Discord.afk(player, "\uD83D\uDCA4 [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false);
+            }
+
             if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.AFK")) && (main.mySQL.isConnected())){
 
                 try {
 
-                    MySQLData.afk(serverName, worldName, playerName, x, y, z, false);
+                    MySQLData.afk(serverName, worldName, playerName, x, y, z, player.hasPermission("logger.staff.log"));
 
                 }catch (Exception event) {
 
@@ -101,11 +112,17 @@ public class onAFK implements Listener {
 
                 }
             }
+
             if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.AFK") && main.getSqLite().isConnected()) {
+
                 try {
+
                     SQLiteData.insertAFK(serverName, player, player.hasPermission("logger.staff.log"));
+
                 } catch (Exception exception) {
+
                     exception.printStackTrace();
+
                 }
             }
         }

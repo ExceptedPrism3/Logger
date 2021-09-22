@@ -6,7 +6,6 @@ import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Database.SQLite.SQLiteData;
 
-import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -39,7 +38,7 @@ public class TPS implements Runnable {
 
     public void run() {
 
-        if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.TPS"))) {
+        if (main.getConfig().getBoolean("Log-to-Files") && main.getConfig().getBoolean("Log.TPS")) {
 
             if ((main.getConfig().getInt("TPS.Value-Medium")) <= 0 || (main.getConfig().getInt("TPS.Value-Medium") >= 20) ||
                     (main.getConfig().getInt("TPS.Value-Critical")) <= 0 || (main.getConfig().getInt("TPS.Value-Critical") >= 20)){
@@ -54,7 +53,7 @@ public class TPS implements Runnable {
 
             if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
 
-                Discord.TPS("The TPS has dropped to " + getTPS(), false, Color.RED);
+                Discord.TPS("The TPS has dropped to " + getTPS(), false);
 
                 try {
 
@@ -64,14 +63,14 @@ public class TPS implements Runnable {
 
                 } catch (IOException e) {
 
-                    System.out.println("An error occurred while logging into the appropriate file.");
+                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
 
             } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
 
-                Discord.TPS("⚠️ WARNING! The TPS has dropped to " + getTPS(), false, Color.RED);
+                Discord.TPS("⚠️ WARNING! The TPS has dropped to " + getTPS(), false);
 
                 try {
 
@@ -81,7 +80,7 @@ public class TPS implements Runnable {
 
                 } catch (IOException e) {
 
-                    System.out.println("An error occurred while logging into the appropriate file.");
+                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -89,10 +88,19 @@ public class TPS implements Runnable {
             }
         }
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.TPS")) && (main.mySQL.isConnected())){
+        if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
 
-            if ((main.getConfig().getInt("TPS.Value-Medium")) <= 0 || (main.getConfig().getInt("TPS.Value-Medium") >= 20) ||
-                    (main.getConfig().getInt("TPS.Value-Critical")) <= 0 || (main.getConfig().getInt("TPS.Value-Critical") >= 20)){
+            Discord.TPS("The TPS has dropped to " + getTPS(), false);
+
+        }else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
+
+            Discord.TPS("⚠️ WARNING! The TPS has dropped to " + getTPS(), false);
+        }
+
+        if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.TPS") && main.mySQL.isConnected()){
+
+            if (main.getConfig().getInt("TPS.Value-Medium") <= 0 || main.getConfig().getInt("TPS.Value-Medium") >= 20 ||
+                    main.getConfig().getInt("TPS.Value-Critical") <= 0 || main.getConfig().getInt("TPS.Value-Critical") >= 20){
 
                 return;
 
@@ -127,8 +135,8 @@ public class TPS implements Runnable {
         if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.TPS")
                 && main.getSqLite().isConnected()) {
 
-            if ((main.getConfig().getInt("TPS.Value-Medium")) <= 0 || (main.getConfig().getInt("TPS.Value-Medium") >= 20) ||
-                    (main.getConfig().getInt("TPS.Value-Critical")) <= 0 || (main.getConfig().getInt("TPS.Value-Critical") >= 20)){
+            if (main.getConfig().getInt("TPS.Value-Medium") <= 0 || main.getConfig().getInt("TPS.Value-Medium") >= 20 ||
+                    main.getConfig().getInt("TPS.Value-Critical") <= 0 || main.getConfig().getInt("TPS.Value-Critical") >= 20){
 
                 return;
 

@@ -12,7 +12,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -45,33 +44,38 @@ public class onPlayerDeath implements Listener {
 
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
 
-                Discord.staffChat(player, "☠️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false, Color.RED);
+                Discord.staffChat(player, "☠️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false);
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
                     out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has died at X = " + x + " Y = " + y + " Z = " + z + "\n");
                     out.close();
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Death")) && (main.mySQL.isConnected())) {
-
-
-                        MySQLData.playerDeath(serverName, worldName, playerName, x, y, z, true);
-
-                    }
-
                 } catch (IOException e) {
 
-                    System.out.println("An error occurred while logging into the appropriate file.");
+                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
+
+                }
+
+                if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Death") && main.mySQL.isConnected()){
+
+
+                    MySQLData.playerDeath(serverName, worldName, playerName, x, y, z, true);
+
+                }
+
+                if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Death")
+                        && main.getSqLite().isConnected()) {
+
+                    SQLiteData.insertPlayerDeath(serverName, player, true);
 
                 }
 
                 return;
 
             }
-
-            Discord.playerDeath(player, "☠️ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false, Color.RED);
 
             try {
 
@@ -81,10 +85,20 @@ public class onPlayerDeath implements Listener {
 
             } catch (IOException e) {
 
-                System.out.println("An error occurred while logging into the appropriate file.");
+                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                 e.printStackTrace();
 
             }
+
+        }
+
+        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+            Discord.staffChat(player, "☠️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false);
+
+        }else {
+
+            Discord.playerDeath(player, "☠️ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false);
 
         }
 
@@ -93,7 +107,7 @@ public class onPlayerDeath implements Listener {
 
             try {
 
-                MySQLData.playerDeath(serverName, worldName, playerName, x, y, z, false);
+                MySQLData.playerDeath(serverName, worldName, playerName, x, y, z, player.hasPermission("logger.staff.log"));
 
             }catch (Exception e){
 
@@ -106,9 +120,13 @@ public class onPlayerDeath implements Listener {
                 && main.getSqLite().isConnected()) {
 
             try {
+
                 SQLiteData.insertPlayerDeath(serverName, player, player.hasPermission("logger.staff.log"));
+
             } catch (Exception e) {
+
                 e.printStackTrace();
+
             }
         }
     }

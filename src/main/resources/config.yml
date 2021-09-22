@@ -43,13 +43,17 @@ Log:
   Block-Break: true
   Portal-Creation: true
   Bucket-Place: true
-  Anvil: true
+  ##################
+  #Temp Disabled
+  Anvil: false
+  ##################
   TPS: true
   RAM: true
   Server-Start: true
   Server-Stop: true
   Item-Drop: true
   Enchanting: true
+  Book-Editing: true
   AFK: true
 
 # How often should we check for the Server's TPS and RAM
@@ -74,11 +78,6 @@ Player-Level:
 # Only Log Specified Commands
 # Block Commands from getting Logged
 Player-Commands:
-  Specific-Commands: false
-  Commands:
-    - /is level
-    - /about
-    - /butcher all
   Whitelist-Commands: false
   Commands-to-Log:
     - /msg

@@ -103,9 +103,10 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new onBlockBreak(), this);
         getServer().getPluginManager().registerEvents(new PortalCreation(), this);
         getServer().getPluginManager().registerEvents(new onBucketPlace(), this);
-        getServer().getPluginManager().registerEvents(new onAnvil(), this);
+        //getServer().getPluginManager().registerEvents(new onAnvil(), this);
         getServer().getPluginManager().registerEvents(new onItemDrop(), this);
         getServer().getPluginManager().registerEvents(new onEnchant(), this);
+        getServer().getPluginManager().registerEvents(new onBook(), this);
 
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new TPS(), 200L, getConfig().getInt("RAM-TPS-Checker"));
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new RAM(), 200L, getConfig().getInt("RAM-TPS-Checker"));

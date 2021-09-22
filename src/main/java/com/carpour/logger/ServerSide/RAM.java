@@ -6,7 +6,6 @@ import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Database.SQLite.SQLiteData;
 
-import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -38,8 +37,6 @@ public class RAM implements Runnable {
 
             if (main.getConfig().getInt("RAM.Percent") <= percentUsed) {
 
-                Discord.RAM("⚠️ The server has **exceeded** the set amount of percentage of RAM Usage! Total Memory: **" + maxMemory + "** | Used Memory **" + usedMemory + "** | Free Memory **" + freeMemory + "**", false, Color.RED);
-
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRAMLogFile(), true));
@@ -49,12 +46,14 @@ public class RAM implements Runnable {
                 } catch (
                         IOException e) {
 
-                    System.out.println("An error occurred while logging into the appropriate file.");
+                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             }
         }
+
+        Discord.RAM("⚠️ The server has **exceeded** the set amount of percentage of RAM Usage! Total Memory: **" + maxMemory + "** | Used Memory **" + usedMemory + "** | Free Memory **" + freeMemory + "**", false);
 
         if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.RAM")) && (main.mySQL.isConnected())) {
 
@@ -68,12 +67,18 @@ public class RAM implements Runnable {
 
             }
         }
+
         if (main.getConfig().getBoolean("SQLite.Enable") && (main.getConfig().getBoolean("Log.RAM"))
                 && (main.getSqLite().isConnected())) {
+
             try{
+
                 SQLiteData.insertRAM(serverName, maxMemory, usedMemory, freeMemory);
+
             } catch (Exception exception) {
+
                 exception.printStackTrace();
+
             }
         }
     }

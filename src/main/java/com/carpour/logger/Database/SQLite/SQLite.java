@@ -47,11 +47,11 @@ public class SQLite {
             try {
 
                 connection.close();
-                main.getLogger().info("SQLite Database has been closed!");
+                main.getLogger().info(ChatColor.GREEN + "SQLite Database has been closed!");
 
             } catch (SQLException e) {
 
-                main.getLogger().warning("SQLite Database couldn't be closed");
+                main.getLogger().warning("SQLite Database couldn't be closed safely, if the issue persists contact the Authors!");
 
             }
         }

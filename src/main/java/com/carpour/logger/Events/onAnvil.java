@@ -16,7 +16,6 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -67,11 +66,11 @@ public class onAnvil implements Listener {
 
                                         if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                                            Discord.staffChat(player, "\uD83D\uDD28 **|** \uD83D\uDC6E\u200D♂️ Has renamed an Item to **" + displayName + "**", false, Color.RED);
+                                            Discord.staffChat(player, "\uD83D\uDD28 **|** \uD83D\uDC6E\u200D♂️ Has renamed an Item to **" + displayName + "**", false);
 
                                             try {
 
-                                                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                                                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
                                                 out.write("[" + dateFormat.format(date) + "] " + "The Staff " + playerName + " has renamed an item to " + displayName + "\n");
                                                 out.close();
 
@@ -84,7 +83,7 @@ public class onAnvil implements Listener {
 
                                             } catch (IOException e) {
 
-                                                System.out.println("An error occurred while logging into the appropriate file.");
+                                                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                                                 e.printStackTrace();
 
                                             }
@@ -93,7 +92,7 @@ public class onAnvil implements Listener {
 
                                         }
 
-                                        Discord.anvil(player, "\uD83D\uDD28️ Has renamed an Item to **" + displayName + "**", false, Color.RED);
+                                        Discord.anvil(player, "\uD83D\uDD28️ Has renamed an Item to **" + displayName + "**", false);
 
                                         try {
 
@@ -103,7 +102,7 @@ public class onAnvil implements Listener {
 
                                         } catch (IOException e) {
 
-                                            System.out.println("An error occurred while logging into the appropriate file.");
+                                            main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                                             e.printStackTrace();
 
                                             return;

@@ -36,6 +36,7 @@ public class FileHandler {
     private static File serverStopFolder;
     private static File itemDropFolder;
     private static File enchantFolder;
+    private static File bookEditingFolder;
     private static File afkFolder;
 
     private static File chatLogFile;
@@ -55,11 +56,12 @@ public class FileHandler {
     private static File portalCreateFile;
     private static File bucketPlaceFile;
     private static File anvilFile;
-    private static File StaffFile;
-    private static File ServerStartFile;
-    private static File ServerStopFile;
+    private static File staffFile;
+    private static File serverStartFile;
+    private static File serverStopFile;
     private static File itemDropFile;
-    private static File EnchantFile;
+    private static File enchantFile;
+    private static File bookEditingFile;
     private static File afkFile;
 
 
@@ -127,19 +129,22 @@ public class FileHandler {
         anvilFile = new File(anvilFolder, filenameDateFormat.format(date) + ".log");
 
         staffFolder = new File(logsFolder, "Staff");
-        StaffFile = new File(staffFolder, filenameDateFormat.format(date) + ".log");
+        staffFile = new File(staffFolder, filenameDateFormat.format(date) + ".log");
 
         serverStartFolder = new File(logsFolder, "Server Start");
-        ServerStartFile = new File(serverStartFolder, filenameDateFormat.format(date) + ".log");
+        serverStartFile = new File(serverStartFolder, filenameDateFormat.format(date) + ".log");
 
         serverStopFolder = new File(logsFolder, "Server Stop");
-        ServerStopFile = new File(serverStopFolder, filenameDateFormat.format(date) + ".log");
+        serverStopFile = new File(serverStopFolder, filenameDateFormat.format(date) + ".log");
 
         itemDropFolder = new File(logsFolder, "Item Drop");
         itemDropFile = new File(itemDropFolder, filenameDateFormat.format(date) + ".log");
 
         enchantFolder = new File(logsFolder, "Enchanting");
-        EnchantFile = new File(enchantFolder, filenameDateFormat.format(date) + ".log");
+        enchantFile = new File(enchantFolder, filenameDateFormat.format(date) + ".log");
+
+        bookEditingFolder = new File(logsFolder, "Book Editing");
+        bookEditingFile = new File(bookEditingFolder, filenameDateFormat.format(date) + ".log");
 
         afkFolder = new File(logsFolder, "AFK");
         afkFile = new File(afkFolder, filenameDateFormat.format(date) + ".log");
@@ -190,6 +195,8 @@ public class FileHandler {
 
             enchantFolder.mkdir();
 
+            bookEditingFolder.mkdir();
+
             if (main.getAPI() != null) afkFolder.mkdir();
 
 
@@ -228,15 +235,17 @@ public class FileHandler {
 
             bucketPlaceFile.createNewFile();
 
-            if (main.getConfig().getBoolean("Staff.Enabled")) StaffFile.createNewFile();
+            if (main.getConfig().getBoolean("Staff.Enabled")) staffFile.createNewFile();
 
-            ServerStartFile.createNewFile();
+            serverStartFile.createNewFile();
 
-            ServerStartFile.createNewFile();
+            serverStartFile.createNewFile();
 
             itemDropFile.createNewFile();
 
-            EnchantFile.createNewFile();
+            enchantFile.createNewFile();
+
+            bookEditingFile.createNewFile();
 
             if (main.getAPI() != null) afkFile.createNewFile();
 
@@ -283,15 +292,17 @@ public class FileHandler {
 
     public static File getAnvilFile() { return anvilFile; }
 
-    public static File getStaffFile() { return StaffFile; }
+    public static File getstaffFile() { return staffFile; }
 
-    public static File getServerStartFile() { return ServerStartFile; }
+    public static File getserverStartFile() { return serverStartFile; }
 
-    public static File getServerStopFile() { return ServerStopFile; }
+    public static File getserverStopFile() { return serverStopFile; }
 
     public static File getItemDropFile() { return itemDropFile; }
 
-    public static File getEnchantFile() { return EnchantFile; }
+    public static File getenchantFile() { return enchantFile; }
+
+    public static File getBookEditingFile() { return bookEditingFile; }
 
     public static File getAfkFile() { return afkFile; }
 
@@ -480,6 +491,13 @@ public class FileHandler {
         {
 
             deleteFile(enchanting);
+
+        }
+
+        for (File book : Objects.requireNonNull(bookEditingFolder.listFiles()))
+        {
+
+            deleteFile(book);
 
         }
 
