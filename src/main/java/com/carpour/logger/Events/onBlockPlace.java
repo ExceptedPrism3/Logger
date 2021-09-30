@@ -42,16 +42,48 @@ public class onBlockPlace implements Listener {
 
         if (player.hasPermission("logger.exempt")) return;
 
-        if (!event.isCancelled() && (main.getConfig().getBoolean("Log-to-Files")) && (main.getConfig().getBoolean("Log.Block-Place"))) {
+        if (!event.isCancelled() && main.getConfig().getBoolean("Log.Block-Place")) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
+            if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                Discord.staffChat(player, "\uD83E\uDDF1️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has placed **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false);
+                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+                    Discord.staffChat(player, "\uD83E\uDDF1️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has placed **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false);
+
+                    try {
+
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
+                        out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has placed " + blockType + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
+
+                    }
+
+                    if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Block-Place") && main.mySQL.isConnected()) {
+
+
+                        MySQLData.blockPlace(serverName, worldName, playerName, blockType.toString(), x, y, z, true);
+
+                    }
+
+                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Block-Place")
+                            && main.getSqLite().isConnected()) {
+
+                        SQLiteData.insertBlockPlace(serverName, player, blockType, true);
+                    }
+
+                    return;
+
+                }
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has placed " + blockType + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
+                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBlockPlaceLogFile(), true));
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has placed " + blockType + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -60,72 +92,43 @@ public class onBlockPlace implements Listener {
                     e.printStackTrace();
 
                 }
+            }
 
-                if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Block-Place") && main.mySQL.isConnected()) {
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
+                Discord.staffChat(player, "\uD83E\uDDF1️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has placed **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false);
 
-                    MySQLData.blockPlace(serverName, worldName, playerName, blockType.toString(), x, y, z, true);
+            } else {
+
+                Discord.blockPlace(player, "\uD83E\uDDF1️ [" + worldName + "] Has placed **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false);
+
+            }
+
+            if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Block-Place")) && (main.mySQL.isConnected())) {
+
+                try {
+
+                    MySQLData.blockPlace(serverName, worldName, playerName, blockType.toString(), x, y, z, player.hasPermission("logger.staff.log"));
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
 
                 }
+            }
 
-                if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Block-Place")
-                        && main.getSqLite().isConnected()) {
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Block-Place")
+                    && main.getSqLite().isConnected()) {
 
-                    SQLiteData.insertBlockPlace(serverName, player, blockType, true);
+                try {
+
+                    SQLiteData.insertBlockPlace(serverName, player, blockType, player.hasPermission("logger.staff.log"));
+
+                } catch (Exception exception) {
+
+                    exception.printStackTrace();
+
                 }
-
-                return;
-
-            }
-
-            try {
-
-                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBlockPlaceLogFile(), true));
-                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has placed " + blockType + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
-                out.close();
-
-            } catch (IOException e) {
-
-                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                e.printStackTrace();
-
-            }
-        }
-
-        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
-
-            Discord.staffChat(player, "\uD83E\uDDF1️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has placed **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false);
-
-        }else {
-
-            Discord.blockPlace(player, "\uD83E\uDDF1️ [" + worldName + "] Has placed **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false);
-
-        }
-
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Block-Place")) && (main.mySQL.isConnected())){
-
-            try {
-
-                MySQLData.blockPlace(serverName, worldName, playerName, blockType.toString(), x, y, z, player.hasPermission("logger.staff.log"));
-
-            }catch (Exception e){
-
-                e.printStackTrace();
-
-            }
-        }
-
-        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Block-Place")
-                && main.getSqLite().isConnected()) {
-
-            try {
-
-                SQLiteData.insertBlockPlace(serverName, player, blockType,player.hasPermission("logger.staff.log"));
-
-            } catch (Exception exception) {
-
-                exception.printStackTrace();
-
             }
         }
     }

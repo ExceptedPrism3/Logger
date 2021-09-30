@@ -18,7 +18,7 @@ public class Reload extends SubCommands {
 
     @Override
     public String getDescription() {
-        return "Reload the Plugin";
+        return "Reload the plugin";
     }
 
     @Override

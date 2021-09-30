@@ -35,18 +35,52 @@ public class onPlayerLevel implements Listener {
 
         if (player.hasPermission("logger.exempt")) return;
 
-        if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Level"))) {
+        if (main.getConfig().getBoolean("Log.Player-Level")) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+            if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                Discord.staffChat(player, "⬆️ **|** \uD83D\uDC6E\u200D♂ Has arrived to the set amount of Level which is **" + logAbove + "**", false);
+                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+                    Discord.staffChat(player, "⬆️ **|** \uD83D\uDC6E\u200D♂ Has arrived to the set amount of Level which is **" + logAbove + "**", false);
+
+                    if (playerLevel == logAbove) {
+
+                        try {
+
+                            BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
+                            out.write("[" + dateFormat.format(date) + "] The Level of the Staff <" + playerName + "> has arrived to the set amount which is " + logAbove + "\n");
+                            out.close();
+
+                        } catch (IOException e) {
+
+                            main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                            e.printStackTrace();
+
+                        }
+
+                        if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Level") && main.mySQL.isConnected()) {
+
+                            MySQLData.levelChange(serverName, playerName, true);
+
+                        }
+
+                        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Level") && main.getSqLite().isConnected()) {
+
+                            SQLiteData.insertLevelChange(serverName, player, true);
+
+                        }
+                    }
+
+                    return;
+
+                }
 
                 if (playerLevel == logAbove) {
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                        out.write("[" + dateFormat.format(date) + "] The Level of the Staff <" + playerName + "> has arrived to the set amount which is " + logAbove + "\n");
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerLevelFile(), true));
+                        out.write("[" + dateFormat.format(date) + "] The Level of the Player <" + playerName + "> has arrived to the set amount which is " + logAbove + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -55,81 +89,50 @@ public class onPlayerLevel implements Listener {
                         e.printStackTrace();
 
                     }
+                }
+            }
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Level") && main.mySQL.isConnected()) {
+            if (playerLevel == logAbove) {
 
-                        MySQLData.levelChange(serverName, playerName, true);
+                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+                    Discord.staffChat(player, "⬆️ **|** \uD83D\uDC6E\u200D♂ Has arrived to the set amount of Level which is **" + logAbove + "**", false);
+
+                } else {
+
+                    Discord.playerLevel(player, "⬆️ Has arrived to the set amount of Level which is **" + logAbove + "**", false);
+
+                }
+            }
+
+            if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Level")) && (main.mySQL.isConnected())) {
+
+                if (playerLevel == logAbove) {
+
+                    try {
+
+                        MySQLData.levelChange(serverName, playerName, player.hasPermission("logger.staff.log"));
+
+                    } catch (Exception e) {
+
+                        e.printStackTrace();
 
                     }
+                }
+            }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Level") && main.getSqLite().isConnected()) {
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Level") && main.getSqLite().isConnected()) {
+                if (playerLevel == logAbove) {
 
-                        SQLiteData.insertLevelChange(serverName, player, true);
+                    try {
+
+                        SQLiteData.insertLevelChange(serverName, player, player.hasPermission("logger.staff.log"));
+
+                    } catch (Exception e) {
+
+                        e.printStackTrace();
 
                     }
-                }
-
-                return;
-
-            }
-
-            if (playerLevel == logAbove) {
-
-                try {
-
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerLevelFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] The Level of the Player <" + playerName + "> has arrived to the set amount which is " + logAbove + "\n");
-                    out.close();
-
-                } catch (IOException e) {
-
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
-                }
-            }
-        }
-
-        if (playerLevel == logAbove) {
-
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
-
-                Discord.staffChat(player, "⬆️ **|** \uD83D\uDC6E\u200D♂ Has arrived to the set amount of Level which is **" + logAbove + "**", false);
-
-            } else {
-
-                Discord.playerLevel(player, "⬆️ Has arrived to the set amount of Level which is **" + logAbove + "**", false);
-
-            }
-        }
-
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Level")) && (main.mySQL.isConnected())){
-
-            if (playerLevel == logAbove) {
-
-                try {
-
-                    MySQLData.levelChange(serverName, playerName, player.hasPermission("logger.staff.log"));
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
-            }
-        }
-
-        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Level") && main.getSqLite().isConnected()) {
-            if (playerLevel == logAbove) {
-
-                try {
-
-                    SQLiteData.insertLevelChange(serverName, player, player.hasPermission("logger.staff.log"));
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
                 }
             }
         }

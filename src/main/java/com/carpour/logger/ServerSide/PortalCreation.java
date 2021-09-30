@@ -30,47 +30,50 @@ public class PortalCreation implements Listener {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && main.getConfig().getBoolean("Log.Portal-Creation")) {
+        if (!event.isCancelled() && main.getConfig().getBoolean("Log.Portal-Creation")) {
 
-            try {
+            if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPortalCreateFile(), true));
-                out.write("[" + dateFormat.format(date) + "] A portal has been created in " + worldName + " using " + reason + "\n");
-                out.close();
+                try {
 
-            } catch (IOException e) {
+                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPortalCreateFile(), true));
+                    out.write("[" + dateFormat.format(date) + "] A portal has been created in " + worldName + " using " + reason + "\n");
+                    out.close();
 
-                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                e.printStackTrace();
+                } catch (IOException e) {
 
+                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
+
+                }
             }
-        }
 
-        Discord.portalCreation("\uD83D\uDEAA A portal has been created in **" + worldName + "** using **" + reason + "**", false);
+            Discord.portalCreation("\uD83D\uDEAA A portal has been created in **" + worldName + "** using **" + reason + "**", false);
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Portal-Creation") && main.mySQL.isConnected()) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Portal-Creation") && main.mySQL.isConnected()) {
 
-            try {
+                try {
 
-                MySQLData.portalCreate(serverName, worldName, reason);
+                    MySQLData.portalCreate(serverName, worldName, reason);
 
-            } catch (Exception e) {
+                } catch (Exception e) {
 
-                e.printStackTrace();
+                    e.printStackTrace();
 
+                }
             }
-        }
 
-        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Portal-Creation") && main.getSqLite().isConnected()) {
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Portal-Creation") && main.getSqLite().isConnected()) {
 
-            try {
+                try {
 
-                SQLiteData.insertPortalCreate(serverName, worldName, reason);
+                    SQLiteData.insertPortalCreate(serverName, worldName, reason);
 
-            } catch (Exception e) {
+                } catch (Exception e) {
 
-                e.printStackTrace();
+                    e.printStackTrace();
 
+                }
             }
         }
     }

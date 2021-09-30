@@ -46,7 +46,7 @@ public class DiscordFile {
 
         } catch (IOException e) {
 
-            System.out.println(ChatColor.RED + "Could not save the file!");
+            Bukkit.getLogger().warning(ChatColor.RED + "Could not save the file!");
             e.printStackTrace();
 
         }

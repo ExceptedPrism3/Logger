@@ -40,16 +40,49 @@ public class onPlayerLeave implements Listener {
 
         if (player.hasPermission("logger.exempt")) return;
 
-        if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Leave"))) {
+        if (main.getConfig().getBoolean("Log.Player-Leave")) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
+            if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false);
+                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+                    Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false);
+
+                    try {
+
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
+                        out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has logged out at X = " + x + " Y = " + y + " Z = " + z + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
+
+                    }
+
+                    if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Leave") && main.mySQL.isConnected()) {
+
+
+                        MySQLData.playerLeave(serverName, worldName, playerName, x, y, z, true);
+
+                    }
+
+                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Leave")
+                            && main.getSqLite().isConnected()) {
+
+                        SQLiteData.insertPlayerLeave(serverName, player, true);
+
+                    }
+
+                    return;
+
+                }
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has logged out at X = " + x + " Y = " + y + " Z = " + z + "\n");
+                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerLeaveLogFile(), true));
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has logged out at X = " + x + " Y = " + y + " Z = " + z + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -58,74 +91,43 @@ public class onPlayerLeave implements Listener {
                     e.printStackTrace();
 
                 }
+            }
 
-                if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Leave") && main.mySQL.isConnected()) {
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
+                Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false);
 
-                    MySQLData.playerLeave(serverName, worldName, playerName, x, y, z, true);
+            } else {
+
+                Discord.playerLeave(player, "\uD83D\uDC4B [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false);
+
+            }
+
+            if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Leave")) && (main.mySQL.isConnected())) {
+
+                try {
+
+                    MySQLData.playerLeave(serverName, worldName, playerName, x, y, z, player.hasPermission("logger.staff.log"));
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
 
                 }
+            }
 
-                if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Leave")
-                        && main.getSqLite().isConnected()) {
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Leave")
+                    && main.getSqLite().isConnected()) {
 
-                    SQLiteData.insertPlayerLeave(serverName, player, true);
+                try {
+
+                    SQLiteData.insertPlayerLeave(serverName, player, player.hasPermission("logger.staff.log"));
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
 
                 }
-
-                return;
-
-            }
-
-            try {
-
-                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerLeaveLogFile(), true));
-                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has logged out at X = " + x + " Y = " + y + " Z = " + z + "\n");
-                out.close();
-
-            } catch (IOException e) {
-
-                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                e.printStackTrace();
-
-            }
-
-        }
-
-        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
-
-            Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false);
-
-        }else {
-
-            Discord.playerLeave(player, "\uD83D\uDC4B [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false);
-
-        }
-
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Leave")) && (main.mySQL.isConnected())){
-
-            try {
-
-                MySQLData.playerLeave(serverName, worldName, playerName, x, y, z, player.hasPermission("logger.staff.log"));
-
-            }catch (Exception e){
-
-                e.printStackTrace();
-
-            }
-        }
-
-        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Leave")
-                && main.getSqLite().isConnected()) {
-
-            try {
-
-                SQLiteData.insertPlayerLeave(serverName, player, player.hasPermission("logger.staff.log"));
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
-
             }
         }
     }

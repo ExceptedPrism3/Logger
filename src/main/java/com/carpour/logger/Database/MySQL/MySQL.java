@@ -16,10 +16,10 @@ public class MySQL {
     private final int port = main.getConfig().getInt("MySQL.Port");
     private final String username = main.getConfig().getString("MySQL.Username");
     private final String password = main.getConfig().getString("MySQL.Password");
-    private final String database = main .getConfig().getString("MySQL.Database");
+    private final String database = main.getConfig().getString("MySQL.Database");
     private Connection connection;
 
-    public boolean isConnected(){ return (connection != null); }
+    public boolean isConnected(){ return connection != null; }
 
     public void connect(){
 

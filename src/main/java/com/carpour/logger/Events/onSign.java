@@ -26,7 +26,6 @@ public class onSign implements Listener {
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-
     public void onPlayerSign(SignChangeEvent event) {
         Player player = event.getPlayer();
         String playerName = player.getName();
@@ -42,15 +41,46 @@ public class onSign implements Listener {
 
         if (player.hasPermission("logger.exempt")) return;
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Sign-Text"))) {
+        if (!event.isCancelled() && main.getConfig().getBoolean("Log.Player-Sign-Text")) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
+            if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                Discord.staffChat(player, "\uD83E\uDEA7 **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines.get(0) + " **|** " + lines.get(1) + " **|** " + lines.get(2) + " **|** " + lines.get(3), false);
+                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+                    Discord.staffChat(player, "\uD83E\uDEA7 **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines.get(0) + " **|** " + lines.get(1) + " **|** " + lines.get(2) + " **|** " + lines.get(3), false);
+
+                    try {
+
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
+                        out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + " | Location X = " + x + " Y = " + y + " Z = " + z + "] <" + playerName + "> " + "Line 1: " + lines.get(0) + " | Line 2: " + lines.get(1) + " | Line 3: " + lines.get(2) + " | Line 4: " + lines.get(3) + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
+
+                    }
+
+                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Sign-Text")) && (main.mySQL.isConnected())) {
+
+                        MySQLData.playerSignText(serverName, worldName, x, y, z, playerName, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", true);
+
+                    }
+
+                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Sign-Text") && main.getSqLite().isConnected()) {
+
+                        SQLiteData.insertPlayerSignText(serverName, player, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", true);
+
+                    }
+
+                    return;
+
+                }
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
+                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getSignLogFile(), true));
                     out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + " | Location X = " + x + " Y = " + y + " Z = " + z + "] <" + playerName + "> " + "Line 1: " + lines.get(0) + " | Line 2: " + lines.get(1) + " | Line 3: " + lines.get(2) + " | Line 4: " + lines.get(3) + "\n");
                     out.close();
 
@@ -60,70 +90,45 @@ public class onSign implements Listener {
                     e.printStackTrace();
 
                 }
+            }
 
-                if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Sign-Text")) && (main.mySQL.isConnected())) {
 
-                    MySQLData.playerSignText(serverName, worldName, x, y, z, playerName, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", true);
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+                Discord.staffChat(player, "\uD83E\uDEA7 **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines.get(0) + " **|** " + lines.get(1) + " **|** " + lines.get(2) + " **|** " + lines.get(3), false);
+
+            } else {
+
+                Discord.playerSignText(player, "\uD83E\uDEA7 [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines.get(0) + " **|** " + lines.get(1) + " **|** " + lines.get(2) + " **|** " + lines.get(3), false);
+
+            }
+
+
+            if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Sign-Text")) && (main.mySQL.isConnected())) {
+
+                try {
+
+                    MySQLData.playerSignText(serverName, worldName, x, y, z, playerName, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", player.hasPermission("logger.staff.log"));
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
 
                 }
+            }
 
-                if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Sign-Text") && main.getSqLite().isConnected()) {
 
-                    SQLiteData.insertPlayerSignText(serverName, player, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", true);
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Sign-Text") && main.getSqLite().isConnected()) {
+
+                try {
+
+                    SQLiteData.insertPlayerSignText(serverName, player, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", player.hasPermission("logger.staff.log"));
+
+                } catch (Exception exception) {
+
+                    exception.printStackTrace();
 
                 }
-
-                return;
-
-            }
-
-            try {
-
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getSignLogFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + " | Location X = " + x + " Y = " + y + " Z = " + z + "] <" + playerName + "> " + "Line 1: " + lines.get(0) + " | Line 2: " + lines.get(1) + " | Line 3: " + lines.get(2) + " | Line 4: " + lines.get(3) + "\n");
-                    out.close();
-
-            } catch (IOException e) {
-
-                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                e.printStackTrace();
-
-            }
-        }
-
-        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
-
-            Discord.staffChat(player, "\uD83E\uDEA7 **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines.get(0) + " **|** " + lines.get(1) + " **|** " + lines.get(2) + " **|** " + lines.get(3), false);
-
-        }else {
-
-            Discord.playerSignText(player, "\uD83E\uDEA7 [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **|** " + lines.get(0) + " **|** " + lines.get(1) + " **|** " + lines.get(2) + " **|** " + lines.get(3), false);
-
-        }
-
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Sign-Text")) && (main.mySQL.isConnected())){
-
-            try {
-
-                MySQLData.playerSignText(serverName, worldName, x, y, z, playerName, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", player.hasPermission("logger.staff.log"));
-
-            }catch (Exception e){
-
-                e.printStackTrace();
-
-            }
-        }
-
-        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Sign-Text") && main.getSqLite().isConnected()) {
-
-            try {
-
-                SQLiteData.insertPlayerSignText(serverName, player, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", player.hasPermission("logger.staff.log"));
-
-            } catch (Exception exception) {
-
-                exception.printStackTrace();
-
             }
         }
     }

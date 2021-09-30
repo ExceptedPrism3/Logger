@@ -27,6 +27,7 @@ public class onEnchant implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEnchanting(EnchantItemEvent event) {
+
         Player player = event.getEnchanter();
         String playerName = player.getName();
         World world = player.getWorld();
@@ -41,18 +42,50 @@ public class onEnchant implements Listener {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Enchanting"))) {
+        if (!event.isCancelled() && main.getConfig().getBoolean("Log.Enchanting")) {
 
             for (Map.Entry<Enchantment, Integer> entry : ench.entrySet()) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                    Discord.staffChat(player, "\uD83D\uDCD6 **|** \uD83D\uDC6E\u200D♂️️ [" + worldName + "] Has used an **Enchantment table** that's located at X = " + x + " Y = " + y + " Z = " + z + " to Apply **" + entry.getKey().getName() + "** on the item **" + item + "** which cost ** xp Level" + cost + "**", false);
+                    if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+                        Discord.staffChat(player, "\uD83D\uDCD6 **|** \uD83D\uDC6E\u200D♂️️ [" + worldName + "] Has used an **Enchantment table** that's located at X = " + x + " Y = " + y + " Z = " + z + " to Apply **" + entry.getKey().getName() + "** on the item **" + item + "** which cost ** xp Level" + cost + "**", false);
+
+                        try {
+
+                            BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
+                            out.write("[" + dateFormat.format((date)) + "] " + "[" + worldName + "] " + "The Staff " + playerName + " has used an Enchantment Table that's Located at X = " + x + " Y = " + y + " Z = " + z + " to Apply " + entry.getKey().getName() + " on the item " + item + " which cost " + cost + " xp Level" + "\n");
+                            out.close();
+
+                        } catch (IOException e) {
+
+                            main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                            e.printStackTrace();
+
+                        }
+
+                        if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Enchanting") && main.mySQL.isConnected()) {
+
+                            MySQLData.enchant(serverName, worldName, playerName, x, y, z, entry.getKey().getName(), item, cost, true);
+
+                        }
+
+                        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Enchanting") && main.getSqLite().isConnected()) {
+
+                            SQLiteData.insertEnchant(serverName, player, entry.getKey().getName(), item, cost, true);
+
+                        }
+
+                        return;
+
+                    }
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                        out.write("[" + dateFormat.format((date)) + "] " + "[" + worldName + "] " + "The Staff " + playerName + " has used an Enchantment Table that's Located at X = " + x + " Y = " + y + " Z = " + z + " to Apply " + entry.getKey().getName() + " on the item " + item + " which cost " + cost + " xp Level" + "\n");
+
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getenchantFile(), true));
+                        out.write("[" + dateFormat.format((date)) + "] " + "[" + worldName + "] " + "The player " + playerName + " has used an Enchantment table that's located at X = " + x + " Y = " + y + " Z = " + z + " to Apply " + entry.getKey().getName() + " on the item " + item + " which cost " + cost + " xp Level" + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -61,37 +94,9 @@ public class onEnchant implements Listener {
                         e.printStackTrace();
 
                     }
-
-                    if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Enchanting") && main.mySQL.isConnected()) {
-
-                        MySQLData.enchant(serverName, worldName, playerName, x, y, z, entry.getKey().getName(), item, cost, true);
-
-                    }
-
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Enchanting") && main.getSqLite().isConnected()) {
-
-                        SQLiteData.insertEnchant(serverName, player, entry.getKey().getName(), item, cost, true);
-
-                    }
-
-                    return;
-
                 }
 
-                try {
-
-
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getenchantFile(), true));
-                    out.write("[" + dateFormat.format((date)) + "] " + "[" + worldName + "] " + "The player " + playerName + " has used an Enchantment table that's located at X = " + x + " Y = " + y + " Z = " + z + " to Apply " + entry.getKey().getName() + " on the item " + item + " which cost " + cost + " xp Level" + "\n");
-                    out.close();
-
-                } catch (IOException e) {
-
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
-                }
-
+                //Discord
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
                     Discord.staffChat(player, "\uD83D\uDCD6 **|** \uD83D\uDC6E\u200D♂️️ [" + worldName + "] Has used an **Enchantment table** that's located at X = " + x + " Y = " + y + " Z = " + z + " to Apply **" + entry.getKey().getName() + "** on the item **" + item + "** which cost ** xp Level" + cost + "**", false);
@@ -102,6 +107,7 @@ public class onEnchant implements Listener {
 
                 }
 
+                //MySQL
                 if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Enchanting")) && (main.mySQL.isConnected())){
 
                     try {
@@ -115,6 +121,7 @@ public class onEnchant implements Listener {
                     }
                 }
 
+                //SQLite
                 if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Enchanting") && main.getSqLite().isConnected()) {
 
                     try{

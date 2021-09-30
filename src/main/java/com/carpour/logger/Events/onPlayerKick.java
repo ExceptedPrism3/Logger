@@ -38,16 +38,47 @@ public class onPlayerKick implements Listener {
 
         if (player.hasPermission("logger.exempt")) return;
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Kick"))) {
+        if (!event.isCancelled() && main.getConfig().getBoolean("Log.Player-Kick")) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
+            if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                Discord.staffChat(player, "\uD83E\uDD7E **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **Reason** " + reason, false);
+                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+                    Discord.staffChat(player, "\uD83E\uDD7E **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **Reason** " + reason, false);
+
+                    try {
+
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
+                        out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> got kicked at X = " + x + " Y = " + y + " Z = " + z + " for " + reason + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
+
+                    }
+
+                    if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Kick") && main.mySQL.isConnected()) {
+
+                        MySQLData.playerKick(serverName, worldName, playerName, x, y, z, reason, true);
+
+                    }
+
+                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Kick") && main.getSqLite().isConnected()) {
+
+                        SQLiteData.insertPlayerKick(serverName, player, reason, true);
+
+                    }
+
+                    return;
+
+                }
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> got kicked at X = " + x + " Y = " + y + " Z = " + z + " for " + reason + "\n");
+                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerKickLogFile(), true));
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> got kicked at X = " + x + " Y = " + y + " Z = " + z + " for " + reason + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -56,71 +87,42 @@ public class onPlayerKick implements Listener {
                     e.printStackTrace();
 
                 }
+            }
 
-                if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Kick") && main.mySQL.isConnected()) {
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    MySQLData.playerKick(serverName, worldName, playerName, x, y, z, reason, true);
+                Discord.staffChat(player, "\uD83E\uDD7E **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **Reason** " + reason, false);
+
+            } else {
+
+                Discord.playerKick(player, "\uD83E\uDD7E [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **Reason** " + reason, false);
+
+            }
+
+            if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Kick")) && (main.mySQL.isConnected())) {
+
+                try {
+
+                    MySQLData.playerKick(serverName, worldName, playerName, x, y, z, reason, player.hasPermission("logger.staff.log"));
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
 
                 }
+            }
 
-                if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Kick") && main.getSqLite().isConnected()) {
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Kick") && main.getSqLite().isConnected()) {
 
-                    SQLiteData.insertPlayerKick(serverName, player, reason, true);
+                try {
+
+                    SQLiteData.insertPlayerKick(serverName, player, reason, player.hasPermission("logger.staff.log"));
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
 
                 }
-
-                return;
-
-            }
-
-            try {
-
-                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerKickLogFile(), true));
-                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> got kicked at X = " + x + " Y = " + y + " Z = " + z + " for " + reason + "\n");
-                out.close();
-
-            } catch (IOException e) {
-
-                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                e.printStackTrace();
-
-            }
-
-        }
-
-        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
-
-            Discord.staffChat(player, "\uD83E\uDD7E **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **Reason** " + reason, false);
-
-        }else {
-
-            Discord.playerKick(player, "\uD83E\uDD7E [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **Reason** " + reason, false);
-
-        }
-
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Kick")) && (main.mySQL.isConnected())){
-
-            try {
-
-                MySQLData.playerKick(serverName, worldName, playerName, x, y, z, reason, player.hasPermission("logger.staff.log"));
-
-            }catch (Exception e){
-
-                e.printStackTrace();
-
-            }
-        }
-
-        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Kick") && main.getSqLite().isConnected()) {
-
-            try {
-
-                SQLiteData.insertPlayerKick(serverName,player,reason,player.hasPermission("logger.staff.log"));
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
-
             }
         }
     }

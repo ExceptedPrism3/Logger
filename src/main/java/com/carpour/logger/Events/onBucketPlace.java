@@ -42,16 +42,47 @@ public class onBucketPlace implements Listener {
 
         if (player.hasPermission("logger.exempt")) return;
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Bucket-Place"))) {
+        if (!event.isCancelled() && (main.getConfig().getBoolean("Log.Bucket-Place"))) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
+            if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                Discord.staffChat(player, "\uD83E\uDEA3️ **|** \uD83D\uDC6E\u200D♂️️ [" + worldName + "] Has placed a **" + bucket + "** at X = " + x + " Y = " + y + " Z = " + z, false);
+                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+                    Discord.staffChat(player, "\uD83E\uDEA3️ **|** \uD83D\uDC6E\u200D♂️️ [" + worldName + "] Has placed a **" + bucket + "** at X = " + x + " Y = " + y + " Z = " + z, false);
+
+                    try {
+
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
+                        out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has placed " + bucket + " at X = " + x + " Y = " + y + " Z = " + z + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
+
+                    }
+
+                    if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Bucket-Place") && main.mySQL.isConnected()) {
+
+                        MySQLData.bucketPlace(serverName, worldName, playerName, bucket, x, y, z, true);
+
+                    }
+
+                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Bucket-Place") && main.getSqLite().isConnected()) {
+
+                        SQLiteData.insertBucketPlace(serverName, player, bucket, true);
+
+                    }
+
+                    return;
+
+                }
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has placed " + bucket + " at X = " + x + " Y = " + y + " Z = " + z + "\n");
+                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBucketPlaceFile(), true));
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has placed " + bucket + " at X = " + x + " Y = " + y + " Z = " + z + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -60,71 +91,42 @@ public class onBucketPlace implements Listener {
                     e.printStackTrace();
 
                 }
+            }
 
-                if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Bucket-Place") && main.mySQL.isConnected()) {
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    MySQLData.bucketPlace(serverName, worldName, playerName, bucket, x, y, z, true);
+                Discord.staffChat(player, "\uD83E\uDEA3️ **|** \uD83D\uDC6E\u200D♂️️ [" + worldName + "] Has placed a **" + bucket + "** at X = " + x + " Y = " + y + " Z = " + z, false);
+
+            } else {
+
+                Discord.bucketPlace(player, "\uD83E\uDEA3️ [" + worldName + "] Has placed a **" + bucket + "** at X = " + x + " Y = " + y + " Z = " + z, false);
+
+            }
+
+            if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Bucket-Place")) && (main.mySQL.isConnected())) {
+
+                try {
+
+                    MySQLData.bucketPlace(serverName, worldName, playerName, bucket, x, y, z, player.hasPermission("logger.staff.log"));
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
 
                 }
+            }
 
-                if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Bucket-Place") && main.getSqLite().isConnected()) {
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Bucket-Place") && main.getSqLite().isConnected()) {
 
-                    SQLiteData.insertBucketPlace(serverName, player, bucket, true);
+                try {
+
+                    SQLiteData.insertBucketPlace(serverName, player, bucket, player.hasPermission("logger.staff.log"));
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
 
                 }
-
-                return;
-
-            }
-
-            try {
-
-                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBucketPlaceFile(), true));
-                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has placed " + bucket + " at X = " + x + " Y = " + y + " Z = " + z + "\n");
-                out.close();
-
-            } catch (IOException e) {
-
-                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                e.printStackTrace();
-
-            }
-
-        }
-
-        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
-
-            Discord.staffChat(player, "\uD83E\uDEA3️ **|** \uD83D\uDC6E\u200D♂️️ [" + worldName + "] Has placed a **" + bucket + "** at X = " + x + " Y = " + y + " Z = " + z, false);
-
-        }else {
-
-            Discord.bucketPlace(player, "\uD83E\uDEA3️ [" + worldName + "] Has placed a **" + bucket + "** at X = " + x + " Y = " + y + " Z = " + z, false);
-
-        }
-
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Bucket-Place")) && (main.mySQL.isConnected())){
-
-            try {
-
-                MySQLData.bucketPlace(serverName, worldName, playerName, bucket, x, y, z, player.hasPermission("logger.staff.log"));
-
-            }catch (Exception e){
-
-                e.printStackTrace();
-
-            }
-        }
-
-        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Bucket-Place") && main.getSqLite().isConnected()) {
-
-            try {
-
-                SQLiteData.insertBucketPlace(serverName, player, bucket, player.hasPermission("logger.staff.log"));
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
-
             }
         }
     }

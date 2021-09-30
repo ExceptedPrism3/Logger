@@ -624,7 +624,7 @@ public class MySQLData {
 
         }catch (SQLException e){
 
-            System.out.println(ChatColor.RED + "An error has occurred while cleaning the tables, if the error persists, contact the Author!");
+            plugin.getLogger().warning(ChatColor.RED + "An error has occurred while cleaning the tables, if the error persists, contact the Author!");
             e.printStackTrace();
 
         }

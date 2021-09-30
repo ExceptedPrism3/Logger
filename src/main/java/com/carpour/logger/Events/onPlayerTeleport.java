@@ -44,16 +44,49 @@ public class onPlayerTeleport implements Listener {
 
         if (player.hasPermission("logger.exempt")) return;
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Player-Teleport"))) {
+        if (!event.isCancelled() && main.getConfig().getBoolean("Log.Player-Teleport")) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")){
+            if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                Discord.staffChat(player, "\uD83D\uDDFA **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "]" + " From X = " + ox + " Y = " + oy + " Z = " + oz + " **To** X = " + tx + " Y = " + ty + " Z = " + tz, false);
+                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+                    Discord.staffChat(player, "\uD83D\uDDFA **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "]" + " From X = " + ox + " Y = " + oy + " Z = " + oz + " **To** X = " + tx + " Y = " + ty + " Z = " + tz, false);
+
+                    try {
+
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
+                        out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff " + playerName + " has teleported from X = " + ox + " Y = " + oy + " Z = " + oz + " to => X = " + tx + " Y = " + ty + " Z = " + tz + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
+
+                    }
+
+                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Teleport")) && (main.mySQL.isConnected())) {
+
+
+                        MySQLData.playerTeleport(serverName, worldName, playerName, ox, oy, oz, tx, ty, tz, true);
+
+                    }
+
+                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Teleport")
+                            && main.getSqLite().isConnected()) {
+
+                        SQLiteData.insertPlayerTeleport(serverName, player, player.getLocation(), event.getTo(), true);
+
+                    }
+
+                    return;
+
+                }
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff " + playerName + " has teleported from X = " + ox + " Y = " + oy + " Z = " + oz + " to => X = " + tx + " Y = " + ty + " Z = " + tz +  "\n");
+                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerTeleportLogFile(), true));
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player " + playerName + " has teleported from X = " + ox + " Y = " + oy + " Z = " + oz + " to => X = " + tx + " Y = " + ty + " Z = " + tz + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -62,74 +95,46 @@ public class onPlayerTeleport implements Listener {
                     e.printStackTrace();
 
                 }
+            }
 
-                if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Teleport")) && (main.mySQL.isConnected())) {
+
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+                Discord.staffChat(player, "\uD83D\uDDFA **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "]" + " From X = " + ox + " Y = " + oy + " Z = " + oz + " **To** X = " + tx + " Y = " + ty + " Z = " + tz, false);
+
+            } else {
+
+                Discord.playerTeleport(player, "\uD83D\uDDFA [" + worldName + "]" + " From X = " + ox + " Y = " + oy + " Z = " + oz + " **To** X = " + tx + " Y = " + ty + " Z = " + tz, false);
+
+            }
 
 
-                    MySQLData.playerTeleport(serverName, worldName, playerName, ox, oy, oz, tx, ty, tz, true);
+            if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Teleport")) && (main.mySQL.isConnected())) {
+
+                try {
+
+                    MySQLData.playerTeleport(serverName, worldName, playerName, ox, oy, oz, tx, ty, tz, player.hasPermission("logger.staff.log"));
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
 
                 }
+            }
 
-                if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Teleport")
-                        && main.getSqLite().isConnected()) {
 
-                    SQLiteData.insertPlayerTeleport(serverName, player, player.getLocation(), event.getTo(), true);
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Teleport")
+                    && main.getSqLite().isConnected()) {
+
+                try {
+
+                    SQLiteData.insertPlayerTeleport(serverName, player, player.getLocation(), event.getTo(), player.hasPermission("logger.staff.log"));
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
 
                 }
-
-                return;
-
-            }
-
-            try {
-
-                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerTeleportLogFile(), true));
-                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player " + playerName + " has teleported from X = " + ox + " Y = " + oy + " Z = " + oz + " to => X = " + tx + " Y = " + ty + " Z = " + tz +  "\n");
-                out.close();
-
-            } catch (IOException e) {
-
-                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                e.printStackTrace();
-
-            }
-
-        }
-
-        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
-
-            Discord.staffChat(player, "\uD83D\uDDFA **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "]" + " From X = " + ox + " Y = " + oy + " Z = " + oz + " **To** X = " + tx + " Y = " + ty + " Z = " + tz, false);
-
-        }else {
-
-            Discord.playerTeleport(player, "\uD83D\uDDFA [" + worldName + "]" + " From X = " + ox + " Y = " + oy + " Z = " + oz + " **To** X = " + tx + " Y = " + ty + " Z = " + tz, false);
-
-        }
-
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Teleport")) && (main.mySQL.isConnected())){
-
-            try {
-
-                MySQLData.playerTeleport(serverName, worldName, playerName, ox, oy, oz, tx, ty, tz, player.hasPermission("logger.staff.log"));
-
-            }catch (Exception e){
-
-                e.printStackTrace();
-
-            }
-        }
-
-        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Teleport")
-                && main.getSqLite().isConnected()) {
-
-            try {
-
-                SQLiteData.insertPlayerTeleport(serverName, player, player.getLocation(), event.getTo(), player.hasPermission("logger.staff.log"));
-
-            }catch (Exception e) {
-
-                e.printStackTrace();
-
             }
         }
     }

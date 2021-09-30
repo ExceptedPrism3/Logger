@@ -13,7 +13,7 @@ public class Credits extends SubCommands {
 
     @Override
     public String getDescription() {
-        return "Plugin Credits";
+        return "Plugin credits";
     }
 
     @Override

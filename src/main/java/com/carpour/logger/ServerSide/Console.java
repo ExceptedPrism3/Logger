@@ -29,50 +29,52 @@ public class Console implements Listener {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (main.getConfig().getBoolean("Log-to-Files") && main.getConfig().getBoolean("Log.Console-Commands")) {
+        if (main.getConfig().getBoolean("Log.Console-Commands")) {
 
-            try {
+            if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getConsoleLogFile(), true));
-                out.write("[" + dateFormat.format(date) + "] " + msg + "\n");
-                out.close();
+                try {
 
-            } catch (IOException e) {
+                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getConsoleLogFile(), true));
+                    out.write("[" + dateFormat.format(date) + "] " + msg + "\n");
+                    out.close();
 
-                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                e.printStackTrace();
+                } catch (IOException e) {
 
+                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
+
+                }
             }
 
-        }
+            Discord.console("\uD83D\uDC7E " + msg, false);
 
-        Discord.console("\uD83D\uDC7E " + msg, false);
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Console-Commands")
+                    && main.mySQL.isConnected()) {
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Console-Commands")
-                && main.mySQL.isConnected()){
+                try {
 
-            try {
+                    MySQLData.consoleCommands(serverName, msg);
 
-                MySQLData.consoleCommands(serverName, msg);
+                } catch (Exception e) {
 
-            }catch (Exception e){
+                    e.printStackTrace();
 
-                e.printStackTrace();
-
+                }
             }
-        }
 
-        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Console-Commands")
-                && main.getSqLite().isConnected()) {
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Console-Commands")
+                    && main.getSqLite().isConnected()) {
 
-            try {
+                try {
 
-                SQLiteData.insertConsoleCommands(serverName, msg);
+                    SQLiteData.insertConsoleCommands(serverName, msg);
 
-            }catch (Exception e){
+                } catch (Exception e) {
 
-                e.printStackTrace();
+                    e.printStackTrace();
 
+                }
             }
         }
     }

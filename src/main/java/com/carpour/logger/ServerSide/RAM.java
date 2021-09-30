@@ -27,58 +27,61 @@ public class RAM implements Runnable {
 
     public void run() {
 
-        if ((main.getConfig().getInt("RAM.Percent")) <= 0 || (main.getConfig().getInt("RAM.Percent") >= 100)) {
+        if (main.getConfig().getInt("RAM.Percent") <= 0 || main.getConfig().getInt("RAM.Percent") >= 100) {
 
             return;
 
         }
 
-        if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.RAM"))) {
+        if (main.getConfig().getBoolean("Log.RAM")) {
 
-            if (main.getConfig().getInt("RAM.Percent") <= percentUsed) {
+            if (main.getConfig().getBoolean("Log-to-Files")) {
+
+                if (main.getConfig().getInt("RAM.Percent") <= percentUsed) {
+
+                    try {
+
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRAMLogFile(), true));
+                        out.write("[" + dateFormat.format(date) + "] The Server has exceeded the set amount of percentage of RAM Usage! Total Memory: " + maxMemory + "| Used Memory " + usedMemory + "| Free Memory " + freeMemory + "\n");
+                        out.close();
+
+                    } catch (
+                            IOException e) {
+
+                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
+
+                    }
+                }
+            }
+
+            Discord.RAM("⚠️ The server has **exceeded** the set amount of percentage of RAM Usage! Total Memory: **" + maxMemory + "** | Used Memory **" + usedMemory + "** | Free Memory **" + freeMemory + "**", false);
+
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.RAM") && main.mySQL.isConnected()) {
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRAMLogFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] The Server has exceeded the set amount of percentage of RAM Usage! Total Memory: " + maxMemory + "| Used Memory " + usedMemory + "| Free Memory " + freeMemory + "\n");
-                    out.close();
+                    MySQLData.RAM(serverName, maxMemory, usedMemory, freeMemory);
 
-                } catch (
-                        IOException e) {
+                } catch (Exception e) {
 
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             }
-        }
 
-        Discord.RAM("⚠️ The server has **exceeded** the set amount of percentage of RAM Usage! Total Memory: **" + maxMemory + "** | Used Memory **" + usedMemory + "** | Free Memory **" + freeMemory + "**", false);
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.RAM")
+                    && main.getSqLite().isConnected()) {
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.RAM")) && (main.mySQL.isConnected())) {
+                try {
 
-            try {
+                    SQLiteData.insertRAM(serverName, maxMemory, usedMemory, freeMemory);
 
-                MySQLData.RAM(serverName, maxMemory, usedMemory, freeMemory);
+                } catch (Exception exception) {
 
-            } catch (Exception e) {
+                    exception.printStackTrace();
 
-                e.printStackTrace();
-
-            }
-        }
-
-        if (main.getConfig().getBoolean("SQLite.Enable") && (main.getConfig().getBoolean("Log.RAM"))
-                && (main.getSqLite().isConnected())) {
-
-            try{
-
-                SQLiteData.insertRAM(serverName, maxMemory, usedMemory, freeMemory);
-
-            } catch (Exception exception) {
-
-                exception.printStackTrace();
-
+                }
             }
         }
     }

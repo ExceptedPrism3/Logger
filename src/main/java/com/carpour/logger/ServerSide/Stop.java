@@ -19,52 +19,54 @@ public class Stop {
 
     public void run() {
 
-
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (main.getConfig().getBoolean("Log-to-Files") && main.getConfig().getBoolean("Log.Server-Stop")) {
+        if (main.getConfig().getBoolean("Log.Server-Stop")) {
 
-            try {
+            if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getserverStopFile(), true));
-                out.write("[" + dateFormat.format(date) + "]" + "\n");
-                out.close();
+                try {
 
-            } catch (IOException e) {
+                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getserverStopFile(), true));
+                    out.write("[" + dateFormat.format(date) + "]" + "\n");
+                    out.close();
 
-                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                e.printStackTrace();
+                } catch (IOException e) {
 
+                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
+
+                }
             }
-        }
 
-        Discord.serverStop("\uD83D\uDD34 " + dateFormat.format(date), false);
+            Discord.serverStop("\uD83D\uDD34 " + dateFormat.format(date), false);
 
-        if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Server-Stop") && main.mySQL.isConnected()) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Server-Stop") && main.mySQL.isConnected()) {
 
-            try {
+                try {
 
-                MySQLData.serverStop(serverName);
+                    MySQLData.serverStop(serverName);
 
-            } catch (Exception e) {
+                } catch (Exception e) {
 
-                e.printStackTrace();
+                    e.printStackTrace();
 
+                }
             }
-        }
 
-        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Server-Stop") && main.getSqLite().isConnected()) {
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Server-Stop") && main.getSqLite().isConnected()) {
 
-            try {
+                try {
 
-                SQLiteData.insertServerStop(serverName);
+                    SQLiteData.insertServerStop(serverName);
 
-            } catch (Exception exception) {
+                } catch (Exception exception) {
 
-                exception.printStackTrace();
+                    exception.printStackTrace();
 
+                }
             }
         }
     }

@@ -43,10 +43,7 @@ Log:
   Block-Break: true
   Portal-Creation: true
   Bucket-Place: true
-  ##################
-  #Temp Disabled
-  Anvil: false
-  ##################
+  Anvil: true
   TPS: true
   RAM: true
   Server-Start: true

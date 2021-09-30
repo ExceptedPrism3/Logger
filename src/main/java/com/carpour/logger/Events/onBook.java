@@ -43,17 +43,47 @@ public class onBook implements Listener {
 
         //Log To Files Handling
         if (!event.isCancelled()
-                && main.getConfig().getBoolean("Log-to-Files")
                 && main.getConfig().getBoolean("Log.Book-Editing")) {
 
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+            if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                Discord.staffChat(player, "\uD83D\uDCD6 **|** \uD83D\uDC6E\u200D♂️ has edited a book that consists of **" + pageCount + "** page(s), with **" + pageContent + "**. The book is signed by **" + signature + "**", false);
+                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+                    Discord.staffChat(player, "\uD83D\uDCD6 **|** \uD83D\uDC6E\u200D♂️ has edited a book that consists of **" + pageCount + "** page(s), with **" + pageContent + "**. The book is signed by **" + signature + "**", false);
+
+                    try {
+
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
+                        out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has edited a book that consists of " + pageCount + " page(s), with " + pageContent + ". The book is signed by " + signature + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
+
+                    }
+
+                    if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Chat") && main.mySQL.isConnected()) {
+
+                        MySQLData.bookEditing(serverName, worldName, playerName, pageCount, pageContent, signature, true);
+
+                    }
+                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Book-Editing")
+                            && main.getSqLite().isConnected()) {
+
+                        SQLiteData.insertBook(serverName, worldName, player, pageCount, pageContent, signature, true);
+
+                    }
+
+                    return;
+
+                }
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has edited a book that consists of " + pageCount + " page(s), with " + pageContent + ". The book is signed by " + signature + "\n");
+                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBookEditingFile(), true));
+                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has edited a book that consists of " + pageCount + " page(s), with " + pageContent + ". The book is signed by " + signature + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -62,73 +92,45 @@ public class onBook implements Listener {
                     e.printStackTrace();
 
                 }
+            }
 
-                if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Chat") && main.mySQL.isConnected()) {
+            if (player.hasPermission("logger.staff.log") && main.getConfig().getBoolean("Staff.Enabled")) {
 
-                    MySQLData.bookEditing(serverName, worldName, playerName, pageCount, pageContent, signature, true);
+                Discord.staffChat(player, "\uD83D\uDCD6 **|** \uD83D\uDC6E\u200D♂️ has edited a book that consists of **" + pageCount + "** page(s), with **" + pageContent + "**. The book is signed by **" + signature + "**", false);
+
+            } else {
+
+                Discord.bookEditing(player, "\uD83D\uDCD6 has edited a book that consists of **" + pageCount + "** page(s), with **" + pageContent + "**. The book is signed by **" + signature + "**", false);
+            }
+
+            //MySQL Handling
+            if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Book-Editing"))
+                    && (main.mySQL.isConnected())) {
+
+                try {
+
+                    MySQLData.bookEditing(serverName, worldName, playerName, pageCount, pageContent, signature, false);
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
 
                 }
-                if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Book-Editing")
-                        && main.getSqLite().isConnected()) {
+            }
 
-                    SQLiteData.insertBook(serverName, worldName, player, pageCount, pageContent, signature, true);
+            //SQLite Handling
+            if (main.getConfig().getBoolean("SQLite.Enable") && (main.getConfig().getBoolean("Log.Book-Editing"))
+                    && (main.getSqLite().isConnected())) {
+
+                try {
+
+                    SQLiteData.insertBook(serverName, worldName, player, pageCount, pageContent, signature, player.hasPermission("logger.staff.log"));
+
+                } catch (Exception exception) {
+
+                    exception.printStackTrace();
 
                 }
-
-                return;
-
-            }
-
-            try {
-
-                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBookEditingFile(), true));
-                out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has edited a book that consists of " + pageCount + " page(s), with " + pageContent + ". The book is signed by " + signature + "\n");
-                out.close();
-
-            } catch (IOException e) {
-
-                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                e.printStackTrace();
-
-            }
-        }
-
-        if (player.hasPermission("logger.staff.log") && main.getConfig().getBoolean("Staff.Enabled")) {
-
-            Discord.staffChat(player, "\uD83D\uDCD6 **|** \uD83D\uDC6E\u200D♂️ has edited a book that consists of **" + pageCount + "** page(s), with **" + pageContent + "**. The book is signed by **" + signature + "**", false);
-
-        }else {
-
-            Discord.bookEditing(player, "\uD83D\uDCD6 has edited a book that consists of **" + pageCount + "** page(s), with **" + pageContent + "**. The book is signed by **" + signature + "**", false);
-        }
-
-        //MySQL Handling
-        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Book-Editing"))
-                && (main.mySQL.isConnected())) {
-
-            try {
-
-                MySQLData.bookEditing(serverName, worldName, playerName, pageCount, pageContent, signature, false);
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
-
-            }
-        }
-
-        //SQLite Handling
-        if (main.getConfig().getBoolean("SQLite.Enable") && (main.getConfig().getBoolean("Log.Book-Editing"))
-                && (main.getSqLite().isConnected())) {
-
-            try {
-
-                SQLiteData.insertBook(serverName, worldName, player, pageCount, pageContent, signature, player.hasPermission("logger.staff.log"));
-
-            } catch (Exception exception) {
-
-                exception.printStackTrace();
-
             }
         }
     }

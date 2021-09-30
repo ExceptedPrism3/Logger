@@ -28,142 +28,145 @@ public class TPS implements Runnable {
     }
 
     public static double getTPS(int ticks) {
-        if (tickCount <= ticks) {
-            return 20.0D;
-        }
+
+        if (tickCount <= ticks) return 20.0D;
         int target = (tickCount - 1 - ticks) % TICKS.length;
         long elapsed = System.currentTimeMillis() - TICKS[target];
         return ticks / (elapsed / 1000.0D);
+
     }
 
     public void run() {
 
-        if (main.getConfig().getBoolean("Log-to-Files") && main.getConfig().getBoolean("Log.TPS")) {
+        if (main.getConfig().getBoolean("Log.TPS")) {
 
-            if ((main.getConfig().getInt("TPS.Value-Medium")) <= 0 || (main.getConfig().getInt("TPS.Value-Medium") >= 20) ||
-                    (main.getConfig().getInt("TPS.Value-Critical")) <= 0 || (main.getConfig().getInt("TPS.Value-Critical") >= 20)){
+            if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                return;
+                if (main.getConfig().getInt("TPS.Value-Medium") <= 0 || main.getConfig().getInt("TPS.Value-Medium") >= 20 ||
+                        main.getConfig().getInt("TPS.Value-Critical") <= 0 || main.getConfig().getInt("TPS.Value-Critical") >= 20) {
 
+                    return;
+
+                }
+
+                TICKS[(tickCount % TICKS.length)] = System.currentTimeMillis();
+
+                tickCount += 1;
+
+                if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
+
+                    Discord.TPS("The TPS has dropped to " + getTPS(), false);
+
+                    try {
+
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
+                        out.write("[" + dateFormat.format(date) + "] The TPS has dropped to " + getTPS() + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
+
+                    }
+
+                } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
+
+                    Discord.TPS("⚠️ WARNING! The TPS has dropped to " + getTPS(), false);
+
+                    try {
+
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
+                        out.write("[" + dateFormat.format(date) + "] WARNING! The TPS has dropped to " + getTPS() + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
+
+                    }
+
+                }
             }
-
-            TICKS[(tickCount % TICKS.length)] = System.currentTimeMillis();
-
-            tickCount += 1;
 
             if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
 
                 Discord.TPS("The TPS has dropped to " + getTPS(), false);
 
-                try {
-
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] The TPS has dropped to " + getTPS() + "\n");
-                    out.close();
-
-                } catch (IOException e) {
-
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
-                }
-
             } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
 
                 Discord.TPS("⚠️ WARNING! The TPS has dropped to " + getTPS(), false);
+            }
 
-                try {
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.TPS") && main.mySQL.isConnected()) {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] WARNING! The TPS has dropped to " + getTPS() + "\n");
-                    out.close();
+                if (main.getConfig().getInt("TPS.Value-Medium") <= 0 || main.getConfig().getInt("TPS.Value-Medium") >= 20 ||
+                        main.getConfig().getInt("TPS.Value-Critical") <= 0 || main.getConfig().getInt("TPS.Value-Critical") >= 20) {
 
-                } catch (IOException e) {
-
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
+                    return;
 
                 }
 
+                if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
+
+                    try {
+
+                        MySQLData.TPS(serverName, getTPS());
+
+                    } catch (Exception e) {
+
+                        e.printStackTrace();
+
+                    }
+
+                } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
+
+                    try {
+
+                        MySQLData.TPS(serverName, getTPS());
+
+                    } catch (Exception e) {
+
+                        e.printStackTrace();
+
+                    }
+                }
             }
-        }
 
-        if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.TPS")
+                    && main.getSqLite().isConnected()) {
 
-            Discord.TPS("The TPS has dropped to " + getTPS(), false);
+                if (main.getConfig().getInt("TPS.Value-Medium") <= 0 || main.getConfig().getInt("TPS.Value-Medium") >= 20 ||
+                        main.getConfig().getInt("TPS.Value-Critical") <= 0 || main.getConfig().getInt("TPS.Value-Critical") >= 20) {
 
-        }else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
-
-            Discord.TPS("⚠️ WARNING! The TPS has dropped to " + getTPS(), false);
-        }
-
-        if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.TPS") && main.mySQL.isConnected()){
-
-            if (main.getConfig().getInt("TPS.Value-Medium") <= 0 || main.getConfig().getInt("TPS.Value-Medium") >= 20 ||
-                    main.getConfig().getInt("TPS.Value-Critical") <= 0 || main.getConfig().getInt("TPS.Value-Critical") >= 20){
-
-                return;
-
-            }
-
-            if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
-
-                try {
-
-                    MySQLData.TPS(serverName, getTPS());
-
-                }catch (Exception e){
-
-                    e.printStackTrace();
+                    return;
 
                 }
 
-            } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")){
+                if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
 
-                try {
+                    try {
 
-                    MySQLData.TPS(serverName, getTPS());
+                        SQLiteData.insertTPS(serverName, getTPS());
 
-                }catch (Exception e){
+                    } catch (Exception e) {
 
-                    e.printStackTrace();
+                        e.printStackTrace();
 
-                }
-            }
-        }
+                    }
 
-        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.TPS")
-                && main.getSqLite().isConnected()) {
+                } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
 
-            if (main.getConfig().getInt("TPS.Value-Medium") <= 0 || main.getConfig().getInt("TPS.Value-Medium") >= 20 ||
-                    main.getConfig().getInt("TPS.Value-Critical") <= 0 || main.getConfig().getInt("TPS.Value-Critical") >= 20){
+                    try {
 
-                return;
+                        SQLiteData.insertTPS(serverName, getTPS());
 
-            }
+                    } catch (Exception e) {
 
-            if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
+                        e.printStackTrace();
 
-                try {
-
-                    SQLiteData.insertTPS(serverName, getTPS());
-
-                }catch (Exception e){
-
-                    e.printStackTrace();
-
-                }
-
-            } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")){
-
-                try {
-
-                    SQLiteData.insertTPS(serverName, getTPS());
-
-                }catch (Exception e){
-
-                    e.printStackTrace();
-
+                    }
                 }
             }
         }

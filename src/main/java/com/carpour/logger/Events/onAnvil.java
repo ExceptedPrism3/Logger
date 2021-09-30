@@ -25,44 +25,45 @@ import java.util.Date;
 
 public class onAnvil implements Listener {
 
-    private final Main main = Main.getInstance();
+private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClick(InventoryClickEvent event) {
 
         Player player = (Player) event.getWhoClicked();
+        String playerName = player.getName();
         String serverName = main.getConfig().getString("Server-Name");
+        Inventory inv = event.getInventory();
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
         if (player.hasPermission("logger.exempt")) return;
 
-        if (main.getConfig().getBoolean("Log-to-Files") && (main.getConfig().getBoolean("Log.Anvil"))) {
+        if (!event.isCancelled() && main.getConfig().getBoolean("Log.Anvil")) {
 
-            if (!event.isCancelled()) {
+            if (inv instanceof AnvilInventory) {
 
-                Inventory inv = event.getInventory();
+                InventoryView view = event.getView();
 
-                if (inv instanceof AnvilInventory) {
-                    InventoryView view = event.getView();
-                    int rawSlot = event.getRawSlot();
+                int rawSlot = event.getRawSlot();
 
-                    if (rawSlot == view.convertSlot(rawSlot)) {
+                if (rawSlot == view.convertSlot(rawSlot)) {
 
-                        if (rawSlot == 2) {
+                    if (rawSlot == 2) {
 
-                            ItemStack item = event.getCurrentItem();
+                        ItemStack item = event.getCurrentItem();
 
-                            if (item != null) {
+                        if (item != null) {
 
-                                ItemMeta meta = item.getItemMeta();
+                            ItemMeta meta = item.getItemMeta();
 
-                                if (meta != null) {
+                            if (meta != null) {
 
-                                    if (meta.hasDisplayName()) {
+                                if (meta.hasDisplayName()) {
 
-                                        String displayName = meta.getDisplayName();
-                                        String playerName = player.getName();
+                                    String displayName = meta.getDisplayName();
+
+                                    if (main.getConfig().getBoolean("Log-to-Files")) {
 
                                         if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
@@ -74,13 +75,6 @@ public class onAnvil implements Listener {
                                                 out.write("[" + dateFormat.format(date) + "] " + "The Staff " + playerName + " has renamed an item to " + displayName + "\n");
                                                 out.close();
 
-                                                if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Anvil")) && (main.mySQL.isConnected())) {
-
-
-                                                    MySQLData.anvil(serverName, playerName, displayName, true);
-
-                                                }
-
                                             } catch (IOException e) {
 
                                                 main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
@@ -88,11 +82,21 @@ public class onAnvil implements Listener {
 
                                             }
 
+                                            if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Anvil") && main.mySQL.isConnected()) {
+
+                                                MySQLData.anvil(serverName, playerName, displayName, true);
+
+                                            }
+
+                                            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Anvil") && main.getSqLite().isConnected()) {
+
+                                                SQLiteData.insertAnvil(serverName, player, displayName, true);
+
+                                            }
+
                                             return;
 
                                         }
-
-                                        Discord.anvil(player, "\uD83D\uDD28️ Has renamed an Item to **" + displayName + "**", false);
 
                                         try {
 
@@ -105,28 +109,47 @@ public class onAnvil implements Listener {
                                             main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                                             e.printStackTrace();
 
-                                            return;
+                                        }
+                                    }
+
+
+                                    //Discord
+                                    if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+
+                                        Discord.staffChat(player, "\uD83D\uDD28 **|** \uD83D\uDC6E\u200D♂️ Has renamed an Item to **" + displayName + "**", false);
+
+                                    } else {
+
+                                        Discord.anvil(player, "\uD83D\uDD28️ Has renamed an Item to **" + displayName + "**", false);
+                                    }
+
+
+                                    //MySQL
+                                    if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Anvil") && main.mySQL.isConnected()) {
+
+                                        try {
+
+                                            MySQLData.anvil(serverName, playerName, displayName, player.hasPermission("logger.staff.log"));
+
+                                        } catch (Exception e) {
+
+                                            e.printStackTrace();
 
                                         }
+                                    }
 
-                                        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Anvil")) && (main.mySQL.isConnected())) {
 
-                                            try {
+                                    //SQLite
+                                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Anvil") && main.getSqLite().isConnected()) {
 
-                                                MySQLData.anvil(serverName, playerName, displayName, false);
+                                        try {
 
-                                            } catch (Exception e) {
+                                            SQLiteData.insertAnvil(serverName, player, displayName, player.hasPermission("logger.staff.log"));
 
-                                                e.printStackTrace();
+                                        } catch (Exception e) {
 
-                                            }
-                                        }
-                                        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Anvil") && main.getSqLite().isConnected()) {
-                                            try {
-                                                SQLiteData.insertAnvil(serverName, player, displayName, player.hasPermission("logger.staff.log"));
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
+                                            e.printStackTrace();
+
                                         }
                                     }
                                 }

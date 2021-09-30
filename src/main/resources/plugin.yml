@@ -7,11 +7,13 @@ description: Log all Activities from Commands, Chat, Player Join, Player Leave, 
 softdepend: [Essentials]
 commands:
   logger:
-    description: Plugin Command.
+    description: Plugin command.
   logger reload:
-    description: Reloads the plugin Configs.
+    description: Reloads the plugin configs.
   logger credits:
-    description: Shows the plugin Authors.
+    description: Shows the plugin authors.
+  logger cmdspy:
+    description: Ability to view player's commands.
 permissions:
   logger.staff:
     description: Allows the user to view Plugin Updates.

@@ -4,6 +4,7 @@ import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Discord.DiscordFile;
 import com.carpour.logger.Events.*;
 import com.carpour.logger.Database.MySQL.*;
+import com.carpour.logger.Events.onCommands.onCommand;
 import com.carpour.logger.Utils.*;
 import com.carpour.logger.Database.SQLite.SQLite;
 import com.carpour.logger.Database.SQLite.SQLiteData;
@@ -62,26 +63,28 @@ public class Main extends JavaPlugin {
         discord.run();
 
         if (getConfig().getBoolean("MySQL.Enable")) {
+
             mySQL = new MySQL();
             mySQL.connect();
             mySQLData = new MySQLData(this);
             if (mySQL.isConnected()) mySQLData.createTable();
             mySQLData.emptyTable();
+
         }
 
         if (getConfig().getBoolean("SQLite.Enable")) {
+
             sqLite = new SQLite();
             sqLite.connect();
             sqLiteData = new SQLiteData(this);
-            if (sqLite.isConnected()) {
-                sqLiteData.createTable();
-            }
+            if (sqLite.isConnected()) sqLiteData.createTable();
             sqLiteData.emptyTable();
+
         }
 
-        if (getConfig().getBoolean("Log-to-Files") && (getConfig().getBoolean("SQLite.Enable"))){
+        if (getConfig().getBoolean("Log-to-Files") && getConfig().getBoolean("SQLite.Enable")){
 
-            getLogger().warning("Logging to Files and SQLite are both enabled, it might impact your Server's Performance!");
+            getLogger().warning("Logging to Files and SQLite are both enabled, this might impact your Server's Performance!");
 
         }
 
@@ -103,7 +106,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new onBlockBreak(), this);
         getServer().getPluginManager().registerEvents(new PortalCreation(), this);
         getServer().getPluginManager().registerEvents(new onBucketPlace(), this);
-        //getServer().getPluginManager().registerEvents(new onAnvil(), this);
+        getServer().getPluginManager().registerEvents(new onAnvil(), this);
         getServer().getPluginManager().registerEvents(new onItemDrop(), this);
         getServer().getPluginManager().registerEvents(new onEnchant(), this);
         getServer().getPluginManager().registerEvents(new onBook(), this);
@@ -159,9 +162,9 @@ public class Main extends JavaPlugin {
         stop = new Stop();
         stop.run();
 
-        if ((getConfig().getBoolean("MySQL.Enable")) && (mySQL.isConnected())) mySQL.disconnect();
+        if (getConfig().getBoolean("MySQL.Enable") && mySQL.isConnected()) mySQL.disconnect();
 
-        if ((getConfig().getBoolean("SQLite.Enable")) && (sqLite.isConnected())) sqLite.disconnect();
+        if (getConfig().getBoolean("SQLite.Enable") && sqLite.isConnected()) sqLite.disconnect();
 
         discord.disconnect();
 
