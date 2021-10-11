@@ -38,6 +38,8 @@ public class FileHandler {
     private static File enchantFolder;
     private static File bookEditingFolder;
     private static File afkFolder;
+    private static File itemPickupFolder;
+    private static File furnaceFolder;
 
     private static File chatLogFile;
     private static File commandLogFile;
@@ -63,6 +65,8 @@ public class FileHandler {
     private static File enchantFile;
     private static File bookEditingFile;
     private static File afkFile;
+    private static File itemPickupFile;
+    private static File furnaceFile;
 
 
     private final Main main = Main.getInstance();
@@ -149,6 +153,12 @@ public class FileHandler {
         afkFolder = new File(logsFolder, "AFK");
         afkFile = new File(afkFolder, filenameDateFormat.format(date) + ".log");
 
+        itemPickupFolder = new File(logsFolder, "Item Pickup");
+        itemPickupFile = new File(itemPickupFolder, filenameDateFormat.format(date) + ".log");
+
+        furnaceFolder = new File(logsFolder, "Furnace");
+        furnaceFile = new File(furnaceFolder, filenameDateFormat.format(date) + ".log");
+
         try {
 
             chatLogFolder.mkdir();
@@ -199,6 +209,10 @@ public class FileHandler {
 
             if (main.getAPI() != null) afkFolder.mkdir();
 
+            itemPickupFolder.mkdir();
+
+            furnaceFolder.mkdir();
+
 
 
             chatLogFile.createNewFile();
@@ -248,6 +262,10 @@ public class FileHandler {
             bookEditingFile.createNewFile();
 
             if (main.getAPI() != null) afkFile.createNewFile();
+
+            itemPickupFile.createNewFile();
+
+            furnaceFile.createNewFile();
 
 
 
@@ -305,6 +323,10 @@ public class FileHandler {
     public static File getBookEditingFile() { return bookEditingFile; }
 
     public static File getAfkFile() { return afkFile; }
+
+    public static File getItemPickupFile() { return itemPickupFile; }
+
+    public static File getFurnaceFile() { return furnaceFile; }
 
 
     public void deleteFile(File file) {
@@ -507,6 +529,20 @@ public class FileHandler {
                 deleteFile(afk);
 
             }
+        }
+
+        for (File pickup : Objects.requireNonNull(itemPickupFolder.listFiles()))
+        {
+
+            deleteFile(pickup);
+
+        }
+
+        for (File furnace : Objects.requireNonNull(furnaceFolder.listFiles()))
+        {
+
+            deleteFile(furnace);
+
         }
     }
 }

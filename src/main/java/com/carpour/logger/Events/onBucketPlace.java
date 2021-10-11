@@ -24,7 +24,6 @@ public class onBucketPlace implements Listener {
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-
     public void onBucket(PlayerBucketEmptyEvent event){
         Player player = event.getPlayer();
         String playerName = player.getName();
@@ -44,11 +43,12 @@ public class onBucketPlace implements Listener {
 
         if (!event.isCancelled() && (main.getConfig().getBoolean("Log.Bucket-Place"))) {
 
+            //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, "\uD83E\uDEA3️ **|** \uD83D\uDC6E\u200D♂️️ [" + worldName + "] Has placed a **" + bucket + "** at X = " + x + " Y = " + y + " Z = " + z, false);
+                    Discord.staffChat(player, "\uD83E\uDEA3️ **|** \uD83D\uDC6E\u200D♂️️ [" + worldName + "] Has placed a **" + bucket + "** at X = **" + x + "** Y = **" + y + "** Z = **" + z + "**", false);
 
                     try {
 
@@ -93,16 +93,18 @@ public class onBucketPlace implements Listener {
                 }
             }
 
+            //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, "\uD83E\uDEA3️ **|** \uD83D\uDC6E\u200D♂️️ [" + worldName + "] Has placed a **" + bucket + "** at X = " + x + " Y = " + y + " Z = " + z, false);
+                Discord.staffChat(player, "\uD83E\uDEA3️ **|** \uD83D\uDC6E\u200D♂️️ [" + worldName + "] Has placed a **" + bucket + "** at X = **" + x + "** Y = **" + y + "** Z = **" + z + "**", false);
 
             } else {
 
-                Discord.bucketPlace(player, "\uD83E\uDEA3️ [" + worldName + "] Has placed a **" + bucket + "** at X = " + x + " Y = " + y + " Z = " + z, false);
+                Discord.bucketPlace(player, "\uD83E\uDEA3️ [" + worldName + "] Has placed a **" + bucket + "** at X = **" + x + "** Y = **" + y + "** Z = **" + z + "**", false);
 
             }
 
+            //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Bucket-Place")) && (main.mySQL.isConnected())) {
 
                 try {
@@ -116,6 +118,7 @@ public class onBucketPlace implements Listener {
                 }
             }
 
+            //SQLite
             if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Bucket-Place") && main.getSqLite().isConnected()) {
 
                 try {

@@ -35,6 +35,7 @@ public class RAM implements Runnable {
 
         if (main.getConfig().getBoolean("Log.RAM")) {
 
+            //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getInt("RAM.Percent") <= percentUsed) {
@@ -55,8 +56,10 @@ public class RAM implements Runnable {
                 }
             }
 
+            //Discord
             Discord.RAM("⚠️ The server has **exceeded** the set amount of percentage of RAM Usage! Total Memory: **" + maxMemory + "** | Used Memory **" + usedMemory + "** | Free Memory **" + freeMemory + "**", false);
 
+            //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.RAM") && main.mySQL.isConnected()) {
 
                 try {
@@ -70,6 +73,7 @@ public class RAM implements Runnable {
                 }
             }
 
+            //SQLite
             if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.RAM")
                     && main.getSqLite().isConnected()) {
 

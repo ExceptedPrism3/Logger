@@ -3,7 +3,7 @@ version: ${project.version}
 main: com.carpour.logger.Main
 api-version: 1.13
 authors: [ Prism3 , thelooter ]
-description: Log all Activities from Commands, Chat, Player Join, Player Leave, Player Death and even Server's RAM, TPS and Much More!
+description: Log all Activities from Players or Server Side!
 softdepend: [Essentials]
 commands:
   logger:

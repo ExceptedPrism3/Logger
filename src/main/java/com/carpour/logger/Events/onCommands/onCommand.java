@@ -44,7 +44,6 @@ public class onCommand implements Listener {
         //Stop Adding Message to Log if the Player has the correct Permissions
         if (player.hasPermission("logger.exempt")) return;
 
-
         //Blacklisted Commands
         if (main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
 
@@ -55,7 +54,6 @@ public class onCommand implements Listener {
             }
         }
 
-
         //Commands Spy
         if (main.getConfig().getBoolean("Player-Commands.Commands-Spy.Enable")) {
 
@@ -63,7 +61,6 @@ public class onCommand implements Listener {
             commandSpy.onCmdSpy(event);
 
         }
-
 
         //Whitelist Commands
         if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")){
@@ -126,8 +123,6 @@ public class onCommand implements Listener {
                 }
             }
 
-
-
             //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
@@ -138,7 +133,6 @@ public class onCommand implements Listener {
                 Discord.playerCommand(player, "\uD83D\uDC7E " + message, false);
 
             }
-
 
             //Logging to MySQL if logging to MySQL and Command Logging is enabled
             if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Commands") && main.mySQL.isConnected()) {
@@ -153,7 +147,6 @@ public class onCommand implements Listener {
 
                 }
             }
-
 
             //Logging to SQLite if logging to SQLite and Command Logging is enabled
             if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Commands") && main.getSqLite().isConnected()) {

@@ -13,7 +13,7 @@
 # Discord Server: https://discord.gg/MfR5mcpVfX
 
 # Server Name
-Server-Name: 'Server_Name'
+Server-Name: "Server_Name"
 
 # How many Days for the logs to be deleted
 # Set it to -1 to cancel the Deletion
@@ -48,10 +48,12 @@ Log:
   RAM: true
   Server-Start: true
   Server-Stop: true
+  Item-Pickup: true
   Item-Drop: true
   Enchanting: true
   Book-Editing: true
   AFK: true
+  Furnace: true
 
 # How often should we check for the Server's TPS and RAM
 # It's better to have it above 1 min to avoid any complications
@@ -89,11 +91,17 @@ Player-Commands:
     - /register
   Commands-Spy:
     Enable: false
-    Message: '&8[&6Spy&8] &7%player% >> %cmd%'
+    Message: "&8[&6Spy&8] &7%player% >> %cmd%"
 
 # Disable this if you want to hide Player's IPs
 Player-Join:
   Player-IP: true
+
+# Items to be picked up
+Item-Pickup:
+  - "APPLE"
+  - "BARRIER"
+  - "BEDROCK"
 
 # MySQL Feature
 # Data-Deletion Value in Days, Set it -1 to cancel
@@ -113,5 +121,5 @@ SQLite:
   Data-Deletion: 7
 
 Messages:
-  No-Permission: '&cYou do not have permission to run this command.'
-  Reload-Message: '&aConfigs Reloaded.'
+  No-Permission: "&cYou do not have permission to run this command."
+  Reload-Message: "&aConfigs Reloaded."

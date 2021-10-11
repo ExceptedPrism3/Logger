@@ -25,6 +25,7 @@ public class Start {
 
         if (main.getConfig().getBoolean("Log.Server-Start")) {
 
+            //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 try {
@@ -41,8 +42,10 @@ public class Start {
                 }
             }
 
-            Discord.serverStart("\uD83D\uDFE2 " + dateFormat.format(date), false);
+            //Discord
+            Discord.serverStart("\uD83D\uDFE2 **" + dateFormat.format(date) + "**", false);
 
+            //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Server-Start") && main.mySQL.isConnected()) {
 
                 try {
@@ -56,6 +59,7 @@ public class Start {
                 }
             }
 
+            //SQLite
             if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Server-Start") && main.getSqLite().isConnected()) {
 
                 try {

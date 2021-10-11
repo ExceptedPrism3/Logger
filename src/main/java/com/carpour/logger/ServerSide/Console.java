@@ -31,6 +31,7 @@ public class Console implements Listener {
 
         if (main.getConfig().getBoolean("Log.Console-Commands")) {
 
+            //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 try {
@@ -47,8 +48,10 @@ public class Console implements Listener {
                 }
             }
 
+            //Discord
             Discord.console("\uD83D\uDC7E " + msg, false);
 
+            //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Console-Commands")
                     && main.mySQL.isConnected()) {
 
@@ -63,6 +66,7 @@ public class Console implements Listener {
                 }
             }
 
+            //SQLite
             if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Console-Commands")
                     && main.getSqLite().isConnected()) {
 

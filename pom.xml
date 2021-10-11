@@ -6,12 +6,12 @@
 
     <groupId>com.carpour</groupId>
     <artifactId>Logger</artifactId>
-    <version>1.6.4</version>
+    <version>1.6.5</version>
     <packaging>jar</packaging>
 
     <name>Logger</name>
 
-    <description>Log all Activities from Commands, Chat, Player Join, Player Leave, Player Death and even Server's RAM, TPS and Much More!</description>
+    <description>Log all Activities from Players or Server Side!</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

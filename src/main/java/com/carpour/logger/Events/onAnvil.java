@@ -63,6 +63,7 @@ private final Main main = Main.getInstance();
 
                                     String displayName = meta.getDisplayName();
 
+                                    //Log To Files Handling
                                     if (main.getConfig().getBoolean("Log-to-Files")) {
 
                                         if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
@@ -112,7 +113,6 @@ private final Main main = Main.getInstance();
                                         }
                                     }
 
-
                                     //Discord
                                     if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
@@ -122,7 +122,6 @@ private final Main main = Main.getInstance();
 
                                         Discord.anvil(player, "\uD83D\uDD28️ Has renamed an Item to **" + displayName + "**", false);
                                     }
-
 
                                     //MySQL
                                     if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Anvil") && main.mySQL.isConnected()) {
@@ -137,7 +136,6 @@ private final Main main = Main.getInstance();
 
                                         }
                                     }
-
 
                                     //SQLite
                                     if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Anvil") && main.getSqLite().isConnected()) {

@@ -40,6 +40,7 @@ public class TPS implements Runnable {
 
         if (main.getConfig().getBoolean("Log.TPS")) {
 
+            //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getInt("TPS.Value-Medium") <= 0 || main.getConfig().getInt("TPS.Value-Medium") >= 20 ||
@@ -90,6 +91,7 @@ public class TPS implements Runnable {
                 }
             }
 
+            //Discord
             if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
 
                 Discord.TPS("The TPS has dropped to " + getTPS(), false);
@@ -99,6 +101,7 @@ public class TPS implements Runnable {
                 Discord.TPS("⚠️ WARNING! The TPS has dropped to " + getTPS(), false);
             }
 
+            //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.TPS") && main.mySQL.isConnected()) {
 
                 if (main.getConfig().getInt("TPS.Value-Medium") <= 0 || main.getConfig().getInt("TPS.Value-Medium") >= 20 ||
@@ -134,6 +137,7 @@ public class TPS implements Runnable {
                 }
             }
 
+            //SQLite
             if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.TPS")
                     && main.getSqLite().isConnected()) {
 

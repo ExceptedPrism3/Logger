@@ -21,7 +21,7 @@ public class onCommandSpy implements Listener {
         Player player = event.getPlayer();
 
         //Stop Adding Message to Log if the Player has the correct Permissions
-        if (player.hasPermission("logger.exempt")) return;
+        if (player.hasPermission("logger.exempt") || player.hasPermission("logger.cmdspy")) return;
 
         //Command Spy
         if (main.getConfig().getBoolean("Log.Player-Commands") && main.getConfig().getBoolean("Player-Commands.Commands-Spy.Enable")) {

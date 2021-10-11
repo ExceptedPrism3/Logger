@@ -46,11 +46,12 @@ public class onPlayerTeleport implements Listener {
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log.Player-Teleport")) {
 
+            //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, "\uD83D\uDDFA **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "]" + " From X = " + ox + " Y = " + oy + " Z = " + oz + " **To** X = " + tx + " Y = " + ty + " Z = " + tz, false);
+                    Discord.staffChat(player, "\uD83D\uDDFA **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "]" + " From X = **" + ox + "** Y = **" + oy + "** Z = **" + oz + "** **To** X = **" + tx + "** Y = **" + ty + "** Z = **" + tz + "**", false);
 
                     try {
 
@@ -97,18 +98,18 @@ public class onPlayerTeleport implements Listener {
                 }
             }
 
-
+            //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, "\uD83D\uDDFA **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "]" + " From X = " + ox + " Y = " + oy + " Z = " + oz + " **To** X = " + tx + " Y = " + ty + " Z = " + tz, false);
+                Discord.staffChat(player, "\uD83D\uDDFA **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "]" + " From X = **" + ox + "** Y = **" + oy + "** Z = **" + oz + "** **To** X = **" + tx + "** Y = **" + ty + "** Z = **" + tz + "**", false);
 
             } else {
 
-                Discord.playerTeleport(player, "\uD83D\uDDFA [" + worldName + "]" + " From X = " + ox + " Y = " + oy + " Z = " + oz + " **To** X = " + tx + " Y = " + ty + " Z = " + tz, false);
+                Discord.playerTeleport(player, "\uD83D\uDDFA [" + worldName + "]" + " From X = **" + ox + "** Y = **" + oy + "** Z = **" + oz + "** **To** X = **" + tx + "** Y = **" + ty + "** Z = **" + tz + "**", false);
 
             }
 
-
+            //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Teleport")) && (main.mySQL.isConnected())) {
 
                 try {
@@ -122,7 +123,7 @@ public class onPlayerTeleport implements Listener {
                 }
             }
 
-
+            //SQLite
             if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Teleport")
                     && main.getSqLite().isConnected()) {
 

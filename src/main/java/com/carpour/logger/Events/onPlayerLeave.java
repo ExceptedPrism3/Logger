@@ -24,7 +24,6 @@ public class onPlayerLeave implements Listener {
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-
     public void onPlayerQuit(PlayerQuitEvent event) {
 
         Player player = event.getPlayer();
@@ -42,11 +41,12 @@ public class onPlayerLeave implements Listener {
 
         if (main.getConfig().getBoolean("Log.Player-Leave")) {
 
+            //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false);
+                    Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = **" + x + "** Y = **" + y + "** Z = **" + z + "**", false);
 
                     try {
 
@@ -93,16 +93,18 @@ public class onPlayerLeave implements Listener {
                 }
             }
 
+            //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false);
+                Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = **" + x + "** Y = **" + y + "** Z = **" + z + "**", false);
 
             } else {
 
-                Discord.playerLeave(player, "\uD83D\uDC4B [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false);
+                Discord.playerLeave(player, "\uD83D\uDC4B [" + worldName + "]" + " X = **" + x + "** Y = **" + y + "** Z = **" + z + "**", false);
 
             }
 
+            //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Leave")) && (main.mySQL.isConnected())) {
 
                 try {
@@ -116,6 +118,7 @@ public class onPlayerLeave implements Listener {
                 }
             }
 
+            //SQLite
             if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Leave")
                     && main.getSqLite().isConnected()) {
 

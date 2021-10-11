@@ -38,7 +38,6 @@ public class MySQL {
                     Bukkit.getConsoleSender().sendMessage("[Logger] " + ChatColor.RED + "Could not connect to the Database!");
 
                 }
-
             }
         }
     }

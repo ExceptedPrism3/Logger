@@ -108,7 +108,6 @@ public class onCommandWhitelist implements Listener {
                 }return;
             }
 
-
             //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
@@ -136,7 +135,6 @@ public class onCommandWhitelist implements Listener {
                 }
             }
 
-
             //Logging to MySQL if logging to MySQL and Command Logging is enabled
             if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Commands") && main.mySQL.isConnected()) {
                 for (String command : main.getConfig().getStringList("Player-Commands.Commands-to-Log")) {
@@ -157,7 +155,6 @@ public class onCommandWhitelist implements Listener {
                     }
                 }
             }
-
 
             //Logging to SQLite if logging to SQLite and Command Logging is enabled
             if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Commands") && main.getSqLite().isConnected()) {

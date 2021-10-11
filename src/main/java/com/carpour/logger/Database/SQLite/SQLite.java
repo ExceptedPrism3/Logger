@@ -33,7 +33,7 @@ public class SQLite {
 
             } catch (ClassNotFoundException | SQLException e) {
 
-                main.getLogger().warning(ChatColor.RED + "Couldn't load SQLite Database, if the issue persists contact the Author!");
+                main.getLogger().warning(ChatColor.RED + "Couldn't load SQLite Database, if the issue persists contact the Authors!");
                 e.printStackTrace();
 
             }

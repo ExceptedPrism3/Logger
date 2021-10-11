@@ -37,10 +37,12 @@ With more than **20 Features** to choose from, nothing is left without monitorin
 * RAM
 * Server Start
 * Server Stop
+* Item Pickup
 * Item Drop
 * AFK **[ Requires Essentials Plugin ]**
 * Book Editing
 * Enchanting
+* Furnace
 
 ## Info
 If you use MySQL, the IP that gets stored in the Database when a Player joins

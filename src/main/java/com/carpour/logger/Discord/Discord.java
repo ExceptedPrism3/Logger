@@ -42,6 +42,8 @@ public class Discord {
     private static TextChannel enchantingChannel;
     private static TextChannel bookEditingChannel;
     private static TextChannel afkChannel;
+    private static TextChannel itemPickupChannel;
+    private static TextChannel furnaceChannel;
 
     public void run() {
 
@@ -108,6 +110,10 @@ public class Discord {
             String bookEditingChannelID = DiscordFile.get().getString("Discord.Book-Editing.Channel-ID");
 
             String afkChannelID = DiscordFile.get().getString("Discord.AFK.Channel-ID");
+
+            String itemPickupChannelID = DiscordFile.get().getString("Discord.Item-Pickup.Channel-ID");
+
+            String furnaceChannelID = DiscordFile.get().getString("Discord.Furnace.Channel-ID");
 
 
             if (staffChannelID != null && main.getConfig().getBoolean("Staff.Enabled") && !staffChannelID.equals("LINK_HERE")) {
@@ -251,6 +257,18 @@ public class Discord {
             if (afkChannelID != null && main.getConfig().getBoolean("Log.AFK") && !afkChannelID.equals("LINK_HERE")) {
 
                 afkChannel = jda.getTextChannelById(afkChannelID);
+
+            }
+
+            if (itemPickupChannelID != null && main.getConfig().getBoolean("Log.Item-Pickup") && !itemPickupChannelID.equals("LINK_HERE")) {
+
+                itemPickupChannel = jda.getTextChannelById(itemPickupChannelID);
+
+            }
+
+            if (furnaceChannelID != null && main.getConfig().getBoolean("Log.Furnace") && !furnaceChannelID.equals("LINK_HERE")) {
+
+                furnaceChannel = jda.getTextChannelById(furnaceChannelID);
 
             }
         }
@@ -411,6 +429,16 @@ public class Discord {
     public static void afk(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, afkChannel);
+    }
+
+    public static void itemPickup(Player player, String content, boolean contentinAuthorLine) {
+
+        discordUtil(player, content, contentinAuthorLine, itemPickupChannel);
+    }
+
+    public static void furnace(Player player, String content, boolean contentinAuthorLine) {
+
+        discordUtil(player, content, contentinAuthorLine, furnaceChannel);
     }
 
     private static void discordUtil(Player player, String content, boolean contentinAuthorLine, TextChannel channel) {

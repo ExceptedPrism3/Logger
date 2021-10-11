@@ -37,14 +37,14 @@ public class onChat implements Listener {
 
         if (player.hasPermission("logger.exempt")) return;
 
-        //Log To Files Handling
         if (!event.isCancelled() && main.getConfig().getBoolean("Log.Player-Chat")) {
 
+            //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, "\uD83D\uDCAC **|** \uD83D\uDC6E\u200D♂️ " + msg, false);
+                    Discord.staffChat(player, "\uD83D\uDCAC **|** \uD83D\uDC6E\u200D♂️ **" + msg +"**", false);
 
                     try {
 
@@ -93,11 +93,11 @@ public class onChat implements Listener {
             //Discord Integration
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, "\uD83D\uDCAC **|** \uD83D\uDC6E\u200D♂️ " + msg, false);
+                Discord.staffChat(player, "\uD83D\uDCAC **|** \uD83D\uDC6E\u200D♂️ **" + msg + "**", false);
 
             } else {
 
-                Discord.playerChat(player, "\uD83D\uDCAC " + msg, false);
+                Discord.playerChat(player, "\uD83D\uDCAC **" + msg + "**", false);
             }
 
             //MySQL Handling

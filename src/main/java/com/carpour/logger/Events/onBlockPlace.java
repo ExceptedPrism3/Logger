@@ -25,7 +25,6 @@ public class onBlockPlace implements Listener {
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-
     public void onPlace(BlockPlaceEvent event) {
 
         Player player = event.getPlayer();
@@ -44,11 +43,12 @@ public class onBlockPlace implements Listener {
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log.Block-Place")) {
 
+            //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, "\uD83E\uDDF1️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has placed **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false);
+                    Discord.staffChat(player, "\uD83E\uDDF1️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has placed **" + blockType + "** at X = **" + x + "** Y = **" + y + "** Z = **" + z + "**", false);
 
                     try {
 
@@ -94,16 +94,18 @@ public class onBlockPlace implements Listener {
                 }
             }
 
+            //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, "\uD83E\uDDF1️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has placed **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false);
+                Discord.staffChat(player, "\uD83E\uDDF1️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has placed **" + blockType + "** at X = **" + x + "** Y = **" + y + "** Z = **" + z + "**", false);
 
             } else {
 
-                Discord.blockPlace(player, "\uD83E\uDDF1️ [" + worldName + "] Has placed **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false);
+                Discord.blockPlace(player, "\uD83E\uDDF1️ [" + worldName + "] Has placed **" + blockType + "** at X = **" + x + "** Y = **" + y + "** Z = **" + z + "**", false);
 
             }
 
+            //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Block-Place")) && (main.mySQL.isConnected())) {
 
                 try {
@@ -117,6 +119,7 @@ public class onBlockPlace implements Listener {
                 }
             }
 
+            //SQLite
             if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Block-Place")
                     && main.getSqLite().isConnected()) {
 

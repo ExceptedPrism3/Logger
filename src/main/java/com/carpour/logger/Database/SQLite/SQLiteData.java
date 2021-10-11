@@ -27,7 +27,7 @@ public class SQLiteData {
 
     public void createTable() {
 
-        PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave, playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel, bucketPlace, anvil, serverStart, serverStop, itemDrop, enchant, bookEditing, afk;
+        PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave, playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel, bucketPlace, anvil, serverStart, serverStop, itemDrop, enchant, bookEditing, afk, itemPickup, furnace;
 
         try {
             playerChat = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Chat " +
@@ -56,7 +56,7 @@ public class SQLiteData {
 
             playerDeath = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Death" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(100)," +
-                    "X INTEGER, Y INTEGER, Z INTEGER, Is_Staff INTEGER)");
+                    "X INTEGER, Y INTEGER, Z INTEGER, Cause TEXT(100), By_Who TEXT(100), Item_Used TEXT(100), Is_Staff INTEGER)");
 
             playerTeleport = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Teleport" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(100)," +
@@ -102,7 +102,7 @@ public class SQLiteData {
 
             itemDrop = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Item_Drop" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(100)," +
-                    "Item TEXT(50), Is_Staff INTEGER)");
+                    "Item TEXT(50), Amount INTEGER, X INTEGER, Y INTEGER, Z INTEGER, Enchantment TEXT(50), Changed_Name TEXT(50), Is_Staff INTEGER)");
 
             enchant = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Enchanting" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(100)," +
@@ -120,6 +120,14 @@ public class SQLiteData {
 
                 afk.executeUpdate();
             }
+
+            itemPickup = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Item_Pickup" +
+                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(100)," +
+                    "Item TEXT(50), Amount INTEGER, X INTEGER, Y INTEGER, Z INTEGER, Changed_Name TEXT(100), Is_Staff INTEGER)");
+
+            furnace = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Furnace" +
+                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(100)," +
+                    "Item TEXT(50), Amount INTEGER, X INTEGER, Y INTEGER, Z INTEGER, Is_Staff INTEGER)");
 
             playerChat.executeUpdate();
             playerCommands.executeUpdate();
@@ -143,6 +151,8 @@ public class SQLiteData {
             itemDrop.executeUpdate();
             enchant.executeUpdate();
             bookEditing.executeUpdate();
+            itemPickup.executeUpdate();
+            furnace.executeUpdate();
 
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -217,9 +227,9 @@ public class SQLiteData {
         }
     }
 
-    public static void insertPlayerDeath(String serverName, Player player, boolean isStaff) {
+    public static void insertPlayerDeath(String serverName, Player player, String cause, String by_who, String using, boolean isStaff) {
         try {
-            PreparedStatement playerDeath = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Player_Death(Server_Name, Date, World, Player_Name, X, Y, Z, Is_Staff) VALUES (?,?,?,?,?,?,?,?)");
+            PreparedStatement playerDeath = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Player_Death(Server_Name, Date, World, Player_Name, X, Y, Z, Cause, By_Who, Item_Used, Is_Staff) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
             playerDeath.setString(1, serverName);
             playerDeath.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
             playerDeath.setString(3, player.getWorld().getName());
@@ -227,7 +237,10 @@ public class SQLiteData {
             playerDeath.setInt(5, player.getLocation().getBlockX());
             playerDeath.setInt(6, player.getLocation().getBlockY());
             playerDeath.setInt(7, player.getLocation().getBlockZ());
-            playerDeath.setBoolean(8, isStaff);
+            playerDeath.setString(8, cause);
+            playerDeath.setString(9, by_who);
+            playerDeath.setString(10, using);
+            playerDeath.setBoolean(11, isStaff);
 
             playerDeath.executeUpdate();
 
@@ -470,15 +483,21 @@ public class SQLiteData {
         }
     }
 
-    public static void insertItemDrop(String serverName, Player player, String item, boolean isStaff) {
+    public static void insertItemDrop(String serverName, Player player, String item, int amount, int x, int y, int z, String enchantment, String changedName, boolean isStaff) {
         try {
-            PreparedStatement itemDropStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Item_Drop(Server_Name, Date, World, Player_Name, Item, Is_Staff) VALUES (?,?,?,?,?,?)");
+            PreparedStatement itemDropStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Item_Drop(Server_Name, Date, World, Player_Name, Item, Amount, X, Y, Z, Enchantment, Changed_Name, Is_Staff) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
             itemDropStatement.setString(1, serverName);
             itemDropStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
             itemDropStatement.setString(3, player.getWorld().getName());
             itemDropStatement.setString(4, player.getName());
             itemDropStatement.setString(5, item);
-            itemDropStatement.setBoolean(6, isStaff);
+            itemDropStatement.setInt(6, amount);
+            itemDropStatement.setInt(7, x);
+            itemDropStatement.setInt(8, y);
+            itemDropStatement.setInt(9, z);
+            itemDropStatement.setString(10, enchantment);
+            itemDropStatement.setString(11, changedName);
+            itemDropStatement.setBoolean(12, isStaff);
 
             itemDropStatement.executeUpdate();
         } catch (SQLException exception) {
@@ -550,6 +569,47 @@ public class SQLiteData {
         }
     }
 
+    public static void insertItemPickup(String serverName, Player player, Material item, int amount, int x, int y, int z, String changed_name, boolean isStaff) {
+        try {
+            PreparedStatement itemPickupStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Item_Pickup(Server_Name, Date, World, Player_Name, Item, Amount, X, Y, Z, Changed_Name, Is_Staff) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+            itemPickupStatement.setString(1, serverName);
+            itemPickupStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
+            itemPickupStatement.setString(3, player.getWorld().getName());
+            itemPickupStatement.setString(4, player.getName());
+            itemPickupStatement.setString(5, String.valueOf(item));
+            itemPickupStatement.setInt(6, amount);
+            itemPickupStatement.setInt(7, x);
+            itemPickupStatement.setInt(8, y);
+            itemPickupStatement.setInt(9, z);
+            itemPickupStatement.setString(10, changed_name);
+            itemPickupStatement.setBoolean(11, isStaff);
+
+            itemPickupStatement.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public static void insertFurnace(String serverName, Player player, Material item, int amount, int x, int y, int z, boolean isStaff) {
+        try {
+            PreparedStatement furnaceStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Furnace(Server_Name, Date, World, Player_Name, Item, Amount, X, Y, Z, Is_Staff) VALUES (?,?,?,?,?,?,?,?,?,?)");
+            furnaceStatement.setString(1, serverName);
+            furnaceStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
+            furnaceStatement.setString(3, player.getWorld().getName());
+            furnaceStatement.setString(4, player.getName());
+            furnaceStatement.setString(5, String.valueOf(item));
+            furnaceStatement.setInt(6, amount);
+            furnaceStatement.setInt(7, x);
+            furnaceStatement.setInt(8, y);
+            furnaceStatement.setInt(9, z);
+            furnaceStatement.setBoolean(10, isStaff);
+
+            furnaceStatement.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
 
     public void emptyTable() {
 
@@ -611,6 +671,10 @@ public class SQLiteData {
 
             }
 
+            PreparedStatement item_pickup = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Item_Pickup WHERE DATE < NOW() - INTERVAL " + when + " DAY");
+
+            PreparedStatement furnace = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Furnace WHERE DATE < NOW() - INTERVAL " + when + " DAY");
+
             player_Chat.executeUpdate();
             player_Commands.executeUpdate();
             console_Commands.executeUpdate();
@@ -633,6 +697,8 @@ public class SQLiteData {
             item_Drop.executeUpdate();
             enchanting.executeUpdate();
             book_Editing.executeUpdate();
+            item_pickup.executeUpdate();
+            furnace.executeUpdate();
 
         }catch (SQLException e){
             plugin.getLogger().severe("An error has occurred while cleaning the tables, if the error persists, contact the Author!");

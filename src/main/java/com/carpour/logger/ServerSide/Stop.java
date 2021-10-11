@@ -25,6 +25,7 @@ public class Stop {
 
         if (main.getConfig().getBoolean("Log.Server-Stop")) {
 
+            //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 try {
@@ -41,8 +42,10 @@ public class Stop {
                 }
             }
 
-            Discord.serverStop("\uD83D\uDD34 " + dateFormat.format(date), false);
+            //Discord
+            Discord.serverStop("\uD83D\uDD34 **" + dateFormat.format(date) + "**", false);
 
+            //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Server-Stop") && main.mySQL.isConnected()) {
 
                 try {
@@ -56,6 +59,7 @@ public class Stop {
                 }
             }
 
+            //SQLite
             if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Server-Stop") && main.getSqLite().isConnected()) {
 
                 try {

@@ -25,7 +25,6 @@ public class onPlayerJoin implements Listener {
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         World world = player.getWorld();
@@ -55,11 +54,12 @@ public class onPlayerJoin implements Listener {
 
         if (main.getConfig().getBoolean("Log.Player-Join")) {
 
+            //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false);
+                    Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = **" + x + "** Y = **" + y + "** Z = **" + z + "** **IP** ||" + ip + "||", false);
 
                     try {
 
@@ -105,16 +105,18 @@ public class onPlayerJoin implements Listener {
                 }
             }
 
+            //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false);
+                Discord.staffChat(player, "\uD83D\uDC4B **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = **" + x + "** Y = **" + y + "** Z = **" + z + "** **IP** ||" + ip + "||", false);
 
             } else {
 
-                Discord.playerJoin(player, "\uD83D\uDC4B [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z + " **IP** ||" + ip + "||", false);
+                Discord.playerJoin(player, "\uD83D\uDC4B [" + worldName + "]" + " X = **" + x + "** Y = **" + y + "** Z = **" + z + "** **IP** ||" + ip + "||", false);
 
             }
 
+            //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Join")) && (main.mySQL.isConnected())) {
 
                 try {
@@ -128,6 +130,7 @@ public class onPlayerJoin implements Listener {
                 }
             }
 
+            //SQLite
             if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Join") && main.getSqLite().isConnected()) {
 
                 try {

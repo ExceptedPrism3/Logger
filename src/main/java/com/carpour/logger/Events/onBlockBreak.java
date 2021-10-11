@@ -42,11 +42,12 @@ public class onBlockBreak implements Listener {
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log.Block-Break")) {
 
+            //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, "⛏️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has broke **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false);
+                    Discord.staffChat(player, "⛏️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has broke **" + blockType + "** at X = **" + x + "** Y = **" + y + "** Z = **" + z + "**", false);
 
                     try {
 
@@ -92,17 +93,15 @@ public class onBlockBreak implements Listener {
                 }
             }
 
-
             //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, "⛏️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has broke **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false);
+                Discord.staffChat(player, "⛏️ **|** \uD83D\uDC6E\u200D♂️ [" + worldName + "] Has broke **" + blockType + "** at X = **" + x + "** Y = **" + y + "** Z = **" + z + "**", false);
 
             } else {
 
-                Discord.blockBreak(player, "⛏️ [" + worldName + "] Has broke **" + blockType + "** at X = " + x + " Y = " + y + " Z = " + z, false);
+                Discord.blockBreak(player, "⛏️ [" + worldName + "] Has broke **" + blockType + "** at X = **" + x + "** Y = **" + y + "** Z = **" + z + "**", false);
             }
-
 
             //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Block-Break") && main.mySQL.isConnected()) {
@@ -117,7 +116,6 @@ public class onBlockBreak implements Listener {
 
                 }
             }
-
 
             //SQLite
             if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Block-Break")

@@ -94,6 +94,7 @@ public class onBook implements Listener {
                 }
             }
 
+            //Discord
             if (player.hasPermission("logger.staff.log") && main.getConfig().getBoolean("Staff.Enabled")) {
 
                 Discord.staffChat(player, "\uD83D\uDCD6 **|** \uD83D\uDC6E\u200D♂️ has edited a book that consists of **" + pageCount + "** page(s), with **" + pageContent + "**. The book is signed by **" + signature + "**", false);
@@ -103,7 +104,7 @@ public class onBook implements Listener {
                 Discord.bookEditing(player, "\uD83D\uDCD6 has edited a book that consists of **" + pageCount + "** page(s), with **" + pageContent + "**. The book is signed by **" + signature + "**", false);
             }
 
-            //MySQL Handling
+            //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Book-Editing"))
                     && (main.mySQL.isConnected())) {
 
@@ -118,7 +119,7 @@ public class onBook implements Listener {
                 }
             }
 
-            //SQLite Handling
+            //SQLite
             if (main.getConfig().getBoolean("SQLite.Enable") && (main.getConfig().getBoolean("Log.Book-Editing"))
                     && (main.getSqLite().isConnected())) {
 

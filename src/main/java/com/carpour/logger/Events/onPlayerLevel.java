@@ -37,13 +37,14 @@ public class onPlayerLevel implements Listener {
 
         if (main.getConfig().getBoolean("Log.Player-Level")) {
 
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (playerLevel == logAbove) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                //Log To Files Handling
+                if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                    Discord.staffChat(player, "⬆️ **|** \uD83D\uDC6E\u200D♂ Has arrived to the set amount of Level which is **" + logAbove + "**", false);
+                    if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    if (playerLevel == logAbove) {
+                        Discord.staffChat(player, "⬆️ **|** \uD83D\uDC6E\u200D♂ Has arrived to the set amount of Level which is **" + logAbove + "**", false);
 
                         try {
 
@@ -69,13 +70,11 @@ public class onPlayerLevel implements Listener {
                             SQLiteData.insertLevelChange(serverName, player, true);
 
                         }
+
+
+                        return;
+
                     }
-
-                    return;
-
-                }
-
-                if (playerLevel == logAbove) {
 
                     try {
 
@@ -89,10 +88,10 @@ public class onPlayerLevel implements Listener {
                         e.printStackTrace();
 
                     }
-                }
-            }
 
-            if (playerLevel == logAbove) {
+                }
+
+                //Discord
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
@@ -103,11 +102,10 @@ public class onPlayerLevel implements Listener {
                     Discord.playerLevel(player, "⬆️ Has arrived to the set amount of Level which is **" + logAbove + "**", false);
 
                 }
-            }
 
-            if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Level")) && (main.mySQL.isConnected())) {
 
-                if (playerLevel == logAbove) {
+                //MySQL
+                if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Level")) && (main.mySQL.isConnected())) {
 
                     try {
 
@@ -119,10 +117,10 @@ public class onPlayerLevel implements Listener {
 
                     }
                 }
-            }
 
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Level") && main.getSqLite().isConnected()) {
-                if (playerLevel == logAbove) {
+                //SQLite
+                if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Level") && main.getSqLite().isConnected()) {
+
 
                     try {
 

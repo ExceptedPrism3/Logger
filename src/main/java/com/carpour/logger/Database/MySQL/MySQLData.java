@@ -2,6 +2,7 @@ package com.carpour.logger.Database.MySQL;
 
 import com.carpour.logger.Main;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.event.world.PortalCreateEvent;
 
 import java.net.InetSocketAddress;
@@ -19,7 +20,7 @@ public class MySQLData {
 
     public void createTable(){
 
-        PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave, playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel, bucketPlace, anvil, serverStart, serverStop, itemDrop, enchant, bookEditing, afk;
+        PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave, playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel, bucketPlace, anvil, serverStart, serverStop, itemDrop, enchant, bookEditing, afk, itempPickup, furnace;
 
         try {
 
@@ -36,7 +37,7 @@ public class MySQLData {
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),X INT,Y INT,Z INT,Playername VARCHAR(100),Line VARCHAR(60),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             playerDeath = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Death "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT,Y INT,Z INT,Cause VARCHAR(40),By_Who VARCHAR(30),Item_Used VARCHAR(30),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             playerTeleport = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Teleport "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),From_X INT,From_Y INT,From_Z INT,To_X INT,To_Y INT,To_Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
@@ -81,7 +82,7 @@ public class MySQLData {
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),PRIMARY KEY (Date))");
 
             itemDrop = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Item_Drop "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Item VARCHAR(50),Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Item VARCHAR(50),Amount INT,X INT,Y INT,Z INT,Enchantment VARCHAR(50),Changed_Name VARCHAR(50),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             enchant = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Enchanting "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT,Y INT,Z INT,Enchantment VARCHAR(50),Item VARCHAR(50),Cost INT(5),Is_Staff TINYINT,PRIMARY KEY (Date))");
@@ -97,6 +98,13 @@ public class MySQLData {
 
                 afk.executeUpdate();
             }
+
+            itempPickup = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Item_Pickup "
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Item VARCHAR(250),Amount INT,X INT,Y INT,Z INT,Changed_Name VARCHAR(250),Is_Staff TINYINT,PRIMARY KEY (Date))");
+
+
+            furnace = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Furnace "
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Item VARCHAR(250),Amount INT,X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             playerChat.executeUpdate();
             playerCommands.executeUpdate();
@@ -120,6 +128,8 @@ public class MySQLData {
             itemDrop.executeUpdate();
             bookEditing.executeUpdate();
             enchant.executeUpdate();
+            itempPickup.executeUpdate();
+            furnace.executeUpdate();
 
         }catch (SQLException e){
 
@@ -193,17 +203,20 @@ public class MySQLData {
         }
     }
 
-    public static void playerDeath(String serverName, String worldname, String playername, double x, double y, double z,boolean staff){
+    public static void playerDeath(String serverName, String worldname, String playername, double x, double y, double z, String cause, String who, String itemUsed, boolean staff){
         try {
             String database = "Player_Death";
-            PreparedStatement playerDeath= plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?)");
+            PreparedStatement playerDeath= plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Cause,By_Who,Item_Used,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
             playerDeath.setString(1, serverName);
             playerDeath.setString(2, worldname);
             playerDeath.setString(3, playername);
             playerDeath.setDouble(4, x);
             playerDeath.setDouble(5, y);
             playerDeath.setDouble(6, z);
-            playerDeath.setBoolean(7, staff);
+            playerDeath.setString(7, cause);
+            playerDeath.setString(8, who);
+            playerDeath.setString(9, itemUsed);
+            playerDeath.setBoolean(10, staff);
             playerDeath.executeUpdate();
 
         } catch (SQLException e){
@@ -455,15 +468,21 @@ public class MySQLData {
         }
     }
 
-    public static void itemDrop(String serverName, String world, String playername, String item, boolean staff){
+    public static void itemDrop(String serverName, String world, String playername, String item, int amount, int x, int y, int z, String enchantment, String changedName, boolean staff){
         try {
             String database = "Item_Drop";
-            PreparedStatement itemDrop = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Item,Is_Staff) VALUES(?,?,?,?,?)");
+            PreparedStatement itemDrop = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Item,Amount,X,Y,Z,Enchantment,Changed_Name,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
             itemDrop.setString(1, serverName);
             itemDrop.setString(2, world);
             itemDrop.setString(3, playername);
             itemDrop.setString(4, item);
-            itemDrop.setBoolean(5, staff);
+            itemDrop.setInt(5, amount);
+            itemDrop.setInt(6, x);
+            itemDrop.setInt(7, y);
+            itemDrop.setInt(8, z);
+            itemDrop.setString(9, enchantment);
+            itemDrop.setString(10, changedName);
+            itemDrop.setBoolean(11, staff);
             itemDrop.executeUpdate();
 
         } catch (SQLException e){
@@ -540,6 +559,51 @@ public class MySQLData {
         }
     }
 
+    public static void itemPickup(String serverName, String world, String playername, Material item, int amount, double x, double y, double z, String changedName, boolean staff){
+        try {
+            String database = "Item_Pickup";
+            PreparedStatement itemPickup = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Item,Amount,X,Y,Z,Changed_Name,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
+            itemPickup.setString(1, serverName);
+            itemPickup.setString(2, world);
+            itemPickup.setString(3, playername);
+            itemPickup.setString(4, String.valueOf(item));
+            itemPickup.setInt(5, amount);
+            itemPickup.setDouble(6, x);
+            itemPickup.setDouble(7, y);
+            itemPickup.setDouble(8, z);
+            itemPickup.setString(9, changedName);
+            itemPickup.setBoolean(10, staff);
+            itemPickup.executeUpdate();
+
+        } catch (SQLException e){
+
+            e.printStackTrace();
+
+        }
+    }
+
+    public static void furnace(String serverName, String world, String playername, Material item, int amount, double x, double y, double z, boolean staff){
+        try {
+            String database = "Furnace";
+            PreparedStatement furnace = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Item,Amount,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?)");
+            furnace.setString(1, serverName);
+            furnace.setString(2, world);
+            furnace.setString(3, playername);
+            furnace.setString(4, String.valueOf(item));
+            furnace.setInt(5, amount);
+            furnace.setDouble(6, x);
+            furnace.setDouble(7, y);
+            furnace.setDouble(8, z);
+            furnace.setBoolean(9, staff);
+            furnace.executeUpdate();
+
+        } catch (SQLException e){
+
+            e.printStackTrace();
+
+        }
+    }
+
     public void emptyTable(){
 
         int when = plugin.getConfig().getInt("MySQL.Data-Deletion");
@@ -599,6 +663,10 @@ public class MySQLData {
                 afk.executeUpdate();
             }
 
+            PreparedStatement item_pickup = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Item_Pickup WHERE DATE < NOW() - INTERVAL " + when + " DAY");
+
+            PreparedStatement furnace = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Furnace WHERE DATE < NOW() - INTERVAL " + when + " DAY");
+
             player_Chat.executeUpdate();
             player_Commands.executeUpdate();
             console_Commands.executeUpdate();
@@ -621,6 +689,8 @@ public class MySQLData {
             item_Drop.executeUpdate();
             enchanting.executeUpdate();
             book_Editing.executeUpdate();
+            item_pickup.executeUpdate();
+            furnace.executeUpdate();
 
         }catch (SQLException e){
 

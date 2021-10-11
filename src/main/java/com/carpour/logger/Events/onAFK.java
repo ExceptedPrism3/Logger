@@ -44,11 +44,12 @@ public class onAFK implements Listener {
 
             if (main.getConfig().getBoolean("Log.AFK")) {
 
+                //Log To Files Handling
                 if (main.getConfig().getBoolean("Log-to-Files")) {
 
                     if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                        Discord.staffChat(player, "\uD83D\uDCA4 **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false);
+                        Discord.staffChat(player, "\uD83D\uDCA4 **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = **" + x + "** Y = **" + y + "** Z = **" + z + "**", false);
 
                         try {
 
@@ -93,17 +94,18 @@ public class onAFK implements Listener {
                     }
                 }
 
-
+                //Discord
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, "\uD83D\uDCA4 **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false);
+                    Discord.staffChat(player, "\uD83D\uDCA4 **|** \uD83D\uDC6E\u200D♂ [" + worldName + "]" + " X = **" + x + "** Y = **" + y + "** Z = **" + z + "**", false);
 
                 } else {
 
-                    Discord.afk(player, "\uD83D\uDCA4 [" + worldName + "]" + " X = " + x + " Y = " + y + " Z = " + z, false);
+                    Discord.afk(player, "\uD83D\uDCA4 [" + worldName + "]" + " X = **" + x + "** Y = **" + y + "** Z = **" + z + "**", false);
 
                 }
 
+                //MySQL
                 if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.AFK")) && (main.mySQL.isConnected())) {
 
                     try {
@@ -117,6 +119,7 @@ public class onAFK implements Listener {
                     }
                 }
 
+                //SQLite
                 if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.AFK") && main.getSqLite().isConnected()) {
 
                     try {

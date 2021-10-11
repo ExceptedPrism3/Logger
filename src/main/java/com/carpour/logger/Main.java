@@ -5,6 +5,7 @@ import com.carpour.logger.Discord.DiscordFile;
 import com.carpour.logger.Events.*;
 import com.carpour.logger.Database.MySQL.*;
 import com.carpour.logger.Events.onCommands.onCommand;
+import com.carpour.logger.Events.onInventories.onFurnace;
 import com.carpour.logger.Utils.*;
 import com.carpour.logger.Database.SQLite.SQLite;
 import com.carpour.logger.Database.SQLite.SQLiteData;
@@ -37,13 +38,9 @@ public class Main extends JavaPlugin {
 
     public Discord discord;
 
-    public SQLite getSqLite() {
-        return sqLite;
-    }
+    public SQLite getSqLite() { return sqLite; }
 
-    public SQLiteData getSqLiteData() {
-        return sqLiteData;
-    }
+    public SQLiteData getSqLiteData() { return sqLiteData; }
 
     @Override
     public void onEnable() {
@@ -52,7 +49,6 @@ public class Main extends JavaPlugin {
 
         saveDefaultConfig();
         getConfig().options().copyDefaults();
-
 
         DiscordFile.Setup();
         DiscordFile.values();
@@ -110,6 +106,12 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new onItemDrop(), this);
         getServer().getPluginManager().registerEvents(new onEnchant(), this);
         getServer().getPluginManager().registerEvents(new onBook(), this);
+
+        getServer().getPluginManager().registerEvents(new onFurnace(), this);
+//        getServer().getPluginManager().registerEvents(new onShulker(), this);
+//        getServer().getPluginManager().registerEvents(new onChest(), this);
+
+        getServer().getPluginManager().registerEvents(new onItemPickup(), this);
 
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new TPS(), 200L, getConfig().getInt("RAM-TPS-Checker"));
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new RAM(), 200L, getConfig().getInt("RAM-TPS-Checker"));
