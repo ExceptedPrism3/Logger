@@ -1,9 +1,10 @@
 package com.carpour.logger;
 
+import com.carpour.logger.Database.MySQL.MySQL;
+import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Discord.DiscordFile;
 import com.carpour.logger.Events.*;
-import com.carpour.logger.Database.MySQL.*;
 import com.carpour.logger.Events.onCommands.onCommand;
 import com.carpour.logger.Events.onInventories.onFurnace;
 import com.carpour.logger.Utils.*;

@@ -1,0 +1,5 @@
+name: Logger-BungeeCord
+version: '${project.version}'
+main: com.carpour.loggerbungeecord.Main
+description: Log all Activities from Players or Server Side!
+author: Prism3
