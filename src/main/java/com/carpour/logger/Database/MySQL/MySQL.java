@@ -31,11 +31,11 @@ public class MySQL {
 
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?AllowPublicKeyRetrieval=true?useSSL=false&jdbcCompliantTruncation=false", username, password);
-                    Bukkit.getConsoleSender().sendMessage("[Logger] " + ChatColor.GREEN + "MySQL Connection has been established!");
+                    Bukkit.getLogger().info("[Logger] " + ChatColor.GREEN + "MySQL Connection has been established!");
 
                 } catch (SQLException | ClassNotFoundException e) {
 
-                    Bukkit.getConsoleSender().sendMessage("[Logger] " + ChatColor.RED + "Could not connect to the Database!");
+                    Bukkit.getLogger().warning("[Logger] " + ChatColor.RED + "Could not connect to the MySQL Database!");
 
                 }
             }
