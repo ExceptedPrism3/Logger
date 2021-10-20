@@ -20,14 +20,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="Logger" />
-    <orderEntry type="module" module-name="Logger-Bungeecord" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: commons-lang:commons-lang:2.6" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.guava:guava:21.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.code.gson:gson:2.8.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: net.md-5:bungeecord-chat:1.16-R0.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.yaml:snakeyaml:1.28" level="project" />
+    <orderEntry type="module" module-name="Logger-Spigot" />
     <orderEntry type="library" name="Maven: net.dv8tion:JDA:4.2.1_253" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:16.0.1" level="project" />
@@ -42,16 +35,6 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.fasterxml.jackson.core:jackson-core:2.10.1" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.26" level="project" />
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.11.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: net.essentialsx:EssentialsX:2.19.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: io.papermc:paperlib:1.0.6" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: net.essentialsx:BaseProviders:2.19.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: net.essentialsx:PaperProvider:2.19.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: net.essentialsx:NMSReflectionProvider:2.19.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: net.essentialsx:1_8Provider:2.19.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.spongepowered:configurate-yaml:4.1.2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.spongepowered:configurate-core:4.1.2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: io.leangen.geantyref:geantyref:1.3.11" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.errorprone:error_prone_annotations:2.6.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.checkerframework:checker-qual:3.14.0" level="project" />
+    <orderEntry type="module" module-name="Logger-Bungeecord" />
   </component>
 </module>
