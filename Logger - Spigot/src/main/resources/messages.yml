@@ -1,0 +1,14 @@
+# Messages for Logger Plugin
+
+# Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
+
+
+# Plugin Messages
+General:
+  No-Permission: "&cYou do not have permission to run this command."
+  Reload: "&aConfigs Reloaded."
+
+# Files Instance
+Files:
+  Player-Chat-Staff: "[%time%] [%world%] The Staff <%player%> has said => %msg%"
+  Player-Chat: ""
