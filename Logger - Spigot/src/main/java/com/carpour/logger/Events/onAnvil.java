@@ -83,13 +83,13 @@ private final Main main = Main.getInstance();
 
                                             }
 
-                                            if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Anvil") && main.mySQL.isConnected()) {
+                                            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                                                 MySQLData.anvil(serverName, playerName, displayName, true);
 
                                             }
 
-                                            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Anvil") && main.getSqLite().isConnected()) {
+                                            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                                                 SQLiteData.insertAnvil(serverName, player, displayName, true);
 
@@ -124,7 +124,7 @@ private final Main main = Main.getInstance();
                                     }
 
                                     //MySQL
-                                    if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Anvil") && main.mySQL.isConnected()) {
+                                    if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                                         try {
 
@@ -138,7 +138,7 @@ private final Main main = Main.getInstance();
                                     }
 
                                     //SQLite
-                                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Anvil") && main.getSqLite().isConnected()) {
+                                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                                         try {
 

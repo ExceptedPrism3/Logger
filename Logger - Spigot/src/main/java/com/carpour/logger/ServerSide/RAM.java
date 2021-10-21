@@ -33,12 +33,12 @@ public class RAM implements Runnable {
 
         }
 
-        if (main.getConfig().getBoolean("Log.RAM")) {
+        if (main.getConfig().getInt("RAM.Percent") <= percentUsed) {
 
-            //Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (main.getConfig().getBoolean("Log.RAM")) {
 
-                if (main.getConfig().getInt("RAM.Percent") <= percentUsed) {
+                //Log To Files Handling
+                if (main.getConfig().getBoolean("Log-to-Files")) {
 
                     try {
 
@@ -54,37 +54,36 @@ public class RAM implements Runnable {
 
                     }
                 }
-            }
 
-            //Discord
-            Discord.RAM("⚠️ The server has **exceeded** the set amount of percentage of RAM Usage! Total Memory: **" + maxMemory + "** | Used Memory **" + usedMemory + "** | Free Memory **" + freeMemory + "**", false);
+                //Discord
+                Discord.RAM("⚠️ The server has **exceeded** the set amount of percentage of RAM Usage! Total Memory: **" + maxMemory + "** | Used Memory **" + usedMemory + "** | Free Memory **" + freeMemory + "**", false);
 
-            //MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.RAM") && main.mySQL.isConnected()) {
+                //MySQL
+                if (main.getConfig().getBoolean("MySQL.Enable")  && main.mySQL.isConnected()) {
 
-                try {
+                    try {
 
-                    MySQLData.RAM(serverName, maxMemory, usedMemory, freeMemory);
+                        MySQLData.RAM(serverName, maxMemory, usedMemory, freeMemory);
 
-                } catch (Exception e) {
+                    } catch (Exception e) {
 
-                    e.printStackTrace();
+                        e.printStackTrace();
 
+                    }
                 }
-            }
 
-            //SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.RAM")
-                    && main.getSqLite().isConnected()) {
+                //SQLite
+                if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
-                try {
+                    try {
 
-                    SQLiteData.insertRAM(serverName, maxMemory, usedMemory, freeMemory);
+                        SQLiteData.insertRAM(serverName, maxMemory, usedMemory, freeMemory);
 
-                } catch (Exception exception) {
+                    } catch (Exception exception) {
 
-                    exception.printStackTrace();
+                        exception.printStackTrace();
 
+                    }
                 }
             }
         }

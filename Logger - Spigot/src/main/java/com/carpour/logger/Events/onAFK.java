@@ -64,13 +64,13 @@ public class onAFK implements Listener {
 
                         }
 
-                        if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.AFK")) && (main.mySQL.isConnected())) {
+                        if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                             MySQLData.afk(serverName, worldName, playerName, x, y, z, true);
 
                         }
 
-                        if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.AFK") && main.getSqLite().isConnected()) {
+                        if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                             SQLiteData.insertAFK(serverName, player, true);
 
@@ -106,7 +106,7 @@ public class onAFK implements Listener {
                 }
 
                 //MySQL
-                if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.AFK")) && (main.mySQL.isConnected())) {
+                if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                     try {
 
@@ -120,7 +120,7 @@ public class onAFK implements Listener {
                 }
 
                 //SQLite
-                if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.AFK") && main.getSqLite().isConnected()) {
+                if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                     try {
 

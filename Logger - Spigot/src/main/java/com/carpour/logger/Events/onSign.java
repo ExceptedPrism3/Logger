@@ -63,13 +63,13 @@ public class onSign implements Listener {
 
                     }
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Sign-Text")) && (main.mySQL.isConnected())) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                         MySQLData.playerSignText(serverName, worldName, x, y, z, playerName, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", true);
 
                     }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Sign-Text") && main.getSqLite().isConnected()) {
+                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                         SQLiteData.insertPlayerSignText(serverName, player, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", true);
 
@@ -105,7 +105,7 @@ public class onSign implements Listener {
             }
 
             //MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Sign-Text")) && (main.mySQL.isConnected())) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                 try {
 
@@ -119,7 +119,7 @@ public class onSign implements Listener {
             }
 
             //SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Sign-Text") && main.getSqLite().isConnected()) {
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                 try {
 

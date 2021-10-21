@@ -483,7 +483,7 @@ public class SQLiteData {
         }
     }
 
-    public static void insertItemDrop(String serverName, Player player, String item, int amount, int x, int y, int z, String enchantment, String changedName, boolean isStaff) {
+    public static void insertItemDrop(String serverName, Player player, String item, int amount, int x, int y, int z, List<String> enchantment, String changedName, boolean isStaff) {
         try {
             PreparedStatement itemDropStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Item_Drop(Server_Name, Date, World, Player_Name, Item, Amount, X, Y, Z, Enchantment, Changed_Name, Is_Staff) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
             itemDropStatement.setString(1, serverName);
@@ -495,7 +495,7 @@ public class SQLiteData {
             itemDropStatement.setInt(7, x);
             itemDropStatement.setInt(8, y);
             itemDropStatement.setInt(9, z);
-            itemDropStatement.setString(10, enchantment);
+            itemDropStatement.setString(10, String.valueOf(enchantment));
             itemDropStatement.setString(11, changedName);
             itemDropStatement.setBoolean(12, isStaff);
 
@@ -505,7 +505,7 @@ public class SQLiteData {
         }
     }
 
-    public static void insertEnchant(String serverName, Player player, String enchantment, String item, int cost, boolean isStaff) {
+    public static void insertEnchant(String serverName, Player player, List<String> enchantment, String item, int cost, boolean isStaff) {
         try {
             PreparedStatement enchantStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Enchanting(Server_Name, Date, World, Player_Name, X, Y, Z, Enchantment, Item, Cost, Is_Staff) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
             enchantStatement.setString(1, serverName);
@@ -515,7 +515,7 @@ public class SQLiteData {
             enchantStatement.setInt(5, player.getLocation().getBlockX());
             enchantStatement.setInt(6, player.getLocation().getBlockY());
             enchantStatement.setInt(7, player.getLocation().getBlockZ());
-            enchantStatement.setString(8, enchantment);
+            enchantStatement.setString(8, String.valueOf(enchantment));
             enchantStatement.setString(9, item);
             enchantStatement.setInt(10, cost);
             enchantStatement.setBoolean(11, isStaff);

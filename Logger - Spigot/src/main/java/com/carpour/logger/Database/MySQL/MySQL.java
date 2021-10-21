@@ -21,23 +21,20 @@ public class MySQL {
 
     public boolean isConnected(){ return connection != null; }
 
-    public void connect(){
+    public void connect() {
 
-        if (main.getConfig().getBoolean("MySQL.Enable")) {
+        if (!isConnected()) {
 
-            if (!isConnected()) {
+            try {
 
-                try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?AllowPublicKeyRetrieval=true?useSSL=false&jdbcCompliantTruncation=false", username, password);
+                Bukkit.getConsoleSender().sendMessage("[Logger] " + ChatColor.GREEN + "MySQL Connection has been established!");
 
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?AllowPublicKeyRetrieval=true?useSSL=false&jdbcCompliantTruncation=false", username, password);
-                    Bukkit.getConsoleSender().sendMessage("[Logger] " + ChatColor.GREEN + "MySQL Connection has been established!");
+            } catch (SQLException | ClassNotFoundException e) {
 
-                } catch (SQLException | ClassNotFoundException e) {
+                Bukkit.getConsoleSender().sendMessage("[Logger] " + ChatColor.RED + "Could not connect to the Database!");
 
-                    Bukkit.getConsoleSender().sendMessage("[Logger] " + ChatColor.RED + "Could not connect to the Database!");
-
-                }
             }
         }
     }

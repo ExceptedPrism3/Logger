@@ -3,6 +3,7 @@ package com.carpour.logger.Commands.onCommands;
 import com.carpour.logger.Discord.DiscordFile;
 import com.carpour.logger.Main;
 import com.carpour.logger.Commands.SubCommands;
+import com.carpour.logger.Utils.Messages;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
@@ -33,11 +34,11 @@ public class Reload extends SubCommands {
 
             main.reloadConfig();
             DiscordFile.reload();
-            player.sendMessage(Objects.requireNonNull(main.getConfig().getString("Messages.Reload-Message")).replaceAll("&", "§"));
+            player.sendMessage(Objects.requireNonNull(Messages.get().getString("General.Reload")).replaceAll("&", "§"));
 
         } else {
 
-            player.sendMessage(Objects.requireNonNull(main.getConfig().getString("Messages.No-Permission")).replaceAll("&", "§"));
+            player.sendMessage(Objects.requireNonNull(Messages.get().getString("General.No-Permission")).replaceAll("&", "§"));
 
         }
     }

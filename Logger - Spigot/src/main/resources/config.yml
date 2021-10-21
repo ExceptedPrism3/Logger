@@ -119,7 +119,3 @@ MySQL:
 SQLite:
   Enable: false
   Data-Deletion: 7
-
-Messages:
-  No-Permission: "&cYou do not have permission to run this command."
-  Reload-Message: "&aConfigs Reloaded."

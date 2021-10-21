@@ -52,8 +52,7 @@ public class Console implements Listener {
             Discord.console("\uD83D\uDC7E " + msg, false);
 
             //MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Console-Commands")
-                    && main.mySQL.isConnected()) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                 try {
 
@@ -67,8 +66,7 @@ public class Console implements Listener {
             }
 
             //SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Console-Commands")
-                    && main.getSqLite().isConnected()) {
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                 try {
 

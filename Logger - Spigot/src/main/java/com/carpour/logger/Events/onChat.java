@@ -5,6 +5,7 @@ import com.carpour.logger.Main;
 import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.Database.SQLite.SQLiteData;
+import com.carpour.logger.Utils.Messages;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class onChat implements Listener {
 
@@ -49,7 +51,7 @@ public class onChat implements Listener {
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                        out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Staff <" + playerName + "> has said => " + msg + "\n");
+                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Player-Chat-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%msg%", msg) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -59,14 +61,14 @@ public class onChat implements Listener {
 
                     }
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Chat") && main.mySQL.isConnected()) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
 
                         MySQLData.playerChat(serverName, worldName, playerName, msg, true);
 
                     }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Chat") && main.getSqLite().isConnected()) {
+                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                         SQLiteData.insertPlayerChat(serverName, player, msg, true);
 
@@ -101,8 +103,7 @@ public class onChat implements Listener {
             }
 
             //MySQL Handling
-            if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Chat"))
-                    && (main.mySQL.isConnected())) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                 try {
 
@@ -116,8 +117,7 @@ public class onChat implements Listener {
             }
 
             //SQLite Handling
-            if (main.getConfig().getBoolean("SQLite.Enable") && (main.getConfig().getBoolean("Log.Player-Chat"))
-                    && (main.getSqLite().isConnected())) {
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                 try {
 

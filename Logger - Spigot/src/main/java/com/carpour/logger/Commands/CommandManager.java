@@ -4,6 +4,7 @@ import com.carpour.logger.Commands.onCommands.Credits;
 import com.carpour.logger.Commands.onCommands.Reload;
 import com.carpour.logger.Discord.DiscordFile;
 import com.carpour.logger.Main;
+import com.carpour.logger.Utils.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -68,7 +69,7 @@ public class CommandManager implements TabExecutor {
 
             main.reloadConfig();
             DiscordFile.reload();
-            sender.sendMessage(Objects.requireNonNull(main.getConfig().getString("Messages.Reload-Message")).replaceAll("&", "§"));
+            sender.sendMessage(Objects.requireNonNull(Messages.get().getString("General.Reload")).replaceAll("&", "§"));
 
         }
 

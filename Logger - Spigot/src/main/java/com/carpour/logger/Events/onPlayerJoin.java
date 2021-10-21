@@ -74,14 +74,14 @@ public class onPlayerJoin implements Listener {
 
                     }
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Join") && main.mySQL.isConnected()) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                         assert ip != null;
                         MySQLData.playerJoin(serverName, worldName, playerName, x, y, z, ip, true);
 
                     }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Join") && main.getSqLite().isConnected()) {
+                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                         SQLiteData.insertPlayerJoin(serverName, player, true);
 
@@ -117,7 +117,7 @@ public class onPlayerJoin implements Listener {
             }
 
             //MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Join")) && (main.mySQL.isConnected())) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                 try {
 
@@ -131,7 +131,7 @@ public class onPlayerJoin implements Listener {
             }
 
             //SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Join") && main.getSqLite().isConnected()) {
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                 try {
 

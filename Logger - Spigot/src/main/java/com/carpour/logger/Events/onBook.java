@@ -42,8 +42,7 @@ public class onBook implements Listener {
         if (!event.isSigning()) signature = "no one";
 
         //Log To Files Handling
-        if (!event.isCancelled()
-                && main.getConfig().getBoolean("Log.Book-Editing")) {
+        if (!event.isCancelled() && main.getConfig().getBoolean("Log.Book-Editing")) {
 
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
@@ -64,13 +63,12 @@ public class onBook implements Listener {
 
                     }
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Chat") && main.mySQL.isConnected()) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                         MySQLData.bookEditing(serverName, worldName, playerName, pageCount, pageContent, signature, true);
 
                     }
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Book-Editing")
-                            && main.getSqLite().isConnected()) {
+                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                         SQLiteData.insertBook(serverName, worldName, player, pageCount, pageContent, signature, true);
 
@@ -105,8 +103,7 @@ public class onBook implements Listener {
             }
 
             //MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Book-Editing"))
-                    && (main.mySQL.isConnected())) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                 try {
 
@@ -120,8 +117,7 @@ public class onBook implements Listener {
             }
 
             //SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && (main.getConfig().getBoolean("Log.Book-Editing"))
-                    && (main.getSqLite().isConnected())) {
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                 try {
 

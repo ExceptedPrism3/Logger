@@ -53,7 +53,7 @@ public class PortalCreation implements Listener {
             Discord.portalCreation("\uD83D\uDEAA A portal has been created in **" + worldName + "** using **" + reason + "**", false);
 
             //MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Portal-Creation") && main.mySQL.isConnected()) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                 try {
 
@@ -67,7 +67,7 @@ public class PortalCreation implements Listener {
             }
 
             //SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Portal-Creation") && main.getSqLite().isConnected()) {
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                 try {
 

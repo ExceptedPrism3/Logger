@@ -62,14 +62,14 @@ public class onFurnace implements Listener {
 
                     }
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Furnace") && main.mySQL.isConnected()) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
 
                         MySQLData.furnace(serverName, worldName, playerName, item, amount, blockX, blockY, blockZ, true);
 
                     }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Furnace") && main.getSqLite().isConnected()) {
+                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                         SQLiteData.insertFurnace(serverName, player, item, amount, blockX, blockY, blockZ, true);
 
@@ -104,8 +104,7 @@ public class onFurnace implements Listener {
             }
 
             //MySQL Handling
-            if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Furnace"))
-                    && (main.mySQL.isConnected())) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                 try {
 
@@ -119,8 +118,7 @@ public class onFurnace implements Listener {
             }
 
             //SQLite Handling
-            if (main.getConfig().getBoolean("SQLite.Enable") && (main.getConfig().getBoolean("Log.Furnace"))
-                    && (main.getSqLite().isConnected())) {
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                 try {
 

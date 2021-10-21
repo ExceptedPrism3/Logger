@@ -22,9 +22,8 @@ public class SQLite {
 
     public void connect() {
 
-        if (!main.getConfig().getBoolean("SQLite.Enable")) return;
-
         if (!isConnected()) {
+
             try {
 
                 Class.forName("org.sqlite.JDBC");

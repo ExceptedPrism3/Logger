@@ -468,7 +468,7 @@ public class MySQLData {
         }
     }
 
-    public static void itemDrop(String serverName, String world, String playername, String item, int amount, int x, int y, int z, String enchantment, String changedName, boolean staff){
+    public static void itemDrop(String serverName, String world, String playername, String item, int amount, int x, int y, int z, List<String> enchantment, String changedName, boolean staff){
         try {
             String database = "Item_Drop";
             PreparedStatement itemDrop = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Item,Amount,X,Y,Z,Enchantment,Changed_Name,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
@@ -480,7 +480,7 @@ public class MySQLData {
             itemDrop.setInt(6, x);
             itemDrop.setInt(7, y);
             itemDrop.setInt(8, z);
-            itemDrop.setString(9, enchantment);
+            itemDrop.setString(9, String.valueOf(enchantment));
             itemDrop.setString(10, changedName);
             itemDrop.setBoolean(11, staff);
             itemDrop.executeUpdate();
@@ -492,7 +492,7 @@ public class MySQLData {
         }
     }
 
-    public static void enchant(String serverName, String world, String playername, double x, double y, double z, String enchantment, String item, int cost ,boolean staff){
+    public static void enchant(String serverName, String world, String playername, double x, double y, double z, List<String> enchantment, String item, int cost ,boolean staff){
         try {
             String database = "Enchanting";
             PreparedStatement enchanting = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Enchantment,Item,Cost,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
@@ -502,7 +502,7 @@ public class MySQLData {
             enchanting.setDouble(4, x);
             enchanting.setDouble(5, y);
             enchanting.setDouble(6, z);
-            enchanting.setString(7, enchantment);
+            enchanting.setString(7, String.valueOf(enchantment));
             enchanting.setString(8, item);
             enchanting.setInt(9, cost);
             enchanting.setBoolean(10, staff);

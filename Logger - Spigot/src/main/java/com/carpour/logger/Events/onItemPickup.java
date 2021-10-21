@@ -72,13 +72,13 @@ public class onItemPickup implements Listener {
 
                             }
 
-                            if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Item-Pickup") && main.mySQL.isConnected()) {
+                            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                                 MySQLData.itemPickup(serverName, worldName, playerName, item, amount, blockX, blockY, blockZ, itemName, true);
 
                             }
 
-                            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Item-Pickup") && main.getSqLite().isConnected()) {
+                            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                                 SQLiteData.insertItemPickup(serverName, player, item, blockX, amount, blockY, blockZ, itemName, true);
 
@@ -114,7 +114,7 @@ public class onItemPickup implements Listener {
                     }
 
                     //MySQL
-                    if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Item-Pickup") && main.mySQL.isConnected()) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                         try {
 
@@ -128,7 +128,7 @@ public class onItemPickup implements Listener {
                     }
 
                     //SQLite
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Item-Pickup") && main.getSqLite().isConnected()) {
+                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                         try {
 

@@ -76,15 +76,14 @@ public class onPlayerDeath implements Listener {
 
                     }
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Death") && main.mySQL.isConnected()) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
 
                         MySQLData.playerDeath(serverName, worldName, playerName, x, y, z, cause, killer, itemInUse, true);
 
                     }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Death")
-                            && main.getSqLite().isConnected()) {
+                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                         SQLiteData.insertPlayerDeath(serverName, player, cause, killer, itemInUse, true);
 
@@ -120,8 +119,7 @@ public class onPlayerDeath implements Listener {
             }
 
             //MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Death"))
-                    && (main.mySQL.isConnected())) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && (main.mySQL.isConnected())) {
 
                 try {
 
@@ -135,8 +133,7 @@ public class onPlayerDeath implements Listener {
             }
 
             //SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Death")
-                    && main.getSqLite().isConnected()) {
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                 try {
 

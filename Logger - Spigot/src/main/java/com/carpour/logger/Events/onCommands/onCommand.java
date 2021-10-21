@@ -93,13 +93,13 @@ public class onCommand implements Listener {
 
                     }
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && (main.getConfig().getBoolean("Log.Player-Commands")) && (main.mySQL.isConnected())) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                         MySQLData.playerCommands(serverName, worldName, playerName, message, true);
 
                     }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Commands") && main.getSqLite().isConnected()) {
+                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                         SQLiteData.insertPlayerCommands(serverName, player, message, true);
 
@@ -135,7 +135,7 @@ public class onCommand implements Listener {
             }
 
             //Logging to MySQL if logging to MySQL and Command Logging is enabled
-            if (main.getConfig().getBoolean("MySQL.Enable") && main.getConfig().getBoolean("Log.Player-Commands") && main.mySQL.isConnected()) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                 try {
 
@@ -149,7 +149,7 @@ public class onCommand implements Listener {
             }
 
             //Logging to SQLite if logging to SQLite and Command Logging is enabled
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getConfig().getBoolean("Log.Player-Commands") && main.getSqLite().isConnected()) {
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                 try {
 
