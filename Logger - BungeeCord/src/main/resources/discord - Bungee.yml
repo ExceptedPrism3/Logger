@@ -1,0 +1,22 @@
+# Discord Bridge Configuration for Logger Plugin [ Proxy Version ]
+#
+# Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
+
+
+Discord:
+  Enable: false
+  Bot-Token: BOT_KEY
+  Staff:
+    Channel-ID: 'LINK_HERE'
+  Player-Chat:
+    Channel-ID: 'LINK_HERE'
+  Player-Login:
+    Channel-ID: 'LINK_HERE'
+  Player-Leave:
+    Channel-ID: 'LINK_HERE'
+  Server-Restart:
+    Channel-ID: 'LINK_HERE'
+  Server-Start:
+    Channel-ID: 'LINK_HERE'
+  Server-Stop:
+    Channel-ID: 'LINK_HERE'

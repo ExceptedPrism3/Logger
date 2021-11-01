@@ -5,6 +5,7 @@ import com.carpour.logger.Main;
 import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.Database.SQLite.SQLiteData;
+import com.carpour.logger.Utils.Messages;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class Start {
 
@@ -31,7 +33,7 @@ public class Start {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getserverStartFile(), true));
-                    out.write("[" + dateFormat.format(date) + "]" + "\n");
+                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Server-Start")).replaceAll("%time%", dateFormat.format(date)) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -43,7 +45,7 @@ public class Start {
             }
 
             //Discord
-            Discord.serverStart("\uD83D\uDFE2 **" + dateFormat.format(date) + "**", false);
+            Discord.serverStart(Objects.requireNonNull(Messages.get().getString("Discord.Server-Start")).replaceAll("%time%", dateFormat.format(date)), false);
 
             //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {

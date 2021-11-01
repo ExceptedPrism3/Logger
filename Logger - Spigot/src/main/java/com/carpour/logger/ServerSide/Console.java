@@ -5,6 +5,7 @@ import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Database.SQLite.SQLiteData;
+import com.carpour.logger.Utils.Messages;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class Console implements Listener {
 
@@ -37,7 +39,7 @@ public class Console implements Listener {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getConsoleLogFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + msg + "\n");
+                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Console-Commands")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%message%", msg) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -49,7 +51,7 @@ public class Console implements Listener {
             }
 
             //Discord
-            Discord.console("\uD83D\uDC7E " + msg, false);
+            Discord.console(Objects.requireNonNull(Messages.get().getString("Discord.Console-Commands")).replaceAll("%message%", msg), false);
 
             //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {

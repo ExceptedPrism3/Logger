@@ -5,6 +5,7 @@ import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Database.SQLite.SQLiteData;
+import com.carpour.logger.Utils.Messages;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class TPS implements Runnable {
 
@@ -54,69 +56,73 @@ public class TPS implements Runnable {
             //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
+                try {
 
-                    try {
-
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
-                        out.write("[" + dateFormat.format(date) + "] The TPS has dropped to " + getTPS() + "\n");
-                        out.close();
-
-                    } catch (IOException e) {
-
-                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-
-                    }
-
-                } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
-
-                    try {
+                    if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
-                        out.write("[" + dateFormat.format(date) + "] WARNING! The TPS has dropped to " + getTPS() + "\n");
+                        out.write(Objects.requireNonNull(Messages.get().getString("Files.TPS-Medium")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%TPS%", String.valueOf(getTPS())) + "\n");
                         out.close();
 
-                    } catch (IOException e) {
+                    } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
 
-                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
+                        out.write(Objects.requireNonNull(Messages.get().getString("Files.TPS-Critical")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%TPS%", String.valueOf(getTPS())) + "\n");
+                        out.close();
 
                     }
+
+                } catch (IOException e) {
+
+                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
 
                 }
-            }
 
-            //Discord
-            if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
-
-                Discord.TPS("The TPS has dropped to " + getTPS(), false);
-
-            } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
-
-                Discord.TPS("⚠️ WARNING! The TPS has dropped to " + getTPS(), false);
-            }
-
-            //MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
-
+                //Discord
                 if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
 
-                    try {
-
-                        MySQLData.TPS(serverName, getTPS());
-
-                    } catch (Exception e) {
-
-                        e.printStackTrace();
-
-                    }
+                    Discord.TPS(Objects.requireNonNull(Messages.get().getString("Discord.TPS-Medium")).replaceAll("%TPS%", String.valueOf(getTPS())), false);
 
                 } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
 
+                    Discord.TPS(Objects.requireNonNull(Messages.get().getString("Discord.TPS-Critical")).replaceAll("%TPS%", String.valueOf(getTPS())), false);
+                }
+
+                //MySQL
+                if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+
                     try {
 
-                        MySQLData.TPS(serverName, getTPS());
+                        if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
+
+                            MySQLData.TPS(serverName, getTPS());
+
+                        } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
+
+                            MySQLData.TPS(serverName, getTPS());
+                        }
+
+                    } catch (Exception e) {
+
+                        e.printStackTrace();
+
+                    }
+                }
+
+                //SQLite
+                if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+
+                    try {
+
+                        if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
+
+                            SQLiteData.insertTPS(serverName, getTPS());
+
+                        } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
+
+                            SQLiteData.insertTPS(serverName, getTPS());
+                        }
 
                     } catch (Exception e) {
 
@@ -126,34 +132,6 @@ public class TPS implements Runnable {
                 }
             }
 
-            //SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
-
-                if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
-
-                    try {
-
-                        SQLiteData.insertTPS(serverName, getTPS());
-
-                    } catch (Exception e) {
-
-                        e.printStackTrace();
-
-                    }
-
-                } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
-
-                    try {
-
-                        SQLiteData.insertTPS(serverName, getTPS());
-
-                    } catch (Exception e) {
-
-                        e.printStackTrace();
-
-                    }
-                }
-            }
         }
     }
 }

@@ -331,7 +331,7 @@ public class FileHandler {
 
     public void deleteFile(File file) {
 
-        if (main.getConfig().getInt("File-Deletion") < 0 ){ return; }
+        if (main.getConfig().getInt("File-Deletion") <= 0 ){ return; }
 
         FileTime creationTime = null;
 
@@ -358,7 +358,7 @@ public class FileHandler {
 
     public void deleteFiles(){
 
-        if (main.getConfig().getInt("File-Deletion") < 0 ){ return; }
+        if (main.getConfig().getInt("File-Deletion") <= 0 ){ return; }
 
         for (File chatLog : Objects.requireNonNull(chatLogFolder.listFiles()))
         {

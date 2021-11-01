@@ -91,9 +91,9 @@ Player-Commands:
     - /register
   Commands-Spy:
     Enable: false
-    Message: "&8[&6Spy&8] &7%player% >> %cmd%"
+    Message: "&8[&bLogger &8&l| &eSpy&8] &7%player% >> %cmd%"
 
-# Disable this if you want to hide Player's IPs
+# Disable to hide Player's IPs
 Player-Join:
   Player-IP: true
 

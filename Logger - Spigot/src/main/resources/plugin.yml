@@ -3,20 +3,18 @@ version: ${project.version}
 main: com.carpour.logger.Main
 api-version: 1.13
 authors: [ Prism3 , thelooter ]
-description: Log all Activities from Players or Server Side!
+description: Log all Activities from Players and Server Side!
 softdepend: [Essentials]
 commands:
   logger:
     description: Plugin command.
   logger reload:
-    description: Reloads the plugin configs.
+    description: "Reloads the plugin configs."
   logger credits:
-    description: Shows the plugin authors.
-  logger cmdspy:
-    description: Ability to view player's commands.
+    description: "Shows the plugin authors."
 permissions:
   logger.staff:
-    description: Allows the user to view Plugin Updates.
+    description: "Allows the user to view Plugin Updates."
     default: op
     children:
       logger.exempt: true
@@ -24,15 +22,15 @@ permissions:
       logger.cmdspy: true
       logger.update: true
   logger.exempt:
-    description: Prevents the Player from Getting Logged.
+    description: "Prevents the Player from Getting Logged."
     default: op
   logger.reload:
-    description: Allows to Reload the Plugin.
+    description: "Allows to Reload the Plugin."
     default: op
   logger.cmdspy:
-    description: Ability to see other player's Commands.
+    description: "Ability to see other player's Commands."
     default: op
   logger.staff.log:
-    description: Logs Staff Members.
+    description: "Logs Staff Members."
   logger.update:
-    description: Update Message is sent to the Users with this Permission.
+    description: "Update Message is sent to the Users with this Permission."

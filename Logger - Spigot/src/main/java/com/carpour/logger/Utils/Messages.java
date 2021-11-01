@@ -38,7 +38,7 @@ public class Messages {
 
         } catch (IOException e) {
 
-            Bukkit.getLogger().warning(ChatColor.RED + "Could not save the file!");
+            Bukkit.getLogger().warning(ChatColor.RED + "Could not save the messages file!");
             e.printStackTrace();
 
         }

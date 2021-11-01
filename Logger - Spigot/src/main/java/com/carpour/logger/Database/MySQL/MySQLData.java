@@ -139,13 +139,13 @@ public class MySQLData {
     
     }
 
-    public static void playerChat(String serverName, String worldname, String playername, String msg, boolean staff){
+    public static void playerChat(String serverName, String worldName, String playerName, String msg, boolean staff){
         try {
             String database = "Player_Chat";
             PreparedStatement playerChat = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Message,Is_Staff) VALUES(?,?,?,?,?)");
             playerChat.setString(1, serverName);
-            playerChat.setString(2, worldname);
-            playerChat.setString(3, playername);
+            playerChat.setString(2, worldName);
+            playerChat.setString(3, playerName);
             playerChat.setString(4, msg);
             playerChat.setBoolean(5, staff);
             playerChat.executeUpdate();
@@ -155,13 +155,13 @@ public class MySQLData {
         }
     }
 
-    public static void playerCommands(String serverName, String worldname, String playername, String msg, boolean staff){
+    public static void playerCommands(String serverName, String worldName, String playerName, String msg, boolean staff){
         try {
             String database = "Player_Commands";
             PreparedStatement playerCommands = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Command,Is_Staff) VALUES(?,?,?,?,?)");
             playerCommands.setString(1, serverName);
-            playerCommands.setString(2, worldname);
-            playerCommands.setString(3, playername);
+            playerCommands.setString(2, worldName);
+            playerCommands.setString(3, playerName);
             playerCommands.setString(4, msg);
             playerCommands.setBoolean(5, staff);
             playerCommands.executeUpdate();
@@ -184,16 +184,16 @@ public class MySQLData {
         }
     }
 
-    public static void playerSignText(String serverName, String worldname, double x, double y, double z, String playername, String Lines, boolean staff){
+    public static void playerSignText(String serverName, String worldName, double x, double y, double z, String playerName, String Lines, boolean staff){
         try {
             String database = "Player_Sign_Text";
             PreparedStatement playerSignText = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,X,Y,Z,Playername,Line,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
             playerSignText.setString(1, serverName);
-            playerSignText.setString(2, worldname);
+            playerSignText.setString(2, worldName);
             playerSignText.setDouble(3, x);
             playerSignText.setDouble(4, y);
             playerSignText.setDouble(5, z);
-            playerSignText.setString(6, playername);
+            playerSignText.setString(6, playerName);
             playerSignText.setString(7, Lines);
             playerSignText.setBoolean(8, staff);
             playerSignText.executeUpdate();
@@ -203,13 +203,13 @@ public class MySQLData {
         }
     }
 
-    public static void playerDeath(String serverName, String worldname, String playername, double x, double y, double z, String cause, String who, String itemUsed, boolean staff){
+    public static void playerDeath(String serverName, String worldName, String playerName, double x, double y, double z, String cause, String who, String itemUsed, boolean staff){
         try {
             String database = "Player_Death";
             PreparedStatement playerDeath= plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Cause,By_Who,Item_Used,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
             playerDeath.setString(1, serverName);
-            playerDeath.setString(2, worldname);
-            playerDeath.setString(3, playername);
+            playerDeath.setString(2, worldName);
+            playerDeath.setString(3, playerName);
             playerDeath.setDouble(4, x);
             playerDeath.setDouble(5, y);
             playerDeath.setDouble(6, z);
@@ -224,13 +224,13 @@ public class MySQLData {
         }
     }
 
-    public static void playerTeleport(String serverName, String worldname, String playername, double ox, double oy, double oz, double tx, double ty, double tz, boolean staff){
+    public static void playerTeleport(String serverName, String worldName, String playerName, double ox, double oy, double oz, double tx, double ty, double tz, boolean staff){
         try {
             String database = "Player_Teleport";
             PreparedStatement playerTeleport = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,From_X,From_Y,From_Z,To_X,To_Y,To_Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
             playerTeleport.setString(1, serverName);
-            playerTeleport.setString(2, worldname);
-            playerTeleport.setString(3, playername);
+            playerTeleport.setString(2, worldName);
+            playerTeleport.setString(3, playerName);
             playerTeleport.setDouble(4, ox);
             playerTeleport.setDouble(5, oy);
             playerTeleport.setDouble(6, oz);
@@ -245,13 +245,13 @@ public class MySQLData {
         }
     }
 
-    public static void playerJoin(String serverName, String worldname, String playername, double x, double y, double z, InetSocketAddress IP, boolean staff) {
+    public static void playerJoin(String serverName, String worldName, String playerName, double x, double y, double z, InetSocketAddress IP, boolean staff) {
         try {
             String database = "Player_Join";
             PreparedStatement playerJoin = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,IP,Is_Staff) VALUES(?,?,?,?,?,?,INET_ATON(?),?)");
             playerJoin.setString(1, serverName);
-            playerJoin.setString(2, worldname);
-            playerJoin.setString(3, playername);
+            playerJoin.setString(2, worldName);
+            playerJoin.setString(3, playerName);
             playerJoin.setDouble(4, x);
             playerJoin.setDouble(5, y);
             playerJoin.setDouble(6, z);
@@ -269,13 +269,13 @@ public class MySQLData {
         }
     }
 
-    public static void playerLeave(String serverName, String worldname, String playername, double x, double y, double z, boolean staff){
+    public static void playerLeave(String serverName, String worldName, String playerName, double x, double y, double z, boolean staff){
         try {
             String database = "Player_Leave";
             PreparedStatement playerLeave = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?)");
             playerLeave.setString(1, serverName);
-            playerLeave.setString(2, worldname);
-            playerLeave.setString(3, playername);
+            playerLeave.setString(2, worldName);
+            playerLeave.setString(3, playerName);
             playerLeave.setDouble(4, x);
             playerLeave.setDouble(5, y);
             playerLeave.setDouble(6, z);
@@ -287,13 +287,13 @@ public class MySQLData {
         }
     }
 
-    public static void blockPlace(String serverName, String worldname, String playername, String block, double x, double y, double z, boolean staff){
+    public static void blockPlace(String serverName, String worldName, String playerName, String block, double x, double y, double z, boolean staff){
         try {
             String database = "Block_Place";
             PreparedStatement blockPlace = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Block,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
             blockPlace.setString(1, serverName);
-            blockPlace.setString(2, worldname);
-            blockPlace.setString(3, playername);
+            blockPlace.setString(2, worldName);
+            blockPlace.setString(3, playerName);
             blockPlace.setString(4, block);
             blockPlace.setDouble(5, x);
             blockPlace.setDouble(6, y);
@@ -306,13 +306,13 @@ public class MySQLData {
         }
     }
 
-    public static void blockBreak(String serverName, String worldname, String playername, String blockname, double x, double y, double z,boolean staff){
+    public static void blockBreak(String serverName, String worldName, String playerName, String blockname, double x, double y, double z,boolean staff){
         try {
             String database = "Block_Break";
             PreparedStatement blockBreak = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Block,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
             blockBreak.setString(1, serverName);
-            blockBreak.setString(2, worldname);
-            blockBreak.setString(3, playername);
+            blockBreak.setString(2, worldName);
+            blockBreak.setString(3, playerName);
             blockBreak.setString(4, blockname);
             blockBreak.setDouble(5, x);
             blockBreak.setDouble(6, y);
@@ -353,13 +353,13 @@ public class MySQLData {
         }
     }
 
-    public static void playerKick(String serverName, String worldname, String playername, double x, double y, double z, String reason, boolean staff){
+    public static void playerKick(String serverName, String worldName, String playerName, double x, double y, double z, String reason, boolean staff){
         try {
             String database = "Player_Kick";
             PreparedStatement playerKick = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Reason,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
             playerKick.setString(1, serverName);
-            playerKick.setString(2, worldname);
-            playerKick.setString(3, playername);
+            playerKick.setString(2, worldName);
+            playerKick.setString(3, playerName);
             playerKick.setDouble(4, x);
             playerKick.setDouble(5, y);
             playerKick.setDouble(6, z);
@@ -372,12 +372,12 @@ public class MySQLData {
         }
     }
 
-    public static void portalCreate(String serverName, String worldname, PortalCreateEvent.CreateReason By){
+    public static void portalCreate(String serverName, String worldName, PortalCreateEvent.CreateReason By){
         try {
             String database = "Portal_Creation";
             PreparedStatement portalCreation = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Caused_By) VALUES(?,?,?)");
             portalCreation.setString(1, serverName);
-            portalCreation.setString(2, worldname);
+            portalCreation.setString(2, worldName);
             portalCreation.setString(3, By.toString());
             portalCreation.executeUpdate();
 
@@ -386,12 +386,12 @@ public class MySQLData {
         }
     }
 
-    public static void levelChange(String serverName, String playername, boolean staff){
+    public static void levelChange(String serverName, String playerName, boolean staff){
         try {
             String database = "Player_Level";
             PreparedStatement playerLevel = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Playername,Is_Staff) VALUES(?,?,?)");
             playerLevel.setString(1, serverName);
-            playerLevel.setString(2, playername);
+            playerLevel.setString(2, playerName);
             playerLevel.setBoolean(3, staff);
             playerLevel.executeUpdate();
 
@@ -402,13 +402,13 @@ public class MySQLData {
         }
     }
 
-    public static void bucketPlace(String serverName, String worldname, String playername, String bucket, double x, double y, double z, boolean staff){
+    public static void bucketPlace(String serverName, String worldName, String playerName, String bucket, double x, double y, double z, boolean staff){
         try {
             String database = "Bucket_Place";
             PreparedStatement bucketPlace = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Bucket,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
             bucketPlace.setString(1, serverName);
-            bucketPlace.setString(2, worldname);
-            bucketPlace.setString(3, playername);
+            bucketPlace.setString(2, worldName);
+            bucketPlace.setString(3, playerName);
             bucketPlace.setString(4, bucket);
             bucketPlace.setDouble(5, x);
             bucketPlace.setDouble(6, y);
@@ -423,12 +423,12 @@ public class MySQLData {
         }
     }
 
-    public static void anvil(String serverName, String playername, String newname, boolean staff){
+    public static void anvil(String serverName, String playerName, String newname, boolean staff){
         try {
             String database = "Anvil";
             PreparedStatement anvil = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Playername,New_name,Is_Staff) VALUES(?,?,?,?)");
             anvil.setString(1, serverName);
-            anvil.setString(2, playername);
+            anvil.setString(2, playerName);
             anvil.setString(3, newname);
             anvil.setBoolean(4, staff);
             anvil.executeUpdate();
@@ -468,13 +468,13 @@ public class MySQLData {
         }
     }
 
-    public static void itemDrop(String serverName, String world, String playername, String item, int amount, int x, int y, int z, List<String> enchantment, String changedName, boolean staff){
+    public static void itemDrop(String serverName, String world, String playerName, String item, int amount, int x, int y, int z, List<String> enchantment, String changedName, boolean staff){
         try {
             String database = "Item_Drop";
             PreparedStatement itemDrop = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Item,Amount,X,Y,Z,Enchantment,Changed_Name,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
             itemDrop.setString(1, serverName);
             itemDrop.setString(2, world);
-            itemDrop.setString(3, playername);
+            itemDrop.setString(3, playerName);
             itemDrop.setString(4, item);
             itemDrop.setInt(5, amount);
             itemDrop.setInt(6, x);
@@ -492,13 +492,13 @@ public class MySQLData {
         }
     }
 
-    public static void enchant(String serverName, String world, String playername, double x, double y, double z, List<String> enchantment, String item, int cost ,boolean staff){
+    public static void enchant(String serverName, String world, String playerName, double x, double y, double z, List<String> enchantment, String item, int cost ,boolean staff){
         try {
             String database = "Enchanting";
             PreparedStatement enchanting = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Enchantment,Item,Cost,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
             enchanting.setString(1, serverName);
             enchanting.setString(2, world);
-            enchanting.setString(3, playername);
+            enchanting.setString(3, playerName);
             enchanting.setDouble(4, x);
             enchanting.setDouble(5, y);
             enchanting.setDouble(6, z);
@@ -515,13 +515,13 @@ public class MySQLData {
         }
     }
 
-    public static void bookEditing(String serverName, String world, String playername, int pages, List<String> content, String signed_by, boolean staff){
+    public static void bookEditing(String serverName, String world, String playerName, int pages, List<String> content, String signed_by, boolean staff){
         try {
             String database = "Book_Editing";
             PreparedStatement enchanting = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Page_Count,Page_Content,Signed_by,Is_Staff) VALUES(?,?,?,?,?,?,?)");
             enchanting.setString(1, serverName);
             enchanting.setString(2, world);
-            enchanting.setString(3, playername);
+            enchanting.setString(3, playerName);
             enchanting.setInt(4, pages);
             enchanting.setString(5, String.valueOf(content));
             enchanting.setString(6, signed_by);
@@ -535,7 +535,7 @@ public class MySQLData {
         }
     }
 
-    public static void afk(String serverName, String world, String playername, double x, double y, double z,boolean staff){
+    public static void afk(String serverName, String world, String playerName, double x, double y, double z,boolean staff){
 
         if (plugin.getAPI() != null) {
 
@@ -544,7 +544,7 @@ public class MySQLData {
                 PreparedStatement afk = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?)");
                 afk.setString(1, serverName);
                 afk.setString(2, world);
-                afk.setString(3, playername);
+                afk.setString(3, playerName);
                 afk.setDouble(4, x);
                 afk.setDouble(5, y);
                 afk.setDouble(6, z);
@@ -559,13 +559,13 @@ public class MySQLData {
         }
     }
 
-    public static void itemPickup(String serverName, String world, String playername, Material item, int amount, double x, double y, double z, String changedName, boolean staff){
+    public static void itemPickup(String serverName, String world, String playerName, Material item, int amount, double x, double y, double z, String changedName, boolean staff){
         try {
             String database = "Item_Pickup";
             PreparedStatement itemPickup = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Item,Amount,X,Y,Z,Changed_Name,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
             itemPickup.setString(1, serverName);
             itemPickup.setString(2, world);
-            itemPickup.setString(3, playername);
+            itemPickup.setString(3, playerName);
             itemPickup.setString(4, String.valueOf(item));
             itemPickup.setInt(5, amount);
             itemPickup.setDouble(6, x);
@@ -582,13 +582,13 @@ public class MySQLData {
         }
     }
 
-    public static void furnace(String serverName, String world, String playername, Material item, int amount, double x, double y, double z, boolean staff){
+    public static void furnace(String serverName, String world, String playerName, Material item, int amount, double x, double y, double z, boolean staff){
         try {
             String database = "Furnace";
             PreparedStatement furnace = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Item,Amount,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?)");
             furnace.setString(1, serverName);
             furnace.setString(2, world);
-            furnace.setString(3, playername);
+            furnace.setString(3, playerName);
             furnace.setString(4, String.valueOf(item));
             furnace.setInt(5, amount);
             furnace.setDouble(6, x);
@@ -694,7 +694,7 @@ public class MySQLData {
 
         }catch (SQLException e){
 
-            plugin.getLogger().warning(ChatColor.RED + "An error has occurred while cleaning the tables, if the error persists, contact the Author!");
+            plugin.getLogger().warning(ChatColor.RED + "An error has occurred while cleaning the tables, if the error persists, contact the Authors!");
             e.printStackTrace();
 
         }

@@ -75,7 +75,7 @@ public class Metrics {
     private void loadConfig() throws IOException {
         File bStatsFolder = new File(plugin.getDataFolder().getParentFile(), "bStats");
         bStatsFolder.mkdirs();
-        File configFile = new File(bStatsFolder, "config.yml");
+        File configFile = new File(bStatsFolder, "config - Bungee.yml");
         if (!configFile.exists()) {
             writeFile(
                     configFile,

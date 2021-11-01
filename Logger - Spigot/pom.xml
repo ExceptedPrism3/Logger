@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Logger-Spigot</artifactId>
-    <version>1.6.6</version>
+    <version>1.7</version>
     <packaging>jar</packaging>
 
     <name>Logger-Spigot</name>
@@ -19,7 +19,7 @@
     <parent>
         <artifactId>Logger</artifactId>
         <groupId>com.carpour</groupId>
-        <version>1.6.6</version>
+        <version>1.7</version>
     </parent>
 
     <build>

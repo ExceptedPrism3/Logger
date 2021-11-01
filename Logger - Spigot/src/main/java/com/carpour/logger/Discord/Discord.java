@@ -444,7 +444,7 @@ public class Discord {
     private static void discordUtil(Player player, String content, boolean contentinAuthorLine, TextChannel channel) {
         if (channel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getDisplayName(),
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getName(),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
@@ -464,7 +464,7 @@ public class Discord {
             } catch (Exception e) {
 
                 Bukkit.getServer().getLogger().warning("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
-                        "If this Issue Persists, Contact the Author!");
+                        "If this Issue Persists, Contact the Authors!");
 
                 e.printStackTrace();
 

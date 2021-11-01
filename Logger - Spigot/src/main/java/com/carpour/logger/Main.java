@@ -1,16 +1,16 @@
 package com.carpour.logger;
 
+import com.carpour.logger.Commands.OnLogger;
 import com.carpour.logger.Database.MySQL.MySQL;
 import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Discord.DiscordFile;
 import com.carpour.logger.Events.*;
-import com.carpour.logger.Events.onCommands.onCommand;
-import com.carpour.logger.Events.onInventories.onFurnace;
+import com.carpour.logger.Events.onCommands.OnCommand;
+import com.carpour.logger.Events.onInventories.OnFurnace;
 import com.carpour.logger.Utils.*;
 import com.carpour.logger.Database.SQLite.SQLite;
 import com.carpour.logger.Database.SQLite.SQLiteData;
-import com.carpour.logger.Commands.CommandManager;
 import com.carpour.logger.ServerSide.*;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
@@ -24,15 +24,11 @@ public class Main extends JavaPlugin {
 
     private static Main instance;
 
-    public FileHandler fileHandler;
-
     public MySQL mySQL;
     public MySQLData mySQLData;
 
     private SQLite sqLite;
     private SQLiteData sqLiteData;
-
-    public ASCIIArt icon;
 
     public Start start;
     public Stop stop;
@@ -50,6 +46,10 @@ public class Main extends JavaPlugin {
 
         saveDefaultConfig();
         getConfig().options().copyDefaults();
+
+        Messages.Setup();
+        Messages.get().options().copyDefaults(true);
+        Messages.save();
 
         DiscordFile.Setup();
         DiscordFile.values();
@@ -85,58 +85,55 @@ public class Main extends JavaPlugin {
 
         }
 
-        new FileHandler(getDataFolder());
-        fileHandler = new FileHandler(getDataFolder());
+        FileHandler fileHandler = new FileHandler(getDataFolder());
         fileHandler.deleteFiles();
 
-        getServer().getPluginManager().registerEvents(new onChat(), this);
-        getServer().getPluginManager().registerEvents(new onCommand(), this);
+        getServer().getPluginManager().registerEvents(new OnChat(), this);
+        getServer().getPluginManager().registerEvents(new OnCommand(), this);
         getServer().getPluginManager().registerEvents(new Console(), this);
-        getServer().getPluginManager().registerEvents(new onSign(), this);
-        getServer().getPluginManager().registerEvents(new onPlayerJoin(), this);
-        getServer().getPluginManager().registerEvents(new onPlayerLeave(), this);
-        getServer().getPluginManager().registerEvents(new onPlayerKick(), this);
-        getServer().getPluginManager().registerEvents(new onPlayerDeath(), this);
-        getServer().getPluginManager().registerEvents(new onPlayerTeleport(), this);
-        getServer().getPluginManager().registerEvents(new onPlayerLevel(), this);
-        getServer().getPluginManager().registerEvents(new onBlockPlace(), this);
-        getServer().getPluginManager().registerEvents(new onBlockBreak(), this);
+        getServer().getPluginManager().registerEvents(new OnSign(), this);
+        getServer().getPluginManager().registerEvents(new OnPlayerJoin(), this);
+        getServer().getPluginManager().registerEvents(new OnPlayerLeave(), this);
+        getServer().getPluginManager().registerEvents(new OnPlayerKick(), this);
+        getServer().getPluginManager().registerEvents(new OnPlayerDeath(), this);
+        getServer().getPluginManager().registerEvents(new OnPlayerTeleport(), this);
+        getServer().getPluginManager().registerEvents(new OnPlayerLevel(), this);
+        getServer().getPluginManager().registerEvents(new OnBlockPlace(), this);
+        getServer().getPluginManager().registerEvents(new OnBlockBreak(), this);
         getServer().getPluginManager().registerEvents(new PortalCreation(), this);
-        getServer().getPluginManager().registerEvents(new onBucketPlace(), this);
-        getServer().getPluginManager().registerEvents(new onAnvil(), this);
-        getServer().getPluginManager().registerEvents(new onItemDrop(), this);
-        getServer().getPluginManager().registerEvents(new onEnchant(), this);
-        getServer().getPluginManager().registerEvents(new onBook(), this);
+        getServer().getPluginManager().registerEvents(new OnBucketPlace(), this);
+        getServer().getPluginManager().registerEvents(new OnAnvil(), this);
+        getServer().getPluginManager().registerEvents(new OnItemPickup(), this);
+        getServer().getPluginManager().registerEvents(new OnItemDrop(), this);
+        getServer().getPluginManager().registerEvents(new OnEnchant(), this);
+        getServer().getPluginManager().registerEvents(new OnBook(), this);
 
-        getServer().getPluginManager().registerEvents(new onFurnace(), this);
+        getServer().getPluginManager().registerEvents(new OnFurnace(), this);
 //        getServer().getPluginManager().registerEvents(new onShulker(), this);
-//        getServer().getPluginManager().registerEvents(new onChest(), this);
+//        getServer().getPluginManager().registerEvents(new OnChest(), this);
 
-        getServer().getPluginManager().registerEvents(new onItemPickup(), this);
 
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new TPS(), 200L, getConfig().getInt("RAM-TPS-Checker"));
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new RAM(), 200L, getConfig().getInt("RAM-TPS-Checker"));
 
-        Objects.requireNonNull(getCommand("logger")).setExecutor(new CommandManager());
+        Objects.requireNonNull(getCommand("logger")).setExecutor(new OnLogger());
 
         if (getAPI() != null){
 
-            getServer().getPluginManager().registerEvents(new onAFK(), this);
+            getServer().getPluginManager().registerEvents(new OnAFK(), this);
 
             getServer().getLogger().info("[Logger] Essentials Plugin was Found!");
 
         }
 
-        icon = new ASCIIArt();
-        icon.Art();
+        new ASCIIArt().Art();
 
         //bstats
 
         new Metrics(this, 12036);
 
         //Update Checker
-        UpdateChecker updater = new UpdateChecker(this);
-        updater.checkForUpdate();
+        new UpdateChecker(this).checkForUpdate();
 
         getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.GOLD + "Thank you " + ChatColor.GREEN + ChatColor.BOLD + "thelooter" + ChatColor.GOLD + " for the Contribution!");
 

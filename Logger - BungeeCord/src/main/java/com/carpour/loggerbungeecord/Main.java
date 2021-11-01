@@ -1,10 +1,14 @@
 package com.carpour.loggerbungeecord;
 
-import com.carpour.loggerbungeecord.Events.onChat;
-import com.carpour.loggerbungeecord.Utils.ConfigManager;
-import com.carpour.loggerbungeecord.Utils.Metrics;
-import com.carpour.loggerbungeecord.Utils.UpdateChecker;
-import net.md_5.bungee.api.ChatColor;
+import com.carpour.loggerbungeecord.Commands.Reload;
+import com.carpour.loggerbungeecord.Database.MySQL.MySQL;
+import com.carpour.loggerbungeecord.Database.MySQL.MySQLData;
+import com.carpour.loggerbungeecord.Discord.Discord;
+import com.carpour.loggerbungeecord.Discord.DiscordFile;
+import com.carpour.loggerbungeecord.Events.*;
+import com.carpour.loggerbungeecord.ServerSide.Start;
+import com.carpour.loggerbungeecord.ServerSide.Stop;
+import com.carpour.loggerbungeecord.Utils.*;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public final class Main extends Plugin {
@@ -13,48 +17,74 @@ public final class Main extends Plugin {
 
     private static ConfigManager cm;
 
+    public MySQL mySQL;
+    public MySQLData mySQLData;
+    public Discord discord;
+
     @Override
     public void onEnable() {
 
-        setInstance(this);
+        instance = this;
+
         cm = new ConfigManager();
         cm.init();
+        
+        new Messages().init();
+        
+        new DiscordFile().init();
+        
+        discord = new Discord();
+        discord.run();
+        
+        FileHandler fileHandler = new FileHandler(getDataFolder());
+        fileHandler.deleteFiles();
 
-        getLogger().info(ChatColor.GREEN + "has been loaded!");
+        getProxy().getPluginManager().registerListener(this, new OnChat());
+        getProxy().getPluginManager().registerListener(this, new OnLogin());
+        getProxy().getPluginManager().registerListener(this, new OnLeave());
+        getProxy().getPluginManager().registerListener(this, new OnReload());
 
-        getProxy().getPluginManager().registerListener(this, new onChat());
+        getProxy().getPluginManager().registerCommand(this, new Reload());
+
+        if (getConfig().getBoolean("MySQL.Enable")) {
+
+            mySQL = new MySQL();
+            mySQL.connect();
+            mySQLData = new MySQLData(this);
+            if (mySQL.isConnected()) mySQLData.createTable();
+            mySQLData.emptyTable();
+
+        }
+
+        new ASCIIArt().Art();
 
         //bstats
 
-        new Metrics(this, 11779);
+        new Metrics(this, 12036);
 
         //Update Checker
+        new UpdateChecker().checkUpdates();
 
-        new UpdateChecker(this, 93562).getLatestVersion(version -> {
-            if(this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                getLogger().info(ChatColor.GREEN + "Plugin is up to date!");
-            } else {
-                getLogger().info(ChatColor.GOLD + "Plugin has a new Update! Current version " + ChatColor.RED + version + ChatColor.GOLD + " and the newest is " + ChatColor.GREEN + this.getDescription().getVersion());
-            }
-        });
+        getLogger().info("has been Enabled!");
+
+        new Start().run();
     }
 
     public static Main getInstance() {
         return instance;
     }
 
-    public static void setInstance(Main instance) {
-        Main.instance = instance;
-    }
-
-    public static ConfigManager getConfig() {
-        return cm;
-    }
+    public static ConfigManager getConfig() { return cm; }
 
     @Override
     public void onDisable() {
 
-        getLogger().info(ChatColor.RED + "has been unloaded!");
+        new Stop().run();
 
+        if (getConfig().getBoolean("MySQL.Enable") && mySQL.isConnected()) mySQL.disconnect();
+
+        discord.disconnect();
+
+        getLogger().info("has been Disabled!");
     }
 }

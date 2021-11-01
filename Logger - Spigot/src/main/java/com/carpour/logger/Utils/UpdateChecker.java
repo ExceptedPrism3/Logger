@@ -44,7 +44,7 @@ public class UpdateChecker {
 
             if (!this.localPluginVersion.equals(this.spigotPluginVersion)) {
 
-                Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&f[Logger] |&e A New Version &a" + this.spigotPluginVersion + " &eis Available at: &6https://www.spigotmc.org/resources/" + ID + "/updates"));
+                Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&f[Logger] |&e A New Version &a" + this.spigotPluginVersion + " &eis Available at: &ahttps://www.spigotmc.org/resources/" + ID + "/updates"));
                 Bukkit.getScheduler().runTask(this.javaPlugin, () -> Bukkit.getPluginManager().registerEvents(new Listener() {
                     @EventHandler(
                             priority = EventPriority.MONITOR
@@ -55,7 +55,7 @@ public class UpdateChecker {
 
                         if (player.isOp() || player.hasPermission("logger.update")) {
 
-                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[&bLogger&7] &f|&e A New Version &a" + UpdateChecker.this.spigotPluginVersion + " &eis Available at: &6https://www.spigotmc.org/resources/" + ID + "/updates"));
+                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[&bLogger&7] &f|&e A New Version &a" + UpdateChecker.this.spigotPluginVersion + " &eis Available at: &ahttps://www.spigotmc.org/resources/" + ID + "/updates"));
 
                         }
                     }

@@ -5,6 +5,7 @@ import com.carpour.logger.Database.SQLite.SQLiteData;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
+import com.carpour.logger.Utils.Messages;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class PortalCreation implements Listener {
 
@@ -38,7 +40,7 @@ public class PortalCreation implements Listener {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPortalCreateFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] A portal has been created in " + worldName + " using " + reason + "\n");
+                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Portal-Creation")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%material%", String.valueOf(reason)) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -50,7 +52,7 @@ public class PortalCreation implements Listener {
             }
 
             //Discord
-            Discord.portalCreation("\uD83D\uDEAA A portal has been created in **" + worldName + "** using **" + reason + "**", false);
+            Discord.portalCreation(Objects.requireNonNull(Messages.get().getString("Discord.Portal-Creation")).replaceAll("%world%", worldName).replaceAll("%material%", String.valueOf(reason)), false);
 
             //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {

@@ -108,9 +108,9 @@ public class SQLiteData {
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(100)," +
                     "X INTEGER, Y INTEGER, Z INTEGER, Enchantment TEXT(50), Item TEXT(50), Cost INTEGER, Is_Staff INTEGER)");
 
-            bookEditing = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Book_Editing "
-                    + "(Server_Name TEXT(30),Date DATETIME DEFAULT CURRENT_TIMESTAMP() PRIMARY KEY, World TEXT(100),Player_name TEXT(100)" +
-                    ",Page_Count INTEGER,Page_Content TEXT(250),Signed_by TEXT(25),Is_Staff INTEGER)");
+            bookEditing = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Book_Editing" +
+                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(100)," +
+                    "Page_Count INTEGER, Page_Content TEXT(100), Signed_by TEXT(25), Is_Staff INTEGER)");
 
             if (plugin.getAPI() != null) {
 
@@ -661,7 +661,7 @@ public class SQLiteData {
 
             PreparedStatement enchanting = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Enchanting WHERE Date <= datetime('now','-" + when + " day')");
 
-            PreparedStatement book_Editing = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Book_Editing WHERE DATE < NOW() - INTERVAL " + when + " DAY");
+            PreparedStatement book_Editing = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Book_Editing WHERE Date <= datetime('now','-" + when + " day')");
 
             if (plugin.getAPI() != null) {
 
@@ -671,9 +671,9 @@ public class SQLiteData {
 
             }
 
-            PreparedStatement item_pickup = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Item_Pickup WHERE DATE < NOW() - INTERVAL " + when + " DAY");
+            PreparedStatement item_pickup = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Item_Pickup WHERE Date <= datetime('now','-" + when + " day')");
 
-            PreparedStatement furnace = plugin.mySQL.getConnection().prepareStatement("DELETE FROM Furnace WHERE DATE < NOW() - INTERVAL " + when + " DAY");
+            PreparedStatement furnace = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Furnace WHERE Date <= datetime('now','-" + when + " day')");
 
             player_Chat.executeUpdate();
             player_Commands.executeUpdate();
@@ -701,7 +701,10 @@ public class SQLiteData {
             furnace.executeUpdate();
 
         }catch (SQLException e){
-            plugin.getLogger().severe("An error has occurred while cleaning the tables, if the error persists, contact the Author!");
+
+            e.printStackTrace();
+
+            plugin.getLogger().severe("An error has occurred while cleaning the tables, if the error persists, contact the Authors!");
 
         }
     }

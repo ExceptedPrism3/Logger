@@ -5,6 +5,7 @@ import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Database.SQLite.SQLiteData;
+import com.carpour.logger.Utils.Messages;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class RAM implements Runnable {
 
@@ -43,7 +45,7 @@ public class RAM implements Runnable {
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRAMLogFile(), true));
-                        out.write("[" + dateFormat.format(date) + "] The Server has exceeded the set amount of percentage of RAM Usage! Total Memory: " + maxMemory + "| Used Memory " + usedMemory + "| Free Memory " + freeMemory + "\n");
+                        out.write(Objects.requireNonNull(Messages.get().getString("Files.RAM")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)) + "\n");
                         out.close();
 
                     } catch (
@@ -56,7 +58,7 @@ public class RAM implements Runnable {
                 }
 
                 //Discord
-                Discord.RAM("⚠️ The server has **exceeded** the set amount of percentage of RAM Usage! Total Memory: **" + maxMemory + "** | Used Memory **" + usedMemory + "** | Free Memory **" + freeMemory + "**", false);
+                Discord.RAM(Objects.requireNonNull(Messages.get().getString("Discord.RAM")).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)), false);
 
                 //MySQL
                 if (main.getConfig().getBoolean("MySQL.Enable")  && main.mySQL.isConnected()) {
