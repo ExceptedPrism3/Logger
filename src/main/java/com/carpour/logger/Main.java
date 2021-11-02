@@ -1,5 +1,7 @@
 package com.carpour.logger;
 
+import com.carpour.logger.Database.PostgreSQL.PostgreSQL;
+import com.carpour.logger.Database.PostgreSQL.PostgreSQLData;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Discord.DiscordFile;
 import com.carpour.logger.Events.*;
@@ -15,8 +17,11 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Main extends JavaPlugin {
@@ -31,6 +36,9 @@ public class Main extends JavaPlugin {
     private SQLite sqLite;
     private SQLiteData sqLiteData;
 
+    private PostgreSQL postgreSQL;
+    private PostgreSQLData postgreSQLData;
+
     public ASCIIArt icon;
 
     public Start start;
@@ -41,6 +49,14 @@ public class Main extends JavaPlugin {
     public SQLite getSqLite() { return sqLite; }
 
     public SQLiteData getSqLiteData() { return sqLiteData; }
+
+    public PostgreSQL getPostgreSQL() {
+        return postgreSQL;
+    }
+
+    public PostgreSQLData getPostgreSQLData() {
+        return postgreSQLData;
+    }
 
     @Override
     public void onEnable() {
@@ -73,8 +89,23 @@ public class Main extends JavaPlugin {
             sqLite = new SQLite();
             sqLite.connect();
             sqLiteData = new SQLiteData(this);
-            if (sqLite.isConnected()) sqLiteData.createTable();
+            if (sqLite.isConnected()){
+                sqLiteData.createTable();
+            }
             sqLiteData.emptyTable();
+
+        }
+
+        if (getConfig().getBoolean("PostgreSQL.Enable")) {
+            postgreSQL = new PostgreSQL();
+            postgreSQL.connect();
+
+            postgreSQLData = new PostgreSQLData(this);
+
+            if (postgreSQL.isConnected()) {
+                postgreSQLData.createTable();
+            }
+            postgreSQLData.emptyTable();
 
         }
 
