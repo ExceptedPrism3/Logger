@@ -6,8 +6,14 @@
 
     <groupId>com.carpour</groupId>
     <artifactId>Logger</artifactId>
-    <version>1.6.5</version>
-    <packaging>jar</packaging>
+    <version>1.7</version>
+    <modules>
+        <module>Logger - Spigot</module>
+        <module>Logger - BungeeCord</module>
+        <module>Logger - Shaded</module>
+        <module>Logger - Core</module>
+    </modules>
+    <packaging>pom</packaging>
 
     <name>Logger</name>
 
@@ -16,50 +22,6 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <createDependencyReducedPom>true</createDependencyReducedPom>
-                            <filters>
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/**</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-    </build>
 
     <repositories>
         <repository>
@@ -80,46 +42,4 @@
             <url>https://repo.essentialsx.net/releases/</url>
         </repository>
     </repositories>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.17.1-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.dv8tion</groupId>
-            <artifactId>JDA</artifactId>
-            <version>4.2.1_253</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>club.minnced</groupId>
-                    <artifactId>opus-java</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.26</version>
-        </dependency>
-        <dependency>
-            <groupId>net.essentialsx</groupId>
-            <artifactId>EssentialsX</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.bstats</groupId>
-                    <artifactId>bstats-bukkit</artifactId>
-                </exclusion>
-            </exclusions>
-            <version>2.19.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.3.0</version>
-        </dependency>
-    </dependencies>
 </project>
