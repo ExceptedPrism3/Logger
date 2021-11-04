@@ -31,7 +31,7 @@ public class PostgreSQLData<T extends PostgreSQLTemplate<?>> {
     }
 
     public void createTable() {
-        final PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave, playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel, bucketPlace, anvil, serverStart, serverStop, itemDrop, enchant, bookEditing, afk, itempPickup, furnace;
+        final PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave, playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel, bucketPlace, anvil, serverStart, serverStop, itemDrop, enchant, bookEditing, afk, itemPickup, furnace;
 
         try {
             playerChat = postgreSQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_chat " +
@@ -69,6 +69,38 @@ public class PostgreSQLData<T extends PostgreSQLTemplate<?>> {
 
             RAM = postgreSQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS ram" +
                     "(server_name TEXT, date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIME, total_memory INTEGER, used_memory INTEGER, free_memory INTEGER, PRIMARY KEY (date))");
+
+            playerKick = postgreSQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_kick" +
+                    "(server_name TEXT,date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIME,world TEXT,player_name TEXT,x INTEGER,y INTEGER,z INTEGER,reason TEXT,is_staff BOOLEAN,PRIMARY KEY (date))");
+
+            portalCreation = postgreSQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS portal_creation" +
+                    "(server_name TEXT ,date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIME,world TEXT,caused_by TEXT,PRIMARY KEY (date))");
+
+            playerLevel = postgreSQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_level" +
+                    "(server_name TEXT,date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIME,player_name TEXT,is_staff BOOLEAN,PRIMARY KEY (date))");
+
+            bucketPlace = postgreSQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS bucket_place" +
+                    "(Server_Name VARCHAR(30),Date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIME,world TEXT,player_name TEXT,bucket TEXT,x INTEGER,y INTEGER,z INTEGER,is_staff BOOLEAN,PRIMARY KEY (date))");
+
+            anvil = postgreSQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS anvil" +
+                    "(server_name TEXT,date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIME,player_name TEXT,new_name TEXT,is_staff BOOLEAN,PRIMARY KEY (date))");
+
+            serverStart = postgreSQL.getConnection().prepareStatement("CREATE  TABLE IF NOT EXISTS server_start" +
+                    "(server_name TEXT,date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIME,PRIMARY KEY (date))");
+
+            serverStop = postgreSQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS server_stop" +
+                    "(server_name TEXT,date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIME,PRIMARY KEY (date))");
+
+            itemDrop = postgreSQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS item_drop" +
+                    "(server_name TEXT,date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIME,world TEXT,player_name TEXT,item TEXT,amount INTEGER,x INTEGER,y INTEGER,z INTEGER,enchantment TEXT,changed_name TEXT,is_staff BOOLEAN,PRIMARY KEY (date))");
+
+            enchant = postgreSQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS enchanting "
+                    + "(server_name TEXT,date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIME,world TEXT,player_name TEXT,x INTEGER,y INTEGER,z INTEGER,enchantment TEXT,item TEXT,cost INTEGER,is_staff BOOLEAN,PRIMARY KEY (date))");
+
+            bookEditing = postgreSQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS book_editing "
+                    + "(server_name TEXT,date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIME,world TEXT,player_name TEXT,page_count INTEGER,page_content TEXT,signed_by TEXT,is_staff BOOLEAN,PRIMARY KEY (date))");
+
+            
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
