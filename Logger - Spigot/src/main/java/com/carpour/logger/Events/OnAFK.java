@@ -1,8 +1,5 @@
 package com.carpour.logger.Events;
 
-import org.carour.loggercore.database.mysql.MySQLData;
-import org.carour.loggercore.database.sqlite.SQLiteData;
-import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.Utils.Messages;
@@ -11,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.carour.loggercore.database.mysql.MySQLData;
+import org.carour.loggercore.database.sqlite.SQLiteData;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -51,7 +50,8 @@ public class OnAFK implements Listener {
 
                     if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.AFK-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+                        main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.AFK-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+
 
                         try {
 
@@ -99,11 +99,11 @@ public class OnAFK implements Listener {
                 //Discord
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.AFK-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+                    main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.AFK-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
 
                 } else {
 
-                    Discord.afk(player, Objects.requireNonNull(Messages.get().getString("Discord.AFK")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+                    main.getDiscord().sendAfk(player, Objects.requireNonNull(Messages.get().getString("Discord.AFK")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
 
                 }
 

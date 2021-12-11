@@ -2,8 +2,6 @@ package com.carpour.loggerbungeecord.Events;
 
 import org.carour.loggercore.database.mysql.MySQLData;
 import com.carpour.logger.Discord.Discord;
-import com.carpour.loggerbungeecord.Database.MySQL.MySQLData;
-import com.carpour.loggerbungeecord.Discord.Discord;
 import com.carpour.loggerbungeecord.Main;
 import com.carpour.loggerbungeecord.Utils.ConfigManager;
 import com.carpour.loggerbungeecord.Utils.FileHandler;

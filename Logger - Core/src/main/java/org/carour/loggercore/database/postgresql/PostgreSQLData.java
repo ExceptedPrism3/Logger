@@ -149,6 +149,7 @@ public class PostgreSQLData<T extends PostgreSQLTemplate<?>> {
 
 
 
+/*
     public void emptyTable() {
 
         int when = plugin.getConfig().getInt("MySQL.Data-Deletion");
@@ -244,4 +245,5 @@ public class PostgreSQLData<T extends PostgreSQLTemplate<?>> {
 
         }
     }
+*/
 }

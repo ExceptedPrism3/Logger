@@ -6,14 +6,13 @@ import org.carour.loggercore.database.mysql.MySQL;
 import org.carour.loggercore.database.mysql.MySQLData;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Discord.DiscordFile;
-import com.carpour.loggerbungeecord.Discord.Discord;
-import com.carpour.loggerbungeecord.Discord.DiscordFile;
 import com.carpour.loggerbungeecord.Events.*;
 import com.carpour.loggerbungeecord.ServerSide.Start;
 import com.carpour.loggerbungeecord.ServerSide.Stop;
 import com.carpour.loggerbungeecord.Utils.*;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.carour.loggercore.database.mysql.MySQLTemplate;
+import org.carour.loggercore.util.SqlConfiguration;
 
 public final class Main extends Plugin implements MySQLTemplate<Plugin> {
 
@@ -53,7 +52,16 @@ public final class Main extends Plugin implements MySQLTemplate<Plugin> {
 
         if (getConfig().getBoolean("MySQL.Enable")) {
 
-            mySQL = new MySQL(this, cm.getConfig());
+
+            SqlConfiguration sqlConfiguration = new SqlConfiguration(
+                    getConfig().getString("MySQL.Host"),
+                    Integer.parseInt(getConfig().getString("MySQL.Port")),
+                    getConfig().getString("MySQL.Database"),
+                    getConfig().getString("MySQL.Username"),
+                    getConfig().getString("MySQL.Password")
+            );
+
+            mySQL = new MySQL(sqlConfiguration, getLogger());
             mySQL.connect();
             mySQLData = new MySQLData<>(this, cm.getConfig());
             if (mySQL.isConnected()) mySQLData.createTable();

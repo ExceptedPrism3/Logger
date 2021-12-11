@@ -70,7 +70,7 @@ private final Main main = Main.getInstance();
 
                                         if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).replaceAll("%renamed%", displayName), false);
+                                            main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).replaceAll("%renamed%", displayName), false);
 
                                             try {
 
@@ -118,11 +118,11 @@ private final Main main = Main.getInstance();
                                     //Discord
                                     if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).replaceAll("%renamed%", displayName), false);
+                                        main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).replaceAll("%renamed%", displayName), false);
 
                                     } else {
 
-                                        Discord.anvil(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil")).replaceAll("%renamed%", displayName), false);
+                                        main.getDiscord().sendAnvil(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil")).replaceAll("%renamed%", displayName), false);
                                     }
 
                                     //MySQL

@@ -95,6 +95,7 @@ public class OnChat implements Listener {
             //Discord Integration
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
+
                 Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat-Staff")).replaceAll("%world%", worldName).replaceAll("%message%", msg), false);
 
             } else {

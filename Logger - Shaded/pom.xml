@@ -65,5 +65,10 @@
             <artifactId>Logger-Bungeecord</artifactId>
             <version>1.7</version>
         </dependency>
+        <dependency>
+            <groupId>com.carpour</groupId>
+            <artifactId>Logger-Core</artifactId>
+            <version>1.7</version>
+        </dependency>
     </dependencies>
 </project>

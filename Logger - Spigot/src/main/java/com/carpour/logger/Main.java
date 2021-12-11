@@ -1,30 +1,35 @@
 package com.carpour.logger;
 
-import org.carour.loggercore.database.mysql.MySQLTemplate;
-import org.carour.loggercore.database.postgresql.PostgreSQL;
-import org.carour.loggercore.database.postgresql.PostgreSQLData;
 import com.carpour.logger.Commands.OnLogger;
-import org.carour.loggercore.database.mysql.MySQL;
-import org.carour.loggercore.database.mysql.MySQLData;
-import com.carpour.logger.Discord.Discord;
-import com.carpour.logger.Discord.DiscordFile;
+import com.carpour.logger.Discord.SpigotDiscordOptions;
 import com.carpour.logger.Events.*;
 import com.carpour.logger.Events.onCommands.OnCommand;
 import com.carpour.logger.Events.onInventories.OnFurnace;
-import com.carpour.logger.Utils.*;
-import org.carour.loggercore.database.postgresql.PostgreSQLTemplate;
-import org.carour.loggercore.database.sqlite.SQLite;
-import org.carour.loggercore.database.sqlite.SQLiteData;
 import com.carpour.logger.ServerSide.*;
+import com.carpour.logger.Utils.*;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.carour.loggercore.database.mysql.MySQL;
+import org.carour.loggercore.database.mysql.MySQLData;
+import org.carour.loggercore.database.mysql.MySQLTemplate;
+import org.carour.loggercore.database.postgresql.PostgreSQL;
+import org.carour.loggercore.database.postgresql.PostgreSQLData;
+import org.carour.loggercore.database.postgresql.PostgreSQLTemplate;
+import org.carour.loggercore.database.sqlite.SQLite;
+import org.carour.loggercore.database.sqlite.SQLiteData;
 import org.carour.loggercore.database.sqlite.SQLiteTemplate;
+import org.carour.loggercore.discord.Discord;
+import org.carour.loggercore.discord.DiscordFile;
+import org.carour.loggercore.discord.DiscordOptions;
+import org.carour.loggercore.util.SqlConfiguration;
 
 import java.util.Objects;
 
+@Getter
 public class Main extends JavaPlugin implements MySQLTemplate<JavaPlugin>, SQLiteTemplate<JavaPlugin>, PostgreSQLTemplate<JavaPlugin> {
 
     private static Main instance;
@@ -42,6 +47,7 @@ public class Main extends JavaPlugin implements MySQLTemplate<JavaPlugin>, SQLit
     public Stop stop;
 
     public Discord discord;
+    private DiscordOptions discordOptions;
 
     public SQLite getSqLite() {
         return sqLite;
@@ -63,7 +69,6 @@ public class Main extends JavaPlugin implements MySQLTemplate<JavaPlugin>, SQLit
 
     @Override
     public void onEnable() {
-
         instance = this;
 
         saveDefaultConfig();
@@ -73,17 +78,27 @@ public class Main extends JavaPlugin implements MySQLTemplate<JavaPlugin>, SQLit
         Messages.get().options().copyDefaults(true);
         Messages.save();
 
-        DiscordFile.Setup();
+        DiscordFile.setup(getDataFolder());
         DiscordFile.values();
         DiscordFile.get().options().copyDefaults(true);
         DiscordFile.save();
 
-        discord = new Discord();
+        discord = new Discord(discordOptions);
         discord.run();
+
+        discordOptions = new SpigotDiscordOptions(getConfig());
 
         if (getConfig().getBoolean("MySQL.Enable")) {
 
-            mySQL = new MySQL(this);
+            SqlConfiguration sqlConfiguration = new SqlConfiguration(
+                    getConfig().getString("MySQL.Host"),
+                    Integer.parseInt(getConfig().getString("MySQL.Port")),
+                    getConfig().getString("MySQL.Database"),
+                    getConfig().getString("MySQL.Username"),
+                    getConfig().getString("MySQL.Password")
+            );
+
+            mySQL = new MySQL(sqlConfiguration, getLogger());
             mySQL.connect();
             mySQLData = new MySQLData<>(this);
             if (mySQL.isConnected()) mySQLData.createTable();
@@ -93,7 +108,7 @@ public class Main extends JavaPlugin implements MySQLTemplate<JavaPlugin>, SQLit
 
         if (getConfig().getBoolean("SQLite.Enable")) {
 
-            sqLite = new SQLite(this);
+            sqLite = new SQLite(getDataFolder(), getLogger());
             sqLite.connect();
             sqLiteData = new SQLiteData<>(this);
             if (sqLite.isConnected()) {
@@ -104,7 +119,15 @@ public class Main extends JavaPlugin implements MySQLTemplate<JavaPlugin>, SQLit
         }
 
         if (getConfig().getBoolean("PostgreSQL.Enable")) {
-            postgreSQL = new PostgreSQL(this);
+
+            SqlConfiguration sqlConfiguration = new SqlConfiguration(getConfig().getString("PostgreSQL.Host"),
+                    Integer.parseInt(getConfig().getString("PostgreSQL.Port")),
+                    getConfig().getString("PostgreSQL.Database"),
+                    getConfig().getString("PostgreSQL.Username"),
+                    getConfig().getString("PostgreSQL.Password"));
+
+
+            postgreSQL = new PostgreSQL(sqlConfiguration, getLogger());
             postgreSQL.connect();
 
             postgreSQLData = new PostgreSQLData<>(this);
@@ -112,7 +135,7 @@ public class Main extends JavaPlugin implements MySQLTemplate<JavaPlugin>, SQLit
             if (postgreSQL.isConnected()) {
                 postgreSQLData.createTable();
             }
-            postgreSQLData.emptyTable();
+            /*postgreSQLData.emptyTable();*/
 
         }
 
