@@ -52,7 +52,7 @@ public class PortalCreation implements Listener {
             }
 
             //Discord
-            Discord.portalCreation(Objects.requireNonNull(Messages.get().getString("Discord.Portal-Creation")).replaceAll("%world%", worldName).replaceAll("%material%", String.valueOf(reason)), false);
+            main.getDiscord().sendPortalCreation(Objects.requireNonNull(Messages.get().getString("Discord.Portal-Creation")).replaceAll("%world%", worldName).replaceAll("%material%", String.valueOf(reason)), false);
 
             //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {

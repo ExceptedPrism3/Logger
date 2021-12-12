@@ -58,7 +58,7 @@ public class RAM implements Runnable {
                 }
 
                 //Discord
-                Discord.RAM(Objects.requireNonNull(Messages.get().getString("Discord.RAM")).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)), false);
+                main.getDiscord().sendRAM(Objects.requireNonNull(Messages.get().getString("Discord.RAM")).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)), false);
 
                 //MySQL
                 if (main.getConfig().getBoolean("MySQL.Enable")  && main.mySQL.isConnected()) {

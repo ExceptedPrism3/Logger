@@ -45,7 +45,7 @@ public class Stop {
             }
 
             //Discord
-            Discord.serverStop(Objects.requireNonNull(Messages.get().getString("Discord.Server-Stop")).replaceAll("%time%", dateFormat.format(date)), false);
+            main.getDiscord().sendServerStop(Objects.requireNonNull(Messages.get().getString("Discord.Server-Stop")).replaceAll("%time%", dateFormat.format(date)), false);
 
             //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {

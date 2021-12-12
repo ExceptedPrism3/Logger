@@ -45,7 +45,7 @@ public class Start {
             }
 
             //Discord
-            Discord.serverStart(Objects.requireNonNull(Messages.get().getString("Discord.Server-Start")).replaceAll("%time%", dateFormat.format(date)), false);
+            main.getDiscord().sendServerStart(Objects.requireNonNull(Messages.get().getString("Discord.Server-Start")).replaceAll("%time%", dateFormat.format(date)), false);
 
             //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {

@@ -82,11 +82,11 @@ public class TPS implements Runnable {
                 //Discord
                 if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
 
-                    Discord.TPS(Objects.requireNonNull(Messages.get().getString("Discord.TPS-Medium")).replaceAll("%TPS%", String.valueOf(getTPS())), false);
+                    main.getDiscord().sendTPS(Objects.requireNonNull(Messages.get().getString("Discord.TPS-Medium")).replaceAll("%TPS%", String.valueOf(getTPS())), false);
 
                 } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
 
-                    Discord.TPS(Objects.requireNonNull(Messages.get().getString("Discord.TPS-Critical")).replaceAll("%TPS%", String.valueOf(getTPS())), false);
+                    main.getDiscord().sendTPS(Objects.requireNonNull(Messages.get().getString("Discord.TPS-Critical")).replaceAll("%TPS%", String.valueOf(getTPS())), false);
                 }
 
                 //MySQL

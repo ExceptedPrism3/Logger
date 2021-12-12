@@ -51,7 +51,7 @@ public class Console implements Listener {
             }
 
             //Discord
-            Discord.console(Objects.requireNonNull(Messages.get().getString("Discord.Console-Commands")).replaceAll("%message%", msg), false);
+            main.getDiscord().sendConsole(Objects.requireNonNull(Messages.get().getString("Discord.Console-Commands")).replaceAll("%message%", msg), false);
 
             //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
