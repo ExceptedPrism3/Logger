@@ -277,7 +277,7 @@ public class Discord {
         }
     }
 
-    public void staffChat(Player player, String content, boolean contentinAuthorLine) {
+    public void sendStaffChat(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, staffChannel);
 
