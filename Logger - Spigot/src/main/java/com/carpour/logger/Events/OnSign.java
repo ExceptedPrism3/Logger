@@ -1,6 +1,5 @@
 package com.carpour.logger.Events;
 
-import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import org.carour.loggercore.database.mysql.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
@@ -50,7 +49,7 @@ public class OnSign implements Listener {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%line1%", lines.get(0)).replaceAll("%line2%", lines.get(1)).replaceAll("%line3%", lines.get(2)).replaceAll("%line4%", lines.get(3)), false);
+                    main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%line1%", lines.get(0)).replaceAll("%line2%", lines.get(1)).replaceAll("%line3%", lines.get(2)).replaceAll("%line4%", lines.get(3)), false);
 
                     try {
 
@@ -98,11 +97,11 @@ public class OnSign implements Listener {
             //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%line1%", lines.get(0)).replaceAll("%line2%", lines.get(1)).replaceAll("%line3%", lines.get(2)).replaceAll("%line4%", lines.get(3)), false);
+                main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%line1%", lines.get(0)).replaceAll("%line2%", lines.get(1)).replaceAll("%line3%", lines.get(2)).replaceAll("%line4%", lines.get(3)), false);
 
             } else {
 
-                Discord.playerSignText(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%line1%", lines.get(0)).replaceAll("%line2%", lines.get(1)).replaceAll("%line3%", lines.get(2)).replaceAll("%line4%", lines.get(3)), false);
+                main.getDiscord().sendPlayerSignText(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%line1%", lines.get(0)).replaceAll("%line2%", lines.get(1)).replaceAll("%line3%", lines.get(2)).replaceAll("%line4%", lines.get(3)), false);
 
             }
 

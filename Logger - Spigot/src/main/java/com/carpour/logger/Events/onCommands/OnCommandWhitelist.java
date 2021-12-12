@@ -1,6 +1,5 @@
 package com.carpour.logger.Events.onCommands;
 
-import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.Utils.Messages;
@@ -51,7 +50,7 @@ public class OnCommandWhitelist implements Listener {
                     if (main.getConfig().getBoolean("Log-to-Files")) {
 
                         if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
-                            main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Whitelisted-Staff")).replaceAll("%world%", worldName).replaceAll("%command%", command), false);
+                            main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Whitelisted-Staff")).replaceAll("%world%", worldName).replaceAll("%command%", command), false);
 
                             try {
 
@@ -97,7 +96,7 @@ public class OnCommandWhitelist implements Listener {
                     //Discord
                     if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                        main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Whitelisted-Staff")).replaceAll("%world%", worldName).replaceAll("%command%", command), false);
+                        main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Whitelisted-Staff")).replaceAll("%world%", worldName).replaceAll("%command%", command), false);
 
                     } else {
 

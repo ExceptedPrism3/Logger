@@ -1,6 +1,5 @@
 package com.carpour.logger.Events;
 
-import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import org.carour.loggercore.database.mysql.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
@@ -46,7 +45,7 @@ public class OnChat implements Listener {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat-Staff")).replaceAll("%world%", worldName).replaceAll("%message%", msg), false);
+                    main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat-Staff")).replaceAll("%world%", worldName).replaceAll("%message%", msg), false);
 
                     try {
 
@@ -95,12 +94,11 @@ public class OnChat implements Listener {
             //Discord Integration
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-
-                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat-Staff")).replaceAll("%world%", worldName).replaceAll("%message%", msg), false);
+                main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat-Staff")).replaceAll("%world%", worldName).replaceAll("%message%", msg), false);
 
             } else {
 
-                Discord.playerChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat")).replaceAll("%world%", worldName).replaceAll("%message%", msg), false);
+                main.getDiscord().sendPlayerChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat")).replaceAll("%world%", worldName).replaceAll("%message%", msg), false);
             }
 
             //MySQL Handling

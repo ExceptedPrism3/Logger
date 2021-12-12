@@ -1,6 +1,5 @@
 package com.carpour.logger.Events;
 
-import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import org.carour.loggercore.database.mysql.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
@@ -47,7 +46,7 @@ public class OnPlayerKick implements Listener {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%reason%", reason), false);
+                    main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%reason%", reason), false);
 
                     try {
 
@@ -95,11 +94,11 @@ public class OnPlayerKick implements Listener {
             //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%reason%", reason), false);
+                main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%reason%", reason), false);
 
             } else {
 
-                Discord.playerKick(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%reason%", reason), false);
+                main.getDiscord().sendPlayerKick(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%reason%", reason), false);
 
             }
 

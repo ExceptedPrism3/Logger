@@ -50,7 +50,7 @@ public class OnAFK implements Listener {
 
                     if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                        main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.AFK-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+                        main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.AFK-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
 
 
                         try {
@@ -99,7 +99,7 @@ public class OnAFK implements Listener {
                 //Discord
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.AFK-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+                    main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.AFK-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
 
                 } else {
 

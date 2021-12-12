@@ -1,6 +1,5 @@
 package com.carpour.logger.Events;
 
-import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import org.carour.loggercore.database.mysql.MySQLData;
@@ -52,7 +51,7 @@ public class OnPlayerTeleport implements Listener {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport-Staff")).replaceAll("%world%", worldName).replaceAll("%oldX%", String.valueOf(ox)).replaceAll("%oldY%", String.valueOf(oy)).replaceAll("%oldZ%", String.valueOf(oz)).replaceAll("%newX%", String.valueOf(tx)).replaceAll("%newY%", String.valueOf(ty)).replaceAll("%newZ%", String.valueOf(tz)), false);
+                    main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport-Staff")).replaceAll("%world%", worldName).replaceAll("%oldX%", String.valueOf(ox)).replaceAll("%oldY%", String.valueOf(oy)).replaceAll("%oldZ%", String.valueOf(oz)).replaceAll("%newX%", String.valueOf(tx)).replaceAll("%newY%", String.valueOf(ty)).replaceAll("%newZ%", String.valueOf(tz)), false);
 
                     try {
 
@@ -101,11 +100,11 @@ public class OnPlayerTeleport implements Listener {
             //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport-Staff")).replaceAll("%world%", worldName).replaceAll("%oldX%", String.valueOf(ox)).replaceAll("%oldY%", String.valueOf(oy)).replaceAll("%oldZ%", String.valueOf(oz)).replaceAll("%newX%", String.valueOf(tx)).replaceAll("%newY%", String.valueOf(ty)).replaceAll("%newZ%", String.valueOf(tz)), false);
+                main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport-Staff")).replaceAll("%world%", worldName).replaceAll("%oldX%", String.valueOf(ox)).replaceAll("%oldY%", String.valueOf(oy)).replaceAll("%oldZ%", String.valueOf(oz)).replaceAll("%newX%", String.valueOf(tx)).replaceAll("%newY%", String.valueOf(ty)).replaceAll("%newZ%", String.valueOf(tz)), false);
 
             } else {
 
-                Discord.playerTeleport(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport")).replaceAll("%world%", worldName).replaceAll("%oldX%", String.valueOf(ox)).replaceAll("%oldY%", String.valueOf(oy)).replaceAll("%oldZ%", String.valueOf(oz)).replaceAll("%newX%", String.valueOf(tx)).replaceAll("%newY%", String.valueOf(ty)).replaceAll("%newZ%", String.valueOf(tz)), false);
+                main.getDiscord().sendPlayerTeleport(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport")).replaceAll("%world%", worldName).replaceAll("%oldX%", String.valueOf(ox)).replaceAll("%oldY%", String.valueOf(oy)).replaceAll("%oldZ%", String.valueOf(oz)).replaceAll("%newX%", String.valueOf(tx)).replaceAll("%newY%", String.valueOf(ty)).replaceAll("%newZ%", String.valueOf(tz)), false);
 
             }
 

@@ -1,6 +1,5 @@
 package com.carpour.logger.Events;
 
-import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import org.carour.loggercore.database.mysql.MySQLData;
@@ -50,7 +49,7 @@ public class OnBucketPlace implements Listener {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Place-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket), false);
+                    main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Place-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket), false);
 
                     try {
 
@@ -98,11 +97,11 @@ public class OnBucketPlace implements Listener {
             //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Place-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket), false);
+                main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Place-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket), false);
 
             } else {
 
-                Discord.bucketPlace(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Place")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket), false);
+                main.getDiscord().sendBucketPlace(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Place")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket), false);
 
             }
 

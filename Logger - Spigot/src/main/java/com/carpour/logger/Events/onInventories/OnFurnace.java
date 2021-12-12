@@ -2,7 +2,6 @@ package com.carpour.logger.Events.onInventories;
 
 import org.carour.loggercore.database.mysql.MySQLData;
 import org.carour.loggercore.database.sqlite.SQLiteData;
-import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.Utils.Messages;
@@ -49,7 +48,7 @@ public class OnFurnace implements Listener {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Furnace-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(blockX)).replaceAll("%y%", String.valueOf(blockY)).replaceAll("%z%", String.valueOf(blockZ)).replaceAll("%amount%", String.valueOf(amount)).replaceAll("%item%", String.valueOf(item)), false);
+                    main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Furnace-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(blockX)).replaceAll("%y%", String.valueOf(blockY)).replaceAll("%z%", String.valueOf(blockZ)).replaceAll("%amount%", String.valueOf(amount)).replaceAll("%item%", String.valueOf(item)), false);
 
                     try {
 
@@ -98,7 +97,7 @@ public class OnFurnace implements Listener {
             //Discord Integration
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Furnace-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(blockX)).replaceAll("%y%", String.valueOf(blockY)).replaceAll("%z%", String.valueOf(blockZ)).replaceAll("%amount%", String.valueOf(amount)).replaceAll("%item%", String.valueOf(item)), false);
+                main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Furnace-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(blockX)).replaceAll("%y%", String.valueOf(blockY)).replaceAll("%z%", String.valueOf(blockZ)).replaceAll("%amount%", String.valueOf(amount)).replaceAll("%item%", String.valueOf(item)), false);
 
             } else {
 

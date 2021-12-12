@@ -80,7 +80,7 @@ public class OnCommand implements Listener {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Staff")).replaceAll("%world%", worldName).replaceAll("%command%", command), false);
+                    main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Staff")).replaceAll("%world%", worldName).replaceAll("%command%", command), false);
 
 
                     try {
@@ -129,7 +129,7 @@ public class OnCommand implements Listener {
             //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Staff")).replaceAll("%world%", worldName).replaceAll("%command%", command), false);
+                main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Staff")).replaceAll("%world%", worldName).replaceAll("%command%", command), false);
 
             } else {
 

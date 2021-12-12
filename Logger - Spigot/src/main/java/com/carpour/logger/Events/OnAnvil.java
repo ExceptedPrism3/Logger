@@ -1,6 +1,5 @@
 package com.carpour.logger.Events;
 
-import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import org.carour.loggercore.database.mysql.MySQLData;
@@ -70,7 +69,7 @@ private final Main main = Main.getInstance();
 
                                         if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                                            main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).replaceAll("%renamed%", displayName), false);
+                                            main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).replaceAll("%renamed%", displayName), false);
 
                                             try {
 
@@ -118,7 +117,7 @@ private final Main main = Main.getInstance();
                                     //Discord
                                     if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                                        main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).replaceAll("%renamed%", displayName), false);
+                                        main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).replaceAll("%renamed%", displayName), false);
 
                                     } else {
 

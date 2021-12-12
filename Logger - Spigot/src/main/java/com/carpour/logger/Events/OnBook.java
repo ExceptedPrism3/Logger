@@ -2,7 +2,6 @@ package com.carpour.logger.Events;
 
 import org.carour.loggercore.database.mysql.MySQLData;
 import org.carour.loggercore.database.sqlite.SQLiteData;
-import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.Utils.Messages;
@@ -50,7 +49,7 @@ public class OnBook implements Listener {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%page%", String.valueOf(pageCount)).replaceAll("%content%", String.valueOf(pageContent)).replaceAll("%sign%", String.valueOf(signature)), false);
+                    main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%page%", String.valueOf(pageCount)).replaceAll("%content%", String.valueOf(pageContent)).replaceAll("%sign%", String.valueOf(signature)), false);
 
                     try {
 
@@ -97,11 +96,11 @@ public class OnBook implements Listener {
             //Discord
             if (player.hasPermission("logger.staff.log") && main.getConfig().getBoolean("Staff.Enabled")) {
 
-                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%page%", String.valueOf(pageCount)).replaceAll("%content%", String.valueOf(pageContent)).replaceAll("%sign%", String.valueOf(signature)), false);
+                main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%page%", String.valueOf(pageCount)).replaceAll("%content%", String.valueOf(pageContent)).replaceAll("%sign%", String.valueOf(signature)), false);
 
             } else {
 
-                Discord.bookEditing(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing")).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%page%", String.valueOf(pageCount)).replaceAll("%content%", String.valueOf(pageContent)).replaceAll("%sign%", String.valueOf(signature)), false);
+                main.getDiscord().sendBookEditing(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing")).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%page%", String.valueOf(pageCount)).replaceAll("%content%", String.valueOf(pageContent)).replaceAll("%sign%", String.valueOf(signature)), false);
             }
 
             //MySQL

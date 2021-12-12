@@ -106,12 +106,11 @@ public class OnItemPickup implements Listener {
                     //Discord
                     if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Item-Pickup-Staff")).replaceAll("%world%", worldName).replaceAll("%item%", String.valueOf(item)).replaceAll("%amount%", String.valueOf(amount)).replaceAll("%x%", String.valueOf(blockX)).replaceAll("%y%", String.valueOf(blockY)).replaceAll("%z%", String.valueOf(blockZ)).replaceAll("%renamed%", String.valueOf(itemName)), false);
+                        main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Item-Pickup-Staff")).replaceAll("%world%", worldName).replaceAll("%item%", String.valueOf(item)).replaceAll("%amount%", String.valueOf(amount)).replaceAll("%x%", String.valueOf(blockX)).replaceAll("%y%", String.valueOf(blockY)).replaceAll("%z%", String.valueOf(blockZ)).replaceAll("%renamed%", String.valueOf(itemName)), false);
 
                     } else {
 
-
-                        Discord.itemPickup(player, Objects.requireNonNull(Messages.get().getString("Discord.Item-Pickup")).replaceAll("%world%", worldName).replaceAll("%item%", String.valueOf(item)).replaceAll("%amount%", String.valueOf(amount)).replaceAll("%x%", String.valueOf(blockX)).replaceAll("%y%", String.valueOf(blockY)).replaceAll("%z%", String.valueOf(blockZ)).replaceAll("%renamed%", String.valueOf(itemName)), false);
+                        main.getDiscord().sendItemPickup(player, Objects.requireNonNull(Messages.get().getString("Discord.Item-Pickup")).replaceAll("%world%", worldName).replaceAll("%item%", String.valueOf(item)).replaceAll("%amount%", String.valueOf(amount)).replaceAll("%x%", String.valueOf(blockX)).replaceAll("%y%", String.valueOf(blockY)).replaceAll("%z%", String.valueOf(blockZ)).replaceAll("%renamed%", String.valueOf(itemName)), false);
 
                     }
 

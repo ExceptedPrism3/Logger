@@ -1,6 +1,5 @@
 package com.carpour.logger.Events;
 
-import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import org.carour.loggercore.database.mysql.MySQLData;
@@ -46,7 +45,7 @@ public class OnPlayerLevel implements Listener {
 
                     if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).replaceAll("%level%", String.valueOf(logAbove)), false);
+                        main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).replaceAll("%level%", String.valueOf(logAbove)), false);
 
                         try {
 
@@ -94,11 +93,10 @@ public class OnPlayerLevel implements Listener {
                 //Discord
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).replaceAll("%level%", String.valueOf(logAbove)), false);
+                    main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).replaceAll("%level%", String.valueOf(logAbove)), false);
 
                 } else {
-
-                    Discord.playerLevel(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level")).replaceAll("%level%", String.valueOf(logAbove)), false);
+                    main.getDiscord().sendPlayerLevel(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level")).replaceAll("%level%", String.valueOf(logAbove)), false);
 
                 }
 
