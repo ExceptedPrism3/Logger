@@ -11,8 +11,11 @@
 # feel free to join the support Discord Server!
 #
 # Spigot: Prism3
-# Discord: Prism3#5787 | ID: 403667971089760257
+# Discord: Prism3#9371 | ID: 403667971089760257
 # Discord Server: https://discord.gg/MfR5mcpVfX
+#
+# Config 1.7.1
+
 
 # Server Name
 Server-Name: "Server_Name"
@@ -24,22 +27,48 @@ File-Deletion: 7
 # Log to Files
 Log-to-Files: true
 
-# This will log players with "loggerbungee.staff.log" permission node in their own folder / file
+# This will log players with the "loggerproxy.staff.log" permission node in their own folder / file
 Staff:
   Enabled: false
 
 # Logging features
-Log:
-  Player-Chat: true
-  Player-Login: true
-  Player-Leave: true
-  Server-Reload: true
-  Server-Start: true
-  Server-Stop: true
+Log-Player:
+  Chat: true
+  Commands: true
+  Login: true
+  Leave: true
 
-# Disable to hide Player's IPs
+Log-Server:
+  Reload: true
+  Start: true
+  Stop: true
+  RAM: true
+
+
+# Player-Commands features
+Player-Commands:
+  Whitelist-Commands: false
+  Commands-to-Log:
+    - /server
+    - /lookup
+  Blacklist-Commands: true
+  Commands-to-Block:
+    - /login
+    - /register
+    - /msg
+
+# Enable to show Player's IPs
 Player-Login:
-  Player-IP: true
+  Player-IP: false
+
+# Server RAM Log
+# How often should we check for the Proxy's RAM
+# It's better to have it above 1 min to avoid any complications
+# Value in Ticks, 20 Ticks = 1 Second
+# Percent goes from 0 -> 100
+RAM:
+  Checker: 6000
+  Percent: 50
 
 # MySQL Feature
 # Data-Deletion Value in Days, Set it -1 to cancel
@@ -50,4 +79,10 @@ MySQL:
   Username: username
   Password: PassworD
   Database: database
+  Data-Deletion: 7
+
+# SQLite Feature
+# Data-Deletion Value in Days, Set it -1 to cancel
+SQLite:
+  Enable: false
   Data-Deletion: 7

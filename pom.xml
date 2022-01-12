@@ -6,11 +6,12 @@
 
     <groupId>com.carpour</groupId>
     <artifactId>Logger</artifactId>
-    <version>1.7</version>
+    <version>1.7.1</version>
     <modules>
         <module>Logger - Spigot</module>
         <module>Logger - BungeeCord</module>
         <module>Logger - Shaded</module>
+        <module>Logger - Velocity</module>
     </modules>
     <packaging>pom</packaging>
 

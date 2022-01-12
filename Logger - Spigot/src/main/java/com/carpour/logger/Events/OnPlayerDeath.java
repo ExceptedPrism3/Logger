@@ -32,9 +32,9 @@ public class OnPlayerDeath implements Listener {
         World world = player.getWorld();
         String worldName = world.getName();
         String playerName = player.getName();
-        double x = Math.floor(player.getLocation().getX());
-        double y = Math.floor(player.getLocation().getY());
-        double z = Math.floor(player.getLocation().getZ());
+        int x = player.getLocation().getBlockX();
+        int y = player.getLocation().getBlockY();
+        int z = player.getLocation().getBlockZ();
         String cause = Objects.requireNonNull(event.getEntity().getLastDamageCause()).getCause().name();
         String killer = "";
         String itemInUse = "";
@@ -51,18 +51,22 @@ public class OnPlayerDeath implements Listener {
             }
 
             killer = event.getEntity().getKiller().getName();
-            itemInUse = Objects.requireNonNull(Objects.requireNonNull(event.getEntity().getKiller()).getItemInHand().getType().name());
+            itemInUse = Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(
+                    event.getEntity().getKiller()).getItemInUse()).getType().name());
 
         }
 
-        if (main.getConfig().getBoolean("Log.Player-Death")) {
+        if (main.getConfig().getBoolean("Log-Player.Death")) {
 
             //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Death-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%cause%", cause).replaceAll("%killer%", killer).replaceAll("%itemUsed%", itemInUse), false);
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Death-Staff")).isEmpty()) {
+
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Death-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%cause%", cause).replaceAll("%killer%", killer).replaceAll("%itemUsed%", itemInUse), false);
+                    }
 
                     try {
 
@@ -111,12 +115,18 @@ public class OnPlayerDeath implements Listener {
             //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Death-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%cause%", cause).replaceAll("%killer%", killer).replaceAll("%itemUsed%", itemInUse), false);
+                if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Death-Staff")).isEmpty()) {
+
+                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Death-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%cause%", cause).replaceAll("%killer%", killer).replaceAll("%itemUsed%", itemInUse), false);
+
+                }
 
             } else {
 
-                Discord.playerDeath(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Death")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%cause%", cause).replaceAll("%killer%", killer).replaceAll("%itemUsed%", itemInUse), false);
+                if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Death")).isEmpty()) {
 
+                    Discord.playerDeath(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Death")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%cause%", cause).replaceAll("%killer%", killer).replaceAll("%itemUsed%", itemInUse), false);
+                }
             }
 
             //MySQL

@@ -1,12 +1,10 @@
 package com.carpour.logger.Utils;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Objects;
 
 public class Messages {
@@ -30,7 +28,7 @@ public class Messages {
 
     public static FileConfiguration get(){ return file; }
 
-    public static void save() {
+    /*public static void save() {
 
         try {
 
@@ -42,7 +40,7 @@ public class Messages {
             e.printStackTrace();
 
         }
-    }
+    }*/
 
     public static void reload(){
 

@@ -1,9 +1,9 @@
 package com.carpour.loggerbungeecord.ServerSide;
 
 import com.carpour.loggerbungeecord.Database.MySQL.MySQLData;
+import com.carpour.loggerbungeecord.Database.SQLite.SQLiteData;
 import com.carpour.loggerbungeecord.Discord.Discord;
 import com.carpour.loggerbungeecord.Main;
-import com.carpour.loggerbungeecord.Utils.ConfigManager;
 import com.carpour.loggerbungeecord.Utils.FileHandler;
 import com.carpour.loggerbungeecord.Utils.Messages;
 
@@ -18,23 +18,21 @@ public class Start {
 
     private final Main main = Main.getInstance();
 
-    private final ConfigManager cm = Main.getConfig();
-
     public void run(){
 
-        String serverName = cm.getString("Server-Name");
+        String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (cm.getBoolean("Log.Server-Start")) {
+        if (main.getConfig().getBoolean("Log-Server.Start")) {
 
             //Log To Files Handling
-            if (cm.getBoolean("Log-to-Files")) {
+            if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStartLogFile(), true));
-                    out.write(Messages.getString("Files.Server-Start").replaceAll("%time%", dateFormat.format(date)) + "\n");
+                    out.write(Messages.getString("Files.Server-Side.Start").replaceAll("%time%", dateFormat.format(date)) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -46,10 +44,14 @@ public class Start {
             }
 
             //Discord
-            Discord.serverStart(Messages.getString("Discord.Server-Start").replaceAll("%time%", dateFormat.format(date)), false);
+            if (!Messages.getString("Discord.Server-Side.Start").isEmpty()) {
+
+                Discord.serverStart(Messages.getString("Discord.Server-Side.Start").replaceAll("%time%", dateFormat.format(date)), false);
+
+            }
 
             //MySQL
-            if (cm.getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                 try {
 
@@ -60,6 +62,28 @@ public class Start {
                     e.printStackTrace();
 
                 }
+            }
+
+            //SQLite Handling
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+
+                try {
+
+                    SQLiteData.insertServerStart(serverName);
+
+                } catch (Exception exception) {
+
+                    exception.printStackTrace();
+
+                }
+            }
+
+            if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")
+                    && main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
+
+                main.getLogger().warning("Enabling both Whitelist and Blacklist isn't supported. " +
+                        "Please disable one of them to continue logging Player Commands");
+
             }
         }
     }

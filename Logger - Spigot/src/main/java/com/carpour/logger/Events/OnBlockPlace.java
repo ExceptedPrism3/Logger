@@ -43,14 +43,18 @@ public class OnBlockPlace implements Listener {
 
         if (player.hasPermission("logger.exempt")) return;
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log.Block-Place")) {
+        if (!event.isCancelled() && main.getConfig().getBoolean("Log-Player.Block-Place")) {
 
             //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).isEmpty()) {
+
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
+
+                    }
 
                     try {
 
@@ -98,12 +102,18 @@ public class OnBlockPlace implements Listener {
             //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
+                if (!Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).isEmpty()) {
+
+                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
+
+                }
 
             } else {
 
-                Discord.blockPlace(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
+                if (!Objects.requireNonNull(Messages.get().getString("Discord.Block-Place")).isEmpty()) {
 
+                    Discord.blockPlace(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
+                }
             }
 
             //MySQL

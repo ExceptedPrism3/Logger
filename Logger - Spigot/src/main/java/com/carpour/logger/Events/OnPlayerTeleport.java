@@ -1,11 +1,13 @@
 package com.carpour.logger.Events;
 
+import com.carpour.logger.API.AuthMeUtil;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Database.SQLite.SQLiteData;
 import com.carpour.logger.Utils.Messages;
+import fr.xephi.authme.api.v3.AuthMeApi;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,24 +37,28 @@ public class OnPlayerTeleport implements Listener {
         int tx = Objects.requireNonNull(event.getTo()).getBlockX();
         int ty = event.getTo().getBlockY();
         int tz = event.getTo().getBlockZ();
-        double ox = Math.floor(player.getLocation().getX());
-        double oy = Math.floor(player.getLocation().getY());
-        double oz = Math.floor(player.getLocation().getZ());
+        int ox = player.getLocation().getBlockX();
+        int oy = player.getLocation().getBlockY();
+        int oz = player.getLocation().getBlockZ();
 
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (player.hasPermission("logger.exempt")) return;
+        if (player.hasPermission("logger.exempt") ||
+                (AuthMeUtil.getAuthMeAPI() != null && !AuthMeApi.getInstance().isAuthenticated(player))) return;
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log.Player-Teleport")) {
+        if (!event.isCancelled() && main.getConfig().getBoolean("Log-Player.Teleport")) {
 
             //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport-Staff")).replaceAll("%world%", worldName).replaceAll("%oldX%", String.valueOf(ox)).replaceAll("%oldY%", String.valueOf(oy)).replaceAll("%oldZ%", String.valueOf(oz)).replaceAll("%newX%", String.valueOf(tx)).replaceAll("%newY%", String.valueOf(ty)).replaceAll("%newZ%", String.valueOf(tz)), false);
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport-Staff")).isEmpty()) {
+
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%oldX%", String.valueOf(ox)).replaceAll("%oldY%", String.valueOf(oy)).replaceAll("%oldZ%", String.valueOf(oz)).replaceAll("%newX%", String.valueOf(tx)).replaceAll("%newY%", String.valueOf(ty)).replaceAll("%newZ%", String.valueOf(tz)), false);
+                    }
 
                     try {
 
@@ -101,12 +107,18 @@ public class OnPlayerTeleport implements Listener {
             //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport-Staff")).replaceAll("%world%", worldName).replaceAll("%oldX%", String.valueOf(ox)).replaceAll("%oldY%", String.valueOf(oy)).replaceAll("%oldZ%", String.valueOf(oz)).replaceAll("%newX%", String.valueOf(tx)).replaceAll("%newY%", String.valueOf(ty)).replaceAll("%newZ%", String.valueOf(tz)), false);
+                if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport-Staff")).isEmpty()) {
+
+                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%oldX%", String.valueOf(ox)).replaceAll("%oldY%", String.valueOf(oy)).replaceAll("%oldZ%", String.valueOf(oz)).replaceAll("%newX%", String.valueOf(tx)).replaceAll("%newY%", String.valueOf(ty)).replaceAll("%newZ%", String.valueOf(tz)), false);
+
+                }
 
             } else {
 
-                Discord.playerTeleport(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport")).replaceAll("%world%", worldName).replaceAll("%oldX%", String.valueOf(ox)).replaceAll("%oldY%", String.valueOf(oy)).replaceAll("%oldZ%", String.valueOf(oz)).replaceAll("%newX%", String.valueOf(tx)).replaceAll("%newY%", String.valueOf(ty)).replaceAll("%newZ%", String.valueOf(tz)), false);
+                if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport")).isEmpty()) {
 
+                    Discord.playerTeleport(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%oldX%", String.valueOf(ox)).replaceAll("%oldY%", String.valueOf(oy)).replaceAll("%oldZ%", String.valueOf(oz)).replaceAll("%newX%", String.valueOf(tx)).replaceAll("%newY%", String.valueOf(ty)).replaceAll("%newZ%", String.valueOf(tz)), false);
+                }
             }
 
             //MySQL

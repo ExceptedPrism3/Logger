@@ -44,13 +44,13 @@ public class ConfigManager {
         return this.config.getBoolean(key);
     }
 
-    /*public List<String> getStringList(String key) {
+    public List<String> getStringList(String key) {
         List<String> list = this.config.getStringList(key);
         List<String> avail = new ArrayList<>();
         for (String str : list)
             avail.add(ChatColor.translateAlternateColorCodes('&', str));
         return avail;
-    }*/
+    }
 
     public File getFile() {
         return new File(Main.getInstance().getDataFolder(), "config - Bungee.yml");

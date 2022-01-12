@@ -1,6 +1,8 @@
 # Messages for Logger Plugin [ Proxy Version ]
-
+#
 # Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
+#
+# Config 1.7.1
 
 
 # Plugin Messages
@@ -13,28 +15,40 @@ General:
 Files:
   Player-Chat-Staff: "[%time%] [%server%] The Staff <%player%> has said => %msg%"
   Player-Chat: "[%time%] [%server%] The Player <%player%> has said => %msg%"
-  Player-Login-Staff: "[%time%] [%server%] The Staff <%player%> has joined with the current IP -> %IP%"
-  Player-Login: "[%time%] [%server%] The Player <%player%> has joined with the current IP -> %IP%"
+  Player-Commands-Staff: "[%time%] [%server%] The Staff <%player%> has executed => %command%"
+  Player-Commands: "[%time%] [%server%] The Player <%player%> has executed => %command%"
+  Player-Login-Staff: "[%time%] The Staff <%player%> has joined with the current IP -> %IP%"
+  Player-Login: "[%time%] The Player <%player%> has joined with the current IP -> %IP%"
   Player-Leave-Staff: "[%time%] [%server%] The Staff <%player%> has left the server"
   Player-Leave: "[%time%] [%server%] The Player <%player%> has left the server"
   Server-Reload-Player-Staff: "[%time%] [%server%] The Staff <%player%> has reloaded the server"
   Server-Reload-Player: "[%time%] [%server%] The Player <%player%> has reloaded the server"
-  Server-Reload-Console: "[%time%] The server has been reloaded"
-  Server-Start: "[%time%] The server has started"
-  Server-Stop: "[%time%] The server has stopped"
+
+  # Server Side Part
+  Server-Side:
+    Reload-Console: "[%time%] The server has been reloaded"
+    Start: "[%time%] The server has started"
+    Stop: "[%time%] The server has stopped"
+    RAM: "[%time%] The Server has exceeded the set amount of percentage of RAM Usage! Total Memory: %max% | Used Memory: %used% | Free Memory: %free%"
 
 # Discord Instance
 # Emojis can be found here https://emojipedia.org/ or elsewhere
 Discord:
-  Player-Chat-Staff: "\uD83D\uDCAC **|** 👮‍♂  **[%server%]** **%msg%**"
-  Player-Chat: "\uD83D\uDCAC **[%server%]** **%msg%**"
-  Player-Login-Staff: "👋 **|** 👮‍♂ ||**%IP%**||"
-  Player-Login: "👋 ||**%IP%**||"
-  Player-Leave-Staff: "👋 **|** 👮‍♂ **[%server%]** Left the server"
-  Player-Leave: "👋 **[%server%]** Left the server"
-  Server-Reload-Player-Staff: "🔃 **|** 👮‍♂  **[%server%]** Has reloaded the server"
-  Server-Reload-Player: "🔃 **[%server%]** Has reloaded the server"
-  Server-Reload-Console: "🔃 **[%time%]** The server has been reloaded"
-  Server-Start: "🟢 **[%time%]**"
-  Server-Stop: "🔴 **[%time%]**"
+  Player-Chat-Staff: "**[%time%]** **[%server%]** **%msg%**"
+  Player-Chat: "**[%time%]** **[%server%]** **%msg%**"
+  Player-Commands-Staff: "**[%time%]** **[%server%]** **%command%**"
+  Player-Commands: "**[%time%]** **[%server%]** **%command%**"
+  Player-Login-Staff: "**[%time%]** ||**%IP%**||"
+  Player-Login: "**[%time%]** ||**%IP%**||"
+  Player-Leave-Staff: "**[%time%]** **[%server%]** Left the server"
+  Player-Leave: "**[%time%]** **[%server%]** Left the server"
+  Server-Reload-Player-Staff: "**[%time%]** **[%server%]** Has reloaded the server"
+  Server-Reload-Player: "**[%time%]** **[%server%]** Has reloaded the server"
+
+  # Server Side Part
+  Server-Side:
+    Restart-Console: "**[%time%]** The server has been reloaded"
+    Start: "**[%time%]**"
+    Stop: "**[%time%]**"
+    RAM: "**[%time%]** The Server has exceeded the set amount of percentage of RAM Usage! Total Memory: **%max%** `|` Used Memory: **%used%** `|` Free Memory: **%free%**"
 

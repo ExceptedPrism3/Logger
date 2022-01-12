@@ -6,7 +6,6 @@ import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Database.SQLite.SQLiteData;
 import com.carpour.logger.Utils.Messages;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -38,7 +37,7 @@ public class OnPlayerLevel implements Listener {
 
         if (player.hasPermission("logger.exempt")) return;
 
-        if (main.getConfig().getBoolean("Log.Player-Level")) {
+        if (main.getConfig().getBoolean("Log-Player.Level")) {
 
             if (playerLevel == logAbove) {
 
@@ -47,7 +46,10 @@ public class OnPlayerLevel implements Listener {
 
                     if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).replaceAll("%level%", String.valueOf(logAbove)), false);
+                        if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).isEmpty()) {
+
+                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%level%", String.valueOf(logAbove)), false);
+                        }
 
                         try {
 
@@ -89,18 +91,23 @@ public class OnPlayerLevel implements Listener {
                         e.printStackTrace();
 
                     }
-
                 }
 
                 //Discord
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).replaceAll("%level%", String.valueOf(logAbove)), false);
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).isEmpty()) {
+
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%level%", String.valueOf(logAbove)), false);
+
+                    }
 
                 } else {
 
-                    Discord.playerLevel(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level")).replaceAll("%level%", String.valueOf(logAbove)), false);
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Level")).isEmpty()) {
 
+                        Discord.playerLevel(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%level%", String.valueOf(logAbove)), false);
+                    }
                 }
 
                 //MySQL

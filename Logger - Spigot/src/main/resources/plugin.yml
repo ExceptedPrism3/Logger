@@ -4,7 +4,7 @@ main: com.carpour.logger.Main
 api-version: 1.13
 authors: [ Prism3 , thelooter ]
 description: Log all Activities from Players and Server Side!
-softdepend: [Essentials]
+softdepend: [Essentials , AuthMe]
 commands:
   logger:
     description: Plugin command.
@@ -19,7 +19,7 @@ permissions:
     children:
       logger.exempt: true
       logger.reload: true
-      logger.cmdspy: true
+      logger.spy: true
       logger.update: true
   logger.exempt:
     description: "Prevents the Player from Getting Logged."
@@ -27,7 +27,7 @@ permissions:
   logger.reload:
     description: "Allows to Reload the Plugin."
     default: op
-  logger.cmdspy:
+  logger.spy:
     description: "Ability to see other player's Commands."
     default: op
   logger.staff.log:

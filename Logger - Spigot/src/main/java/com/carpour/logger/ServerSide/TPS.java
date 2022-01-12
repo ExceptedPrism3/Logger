@@ -40,7 +40,7 @@ public class TPS implements Runnable {
 
     public void run() {
 
-        if (main.getConfig().getBoolean("Log.TPS")) {
+        if (main.getConfig().getBoolean("Log-Server.TPS")) {
 
             if (main.getConfig().getInt("TPS.Value-Medium") <= 0 || main.getConfig().getInt("TPS.Value-Medium") >= 20 ||
                     main.getConfig().getInt("TPS.Value-Critical") <= 0 || main.getConfig().getInt("TPS.Value-Critical") >= 20) {
@@ -61,13 +61,13 @@ public class TPS implements Runnable {
                     if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
-                        out.write(Objects.requireNonNull(Messages.get().getString("Files.TPS-Medium")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%TPS%", String.valueOf(getTPS())) + "\n");
+                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Server-Side.TPS-Medium")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%TPS%", String.valueOf(getTPS())) + "\n");
                         out.close();
 
                     } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
-                        out.write(Objects.requireNonNull(Messages.get().getString("Files.TPS-Critical")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%TPS%", String.valueOf(getTPS())) + "\n");
+                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Server-Side.TPS-Critical")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%TPS%", String.valueOf(getTPS())) + "\n");
                         out.close();
 
                     }
@@ -82,11 +82,18 @@ public class TPS implements Runnable {
                 //Discord
                 if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
 
-                    Discord.TPS(Objects.requireNonNull(Messages.get().getString("Discord.TPS-Medium")).replaceAll("%TPS%", String.valueOf(getTPS())), false);
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.TPS-Medium")).isEmpty()) {
+
+                        Discord.TPS(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.TPS-Medium")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%TPS%", String.valueOf(getTPS())), false);
+
+                    }
 
                 } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
 
-                    Discord.TPS(Objects.requireNonNull(Messages.get().getString("Discord.TPS-Critical")).replaceAll("%TPS%", String.valueOf(getTPS())), false);
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.TPS-Critical")).isEmpty()) {
+
+                        Discord.TPS(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.TPS-Critical")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%TPS%", String.valueOf(getTPS())), false);
+                    }
                 }
 
                 //MySQL
@@ -131,7 +138,6 @@ public class TPS implements Runnable {
                     }
                 }
             }
-
         }
     }
 }

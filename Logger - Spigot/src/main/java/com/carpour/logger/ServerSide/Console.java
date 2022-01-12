@@ -16,8 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 public class Console implements Listener {
 
@@ -26,12 +25,25 @@ public class Console implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onConsoleCommand(ServerCommandEvent event) {
 
-        String msg = event.getCommand();
+        String command = event.getCommand();
+        List<String> commandParts = Arrays.asList(event.getCommand().split("\\s+"));
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (main.getConfig().getBoolean("Log.Console-Commands")) {
+        if (main.getConfig().getBoolean("Log-Server.Console-Commands")) {
+
+            //Blacklisted Commands
+            if (main.getConfig().getBoolean("Console-Commands.Blacklist-Commands")) {
+
+                for (String m : main.getConfig().getStringList("Console-Commands.Commands-to-Block")) {
+
+                    if (commandParts.get(0).equalsIgnoreCase(m)) {
+                        event.setCancelled(true);
+                        return;
+                    }
+                }
+            }
 
             //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
@@ -39,7 +51,7 @@ public class Console implements Listener {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getConsoleLogFile(), true));
-                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Console-Commands")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%message%", msg) + "\n");
+                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Server-Side.Console-Commands")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%command%", command) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -51,14 +63,17 @@ public class Console implements Listener {
             }
 
             //Discord
-            Discord.console(Objects.requireNonNull(Messages.get().getString("Discord.Console-Commands")).replaceAll("%message%", msg), false);
+            if (!Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Console-Commands")).isEmpty()) {
+
+                Discord.console(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Console-Commands")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%command%", command), false);
+            }
 
             //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                 try {
 
-                    MySQLData.consoleCommands(serverName, msg);
+                    MySQLData.consoleCommands(serverName, command);
 
                 } catch (Exception e) {
 
@@ -72,7 +87,7 @@ public class Console implements Listener {
 
                 try {
 
-                    SQLiteData.insertConsoleCommands(serverName, msg);
+                    SQLiteData.insertConsoleCommands(serverName, command);
 
                 } catch (Exception e) {
 

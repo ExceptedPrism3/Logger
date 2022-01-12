@@ -1,8 +1,6 @@
 package com.carpour.logger.Database.MySQL;
 
 import com.carpour.logger.Main;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -29,11 +27,11 @@ public class MySQL {
 
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?AllowPublicKeyRetrieval=true?useSSL=false&jdbcCompliantTruncation=false", username, password);
-                Bukkit.getConsoleSender().sendMessage("[Logger] " + ChatColor.GREEN + "MySQL Connection has been established!");
+                main.getLogger().info("MySQL Connection has been established!");
 
             } catch (SQLException | ClassNotFoundException e) {
 
-                Bukkit.getConsoleSender().sendMessage("[Logger] " + ChatColor.RED + "Could not connect to the Database!");
+                main.getLogger().severe("Could not connect to MySQL Database!");
 
             }
         }
@@ -46,11 +44,11 @@ public class MySQL {
             try {
 
                 connection.close();
-                Bukkit.getConsoleSender().sendMessage("[Logger] " + ChatColor.GREEN + "MySQL Connection has been closed!");
+                main.getLogger().info("MySQL Connection has been closed!");
 
             } catch (SQLException e) {
 
-                Bukkit.getConsoleSender().sendMessage("[Logger] " + ChatColor.RED + "MySQL Database couldn't be closed safely, if the issue persists contact the Authors!");
+                main.getLogger().severe("MySQL Database couldn't be closed safely, if the issue persists contact the Authors!");
 
             }
         }

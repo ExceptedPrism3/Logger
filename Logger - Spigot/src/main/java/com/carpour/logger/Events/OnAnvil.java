@@ -1,6 +1,7 @@
 package com.carpour.logger.Events;
 
 import com.carpour.logger.Discord.Discord;
+import com.carpour.logger.Events.Spy.OnAnvilSpy;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.Database.MySQL.MySQLData;
@@ -41,7 +42,7 @@ private final Main main = Main.getInstance();
 
         if (player.hasPermission("logger.exempt")) return;
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log.Anvil")) {
+        if (!event.isCancelled() && main.getConfig().getBoolean("Log-Player.Anvil")) {
 
             if (inv instanceof AnvilInventory) {
 
@@ -65,12 +66,24 @@ private final Main main = Main.getInstance();
 
                                     String displayName = meta.getDisplayName();
 
+                                    //Anvil Spy
+                                    if (main.getConfig().getBoolean("Spy-Features.Anvil-Spy.Enable")) {
+
+                                        OnAnvilSpy anvilSpy = new OnAnvilSpy();
+                                        anvilSpy.onAnvilSpy(event);
+
+                                    }
+
                                     //Log To Files Handling
                                     if (main.getConfig().getBoolean("Log-to-Files")) {
 
                                         if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).replaceAll("%renamed%", displayName), false);
+                                            if (!Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).isEmpty()) {
+
+                                                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%renamed%", displayName), false);
+
+                                            }
 
                                             try {
 
@@ -118,11 +131,18 @@ private final Main main = Main.getInstance();
                                     //Discord
                                     if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).replaceAll("%renamed%", displayName), false);
+                                        if (!Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).isEmpty()) {
+
+                                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%renamed%", displayName), false);
+
+                                        }
 
                                     } else {
 
-                                        Discord.anvil(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil")).replaceAll("%renamed%", displayName), false);
+                                        if (!Objects.requireNonNull(Messages.get().getString("Discord.Anvil")).isEmpty()) {
+
+                                            Discord.anvil(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%renamed%", displayName), false);
+                                        }
                                     }
 
                                     //MySQL

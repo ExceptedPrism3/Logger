@@ -3,6 +3,7 @@ package com.carpour.logger.Events;
 import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Database.SQLite.SQLiteData;
 import com.carpour.logger.Discord.Discord;
+import com.carpour.logger.Events.Spy.OnBookSpy;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
 import com.carpour.logger.Utils.Messages;
@@ -38,19 +39,30 @@ public class OnBook implements Listener {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-
         if (player.hasPermission("logger.exempt")) return;
+
+        //Book Spy
+        if (main.getConfig().getBoolean("Spy-Features.Book-Spy.Enable")) {
+
+            OnBookSpy bookSpy = new OnBookSpy();
+            bookSpy.onBookSpy(event);
+
+        }
 
         if (!event.isSigning()) signature = "no one";
 
         //Log To Files Handling
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log.Book-Editing")) {
+        if (!event.isCancelled() && main.getConfig().getBoolean("Log-Player.Book-Editing")) {
 
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%page%", String.valueOf(pageCount)).replaceAll("%content%", String.valueOf(pageContent)).replaceAll("%sign%", String.valueOf(signature)), false);
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).isEmpty()) {
+
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%page%", String.valueOf(pageCount)).replaceAll("%content%", String.valueOf(pageContent)).replaceAll("%sign%", String.valueOf(signature)), false);
+
+                    }
 
                     try {
 
@@ -72,7 +84,7 @@ public class OnBook implements Listener {
                     }
                     if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
-                        SQLiteData.insertBook(serverName, worldName, player, pageCount, pageContent, signature, true);
+                        SQLiteData.insertBook(serverName, player, pageCount, pageContent, signature, true);
 
                     }
 
@@ -95,13 +107,20 @@ public class OnBook implements Listener {
             }
 
             //Discord
-            if (player.hasPermission("logger.staff.log") && main.getConfig().getBoolean("Staff.Enabled")) {
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%page%", String.valueOf(pageCount)).replaceAll("%content%", String.valueOf(pageContent)).replaceAll("%sign%", String.valueOf(signature)), false);
+                if (!Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).isEmpty()) {
+
+                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%page%", String.valueOf(pageCount)).replaceAll("%content%", String.valueOf(pageContent)).replaceAll("%sign%", String.valueOf(signature)), false);
+
+                }
 
             } else {
 
-                Discord.bookEditing(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing")).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%page%", String.valueOf(pageCount)).replaceAll("%content%", String.valueOf(pageContent)).replaceAll("%sign%", String.valueOf(signature)), false);
+                if (!Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing")).isEmpty()) {
+
+                    Discord.bookEditing(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%page%", String.valueOf(pageCount)).replaceAll("%content%", String.valueOf(pageContent)).replaceAll("%sign%", String.valueOf(signature)), false);
+                }
             }
 
             //MySQL
@@ -123,7 +142,7 @@ public class OnBook implements Listener {
 
                 try {
 
-                    SQLiteData.insertBook(serverName, worldName, player, pageCount, pageContent, signature, player.hasPermission("logger.staff.log"));
+                    SQLiteData.insertBook(serverName, player, pageCount, pageContent, signature, player.hasPermission("logger.staff.log"));
 
                 } catch (Exception exception) {
 

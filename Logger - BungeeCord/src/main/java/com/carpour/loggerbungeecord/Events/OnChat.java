@@ -1,9 +1,9 @@
 package com.carpour.loggerbungeecord.Events;
 
+import com.carpour.loggerbungeecord.Database.SQLite.SQLiteData;
 import com.carpour.loggerbungeecord.Database.MySQL.MySQLData;
 import com.carpour.loggerbungeecord.Discord.Discord;
 import com.carpour.loggerbungeecord.Main;
-import com.carpour.loggerbungeecord.Utils.ConfigManager;
 import com.carpour.loggerbungeecord.Utils.FileHandler;
 import com.carpour.loggerbungeecord.Utils.Messages;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -21,35 +21,69 @@ import java.util.Objects;
 
 public class OnChat implements Listener {
 
-    private final ConfigManager cm = Main.getConfig();
-
     private final Main main = Main.getInstance();
 
     @EventHandler
     public void onPlayerChat(ChatEvent event){
 
-        ProxiedPlayer player = (ProxiedPlayer) event.getSender();
-        String server =  ((ProxiedPlayer) event.getSender()).getServer().getInfo().getName();
-        String message = event.getMessage();
-        String serverName = cm.getString("Server-Name");
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        if (!event.isCommand()) {
 
-        if (player.hasPermission("loggerbungee.exempt")) return;
+            ProxiedPlayer player = (ProxiedPlayer) event.getSender();
+            String server = player.getServer().getInfo().getName();
+            String message = event.getMessage();
+            String serverName = main.getConfig().getString("Server-Name");
+            Date date = new Date();
+            DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (!event.isCancelled() && cm.getBoolean("Log.Player-Chat")) {
+            if (player.hasPermission("loggerproxy.exempt")) return;
 
-            //Log To Files Handling
-            if (cm.getBoolean("Log-to-Files")) {
+            if (!event.isCancelled() && main.getConfig().getBoolean("Log-Player.Chat")) {
 
-                if (cm.getBoolean("Staff.Enabled") && player.hasPermission("loggerbungee.staff.log")) {
+                //Log To Files Handling
+                if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat-Staff")).replaceAll("%server%", server).replaceAll("%msg%", message), false);
+                    if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
+
+                        if (!Messages.getString("Discord.Player-Chat-Staff").isEmpty()) {
+
+                            Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%msg%", message), false);
+
+                        }
+
+                        try {
+
+                            BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
+                            out.write(Messages.getString("Files.Player-Chat-Staff").replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%player%", player.getName()).replaceAll("%msg%", message) + "\n");
+                            out.close();
+
+                        } catch (IOException e) {
+
+                            Main.getInstance().getLogger().warning("An error occurred while logging into the appropriate file.");
+                            e.printStackTrace();
+
+                        }
+
+                        if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+
+
+                            MySQLData.playerChat(serverName, player.getName(), message, true);
+
+                        }
+
+                        if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+
+                            SQLiteData.insertPlayerChat(serverName, player.getName(), message, true);
+
+                        }
+
+                        return;
+
+                    }
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
-                        out.write(Messages.getString("Files.Player-Chat-Staff").replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%player%", player.getName()).replaceAll("%msg%", message) + "\n");
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getChatLogFile(), true));
+                        out.write(Messages.getString("Files.Player-Chat").replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%player%", player.getName()).replaceAll("%msg%", message) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -58,53 +92,51 @@ public class OnChat implements Listener {
                         e.printStackTrace();
 
                     }
+                }
 
-                    if (cm.getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                //Discord Integration
+                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
 
+                    if (!Messages.getString("Discord.Player-Chat-Staff").isEmpty()) {
 
-                        MySQLData.playerChat(serverName, player.getName(), message, true);
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%msg%", message), false);
 
                     }
 
-                    return;
+                } else {
 
+                    if (!Messages.getString("Discord.Player-Chat").isEmpty()) {
+
+                        Discord.playerChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%msg%", message), false);
+                    }
                 }
 
-                try {
+                //MySQL Handling
+                if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getChatLogFile(), true));
-                    out.write(Messages.getString("Files.Player-Chat").replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%player%", player.getName()).replaceAll("%msg%", message) + "\n");
-                    out.close();
+                    try {
 
-                } catch (IOException e) {
+                        MySQLData.playerChat(serverName, player.getName(), message, player.hasPermission("loggerproxy.staff.log"));
 
-                    Main.getInstance().getLogger().warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
+                    } catch (Exception e) {
 
+                        e.printStackTrace();
+
+                    }
                 }
-            }
 
-            //Discord Integration
-            if (cm.getBoolean("Staff.Enabled") && player.hasPermission("loggerbungee.staff.log")) {
+                //SQLite Handling
+                if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
-                Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat-Staff")).replaceAll("%server%", server).replaceAll("%msg%", message), false);
+                    try {
 
-            } else {
+                        SQLiteData.insertPlayerChat(serverName, player.getName(), message, player.hasPermission("loggerproxy.staff.log"));
 
-                Discord.playerChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat")).replaceAll("%server%", server).replaceAll("%msg%", message), false);
-            }
+                    } catch (Exception exception) {
 
-            //MySQL Handling
-            if (cm.getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                        exception.printStackTrace();
 
-                try {
-
-                    MySQLData.playerChat(serverName, player.getName(), message, player.hasPermission("loggerbungee.staff.log"));
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
+                    }
                 }
             }
         }

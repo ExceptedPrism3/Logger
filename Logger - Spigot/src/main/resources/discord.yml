@@ -1,0 +1,119 @@
+# Discord Bridge Configuration for Logger Plugin [ Bukkit Version]
+#
+# Need Support Join the Discord Server: https://discord.gg/MfR5mcpVfX
+#
+# Config 1.7.1
+
+
+Discord:
+  Enable: false
+  Bot-Token: BOT_KEY
+  Staff:
+    Channel-ID: 'LINK_HERE'
+  Player-Chat:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Player-Commands:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Player-Sign-Text:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Player-Join:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Player-Leave:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Player-Kick:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Player-Death:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Player-Teleport:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Player-Level:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Block-Place:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Block-Break:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Bucket-Fill:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Bucket-Empty:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Anvil:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Item-Pickup:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Item-Drop:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Enchanting:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Book-Editing:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Furnace:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+  Game-Mode:
+    Enable: true
+    Channel-ID: 'LINK_HERE'
+
+  # Server Side Checkers
+  Server-Side:
+    Start:
+      Enable: true
+      Channel-ID: 'LINK_HERE'
+    Stop:
+      Enable: true
+      Channel-ID: 'LINK_HERE'
+    Console-Commands:
+      Enable: true
+      Channel-ID: 'LINK_HERE'
+    RAM:
+      Enable: true
+      Channel-ID: 'LINK_HERE'
+    TPS:
+      Enable: true
+      Channel-ID: 'LINK_HERE'
+    Portal-Creation:
+      Enable: true
+      Channel-ID: 'LINK_HERE'
+    RCON:
+      Enable: true
+      Channel-ID: 'LINK_HERE'
+
+  # Extra Side Checkers
+  Extras:
+    AFK:
+      Enable: true
+      Channel-ID: 'LINK_HERE'
+    Wrong-Password:
+      Enable: true
+      Channel-ID: 'LINK_HERE'
+
+# Bot Activity Status
+# First Part must not be different from
+# Playing, Watching, Listening, Streaming, Competing
+# Otherwise it will not work
+# Time in Seconds
+ActivityCycling:
+  Enabled: true
+  Activities:
+    - ["watching", "Minecraft Movie"]
+    - ["playing", "Minecraft 1.7"]
+    - ["listening", "Dragon's Heart Beats"]
+    - ["streaming", "Minecraft Gameplay"]
+  Time: 30

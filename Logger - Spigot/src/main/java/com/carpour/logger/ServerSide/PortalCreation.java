@@ -32,7 +32,9 @@ public class PortalCreation implements Listener {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log.Portal-Creation")) {
+        if (!event.isCancelled() && main.getConfig().getBoolean("Log-Server.Portal-Creation")) {
+
+            System.out.println(event.getBlocks());
 
             //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
@@ -40,7 +42,7 @@ public class PortalCreation implements Listener {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPortalCreateFile(), true));
-                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Portal-Creation")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%material%", String.valueOf(reason)) + "\n");
+                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Server-Side.Portal-Creation")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%material%", String.valueOf(reason)) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -52,7 +54,10 @@ public class PortalCreation implements Listener {
             }
 
             //Discord
-            Discord.portalCreation(Objects.requireNonNull(Messages.get().getString("Discord.Portal-Creation")).replaceAll("%world%", worldName).replaceAll("%material%", String.valueOf(reason)), false);
+            if (!Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Portal-Creation")).isEmpty()) {
+
+                Discord.portalCreation(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Portal-Creation")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%material%", String.valueOf(reason)), false);
+            }
 
             //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {

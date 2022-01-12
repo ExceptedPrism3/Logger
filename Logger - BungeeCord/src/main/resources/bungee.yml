@@ -7,17 +7,17 @@ commands:
   reload:
     description: "Reloads the plugin configs"
 permissions:
-  loggerbungee.staff:
-    description: "Allows the user to view Plugin Updates."
+  loggerproxy.staff:
+    description: "Allows to view Plugin updates."
     default: op
     children:
-      logger.exempt: true
-      logger.reload: true
-  loggerbungee.exempt:
-    description: "Prevents the Player from Getting Logged."
+      loggerproxy.exempt: true
+      loggerproxy.reload: true
+  loggerproxy.exempt:
+    description: "Prevents the player from getting logged."
     default: op
-  loggerbungee.reload:
-    description: "Allows to Reload the Plugin."
+  loggerproxy.reload:
+    description: "Allows to reload the Plugin."
     default: op
-  loggerbungee.staff.log:
-    description: "Logs Staff Members."
+  loggerproxy.staff.log:
+    description: "Logs staff members."

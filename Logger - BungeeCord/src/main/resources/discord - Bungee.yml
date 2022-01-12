@@ -1,6 +1,8 @@
 # Discord Bridge Configuration for Logger Plugin [ Proxy Version ]
 #
 # Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
+#
+# Config 1.7.1
 
 
 Discord:
@@ -10,13 +12,34 @@ Discord:
     Channel-ID: 'LINK_HERE'
   Player-Chat:
     Channel-ID: 'LINK_HERE'
+  Player-Commands:
+    Channel-ID: 'LINK_HERE'
   Player-Login:
     Channel-ID: 'LINK_HERE'
   Player-Leave:
     Channel-ID: 'LINK_HERE'
-  Server-Restart:
-    Channel-ID: 'LINK_HERE'
-  Server-Start:
-    Channel-ID: 'LINK_HERE'
-  Server-Stop:
-    Channel-ID: 'LINK_HERE'
+
+  # Server Side
+  Server-Side:
+    Restart:
+      Channel-ID: 'LINK_HERE'
+    Start:
+      Channel-ID: 'LINK_HERE'
+    Stop:
+      Channel-ID: 'LINK_HERE'
+    RAM:
+      Channel-ID: 'LINK_HERE'
+
+# Bot Activity Status
+# First Part must not be different from
+# Playing, Watching, Listening, Streaming, Competing
+# Otherwise it will not work
+# Time in Seconds
+ActivityCycling:
+  Enabled: true
+  Activities:
+    - ["watching", "Minecraft Movie"]
+    - ["playing", "Minecraft 1.7"]
+    - ["listening", "Dragon's Heart Beats"]
+    - ["streaming", "Minecraft Gameplay"]
+  Time: 30

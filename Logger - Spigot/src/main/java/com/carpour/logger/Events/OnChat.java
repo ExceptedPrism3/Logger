@@ -39,14 +39,18 @@ public class OnChat implements Listener {
 
         if (player.hasPermission("logger.exempt")) return;
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log.Player-Chat")) {
+        if (!event.isCancelled() && main.getConfig().getBoolean("Log-Player.Chat")) {
 
             //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat-Staff")).replaceAll("%world%", worldName).replaceAll("%message%", msg), false);
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat-Staff")).isEmpty()) {
+
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%message%", msg), false);
+
+                    }
 
                     try {
 
@@ -95,11 +99,18 @@ public class OnChat implements Listener {
             //Discord Integration
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat-Staff")).replaceAll("%world%", worldName).replaceAll("%message%", msg), false);
+                if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat-Staff")).isEmpty()) {
+
+                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%message%", msg), false);
+
+                }
 
             } else {
 
-                Discord.playerChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat")).replaceAll("%world%", worldName).replaceAll("%message%", msg), false);
+                if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat")).isEmpty()) {
+
+                    Discord.playerChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%message%", msg), false);
+                }
             }
 
             //MySQL Handling

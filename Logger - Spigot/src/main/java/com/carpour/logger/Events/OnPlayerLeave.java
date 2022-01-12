@@ -32,23 +32,26 @@ public class OnPlayerLeave implements Listener {
         World world = player.getWorld();
         String worldName = world.getName();
         String playerName = player.getName();
-        double x = Math.floor(player.getLocation().getX());
-        double y = Math.floor(player.getLocation().getY());
-        double z = Math.floor(player.getLocation().getZ());
+        int x = player.getLocation().getBlockX();
+        int y = player.getLocation().getBlockY();
+        int z = player.getLocation().getBlockZ();
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
         if (player.hasPermission("logger.exempt")) return;
 
-        if (main.getConfig().getBoolean("Log.Player-Leave")) {
+        if (main.getConfig().getBoolean("Log-Player.Leave")) {
 
             //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Leave-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Leave-Staff")).isEmpty()) {
+
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Leave-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+                    }
 
                     try {
 
@@ -97,12 +100,18 @@ public class OnPlayerLeave implements Listener {
             //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Leave-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+                if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Leave-Staff")).isEmpty()) {
+
+                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Leave-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+
+                }
 
             } else {
 
-                Discord.playerLeave(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Leave")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+                if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Leave")).isEmpty()) {
 
+                    Discord.playerLeave(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Leave")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+                }
             }
 
             //MySQL

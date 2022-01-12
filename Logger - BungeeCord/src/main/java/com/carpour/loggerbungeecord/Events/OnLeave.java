@@ -1,9 +1,9 @@
 package com.carpour.loggerbungeecord.Events;
 
 import com.carpour.loggerbungeecord.Database.MySQL.MySQLData;
+import com.carpour.loggerbungeecord.Database.SQLite.SQLiteData;
 import com.carpour.loggerbungeecord.Discord.Discord;
 import com.carpour.loggerbungeecord.Main;
-import com.carpour.loggerbungeecord.Utils.ConfigManager;
 import com.carpour.loggerbungeecord.Utils.FileHandler;
 import com.carpour.loggerbungeecord.Utils.Messages;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -21,7 +21,6 @@ import java.util.Objects;
 
 public class OnLeave implements Listener {
 
-    private final ConfigManager cm = Main.getConfig();
     private final Main main = Main.getInstance();
 
     @EventHandler
@@ -29,28 +28,36 @@ public class OnLeave implements Listener {
 
         ProxiedPlayer player = event.getPlayer();
         String playerName = player.getName();
-        String server = player.getServer().getInfo().getName();
-        String serverName = cm.getString("Server-Name");
+
+        // This resolves an error showing up if the targeted server is offline whist connecting
+        if (player.getServer() == null) return;
+
+        String playerServerName = player.getServer().getInfo().getName();
+        String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (player.hasPermission("loggerbungee.exempt")) return;
+        if (player.getServer() == null || playerServerName == null) return;
 
-        if (player.getServer() == null) return;
+        if (player.hasPermission("loggerproxy.exempt")) return;
 
-        if (cm.getBoolean("Log.Player-Leave")) {
+        if (main.getConfig().getBoolean("Log-Player.Leave")) {
 
             //Log To Files Handling
-            if (cm.getBoolean("Log-to-Files")) {
+            if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                if (cm.getBoolean("Staff.Enabled") && player.hasPermission("loggerbungee.staff.log")) {
+                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Leave-Staff")).replaceAll("%server%", server), false);
+                    if (!Messages.getString("Discord.Player-Leave-Staff").isEmpty()) {
+
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Leave-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", playerServerName), false);
+
+                    }
 
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
-                        out.write(Messages.getString("Files.Player-Leave-Staff").replaceAll("%server%", server).replaceAll("%time%", dateFormat.format(date)).replaceAll("%player%", playerName) + "\n");
+                        out.write(Messages.getString("Files.Player-Leave-Staff").replaceAll("%server%", playerServerName).replaceAll("%time%", dateFormat.format(date)).replaceAll("%player%", playerName) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -60,10 +67,16 @@ public class OnLeave implements Listener {
 
                     }
 
-                    if (cm.getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
 
                         MySQLData.playerLeave(serverName, playerName, true);
+
+                    }
+
+                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+
+                        SQLiteData.insertPlayerLeave(serverName, playerName, true);
 
                     }
 
@@ -74,7 +87,7 @@ public class OnLeave implements Listener {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLeaveLogFile(), true));
-                    out.write(Messages.getString("Files.Player-Leave").replaceAll("%server%", server).replaceAll("%time%", dateFormat.format(date)).replaceAll("%player%", playerName) + "\n");
+                    out.write(Messages.getString("Files.Player-Leave").replaceAll("%server%", playerServerName).replaceAll("%time%", dateFormat.format(date)).replaceAll("%player%", playerName) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -86,25 +99,47 @@ public class OnLeave implements Listener {
             }
 
             //Discord Integration
-            if (cm.getBoolean("Staff.Enabled") && player.hasPermission("loggerbungee.staff.log")) {
+            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
 
-                Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Leave-Staff")).replaceAll("%server%", server), false);
+                if (!Messages.getString("Discord.Player-Leave-Staff").isEmpty()) {
+
+                    Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Leave-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", playerServerName), false);
+
+                }
 
             } else {
 
-                Discord.playerLeave(player, Objects.requireNonNull(Messages.getString("Discord.Player-Leave")).replaceAll("%server%", server), false);
+                if (!Messages.getString("Discord.Player-Leave").isEmpty()) {
+
+                    Discord.playerLeave(player, Objects.requireNonNull(Messages.getString("Discord.Player-Leave")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", playerServerName), false);
+
+                }
             }
 
             //MySQL Handling
-            if (cm.getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
 
                 try {
 
-                    MySQLData.playerLeave(serverName, playerName, player.hasPermission("loggerbungee.staff.log"));
+                    MySQLData.playerLeave(serverName, playerName, player.hasPermission("loggerproxy.staff.log"));
 
                 } catch (Exception e) {
 
                     e.printStackTrace();
+
+                }
+            }
+
+            //SQLite Handling
+            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+
+                try {
+
+                    SQLiteData.insertPlayerLeave(serverName, playerName, player.hasPermission("loggerproxy.staff.log"));
+
+                } catch (Exception exception) {
+
+                    exception.printStackTrace();
 
                 }
             }

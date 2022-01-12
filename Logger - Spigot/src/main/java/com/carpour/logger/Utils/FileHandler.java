@@ -1,5 +1,7 @@
 package com.carpour.logger.Utils;
 
+import com.carpour.logger.API.AuthMeUtil;
+import com.carpour.logger.API.EssentialsUtil;
 import com.carpour.logger.Main;
 
 import java.io.File;
@@ -13,10 +15,10 @@ import java.util.concurrent.TimeUnit;
 
 public class FileHandler {
 
-
+    //Folders Part
+    //Player Side
     private static File chatLogFolder;
     private static File commandLogFolder;
-    private static File consoleLogFolder;
     private static File signLogFolder;
     private static File playerJoinLogFolder;
     private static File playerLeaveLogFolder;
@@ -24,26 +26,35 @@ public class FileHandler {
     private static File playerTeleportLogFolder;
     private static File blockPlaceLogFolder;
     private static File blockBreakLogFolder;
-    private static File TPSLogFolder;
-    private static File RAMLogFolder;
     private static File playerKickLogFolder;
     private static File playerLevelFolder;
-    private static File portalCreateFolder;
-    private static File bucketPlaceFolder;
+    private static File bucketFillFolder;
+    private static File bucketEmptyFolder;
     private static File anvilFolder;
     private static File staffFolder;
-    private static File serverStartFolder;
-    private static File serverStopFolder;
     private static File itemDropFolder;
     private static File enchantFolder;
     private static File bookEditingFolder;
-    private static File afkFolder;
     private static File itemPickupFolder;
     private static File furnaceFolder;
+    private static File gameModeFolder;
+    //Server Side
+    private static File serverStartFolder;
+    private static File serverStopFolder;
+    private static File consoleLogFolder;
+    private static File RAMFolder;
+    private static File TPSFolder;
+    private static File portalCreateFolder;
+    private static File rconFolder;
+    //Extras Side Part
+    private static File afkFolder;
+    private static File wrongPasswordFolder;
 
+    //Files Part
+
+    //Player Side
     private static File chatLogFile;
     private static File commandLogFile;
-    private static File consoleLogFile;
     private static File signLogFile;
     private static File playerJoinLogFile;
     private static File playerLeaveLogFile;
@@ -51,22 +62,29 @@ public class FileHandler {
     private static File playerTeleportLogFile;
     private static File blockPlaceLogFile;
     private static File blockBreakLogFile;
-    private static File TPSLogFile;
-    private static File RAMLogFile;
     private static File playerKickLogFile;
     private static File playerLevelFile;
-    private static File portalCreateFile;
-    private static File bucketPlaceFile;
+    private static File bucketFillFile;
+    private static File bucketEmptyFile;
     private static File anvilFile;
     private static File staffFile;
-    private static File serverStartFile;
-    private static File serverStopFile;
     private static File itemDropFile;
     private static File enchantFile;
     private static File bookEditingFile;
-    private static File afkFile;
     private static File itemPickupFile;
     private static File furnaceFile;
+    private static File gameModeFile;
+    //Server Side
+    private static File serverStartFile;
+    private static File serverStopFile;
+    private static File consoleLogFile;
+    private static File RAMFile;
+    private static File TPSFile;
+    private static File portalCreateFile;
+    private static File rconFile;
+    //Extras Side
+    private static File afkFile;
+    private static File wrongPasswordFile;
 
 
     private final Main main = Main.getInstance();
@@ -81,14 +99,15 @@ public class FileHandler {
         Date date = new Date();
         SimpleDateFormat filenameDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
+        //Player Side Part
+        staffFolder = new File(logsFolder, "Staff");
+        staffFile = new File(staffFolder, filenameDateFormat.format(date) + ".log");
+
         chatLogFolder = new File(logsFolder, "Player Chat");
         chatLogFile = new File(chatLogFolder, filenameDateFormat.format(date) + ".log");
 
         commandLogFolder = new File(logsFolder, "Player Commands");
         commandLogFile = new File(commandLogFolder, filenameDateFormat.format(date) + ".log");
-
-        consoleLogFolder = new File(logsFolder, "Console Commands");
-        consoleLogFile = new File(consoleLogFolder, filenameDateFormat.format(date) + ".log");
 
         signLogFolder = new File(logsFolder, "Player Sign Text");
         signLogFile = new File(signLogFolder, filenameDateFormat.format(date) + ".log");
@@ -111,35 +130,20 @@ public class FileHandler {
         blockBreakLogFolder = new File(logsFolder, "Block Break");
         blockBreakLogFile = new File(blockBreakLogFolder, filenameDateFormat.format(date) + ".log");
 
-        TPSLogFolder = new File(logsFolder, "TPS");
-        TPSLogFile = new File(TPSLogFolder, filenameDateFormat.format(date) + ".log");
-
-        RAMLogFolder = new File(logsFolder, "RAM");
-        RAMLogFile = new File(RAMLogFolder, filenameDateFormat.format(date) + ".log");
-
         playerKickLogFolder = new File(logsFolder, "Player Kick");
         playerKickLogFile = new File(playerKickLogFolder, filenameDateFormat.format(date) + ".log");
 
         playerLevelFolder = new File(logsFolder, "Player Level");
         playerLevelFile = new File(playerLevelFolder, filenameDateFormat.format(date) + ".log");
 
-        portalCreateFolder = new File(logsFolder, "Portal Creation");
-        portalCreateFile = new File(portalCreateFolder, filenameDateFormat.format(date) + ".log");
+        bucketFillFolder = new File(logsFolder, "Bucket Fill");
+        bucketFillFile = new File(bucketFillFolder, filenameDateFormat.format(date) + ".log");
 
-        bucketPlaceFolder = new File(logsFolder, "Bucket Place");
-        bucketPlaceFile = new File(bucketPlaceFolder, filenameDateFormat.format(date) + ".log");
+        bucketEmptyFolder = new File(logsFolder, "Bucket Empty");
+        bucketEmptyFile = new File(bucketEmptyFolder, filenameDateFormat.format(date) + ".log");
 
         anvilFolder = new File(logsFolder, "Anvil");
         anvilFile = new File(anvilFolder, filenameDateFormat.format(date) + ".log");
-
-        staffFolder = new File(logsFolder, "Staff");
-        staffFile = new File(staffFolder, filenameDateFormat.format(date) + ".log");
-
-        serverStartFolder = new File(logsFolder, "Server Start");
-        serverStartFile = new File(serverStartFolder, filenameDateFormat.format(date) + ".log");
-
-        serverStopFolder = new File(logsFolder, "Server Stop");
-        serverStopFile = new File(serverStopFolder, filenameDateFormat.format(date) + ".log");
 
         itemDropFolder = new File(logsFolder, "Item Drop");
         itemDropFile = new File(itemDropFolder, filenameDateFormat.format(date) + ".log");
@@ -150,22 +154,53 @@ public class FileHandler {
         bookEditingFolder = new File(logsFolder, "Book Editing");
         bookEditingFile = new File(bookEditingFolder, filenameDateFormat.format(date) + ".log");
 
-        afkFolder = new File(logsFolder, "AFK");
-        afkFile = new File(afkFolder, filenameDateFormat.format(date) + ".log");
-
         itemPickupFolder = new File(logsFolder, "Item Pickup");
         itemPickupFile = new File(itemPickupFolder, filenameDateFormat.format(date) + ".log");
 
         furnaceFolder = new File(logsFolder, "Furnace");
         furnaceFile = new File(furnaceFolder, filenameDateFormat.format(date) + ".log");
 
+        gameModeFolder = new File(logsFolder, "Game Mode");
+        gameModeFile = new File(gameModeFolder, filenameDateFormat.format(date) + ".log");
+
+        //Server Side Part
+        serverStartFolder = new File(logsFolder, "Server Start");
+        serverStartFile = new File(serverStartFolder, filenameDateFormat.format(date) + ".log");
+
+        serverStopFolder = new File(logsFolder, "Server Stop");
+        serverStopFile = new File(serverStopFolder, filenameDateFormat.format(date) + ".log");
+
+        consoleLogFolder = new File(logsFolder, "Console Commands");
+        consoleLogFile = new File(consoleLogFolder, filenameDateFormat.format(date) + ".log");
+
+        RAMFolder = new File(logsFolder, "RAM");
+        RAMFile = new File(RAMFolder, filenameDateFormat.format(date) + ".log");
+
+        TPSFolder = new File(logsFolder, "TPS");
+        TPSFile = new File(TPSFolder, filenameDateFormat.format(date) + ".log");
+
+        portalCreateFolder = new File(logsFolder, "Portal Creation");
+        portalCreateFile = new File(portalCreateFolder, filenameDateFormat.format(date) + ".log");
+
+        rconFolder = new File(logsFolder, "RCON");
+        rconFile = new File(rconFolder, filenameDateFormat.format(date) + ".log");
+
+        //Extras Side Part
+        afkFolder = new File(logsFolder, "AFK");
+        afkFile = new File(afkFolder, filenameDateFormat.format(date) + ".log");
+
+        wrongPasswordFolder = new File(logsFolder, "Wrong Password");
+        wrongPasswordFile = new File(wrongPasswordFolder, filenameDateFormat.format(date) + ".log");
+
         try {
+
+            //Folder Handling
+            //Player Side Part
+            if (main.getConfig().getBoolean("Staff.Enabled")) staffFolder.mkdir();
 
             chatLogFolder.mkdir();
 
             commandLogFolder.mkdir();
-
-            consoleLogFolder.mkdir();
 
             signLogFolder.mkdir();
 
@@ -181,25 +216,15 @@ public class FileHandler {
 
             blockBreakLogFolder.mkdir();
 
-            TPSLogFolder.mkdir();
-
-            RAMLogFolder.mkdir();
-
             playerKickLogFolder.mkdir();
 
             playerLevelFolder.mkdir();
 
-            portalCreateFolder.mkdir();
+            bucketFillFolder.mkdir();
 
-            bucketPlaceFolder.mkdir();
+            bucketEmptyFolder.mkdir();
 
             anvilFolder.mkdir();
-
-            if (main.getConfig().getBoolean("Staff.Enabled")) staffFolder.mkdir();
-
-            serverStartFolder.mkdir();
-
-            serverStopFolder.mkdir();
 
             itemDropFolder.mkdir();
 
@@ -207,19 +232,40 @@ public class FileHandler {
 
             bookEditingFolder.mkdir();
 
-            if (main.getAPI() != null) afkFolder.mkdir();
-
             itemPickupFolder.mkdir();
 
             furnaceFolder.mkdir();
 
+            gameModeFolder.mkdir();
 
+            //Server Side Part
+            serverStartFolder.mkdir();
+
+            serverStopFolder.mkdir();
+
+            consoleLogFolder.mkdir();
+
+            RAMFolder.mkdir();
+
+            TPSFolder.mkdir();
+
+            portalCreateFolder.mkdir();
+
+            rconFolder.mkdir();
+
+            //Extras Side Part
+            if (EssentialsUtil.getEssentialsAPI() != null) afkFolder.mkdir();
+
+            if (AuthMeUtil.getAuthMeAPI() != null) wrongPasswordFolder.mkdir();
+
+
+            //Files Handling
+            //Player Side
+            if (main.getConfig().getBoolean("Staff.Enabled")) staffFile.createNewFile();
 
             chatLogFile.createNewFile();
 
             commandLogFile.createNewFile();
-
-            consoleLogFile.createNewFile();
 
             signLogFile.createNewFile();
 
@@ -235,25 +281,15 @@ public class FileHandler {
 
             blockBreakLogFile.createNewFile();
 
-            TPSLogFile.createNewFile();
-
-            RAMLogFile.createNewFile();
-
             playerKickLogFile.createNewFile();
 
             playerLevelFile.createNewFile();
 
-            portalCreateFile.createNewFile();
-
             anvilFile.createNewFile();
 
-            bucketPlaceFile.createNewFile();
+            bucketFillFile.createNewFile();
 
-            if (main.getConfig().getBoolean("Staff.Enabled")) staffFile.createNewFile();
-
-            serverStartFile.createNewFile();
-
-            serverStartFile.createNewFile();
+            bucketEmptyFile.createNewFile();
 
             itemDropFile.createNewFile();
 
@@ -261,11 +297,31 @@ public class FileHandler {
 
             bookEditingFile.createNewFile();
 
-            if (main.getAPI() != null) afkFile.createNewFile();
-
             itemPickupFile.createNewFile();
 
             furnaceFile.createNewFile();
+
+            gameModeFile.createNewFile();
+
+            //Server Side
+            serverStartFile.createNewFile();
+
+            serverStartFile.createNewFile();
+
+            consoleLogFile.createNewFile();
+
+            RAMFile.createNewFile();
+
+            TPSFile.createNewFile();
+
+            portalCreateFile.createNewFile();
+
+            rconFile.createNewFile();
+
+            //Extras Side
+            if (EssentialsUtil.getEssentialsAPI() != null) afkFile.createNewFile();
+
+            if (AuthMeUtil.getAuthMeAPI() != null) wrongPasswordFile.createNewFile();
 
 
 
@@ -279,8 +335,6 @@ public class FileHandler {
     public static File getChatLogFile() { return chatLogFile; }
 
     public static File getCommandLogFile() { return commandLogFile; }
-
-    public static File getConsoleLogFile() { return consoleLogFile; }
 
     public static File getSignLogFile() { return signLogFile; }
 
@@ -296,25 +350,17 @@ public class FileHandler {
 
     public static File getBlockBreakLogFile() { return blockBreakLogFile; }
 
-    public static File getTPSLogFile() { return TPSLogFile; }
-
-    public static File getRAMLogFile() { return RAMLogFile; }
-
     public static File getPlayerKickLogFile() { return playerKickLogFile; }
 
     public static File getPlayerLevelFile() { return playerLevelFile; }
 
-    public static File getPortalCreateFile() { return portalCreateFile; }
+    public static File getBucketFillFile() { return bucketFillFile; }
 
-    public static File getBucketPlaceFile() { return bucketPlaceFile; }
+    public static File getBucketEmptyFolder() { return bucketEmptyFile; }
 
     public static File getAnvilFile() { return anvilFile; }
 
     public static File getstaffFile() { return staffFile; }
-
-    public static File getserverStartFile() { return serverStartFile; }
-
-    public static File getserverStopFile() { return serverStopFile; }
 
     public static File getItemDropFile() { return itemDropFile; }
 
@@ -322,11 +368,31 @@ public class FileHandler {
 
     public static File getBookEditingFile() { return bookEditingFile; }
 
-    public static File getAfkFile() { return afkFile; }
-
     public static File getItemPickupFile() { return itemPickupFile; }
 
     public static File getFurnaceFile() { return furnaceFile; }
+
+    public static File getGameModeFile() { return gameModeFile; }
+
+    // Server Side Part
+    public static File getserverStartFile() { return serverStartFile; }
+
+    public static File getserverStopFile() { return serverStopFile; }
+
+    public static File getConsoleLogFile() { return consoleLogFile; }
+
+    public static File getRAMLogFile() { return RAMFile; }
+
+    public static File getTPSLogFile() { return TPSFile; }
+
+    public static File getPortalCreateFile() { return portalCreateFile; }
+
+    public static File getRconFile() { return rconFile; }
+
+    //Extras Side Part
+    public static File getAfkFile() { return afkFile; }
+
+    public static File getWrongPasswordFile() { return wrongPasswordFile; }
 
 
     public void deleteFile(File file) {
@@ -346,7 +412,7 @@ public class FileHandler {
 
         assert creationTime != null;
         long offset = System.currentTimeMillis() - creationTime.toMillis();
-        long fileDeletionDays = main.getConfig().getLong("File-Deletion");
+        long fileDeletionDays = main.getConfig().getInt("File-Deletion");
         long maxAge = TimeUnit.DAYS.toMillis(fileDeletionDays);
 
         if(offset > maxAge) {
@@ -360,6 +426,7 @@ public class FileHandler {
 
         if (main.getConfig().getInt("File-Deletion") <= 0 ){ return; }
 
+        //Player Side
         for (File chatLog : Objects.requireNonNull(chatLogFolder.listFiles()))
         {
 
@@ -371,13 +438,6 @@ public class FileHandler {
         {
 
             deleteFile(commandLog);
-
-        }
-
-        for (File consoleLog : Objects.requireNonNull(consoleLogFolder.listFiles()))
-        {
-
-            deleteFile(consoleLog);
 
         }
 
@@ -430,20 +490,6 @@ public class FileHandler {
 
         }
 
-        for (File TPSLog : Objects.requireNonNull(TPSLogFolder.listFiles()))
-        {
-
-            deleteFile(TPSLog);
-
-        }
-
-        for (File RAMLog : Objects.requireNonNull(RAMLogFolder.listFiles()))
-        {
-
-            deleteFile(RAMLog);
-
-        }
-
         for (File kickLog : Objects.requireNonNull(playerKickLogFolder.listFiles()))
         {
 
@@ -458,17 +504,17 @@ public class FileHandler {
 
         }
 
-        for (File portalCreate : Objects.requireNonNull(portalCreateFolder.listFiles()))
+        for (File bucketFill : Objects.requireNonNull(bucketFillFolder.listFiles()))
         {
 
-            deleteFile(portalCreate);
+            deleteFile(bucketFill);
 
         }
 
-        for (File bucketPlace : Objects.requireNonNull(bucketPlaceFolder.listFiles()))
+        for (File bucketEmpty : Objects.requireNonNull(bucketEmptyFolder.listFiles()))
         {
 
-            deleteFile(bucketPlace);
+            deleteFile(bucketEmpty);
 
         }
 
@@ -486,20 +532,6 @@ public class FileHandler {
                 deleteFile(Staff);
 
             }
-        }
-
-        for (File serverStart : Objects.requireNonNull(serverStartFolder.listFiles()))
-        {
-
-            deleteFile(serverStart);
-
-        }
-
-        for (File serverStop : Objects.requireNonNull(serverStopFolder.listFiles()))
-        {
-
-            deleteFile(serverStop);
-
         }
 
         for (File itemDrop : Objects.requireNonNull(itemDropFolder.listFiles()))
@@ -523,14 +555,6 @@ public class FileHandler {
 
         }
 
-        if (main.getAPI() != null) {
-            for (File afk : Objects.requireNonNull(afkFolder.listFiles())) {
-
-                deleteFile(afk);
-
-            }
-        }
-
         for (File pickup : Objects.requireNonNull(itemPickupFolder.listFiles()))
         {
 
@@ -543,6 +567,80 @@ public class FileHandler {
 
             deleteFile(furnace);
 
+        }
+
+        //Server Side
+        for (File serverStart : Objects.requireNonNull(serverStartFolder.listFiles()))
+        {
+
+            deleteFile(serverStart);
+
+        }
+
+        for (File serverStop : Objects.requireNonNull(serverStopFolder.listFiles()))
+        {
+
+            deleteFile(serverStop);
+
+        }
+
+        for (File consoleLog : Objects.requireNonNull(consoleLogFolder.listFiles()))
+        {
+
+            deleteFile(consoleLog);
+
+        }
+
+        for (File RAMLog : Objects.requireNonNull(RAMFolder.listFiles()))
+        {
+
+            deleteFile(RAMLog);
+
+        }
+
+        for (File TPSLog : Objects.requireNonNull(TPSFolder.listFiles()))
+        {
+
+            deleteFile(TPSLog);
+
+        }
+
+        for (File portalCreate : Objects.requireNonNull(portalCreateFolder.listFiles()))
+        {
+
+            deleteFile(portalCreate);
+
+        }
+
+        for (File rcon : Objects.requireNonNull(rconFolder.listFiles()))
+        {
+
+            deleteFile(rcon);
+
+        }
+
+        for (File creative : Objects.requireNonNull(gameModeFolder.listFiles()))
+        {
+
+            deleteFile(creative);
+
+        }
+
+        //Extra Side
+        if (EssentialsUtil.getEssentialsAPI() != null) {
+            for (File afk : Objects.requireNonNull(afkFolder.listFiles())) {
+
+                deleteFile(afk);
+
+            }
+        }
+
+        if (AuthMeUtil.getAuthMeAPI() != null) {
+            for (File password : Objects.requireNonNull(wrongPasswordFolder.listFiles())) {
+
+                deleteFile(password);
+
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.carpour.logger.Events;
 
 import com.carpour.logger.Discord.Discord;
+import com.carpour.logger.Events.Spy.OnSignSpy;
 import com.carpour.logger.Main;
 import com.carpour.logger.Database.MySQL.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
@@ -34,23 +35,35 @@ public class OnSign implements Listener {
         World world = player.getWorld();
         List<String> lines = Arrays.asList(event.getLines());
         String worldName = world.getName();
-        double x = Math.floor(player.getLocation().getX());
-        double y = Math.floor(player.getLocation().getY());
-        double z = Math.floor(player.getLocation().getZ());
+        int x = player.getLocation().getBlockX();
+        int y = player.getLocation().getBlockY();
+        int z = player.getLocation().getBlockZ();
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
         if (player.hasPermission("logger.exempt")) return;
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log.Player-Sign-Text")) {
+        //Sign Spy
+        if (main.getConfig().getBoolean("Spy-Features.Book-Spy.Enable")) {
+
+            OnSignSpy signSpy = new OnSignSpy();
+            signSpy.onSignSpy(event);
+
+        }
+
+        if (!event.isCancelled() && main.getConfig().getBoolean("Log-Player.Sign-Text")) {
 
             //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%line1%", lines.get(0)).replaceAll("%line2%", lines.get(1)).replaceAll("%line3%", lines.get(2)).replaceAll("%line4%", lines.get(3)), false);
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text-Staff")).isEmpty()) {
+
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%line1%", lines.get(0)).replaceAll("%line2%", lines.get(1)).replaceAll("%line3%", lines.get(2)).replaceAll("%line4%", lines.get(3)), false);
+
+                    }
 
                     try {
 
@@ -78,7 +91,6 @@ public class OnSign implements Listener {
                     }
 
                     return;
-
                 }
 
                 try {
@@ -98,12 +110,18 @@ public class OnSign implements Listener {
             //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%line1%", lines.get(0)).replaceAll("%line2%", lines.get(1)).replaceAll("%line3%", lines.get(2)).replaceAll("%line4%", lines.get(3)), false);
+                if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text-Staff")).isEmpty()) {
+
+                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%line1%", lines.get(0)).replaceAll("%line2%", lines.get(1)).replaceAll("%line3%", lines.get(2)).replaceAll("%line4%", lines.get(3)), false);
+
+                }
 
             } else {
 
-                Discord.playerSignText(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%line1%", lines.get(0)).replaceAll("%line2%", lines.get(1)).replaceAll("%line3%", lines.get(2)).replaceAll("%line4%", lines.get(3)), false);
+                if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text")).isEmpty()) {
 
+                    Discord.playerSignText(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%line1%", lines.get(0)).replaceAll("%line2%", lines.get(1)).replaceAll("%line3%", lines.get(2)).replaceAll("%line4%", lines.get(3)), false);
+                }
             }
 
             //MySQL

@@ -25,7 +25,7 @@ public class Start {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (main.getConfig().getBoolean("Log.Server-Start")) {
+        if (main.getConfig().getBoolean("Log-Server.Start")) {
 
             //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
@@ -33,7 +33,7 @@ public class Start {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getserverStartFile(), true));
-                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Server-Start")).replaceAll("%time%", dateFormat.format(date)) + "\n");
+                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Server-Side.Start")).replaceAll("%time%", dateFormat.format(date)) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -45,7 +45,10 @@ public class Start {
             }
 
             //Discord
-            Discord.serverStart(Objects.requireNonNull(Messages.get().getString("Discord.Server-Start")).replaceAll("%time%", dateFormat.format(date)), false);
+            if (!Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Start")).isEmpty()) {
+
+                Discord.serverStart(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Start")).replaceAll("%time%", dateFormat.format(date)), false);
+            }
 
             //MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {

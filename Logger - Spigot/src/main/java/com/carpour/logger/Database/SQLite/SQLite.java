@@ -1,7 +1,6 @@
 package com.carpour.logger.Database.SQLite;
 
 import com.carpour.logger.Main;
-import org.bukkit.ChatColor;
 
 import java.io.File;
 import java.sql.Connection;
@@ -28,11 +27,11 @@ public class SQLite {
 
                 Class.forName("org.sqlite.JDBC");
                 connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile.getAbsolutePath());
-                main.getLogger().info(ChatColor.GREEN + "SQLite Connection has been established!");
+                main.getLogger().info("SQLite Connection has been established!");
 
             } catch (ClassNotFoundException | SQLException e) {
 
-                main.getLogger().warning(ChatColor.RED + "Couldn't load SQLite Database, if the issue persists contact the Authors!");
+                main.getLogger().severe("Couldn't load SQLite Database, if the issue persists contact the Authors!");
                 e.printStackTrace();
 
             }
@@ -46,11 +45,11 @@ public class SQLite {
             try {
 
                 connection.close();
-                main.getLogger().info(ChatColor.GREEN + "SQLite Database has been closed!");
+                main.getLogger().info("SQLite Database has been closed!");
 
             } catch (SQLException e) {
 
-                main.getLogger().warning("SQLite Database couldn't be closed safely, if the issue persists contact the Authors!");
+                main.getLogger().severe("SQLite Database couldn't be closed safely, if the issue persists contact the Authors!");
 
             }
         }

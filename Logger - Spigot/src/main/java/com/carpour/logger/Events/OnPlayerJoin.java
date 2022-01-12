@@ -33,9 +33,9 @@ public class OnPlayerJoin implements Listener {
         String worldName = world.getName();
         String playerName = player.getName();
         InetSocketAddress ip = player.getAddress();
-        double x = player.getLocation().getBlockX();
-        double y = player.getLocation().getBlockY();
-        double z = player.getLocation().getBlockZ();
+        int x = player.getLocation().getBlockX();
+        int y = player.getLocation().getBlockY();
+        int z = player.getLocation().getBlockZ();
         String serverName = main.getConfig().getString("Server-Name");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -43,10 +43,10 @@ public class OnPlayerJoin implements Listener {
         if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")
                 && main.getConfig().getBoolean("Player-Commands.Blacklist-Commands") &&
             player.hasPermission("logger.staff")) {
-            player.sendMessage(ChatColor.GRAY + "[" +
-                    ChatColor.AQUA + "Logger" + ChatColor.GRAY + "]" + ChatColor.WHITE + " | " +
-                    ChatColor.RED + "Enabling both Whitelist and Blacklist isn't supported. " +
-                    "Please disable one of them to continue logging Player Commands");
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    "&7[ &bLogger &7] &f| &cEnabling both Whitelist" +
+                            " and Blacklist isn't supported. Please disable one of them" +
+                            " to continue logging Player Commands"));
 
         }
 
@@ -54,14 +54,18 @@ public class OnPlayerJoin implements Listener {
 
         if (player.hasPermission("logger.exempt")) return;
 
-        if (main.getConfig().getBoolean("Log.Player-Join")) {
+        if (main.getConfig().getBoolean("Log-Player.Join")) {
 
             //Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Join-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%IP%", String.valueOf(ip)), false);
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Join-Staff")).isEmpty()) {
+
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Join-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%IP%", String.valueOf(ip)), false);
+
+                    }
 
                     try {
 
@@ -109,12 +113,18 @@ public class OnPlayerJoin implements Listener {
             //Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Join-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%IP%", String.valueOf(ip)), false);
+                if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Join-Staff")).isEmpty()) {
+
+                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Join-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%IP%", String.valueOf(ip)), false);
+
+                }
 
             } else {
 
-                Discord.playerJoin(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Join")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%IP%", String.valueOf(ip)), false);
+                if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Join")).isEmpty()) {
 
+                    Discord.playerJoin(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Join")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%IP%", String.valueOf(ip)), false);
+                }
             }
 
             //MySQL

@@ -13,25 +13,27 @@ import java.util.concurrent.TimeUnit;
 
 public class FileHandler {
 
-    ConfigManager cm = Main.getConfig();
+    private final Main main = Main.getInstance();
 
     private static File staffLogFolder;
     private static File chatLogFolder;
+    private static File commandLogFolder;
     private static File loginLogFolder;
     private static File leaveLogFolder;
-//    private static File switchLogFolder;
     private static File reloadLogFolder;
     private static File serverStartLogFolder;
     private static File serverStopLogFolder;
+    private static File RAMLogFolder;
 
     private static File staffLogFile;
     private static File chatLogFile;
+    private static File commandLogFile;
     private static File loginLogFile;
     private static File leaveLogFile;
-//    private static File switchLogFile;
     private static File reloadLogFile;
     private static File serverStartLogFile;
     private static File serverStopLogFile;
+    private static File RAMLogFile;
 
     public FileHandler(File dataFolder) {
 
@@ -50,14 +52,14 @@ public class FileHandler {
         chatLogFolder = new File(logsFolder, "Player Chat");
         chatLogFile = new File(chatLogFolder, filenameDateFormat.format(date) + ".log");
 
+        commandLogFolder = new File(logsFolder, "Player Commands");
+        commandLogFile = new File(commandLogFolder, filenameDateFormat.format(date) + ".log");
+
         loginLogFolder = new File(logsFolder, "Player Login");
         loginLogFile = new File(loginLogFolder, filenameDateFormat.format(date) + ".log");
 
         leaveLogFolder = new File(logsFolder, "Player Leave");
         leaveLogFile = new File(leaveLogFolder, filenameDateFormat.format(date) + ".log");
-
-//        switchLogFolder = new File(logsFolder, "Player Switch");
-//        switchLogFile = new File(switchLogFolder, filenameDateFormat.format(date) + ".log");
 
         reloadLogFolder = new File(logsFolder, "Reload");
         reloadLogFile = new File(reloadLogFolder, filenameDateFormat.format(date) + ".log");
@@ -68,25 +70,30 @@ public class FileHandler {
         serverStopLogFolder = new File(logsFolder, "Server Stop");
         serverStopLogFile = new File(serverStopLogFolder, filenameDateFormat.format(date) + ".log");
 
+        RAMLogFolder = new File(logsFolder, "RAM");
+        RAMLogFile = new File(RAMLogFolder, filenameDateFormat.format(date) + ".log");
+
         try {
 
-            staffLogFolder.mkdir();
+            if (main.getConfig().getBoolean("Staff.Enabled")) staffLogFolder.mkdir();
             chatLogFolder.mkdir();
+            commandLogFolder.mkdir();
             loginLogFolder.mkdir();
             leaveLogFolder.mkdir();
-//            switchLogFolder.mkdir();
             reloadLogFolder.mkdir();
             serverStartLogFolder.mkdir();
             serverStopLogFolder.mkdir();
+            RAMLogFolder.mkdir();
 
-            staffLogFile.createNewFile();
+            if (main.getConfig().getBoolean("Staff.Enabled")) staffLogFile.createNewFile();
             chatLogFile.createNewFile();
+            commandLogFile.createNewFile();
             loginLogFile.createNewFile();
             leaveLogFile.createNewFile();
-//            switchLogFile.createNewFile();
             reloadLogFile.createNewFile();
             serverStartLogFile.createNewFile();
             serverStopLogFile.createNewFile();
+            RAMLogFile.createNewFile();
 
 
 
@@ -101,11 +108,11 @@ public class FileHandler {
 
     public static File getChatLogFile() { return chatLogFile; }
 
+    public static File getCommandLogFile() { return commandLogFile; }
+
     public static File getLoginLogFile() { return loginLogFile; }
 
     public static File getLeaveLogFile() { return leaveLogFile; }
-
-//    public static File getSwtichLogFile() { return switchLogFile; }
 
     public static File getReloadLogFile() { return reloadLogFile; }
 
@@ -113,10 +120,12 @@ public class FileHandler {
 
     public static File getServerStopLogFile() { return serverStopLogFile; }
 
+    public static File getRAMLogFile() { return RAMLogFile; }
+
 
     public void deleteFile(File file) {
 
-        if (cm.getInt("File-Deletion") <= 0 ){ return; }
+        if (main.getConfig().getInt("File-Deletion") <= 0 ){ return; }
 
         FileTime creationTime = null;
 
@@ -131,7 +140,7 @@ public class FileHandler {
 
         assert creationTime != null;
         long offset = System.currentTimeMillis() - creationTime.toMillis();
-        long fileDeletionDays = cm.getLong("File-Deletion");
+        long fileDeletionDays = main.getConfig().getInt("File-Deletion");
         long maxAge = TimeUnit.DAYS.toMillis(fileDeletionDays);
 
         if(offset > maxAge) {
@@ -143,13 +152,15 @@ public class FileHandler {
 
     public void deleteFiles(){
 
-        if (cm.getInt("File-Deletion") <= 0 ){ return; }
+        if (main.getConfig().getInt("File-Deletion") <= 0 ){ return; }
 
+        if (main.getConfig().getBoolean("Staff.Enabled")){
 
-        for (File staffLog : Objects.requireNonNull(staffLogFolder.listFiles()))
-        {
+            for (File staffLog : Objects.requireNonNull(staffLogFolder.listFiles())) {
 
-            deleteFile(staffLog);
+                deleteFile(staffLog);
+
+            }
 
         }
 
@@ -157,6 +168,13 @@ public class FileHandler {
         {
 
             deleteFile(chatLog);
+
+        }
+
+        for (File commandsLog : Objects.requireNonNull(commandLogFolder.listFiles()))
+        {
+
+            deleteFile(commandsLog);
 
         }
 
@@ -173,13 +191,6 @@ public class FileHandler {
             deleteFile(leaveLog);
 
         }
-
-        /*for (File switchLog : Objects.requireNonNull(switchLogFolder.listFiles()))
-        {
-
-            deleteFile(switchLog);
-
-        }*/
 
         for (File reloadLog : Objects.requireNonNull(reloadLogFolder.listFiles()))
         {
@@ -199,6 +210,13 @@ public class FileHandler {
         {
 
             deleteFile(serverStopLog);
+
+        }
+
+        for (File RAMLog : Objects.requireNonNull(RAMLogFolder.listFiles()))
+        {
+
+            deleteFile(RAMLog);
 
         }
     }
