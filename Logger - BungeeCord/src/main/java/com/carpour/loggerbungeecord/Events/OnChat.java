@@ -14,9 +14,8 @@ import net.md_5.bungee.event.EventHandler;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class OnChat implements Listener {
@@ -32,8 +31,7 @@ public class OnChat implements Listener {
             String server = player.getServer().getInfo().getName();
             String message = event.getMessage();
             String serverName = main.getConfig().getString("Server-Name");
-            Date date = new Date();
-            DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
             if (player.hasPermission("loggerproxy.exempt")) return;
 
@@ -46,14 +44,14 @@ public class OnChat implements Listener {
 
                         if (!Messages.getString("Discord.Player-Chat-Staff").isEmpty()) {
 
-                            Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%msg%", message), false);
+                            Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
 
                         }
 
                         try {
 
                             BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
-                            out.write(Messages.getString("Files.Player-Chat-Staff").replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%player%", player.getName()).replaceAll("%msg%", message) + "\n");
+                            out.write(Messages.getString("Files.Player-Chat-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%player%", player.getName()).replaceAll("%msg%", message) + "\n");
                             out.close();
 
                         } catch (IOException e) {
@@ -83,7 +81,7 @@ public class OnChat implements Listener {
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getChatLogFile(), true));
-                        out.write(Messages.getString("Files.Player-Chat").replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%player%", player.getName()).replaceAll("%msg%", message) + "\n");
+                        out.write(Messages.getString("Files.Player-Chat").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%player%", player.getName()).replaceAll("%msg%", message) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -99,7 +97,7 @@ public class OnChat implements Listener {
 
                     if (!Messages.getString("Discord.Player-Chat-Staff").isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%msg%", message), false);
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
 
                     }
 
@@ -107,7 +105,7 @@ public class OnChat implements Listener {
 
                     if (!Messages.getString("Discord.Player-Chat").isEmpty()) {
 
-                        Discord.playerChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%msg%", message), false);
+                        Discord.playerChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
                     }
                 }
 

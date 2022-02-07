@@ -3,6 +3,7 @@ version: '${project.version}'
 main: com.carpour.loggerbungeecord.Main
 description: Log all Activities from Players and Server Side!
 author: Prism3 & theloother
+softdepends: [LiteBans]
 commands:
   reload:
     description: "Reloads the plugin configs"
@@ -21,3 +22,5 @@ permissions:
     default: op
   loggerproxy.staff.log:
     description: "Logs staff members."
+    children:
+      loggerproxy.exempt: false

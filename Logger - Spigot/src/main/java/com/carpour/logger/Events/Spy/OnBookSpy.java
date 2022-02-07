@@ -21,7 +21,7 @@ public class OnBookSpy implements Listener{
 
         Player player = event.getPlayer();
 
-        if (player.hasPermission("logger.exempt") || player.hasPermission("logger.spy")) return;
+        if (player.hasPermission("logger.exempt") || player.hasPermission("logger.spy.bypass")) return;
 
         //Book Spy
         if (main.getConfig().getBoolean("Log-Player.Book-Editing") && main.getConfig().getBoolean("Spy-Features.Book-Spy.Enable")) {

@@ -15,8 +15,8 @@ public class Reload implements SimpleCommand {
     @Override
     public void execute(Invocation invocation) {
 
-        CommandSource sender = invocation.source();
-        String[] args = invocation.arguments();
+        final CommandSource sender = invocation.source();
+        final String[] args = invocation.arguments();
 
         if (sender.hasPermission("logger.proxy")) {
 
@@ -26,9 +26,9 @@ public class Reload implements SimpleCommand {
 
             } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
 
-                    main.getConfig().reload();
-                    messages.reload();
-                    sender.sendMessage(Identity.nil(), Component.text(messages.getString("General.Reload")));
+                main.getConfig().reload();
+                messages.reload();
+                sender.sendMessage(Identity.nil(), Component.text(messages.getString("General.Reload")));
 
             } else {
 

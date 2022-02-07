@@ -28,9 +28,17 @@ permissions:
     description: "Allows to Reload the Plugin."
     default: op
   logger.spy:
-    description: "Ability to see other player's Commands."
+    description: "Ability to see other player's and Staff's Actions."
     default: op
+  logger.spy.bypass:
+    description: "Ability to see other player's and staff's Actions but others can not."
+    default: op
+    children:
+      logger.spy: true
   logger.staff.log:
     description: "Logs Staff Members."
+    children:
+      logger.exempt: false
   logger.update:
     description: "Update Message is sent to the Users with this Permission."
+    default: op

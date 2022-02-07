@@ -15,8 +15,8 @@ import java.util.concurrent.TimeUnit;
 
 public class FileHandler {
 
-    //Folders Part
-    //Player Side
+    // Folders Part
+    // Player Side
     private static File chatLogFolder;
     private static File commandLogFolder;
     private static File signLogFolder;
@@ -38,7 +38,9 @@ public class FileHandler {
     private static File itemPickupFolder;
     private static File furnaceFolder;
     private static File gameModeFolder;
-    //Server Side
+    private static File craftFolder;
+
+    // Server Side
     private static File serverStartFolder;
     private static File serverStopFolder;
     private static File consoleLogFolder;
@@ -46,13 +48,13 @@ public class FileHandler {
     private static File TPSFolder;
     private static File portalCreateFolder;
     private static File rconFolder;
-    //Extras Side Part
+
+    // Extras Side Part
     private static File afkFolder;
     private static File wrongPasswordFolder;
 
-    //Files Part
-
-    //Player Side
+    // Files Part
+    // Player Side
     private static File chatLogFile;
     private static File commandLogFile;
     private static File signLogFile;
@@ -74,7 +76,9 @@ public class FileHandler {
     private static File itemPickupFile;
     private static File furnaceFile;
     private static File gameModeFile;
-    //Server Side
+    private static File craftFile;
+
+    // Server Side
     private static File serverStartFile;
     private static File serverStopFile;
     private static File consoleLogFile;
@@ -82,7 +86,8 @@ public class FileHandler {
     private static File TPSFile;
     private static File portalCreateFile;
     private static File rconFile;
-    //Extras Side
+
+    // Extras Side
     private static File afkFile;
     private static File wrongPasswordFile;
 
@@ -99,7 +104,7 @@ public class FileHandler {
         Date date = new Date();
         SimpleDateFormat filenameDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-        //Player Side Part
+        // Player Side Part
         staffFolder = new File(logsFolder, "Staff");
         staffFile = new File(staffFolder, filenameDateFormat.format(date) + ".log");
 
@@ -163,7 +168,10 @@ public class FileHandler {
         gameModeFolder = new File(logsFolder, "Game Mode");
         gameModeFile = new File(gameModeFolder, filenameDateFormat.format(date) + ".log");
 
-        //Server Side Part
+        craftFolder = new File(logsFolder, "Crafting");
+        craftFile = new File(craftFolder, filenameDateFormat.format(date) + ".log");
+
+        // Server Side Part
         serverStartFolder = new File(logsFolder, "Server Start");
         serverStartFile = new File(serverStartFolder, filenameDateFormat.format(date) + ".log");
 
@@ -185,7 +193,7 @@ public class FileHandler {
         rconFolder = new File(logsFolder, "RCON");
         rconFile = new File(rconFolder, filenameDateFormat.format(date) + ".log");
 
-        //Extras Side Part
+        // Extras Side Part
         afkFolder = new File(logsFolder, "AFK");
         afkFile = new File(afkFolder, filenameDateFormat.format(date) + ".log");
 
@@ -194,8 +202,8 @@ public class FileHandler {
 
         try {
 
-            //Folder Handling
-            //Player Side Part
+            // Folder Handling
+            // Player Side Part
             if (main.getConfig().getBoolean("Staff.Enabled")) staffFolder.mkdir();
 
             chatLogFolder.mkdir();
@@ -238,7 +246,9 @@ public class FileHandler {
 
             gameModeFolder.mkdir();
 
-            //Server Side Part
+            craftFolder.mkdir();
+
+            // Server Side Part
             serverStartFolder.mkdir();
 
             serverStopFolder.mkdir();
@@ -253,14 +263,14 @@ public class FileHandler {
 
             rconFolder.mkdir();
 
-            //Extras Side Part
+            // Extras Side Part
             if (EssentialsUtil.getEssentialsAPI() != null) afkFolder.mkdir();
 
             if (AuthMeUtil.getAuthMeAPI() != null) wrongPasswordFolder.mkdir();
 
 
-            //Files Handling
-            //Player Side
+            // Files Handling
+            // Player Side
             if (main.getConfig().getBoolean("Staff.Enabled")) staffFile.createNewFile();
 
             chatLogFile.createNewFile();
@@ -303,7 +313,9 @@ public class FileHandler {
 
             gameModeFile.createNewFile();
 
-            //Server Side
+            craftFile.createNewFile();
+
+            // Server Side
             serverStartFile.createNewFile();
 
             serverStartFile.createNewFile();
@@ -318,18 +330,12 @@ public class FileHandler {
 
             rconFile.createNewFile();
 
-            //Extras Side
+            // Extras Side
             if (EssentialsUtil.getEssentialsAPI() != null) afkFile.createNewFile();
 
             if (AuthMeUtil.getAuthMeAPI() != null) wrongPasswordFile.createNewFile();
 
-
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     public static File getChatLogFile() { return chatLogFile; }
@@ -374,6 +380,8 @@ public class FileHandler {
 
     public static File getGameModeFile() { return gameModeFile; }
 
+    public static File getCraftFile() { return craftFile; }
+
     // Server Side Part
     public static File getserverStartFile() { return serverStartFile; }
 
@@ -389,7 +397,7 @@ public class FileHandler {
 
     public static File getRconFile() { return rconFile; }
 
-    //Extras Side Part
+    // Extras Side Part
     public static File getAfkFile() { return afkFile; }
 
     public static File getWrongPasswordFile() { return wrongPasswordFile; }
@@ -397,7 +405,7 @@ public class FileHandler {
 
     public void deleteFile(File file) {
 
-        if (main.getConfig().getInt("File-Deletion") <= 0 ){ return; }
+        if (main.getConfig().getInt("File-Deletion") <= 0 ) return;
 
         FileTime creationTime = null;
 
@@ -415,22 +423,18 @@ public class FileHandler {
         long fileDeletionDays = main.getConfig().getInt("File-Deletion");
         long maxAge = TimeUnit.DAYS.toMillis(fileDeletionDays);
 
-        if(offset > maxAge) {
-
-            file.delete();
-
-        }
+        if (offset > maxAge) file.delete();
     }
 
     public void deleteFiles(){
 
-        if (main.getConfig().getInt("File-Deletion") <= 0 ){ return; }
+        if (main.getConfig().getInt("File-Deletion") <= 0 ) return;
 
-        //Player Side
+        // Player Side
         for (File chatLog : Objects.requireNonNull(chatLogFolder.listFiles()))
         {
 
-                deleteFile(chatLog);
+            deleteFile(chatLog);
 
         }
 
@@ -569,7 +573,14 @@ public class FileHandler {
 
         }
 
-        //Server Side
+        for (File craft : Objects.requireNonNull(craftFolder.listFiles()))
+        {
+
+            deleteFile(craft);
+
+        }
+
+        // Server Side
         for (File serverStart : Objects.requireNonNull(serverStartFolder.listFiles()))
         {
 
@@ -626,7 +637,7 @@ public class FileHandler {
 
         }
 
-        //Extra Side
+        // Extra Side
         if (EssentialsUtil.getEssentialsAPI() != null) {
             for (File afk : Objects.requireNonNull(afkFolder.listFiles())) {
 

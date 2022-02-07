@@ -19,9 +19,10 @@ public class OnCommandSpy implements Listener {
 
         Player player = event.getPlayer();
 
-        if (player.hasPermission("logger.exempt") || player.hasPermission("logger.spy")) return;
+        if (player.hasPermission("logger.exempt") ||
+                player.hasPermission("logger.spy.bypass")) return;
 
-        //Command Spy
+        // Command Spy
         if (main.getConfig().getBoolean("Log-Player.Commands") && main.getConfig().getBoolean("Spy-Features.Commands-Spy.Enable")) {
 
             for (Player players : Bukkit.getOnlinePlayers()) {

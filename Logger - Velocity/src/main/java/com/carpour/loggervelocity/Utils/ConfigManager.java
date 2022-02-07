@@ -76,10 +76,6 @@ public class ConfigManager {
         return this.configuration.get(path);
     }
 
-    /*public void set(final String path, final Object object) {
-        configuration.set(path, object);
-    }*/
-
     public boolean getBoolean(final String path) {
 
         return this.configuration.get(path) != null && this.configuration.getBoolean(path);

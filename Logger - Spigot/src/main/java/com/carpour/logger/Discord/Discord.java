@@ -7,8 +7,6 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.bukkit.entity.Player;
 
-import javax.security.auth.login.LoginException;
-
 public class Discord {
 
     private final Main main = Main.getInstance();
@@ -36,6 +34,7 @@ public class Discord {
     private static TextChannel itemPickupChannel;
     private static TextChannel furnaceChannel;
     private static TextChannel gameModeChannel;
+    private static TextChannel craftChannel;
 
     private static TextChannel serverStartChannel;
     private static TextChannel serverStopChannel;
@@ -60,14 +59,15 @@ public class Discord {
 
                 new DiscordStatus();
 
-            } catch (InterruptedException | LoginException e) {
+            } catch (Exception e) {
 
-                main.getLogger().severe("An error has occurred whilst connecting to the Bot. Is the Bot Key Valid?");
+                main.getLogger().severe("An error has occurred whilst connecting to the Bot." +
+                        " Is the Bot Key Valid?");
                 return;
 
             }
 
-            //Player Side Part
+            // Player Side Part
             String staffChannelID = DiscordFile.get().getString("Discord.Staff.Channel-ID");
 
             String playerChatChannelID = DiscordFile.get().getString("Discord.Player-Chat.Channel-ID");
@@ -110,7 +110,9 @@ public class Discord {
 
             String gameModeChannelID = DiscordFile.get().getString("Discord.Game-Mode.Channel-ID");
 
-            //Server Side Part
+            String craftChannelID = DiscordFile.get().getString("Discord.Craft.Channel-ID");
+
+            // Server Side Part
             String serverStartChannelID = DiscordFile.get().getString("Discord.Server-Side.Start.Channel-ID");
 
             String serverStopChannelID = DiscordFile.get().getString("Discord.Server-Side.Stop.Channel-ID");
@@ -125,192 +127,205 @@ public class Discord {
 
             String rconChannelID = DiscordFile.get().getString("Discord.Server-Side.RCON.Channel-ID");
 
-            //Extras
+            // Extras
             String afkChannelID = DiscordFile.get().getString("Discord.Extras.AFK.Channel-ID");
 
             String wrongPasswordChannelID = DiscordFile.get().getString("Discord.Extras.Wrong-Password.Channel-ID");
 
 
-            // Player Side Part
-            if (staffChannelID != null && main.getConfig().getBoolean("Staff.Enabled") && !staffChannelID.equals("LINK_HERE")) {
+            try {
 
-                staffChannel = jda.getTextChannelById(staffChannelID);
+                // Player Side Part
+                if (!(staffChannelID.isEmpty()) && main.getConfig().getBoolean("Staff.Enabled") && !staffChannelID.equals("LINK_HERE")) {
 
-            }
+                    staffChannel = jda.getTextChannelById(staffChannelID);
 
-            if (playerChatChannelID != null && main.getConfig().getBoolean("Log-Player.Chat") && !playerChatChannelID.equals("LINK_HERE")) {
+                }
 
-                playerChatChannel = jda.getTextChannelById(playerChatChannelID);
+                if (!(playerChatChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Chat") && !playerChatChannelID.equals("LINK_HERE")) {
 
-            }
+                    playerChatChannel = jda.getTextChannelById(playerChatChannelID);
 
-            if (playerCommandsChannelID != null && main.getConfig().getBoolean("Log-Player.Commands") && !playerCommandsChannelID.equals("LINK_HERE")) {
+                }
 
-                playerCommandsChannel = jda.getTextChannelById(playerCommandsChannelID);
+                if (!(playerCommandsChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Commands") && !playerCommandsChannelID.equals("LINK_HERE")) {
 
-            }
+                    playerCommandsChannel = jda.getTextChannelById(playerCommandsChannelID);
 
-            if (playerSignTextChannelID != null && main.getConfig().getBoolean("Log-Player.Sign-Text") && !playerSignTextChannelID.equals("LINK_HERE")) {
+                }
 
-                playerSignTextChannel = jda.getTextChannelById(playerSignTextChannelID);
+                if (!(playerSignTextChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Sign-Text") && !playerSignTextChannelID.equals("LINK_HERE")) {
 
-            }
+                    playerSignTextChannel = jda.getTextChannelById(playerSignTextChannelID);
 
-            if (playerJoinChannelID != null && main.getConfig().getBoolean("Log-Player.Join") && !playerJoinChannelID.equals("LINK_HERE")) {
+                }
 
-                playerJoinChannel = jda.getTextChannelById(playerJoinChannelID);
+                if (!(playerJoinChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Join") && !playerJoinChannelID.equals("LINK_HERE")) {
 
-            }
+                    playerJoinChannel = jda.getTextChannelById(playerJoinChannelID);
 
-            if (playerLeaveChannelID != null && main.getConfig().getBoolean("Log-Player.Leave") && !playerLeaveChannelID.equals("LINK_HERE")) {
+                }
 
-                playerLeaveChannel = jda.getTextChannelById(playerLeaveChannelID);
+                if (!(playerLeaveChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Leave") && !playerLeaveChannelID.equals("LINK_HERE")) {
 
-            }
+                    playerLeaveChannel = jda.getTextChannelById(playerLeaveChannelID);
 
-            if (playerKickChannelID != null && main.getConfig().getBoolean("Log-Player.Kick") && !playerKickChannelID.equals("LINK_HERE")) {
+                }
 
-                playerKickChannel = jda.getTextChannelById(playerKickChannelID);
+                if (!(playerKickChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Kick") && !playerKickChannelID.equals("LINK_HERE")) {
 
-            }
+                    playerKickChannel = jda.getTextChannelById(playerKickChannelID);
 
-            if (playerDeathChannelID != null && main.getConfig().getBoolean("Log-Player.Death") && !playerDeathChannelID.equals("LINK_HERE")) {
+                }
 
-                playerDeathChannel = jda.getTextChannelById(playerDeathChannelID);
+                if (!(playerDeathChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Death") && !playerDeathChannelID.equals("LINK_HERE")) {
 
-            }
+                    playerDeathChannel = jda.getTextChannelById(playerDeathChannelID);
 
-            if (playerTeleportChannelID != null && main.getConfig().getBoolean("Log-Player.Teleport") && !playerTeleportChannelID.equals("LINK_HERE")) {
+                }
 
-                playerTeleportChannel = jda.getTextChannelById(playerTeleportChannelID);
+                if (!(playerTeleportChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Teleport") && !playerTeleportChannelID.equals("LINK_HERE")) {
 
-            }
+                    playerTeleportChannel = jda.getTextChannelById(playerTeleportChannelID);
 
-            if (playerLevelChannelID != null && main.getConfig().getBoolean("Log-Player.Level") && !playerLevelChannelID.equals("LINK_HERE")) {
+                }
 
-                playerLevelChannel = jda.getTextChannelById(playerLevelChannelID);
+                if (!(playerLevelChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Level") && !playerLevelChannelID.equals("LINK_HERE")) {
 
-            }
+                    playerLevelChannel = jda.getTextChannelById(playerLevelChannelID);
 
-            if (blockPlaceChannelID != null && main.getConfig().getBoolean("Log-Player.Block-Place") && !blockPlaceChannelID.equals("LINK_HERE")) {
+                }
 
-                blockPlaceChannel = jda.getTextChannelById(blockPlaceChannelID);
+                if (!(blockPlaceChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Block-Place") && !blockPlaceChannelID.equals("LINK_HERE")) {
 
-            }
+                    blockPlaceChannel = jda.getTextChannelById(blockPlaceChannelID);
 
-            if (blockBreakChannelID != null && main.getConfig().getBoolean("Log-Player.Block-Break") && !blockBreakChannelID.equals("LINK_HERE")) {
+                }
 
-                blockBreakChannel = jda.getTextChannelById(blockBreakChannelID);
+                if (!(blockBreakChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Block-Break") && !blockBreakChannelID.equals("LINK_HERE")) {
 
-            }
+                    blockBreakChannel = jda.getTextChannelById(blockBreakChannelID);
 
-            if (bucketFillChannelID != null && main.getConfig().getBoolean("Log-Player.Bucket-Fill") && !bucketFillChannelID.equals("LINK_HERE")) {
+                }
 
-                bucketFillChannel = jda.getTextChannelById(bucketFillChannelID);
+                if (!(bucketFillChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Bucket-Fill") && !bucketFillChannelID.equals("LINK_HERE")) {
 
-            }
+                    bucketFillChannel = jda.getTextChannelById(bucketFillChannelID);
 
-            if (bucketEmptyChannelID != null && main.getConfig().getBoolean("Log-Player.Bucket-Empty") && !bucketEmptyChannelID.equals("LINK_HERE")) {
+                }
 
-                bucketEmptyChannel = jda.getTextChannelById(bucketEmptyChannelID);
+                if (!(bucketEmptyChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Bucket-Empty") && !bucketEmptyChannelID.equals("LINK_HERE")) {
 
-            }
+                    bucketEmptyChannel = jda.getTextChannelById(bucketEmptyChannelID);
 
-            if (anvilChannelID != null && main.getConfig().getBoolean("Log-Player.Anvil") && !anvilChannelID.equals("LINK_HERE")) {
+                }
 
-                anvilChannel = jda.getTextChannelById(anvilChannelID);
+                if (!(anvilChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Anvil") && !anvilChannelID.equals("LINK_HERE")) {
 
-            }
+                    anvilChannel = jda.getTextChannelById(anvilChannelID);
 
-            if (itemDropChannelID != null && main.getConfig().getBoolean("Log-Player.Item-Drop") && !itemDropChannelID.equals("LINK_HERE")) {
+                }
 
-                itemDropChannel = jda.getTextChannelById(itemDropChannelID);
+                if (!(itemDropChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Item-Drop") && !itemDropChannelID.equals("LINK_HERE")) {
 
-            }
+                    itemDropChannel = jda.getTextChannelById(itemDropChannelID);
 
-            if (enchantingChannelID != null && main.getConfig().getBoolean("Log-Player.Enchanting") && !enchantingChannelID.equals("LINK_HERE")) {
+                }
 
-                enchantingChannel = jda.getTextChannelById(enchantingChannelID);
+                if (!(enchantingChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Enchanting") && !enchantingChannelID.equals("LINK_HERE")) {
 
-            }
+                    enchantingChannel = jda.getTextChannelById(enchantingChannelID);
 
-            if (bookEditingChannelID != null && main.getConfig().getBoolean("Log-Player.Book-Editing") && !bookEditingChannelID.equals("LINK_HERE")) {
+                }
 
-                bookEditingChannel = jda.getTextChannelById(bookEditingChannelID);
+                if (!(bookEditingChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Book-Editing") && !bookEditingChannelID.equals("LINK_HERE")) {
 
-            }
+                    bookEditingChannel = jda.getTextChannelById(bookEditingChannelID);
 
-            if (itemPickupChannelID != null && main.getConfig().getBoolean("Log-Player.Item-Pickup") && !itemPickupChannelID.equals("LINK_HERE")) {
+                }
 
-                itemPickupChannel = jda.getTextChannelById(itemPickupChannelID);
+                if (!(itemPickupChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Item-Pickup") && !itemPickupChannelID.equals("LINK_HERE")) {
 
-            }
+                    itemPickupChannel = jda.getTextChannelById(itemPickupChannelID);
 
-            if (furnaceChannelID != null && main.getConfig().getBoolean("Log-Player.Furnace") && !furnaceChannelID.equals("LINK_HERE")) {
+                }
 
-                furnaceChannel = jda.getTextChannelById(furnaceChannelID);
+                if (!(furnaceChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Furnace") && !furnaceChannelID.equals("LINK_HERE")) {
 
-            }
+                    furnaceChannel = jda.getTextChannelById(furnaceChannelID);
 
-            if (gameModeChannelID != null && main.getConfig().getBoolean("Log-Player.Game-Mode") && !gameModeChannelID.equals("LINK_HERE")) {
+                }
 
-                gameModeChannel = jda.getTextChannelById(gameModeChannelID);
+                if (!(gameModeChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Game-Mode") && !gameModeChannelID.equals("LINK_HERE")) {
 
-            }
+                    gameModeChannel = jda.getTextChannelById(gameModeChannelID);
 
-            // Server Side Part
-            if (serverStartChannelID != null && main.getConfig().getBoolean("Log-Server.Start") && !serverStartChannelID.equals("LINK_HERE")) {
+                }
 
-                serverStartChannel = jda.getTextChannelById(serverStartChannelID);
+                if (!(craftChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Craft") && !craftChannelID.equals("LINK_HERE")) {
 
-            }
+                    craftChannel = jda.getTextChannelById(craftChannelID);
 
-            if (serverStopChannelID != null && main.getConfig().getBoolean("Log-Server.Stop") && !serverStopChannelID.equals("LINK_HERE")) {
+                }
 
-                serverStopChannel = jda.getTextChannelById(serverStopChannelID);
+                // Server Side Part
+                if (!(serverStartChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Server.Start") && !serverStartChannelID.equals("LINK_HERE")) {
 
-            }
+                    serverStartChannel = jda.getTextChannelById(serverStartChannelID);
 
-            if (consoleChannelID != null && main.getConfig().getBoolean("Log-Server.Console-Commands") && !consoleChannelID.equals("LINK_HERE")) {
+                }
 
-                consoleChannel = jda.getTextChannelById(consoleChannelID);
+                if (!(serverStopChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Server.Stop") && !serverStopChannelID.equals("LINK_HERE")) {
 
-            }
+                    serverStopChannel = jda.getTextChannelById(serverStopChannelID);
 
-            if (RAMChannelID != null && main.getConfig().getBoolean("Log-Server.RAM") && !RAMChannelID.equals("LINK_HERE")) {
+                }
 
-                RAMChannel = jda.getTextChannelById(RAMChannelID);
+                if (!(consoleChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Server.Console-Commands") && !consoleChannelID.equals("LINK_HERE")) {
 
-            }
+                    consoleChannel = jda.getTextChannelById(consoleChannelID);
 
-            if (TPSChannelID != null && main.getConfig().getBoolean("Log-Server.TPS") && !TPSChannelID.equals("LINK_HERE")) {
+                }
 
-                TPSChannel = jda.getTextChannelById(TPSChannelID);
+                if (!(RAMChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Server.RAM") && !RAMChannelID.equals("LINK_HERE")) {
 
-            }
+                    RAMChannel = jda.getTextChannelById(RAMChannelID);
 
-            if (portalCreationChannelID != null && main.getConfig().getBoolean("Log-Server.Portal-Creation") && !portalCreationChannelID.equals("LINK_HERE")) {
+                }
 
-                portalCreationChannel = jda.getTextChannelById(portalCreationChannelID);
+                if (!(TPSChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Server.TPS") && !TPSChannelID.equals("LINK_HERE")) {
 
-            }
+                    TPSChannel = jda.getTextChannelById(TPSChannelID);
 
-            if (rconChannelID != null && main.getConfig().getBoolean("Log-Server.RCON") && !rconChannelID.equals("LINK_HERE")) {
+                }
 
-                rconChannel = jda.getTextChannelById(rconChannelID);
+                if (!(portalCreationChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Server.Portal-Creation") && !portalCreationChannelID.equals("LINK_HERE")) {
 
-            }
+                    portalCreationChannel = jda.getTextChannelById(portalCreationChannelID);
 
-            // Extra Checkers Part
-            if (afkChannelID != null && main.getConfig().getBoolean("Log-Player.AFK") && !afkChannelID.equals("LINK_HERE")) {
+                }
 
-                afkChannel = jda.getTextChannelById(afkChannelID);
+                if (!(rconChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Server.RCON") && !rconChannelID.equals("LINK_HERE")) {
 
-            }
+                    rconChannel = jda.getTextChannelById(rconChannelID);
 
-            if (wrongPasswordChannelID != null && main.getConfig().getBoolean("Log-Extras.Essentials-AFK") && !wrongPasswordChannelID.equals("LINK_HERE")) {
+                }
 
-                wrongPasswordChannel = jda.getTextChannelById(wrongPasswordChannelID);
+                // Extra Checkers Part
+                if (!(afkChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.AFK") && !afkChannelID.equals("LINK_HERE")) {
+
+                    afkChannel = jda.getTextChannelById(afkChannelID);
+
+                }
+
+                if (!(wrongPasswordChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Extras.Essentials-AFK") && !wrongPasswordChannelID.equals("LINK_HERE")) {
+
+                    wrongPasswordChannel = jda.getTextChannelById(wrongPasswordChannelID);
+
+                }
+            }catch (Exception e){
+
+                main.getLogger().severe("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
 
             }
         }
@@ -509,6 +524,11 @@ public class Discord {
         discordUtil(player, content, contentinAuthorLine, gameModeChannel);
     }
 
+    public static void playerCraft(Player player, String content, boolean contentinAuthorLine) {
+
+        discordUtil(player, content, contentinAuthorLine, craftChannel);
+    }
+
     private static void discordUtil(Player player, String content, boolean contentinAuthorLine, TextChannel channel) {
         if (channel == null) return;
 
@@ -527,8 +547,7 @@ public class Discord {
 
                 jda.shutdown();
                 jda = null;
-                DiscordStatus status = new DiscordStatus();
-                status.getThreadPool().shutdown();
+                DiscordStatus.getThreadPool().shutdown();
                 main.getLogger().info("Discord Bot Bridge has been closed!");
 
             } catch (Exception e) {

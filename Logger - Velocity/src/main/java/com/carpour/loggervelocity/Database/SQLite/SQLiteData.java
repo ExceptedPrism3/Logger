@@ -19,11 +19,12 @@ public class SQLiteData {
 
     public void createTable() {
 
-        PreparedStatement playerChat, playerCommands, playerLogin, playerLeave, serverStart, serverStop, consoleCommands, ram;
+        PreparedStatement playerChat, playerCommands, playerLogin, playerLeave, serverStart, serverStop,
+                consoleCommands, ram, liteBans;
 
         try {
 
-            //Player Side Part
+            // Player Side Part
             playerChat = plugin.sqLite.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Chat_Velocity" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, Player_Name TEXT(30)," +
                     "Message TEXT(256), Is_Staff INTEGER)");
@@ -39,7 +40,7 @@ public class SQLiteData {
             playerLeave = plugin.sqLite.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS  Player_Leave_Velocity " +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, Player_Name TEXT(30), Is_Staff INTEGER)");
 
-            //Server Side Part
+            // Server Side Part
             consoleCommands = plugin.sqLite.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Console_Commands_Velocity" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY,Command TEXT(256))");
 
@@ -53,6 +54,13 @@ public class SQLiteData {
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY," +
                     " Total_Memory INTEGER, Used_Memory INTEGER, Free_Memory INTEGER)");
 
+            // Extra Side Part
+            liteBans = plugin.sqLite.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS LiteBans_Proxy" +
+                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY," +
+                    " Sender TEXT(30), Command TEXT(10), OnWho TEXT(30), Reason TEXT(60)," +
+                    " Duration TEXT(50), Is_Silent INTEGER)");
+
+
             playerChat.executeUpdate();
             playerCommands.executeUpdate();
             playerLogin.executeUpdate();
@@ -62,6 +70,8 @@ public class SQLiteData {
             serverStart.executeUpdate();
             serverStop.executeUpdate();
             ram.executeUpdate();
+
+            liteBans.executeUpdate();
 
         } catch (SQLException exception) { exception.printStackTrace(); }
     }
@@ -130,7 +140,6 @@ public class SQLiteData {
         } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
-
     public static void insertConsoleCommands(String serverName, String command) {
         try {
             PreparedStatement serverReload = plugin.sqLite.getConnection().prepareStatement("INSERT INTO Console_Commands_Velocity (Server_Name, Date, Command) VALUES (?,?,?)");
@@ -178,6 +187,23 @@ public class SQLiteData {
         } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
+    public static void insertLiteBans(String serverName, String executor, String command, String onWho, String duration, String reason, boolean isSilent) {
+        try {
+            PreparedStatement liteBansStatement = plugin.sqLite.getConnection().prepareStatement("INSERT INTO LiteBans_Proxy (Server_Name, Date, Sender, Command, OnWho, Reason, Duration, Is_Silent) VALUES(?,?,?,?,?,?,?,?)");
+            liteBansStatement.setString(1, serverName);
+            liteBansStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
+            liteBansStatement.setString(3, executor);
+            liteBansStatement.setString(4, command);
+            liteBansStatement.setString(5, onWho);
+            liteBansStatement.setString(6, duration);
+            liteBansStatement.setString(7, reason);
+            liteBansStatement.setBoolean(8, isSilent);
+
+            liteBansStatement.executeUpdate();
+
+        } catch (SQLException exception) { exception.printStackTrace(); }
+    }
+
 
     public void emptyTable() {
 
@@ -187,7 +213,7 @@ public class SQLiteData {
 
         try{
 
-            //Player Side Part
+            // Player Side Part
             PreparedStatement player_Chat = plugin.sqLite.getConnection().prepareStatement("DELETE FROM Player_Chat_Velocity WHERE Date <= datetime('now','-" + when + " day')");
 
             PreparedStatement player_Commands = plugin.sqLite.getConnection().prepareStatement("DELETE FROM Player_Commands_Velocity WHERE Date <= datetime('now','-" + when + " day')");
@@ -196,7 +222,7 @@ public class SQLiteData {
 
             PreparedStatement player_Leave = plugin.sqLite.getConnection().prepareStatement("DELETE FROM Player_Leave_Velocity WHERE Date <= datetime('now','-" + when + " day')");
 
-            //Server Side Part
+            // Server Side Part
             PreparedStatement console_Commands = plugin.sqLite.getConnection().prepareStatement("DELETE FROM Console_Commands_Velocity WHERE Date <= datetime('now','-" + when + " day')");
 
             PreparedStatement server_Start = plugin.sqLite.getConnection().prepareStatement("DELETE FROM Server_Start_Velocity WHERE Date <= datetime('now','-" + when + " day')");
@@ -205,18 +231,24 @@ public class SQLiteData {
 
             PreparedStatement ram = plugin.sqLite.getConnection().prepareStatement("DELETE FROM RAM_Velocity WHERE Date <= datetime('now','-" + when + " day')");
 
+            // Extra Side Part
+            PreparedStatement liteBans = plugin.sqLite.getConnection().prepareStatement("DELETE FROM LiteBans_Proxy WHERE Date <= datetime('now','-" + when + " day')");
+
             player_Chat.executeUpdate();
             player_Commands.executeUpdate();
             player_Login.executeUpdate();
             player_Leave.executeUpdate();
+
             console_Commands.executeUpdate();
             server_Start.executeUpdate();
             server_Stop.executeUpdate();
             ram.executeUpdate();
 
+            liteBans.executeUpdate();
+
         }catch (SQLException e){
 
-            plugin.getLogger().error("[Logger] An error has occurred while cleaning the tables, if the error persists, contact the Authors!");
+            plugin.getLogger().error("An error has occurred while cleaning the tables, if the error persists, contact the Authors!");
             e.printStackTrace();
 
         }

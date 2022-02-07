@@ -16,7 +16,8 @@ public class MySQLData {
 
     public void createTable(){
 
-        PreparedStatement playerChat, playerCommand, playerLogin, playerLeave, serverReload, serverStart, serverStop, ram;
+        PreparedStatement playerChat, playerCommand, playerLogin, playerLeave, serverReload, serverStart, serverStop,
+                ram, liteBans;
 
         try {
 
@@ -45,6 +46,11 @@ public class MySQLData {
             ram = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS RAM_Proxy "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Total_Memory INT,Used_Memory INT,Free_Memory INT,PRIMARY KEY (Date))");
 
+            // Extra Side Part
+            liteBans = plugin.mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS LiteBans_Proxy "
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Sender VARCHAR(100),Command VARCHAR(20),OnWho VARCHAR(100)," +
+                    "Reason VARCHAR(200),Duration VARCHAR(30), Is_Silent TINYINT,PRIMARY KEY (Date))");
+
             playerChat.executeUpdate();
             playerCommand.executeUpdate();
             playerLogin.executeUpdate();
@@ -54,6 +60,8 @@ public class MySQLData {
             serverStart.executeUpdate();
             serverStop.executeUpdate();
             ram.executeUpdate();
+
+            liteBans.executeUpdate();
 
         }catch (SQLException e){
 
@@ -72,9 +80,7 @@ public class MySQLData {
             playerChat.setBoolean(4, staff);
             playerChat.executeUpdate();
 
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
+        } catch (SQLException e){ e.printStackTrace(); }
     }
 
     public static void playerCommands(String serverName, String playerName, String command, boolean staff){
@@ -87,9 +93,7 @@ public class MySQLData {
             playerCommand.setBoolean(4, staff);
             playerCommand.executeUpdate();
 
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
+        } catch (SQLException e){ e.printStackTrace(); }
     }
 
     public static void playerLogin(String serverName, String playerName, InetSocketAddress IP, boolean staff){
@@ -109,9 +113,7 @@ public class MySQLData {
             playerLogin.setBoolean(4, staff);
             playerLogin.executeUpdate();
 
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
+        } catch (SQLException e){ e.printStackTrace(); }
     }
 
     public static void playerLeave(String serverName, String playerName, boolean staff){
@@ -123,9 +125,7 @@ public class MySQLData {
             playerLeave.setBoolean(3, staff);
             playerLeave.executeUpdate();
 
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
+        } catch (SQLException e){ e.printStackTrace(); }
     }
 
     public static void serverReload(String serverName, String playerName, boolean staff){
@@ -137,9 +137,7 @@ public class MySQLData {
             serverReload.setBoolean(3, staff);
             serverReload.executeUpdate();
 
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
+        } catch (SQLException e){ e.printStackTrace(); }
     }
 
     public static void serverStart(String serverName){
@@ -149,11 +147,7 @@ public class MySQLData {
             serverStart.setString(1, serverName);
             serverStart.executeUpdate();
 
-        } catch (SQLException e){
-
-            e.printStackTrace();
-
-        }
+        } catch (SQLException e){ e.printStackTrace(); }
     }
 
     public static void serverStop(String serverName){
@@ -163,11 +157,7 @@ public class MySQLData {
             serverStop.setString(1, serverName);
             serverStop.executeUpdate();
 
-        } catch (SQLException e){
-
-            e.printStackTrace();
-
-        }
+        } catch (SQLException e){ e.printStackTrace(); }
     }
 
     public static void RAM(String serverName, long TM, long UM, long FM){
@@ -180,9 +170,23 @@ public class MySQLData {
             RAM.setLong(4, FM);
             RAM.executeUpdate();
 
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
+        } catch (SQLException e){ e.printStackTrace(); }
+    }
+
+    public static void liteBans(String serverName, String executor, String command, String onWho, String duration, String reason, boolean isSilent){
+        try {
+            String database = "LiteBans_Proxy";
+            PreparedStatement liteBans = plugin.mySQL.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Sender,Command,OnWho,Reason,Duration,Is_Silent) VALUES(?,?,?,?,?,?,?)");
+            liteBans.setString(1, serverName);
+            liteBans.setString(2, executor);
+            liteBans.setString(3, command);
+            liteBans.setString(4, onWho);
+            liteBans.setString(5, duration);
+            liteBans.setString(6, reason);
+            liteBans.setBoolean(7, isSilent);
+            liteBans.executeUpdate();
+
+        } catch (SQLException e){ e.printStackTrace(); }
     }
 
     public void emptyTable(){
@@ -209,14 +213,19 @@ public class MySQLData {
 
             PreparedStatement ram = plugin.mySQL.getConnection().prepareStatement("DELETE FROM RAM_Proxy WHERE DATE < NOW() - INTERVAL " + when + " DAY");
 
+            PreparedStatement liteBans = plugin.mySQL.getConnection().prepareStatement("DELETE FROM LiteBans_Proxy WHERE DATE < NOW() - INTERVAL " + when + " DAY");
+
             player_Chat.executeUpdate();
             player_Login.executeUpdate();
             player_Command.executeUpdate();
             player_Leave.executeUpdate();
+
             server_Reload.executeUpdate();
             server_Start.executeUpdate();
             server_Stop.executeUpdate();
             ram.executeUpdate();
+
+            liteBans.executeUpdate();
 
         }catch (SQLException e){
 

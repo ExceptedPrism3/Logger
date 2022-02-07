@@ -4,7 +4,6 @@ import com.carpour.loggerbungeecord.Database.MySQL.MySQLData;
 import com.carpour.loggerbungeecord.Database.SQLite.SQLiteData;
 import com.carpour.loggerbungeecord.Discord.Discord;
 import com.carpour.loggerbungeecord.Main;
-import com.carpour.loggerbungeecord.Utils.ConfigManager;
 import com.carpour.loggerbungeecord.Utils.FileHandler;
 import com.carpour.loggerbungeecord.Utils.Messages;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -16,9 +15,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class OnLogin implements Listener {
@@ -32,8 +30,7 @@ public class OnLogin implements Listener {
         String playerName = player.getName();
         InetSocketAddress playerIP = (InetSocketAddress) event.getPlayer().getSocketAddress();
         String serverName = main.getConfig().getString("Server-Name");
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         if (player.hasPermission("loggerproxy.exempt")) return;
 
@@ -48,14 +45,14 @@ public class OnLogin implements Listener {
 
                     if (!Messages.getString("Discord.Player-Login-Staff").isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Login-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%IP%", String.valueOf(playerIP)), false);
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Login-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%IP%", String.valueOf(playerIP)), false);
 
                     }
 
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
-                        out.write(Messages.getString("Files.Player-Login-Staff").replaceAll("%time%", dateFormat.format(date)).replaceAll("%player%", playerName).replaceAll("%IP%", String.valueOf(playerIP)) + "\n");
+                        out.write(Messages.getString("Files.Player-Login-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%IP%", String.valueOf(playerIP)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -85,7 +82,7 @@ public class OnLogin implements Listener {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLoginLogFile(), true));
-                    out.write(Messages.getString("Files.Player-Login").replaceAll("%time%", dateFormat.format(date)).replaceAll("%player%", playerName).replaceAll("%IP%", String.valueOf(playerIP)) + "\n");
+                    out.write(Messages.getString("Files.Player-Login").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%IP%", String.valueOf(playerIP)) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -101,7 +98,7 @@ public class OnLogin implements Listener {
 
                 if (!Messages.getString("Discord.Player-Login-Staff").isEmpty()) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Login-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%IP%", String.valueOf(playerIP)), false);
+                    Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Login-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%IP%", String.valueOf(playerIP)), false);
 
                 }
 
@@ -109,7 +106,7 @@ public class OnLogin implements Listener {
 
                 if (!Messages.getString("Discord.Player-Login").isEmpty()) {
 
-                    Discord.playerLogin(player, Objects.requireNonNull(Messages.getString("Discord.Player-Login")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%IP%", String.valueOf(playerIP)), false);
+                    Discord.playerLogin(player, Objects.requireNonNull(Messages.getString("Discord.Player-Login")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%IP%", String.valueOf(playerIP)), false);
 
                 }
             }

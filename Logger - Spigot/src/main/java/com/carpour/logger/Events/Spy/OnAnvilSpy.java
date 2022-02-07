@@ -26,7 +26,7 @@ public class OnAnvilSpy implements Listener {
         Player player = (Player) event.getWhoClicked();
         Inventory inv = event.getInventory();
 
-        if (player.hasPermission("logger.exempt") || player.hasPermission("logger.spy")) return;
+        if (player.hasPermission("logger.exempt") || player.hasPermission("logger.spy.bypass")) return;
 
         if (main.getConfig().getBoolean("Log-Player.Anvil") && main.getConfig().getBoolean("Spy-Features.Anvil-Spy.Enable")) {
 

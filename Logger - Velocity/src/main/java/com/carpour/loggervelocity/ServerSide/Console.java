@@ -14,9 +14,8 @@ import com.velocitypowered.api.event.command.CommandExecuteEvent;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Console {
 
@@ -28,18 +27,17 @@ public class Console {
 
         String command = event.getCommand();
         String serverName = main.getConfig().getString("Server-Name");
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         if (main.getConfig().getBoolean("Log-Server.Console-Commands")) {
 
-            //Log To Files Handling
+            // Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getConsoleCommandLogFile(), true));
-                    out.write(messages.getString("Files.Server-Side.Console-Commands").replaceAll("%time%", dateFormat.format(date)).replaceAll("%command%", command) + "\n");
+                    out.write(messages.getString("Files.Server-Side.Console-Commands").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%command%", command) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -50,38 +48,30 @@ public class Console {
                 }
             }
 
-            //Discord
+            // Discord
             if (!messages.getString("Discord.Server-Side.Console-Commands").isEmpty()) {
 
-                Discord.console(messages.getString("Discord.Server-Side.Console-Commands").replaceAll("%time%", dateFormat.format(date)).replaceAll("%command%", command), false);
+                Discord.console(messages.getString("Discord.Server-Side.Console-Commands").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%command%", command), false);
             }
 
-            //MySQL
+            // MySQL
             if (main.getConfig().getBoolean("MySQL.Enable") && MySQL.isConnected()) {
 
                 try {
 
                     MySQLData.consoleCommands(serverName, command);
 
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
 
-            //SQLite
+            // SQLite
             if (main.getConfig().getBoolean("SQLite.Enable") && SQLite.isConnected()) {
 
                 try {
 
                     SQLiteData.insertConsoleCommands(serverName, command);
 
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
         }
     }

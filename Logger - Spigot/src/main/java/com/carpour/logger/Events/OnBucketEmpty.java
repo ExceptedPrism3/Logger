@@ -1,9 +1,9 @@
 package com.carpour.logger.Events;
 
-import com.carpour.logger.Discord.Discord;
+import  com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.Database.MySQL.MySQLData;
+import com.carpour.logger.Database.External.ExternalData;
 import com.carpour.logger.Database.SQLite.SQLiteData;
 import com.carpour.logger.Utils.Messages;
 import org.bukkit.World;
@@ -16,9 +16,8 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class OnBucketEmpty implements Listener {
@@ -37,28 +36,27 @@ public class OnBucketEmpty implements Listener {
         int y = player.getLocation().getBlockY();
         int z = player.getLocation().getBlockZ();
         String serverName = main.getConfig().getString("Server-Name");
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         if (player.hasPermission("logger.exempt")) return;
 
         if (!event.isCancelled() && (main.getConfig().getBoolean("Log-Player.Bucket-Empty"))) {
 
-            //Log To Files Handling
+            // Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Empty-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Empty-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket), false);
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Empty-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket), false);
 
                     }
 
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Bucket-Empty-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket) + "\n");
+                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Bucket-Empty-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -68,9 +66,9 @@ public class OnBucketEmpty implements Listener {
 
                     }
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                    if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
 
-                        MySQLData.bucketEmpty(serverName, worldName, playerName, bucket, x, y, z, true);
+                        ExternalData.bucketEmpty(serverName, worldName, playerName, bucket, x, y, z, true);
 
                     }
 
@@ -87,7 +85,7 @@ public class OnBucketEmpty implements Listener {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBucketEmptyFolder(), true));
-                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Bucket-Empty")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket) + "\n");
+                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Bucket-Empty")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -98,12 +96,12 @@ public class OnBucketEmpty implements Listener {
                 }
             }
 
-            //Discord
+            // Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Empty-Staff")).isEmpty()) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Empty-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket), false);
+                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Empty-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket), false);
 
                 }
 
@@ -111,36 +109,28 @@ public class OnBucketEmpty implements Listener {
 
                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Empty")).isEmpty()) {
 
-                    Discord.bucketEmpty(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Empty")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket), false);
+                    Discord.bucketEmpty(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Empty")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket), false);
                 }
             }
 
-            //MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+            // MySQL
+            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
 
                 try {
 
-                    MySQLData.bucketEmpty(serverName, worldName, playerName, bucket, x, y, z, player.hasPermission("logger.staff.log"));
+                    ExternalData.bucketEmpty(serverName, worldName, playerName, bucket, x, y, z, player.hasPermission("logger.staff.log"));
 
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
 
-            //SQLite
+            // SQLite
             if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                 try {
 
                     SQLiteData.insertBucketEmpty(serverName, player, bucket, player.hasPermission("logger.staff.log"));
 
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
         }
     }

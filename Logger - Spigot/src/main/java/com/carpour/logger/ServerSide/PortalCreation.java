@@ -1,6 +1,6 @@
 package com.carpour.logger.ServerSide;
 
-import com.carpour.logger.Database.MySQL.MySQLData;
+import com.carpour.logger.Database.External.ExternalData;
 import com.carpour.logger.Database.SQLite.SQLiteData;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
@@ -14,9 +14,8 @@ import org.bukkit.event.world.PortalCreateEvent;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class PortalCreation implements Listener {
@@ -29,20 +28,17 @@ public class PortalCreation implements Listener {
         String worldName = event.getWorld().getName();
         PortalCreateEvent.CreateReason reason = event.getReason();
         String serverName = main.getConfig().getString("Server-Name");
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-Server.Portal-Creation")) {
 
-            System.out.println(event.getBlocks());
-
-            //Log To Files Handling
+            // Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPortalCreateFile(), true));
-                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Server-Side.Portal-Creation")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%material%", String.valueOf(reason)) + "\n");
+                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Server-Side.Portal-Creation")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%material%", String.valueOf(reason)) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -53,38 +49,30 @@ public class PortalCreation implements Listener {
                 }
             }
 
-            //Discord
+            // Discord
             if (!Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Portal-Creation")).isEmpty()) {
 
-                Discord.portalCreation(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Portal-Creation")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%material%", String.valueOf(reason)), false);
+                Discord.portalCreation(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Portal-Creation")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%material%", String.valueOf(reason)), false);
             }
 
-            //MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+            // MySQL
+            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
 
                 try {
 
-                    MySQLData.portalCreate(serverName, worldName, reason);
+                    ExternalData.portalCreate(serverName, worldName, reason);
 
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
 
-            //SQLite
+            // SQLite
             if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                 try {
 
                     SQLiteData.insertPortalCreate(serverName, worldName, reason);
 
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
         }
     }

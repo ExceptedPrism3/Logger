@@ -1,5 +1,6 @@
 package com.carpour.loggervelocity;
 
+import com.carpour.loggervelocity.API.LiteBansUtil;
 import com.carpour.loggervelocity.Commands.Reload;
 import com.carpour.loggervelocity.Database.MySQL.MySQL;
 import com.carpour.loggervelocity.Database.MySQL.MySQLData;
@@ -8,6 +9,7 @@ import com.carpour.loggervelocity.Database.SQLite.SQLiteData;
 import com.carpour.loggervelocity.Discord.Discord;
 import com.carpour.loggervelocity.Events.*;
 import com.carpour.loggervelocity.Events.OnCommands.OnCommand;
+import com.carpour.loggervelocity.Events.PluginDependent.LiteBans.OnLiteBanEvents;
 import com.carpour.loggervelocity.ServerSide.RAM;
 import com.carpour.loggervelocity.ServerSide.Start;
 import com.carpour.loggervelocity.ServerSide.Stop;
@@ -28,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 @Plugin(id = "logger-velocity", name = "Logger", version = "1.7.1", authors = {"prism3, thelooter"})
 public class Main{
 
-    private final ProxyServer server;
+    private static ProxyServer server;
     private final Logger logger;
     private final Metrics.Factory metricsFactory;
 
@@ -48,7 +50,7 @@ public class Main{
     @Inject
     public Main(ProxyServer server, Logger logger, Metrics.Factory metricsFactory) {
 
-        this.server = server;
+        Main.server = server;
         this.logger = logger;
         this.metricsFactory = metricsFactory;
 
@@ -69,6 +71,7 @@ public class Main{
         FileHandler fileHandler = new FileHandler(folder.toFile());
         fileHandler.deleteFiles();
 
+        // bstats
         metricsFactory.make(this, Bstats.pluginID);
 
         server.getEventManager().register(this, new OnChat());
@@ -103,6 +106,14 @@ public class Main{
             }
         }
 
+        if (LiteBansUtil.getLiteBansAPI().isPresent()){
+
+            server.getScheduler().buildTask(this, new OnLiteBanEvents()).delay(5, TimeUnit.SECONDS).schedule();
+
+            getLogger().info("LiteBans Plugin Detected!");
+
+        }
+
         new Start().run();
 
 //        new ASCIIArt().Art();
@@ -128,6 +139,8 @@ public class Main{
     }
 
     public static Main getInstance() { return instance; }
+
+    public static ProxyServer getServer() { return server; }
 
     public Logger getLogger(){ return logger; }
 

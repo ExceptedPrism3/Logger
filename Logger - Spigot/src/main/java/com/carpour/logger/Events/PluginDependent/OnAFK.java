@@ -1,6 +1,6 @@
 package com.carpour.logger.Events.PluginDependent;
 
-import com.carpour.logger.Database.MySQL.MySQLData;
+import com.carpour.logger.Database.External.ExternalData;
 import com.carpour.logger.Database.SQLite.SQLiteData;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
@@ -15,9 +15,8 @@ import org.bukkit.event.Listener;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 
@@ -37,8 +36,7 @@ public class OnAFK implements Listener {
         int z = player.getLocation().getBlockZ();
         String worldName = player.getWorld().getName();
         String serverName = main.getConfig().getString("Server-Name");
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         if (player.hasPermission("logger.exempt")) return;
 
@@ -46,20 +44,20 @@ public class OnAFK implements Listener {
 
             if (main.getConfig().getBoolean("Log-Extras.Essentials-AFK")) {
 
-                //Log To Files Handling
+                // Log To Files Handling
                 if (main.getConfig().getBoolean("Log-to-Files")) {
 
                     if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).isEmpty()) {
 
-                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
                         }
 
                         try {
 
                             BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                            out.write(Objects.requireNonNull(Messages.get().getString("Files.Extras.AFK-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)) + "\n");
+                            out.write(Objects.requireNonNull(Messages.get().getString("Files.Extras.AFK-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)) + "\n");
                             out.close();
 
                         } catch (IOException event) {
@@ -69,9 +67,9 @@ public class OnAFK implements Listener {
 
                         }
 
-                        if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                        if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
 
-                            MySQLData.afk(serverName, worldName, playerName, x, y, z, true);
+                            ExternalData.afk(serverName, worldName, playerName, x, y, z, true);
 
                         }
 
@@ -88,7 +86,7 @@ public class OnAFK implements Listener {
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAfkFile(), true));
-                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Extras.AFK")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)) + "\n");
+                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Extras.AFK")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)) + "\n");
                         out.close();
 
                     } catch (IOException event) {
@@ -99,12 +97,12 @@ public class OnAFK implements Listener {
                     }
                 }
 
-                //Discord
+                // Discord
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
 
                     }
 
@@ -112,36 +110,28 @@ public class OnAFK implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK")).isEmpty()) {
 
-                        Discord.afk(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+                        Discord.afk(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
                     }
                 }
 
-                //MySQL
-                if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                // MySQL
+                if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
 
                     try {
 
-                        MySQLData.afk(serverName, worldName, playerName, x, y, z, player.hasPermission("logger.staff.log"));
+                        ExternalData.afk(serverName, worldName, playerName, x, y, z, player.hasPermission("logger.staff.log"));
 
-                    } catch (Exception event) {
-
-                        event.printStackTrace();
-
-                    }
+                    } catch (Exception event) { event.printStackTrace(); }
                 }
 
-                //SQLite
+                // SQLite
                 if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                     try {
 
                         SQLiteData.insertAFK(serverName, player, player.hasPermission("logger.staff.log"));
 
-                    } catch (Exception exception) {
-
-                        exception.printStackTrace();
-
-                    }
+                    } catch (Exception exception) { exception.printStackTrace(); }
                 }
             }
         }

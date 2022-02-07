@@ -37,6 +37,15 @@ public class DiscordFile {
         return str;
     }
 
+    /*public static long getLong(final String path) {
+
+        if (discord.get(path) != null) {
+
+            return discord.getLong(path);
+
+        } return 0;
+    }*/
+
     public static File getFile() {
         return new File(Main.getInstance().getDataFolder(), "discord - Bungee.yml");
     }

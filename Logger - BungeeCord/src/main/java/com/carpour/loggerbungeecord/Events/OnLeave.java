@@ -14,9 +14,8 @@ import net.md_5.bungee.event.EventHandler;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class OnLeave implements Listener {
@@ -34,8 +33,7 @@ public class OnLeave implements Listener {
 
         String playerServerName = player.getServer().getInfo().getName();
         String serverName = main.getConfig().getString("Server-Name");
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         if (player.getServer() == null || playerServerName == null) return;
 
@@ -50,14 +48,14 @@ public class OnLeave implements Listener {
 
                     if (!Messages.getString("Discord.Player-Leave-Staff").isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Leave-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", playerServerName), false);
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Leave-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", playerServerName), false);
 
                     }
 
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
-                        out.write(Messages.getString("Files.Player-Leave-Staff").replaceAll("%server%", playerServerName).replaceAll("%time%", dateFormat.format(date)).replaceAll("%player%", playerName) + "\n");
+                        out.write(Messages.getString("Files.Player-Leave-Staff").replaceAll("%server%", playerServerName).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -87,7 +85,7 @@ public class OnLeave implements Listener {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLeaveLogFile(), true));
-                    out.write(Messages.getString("Files.Player-Leave").replaceAll("%server%", playerServerName).replaceAll("%time%", dateFormat.format(date)).replaceAll("%player%", playerName) + "\n");
+                    out.write(Messages.getString("Files.Player-Leave").replaceAll("%server%", playerServerName).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -103,7 +101,7 @@ public class OnLeave implements Listener {
 
                 if (!Messages.getString("Discord.Player-Leave-Staff").isEmpty()) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Leave-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", playerServerName), false);
+                    Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Leave-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", playerServerName), false);
 
                 }
 
@@ -111,7 +109,7 @@ public class OnLeave implements Listener {
 
                 if (!Messages.getString("Discord.Player-Leave").isEmpty()) {
 
-                    Discord.playerLeave(player, Objects.requireNonNull(Messages.getString("Discord.Player-Leave")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", playerServerName), false);
+                    Discord.playerLeave(player, Objects.requireNonNull(Messages.getString("Discord.Player-Leave")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", playerServerName), false);
 
                 }
             }

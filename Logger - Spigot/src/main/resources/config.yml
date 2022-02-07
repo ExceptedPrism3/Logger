@@ -14,7 +14,7 @@
 # Discord: Prism3#9371 ID: 403667971089760257
 # Discord Server: https://discord.gg/MfR5mcpVfX
 #
-# Config 1.7.1
+# Config 1.7.2
 
 # Server Name
 Server-Name: "Server_Name"
@@ -52,6 +52,7 @@ Log-Player:
   Book-Editing: true
   Furnace: true
   Game-Mode: true
+  Craft: true
 
 Log-Server:
   Start: true
@@ -66,7 +67,6 @@ Log-Server:
 Log-Extras:
   Essentials-AFK: true
   AuthMe-Wrong-Password: true
-
 
 # Only Log Specified Commands
 # Block Commands from getting Logged
@@ -91,12 +91,6 @@ Player-Join:
 # Log players if their level exceeds the set amount
 Player-Level:
   Log-Above: 100
-
-# Items to be logged
-Item-Pickup:
-  - "APPLE"
-  - "BARRIER"
-  - "BEDROCK"
 
 # Which Game-Mode to get logged?
 Game-Mode: Creative
@@ -138,10 +132,12 @@ Spy-Features:
     Enable: false
     Message: "&8[&bLogger &8&l| &eAnvil-Spy&8] &7%player% >> %renamed%"
 
-# MySQL Feature
+# External Database Feature
+# Available Types are MySQL and MariaDB
 # Data-Deletion Value in Days, Set it -1 to cancel
-MySQL:
+Database:
   Enable: false
+  Type: MySQL
   Host: localhost
   Port: 3306
   Username: username
@@ -154,3 +150,6 @@ MySQL:
 SQLite:
   Enable: false
   Data-Deletion: 7
+
+# Checks for Updates
+Update-Checker: true

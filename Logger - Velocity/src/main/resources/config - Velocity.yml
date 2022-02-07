@@ -14,7 +14,7 @@
 # Discord: Prism3#9371 | ID: 403667971089760257
 # Discord Server: https://discord.gg/MfR5mcpVfX
 #
-# Config: 1.7.1
+# Config: 1.7.2
 
 
 # Server Name
@@ -44,6 +44,9 @@ Log-Server:
   Stop: true
   RAM: true
 
+Log-Extra:
+  LiteBans: true
+
 
 # Player-Commands features
 # Do not add / at first
@@ -70,6 +73,18 @@ Player-Login:
 RAM:
   Checker: 300
   Percent: 80
+
+# LiteBans Features to Log
+# It does not log revoked actions!
+# example: unban <player>
+LiteBans:
+  IP-Ban: true
+  Temp-IP-Ban: true
+  Ban: true
+  Temp-Ban: true
+  Mute: true
+  Temp-Mute: true
+  Kick: true
 
 # MySQL Feature
 # Data-Deletion value in days, set it -1 to cancel

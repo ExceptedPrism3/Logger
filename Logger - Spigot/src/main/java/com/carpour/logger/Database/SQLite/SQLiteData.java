@@ -17,11 +17,9 @@ import java.util.Objects;
 
 public class SQLiteData {
 
-
     private static Main plugin;
 
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss:SSSXXX");
-
 
     public SQLiteData(Main plugin) {
         SQLiteData.plugin = plugin;
@@ -29,11 +27,14 @@ public class SQLiteData {
 
     public void createTable() {
 
-        PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave, playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel, bucketFill, bucketEmpty, anvil, serverStart, serverStop, itemDrop, enchant, bookEditing, afk, wrongPassword, itemPickup, furnace, rcon, gameMode;
+        PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave,
+                playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel,
+                bucketFill, bucketEmpty, anvil, serverStart, serverStop, itemDrop, enchant, bookEditing, afk,
+                wrongPassword, itemPickup, furnace, rcon, gameMode, craft;
 
         try {
 
-            //Player Side Part
+            // Player Side Part
             playerChat = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Chat " +
                     "(Server_Name TEXT(30),Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY , World TEXT(100), Player_Name TEXT(20)," +
                     "Message TEXT(256), Is_Staff INTEGER)");
@@ -56,7 +57,7 @@ public class SQLiteData {
 
             playerDeath = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Death" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(40)," +
-                    "X INTEGER, Y INTEGER, Z INTEGER, Cause TEXT(100), By_Who TEXT(100), Item_Used TEXT(100), Is_Staff INTEGER)");
+                    "X INTEGER, Y INTEGER, Z INTEGER, Cause TEXT(100), By_Who TEXT(100), Is_Staff INTEGER)");
 
             playerTeleport = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Teleport" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(40)," +
@@ -112,7 +113,7 @@ public class SQLiteData {
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(40)," +
                     "Game_Mode TEXT(15), Is_Staff INTEGER)");
 
-            //Server Side Part
+            // Server Side Part
             serverStart = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Server_Start" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY)");
 
@@ -135,7 +136,11 @@ public class SQLiteData {
             rcon = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS RCON" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, IP TEXT, Command TEXT(100))");
 
-            //Extras Side Part
+            craft = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Crafting" +
+                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(40)," +
+                    "Item TEXT(50), Amount INTEGER, X INTEGER, Y INTEGER, Z INTEGER, Is_Staff INTEGER)");
+
+            // Extras Side Part
             if (EssentialsUtil.getEssentialsAPI() != null) {
 
                 afk = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS AFK" +
@@ -174,6 +179,7 @@ public class SQLiteData {
             itemPickup.executeUpdate();
             furnace.executeUpdate();
             gameMode.executeUpdate();
+            craft.executeUpdate();
 
             serverStart.executeUpdate();
             serverStop.executeUpdate();
@@ -183,9 +189,7 @@ public class SQLiteData {
             portalCreation.executeUpdate();
             rcon.executeUpdate();
 
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertPlayerChat(String serverName, Player player, String message, boolean staff) {
@@ -201,9 +205,7 @@ public class SQLiteData {
 
             playerChat.executeUpdate();
 
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertPlayerCommands(String serverName, Player player, String command, boolean staff) {
@@ -218,10 +220,7 @@ public class SQLiteData {
 
             playerCommands.executeUpdate();
 
-
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
 
@@ -233,9 +232,7 @@ public class SQLiteData {
             consoleCommands.setString(3, command);
 
             consoleCommands.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertPlayerSignText(String serverName, Player player, String lines, boolean isStaff) {
@@ -251,14 +248,13 @@ public class SQLiteData {
             playerSignText.setString(8, lines);
             playerSignText.setBoolean(9, isStaff);
 
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+            playerSignText.executeUpdate();
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
-    public static void insertPlayerDeath(String serverName, Player player, String cause, String by_who, String using, boolean isStaff) {
+    public static void insertPlayerDeath(String serverName, Player player, String cause, String by_who, boolean isStaff) {
         try {
-            PreparedStatement playerDeath = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Player_Death (Server_Name, Date, World, Player_Name, X, Y, Z, Cause, By_Who, Item_Used, Is_Staff) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+            PreparedStatement playerDeath = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Player_Death (Server_Name, Date, World, Player_Name, X, Y, Z, Cause, By_Who, Is_Staff) VALUES (?,?,?,?,?,?,?,?,?,?)");
             playerDeath.setString(1, serverName);
             playerDeath.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
             playerDeath.setString(3, player.getWorld().getName());
@@ -268,14 +264,11 @@ public class SQLiteData {
             playerDeath.setInt(7, player.getLocation().getBlockZ());
             playerDeath.setString(8, cause);
             playerDeath.setString(9, by_who);
-            playerDeath.setString(10, using);
-            playerDeath.setBoolean(11, isStaff);
+            playerDeath.setBoolean(10, isStaff);
 
             playerDeath.executeUpdate();
 
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertPlayerTeleport(String serverName, Player player, Location from, Location to, boolean isStaff) {
@@ -294,9 +287,7 @@ public class SQLiteData {
             playerTeleport.setBoolean(11, isStaff);
 
             playerTeleport.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertPlayerJoin(String serverName, Player player, boolean isStaff) {
@@ -314,11 +305,8 @@ public class SQLiteData {
             }
             playerJoin.setBoolean(7, isStaff);
 
-
             playerJoin.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertPlayerLeave(String serverName, Player player, boolean isStaff) {
@@ -334,9 +322,7 @@ public class SQLiteData {
             playerLeave.setBoolean(8, isStaff);
 
             playerLeave.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertBlockPlace(String serverName, Player player, Material block, boolean isStaff) {
@@ -353,9 +339,7 @@ public class SQLiteData {
             blockPlace.setBoolean(9, isStaff);
 
             blockPlace.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertBlockBreak(String serverName, Player player, Material block, boolean isStaff) {
@@ -371,11 +355,8 @@ public class SQLiteData {
             blockBreak.setInt(8, player.getLocation().getBlockZ());
             blockBreak.setBoolean(9, isStaff);
 
-
             blockBreak.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertTPS(String serverName, double tps) {
@@ -387,9 +368,7 @@ public class SQLiteData {
             tpsStatement.setDouble(3, tps);
 
             tpsStatement.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertRAM(String serverName, long totalMemory, long usedMemory, long freeMemory) {
@@ -402,9 +381,7 @@ public class SQLiteData {
             ramStatement.setLong(5, freeMemory);
 
             ramStatement.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertPlayerKick(String serverName, Player player, String reason, boolean isStaff) {
@@ -421,9 +398,7 @@ public class SQLiteData {
             playerKickStatement.setBoolean(9, isStaff);
 
             playerKickStatement.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertPortalCreate(String serverName, String worldName, PortalCreateEvent.CreateReason reason) {
@@ -435,9 +410,7 @@ public class SQLiteData {
             portalCreateStatement.setString(4, reason.toString());
 
             portalCreateStatement.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertLevelChange(String serverName, Player player, boolean isStaff) {
@@ -449,9 +422,7 @@ public class SQLiteData {
             levelChangeStatement.setBoolean(4, isStaff);
 
             levelChangeStatement.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertBucketFill(String serverName, Player player, String bucket, boolean isStaff) {
@@ -468,9 +439,7 @@ public class SQLiteData {
             bucketFillStatement.setBoolean(9, isStaff);
 
             bucketFillStatement.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertBucketEmpty(String serverName, Player player, String bucket, boolean isStaff) {
@@ -487,9 +456,7 @@ public class SQLiteData {
             bucketEmptyStatement.setBoolean(9, isStaff);
 
             bucketEmptyStatement.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertAnvil(String serverName, Player player, String newName, boolean isStaff) {
@@ -502,9 +469,7 @@ public class SQLiteData {
             anvilStatement.setBoolean(5, isStaff);
 
             anvilStatement.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertServerStart(String serverName) {
@@ -514,9 +479,7 @@ public class SQLiteData {
             serverStartStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
 
             serverStartStatement.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertServerStop(String serverName) {
@@ -526,9 +489,7 @@ public class SQLiteData {
             serverStopStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
 
             serverStopStatement.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertItemDrop(String serverName, Player player, String item, int amount, int x, int y, int z, List<String> enchantment, String changedName, boolean isStaff) {
@@ -548,9 +509,7 @@ public class SQLiteData {
             itemDropStatement.setBoolean(12, isStaff);
 
             itemDropStatement.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertEnchant(String serverName, Player player, List<String> enchantment, String item, int cost, boolean isStaff) {
@@ -569,9 +528,7 @@ public class SQLiteData {
             enchantStatement.setBoolean(11, isStaff);
 
             enchantStatement.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertBook(String serverName, Player player, int pages, List<String> content, String signed_by, boolean staff){
@@ -588,11 +545,7 @@ public class SQLiteData {
 
             book_editing.executeUpdate();
 
-        } catch (SQLException e){
-
-            e.printStackTrace();
-
-        }
+        } catch (SQLException e){ e.printStackTrace(); }
     }
 
     public static void insertAFK(String serverName, Player player, boolean isStaff) {
@@ -611,9 +564,7 @@ public class SQLiteData {
                 enchantStatement.setBoolean(8, isStaff);
 
                 enchantStatement.executeUpdate();
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
+            } catch (SQLException exception) { exception.printStackTrace(); }
         }
     }
 
@@ -630,9 +581,7 @@ public class SQLiteData {
                 enchantStatement.setBoolean(5, isStaff);
 
                 enchantStatement.executeUpdate();
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
+            } catch (SQLException exception) { exception.printStackTrace(); }
         }
     }
 
@@ -652,9 +601,7 @@ public class SQLiteData {
             itemPickupStatement.setBoolean(11, isStaff);
 
             itemPickupStatement.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertFurnace(String serverName, Player player, Material item, int amount, int x, int y, int z, boolean isStaff) {
@@ -672,9 +619,7 @@ public class SQLiteData {
             furnaceStatement.setBoolean(10, isStaff);
 
             furnaceStatement.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertRcon(String serverName, String IP, String command) {
@@ -687,9 +632,7 @@ public class SQLiteData {
 
             rcon.executeUpdate();
 
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     public static void insertGameMode(String serverName, String world, String playerName, String gameMode, boolean staff) {
@@ -704,9 +647,25 @@ public class SQLiteData {
 
             game_Mode.executeUpdate();
 
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        } catch (SQLException exception) { exception.printStackTrace(); }
+    }
+
+    public static void insertPlayerCraft(String serverName, Player player, String item, int amount, int x, int y, int z, boolean isStaff) {
+        try {
+            PreparedStatement craftStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Crafting (Server_Name, Date, World, Player_Name, Item, Amount, X, Y, Z, Is_Staff) VALUES (?,?,?,?,?,?,?,?,?,?)");
+            craftStatement.setString(1, serverName);
+            craftStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
+            craftStatement.setString(3, player.getWorld().getName());
+            craftStatement.setString(4, player.getName());
+            craftStatement.setString(5, item);
+            craftStatement.setInt(6, amount);
+            craftStatement.setInt(7, x);
+            craftStatement.setInt(8, y);
+            craftStatement.setInt(9, z);
+            craftStatement.setBoolean(10, isStaff);
+
+            craftStatement.executeUpdate();
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
 
@@ -718,7 +677,7 @@ public class SQLiteData {
 
         try{
 
-            //Player Side Part
+            // Player Side Part
             PreparedStatement player_Chat = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Chat WHERE Date <= datetime('now','-" + when + " day')");
 
             PreparedStatement player_Commands = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Commands WHERE Date <= datetime('now','-" + when + " day')");
@@ -759,7 +718,9 @@ public class SQLiteData {
 
             PreparedStatement gameMode = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Game_Mode WHERE Date <= datetime('now','-" + when + " day')");
 
-            //Server Side Part
+            PreparedStatement craft = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Crafting WHERE Date <= datetime('now','-" + when + " day')");
+
+            // Server Side Part
             PreparedStatement server_Start = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Server_Start WHERE Date <= datetime('now','-" + when + " day')");
 
             PreparedStatement server_Stop = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Server_Stop WHERE Date <= datetime('now','-" + when + " day')");
@@ -774,7 +735,7 @@ public class SQLiteData {
 
             PreparedStatement rcon = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM RCON WHERE Date <= datetime('now','-" + when + " day')");
 
-            //Extras Side Part
+            // Extras Side Part
             if (EssentialsUtil.getEssentialsAPI() != null) {
 
                 PreparedStatement afk = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM AFK WHERE Date <= datetime('now','-" + when + " day')");
@@ -811,6 +772,7 @@ public class SQLiteData {
             item_pickup.executeUpdate();
             furnace.executeUpdate();
             gameMode.executeUpdate();
+            craft.executeUpdate();
 
             server_Start.executeUpdate();
             server_Stop.executeUpdate();
@@ -822,9 +784,9 @@ public class SQLiteData {
 
         }catch (SQLException e){
 
-            e.printStackTrace();
-
             plugin.getLogger().severe("An error has occurred while cleaning the tables, if the error persists, contact the Authors!");
+
+            e.printStackTrace();
 
         }
     }

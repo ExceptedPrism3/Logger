@@ -1,6 +1,8 @@
 package com.carpour.loggerbungeecord;
 
+import com.carpour.loggerbungeecord.API.LiteBansUtil;
 import com.carpour.loggerbungeecord.Events.OnCommands.OnCommand;
+import com.carpour.loggerbungeecord.Events.PluginDependent.LiteBans.OnLiteBanEvents;
 import com.carpour.loggerbungeecord.ServerSide.RAM;
 import com.carpour.loggerbungeecord.Database.SQLite.SQLite;
 import com.carpour.loggerbungeecord.Database.SQLite.SQLiteData;
@@ -60,6 +62,8 @@ public final class Main extends Plugin {
         getProxy().getPluginManager().registerListener(this, new OnReload());
         getProxy().getPluginManager().registerListener(this, new OnCommand());
 
+        // Plugin Dependent
+
         getProxy().getScheduler().schedule(this, new RAM(), 200L, getConfig().getInt("RAM.Checker") / 20, TimeUnit.SECONDS);
 
         getProxy().getPluginManager().registerCommand(this, new Reload());
@@ -69,8 +73,10 @@ public final class Main extends Plugin {
             mySQL = new MySQL();
             mySQL.connect();
             MySQLData mySQLData = new MySQLData(this);
-            if (mySQL.isConnected()) mySQLData.createTable();
-            mySQLData.emptyTable();
+            if (mySQL.isConnected()) {
+                mySQLData.createTable();
+                mySQLData.emptyTable();
+            }
 
         }
 
@@ -79,19 +85,29 @@ public final class Main extends Plugin {
             sqLite = new SQLite();
             sqLite.connect();
             SQLiteData sqLiteData = new SQLiteData(this);
-            if (sqLite.isConnected()) sqLiteData.createTable();
-            sqLiteData.emptyTable();
+            if (sqLite.isConnected()) {
+                sqLiteData.createTable();
+                sqLiteData.emptyTable();
+            }
 
         }
 
         new ASCIIArt().Art();
 
-        //bstats
+        // bstats
 
         new Metrics(this, 12036);
 
-        //Update Checker
+        // Update Checker
         new UpdateChecker().checkUpdates();
+
+        if (LiteBansUtil.getLiteBansAPI() != null){
+
+            getProxy().getScheduler().schedule(this, new OnLiteBanEvents(), 5L, 0, TimeUnit.SECONDS);
+
+            getLogger().info("LiteBans Plugin Detected!");
+
+        }
 
         getLogger().info("has been Enabled!");
 

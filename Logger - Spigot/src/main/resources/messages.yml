@@ -2,7 +2,7 @@
 #
 # Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
 #
-# Config 1.7.1
+# Config 1.7.2
 
 
 # Plugin Messages
@@ -27,8 +27,8 @@ Files:
   Player-Leave: "[%time%] [%world%] The Player <%player%> has left at %x%, %y%, %z%"
   Player-Kick-Staff: "[%time%] [%world%] The Staff <%player%> got kicked at X= %x%, Y= %y%, Z= %z% with the reason %reason%"
   Player-Kick: "[%time%] [%world%] The Player <%player%> got kicked at X= %x%, Y= %y%, Z= %z% with the reason %reason%"
-  Player-Death-Staff: "[%time%] [%world%] The Staff <%player%> has died at X= %x%, Y= %y%, Z= %z% | caused by %cause% | %killer% %usedItem%"
-  Player-Death: "[%time%] [%world%] The Player <%player%> has died at X= %x%, Y= %y%, Z= %z% | caused by %cause% | %killer% %usedItem%"
+  Player-Death-Staff: "[%time%] [%world%] The Staff <%player%> has died at X= %x%, Y= %y%, Z= %z% | caused by %cause% | %killer%"
+  Player-Death: "[%time%] [%world%] The Player <%player%> has died at X= %x%, Y= %y%, Z= %z% | caused by %cause% | %killer%"
   Player-Teleport-Staff: "[%time%] [%world%] The Staff <%player%> has teleported from %oldX%, %oldY%, %oldZ% to %newX%, %newY%, %newZ%"
   Player-Teleport: "[%time%] [%world%] The Player <%player%> has teleported from %oldX%, %oldY%, %oldZ% to %newX%, %newY%, %newZ%"
   Player-Level-Staff: "[%time%] The Staff <%player%> has arrived at the set amount of Level which is %level%"
@@ -55,6 +55,8 @@ Files:
   Furnace: "[%time%] [%world%] The Player <%player%> has extracted %amount% of %item% from a Furnace that's located at X= %x%, Y= %y%, Z= %z%"
   Game-Mode-Staff: "[%time%] [%world%] The Staff <%player%> has changed their game-mode to %game-mode%"
   Game-Mode: "[%time%] [%world%] The Player <%player%> has changed their game-mode to %game-mode%"
+  Player-Craft-Staff: "[%time%] [%world%] The Staff <%player%> has crafted %amount% of %item% at X= %x%, Y= %y%, Z= %z%"
+  Player-Craft: "[%time%] [%world%] The Player <%player%> has crafted %amount% of %item% at X= %x%, Y= %y%, Z= %z%"
 
   Server-Side:
     Start: "[%time%]"
@@ -89,8 +91,8 @@ Discord:
   Player-Leave: "**[%time%]** **[%world%]** X= **%x%** `|` Y= **%y%** `|` Z= **%z%**"
   Player-Kick-Staff: "**[%time%]** **[%world%]** X= **%x%** `|` Y= **%y%** `|` Z= **%z%** reason **%reason%**"
   Player-Kick: "**[%time%]** **[%world%]** **%x%** `|` **%y%** `|` **%z%** reason **%reason%**"
-  Player-Death-Staff: "**[%time%]** **[%world%]** has died at X= **%x%** `|` Y= **%y%** `|` Z= **%z%** `|` caused by **%cause%** `|` **%killer%** `|` **%itemUsed%**"
-  Player-Death: "**[%time%]** **[%world%]** has died at *X= **%x%** `|` Y= **%y%** `|` Z= **%z%** `|` caused by **%cause%** `|` **%killer%** `|` **%itemUsed%**"
+  Player-Death-Staff: "**[%time%]** **[%world%]** has died at X= **%x%** `|` Y= **%y%** `|` Z= **%z%** `|` caused by **%cause%** `|` **%killer%**"
+  Player-Death: "**[%time%]** **[%world%]** has died at *X= **%x%** `|` Y= **%y%** `|` Z= **%z%** `|` caused by **%cause%** `|` **%killer%**"
   Player-Teleport-Staff: "**[%time%]** **[%world%]** Old X= **%oldX%**, Old Y= **%oldY%**, Old Z= **%oldZ%** `to` New X= **%newX%**, New Y= **%newY%**, New Z= **%newZ%**"
   Player-Teleport: "**[%time%]** **[%world%]** Old X= **%oldX%**, Old Y= **%oldY%**, Old Z= **%oldZ%** `to` New X= **%newX%**, New Y= **%newY%**, New Z= **%newZ%**"
   Player-Level-Staff: "**[%time%]** has arrived at the set amount of Level which is **%level%**"
@@ -119,6 +121,8 @@ Discord:
   Furnace: "**[%time%]** **[%world%]** has extracted **%amount%** of **%item%** from a Furnace that's located at X= **%x%**, Y= **%y%**, Z= **%z%**"
   Game-Mode-Staff: "**[%time%]** **[%world%]** has changed their game-mode to **%game-mode%**"
   Game-Mode: "**[%time%]** **[%world%]** has changed their game-mode to **%game-mode%**"
+  Player-Craft-Staff: "**[%time%]** **[%world%]** has crafted **%amount%** of **%item%** at X= **%x%**, Y= **%y%**, Z= **%z%**"
+  Player-Craft: "**[%time%]** **[%world%]** has crafted **%amount%** of **%item%** at X= **%x%**, Y= **%y%**, Z= **%z%**"
 
   Server-Side:
     Start: "**%time%**"

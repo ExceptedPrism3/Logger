@@ -7,8 +7,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import javax.security.auth.login.LoginException;
-
 public class Discord {
 
     private static JDA jda;
@@ -20,10 +18,13 @@ public class Discord {
     private static TextChannel playerCommandsChannel;
     private static TextChannel playerLoginChannel;
     private static TextChannel playerLeaveChannel;
+
     private static TextChannel consoleCommandsChannel;
     private static TextChannel serverStartChannel;
     private static TextChannel serverStopChannel;
     private static TextChannel ramChannel;
+
+    private static TextChannel liteBansChannel;
 
     public void run() {
 
@@ -39,7 +40,7 @@ public class Discord {
 
                 new DiscordStatus();
 
-            } catch (InterruptedException | LoginException e) {
+            } catch (Exception e) {
 
                 Main.getInstance().getLogger().error("An error has occurred whilst connecting to the Bot." +
                         " Is the Bot Key Valid?");
@@ -65,58 +66,72 @@ public class Discord {
 
             String ramChannelID = discordFile.getString("Discord.Server-Side.RAM.Channel-ID");
 
+            String liteBansChannelID = discordFile.getString("Discord.Extra.LiteBans.Channel-ID");
 
-            if (!(staffChannelID.isEmpty()) && main.getConfig().getBoolean("Staff.Enabled") && !staffChannelID.equals("LINK_HERE")) {
+            try {
 
-                staffChannel = jda.getTextChannelById(staffChannelID);
+                if (!(staffChannelID.isEmpty()) && main.getConfig().getBoolean("Staff.Enabled") && !staffChannelID.equals("LINK_HERE")) {
 
-            }
+                    staffChannel = jda.getTextChannelById(staffChannelID);
 
-            if (!(playerChatChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Chat") && !playerChatChannelID.equals("LINK_HERE")) {
+                }
 
-                playerChatChannel = jda.getTextChannelById(playerChatChannelID);
+                if (!(playerChatChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Chat") && !playerChatChannelID.equals("LINK_HERE")) {
 
-            }
+                    playerChatChannel = jda.getTextChannelById(playerChatChannelID);
 
-            if (!(playerCommandsChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Commands") && !playerCommandsChannelID.equals("LINK_HERE")) {
+                }
 
-                playerCommandsChannel = jda.getTextChannelById(playerCommandsChannelID);
+                if (!(playerCommandsChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Commands") && !playerCommandsChannelID.equals("LINK_HERE")) {
 
-            }
+                    playerCommandsChannel = jda.getTextChannelById(playerCommandsChannelID);
 
-            if (!(playerLoginChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Login") && !playerLoginChannelID.equals("LINK_HERE")) {
+                }
 
-                playerLoginChannel = jda.getTextChannelById(playerLoginChannelID);
+                if (!(playerLoginChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Login") && !playerLoginChannelID.equals("LINK_HERE")) {
 
-            }
+                    playerLoginChannel = jda.getTextChannelById(playerLoginChannelID);
 
-            if (!(playerLeaveChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Leave") && !playerLeaveChannelID.equals("LINK_HERE")) {
+                }
 
-                playerLeaveChannel = jda.getTextChannelById(playerLeaveChannelID);
+                if (!(playerLeaveChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Leave") && !playerLeaveChannelID.equals("LINK_HERE")) {
 
-            }
+                    playerLeaveChannel = jda.getTextChannelById(playerLeaveChannelID);
 
-            if (!(consoleCommandsChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Server.Console-Commands") && !consoleCommandsChannelID.equals("LINK_HERE")) {
+                }
 
-                consoleCommandsChannel = jda.getTextChannelById(consoleCommandsChannelID);
+                if (!(consoleCommandsChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Server.Console-Commands") && !consoleCommandsChannelID.equals("LINK_HERE")) {
 
-            }
+                    consoleCommandsChannel = jda.getTextChannelById(consoleCommandsChannelID);
 
-            if (!(serverStartChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Server.Start") && !serverStartChannelID.equals("LINK_HERE")) {
+                }
 
-                serverStartChannel = jda.getTextChannelById(serverStartChannelID);
+                if (!(serverStartChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Server.Start") && !serverStartChannelID.equals("LINK_HERE")) {
 
-            }
+                    serverStartChannel = jda.getTextChannelById(serverStartChannelID);
 
-            if (!(serverStopChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Server.Stop") && !serverStopChannelID.equals("LINK_HERE")) {
+                }
 
-                serverStopChannel = jda.getTextChannelById(serverStopChannelID);
+                if (!(serverStopChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Server.Stop") && !serverStopChannelID.equals("LINK_HERE")) {
 
-            }
+                    serverStopChannel = jda.getTextChannelById(serverStopChannelID);
 
-            if (!(ramChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Server.Stop") && !ramChannelID.equals("LINK_HERE")) {
+                }
 
-                ramChannel = jda.getTextChannelById(ramChannelID);
+                if (!(ramChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Server.Stop") && !ramChannelID.equals("LINK_HERE")) {
+
+                    ramChannel = jda.getTextChannelById(ramChannelID);
+
+                }
+
+                if (!(liteBansChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Extra.LiteBans") && !liteBansChannelID.equals("LINK_HERE")) {
+
+                    liteBansChannel = jda.getTextChannelById(liteBansChannelID);
+
+                }
+            }catch (Exception e){
+
+                main.getLogger().error("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
 
             }
         }
@@ -192,6 +207,17 @@ public class Discord {
         ramChannel.sendMessage(builder.build()).queue();
     }
 
+    public static void liteBans(String content, boolean contentinAuthorLine) {
+
+        if (liteBansChannel == null) return;
+
+        EmbedBuilder builder = new EmbedBuilder().setAuthor("LiteBans");
+
+        if (!contentinAuthorLine) builder.setDescription(content);
+
+        liteBansChannel.sendMessage(builder.build()).queue();
+    }
+
     private static void discordUtil(Player player, String content, boolean contentinAuthorLine, TextChannel channel) {
         if (channel == null) return;
 
@@ -210,14 +236,13 @@ public class Discord {
 
                 jda.shutdown();
                 jda = null;
-                DiscordStatus status = new DiscordStatus();
-                status.getThreadPool().shutdown();
+                DiscordStatus.getThreadPool().shutdown();
                 Main.getInstance().getLogger().info("Discord Bot Bridge has been closed!");
 
             } catch (Exception e) {
 
                 Main.getInstance().getLogger().error("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
-                        "If this Issue Persists, Contact the Authors!");
+                        " If this Issue Persists, Contact the Authors!");
 
                 e.printStackTrace();
 

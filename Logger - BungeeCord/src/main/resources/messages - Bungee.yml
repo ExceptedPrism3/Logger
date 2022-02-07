@@ -2,7 +2,7 @@
 #
 # Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
 #
-# Config 1.7.1
+# Config 1.7.2
 
 
 # Plugin Messages
@@ -31,6 +31,10 @@ Files:
     Stop: "[%time%] The server has stopped"
     RAM: "[%time%] The Server has exceeded the set amount of percentage of RAM Usage! Total Memory: %max% | Used Memory: %used% | Free Memory: %free%"
 
+  # Extra Side Part
+  Extra:
+    LiteBans: "[%time%] The command '%command%' has been executed on %on% by %executor% for '%duration%' for the reason %reason% | %silent%"
+
 # Discord Instance
 # Emojis can be found here https://emojipedia.org/ or elsewhere
 Discord:
@@ -52,3 +56,6 @@ Discord:
     Stop: "**[%time%]**"
     RAM: "**[%time%]** The Server has exceeded the set amount of percentage of RAM Usage! Total Memory: **%max%** `|` Used Memory: **%used%** `|` Free Memory: **%free%**"
 
+  # Extra Side Part
+  Extra:
+    LiteBans: "**[%time%]** The command **%command%** has been executed on **%on%** by **%executor%** for **%duration%** for the reason **%reason%** | **%silent%**"

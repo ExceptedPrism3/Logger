@@ -14,10 +14,9 @@ import net.md_5.bungee.event.EventHandler;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,8 +35,7 @@ public class OnCommandWhitelist implements Listener {
             String command = event.getMessage();
             List<String> commandParts = Arrays.asList(command.split("\\s+"));
             String serverName = main.getConfig().getString("Server-Name");
-            Date date = new Date();
-            DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
             if (!event.isCancelled() && main.getConfig().getBoolean("Log-Player.Commands")) {
 
@@ -52,14 +50,14 @@ public class OnCommandWhitelist implements Listener {
 
                                 if (!Messages.getString("Discord.Player-Commands-Staff").isEmpty()) {
 
-                                    Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Commands-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%command%", command), false);
+                                    Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Commands-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%command%", command), false);
 
                                 }
 
                                 try {
 
                                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
-                                    out.write(Messages.getString("Files.Player-Commands-Staff").replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%player%", player.getName()).replaceAll("%command%", command) + "\n");
+                                    out.write(Messages.getString("Files.Player-Commands-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%player%", player.getName()).replaceAll("%command%", command) + "\n");
                                     out.close();
 
                                 } catch (IOException e) {
@@ -89,7 +87,7 @@ public class OnCommandWhitelist implements Listener {
                             try {
 
                                 BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true));
-                                out.write(Messages.getString("Files.Player-Commands").replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%player%", player.getName()).replaceAll("%command%", command) + "\n");
+                                out.write(Messages.getString("Files.Player-Commands").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%player%", player.getName()).replaceAll("%command%", command) + "\n");
                                 out.close();
 
                             } catch (IOException e) {
@@ -105,7 +103,7 @@ public class OnCommandWhitelist implements Listener {
 
                             if (!Messages.getString("Discord.Player-Commands-Staff").isEmpty()) {
 
-                                Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Commands-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%command%", command), false);
+                                Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Commands-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%command%", command), false);
 
                             }
 
@@ -113,7 +111,7 @@ public class OnCommandWhitelist implements Listener {
 
                             if (!Messages.getString("Discord.Player-Commands").isEmpty()) {
 
-                                Discord.playerCommands(player, Objects.requireNonNull(Messages.getString("Discord.Player-Commands")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%command%", command), false);
+                                Discord.playerCommands(player, Objects.requireNonNull(Messages.getString("Discord.Player-Commands")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%command%", command), false);
 
                             }
                         }

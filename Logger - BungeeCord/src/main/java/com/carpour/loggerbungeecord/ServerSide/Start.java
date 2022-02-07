@@ -10,9 +10,8 @@ import com.carpour.loggerbungeecord.Utils.Messages;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Start {
 
@@ -21,8 +20,7 @@ public class Start {
     public void run(){
 
         String serverName = main.getConfig().getString("Server-Name");
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         if (main.getConfig().getBoolean("Log-Server.Start")) {
 
@@ -32,7 +30,7 @@ public class Start {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStartLogFile(), true));
-                    out.write(Messages.getString("Files.Server-Side.Start").replaceAll("%time%", dateFormat.format(date)) + "\n");
+                    out.write(Messages.getString("Files.Server-Side.Start").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -46,7 +44,7 @@ public class Start {
             //Discord
             if (!Messages.getString("Discord.Server-Side.Start").isEmpty()) {
 
-                Discord.serverStart(Messages.getString("Discord.Server-Side.Start").replaceAll("%time%", dateFormat.format(date)), false);
+                Discord.serverStart(Messages.getString("Discord.Server-Side.Start").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())), false);
 
             }
 

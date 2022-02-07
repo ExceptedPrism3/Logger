@@ -15,9 +15,8 @@ import com.velocitypowered.api.proxy.Player;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class OnLeave {
 
@@ -35,28 +34,27 @@ public class OnLeave {
 
         String server = player.getCurrentServer().get().getServerInfo().getName();
         String serverName = main.getConfig().getString("Server-Name");
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         if (player.hasPermission("loggerproxy.exempt")) return;
 
         if (main.getConfig().getBoolean("Log-Player.Leave")) {
 
-            //Log To Files Handling
+            // Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
 
                     if (!messages.getString("Discord.Player-Leave-Staff").isEmpty()) {
 
-                        Discord.staffChat(player, messages.getString("Discord.Player-Leave-Staff").replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server), false);
+                        Discord.staffChat(player, messages.getString("Discord.Player-Leave-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server), false);
 
                     }
 
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
-                        out.write(messages.getString("Files.Player-Leave-Staff").replaceAll("%server%", server).replaceAll("%time%", dateFormat.format(date)).replaceAll("%player%", playerName) + "\n");
+                        out.write(messages.getString("Files.Player-Leave-Staff").replaceAll("%server%", server).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -84,7 +82,7 @@ public class OnLeave {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLeaveLogFile(), true));
-                    out.write(messages.getString("Files.Player-Leave").replaceAll("%server%", server).replaceAll("%time%", dateFormat.format(date)).replaceAll("%player%", playerName) + "\n");
+                    out.write(messages.getString("Files.Player-Leave").replaceAll("%server%", server).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -95,12 +93,12 @@ public class OnLeave {
                 }
             }
 
-            //Discord Integration
+            // Discord Integration
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
 
                 if (!messages.getString("Discord.Player-Leave-Staff").isEmpty()) {
 
-                    Discord.staffChat(player, messages.getString("Discord.Player-Leave-Staff").replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server), false);
+                    Discord.staffChat(player, messages.getString("Discord.Player-Leave-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server), false);
 
                 }
 
@@ -108,38 +106,30 @@ public class OnLeave {
 
                 if (!messages.getString("Discord.Player-Leave").isEmpty()) {
 
-                    Discord.playerLeave(player, messages.getString("Discord.Player-Leave").replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server), false);
+                    Discord.playerLeave(player, messages.getString("Discord.Player-Leave").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server), false);
 
                 }
             }
 
 
-            //MySQL Handling
+            // MySQL Handling
             if (main.getConfig().getBoolean("MySQL.Enable") && MySQL.isConnected()) {
 
                 try {
 
                     MySQLData.playerLeave(serverName, playerName, player.hasPermission("loggerproxy.staff.log"));
 
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
 
-            //SQLite Handling
+            // SQLite Handling
             if (main.getConfig().getBoolean("SQLite.Enable") && SQLite.isConnected()) {
 
                 try {
 
                     SQLiteData.insertPlayerLeave(serverName, playerName, player.hasPermission("loggerproxy.staff.log"));
 
-                } catch (Exception exception) {
-
-                    exception.printStackTrace();
-
-                }
+                } catch (Exception exception) { exception.printStackTrace(); }
             }
         }
     }

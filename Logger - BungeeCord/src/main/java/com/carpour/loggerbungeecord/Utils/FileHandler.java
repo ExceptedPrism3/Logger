@@ -1,5 +1,6 @@
 package com.carpour.loggerbungeecord.Utils;
 
+import com.carpour.loggerbungeecord.API.LiteBansUtil;
 import com.carpour.loggerbungeecord.Main;
 
 import java.io.File;
@@ -24,6 +25,7 @@ public class FileHandler {
     private static File serverStartLogFolder;
     private static File serverStopLogFolder;
     private static File RAMLogFolder;
+    private static File liteBansLogFolder;
 
     private static File staffLogFile;
     private static File chatLogFile;
@@ -34,6 +36,9 @@ public class FileHandler {
     private static File serverStartLogFile;
     private static File serverStopLogFile;
     private static File RAMLogFile;
+    private static File liteBansBansLogFile;
+    private static File liteBansMuteLogFile;
+    private static File liteBansKickLogFile;
 
     public FileHandler(File dataFolder) {
 
@@ -44,7 +49,6 @@ public class FileHandler {
 
         Date date = new Date();
         SimpleDateFormat filenameDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-
 
         staffLogFolder = new File(logsFolder, "Staff");
         staffLogFile = new File(staffLogFolder, filenameDateFormat.format(date) + ".log");
@@ -73,6 +77,17 @@ public class FileHandler {
         RAMLogFolder = new File(logsFolder, "RAM");
         RAMLogFile = new File(RAMLogFolder, filenameDateFormat.format(date) + ".log");
 
+        liteBansLogFolder = new File(logsFolder, "LiteBans");
+
+        File liteBansBansLogFolder = new File(liteBansLogFolder, "Bans");
+        liteBansBansLogFile = new File(liteBansBansLogFolder, filenameDateFormat.format(date) + ".log");
+
+        File liteBansMuteLogFolder = new File(liteBansLogFolder, "Mutes");
+        liteBansMuteLogFile = new File(liteBansMuteLogFolder, filenameDateFormat.format(date) + ".log");
+
+        File liteBansKickLogFolder = new File(liteBansLogFolder, "Kick");
+        liteBansKickLogFile = new File(liteBansKickLogFolder, filenameDateFormat.format(date) + ".log");
+
         try {
 
             if (main.getConfig().getBoolean("Staff.Enabled")) staffLogFolder.mkdir();
@@ -84,6 +99,13 @@ public class FileHandler {
             serverStartLogFolder.mkdir();
             serverStopLogFolder.mkdir();
             RAMLogFolder.mkdir();
+            if (LiteBansUtil.getLiteBansAPI() != null){
+
+                liteBansLogFolder.mkdir();
+                liteBansBansLogFolder.mkdir();
+                liteBansMuteLogFolder.mkdir();
+                liteBansKickLogFolder.mkdir();
+            }
 
             if (main.getConfig().getBoolean("Staff.Enabled")) staffLogFile.createNewFile();
             chatLogFile.createNewFile();
@@ -94,8 +116,12 @@ public class FileHandler {
             serverStartLogFile.createNewFile();
             serverStopLogFile.createNewFile();
             RAMLogFile.createNewFile();
+            if (LiteBansUtil.getLiteBansAPI() != null){
 
-
+                liteBansBansLogFile.createNewFile();
+                liteBansMuteLogFile.createNewFile();
+                liteBansKickLogFile.createNewFile();
+            }
 
         } catch (IOException e) {
 
@@ -122,6 +148,11 @@ public class FileHandler {
 
     public static File getRAMLogFile() { return RAMLogFile; }
 
+    public static File getLiteBansBansLogFile() { return liteBansBansLogFile; }
+
+    public static File getLiteBansMuteLogFile() { return liteBansMuteLogFile; }
+
+    public static File getLiteBansKickLogFile() { return liteBansKickLogFile; }
 
     public void deleteFile(File file) {
 
@@ -218,6 +249,16 @@ public class FileHandler {
 
             deleteFile(RAMLog);
 
+        }
+
+        if (LiteBansUtil.getLiteBansAPI() != null){
+
+            for (File liteBansLog : Objects.requireNonNull(liteBansLogFolder.listFiles()))
+            {
+
+                deleteFile(liteBansLog);
+
+            }
         }
     }
 }

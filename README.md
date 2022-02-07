@@ -1,14 +1,16 @@
 # Logger
 
 ![Updated Badge](https://badges.pufler.dev/updated/ExceptedPrism3/Logger)
+[![CodeFactor](https://www.codefactor.io/repository/github/exceptedprism3/logger/badge)](https://www.codefactor.io/repository/github/exceptedprism3/logger)
 ![Version](https://img.shields.io/github/v/release/ExceptedPrism3/Logger)
+![Servers](https://img.shields.io/bstats/servers/12036?color=brightgreen)
 ![Downloads](https://img.shields.io/github/downloads/ExceptedPrism3/Logger/total)
 ![Issues](https://img.shields.io/github/issues/ExceptedPrism3/Logger)
-[![Discord](https://img.shields.io/discord/850407951629287424)](https://discord.gg/MfR5mcpVfX)
+[![Discord](https://img.shields.io/discord/850407951629287424?color=%235865F2&label=Join%20Our%20Discord)](https://discord.gg/MfR5mcpVfX)
 
 An All-in-One plugin that logs all Activities from Commands, Chat, Player Join, Player Leave, Player Death and even Server's RAM, TPS and Much More for both Proxy and Bukkit Servers!
 
-This plugin can be found on [Spigot](https://www.spigotmc.org/resources/logger.94236) & [MC-Market](https://www.mc-market.org/resources/20657/).
+This plugin can be found on [Spigot](https://www.spigotmc.org/resources/logger.94236) & [MC-Market](https://www.mc-market.org/resources/20657/) & [Hyatlas](https://hyatlas.com/shop/logger-1-7-1-18.23/).
 
 If support is needed or a suggesting that needs to be implemented, feel free to ask on the [Discord](https://discord.gg/MfR5mcpVfX), also do not forget to check out the plugin's **[Wiki](https://prism3.gitbook.io/logger-or-wiki/)**.
 
@@ -35,7 +37,7 @@ With more than **20 Features** Checkers, nothing is left without monitoring.
   * **Bucket Fill**
   * **...**
   
-##**More Features and Information can be found in the [Wiki](https://prism3.gitbook.io/logger-or-wiki/)** 
+## **More Features and Information can be found in the [Wiki](https://prism3.gitbook.io/logger-or-wiki/)**
 
 ## Info
 If you use MySQL, the IP that gets stored in the Database when a Player joins
@@ -45,3 +47,6 @@ To convert it back, just execute the following SQL Command:
 ```mysql
 SELECT INET_NTOA("value");
 ```
+
+## Contributing
+Pull requests are welcome. For major changes, open an issue or a ticket first to discuss what you would like to change.

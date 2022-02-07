@@ -10,9 +10,8 @@ import com.carpour.loggerbungeecord.Utils.Messages;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class RAM implements Runnable{
@@ -24,8 +23,7 @@ public class RAM implements Runnable{
     long usedMemory = maxMemory - freeMemory;
     double percentUsed = (double) usedMemory * 100.0D / (double) maxMemory;
     String serverName = main.getConfig().getString("Server-Name");
-    Date date = new Date();
-    DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public void run() {
 
@@ -45,7 +43,7 @@ public class RAM implements Runnable{
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRAMLogFile(), true));
-                        out.write(Objects.requireNonNull(Messages.getString("Files.Server-Side.RAM")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)) + "\n");
+                        out.write(Objects.requireNonNull(Messages.getString("Files.Server-Side.RAM")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)) + "\n");
                         out.close();
 
                     } catch (
@@ -60,7 +58,7 @@ public class RAM implements Runnable{
                 //Discord
                 if (!Messages.getString("Discord.Server-Side.RAM").isEmpty()) {
 
-                    Discord.ram(Objects.requireNonNull(Messages.getString("Discord.Server-Side.RAM")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)), false);
+                    Discord.ram(Objects.requireNonNull(Messages.getString("Discord.Server-Side.RAM")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)), false);
 
                 }
 

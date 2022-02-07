@@ -1,5 +1,7 @@
 package com.carpour.loggervelocity.Utils;
 
+import com.carpour.loggervelocity.API.LiteBansUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,6 +24,7 @@ public class FileHandler {
     private static File serverStartLogFolder;
     private static File serverStopLogFolder;
     private static File ramLogFolder;
+    private static File liteBansLogFolder;
 
     private static File staffLogFile;
     private static File chatLogFile;
@@ -32,6 +35,9 @@ public class FileHandler {
     private static File serverStartLogFile;
     private static File serverStopLogFile;
     private static File ramLogFile;
+    private static File liteBansBansLogFile;
+    private static File liteBansMuteLogFile;
+    private static File liteBansKickLogFile;
 
     public FileHandler(File dataFolder) {
 
@@ -42,7 +48,6 @@ public class FileHandler {
 
         Date date = new Date();
         SimpleDateFormat filenameDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-
 
         staffLogFolder = new File(logsFolder, "Staff");
         staffLogFile = new File(staffLogFolder, filenameDateFormat.format(date) + ".log");
@@ -71,6 +76,17 @@ public class FileHandler {
         ramLogFolder = new File(logsFolder, "RAM");
         ramLogFile = new File(ramLogFolder, filenameDateFormat.format(date) + ".log");
 
+        liteBansLogFolder = new File(logsFolder, "LiteBans");
+
+        File liteBansBansLogFolder = new File(liteBansLogFolder, "Bans");
+        liteBansBansLogFile = new File(liteBansBansLogFolder, filenameDateFormat.format(date) + ".log");
+
+        File liteBansMuteLogFolder = new File(liteBansLogFolder, "Mutes");
+        liteBansMuteLogFile = new File(liteBansMuteLogFolder, filenameDateFormat.format(date) + ".log");
+
+        File liteBansKickLogFolder = new File(liteBansLogFolder, "Kick");
+        liteBansKickLogFile = new File(liteBansKickLogFolder, filenameDateFormat.format(date) + ".log");
+
         try {
 
             if (config.getBoolean("Staff.Enabled")) staffLogFolder.mkdir();
@@ -82,6 +98,13 @@ public class FileHandler {
             serverStartLogFolder.mkdir();
             serverStopLogFolder.mkdir();
             ramLogFolder.mkdir();
+            if (LiteBansUtil.getLiteBansAPI().isPresent()){
+
+                liteBansLogFolder.mkdir();
+                liteBansBansLogFolder.mkdir();
+                liteBansMuteLogFolder.mkdir();
+                liteBansKickLogFolder.mkdir();
+            }
 
             if (config.getBoolean("Staff.Enabled")) staffLogFile.createNewFile();
             chatLogFile.createNewFile();
@@ -92,6 +115,12 @@ public class FileHandler {
             serverStartLogFile.createNewFile();
             serverStopLogFile.createNewFile();
             ramLogFile.createNewFile();
+            if (LiteBansUtil.getLiteBansAPI().isPresent()){
+
+                liteBansBansLogFile.createNewFile();
+                liteBansMuteLogFile.createNewFile();
+                liteBansKickLogFile.createNewFile();
+            }
 
         } catch (IOException e) { e.printStackTrace(); }
     }
@@ -113,6 +142,12 @@ public class FileHandler {
     public static File getServerStopLogFile() { return serverStopLogFile; }
 
     public static File getRamLogFile() { return ramLogFile; }
+
+    public static File getLiteBansBansLogFile() { return liteBansBansLogFile; }
+
+    public static File getLiteBansMuteLogFile() { return liteBansMuteLogFile; }
+
+    public static File getLiteBansKickLogFile() { return liteBansKickLogFile; }
 
 
     public void deleteFile(File file) {
@@ -177,10 +212,10 @@ public class FileHandler {
 
         }
 
-        for (File consolecommandsLog : Objects.requireNonNull(consoleCommandLogFolder.listFiles()))
+        for (File consoleCommandsLog : Objects.requireNonNull(consoleCommandLogFolder.listFiles()))
         {
 
-            deleteFile(consolecommandsLog);
+            deleteFile(consoleCommandsLog);
 
         }
 
@@ -203,6 +238,16 @@ public class FileHandler {
 
             deleteFile(ramLog);
 
+        }
+
+        if (LiteBansUtil.getLiteBansAPI().isPresent()){
+
+            for (File liteBansLog : Objects.requireNonNull(liteBansLogFolder.listFiles()))
+            {
+
+                deleteFile(liteBansLog);
+
+            }
         }
     }
 }

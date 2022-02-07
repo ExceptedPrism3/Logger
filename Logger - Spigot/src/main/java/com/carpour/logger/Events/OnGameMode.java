@@ -1,6 +1,6 @@
 package com.carpour.logger.Events;
 
-import com.carpour.logger.Database.MySQL.MySQLData;
+import com.carpour.logger.Database.External.ExternalData;
 import com.carpour.logger.Database.SQLite.SQLiteData;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
@@ -17,9 +17,8 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class OnGameMode implements Listener {
@@ -35,8 +34,7 @@ public class OnGameMode implements Listener {
         String worldName = world.getName();
         String gameMode = Objects.requireNonNull(main.getConfig().getString("Game-Mode"));
         String serverName = main.getConfig().getString("Server-Name");
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         if (player.hasPermission("logger.exempt") || gameMode.isEmpty()) return;
 
@@ -44,21 +42,21 @@ public class OnGameMode implements Listener {
 
             if (event.getNewGameMode() == GameMode.valueOf(gameMode.toUpperCase())) {
 
-                //Log To Files Handling
+                // Log To Files Handling
                 if (main.getConfig().getBoolean("Log-to-Files")) {
 
                     if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode-Staff")).isEmpty()) {
 
-                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%game-mode%", gameMode), false);
+                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%game-mode%", gameMode), false);
 
                         }
 
                         try {
 
                             BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                            out.write(Objects.requireNonNull(Messages.get().getString("Files.Game-Mode-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%game-mode%", gameMode) + "\n");
+                            out.write(Objects.requireNonNull(Messages.get().getString("Files.Game-Mode-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%game-mode%", gameMode) + "\n");
                             out.close();
 
                         } catch (IOException e) {
@@ -68,10 +66,9 @@ public class OnGameMode implements Listener {
 
                         }
 
-                        if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                        if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
 
-
-                            MySQLData.gameMode(serverName, worldName, playerName, gameMode, true);
+                            ExternalData.gameMode(serverName, worldName, playerName, gameMode, true);
 
                         }
 
@@ -88,7 +85,7 @@ public class OnGameMode implements Listener {
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getGameModeFile(), true));
-                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Game-Mode")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%game-mode%", gameMode) + "\n");
+                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Game-Mode")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%game-mode%", gameMode) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -99,12 +96,12 @@ public class OnGameMode implements Listener {
                     }
                 }
 
-                //Discord Integration
+                // Discord Integration
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%game-mode%", gameMode), false);
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%game-mode%", gameMode), false);
 
                     }
 
@@ -112,36 +109,28 @@ public class OnGameMode implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode")).isEmpty()) {
 
-                        Discord.gameMode(player, Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%game-mode%", gameMode), false);
+                        Discord.gameMode(player, Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%game-mode%", gameMode), false);
                     }
                 }
 
-                //MySQL Handling
-                if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                // MySQL Handling
+                if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
 
                     try {
 
-                        MySQLData.gameMode(serverName, worldName, playerName, gameMode, player.hasPermission("logger.staff.log"));
+                        ExternalData.gameMode(serverName, worldName, playerName, gameMode, player.hasPermission("logger.staff.log"));
 
-                    } catch (Exception e) {
-
-                        e.printStackTrace();
-
-                    }
+                    } catch (Exception e) { e.printStackTrace(); }
                 }
 
-                //SQLite Handling
+                // SQLite Handling
                 if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                     try {
 
                         SQLiteData.insertGameMode(serverName, worldName, playerName, gameMode, player.hasPermission("logger.staff.log"));
 
-                    } catch (Exception exception) {
-
-                        exception.printStackTrace();
-
-                    }
+                    } catch (Exception exception) { exception.printStackTrace(); }
                 }
             }
         }

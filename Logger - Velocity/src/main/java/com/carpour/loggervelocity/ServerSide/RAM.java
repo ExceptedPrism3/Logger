@@ -12,22 +12,20 @@ import com.carpour.loggervelocity.Utils.Messages;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class RAM implements Runnable{
 
-    Main main = Main.getInstance();
-    Messages messages = new Messages();
+    final Main main = Main.getInstance();
+    final Messages messages = new Messages();
 
     long maxMemory = Runtime.getRuntime().maxMemory() / 1048576L;
     long freeMemory = Runtime.getRuntime().freeMemory() / 1048576L;
     long usedMemory = maxMemory - freeMemory;
     double percentUsed = (double) usedMemory * 100.0D / (double) maxMemory;
     String serverName = main.getConfig().getString("Server-Name");
-    Date date = new Date();
-    DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public void run() {
 
@@ -41,17 +39,16 @@ public class RAM implements Runnable{
 
             if (main.getConfig().getBoolean("Log-Server.RAM")) {
 
-                //Log To Files Handling
+                // Log To Files Handling
                 if (main.getConfig().getBoolean("Log-to-Files")) {
 
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRamLogFile(), true));
-                        out.write(messages.getString("Files.Server-Side.RAM").replaceAll("%time%", dateFormat.format(date)).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)) + "\n");
+                        out.write(messages.getString("Files.Server-Side.RAM").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)) + "\n");
                         out.close();
 
-                    } catch (
-                            IOException e) {
+                    } catch (IOException e) {
 
                         main.getLogger().error("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
@@ -59,39 +56,31 @@ public class RAM implements Runnable{
                     }
                 }
 
-                //Discord
+                // Discord
                 if (!messages.getString("Discord.Server-Side.RAM").isEmpty()) {
 
-                    Discord.ram(messages.getString("Discord.Server-Side.RAM").replaceAll("%time%", dateFormat.format(date)).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)), false);
+                    Discord.ram(messages.getString("Discord.Server-Side.RAM").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)), false);
 
                 }
 
-                //MySQL
+                // MySQL
                 if (main.getConfig().getBoolean("MySQL.Enable") && MySQL.isConnected()) {
 
                     try {
 
                         MySQLData.RAM(serverName, maxMemory, usedMemory, freeMemory);
 
-                    } catch (Exception e) {
-
-                        e.printStackTrace();
-
-                    }
+                    } catch (Exception e) { e.printStackTrace(); }
                 }
 
-                //SQLite
+                // SQLite
                 if (main.getConfig().getBoolean("SQLite.Enable") && SQLite.isConnected()) {
 
                     try {
 
                         SQLiteData.insertRAM(serverName, maxMemory, usedMemory, freeMemory);
 
-                    } catch (Exception exception) {
-
-                        exception.printStackTrace();
-
-                    }
+                    } catch (Exception exception) { exception.printStackTrace(); }
                 }
             }
         }

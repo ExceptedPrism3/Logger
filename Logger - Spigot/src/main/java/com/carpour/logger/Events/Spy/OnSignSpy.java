@@ -22,7 +22,7 @@ public class OnSignSpy implements Listener {
 
         Player player = event.getPlayer();
 
-        if (player.hasPermission("logger.exempt") || player.hasPermission("logger.spy")) return;
+        if (player.hasPermission("logger.exempt") || player.hasPermission("logger.spy.bypass")) return;
 
         if (main.getConfig().getBoolean("Log-Player.Sign-Text") && main.getConfig().getBoolean("Spy-Features.Sign-Spy.Enable")) {
 

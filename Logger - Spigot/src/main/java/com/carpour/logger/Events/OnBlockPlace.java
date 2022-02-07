@@ -3,7 +3,7 @@ package com.carpour.logger.Events;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.Database.MySQL.MySQLData;
+import com.carpour.logger.Database.External.ExternalData;
 import com.carpour.logger.Database.SQLite.SQLiteData;
 import com.carpour.logger.Utils.Messages;
 import org.bukkit.Material;
@@ -17,9 +17,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class OnBlockPlace implements Listener {
@@ -38,28 +37,27 @@ public class OnBlockPlace implements Listener {
         int z = event.getBlock().getLocation().getBlockZ();
         Material blockType = event.getBlock().getType();
         String serverName = main.getConfig().getString("Server-Name");
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         if (player.hasPermission("logger.exempt")) return;
 
         if (!event.isCancelled() && main.getConfig().getBoolean("Log-Player.Block-Place")) {
 
-            //Log To Files Handling
+            // Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
 
                     }
 
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Block-Place-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)) + "\n");
+                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Block-Place-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -69,10 +67,9 @@ public class OnBlockPlace implements Listener {
 
                     }
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                    if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
 
-
-                        MySQLData.blockPlace(serverName, worldName, playerName, blockType.toString(), x, y, z, true);
+                        ExternalData.blockPlace(serverName, worldName, playerName, blockType.toString(), x, y, z, true);
 
                     }
 
@@ -88,7 +85,7 @@ public class OnBlockPlace implements Listener {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBlockPlaceLogFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has placed " + blockType + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
+                    out.write("[" + dateTimeFormatter.format(ZonedDateTime.now()) + "] " + "[" + worldName + "] The Player <" + playerName + "> has placed " + blockType + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -99,12 +96,12 @@ public class OnBlockPlace implements Listener {
                 }
             }
 
-            //Discord
+            // Discord
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).isEmpty()) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
+                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
 
                 }
 
@@ -112,36 +109,28 @@ public class OnBlockPlace implements Listener {
 
                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Block-Place")).isEmpty()) {
 
-                    Discord.blockPlace(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
+                    Discord.blockPlace(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
                 }
             }
 
-            //MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+            // MySQL
+            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
 
                 try {
 
-                    MySQLData.blockPlace(serverName, worldName, playerName, blockType.toString(), x, y, z, player.hasPermission("logger.staff.log"));
+                    ExternalData.blockPlace(serverName, worldName, playerName, blockType.toString(), x, y, z, player.hasPermission("logger.staff.log"));
 
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
 
-            //SQLite
+            // SQLite
             if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
                 try {
 
                     SQLiteData.insertBlockPlace(serverName, player, blockType, player.hasPermission("logger.staff.log"));
 
-                } catch (Exception exception) {
-
-                    exception.printStackTrace();
-
-                }
+                } catch (Exception exception) { exception.printStackTrace(); }
             }
         }
     }

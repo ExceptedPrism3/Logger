@@ -3,12 +3,13 @@ package com.carpour.logger;
 import com.carpour.logger.API.AuthMeUtil;
 import com.carpour.logger.API.EssentialsUtil;
 import com.carpour.logger.Commands.OnLogger;
-import com.carpour.logger.Database.MySQL.MySQL;
-import com.carpour.logger.Database.MySQL.MySQLData;
+import com.carpour.logger.Database.External.External;
+import com.carpour.logger.Database.External.ExternalData;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Discord.DiscordFile;
 import com.carpour.logger.Events.*;
 import com.carpour.logger.Events.OnCommands.OnCommand;
+import com.carpour.logger.Events.OnInventories.OnCraft;
 import com.carpour.logger.Events.OnInventories.OnFurnace;
 import com.carpour.logger.Events.PluginDependent.OnAFK;
 import com.carpour.logger.Events.PluginDependent.OnAuthMePassword;
@@ -26,7 +27,7 @@ public class Main extends JavaPlugin {
 
     private static Main instance;
 
-    public MySQL mySQL;
+    public External external;
 
     private SQLite sqLite;
 
@@ -49,16 +50,15 @@ public class Main extends JavaPlugin {
         discord = new Discord();
         discord.run();
 
-        if (getConfig().getBoolean("MySQL.Enable")) {
+        if (getConfig().getBoolean("Database.Enable")) {
 
-            mySQL = new MySQL();
-            mySQL.connect();
-            MySQLData mySQLData = new MySQLData(this);
-            if (mySQL.isConnected()) {
-                mySQLData.createTable();
-                mySQLData.emptyTable();
+            external = new External();
+            external.connect();
+            ExternalData externalData = new ExternalData(this);
+            if (external.isConnected()) {
+                externalData.createTable();
+                externalData.emptyTable();
             }
-
         }
 
         if (getConfig().getBoolean("SQLite.Enable")) {
@@ -70,7 +70,6 @@ public class Main extends JavaPlugin {
                 sqLiteData.createTable();
                 sqLiteData.emptyTable();
             }
-
         }
 
         if (getConfig().getBoolean("Log-to-Files") && getConfig().getBoolean("SQLite.Enable")){
@@ -106,6 +105,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnGameMode(), this);
 
         getServer().getPluginManager().registerEvents(new OnFurnace(), this);
+        getServer().getPluginManager().registerEvents(new OnCraft(), this);
 
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new TPS(), 300L, getConfig().getInt("RAM-TPS-Checker"));
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new RAM(), 300L, getConfig().getInt("RAM-TPS-Checker"));
@@ -116,7 +116,7 @@ public class Main extends JavaPlugin {
 
             getServer().getPluginManager().registerEvents(new OnAFK(), this);
 
-            getServer().getLogger().info("[Logger] Essentials Plugin Detected!");
+            getLogger().info("Essentials Plugin Detected!");
 
         }
 
@@ -124,28 +124,31 @@ public class Main extends JavaPlugin {
 
             getServer().getPluginManager().registerEvents(new OnAuthMePassword(), this);
 
-            getServer().getLogger().info("[Logger] AuthMe Plugin Detected!");
+            getLogger().info("AuthMe Plugin Detected!");
 
         }
 
         new ASCIIArt().Art();
 
-        //bstats
+        // bstats
 
         new Metrics(this, 12036);
 
-        //Update Checker
-        int resource_ID = 94236;
-        UpdateChecker.init(this, resource_ID)
-                .checkEveryXHours(6)
-                .setChangelogLink(resource_ID)
-                .setNotifyOpsOnJoin(true)
-                .setNotifyByPermissionOnJoin("logger.update")
-                .checkNow();
+        // Update Checker
+        if (getConfig().getBoolean("Update-Checker")) {
 
-        getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.GOLD + "Thank you " + ChatColor.GREEN + ChatColor.BOLD + "thelooter" + ChatColor.GOLD + " for the Contribution!");
+            int resource_ID = 94236;
+            UpdateChecker.init(this, resource_ID)
+                    .checkEveryXHours(2)
+                    .setChangelogLink(resource_ID)
+                    .setNotifyByPermissionOnJoin("logger.update")
+                    .checkNow();
 
-        getServer().getLogger().info("[Logger] Plugin Enabled!");
+        }
+
+        getLogger().info(ChatColor.GOLD + "Thank you " + ChatColor.GREEN + ChatColor.BOLD + "thelooter" + ChatColor.GOLD + " for the Contribution!");
+
+        getLogger().info("Plugin Enabled!");
 
         new Start().run();
     }
@@ -155,13 +158,13 @@ public class Main extends JavaPlugin {
 
         new Stop().run();
 
-        if (getConfig().getBoolean("MySQL.Enable") && mySQL.isConnected()) mySQL.disconnect();
+        if (getConfig().getBoolean("Database.Enable") && external.isConnected()) external.disconnect();
 
         if (getConfig().getBoolean("SQLite.Enable") && sqLite.isConnected()) sqLite.disconnect();
 
         discord.disconnect();
 
-        getServer().getLogger().info("[Logger] Plugin Disabled!");
+        getLogger().info("Plugin Disabled!");
 
     }
 

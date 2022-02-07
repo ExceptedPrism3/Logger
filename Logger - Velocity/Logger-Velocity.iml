@@ -64,5 +64,6 @@
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.26" level="project" />
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.11.4" level="project" />
     <orderEntry type="library" name="Maven: org.xerial:sqlite-jdbc:3.36.0.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.gitlab.ruany:LiteBansAPI:0.3.5" level="project" />
   </component>
 </module>

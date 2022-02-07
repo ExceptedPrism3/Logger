@@ -3,7 +3,7 @@ package com.carpour.logger.Events;
 import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import com.carpour.logger.Database.MySQL.MySQLData;
+import com.carpour.logger.Database.External.ExternalData;
 import com.carpour.logger.Database.SQLite.SQLiteData;
 import com.carpour.logger.Utils.Messages;
 import org.bukkit.Material;
@@ -17,9 +17,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class OnBlockBreak implements Listener {
@@ -38,8 +37,7 @@ public class OnBlockBreak implements Listener {
         int z = event.getBlock().getLocation().getBlockZ();
         Material blockType = event.getBlock().getType();
         String serverName = main.getConfig().getString("Server-Name");
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         if (player.hasPermission("logger.exempt")) return;
 
@@ -52,14 +50,14 @@ public class OnBlockBreak implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Block-Break-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Break-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Break-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
 
                     }
 
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Block-Break-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)) + "\n");
+                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Block-Break-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -69,10 +67,9 @@ public class OnBlockBreak implements Listener {
 
                     }
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                    if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
 
-
-                        MySQLData.blockBreak(serverName, worldName, playerName, blockType.toString(), x, y, z, true);
+                        ExternalData.blockBreak(serverName, worldName, playerName, blockType.toString(), x, y, z, true);
 
                     }
 
@@ -88,7 +85,7 @@ public class OnBlockBreak implements Listener {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBlockBreakLogFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has broke " + blockType + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
+                    out.write("[" + dateTimeFormatter.format(ZonedDateTime.now()) + "] " + "[" + worldName + "] The Player <" + playerName + "> has broke " + blockType + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -104,7 +101,7 @@ public class OnBlockBreak implements Listener {
 
                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Block-Break-Staff")).isEmpty()) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Break-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
+                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Break-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
 
                 }
 
@@ -112,22 +109,18 @@ public class OnBlockBreak implements Listener {
 
                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Block-Break")).isEmpty()) {
 
-                    Discord.blockBreak(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Break")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
+                    Discord.blockBreak(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Break")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
                 }
             }
 
             //MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
 
                 try {
 
-                    MySQLData.blockBreak(serverName, worldName, playerName, blockType.toString(), x, y, z, player.hasPermission("logger.staff.log"));
+                    ExternalData.blockBreak(serverName, worldName, playerName, blockType.toString(), x, y, z, player.hasPermission("logger.staff.log"));
 
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
 
             //SQLite
@@ -137,11 +130,7 @@ public class OnBlockBreak implements Listener {
 
                     SQLiteData.insertBlockBreak(serverName, player, blockType, player.hasPermission("logger.staff.log"));
 
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
         }
     }

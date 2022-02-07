@@ -15,9 +15,8 @@ import com.velocitypowered.api.proxy.Player;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class OnChat{
 
@@ -32,28 +31,27 @@ public class OnChat{
         String server = String.valueOf(player.getCurrentServer().get().getServerInfo().getName());
         String message = event.getMessage();
         String serverName = main.getConfig().getString("Server-Name");
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         if (player.hasPermission("loggerproxy.exempt")) return;
 
         if (main.getConfig().getBoolean("Log-Player.Chat")) {
 
-            //Log To Files Handling
+            // Log To Files Handling
             if (main.getConfig().getBoolean("Log-to-Files")) {
 
                 if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
 
                     if (!messages.getString("Discord.Player-Chat-Staff").isEmpty()) {
 
-                        Discord.staffChat(player, messages.getString("Discord.Player-Chat-Staff").replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%msg%", message), false);
+                        Discord.staffChat(player, messages.getString("Discord.Player-Chat-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
 
                     }
 
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
-                        out.write(messages.getString("Files.Player-Chat-Staff").replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%player%", playerName).replaceAll("%msg%", message) + "\n");
+                        out.write(messages.getString("Files.Player-Chat-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%player%", playerName).replaceAll("%msg%", message) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -64,7 +62,6 @@ public class OnChat{
                     }
 
                     if (main.getConfig().getBoolean("MySQL.Enable") && MySQL.isConnected()) {
-
 
                         MySQLData.playerChat(serverName, playerName, message, true);
 
@@ -83,7 +80,7 @@ public class OnChat{
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getChatLogFile(), true));
-                    out.write(messages.getString("Files.Player-Chat").replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%player%", playerName).replaceAll("%msg%", message) + "\n");
+                    out.write(messages.getString("Files.Player-Chat").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%player%", playerName).replaceAll("%msg%", message) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -94,12 +91,12 @@ public class OnChat{
                 }
             }
 
-            //Discord Integration
+            // Discord Integration
             if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
 
                 if (!messages.getString("Discord.Player-Chat-Staff").isEmpty()) {
 
-                    Discord.staffChat(player, messages.getString("Discord.Player-Chat-Staff").replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%msg%", message), false);
+                    Discord.staffChat(player, messages.getString("Discord.Player-Chat-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
 
                 }
 
@@ -107,38 +104,30 @@ public class OnChat{
 
                 if (!messages.getString("Discord.Player-Chat").isEmpty()) {
 
-                    Discord.playerChat(player, messages.getString("Discord.Player-Chat").replaceAll("%time%", dateFormat.format(date)).replaceAll("%server%", server).replaceAll("%msg%", message), false);
+                    Discord.playerChat(player, messages.getString("Discord.Player-Chat").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
 
                 }
             }
 
 
-            //MySQL Handling
+            // MySQL Handling
             if (main.getConfig().getBoolean("MySQL.Enable") && MySQL.isConnected()) {
 
                 try {
 
                     MySQLData.playerChat(serverName, playerName, message, player.hasPermission("loggerproxy.staff.log"));
 
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
 
-            //SQLite Handling
+            // SQLite Handling
             if (main.getConfig().getBoolean("SQLite.Enable") && SQLite.isConnected()) {
 
                 try {
 
                     SQLiteData.insertPlayerChat(serverName, playerName, message, player.hasPermission("loggerproxy.staff.log"));
 
-                } catch (Exception exception) {
-
-                    exception.printStackTrace();
-
-                }
+                } catch (Exception exception) { exception.printStackTrace(); }
             }
         }
     }

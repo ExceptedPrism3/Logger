@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Logger-Velocity</artifactId>
-    <version>1.7.1</version>
+    <version>1.7.2</version>
     <packaging>jar</packaging>
 
     <name>Logger-Velocity</name>
@@ -19,7 +19,7 @@
     <parent>
         <artifactId>Logger</artifactId>
         <groupId>com.carpour</groupId>
-        <version>1.7.1</version>
+        <version>1.7.2</version>
     </parent>
 
     <build>
@@ -112,6 +112,10 @@
             <id>velocitypowered-repo</id>
             <url>https://nexus.velocitypowered.com/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -153,6 +157,12 @@
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.36.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.gitlab.ruany</groupId>
+            <artifactId>LiteBansAPI</artifactId>
+            <version>LATEST</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
