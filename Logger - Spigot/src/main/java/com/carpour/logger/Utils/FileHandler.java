@@ -2,6 +2,7 @@ package com.carpour.logger.Utils;
 
 import com.carpour.logger.API.AuthMeUtil;
 import com.carpour.logger.API.EssentialsUtil;
+import com.carpour.logger.API.VaultUtil;
 import com.carpour.logger.Main;
 
 import java.io.File;
@@ -52,6 +53,7 @@ public class FileHandler {
     // Extras Side Part
     private static File afkFolder;
     private static File wrongPasswordFolder;
+    private static File vaultFolder;
 
     // Files Part
     // Player Side
@@ -90,6 +92,7 @@ public class FileHandler {
     // Extras Side
     private static File afkFile;
     private static File wrongPasswordFile;
+    private static File vaultFile;
 
 
     private final Main main = Main.getInstance();
@@ -200,6 +203,9 @@ public class FileHandler {
         wrongPasswordFolder = new File(logsFolder, "Wrong Password");
         wrongPasswordFile = new File(wrongPasswordFolder, filenameDateFormat.format(date) + ".log");
 
+        vaultFolder = new File(logsFolder, "Player Balance");
+        vaultFile = new File(vaultFolder, filenameDateFormat.format(date) + ".log");
+
         try {
 
             // Folder Handling
@@ -268,6 +274,8 @@ public class FileHandler {
 
             if (AuthMeUtil.getAuthMeAPI() != null) wrongPasswordFolder.mkdir();
 
+            if (VaultUtil.getVaultAPI()) vaultFolder.mkdir();
+
 
             // Files Handling
             // Player Side
@@ -335,6 +343,8 @@ public class FileHandler {
 
             if (AuthMeUtil.getAuthMeAPI() != null) wrongPasswordFile.createNewFile();
 
+            if (VaultUtil.getVaultAPI()) vaultFile.createNewFile();
+
         } catch (IOException e) { e.printStackTrace(); }
     }
 
@@ -401,6 +411,8 @@ public class FileHandler {
     public static File getAfkFile() { return afkFile; }
 
     public static File getWrongPasswordFile() { return wrongPasswordFile; }
+
+    public static File getVaultFile() { return vaultFile; }
 
 
     public void deleteFile(File file) {
@@ -650,6 +662,14 @@ public class FileHandler {
             for (File password : Objects.requireNonNull(wrongPasswordFolder.listFiles())) {
 
                 deleteFile(password);
+
+            }
+        }
+
+        if (VaultUtil.getVaultAPI()) {
+            for (File vault : Objects.requireNonNull(vaultFolder.listFiles())) {
+
+                deleteFile(vault);
 
             }
         }

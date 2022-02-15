@@ -2,7 +2,7 @@
 #
 # Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
 #
-# Config 1.7.2
+# Config 1.7.3
 
 
 # Plugin Messages
@@ -47,8 +47,8 @@ Files:
   Item-Pickup: "[%time%] [%world%] The Player <%player%> has picked %amount% of %item% at X= %x%, Y= %y%, Z= %z% | %renamed%"
   Item-Drop-Staff: "[%time%] [%world%] The Staff <%player%> has dropped %amount% of %item% at X= %x%, Y= %y%, Z= %z% that had %enchantment% enchantment(s) | %renamed%"
   Item-Drop: "[%time%] [%world%] The Player <%player%> has dropped %amount% of %item% at X= %x%, Y= %y%, Z= %z% that had %enchantment% enchantment(s) | %renamed%"
-  Enchanting-Staff: "[%time%] [%world%] The Staff <%player%> has used an enchantment table that's located at X= %x%, Y= %y%, Z= %z% to enchant %item% with %enchantment% enchantment(s) that cost %level% xp level"
-  Enchanting: "[%time%] [%world%] The Player <%player%> has used an enchantment table that's located at X= %x%, Y= %y%, Z= %z% to enchant %item% with %enchantment% enchantment(s) that cost %level% xp level"
+  Enchanting-Staff: "[%time%] [%world%] The Staff <%player%> has used an enchantment table that's located at X= %x%, Y= %y%, Z= %z% to enchant %item% with %enchantment% enchantment(s) that had %enchlevel% level(s) which cost %level% xp level"
+  Enchanting: "[%time%] [%world%] The Player <%player%> has used an enchantment table that's located at X= %x%, Y= %y%, Z= %z% to enchant %item% with %enchantment% enchantment(s) that had %enchlevel% level(s) which cost %level% xp level"
   Book-Editing-Staff: "[%time%] [%world%] The Staff <%player%> has edited a book that consists of %page% page(s), with %content%. The book is signed by %sign%"
   Book-Editing: "[%time%] [%world%] The Player <%player%> has edited a book that consists of %page% page(s), with %content%. The book is signed by %sign%"
   Furnace-Staff: "[%time%] [%world%] The Staff <%player%> has extracted %amount% of %item% from a Furnace that's located at X= %x%, Y= %y%, Z= %z%"
@@ -73,6 +73,8 @@ Files:
     AFK: "[%time%] [%world%] The Player <%player%> has went AFK at X= %x%, Y= %y%, Z= %z%"
     Wrong-Password-Staff: "[%time%] [%world%] The Staff <%player%> has entered a Wrong Password"
     Wrong-Password: "[%time%] [%world%] The Player <%player%> has entered a Wrong Password"
+    Vault-Staff: "[%time%] The balance of the Player <%player%> has changed from %oldbal% to %newbal%"
+    Vault: "[%time%] The balance of the Staff <%player%> has changed from %oldbal% to %newbal%"
 
 # Discord Instance
 # Emojis can be found here https://emojipedia.org/ or elsewhere
@@ -111,8 +113,8 @@ Discord:
   Item-Pickup: "**[%time%]** **[%world%]** has picked up **%amount%** of **%item%** at X= **%x%**, Y= **%y%**, Z= **%z%** `|` **%renamed%**"
   Item-Drop-Staff: "**[%time%]** **[%world%]** has dropped **%amount%** of **%item%** at X= **%x%**, Y= **%y%**, Z= **%z%** that had **%enchantment%** enchantment(s) `|` **%renamed%**"
   Item-Drop: "**[%time%]** **[%world%]** has dropped **%amount%** of **%item%** at X= **%x%**, Y= **%y%**, Z= **%z%** that had **%enchantment%** enchantment(s) `|` **%renamed%**"
-  Enchanting-Staff: "**[%time%]** **[%world%]** Has used an Enchantment table that's located at X= **%x%**, Y= **%y%**, Z= **%z%** to Apply **%enchantment%** enchantment(s) on the item **%item%** which cost **%level%** xp Level"
-  Enchanting: "**[%time%]** **[%world%]** Has used an Enchantment table that's located at X= **%x%**, Y= **%y%**, Z= **%z%** to Apply **%enchantment%** enchantment(s) on the item **%item%** which cost **%level%** xp Level"
+  Enchanting-Staff: "**[%time%]** **[%world%]** Has used an Enchantment table that's located at X= **%x%**, Y= **%y%**, Z= **%z%** to Apply **%enchantment%** enchantment(s) that had %enchlevel% level(s) on the item **%item%** which cost **%level%** xp Level"
+  Enchanting: "**[%time%]** **[%world%]** Has used an Enchantment table that's located at X= **%x%**, Y= **%y%**, Z= **%z%** to Apply **%enchantment%** enchantment(s) that had %enchlevel% level(s) which on the item **%item%** which cost **%level%** xp Level"
   Book-Editing-Staff: "**[%time%]** **[%world%]** has edited a book that consists of **%page%** page(s), with **%content%**. The book is signed by **%sign%**"
   Book-Editing: "**[%time%]** **[%world%]** has edited a book that consists of **%page%** page(s), with **%content%**. The book is signed by **%sign%**"
   AFK-Staff: "**[%time%]** **[%world%]*X= **%x%** `|` Y= **%y%** `|` Z= **%z%**"
@@ -137,5 +139,7 @@ Discord:
   Extras:
     AFK-Staff: "**[%time%]** **[%world%]*X= **%x%** `|` Y= **%y%** `|` Z= **%z%**"
     AFK: "**[%time%]** **[%world%]** X= **%x%** `|` Y= **%y%** `|` Z= **%z%**"
-    Wrong-Password-Staff: "**[%time%]** [%world%] The Staff <**%player%**> has entered a Wrong Password"
-    Wrong-Password: "**[%time%]** [%world%] The Player <**%player%**> has entered a Wrong Password"
+    Wrong-Password-Staff: "**[%time%]** **[%world%]** has entered a Wrong Password"
+    Wrong-Password: "**[%time%]** **[%world%]** has entered a Wrong Password"
+    Vault-Staff: "**[%time%]** The balance has changed from **%oldbal%** to **%newbal%**"
+    Vault: "**[%time%]** The balance has changed from **%oldbal%** to **%newbal%**"

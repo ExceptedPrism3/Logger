@@ -2,6 +2,7 @@ package com.carpour.logger;
 
 import com.carpour.logger.API.AuthMeUtil;
 import com.carpour.logger.API.EssentialsUtil;
+import com.carpour.logger.API.VaultUtil;
 import com.carpour.logger.Commands.OnLogger;
 import com.carpour.logger.Database.External.External;
 import com.carpour.logger.Database.External.ExternalData;
@@ -13,6 +14,7 @@ import com.carpour.logger.Events.OnInventories.OnCraft;
 import com.carpour.logger.Events.OnInventories.OnFurnace;
 import com.carpour.logger.Events.PluginDependent.OnAFK;
 import com.carpour.logger.Events.PluginDependent.OnAuthMePassword;
+import com.carpour.logger.Events.PluginDependent.OnVault;
 import com.carpour.logger.Utils.*;
 import com.carpour.logger.Database.SQLite.SQLite;
 import com.carpour.logger.Database.SQLite.SQLiteData;
@@ -81,7 +83,7 @@ public class Main extends JavaPlugin {
         FileHandler fileHandler = new FileHandler(getDataFolder());
         fileHandler.deleteFiles();
 
-        getServer().getPluginManager().registerEvents(new OnChat(), this);
+        getServer().getPluginManager().registerEvents(new OnPlayerChat(), this);
         getServer().getPluginManager().registerEvents(new OnCommand(), this);
         getServer().getPluginManager().registerEvents(new Console(), this);
         getServer().getPluginManager().registerEvents(new OnSign(), this);
@@ -128,10 +130,22 @@ public class Main extends JavaPlugin {
 
         }
 
+        if (VaultUtil.getVaultAPI()){
+
+            if (VaultUtil.getVault().isEnabled()) {
+
+                OnVault vault = new OnVault();
+                getServer().getPluginManager().registerEvents(vault, this);
+                getServer().getScheduler().scheduleSyncRepeatingTask(this, vault, 60L, getConfig().getInt("Vault.Checker"));
+            }
+
+            getLogger().info("Vault Plugin Detected!");
+
+        }
+
         new ASCIIArt().Art();
 
         // bstats
-
         new Metrics(this, 12036);
 
         // Update Checker

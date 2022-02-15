@@ -1,6 +1,6 @@
 package com.carpour.loggerbungeecord.ServerSide;
 
-import com.carpour.loggerbungeecord.Database.MySQL.MySQLData;
+import com.carpour.loggerbungeecord.Database.External.ExternalData;
 import com.carpour.loggerbungeecord.Database.SQLite.SQLiteData;
 import com.carpour.loggerbungeecord.Discord.Discord;
 import com.carpour.loggerbungeecord.Main;
@@ -63,11 +63,11 @@ public class RAM implements Runnable{
                 }
 
                 //MySQL
-                if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
 
                     try {
 
-                        MySQLData.RAM(serverName, maxMemory, usedMemory, freeMemory);
+                        ExternalData.RAM(serverName, maxMemory, usedMemory, freeMemory);
 
                     } catch (Exception e) {
 

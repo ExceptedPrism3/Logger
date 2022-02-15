@@ -1,7 +1,7 @@
 package com.carpour.loggervelocity.ServerSide;
 
-import com.carpour.loggervelocity.Database.MySQL.MySQL;
-import com.carpour.loggervelocity.Database.MySQL.MySQLData;
+import com.carpour.loggervelocity.Database.External.External;
+import com.carpour.loggervelocity.Database.External.ExternalData;
 import com.carpour.loggervelocity.Database.SQLite.SQLite;
 import com.carpour.loggervelocity.Database.SQLite.SQLiteData;
 import com.carpour.loggervelocity.Discord.Discord;
@@ -25,7 +25,7 @@ public class Console {
         Main main = Main.getInstance();
         Messages messages = new Messages();
 
-        String command = event.getCommand();
+        String command = event.getCommand().replace("\\", "\\\\");
         String serverName = main.getConfig().getString("Server-Name");
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -55,11 +55,11 @@ public class Console {
             }
 
             // MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && MySQL.isConnected()) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && External.isConnected()) {
 
                 try {
 
-                    MySQLData.consoleCommands(serverName, command);
+                    ExternalData.consoleCommands(serverName, command);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

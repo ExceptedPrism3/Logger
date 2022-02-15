@@ -4,17 +4,17 @@ main: com.carpour.logger.Main
 api-version: 1.13
 authors: [ Prism3 , thelooter ]
 description: Log all Activities from Players and Server Side!
-softdepend: [Essentials , AuthMe]
+softdepend: [Essentials, AuthMe, Vault]
 commands:
   logger:
-    description: Plugin command.
+    description: "Plugin command."
   logger reload:
-    description: "Reloads the plugin configs."
+    description: "Reloads the Plugin configs."
   logger credits:
-    description: "Shows the plugin authors."
+    description: "Shows the Plugin authors."
 permissions:
   logger.staff:
-    description: "Allows the user to view Plugin Updates."
+    description: "Allows the Player to execute Plugin Commands, spy on others actions, and view Plugin Updates."
     default: op
     children:
       logger.exempt: true
@@ -22,16 +22,20 @@ permissions:
       logger.spy: true
       logger.update: true
   logger.exempt:
-    description: "Prevents the Player from Getting Logged."
+    description: "Prevents the Player from getting logged."
     default: op
+    children:
+      logger.exempt.discord: true
+  logger.exempt.discord:
+    description: "Prevents the Player from getting discord logged."
   logger.reload:
     description: "Allows to Reload the Plugin."
     default: op
   logger.spy:
-    description: "Ability to see other player's and Staff's Actions."
+    description: "Ability to see other players' and Staff's actions."
     default: op
   logger.spy.bypass:
-    description: "Ability to see other player's and staff's Actions but others can not."
+    description: "Ability to see other players and staff's Actions but others can not."
     default: op
     children:
       logger.spy: true
@@ -40,5 +44,5 @@ permissions:
     children:
       logger.exempt: false
   logger.update:
-    description: "Update Message is sent to the Users with this Permission."
+    description: "Ability to receive Plugin Updates."
     default: op

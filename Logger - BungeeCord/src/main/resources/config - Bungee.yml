@@ -14,7 +14,7 @@
 # Discord: Prism3#9371 | ID: 403667971089760257
 # Discord Server: https://discord.gg/MfR5mcpVfX
 #
-# Config 1.7.2
+# Config 1.7.3
 
 
 # Server Name
@@ -84,10 +84,9 @@ LiteBans:
   Temp-Mute: true
   Kick: true
 
-
 # MySQL Feature
 # Data-Deletion Value in Days, Set it -1 to cancel
-MySQL:
+Database:
   Enable: false
   Host: localhost
   Port: 3306

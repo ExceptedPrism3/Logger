@@ -2,6 +2,7 @@ package com.carpour.logger.Database.SQLite;
 
 import com.carpour.logger.API.AuthMeUtil;
 import com.carpour.logger.API.EssentialsUtil;
+import com.carpour.logger.API.VaultUtil;
 import com.carpour.logger.Main;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,7 +31,7 @@ public class SQLiteData {
         PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave,
                 playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel,
                 bucketFill, bucketEmpty, anvil, serverStart, serverStop, itemDrop, enchant, bookEditing, afk,
-                wrongPassword, itemPickup, furnace, rcon, gameMode, craft;
+                wrongPassword, itemPickup, furnace, rcon, gameMode, craft, vault;
 
         try {
 
@@ -95,7 +96,8 @@ public class SQLiteData {
 
             enchant = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Enchanting" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(40)," +
-                    "X INTEGER, Y INTEGER, Z INTEGER, Enchantment TEXT(50), Item TEXT(50), Cost INTEGER, Is_Staff INTEGER)");
+                    "X INTEGER, Y INTEGER, Z INTEGER, Enchantment TEXT(50), Enchantment_Level INTEGER, Item TEXT(50)," +
+                    " Cost INTEGER, Is_Staff INTEGER)");
 
             bookEditing = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Book_Editing" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(40)," +
@@ -157,6 +159,15 @@ public class SQLiteData {
                         "Is_Staff INTEGER)");
 
                 wrongPassword.executeUpdate();
+            }
+
+            if (VaultUtil.getVaultAPI() && VaultUtil.getVault().isEnabled()) {
+
+                vault = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Vault" +
+                        "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, Player_Name TEXT(30), Old_Balance REAL(200)," +
+                        " New_Balance REAL(200), Is_Staff INTEGER)");
+
+                vault.executeUpdate();
             }
 
             playerChat.executeUpdate();
@@ -512,9 +523,9 @@ public class SQLiteData {
         } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
-    public static void insertEnchant(String serverName, Player player, List<String> enchantment, String item, int cost, boolean isStaff) {
+    public static void insertEnchant(String serverName, Player player, List<String> enchantment, int enchantmentLevel, String item, int cost, boolean isStaff) {
         try {
-            PreparedStatement enchantStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Enchanting (Server_Name, Date, World, Player_Name, X, Y, Z, Enchantment, Item, Cost, Is_Staff) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+            PreparedStatement enchantStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Enchanting (Server_Name, Date, World, Player_Name, X, Y, Z, Enchantment, Enchantment_Level, Item, Cost, Is_Staff) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
             enchantStatement.setString(1, serverName);
             enchantStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
             enchantStatement.setString(3, player.getWorld().getName());
@@ -523,9 +534,10 @@ public class SQLiteData {
             enchantStatement.setInt(6, player.getLocation().getBlockY());
             enchantStatement.setInt(7, player.getLocation().getBlockZ());
             enchantStatement.setString(8, String.valueOf(enchantment));
-            enchantStatement.setString(9, item);
-            enchantStatement.setInt(10, cost);
-            enchantStatement.setBoolean(11, isStaff);
+            enchantStatement.setInt(9, enchantmentLevel);
+            enchantStatement.setString(10, item);
+            enchantStatement.setInt(11, cost);
+            enchantStatement.setBoolean(12, isStaff);
 
             enchantStatement.executeUpdate();
         } catch (SQLException exception) { exception.printStackTrace(); }
@@ -668,6 +680,20 @@ public class SQLiteData {
         } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
+    public static void insertVault(String serverName, Player player, double oldBal, double newBal, boolean isStaff) {
+        try {
+            PreparedStatement vault = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Vault (Server_Name, Date, Player_Name, Old_Balance, New_Balance, Is_Staff) VALUES (?,?,?,?,?,?)");
+            vault.setString(1, serverName);
+            vault.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
+            vault.setString(3, player.getName());
+            vault.setDouble(4, oldBal);
+            vault.setDouble(5, newBal);
+            vault.setBoolean(6, isStaff);
+
+            vault.executeUpdate();
+        } catch (SQLException exception) { exception.printStackTrace(); }
+    }
+
 
     public void emptyTable() {
 
@@ -749,6 +775,14 @@ public class SQLiteData {
                 PreparedStatement wrong_Password = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Wrong_Password WHERE Date <= datetime('now','-" + when + " day')");
 
                 wrong_Password.executeUpdate();
+
+            }
+
+            if (VaultUtil.getVaultAPI() && VaultUtil.getVault().isEnabled()) {
+
+                PreparedStatement vault = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Vault WHERE Date <= datetime('now','-" + when + " day')");
+
+                vault.executeUpdate();
 
             }
 

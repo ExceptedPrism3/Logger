@@ -35,7 +35,7 @@ public class OnBookSpy implements Listener{
                     players.sendMessage(ChatColor.translateAlternateColorCodes('&',
                             Objects.requireNonNull(main.getConfig().getString("Spy-Features.Book-Spy.Message")).
                                     replace("%player%", player.getName()).
-                                    replace("%content%", pageContent.toString())));
+                                    replace("%content%", pageContent.toString().replace("\\", "\\\\"))));
 
                 }
             }

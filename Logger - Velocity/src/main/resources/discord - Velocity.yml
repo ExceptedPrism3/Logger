@@ -5,6 +5,7 @@
 # Config 1.7.2
 
 
+# Leaving Channel-ID empty will disable the Channel
 Discord:
   Enable: false
   Bot-Token: BOT_KEY

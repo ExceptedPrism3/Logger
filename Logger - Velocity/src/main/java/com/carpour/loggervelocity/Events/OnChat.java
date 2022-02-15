@@ -1,7 +1,7 @@
 package com.carpour.loggervelocity.Events;
 
-import com.carpour.loggervelocity.Database.MySQL.MySQL;
-import com.carpour.loggervelocity.Database.MySQL.MySQLData;
+import com.carpour.loggervelocity.Database.External.External;
+import com.carpour.loggervelocity.Database.External.ExternalData;
 import com.carpour.loggervelocity.Database.SQLite.SQLite;
 import com.carpour.loggervelocity.Database.SQLite.SQLiteData;
 import com.carpour.loggervelocity.Discord.Discord;
@@ -29,7 +29,7 @@ public class OnChat{
         Player player = event.getPlayer();
         String playerName = player.getUsername();
         String server = String.valueOf(player.getCurrentServer().get().getServerInfo().getName());
-        String message = event.getMessage();
+        String message = event.getMessage().replace("\\", "\\\\");
         String serverName = main.getConfig().getString("Server-Name");
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -61,9 +61,9 @@ public class OnChat{
 
                     }
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && MySQL.isConnected()) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && External.isConnected()) {
 
-                        MySQLData.playerChat(serverName, playerName, message, true);
+                        ExternalData.playerChat(serverName, playerName, message, true);
 
                     }
 
@@ -92,30 +92,32 @@ public class OnChat{
             }
 
             // Discord Integration
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
+            if (!player.hasPermission("logger.exempt.discord")) {
 
-                if (!messages.getString("Discord.Player-Chat-Staff").isEmpty()) {
+                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
 
-                    Discord.staffChat(player, messages.getString("Discord.Player-Chat-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
+                    if (!messages.getString("Discord.Player-Chat-Staff").isEmpty()) {
 
-                }
+                        Discord.staffChat(player, messages.getString("Discord.Player-Chat-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
 
-            } else {
+                    }
 
-                if (!messages.getString("Discord.Player-Chat").isEmpty()) {
+                } else {
 
-                    Discord.playerChat(player, messages.getString("Discord.Player-Chat").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
+                    if (!messages.getString("Discord.Player-Chat").isEmpty()) {
 
+                        Discord.playerChat(player, messages.getString("Discord.Player-Chat").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
+
+                    }
                 }
             }
 
-
             // MySQL Handling
-            if (main.getConfig().getBoolean("MySQL.Enable") && MySQL.isConnected()) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && External.isConnected()) {
 
                 try {
 
-                    MySQLData.playerChat(serverName, playerName, message, player.hasPermission("loggerproxy.staff.log"));
+                    ExternalData.playerChat(serverName, playerName, message, player.hasPermission("loggerproxy.staff.log"));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

@@ -25,7 +25,7 @@ public class Console implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onConsoleCommand(ServerCommandEvent event) {
 
-        String command = event.getCommand();
+        String command = event.getCommand().replace("\\", "\\\\");
         List<String> commandParts = Arrays.asList(event.getCommand().split("\\s+"));
         String serverName = main.getConfig().getString("Server-Name");
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

@@ -20,7 +20,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class OnChat implements Listener {
+public class OnPlayerChat implements Listener {
 
     private final Main main = Main.getInstance();
 
@@ -31,7 +31,7 @@ public class OnChat implements Listener {
         World world = player.getWorld();
         final String worldName = world.getName();
         final String playerName = player.getName();
-        String msg = event.getMessage();
+        String msg = event.getMessage().replace("\\", "\\\\");
         String serverName = main.getConfig().getString("Server-Name");
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -94,19 +94,22 @@ public class OnChat implements Listener {
             }
 
             // Discord Integration
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+            if (!player.hasPermission("logger.exempt.discord")) {
 
-                if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat-Staff")).isEmpty()) {
+                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%message%", msg), false);
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat-Staff")).isEmpty()) {
 
-                }
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%message%", msg), false);
 
-            } else {
+                    }
 
-                if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat")).isEmpty()) {
+                } else {
 
-                    Discord.playerChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%message%", msg), false);
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat")).isEmpty()) {
+
+                        Discord.playerChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%message%", msg), false);
+                    }
                 }
             }
 

@@ -1,6 +1,6 @@
 package com.carpour.loggerbungeecord.Events.OnCommands;
 
-import com.carpour.loggerbungeecord.Database.MySQL.MySQLData;
+import com.carpour.loggerbungeecord.Database.External.ExternalData;
 import com.carpour.loggerbungeecord.Database.SQLite.SQLiteData;
 import com.carpour.loggerbungeecord.Discord.Discord;
 import com.carpour.loggerbungeecord.Main;
@@ -32,7 +32,7 @@ public class OnCommandWhitelist implements Listener {
             ProxiedPlayer player = (ProxiedPlayer) event.getSender();
             String playerName = player.getName();
             String server = player.getServer().getInfo().getName();
-            String command = event.getMessage();
+            String command = event.getMessage().replace("\\", "\\\\");
             List<String> commandParts = Arrays.asList(command.split("\\s+"));
             String serverName = main.getConfig().getString("Server-Name");
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -67,10 +67,10 @@ public class OnCommandWhitelist implements Listener {
 
                                 }
 
-                                if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                                if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
 
 
-                                    MySQLData.playerCommands(serverName, playerName, command, true);
+                                    ExternalData.playerCommands(serverName, playerName, command, true);
 
                                 }
 
@@ -99,30 +99,32 @@ public class OnCommandWhitelist implements Listener {
                         }
 
                         //Discord Integration
-                        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
+                        if (!player.hasPermission("logger.exempt.discord")) {
 
-                            if (!Messages.getString("Discord.Player-Commands-Staff").isEmpty()) {
+                            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
 
-                                Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Commands-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%command%", command), false);
+                                if (!Messages.getString("Discord.Player-Commands-Staff").isEmpty()) {
 
-                            }
+                                    Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Commands-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%command%", command), false);
 
-                        } else {
+                                }
 
-                            if (!Messages.getString("Discord.Player-Commands").isEmpty()) {
+                            } else {
 
-                                Discord.playerCommands(player, Objects.requireNonNull(Messages.getString("Discord.Player-Commands")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%command%", command), false);
+                                if (!Messages.getString("Discord.Player-Commands").isEmpty()) {
 
+                                    Discord.playerCommands(player, Objects.requireNonNull(Messages.getString("Discord.Player-Commands")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%command%", command), false);
+
+                                }
                             }
                         }
 
-
                         //MySQL Handling
-                        if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                        if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
 
                             try {
 
-                                MySQLData.playerCommands(serverName, playerName, command, player.hasPermission("loggerproxy.staff.log"));
+                                ExternalData.playerCommands(serverName, playerName, command, player.hasPermission("loggerproxy.staff.log"));
 
                             } catch (Exception e) {
 

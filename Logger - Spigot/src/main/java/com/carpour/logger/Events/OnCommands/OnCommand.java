@@ -34,7 +34,7 @@ public class OnCommand implements Listener {
         World world = player.getWorld();
         String worldName = world.getName();
         String playerName = player.getName();
-        String command = event.getMessage();
+        String command = event.getMessage().replace("\\", "\\\\");
         List<String> commandParts = Arrays.asList(event.getMessage().split("\\s+"));
         String serverName = main.getConfig().getString("Server-Name");
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

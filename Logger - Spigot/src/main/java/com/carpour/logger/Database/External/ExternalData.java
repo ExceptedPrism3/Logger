@@ -2,6 +2,7 @@ package com.carpour.logger.Database.External;
 
 import com.carpour.logger.API.AuthMeUtil;
 import com.carpour.logger.API.EssentialsUtil;
+import com.carpour.logger.API.VaultUtil;
 import com.carpour.logger.Main;
 import org.bukkit.Material;
 import org.bukkit.event.world.PortalCreateEvent;
@@ -24,7 +25,7 @@ public class ExternalData {
         PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave,
                 playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel,
                 bucketFill, bucketEmpty, anvil, serverStart, serverStop, itemDrop, enchant, bookEditing, afk,
-                wrongPassword, itemPickup, furnace, rcon, gameMode, craft;
+                wrongPassword, itemPickup, furnace, rcon, gameMode, craft, vault;
 
         try {
 
@@ -75,7 +76,7 @@ public class ExternalData {
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Item VARCHAR(50),Amount INT,X INT,Y INT,Z INT,Enchantment VARCHAR(50),Changed_Name VARCHAR(50),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             enchant = plugin.external.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Enchanting "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT,Y INT,Z INT,Enchantment VARCHAR(50),Item VARCHAR(50),Cost INT(5),Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),X INT,Y INT,Z INT,Enchantment VARCHAR(50), Enchantment_Level INT, Item VARCHAR(50),Cost INT(5),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             bookEditing = plugin.external.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Book_Editing "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Page_Count INT,Page_Content VARCHAR(250),Signed_by VARCHAR(25),Is_Staff TINYINT,PRIMARY KEY (Date))");
@@ -125,10 +126,22 @@ public class ExternalData {
 
             if (AuthMeUtil.getAuthMeAPI() != null) {
 
-                wrongPassword = plugin.external.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Wrong_Password "
-                        + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100),Playername VARCHAR(100),Is_Staff TINYINT,PRIMARY KEY (Date))");
+                wrongPassword = plugin.external.getConnection().prepareStatement("CREATE TABLE IF NOT " +
+                        "EXISTS Wrong_Password (Server_Name VARCHAR(30)," +
+                        "Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+                        "Playername VARCHAR(100),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
                 wrongPassword.executeUpdate();
+            }
+
+            if (VaultUtil.getVaultAPI() && VaultUtil.getVault().isEnabled()) {
+
+                vault = plugin.external.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Vault "
+                        + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                        "Player_Name VARCHAR(100), Old_Balance DOUBLE, New_Balance DOUBLE, " +
+                        "Is_Staff TINYINT,PRIMARY KEY (Date))");
+
+                vault.executeUpdate();
             }
 
             playerChat.executeUpdate();
@@ -481,10 +494,10 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void enchant(String serverName, String world, String playerName, int x, int y, int z, List<String> enchantment, String item, int cost ,boolean staff){
+    public static void enchant(String serverName, String world, String playerName, int x, int y, int z, List<String> enchantment, int enchantmentLevel, String item, int cost ,boolean staff){
         try {
             String database = "Enchanting";
-            PreparedStatement enchanting = plugin.external.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Enchantment,Item,Cost,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
+            PreparedStatement enchanting = plugin.external.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Enchantment,Enchantment_Level,Item,Cost,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
             enchanting.setString(1, serverName);
             enchanting.setString(2, world);
             enchanting.setString(3, playerName);
@@ -492,9 +505,10 @@ public class ExternalData {
             enchanting.setInt(5, y);
             enchanting.setInt(6, z);
             enchanting.setString(7, String.valueOf(enchantment));
-            enchanting.setString(8, item);
-            enchanting.setInt(9, cost);
-            enchanting.setBoolean(10, staff);
+            enchanting.setInt(8, enchantmentLevel);
+            enchanting.setString(9, item);
+            enchanting.setInt(10, cost);
+            enchanting.setBoolean(11, staff);
             enchanting.executeUpdate();
 
         } catch (SQLException e){ e.printStackTrace(); }
@@ -634,6 +648,20 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
+    public static void vault(String serverName, String playerName, double oldBal, double newBal, boolean staff){
+        try {
+            String database = "Vault";
+            PreparedStatement vault = plugin.external.getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Player_Name,Old_Balance,New_Balance,Is_Staff) VALUES(?,?,?,?,?)");
+            vault.setString(1, serverName);
+            vault.setString(2, playerName);
+            vault.setDouble(3, oldBal);
+            vault.setDouble(4, newBal);
+            vault.setBoolean(5, staff);
+            vault.executeUpdate();
+
+        } catch (SQLException e){ e.printStackTrace(); }
+    }
+
     public void emptyTable(){
 
         int when = plugin.getConfig().getInt("Database.Data-Deletion");
@@ -713,6 +741,13 @@ public class ExternalData {
                 PreparedStatement wrong_password = plugin.external.getConnection().prepareStatement("DELETE FROM Wrong_Password WHERE DATE < NOW() - INTERVAL " + when + " DAY");
 
                 wrong_password.executeUpdate();
+            }
+
+            if (VaultUtil.getVaultAPI() && VaultUtil.getVault().isEnabled()) {
+
+                PreparedStatement vault = plugin.external.getConnection().prepareStatement("DELETE FROM Vault WHERE DATE < NOW() - INTERVAL " + when + " DAY");
+
+                vault.executeUpdate();
             }
 
             player_Chat.executeUpdate();

@@ -7,8 +7,8 @@ import com.carpour.loggerbungeecord.ServerSide.RAM;
 import com.carpour.loggerbungeecord.Database.SQLite.SQLite;
 import com.carpour.loggerbungeecord.Database.SQLite.SQLiteData;
 import com.carpour.loggerbungeecord.Commands.Reload;
-import com.carpour.loggerbungeecord.Database.MySQL.MySQL;
-import com.carpour.loggerbungeecord.Database.MySQL.MySQLData;
+import com.carpour.loggerbungeecord.Database.External.External;
+import com.carpour.loggerbungeecord.Database.External.ExternalData;
 import com.carpour.loggerbungeecord.Discord.Discord;
 import com.carpour.loggerbungeecord.Discord.DiscordFile;
 import com.carpour.loggerbungeecord.Events.*;
@@ -26,7 +26,7 @@ public final class Main extends Plugin {
 
     private static ConfigManager cm;
 
-    public MySQL mySQL;
+    public External external;
 
     private SQLite sqLite;
 
@@ -68,14 +68,14 @@ public final class Main extends Plugin {
 
         getProxy().getPluginManager().registerCommand(this, new Reload());
 
-        if (getConfig().getBoolean("MySQL.Enable")) {
+        if (getConfig().getBoolean("Database.Enable")) {
 
-            mySQL = new MySQL();
-            mySQL.connect();
-            MySQLData mySQLData = new MySQLData(this);
-            if (mySQL.isConnected()) {
-                mySQLData.createTable();
-                mySQLData.emptyTable();
+            external = new External();
+            external.connect();
+            ExternalData externalData = new ExternalData(this);
+            if (external.isConnected()) {
+                externalData.createTable();
+                externalData.emptyTable();
             }
 
         }
@@ -95,7 +95,6 @@ public final class Main extends Plugin {
         new ASCIIArt().Art();
 
         // bstats
-
         new Metrics(this, 12036);
 
         // Update Checker
@@ -119,7 +118,7 @@ public final class Main extends Plugin {
 
         new Stop().run();
 
-        if (getConfig().getBoolean("MySQL.Enable") && mySQL.isConnected()) mySQL.disconnect();
+        if (getConfig().getBoolean("Database.Enable") && external.isConnected()) external.disconnect();
 
         if (getConfig().getBoolean("SQLite.Enable") && sqLite.isConnected()) sqLite.disconnect();
 

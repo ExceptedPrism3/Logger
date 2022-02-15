@@ -50,7 +50,7 @@ public class OnAnvilSpy implements Listener {
 
                                 if (meta.hasDisplayName()) {
 
-                                    String displayName = meta.getDisplayName();
+                                    String displayName = meta.getDisplayName().replace("\\", "\\\\");
 
                                     for (Player players : Bukkit.getOnlinePlayers()) {
 

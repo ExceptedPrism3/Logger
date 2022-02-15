@@ -5,7 +5,7 @@
     <parent>
         <artifactId>Logger</artifactId>
         <groupId>com.carpour</groupId>
-        <version>1.7.2</version>
+        <version>1.7.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -58,17 +58,17 @@
         <dependency>
             <groupId>com.carpour</groupId>
             <artifactId>Logger-Spigot</artifactId>
-            <version>1.7.2</version>
+            <version>1.7.3</version>
         </dependency>
         <dependency>
             <groupId>com.carpour</groupId>
             <artifactId>Logger-Bungeecord</artifactId>
-            <version>1.7.2</version>
+            <version>1.7.3</version>
         </dependency>
         <dependency>
             <groupId>com.carpour</groupId>
             <artifactId>Logger-Velocity</artifactId>
-            <version>1.7.2</version>
+            <version>1.7.3</version>
         </dependency>
     </dependencies>
 </project>

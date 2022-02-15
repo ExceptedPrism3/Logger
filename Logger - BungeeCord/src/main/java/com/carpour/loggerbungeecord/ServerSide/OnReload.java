@@ -1,6 +1,6 @@
 package com.carpour.loggerbungeecord.ServerSide;
 
-import com.carpour.loggerbungeecord.Database.MySQL.MySQLData;
+import com.carpour.loggerbungeecord.Database.External.ExternalData;
 import com.carpour.loggerbungeecord.Database.SQLite.SQLiteData;
 import com.carpour.loggerbungeecord.Discord.Discord;
 import com.carpour.loggerbungeecord.Main;
@@ -64,10 +64,10 @@ public class OnReload implements Listener {
 
                         }
 
-                        if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                        if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
 
 
-                            MySQLData.serverReload(serverName, playerName, true);
+                            ExternalData.serverReload(serverName, playerName, true);
 
                         }
 
@@ -114,11 +114,11 @@ public class OnReload implements Listener {
                 }
 
                 //MySQL Handling
-                if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
 
                     try {
 
-                        MySQLData.serverReload(serverName, playerName, player.hasPermission("loggerproxy.staff.log"));
+                        ExternalData.serverReload(serverName, playerName, player.hasPermission("loggerproxy.staff.log"));
 
                     } catch (Exception e) {
 
@@ -164,11 +164,11 @@ public class OnReload implements Listener {
                 }
 
                 //MySQL Handling
-                if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
 
                     try {
 
-                        MySQLData.serverReload(serverName, null, true);
+                        ExternalData.serverReload(serverName, null, true);
 
                     } catch (Exception e) {
 

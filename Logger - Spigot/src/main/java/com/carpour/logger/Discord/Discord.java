@@ -46,6 +46,7 @@ public class Discord {
 
     private static TextChannel afkChannel;
     private static TextChannel wrongPasswordChannel;
+    private static TextChannel vaultChannel;
 
     public void run() {
 
@@ -131,6 +132,8 @@ public class Discord {
             String afkChannelID = DiscordFile.get().getString("Discord.Extras.AFK.Channel-ID");
 
             String wrongPasswordChannelID = DiscordFile.get().getString("Discord.Extras.Wrong-Password.Channel-ID");
+
+            String vaultChannelID = DiscordFile.get().getString("Discord.Extras.Vault.Channel-ID");
 
 
             try {
@@ -321,6 +324,12 @@ public class Discord {
                 if (!(wrongPasswordChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Extras.Essentials-AFK") && !wrongPasswordChannelID.equals("LINK_HERE")) {
 
                     wrongPasswordChannel = jda.getTextChannelById(wrongPasswordChannelID);
+
+                }
+
+                if (!(vaultChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Extras.Vault") && !vaultChannelID.equals("LINK_HERE")) {
+
+                    vaultChannel = jda.getTextChannelById(vaultChannelID);
 
                 }
             }catch (Exception e){
@@ -527,6 +536,11 @@ public class Discord {
     public static void playerCraft(Player player, String content, boolean contentinAuthorLine) {
 
         discordUtil(player, content, contentinAuthorLine, craftChannel);
+    }
+
+    public static void vault(Player player, String content, boolean contentinAuthorLine) {
+
+        discordUtil(player, content, contentinAuthorLine, vaultChannel);
     }
 
     private static void discordUtil(Player player, String content, boolean contentinAuthorLine, TextChannel channel) {

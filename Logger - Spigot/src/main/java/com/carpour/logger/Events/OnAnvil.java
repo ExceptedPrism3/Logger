@@ -62,7 +62,7 @@ private final Main main = Main.getInstance();
 
                                 if (meta.hasDisplayName()) {
 
-                                    String displayName = meta.getDisplayName();
+                                    String displayName = meta.getDisplayName().replace("\\", "\\\\");
 
                                     // Anvil Spy
                                     if (main.getConfig().getBoolean("Spy-Features.Anvil-Spy.Enable")) {
@@ -127,19 +127,22 @@ private final Main main = Main.getInstance();
                                     }
 
                                     // Discord
-                                    if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                                    if (!player.hasPermission("logger.exempt.discord")) {
 
-                                        if (!Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).isEmpty()) {
+                                        if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%renamed%", displayName), false);
+                                            if (!Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).isEmpty()) {
 
-                                        }
+                                                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%renamed%", displayName), false);
 
-                                    } else {
+                                            }
 
-                                        if (!Objects.requireNonNull(Messages.get().getString("Discord.Anvil")).isEmpty()) {
+                                        } else {
 
-                                            Discord.anvil(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%renamed%", displayName), false);
+                                            if (!Objects.requireNonNull(Messages.get().getString("Discord.Anvil")).isEmpty()) {
+
+                                                Discord.anvil(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%renamed%", displayName), false);
+                                            }
                                         }
                                     }
 

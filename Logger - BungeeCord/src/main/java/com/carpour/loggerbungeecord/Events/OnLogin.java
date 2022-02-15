@@ -1,6 +1,6 @@
 package com.carpour.loggerbungeecord.Events;
 
-import com.carpour.loggerbungeecord.Database.MySQL.MySQLData;
+import com.carpour.loggerbungeecord.Database.External.ExternalData;
 import com.carpour.loggerbungeecord.Database.SQLite.SQLiteData;
 import com.carpour.loggerbungeecord.Discord.Discord;
 import com.carpour.loggerbungeecord.Main;
@@ -62,10 +62,10 @@ public class OnLogin implements Listener {
 
                     }
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                    if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
 
 
-                        MySQLData.playerLogin(serverName, playerName, playerIP, true);
+                        ExternalData.playerLogin(serverName, playerName, playerIP, true);
 
                     }
 
@@ -94,29 +94,32 @@ public class OnLogin implements Listener {
             }
 
             //Discord Integration
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
+            if (!player.hasPermission("logger.exempt.discord")) {
 
-                if (!Messages.getString("Discord.Player-Login-Staff").isEmpty()) {
+                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Login-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%IP%", String.valueOf(playerIP)), false);
+                    if (!Messages.getString("Discord.Player-Login-Staff").isEmpty()) {
 
-                }
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Login-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%IP%", String.valueOf(playerIP)), false);
 
-            } else {
+                    }
 
-                if (!Messages.getString("Discord.Player-Login").isEmpty()) {
+                } else {
 
-                    Discord.playerLogin(player, Objects.requireNonNull(Messages.getString("Discord.Player-Login")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%IP%", String.valueOf(playerIP)), false);
+                    if (!Messages.getString("Discord.Player-Login").isEmpty()) {
 
+                        Discord.playerLogin(player, Objects.requireNonNull(Messages.getString("Discord.Player-Login")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%IP%", String.valueOf(playerIP)), false);
+
+                    }
                 }
             }
 
             //MySQL Handling
-            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+            if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
 
                 try {
 
-                    MySQLData.playerLogin(serverName, playerName, playerIP, player.hasPermission("loggerproxy.staff.log"));
+                    ExternalData.playerLogin(serverName, playerName, playerIP, player.hasPermission("loggerproxy.staff.log"));
 
                 } catch (Exception e) {
 

@@ -1,7 +1,7 @@
 package com.carpour.loggervelocity.Events.PluginDependent.LiteBans;
 
-import com.carpour.loggervelocity.Database.MySQL.MySQL;
-import com.carpour.loggervelocity.Database.MySQL.MySQLData;
+import com.carpour.loggervelocity.Database.External.External;
+import com.carpour.loggervelocity.Database.External.ExternalData;
 import com.carpour.loggervelocity.Database.SQLite.SQLite;
 import com.carpour.loggervelocity.Database.SQLite.SQLiteData;
 import com.carpour.loggervelocity.Discord.Discord;
@@ -9,7 +9,6 @@ import com.carpour.loggervelocity.Events.PluginDependent.LiteBans.Utils.Username
 import com.carpour.loggervelocity.Main;
 import com.carpour.loggervelocity.Utils.FileHandler;
 import com.mysql.cj.Messages;
-import com.velocitypowered.api.proxy.Player;
 import litebans.api.Entry;
 import litebans.api.Events;
 
@@ -32,12 +31,6 @@ public class OnLiteBanEvents implements Runnable{
             public void entryAdded(Entry entry) {
 
                 final Main main = Main.getInstance();
-
-                for (Player player : Main.getServer().getAllPlayers()) {
-
-                    if (player.hasPermission("loggerproxy.exempt")) return;
-
-                }
 
                 String entryType = entry.getType().toLowerCase();
                 String executorName = entry.getExecutorName();
@@ -117,11 +110,11 @@ public class OnLiteBanEvents implements Runnable{
                     }
 
                     // MySQL Handling
-                    if (main.getConfig().getBoolean("MySQL.Enable") && MySQL.isConnected()) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && External.isConnected()) {
 
                         try {
 
-                            MySQLData.liteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
+                            ExternalData.liteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
 
                         } catch (Exception e) { e.printStackTrace(); }
                     }

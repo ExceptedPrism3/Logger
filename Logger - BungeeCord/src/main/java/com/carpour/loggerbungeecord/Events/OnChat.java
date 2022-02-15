@@ -1,7 +1,7 @@
 package com.carpour.loggerbungeecord.Events;
 
 import com.carpour.loggerbungeecord.Database.SQLite.SQLiteData;
-import com.carpour.loggerbungeecord.Database.MySQL.MySQLData;
+import com.carpour.loggerbungeecord.Database.External.ExternalData;
 import com.carpour.loggerbungeecord.Discord.Discord;
 import com.carpour.loggerbungeecord.Main;
 import com.carpour.loggerbungeecord.Utils.FileHandler;
@@ -29,7 +29,7 @@ public class OnChat implements Listener {
 
             ProxiedPlayer player = (ProxiedPlayer) event.getSender();
             String server = player.getServer().getInfo().getName();
-            String message = event.getMessage();
+            String message = event.getMessage().replace("\\", "\\\\");
             String serverName = main.getConfig().getString("Server-Name");
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -61,10 +61,10 @@ public class OnChat implements Listener {
 
                         }
 
-                        if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                        if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
 
 
-                            MySQLData.playerChat(serverName, player.getName(), message, true);
+                            ExternalData.playerChat(serverName, player.getName(), message, true);
 
                         }
 
@@ -93,28 +93,31 @@ public class OnChat implements Listener {
                 }
 
                 //Discord Integration
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
+                if (!player.hasPermission("logger.exempt.discord")) {
 
-                    if (!Messages.getString("Discord.Player-Chat-Staff").isEmpty()) {
+                    if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
+                        if (!Messages.getString("Discord.Player-Chat-Staff").isEmpty()) {
 
-                    }
+                            Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
 
-                } else {
+                        }
 
-                    if (!Messages.getString("Discord.Player-Chat").isEmpty()) {
+                    } else {
 
-                        Discord.playerChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
+                        if (!Messages.getString("Discord.Player-Chat").isEmpty()) {
+
+                            Discord.playerChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
+                        }
                     }
                 }
 
                 //MySQL Handling
-                if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
 
                     try {
 
-                        MySQLData.playerChat(serverName, player.getName(), message, player.hasPermission("loggerproxy.staff.log"));
+                        ExternalData.playerChat(serverName, player.getName(), message, player.hasPermission("loggerproxy.staff.log"));
 
                     } catch (Exception e) {
 

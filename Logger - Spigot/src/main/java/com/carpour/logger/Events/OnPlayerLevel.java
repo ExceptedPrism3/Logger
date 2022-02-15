@@ -92,19 +92,22 @@ public class OnPlayerLevel implements Listener {
                 }
 
                 // Discord
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (!player.hasPermission("logger.exempt.discord")) {
 
-                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).isEmpty()) {
+                    if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%level%", String.valueOf(logAbove)), false);
+                        if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).isEmpty()) {
 
-                    }
+                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%level%", String.valueOf(logAbove)), false);
 
-                } else {
+                        }
 
-                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Level")).isEmpty()) {
+                    } else {
 
-                        Discord.playerLevel(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%level%", String.valueOf(logAbove)), false);
+                        if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Level")).isEmpty()) {
+
+                            Discord.playerLevel(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%level%", String.valueOf(logAbove)), false);
+                        }
                     }
                 }
 

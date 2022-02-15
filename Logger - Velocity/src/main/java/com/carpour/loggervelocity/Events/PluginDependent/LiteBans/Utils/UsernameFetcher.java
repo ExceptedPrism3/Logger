@@ -31,7 +31,6 @@ public class UsernameFetcher {
             e.printStackTrace();
 
         }
-
         return name;
     }
 }

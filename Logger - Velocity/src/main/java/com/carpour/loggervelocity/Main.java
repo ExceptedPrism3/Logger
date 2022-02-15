@@ -2,8 +2,8 @@ package com.carpour.loggervelocity;
 
 import com.carpour.loggervelocity.API.LiteBansUtil;
 import com.carpour.loggervelocity.Commands.Reload;
-import com.carpour.loggervelocity.Database.MySQL.MySQL;
-import com.carpour.loggervelocity.Database.MySQL.MySQLData;
+import com.carpour.loggervelocity.Database.External.External;
+import com.carpour.loggervelocity.Database.External.ExternalData;
 import com.carpour.loggervelocity.Database.SQLite.SQLite;
 import com.carpour.loggervelocity.Database.SQLite.SQLiteData;
 import com.carpour.loggervelocity.Discord.Discord;
@@ -39,7 +39,7 @@ public class Main{
 
     private Discord discord;
 
-    public MySQL mySQL;
+    public External external;
 
     public SQLite sqLite;
 
@@ -86,12 +86,12 @@ public class Main{
 
         if (config.getBoolean("MySQL.Enable")) {
 
-            mySQL = new MySQL();
-            mySQL.connect();
-            MySQLData mySQLData = new MySQLData(this);
-            if (MySQL.isConnected()) {
-                mySQLData.createTable();
-                mySQLData.emptyTable();
+            external = new External();
+            external.connect();
+            ExternalData externalData = new ExternalData(this);
+            if (External.isConnected()) {
+                externalData.createTable();
+                externalData.emptyTable();
             }
         }
 
@@ -129,7 +129,7 @@ public class Main{
 
         new Stop().run();
 
-        if (config.getBoolean("MySQL.Enable") && MySQL.isConnected()) mySQL.disconnect();
+        if (config.getBoolean("Database.Enable") && External.isConnected()) external.disconnect();
 
         if (config.getBoolean("SQLite.Enable") && SQLite.isConnected()) sqLite.disconnect();
 

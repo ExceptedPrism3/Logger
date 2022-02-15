@@ -35,8 +35,10 @@ public class OnSignSpy implements Listener {
                     players.sendMessage(ChatColor.translateAlternateColorCodes('&',
                             Objects.requireNonNull(main.getConfig().getString("Spy-Features.Sign-Spy.Message")).
                                     replace("%player%", player.getName()).
-                                    replace("%line1%", lines.get(0)).replace("%line2%", lines.get(1)).
-                                    replace("%line3%", lines.get(2)).replace("%line4%", lines.get(3))));
+                                    replace("%line1%", lines.get(0).replace("\\", "\\\\")).
+                                    replace("%line2%", lines.get(1).replace("\\", "\\\\")).
+                                    replace("%line3%", lines.get(2).replace("\\", "\\\\")).
+                                    replace("%line4%", lines.get(3).replace("\\", "\\\\"))));
 
                 }
             }

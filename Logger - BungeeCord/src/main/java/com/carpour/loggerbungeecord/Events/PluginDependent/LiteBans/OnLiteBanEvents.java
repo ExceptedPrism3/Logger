@@ -1,6 +1,6 @@
 package com.carpour.loggerbungeecord.Events.PluginDependent.LiteBans;
 
-import com.carpour.loggerbungeecord.Database.MySQL.MySQLData;
+import com.carpour.loggerbungeecord.Database.External.ExternalData;
 import com.carpour.loggerbungeecord.Database.SQLite.SQLiteData;
 import com.carpour.loggerbungeecord.Discord.Discord;
 import com.carpour.loggerbungeecord.Events.PluginDependent.LiteBans.Utils.UsernameFetcher;
@@ -9,7 +9,6 @@ import com.carpour.loggerbungeecord.Utils.FileHandler;
 import com.carpour.loggerbungeecord.Utils.Messages;
 import litebans.api.Entry;
 import litebans.api.Events;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Listener;
 
 import java.io.BufferedWriter;
@@ -31,12 +30,6 @@ public class OnLiteBanEvents implements Listener, Runnable{
             public void entryAdded(Entry entry) {
 
                 final Main main = Main.getInstance();
-
-                for (ProxiedPlayer player : main.getProxy().getPlayers()) {
-
-                    if (player.hasPermission("loggerproxy.exempt")) return;
-
-                }
 
                 String entryType = entry.getType().toLowerCase();
                 String executorName = entry.getExecutorName();
@@ -116,11 +109,11 @@ public class OnLiteBanEvents implements Listener, Runnable{
                     }
 
                     // MySQL Handling
-                    if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                    if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
 
                         try {
 
-                            MySQLData.liteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
+                            ExternalData.liteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
 
                         } catch (Exception e) {
 

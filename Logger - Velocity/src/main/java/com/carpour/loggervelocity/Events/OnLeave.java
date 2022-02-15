@@ -1,7 +1,7 @@
 package com.carpour.loggervelocity.Events;
 
-import com.carpour.loggervelocity.Database.MySQL.MySQL;
-import com.carpour.loggervelocity.Database.MySQL.MySQLData;
+import com.carpour.loggervelocity.Database.External.External;
+import com.carpour.loggervelocity.Database.External.ExternalData;
 import com.carpour.loggervelocity.Database.SQLite.SQLite;
 import com.carpour.loggervelocity.Database.SQLite.SQLiteData;
 import com.carpour.loggervelocity.Discord.Discord;
@@ -64,9 +64,9 @@ public class OnLeave {
 
                     }
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && MySQL.isConnected()) {
+                    if (main.getConfig().getBoolean("MySQL.Enable") && External.isConnected()) {
 
-                        MySQLData.playerLeave(serverName, playerName, true);
+                        ExternalData.playerLeave(serverName, playerName, true);
 
                     }
 
@@ -94,30 +94,32 @@ public class OnLeave {
             }
 
             // Discord Integration
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
+            if (!player.hasPermission("logger.exempt.discord")) {
 
-                if (!messages.getString("Discord.Player-Leave-Staff").isEmpty()) {
+                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
 
-                    Discord.staffChat(player, messages.getString("Discord.Player-Leave-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server), false);
+                    if (!messages.getString("Discord.Player-Leave-Staff").isEmpty()) {
 
-                }
+                        Discord.staffChat(player, messages.getString("Discord.Player-Leave-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server), false);
 
-            } else {
+                    }
 
-                if (!messages.getString("Discord.Player-Leave").isEmpty()) {
+                } else {
 
-                    Discord.playerLeave(player, messages.getString("Discord.Player-Leave").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server), false);
+                    if (!messages.getString("Discord.Player-Leave").isEmpty()) {
 
+                        Discord.playerLeave(player, messages.getString("Discord.Player-Leave").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server), false);
+
+                    }
                 }
             }
 
-
             // MySQL Handling
-            if (main.getConfig().getBoolean("MySQL.Enable") && MySQL.isConnected()) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && External.isConnected()) {
 
                 try {
 
-                    MySQLData.playerLeave(serverName, playerName, player.hasPermission("loggerproxy.staff.log"));
+                    ExternalData.playerLeave(serverName, playerName, player.hasPermission("loggerproxy.staff.log"));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

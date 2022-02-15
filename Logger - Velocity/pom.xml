@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Logger-Velocity</artifactId>
-    <version>1.7.2</version>
+    <version>1.7.3</version>
     <packaging>jar</packaging>
 
     <name>Logger-Velocity</name>
@@ -19,7 +19,7 @@
     <parent>
         <artifactId>Logger</artifactId>
         <groupId>com.carpour</groupId>
-        <version>1.7.2</version>
+        <version>1.7.3</version>
     </parent>
 
     <build>
@@ -163,6 +163,11 @@
             <artifactId>LiteBansAPI</artifactId>
             <version>LATEST</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>3.0.2-rc</version>
         </dependency>
     </dependencies>
 </project>
