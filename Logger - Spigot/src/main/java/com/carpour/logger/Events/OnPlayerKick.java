@@ -16,34 +16,34 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class OnPlayerKick implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onTabCompletion(PlayerKickEvent event){
+    public void onTabCompletion(final PlayerKickEvent event){
 
-        Player player = event.getPlayer();
-        String reason = event.getReason();
-        String worldName = player.getWorld().getName();
-        String playerName = player.getName();
-        int x = player.getLocation().getBlockX();
-        int y = player.getLocation().getBlockY();
-        int z = player.getLocation().getBlockZ();
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Kick")) {
 
-        if (player.hasPermission("logger.exempt")) return;
+            final Player player = event.getPlayer();
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log-Player.Kick")) {
+            if (player.hasPermission(loggerExempt)) return;
+
+            final String reason = event.getReason();
+            final String worldName = player.getWorld().getName();
+            final String playerName = player.getName();
+            final int x = player.getLocation().getBlockX();
+            final int y = player.getLocation().getBlockY();
+            final int z = player.getLocation().getBlockZ();
 
             // Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (isLogToFiles) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick-Staff")).isEmpty()) {
 
@@ -58,18 +58,18 @@ public class OnPlayerKick implements Listener {
 
                     } catch (IOException e) {
 
-                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
 
-                    if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+                    if (isExternal && this.main.external.isConnected()) {
 
                         ExternalData.playerKick(serverName, worldName, playerName, x, y, z, reason, true);
 
                     }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                    if (isSqlite && this.main.getSqLite().isConnected()) {
 
                         SQLiteData.insertPlayerKick(serverName, player, reason, true);
 
@@ -87,23 +87,22 @@ public class OnPlayerKick implements Listener {
 
                 } catch (IOException e) {
 
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             }
 
             // Discord
-            if (!player.hasPermission("logger.exempt.discord")) {
+            if (!player.hasPermission(loggerExemptDiscord)) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick-Staff")).isEmpty()) {
 
                         Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%reason%", reason), false);
 
                     }
-
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick")).isEmpty()) {
@@ -114,21 +113,21 @@ public class OnPlayerKick implements Listener {
             }
 
             // MySQL
-            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+            if (isExternal && this.main.external.isConnected()) {
 
                 try {
 
-                    ExternalData.playerKick(serverName, worldName, playerName, x, y, z, reason, player.hasPermission("logger.staff.log"));
+                    ExternalData.playerKick(serverName, worldName, playerName, x, y, z, reason, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {
 
-                    SQLiteData.insertPlayerKick(serverName, player, reason, player.hasPermission("logger.staff.log"));
+                    SQLiteData.insertPlayerKick(serverName, player, reason, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

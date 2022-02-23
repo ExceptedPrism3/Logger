@@ -13,7 +13,7 @@ public class Messages {
 
     private static Configuration messages = null;
 
-    public void init() {
+    public static void init() {
 
         saveDefaultConfig();
 
@@ -37,15 +37,15 @@ public class Messages {
         return str;
     }
 
-    public File getFile() {
-        return new File(Main.getInstance().getDataFolder(), "messages - Bungee.yml");
+    public static File getFile() {
+        return new File(Main.getInstance().getDataFolder(), "Messages/en.yml");
     }
 
-    private void saveDefaultConfig() {
+    private static void saveDefaultConfig() {
 
         if (!Main.getInstance().getDataFolder().exists()) Main.getInstance().getDataFolder().mkdir();
 
-        File file = getFile();
+        final File file = getFile();
 
         if (!file.exists()) {
 
@@ -53,9 +53,9 @@ public class Messages {
 
                 file.createNewFile();
 
-                try (InputStream is = Main.getInstance().getResourceAsStream("messages - Bungee.yml")) {
+                try (final InputStream is = Main.getInstance().getResourceAsStream("Messages/en.yml")) {
 
-                    OutputStream os = new FileOutputStream(file);
+                    final OutputStream os = new FileOutputStream(file);
                     ByteStreams.copy(is, os);
                     os.close();
 

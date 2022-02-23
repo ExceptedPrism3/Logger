@@ -12,28 +12,30 @@ import org.bukkit.event.player.PlayerEditBookEvent;
 import java.util.List;
 import java.util.Objects;
 
+import static com.carpour.logger.Utils.Data.*;
+
 public class OnBookSpy implements Listener{
 
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBookSpy(PlayerEditBookEvent event) {
+    public void onBookSpy(final PlayerEditBookEvent event) {
 
-        Player player = event.getPlayer();
+        if (this.main.getConfig().getBoolean("Log-Player.Book-Editing")
+                && this.main.getConfig().getBoolean("Spy-Features.Book-Spy.Enable")) {
 
-        if (player.hasPermission("logger.exempt") || player.hasPermission("logger.spy.bypass")) return;
+            final Player player = event.getPlayer();
 
-        //Book Spy
-        if (main.getConfig().getBoolean("Log-Player.Book-Editing") && main.getConfig().getBoolean("Spy-Features.Book-Spy.Enable")) {
+            if (player.hasPermission(loggerExempt) || player.hasPermission(loggerSpyBypass)) return;
 
-            List<String> pageContent = event.getNewBookMeta().getPages();
+            final List<String> pageContent = event.getNewBookMeta().getPages();
 
             for (Player players : Bukkit.getOnlinePlayers()) {
 
-                if (players.hasPermission("logger.spy")) {
+                if (players.hasPermission(loggerSpy)) {
 
                     players.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                            Objects.requireNonNull(main.getConfig().getString("Spy-Features.Book-Spy.Message")).
+                            Objects.requireNonNull(this.main.getConfig().getString("Spy-Features.Book-Spy.Message")).
                                     replace("%player%", player.getName()).
                                     replace("%content%", pageContent.toString().replace("\\", "\\\\"))));
 

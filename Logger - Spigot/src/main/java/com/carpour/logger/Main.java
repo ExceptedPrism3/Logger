@@ -25,11 +25,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
 
+import static com.carpour.logger.Utils.Data.*;
+
 public class Main extends JavaPlugin {
 
     private static Main instance;
 
-    public External external;
+    private External external;
 
     private SQLite sqLite;
 
@@ -43,38 +45,20 @@ public class Main extends JavaPlugin {
         saveDefaultConfig();
         getConfig().options().copyDefaults();
 
+        this.initializer(new Data());
+
         Messages.Setup();
         Messages.get().options().copyDefaults(true);
 
         DiscordFile.Setup();
         DiscordFile.get().options().copyDefaults(true);
 
-        discord = new Discord();
-        discord.run();
+        this.discord = new Discord();
+        this.discord.run();
 
-        if (getConfig().getBoolean("Database.Enable")) {
+        databaseSetup();
 
-            external = new External();
-            external.connect();
-            ExternalData externalData = new ExternalData(this);
-            if (external.isConnected()) {
-                externalData.createTable();
-                externalData.emptyTable();
-            }
-        }
-
-        if (getConfig().getBoolean("SQLite.Enable")) {
-
-            sqLite = new SQLite();
-            sqLite.connect();
-            SQLiteData sqLiteData = new SQLiteData(this);
-            if (sqLite.isConnected()) {
-                sqLiteData.createTable();
-                sqLiteData.emptyTable();
-            }
-        }
-
-        if (getConfig().getBoolean("Log-to-Files") && getConfig().getBoolean("SQLite.Enable")){
+        if (isLogToFiles && isSqlite){
 
             getLogger().warning("Logging to Files and SQLite are both enabled, this might impact your Server's Performance!");
 
@@ -109,10 +93,89 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnFurnace(), this);
         getServer().getPluginManager().registerEvents(new OnCraft(), this);
 
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new TPS(), 300L, getConfig().getInt("RAM-TPS-Checker"));
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new RAM(), 300L, getConfig().getInt("RAM-TPS-Checker"));
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, new TPS(), 300L, ramTpsChecker);
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, new RAM(), 300L, ramTpsChecker);
 
         Objects.requireNonNull(getCommand("logger")).setExecutor(new OnLogger());
+
+        new ASCIIArt().Art();
+
+        // bStats
+        new Metrics(this, 12036);
+
+        // Update Checker
+        if (isUpdateChecker) {
+
+            UpdateChecker.init(this, resource_ID)
+                    .checkEveryXHours(2)
+                    .setChangelogLink(resource_ID)
+                    .setNotifyByPermissionOnJoin(loggerUpdate)
+                    .checkNow();
+
+        }
+
+        loadPluginDepends();
+
+        getLogger().info(ChatColor.GOLD + "Thank you " + ChatColor.GREEN + ChatColor.BOLD + "thelooter" + ChatColor.GOLD + " for the Contribution!");
+
+        getLogger().info("Plugin Enabled!");
+
+        new Start().run();
+    }
+
+    @Override
+    public void onDisable() {
+
+        new Stop().run();
+
+        if (isExternal && this.external.isConnected()) this.external.disconnect();
+
+        if (isSqlite && this.sqLite.isConnected()) this.sqLite.disconnect();
+
+        this.discord.disconnect();
+
+        getLogger().info("Plugin Disabled!");
+
+    }
+
+    private void initializer(Data data){
+
+        data.initializeDateFormatter();
+        data.initializeStrings();
+        data.initializeListOfStrings();
+        data.initializeIntegers();
+        data.initializeLongs();
+        data.initializeBooleans();
+        data.initializePermissionStrings();
+
+    }
+
+    private void databaseSetup(){
+
+        if (isExternal) {
+
+            this.external = new External();
+            this.external.connect();
+            ExternalData externalData = new ExternalData(this);
+            if (this.external.isConnected()) {
+                externalData.createTable();
+                externalData.emptyTable();
+            }
+        }
+
+        if (isSqlite) {
+
+            this.sqLite = new SQLite();
+            this.sqLite.connect();
+            SQLiteData sqLiteData = new SQLiteData(this);
+            if (this.sqLite.isConnected()) {
+                sqLiteData.createTable();
+                sqLiteData.emptyTable();
+            }
+        }
+    }
+
+    private void loadPluginDepends(){
 
         if (EssentialsUtil.getEssentialsAPI() != null){
 
@@ -136,53 +199,17 @@ public class Main extends JavaPlugin {
 
                 OnVault vault = new OnVault();
                 getServer().getPluginManager().registerEvents(vault, this);
-                getServer().getScheduler().scheduleSyncRepeatingTask(this, vault, 60L, getConfig().getInt("Vault.Checker"));
+                getServer().getScheduler().scheduleSyncRepeatingTask(this, vault, 60L, vaultChecker);
             }
 
             getLogger().info("Vault Plugin Detected!");
 
         }
-
-        new ASCIIArt().Art();
-
-        // bstats
-        new Metrics(this, 12036);
-
-        // Update Checker
-        if (getConfig().getBoolean("Update-Checker")) {
-
-            int resource_ID = 94236;
-            UpdateChecker.init(this, resource_ID)
-                    .checkEveryXHours(2)
-                    .setChangelogLink(resource_ID)
-                    .setNotifyByPermissionOnJoin("logger.update")
-                    .checkNow();
-
-        }
-
-        getLogger().info(ChatColor.GOLD + "Thank you " + ChatColor.GREEN + ChatColor.BOLD + "thelooter" + ChatColor.GOLD + " for the Contribution!");
-
-        getLogger().info("Plugin Enabled!");
-
-        new Start().run();
-    }
-
-    @Override
-    public void onDisable() {
-
-        new Stop().run();
-
-        if (getConfig().getBoolean("Database.Enable") && external.isConnected()) external.disconnect();
-
-        if (getConfig().getBoolean("SQLite.Enable") && sqLite.isConnected()) sqLite.disconnect();
-
-        discord.disconnect();
-
-        getLogger().info("Plugin Disabled!");
-
     }
 
     public static Main getInstance() { return instance; }
 
-    public SQLite getSqLite() { return sqLite; }
+    public External getExternal() { return this.external; }
+
+    public SQLite getSqLite() { return this.sqLite; }
 }

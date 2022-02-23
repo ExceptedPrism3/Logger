@@ -11,8 +11,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class Stop {
 
@@ -20,13 +21,10 @@ public class Stop {
 
     public void run() {
 
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        if (main.getConfig().getBoolean("Log-Server.Stop")) {
+        if (this.main.getConfig().getBoolean("Log-Server.Stop")) {
 
             // Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (isLogToFiles) {
 
                 try {
 
@@ -36,7 +34,7 @@ public class Stop {
 
                 } catch (IOException e) {
 
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -49,7 +47,7 @@ public class Stop {
             }
 
             // MySQL
-            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+            if (isExternal && this.main.external.isConnected()) {
 
                 try {
 
@@ -59,7 +57,7 @@ public class Stop {
             }
 
             // SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {
 

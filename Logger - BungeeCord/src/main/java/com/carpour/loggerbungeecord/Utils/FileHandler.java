@@ -12,6 +12,9 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import static com.carpour.loggerbungeecord.Utils.Data.fileDeletion;
+import static com.carpour.loggerbungeecord.Utils.Data.isStaffEnabled;
+
 public class FileHandler {
 
     private final Main main = Main.getInstance();
@@ -44,11 +47,11 @@ public class FileHandler {
 
         dataFolder.mkdir();
 
-        File logsFolder = new File(dataFolder, "Logs");
+        final File logsFolder = new File(dataFolder, "Logs");
         logsFolder.mkdirs();
 
-        Date date = new Date();
-        SimpleDateFormat filenameDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        final Date date = new Date();
+        final SimpleDateFormat filenameDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         staffLogFolder = new File(logsFolder, "Staff");
         staffLogFile = new File(staffLogFolder, filenameDateFormat.format(date) + ".log");
@@ -79,18 +82,18 @@ public class FileHandler {
 
         liteBansLogFolder = new File(logsFolder, "LiteBans");
 
-        File liteBansBansLogFolder = new File(liteBansLogFolder, "Bans");
+        final File liteBansBansLogFolder = new File(liteBansLogFolder, "Bans");
         liteBansBansLogFile = new File(liteBansBansLogFolder, filenameDateFormat.format(date) + ".log");
 
-        File liteBansMuteLogFolder = new File(liteBansLogFolder, "Mutes");
+        final File liteBansMuteLogFolder = new File(liteBansLogFolder, "Mutes");
         liteBansMuteLogFile = new File(liteBansMuteLogFolder, filenameDateFormat.format(date) + ".log");
 
-        File liteBansKickLogFolder = new File(liteBansLogFolder, "Kick");
+        final File liteBansKickLogFolder = new File(liteBansLogFolder, "Kick");
         liteBansKickLogFile = new File(liteBansKickLogFolder, filenameDateFormat.format(date) + ".log");
 
         try {
 
-            if (main.getConfig().getBoolean("Staff.Enabled")) staffLogFolder.mkdir();
+            if (isStaffEnabled) staffLogFolder.mkdir();
             chatLogFolder.mkdir();
             commandLogFolder.mkdir();
             loginLogFolder.mkdir();
@@ -107,7 +110,7 @@ public class FileHandler {
                 liteBansKickLogFolder.mkdir();
             }
 
-            if (main.getConfig().getBoolean("Staff.Enabled")) staffLogFile.createNewFile();
+            if (isStaffEnabled) staffLogFile.createNewFile();
             chatLogFile.createNewFile();
             commandLogFile.createNewFile();
             loginLogFile.createNewFile();
@@ -156,7 +159,7 @@ public class FileHandler {
 
     public void deleteFile(File file) {
 
-        if (main.getConfig().getInt("File-Deletion") <= 0 ){ return; }
+        if (fileDeletion <= 0 ){ return; }
 
         FileTime creationTime = null;
 
@@ -170,9 +173,9 @@ public class FileHandler {
         }
 
         assert creationTime != null;
-        long offset = System.currentTimeMillis() - creationTime.toMillis();
-        long fileDeletionDays = main.getConfig().getInt("File-Deletion");
-        long maxAge = TimeUnit.DAYS.toMillis(fileDeletionDays);
+        final long offset = System.currentTimeMillis() - creationTime.toMillis();
+        final long fileDeletionDays = main.getConfig().getInt("File-Deletion");
+        final long maxAge = TimeUnit.DAYS.toMillis(fileDeletionDays);
 
         if(offset > maxAge) {
 
@@ -183,16 +186,15 @@ public class FileHandler {
 
     public void deleteFiles(){
 
-        if (main.getConfig().getInt("File-Deletion") <= 0 ){ return; }
+        if (fileDeletion<= 0 ){ return; }
 
-        if (main.getConfig().getBoolean("Staff.Enabled")){
+        if (isStaffEnabled){
 
             for (File staffLog : Objects.requireNonNull(staffLogFolder.listFiles())) {
 
                 deleteFile(staffLog);
 
             }
-
         }
 
         for (File chatLog : Objects.requireNonNull(chatLogFolder.listFiles()))

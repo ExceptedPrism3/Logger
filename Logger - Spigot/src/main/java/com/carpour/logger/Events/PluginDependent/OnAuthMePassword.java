@@ -16,30 +16,30 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class OnAuthMePassword implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void password(FailedLoginEvent e) {
+    public void password(final FailedLoginEvent e) {
 
-        Player player = e.getPlayer();
-        String playerName = player.getName();
-        String worldName = player.getWorld().getName();
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (this.main.getConfig().getBoolean("Log-Extras.AuthMe-Wrong-Password")) {
 
-        if (player.hasPermission("logger.exempt")) return;
+            final Player player = e.getPlayer();
 
-        if (main.getConfig().getBoolean("Log-Extras.AuthMe-Wrong-Password")) {
+            if (player.hasPermission(loggerExempt)) return;
+
+            final String playerName = player.getName();
+            final String worldName = player.getWorld().getName();
 
             // Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (isLogToFiles) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.Wrong-Password-Staff")).isEmpty()) {
 
@@ -54,18 +54,18 @@ public class OnAuthMePassword implements Listener {
 
                     } catch (IOException event) {
 
-                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                         event.printStackTrace();
 
                     }
 
-                    if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+                    if (isExternal && this.main.external.isConnected()) {
 
                         ExternalData.wrongPassword(serverName, worldName, playerName, true);
 
                     }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                    if (isSqlite && this.main.getSqLite().isConnected()) {
 
                         SQLiteData.insertWrongPassword(serverName, player, true);
 
@@ -83,23 +83,22 @@ public class OnAuthMePassword implements Listener {
 
                 } catch (IOException event) {
 
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     event.printStackTrace();
 
                 }
             }
 
             // Discord
-            if (!player.hasPermission("logger.exempt.discord")) {
+            if (!player.hasPermission(loggerExemptDiscord)) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.Wrong-Password-Staff")).isEmpty()) {
 
                         Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.Wrong-Password-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName), false);
 
                     }
-
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.Wrong-Password")).isEmpty()) {
@@ -110,21 +109,21 @@ public class OnAuthMePassword implements Listener {
             }
 
             // MySQL
-            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+            if (isExternal && this.main.external.isConnected()) {
 
                 try {
 
-                    ExternalData.wrongPassword(serverName, worldName, playerName, player.hasPermission("logger.staff.log"));
+                    ExternalData.wrongPassword(serverName, worldName, playerName, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception event) { event.printStackTrace(); }
             }
 
             // SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {
 
-                    SQLiteData.insertWrongPassword(serverName, player, player.hasPermission("logger.staff.log"));
+                    SQLiteData.insertWrongPassword(serverName, player, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

@@ -20,11 +20,12 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class OnVault implements Listener, Runnable {
 
@@ -35,28 +36,26 @@ public class OnVault implements Listener, Runnable {
     @Override
     public void run() {
 
-        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+        if (this.main.getConfig().getBoolean("Log-Extras.Vault")) {
 
-            if (player.hasPermission("logger.exempt")) return;
+            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 
-            for (Map.Entry<UUID, Double> bal : players.entrySet()) {
+                if (player.hasPermission(loggerExempt)) return;
 
-                String playerName = player.getName();
-                String serverName = main.getConfig().getString("Server-Name");
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                for (Map.Entry<UUID, Double> bal : this.players.entrySet()) {
 
-                if (econ.getBalance(player.getPlayer()) != players.get(player.getUniqueId())) {
+                    final String playerName = player.getName();
 
-                    double oldBalance = bal.getValue();
-                    players.put(player.getUniqueId(), econ.getBalance(player.getPlayer()));
-                    double newBalance = bal.getValue();
+                    if (this.econ.getBalance(player.getPlayer()) != this.players.get(player.getUniqueId())) {
 
-                    if (main.getConfig().getBoolean("Log-Extras.Vault")) {
+                        double oldBalance = bal.getValue();
+                        this.players.put(player.getUniqueId(), this.econ.getBalance(player.getPlayer()));
+                        double newBalance = bal.getValue();
 
                         // Log To Files Handling
-                        if (main.getConfig().getBoolean("Log-to-Files")) {
+                        if (isLogToFiles) {
 
-                            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault-Staff")).isEmpty()) {
 
@@ -72,18 +71,18 @@ public class OnVault implements Listener, Runnable {
 
                                 } catch (IOException e) {
 
-                                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                                     e.printStackTrace();
 
                                 }
 
-                                if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+                                if (isExternal && this.main.external.isConnected()) {
 
                                     ExternalData.vault(serverName, playerName, oldBalance, newBalance, true);
 
                                 }
 
-                                if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                                if (isSqlite && this.main.getSqLite().isConnected()) {
 
                                     SQLiteData.insertVault(serverName, player, oldBalance, newBalance, true);
 
@@ -101,16 +100,16 @@ public class OnVault implements Listener, Runnable {
 
                             } catch (IOException e) {
 
-                                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                                this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                                 e.printStackTrace();
 
                             }
                         }
 
                         // Discord Integration
-                        if (!player.hasPermission("logger.exempt.discord")) {
+                        if (!player.hasPermission(loggerExemptDiscord)) {
 
-                            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault-Staff")).isEmpty()) {
 
@@ -128,21 +127,21 @@ public class OnVault implements Listener, Runnable {
                         }
 
                         // MySQL Handling
-                        if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+                        if (isExternal && this.main.external.isConnected()) {
 
                             try {
 
-                                ExternalData.vault(serverName, playerName, oldBalance, newBalance, player.hasPermission("logger.staff.log"));
+                                ExternalData.vault(serverName, playerName, oldBalance, newBalance, player.hasPermission(loggerStaffLog));
 
                             } catch (Exception e) { e.printStackTrace(); }
                         }
 
                         // SQLite Handling
-                        if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                        if (isSqlite && this.main.getSqLite().isConnected()) {
 
                             try {
 
-                                SQLiteData.insertVault(serverName, player, oldBalance, newBalance, player.hasPermission("logger.staff.log"));
+                                SQLiteData.insertVault(serverName, player, oldBalance, newBalance, player.hasPermission(loggerStaffLog));
 
                             } catch (Exception exception) { exception.printStackTrace(); }
                         }
@@ -153,16 +152,16 @@ public class OnVault implements Listener, Runnable {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onJoin(PlayerJoinEvent event){
+    public void onJoin(final PlayerJoinEvent event){
 
-        players.put(event.getPlayer().getUniqueId(), econ.getBalance(event.getPlayer()));
+        this.players.put(event.getPlayer().getUniqueId(), this.econ.getBalance(event.getPlayer()));
 
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onLeave(PlayerQuitEvent event){
+    public void onLeave(final PlayerQuitEvent event){
 
-        players.remove(event.getPlayer().getUniqueId());
+        this.players.remove(event.getPlayer().getUniqueId());
 
     }
 }

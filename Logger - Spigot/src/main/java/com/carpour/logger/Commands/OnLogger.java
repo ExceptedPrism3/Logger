@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+import static com.carpour.logger.Utils.Data.*;
+
 public class OnLogger implements CommandExecutor {
 
     private final Main main = Main.getInstance();
@@ -18,7 +20,7 @@ public class OnLogger implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
 
-        if (sender.hasPermission("logger.staff") || sender.hasPermission("logger.reload")) {
+        if (sender.hasPermission(loggerStaff) || sender.hasPermission(loggerReload)) {
 
             if (args.length != 0 && !(args[0].equalsIgnoreCase("Reload") || args[0].equalsIgnoreCase("Credits"))) {
 
@@ -29,7 +31,7 @@ public class OnLogger implements CommandExecutor {
 
                 if (args[0].equalsIgnoreCase("Reload")) {
 
-                    main.reloadConfig();
+                    this.main.reloadConfig();
                     Messages.reload();
                     DiscordFile.reload();
                     sender.sendMessage(Objects.requireNonNull(Messages.get().getString("General.Reload")).replaceAll("&", "§"));
@@ -51,7 +53,7 @@ public class OnLogger implements CommandExecutor {
 
             } else if (args.length == 0) {
 
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "Running Logger &a&l" + Main.getInstance().getDescription().getVersion() + "\n" +
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "Running Logger &a&l" + pluginVersion + "\n" +
                         "&f/Logger credits &6- &bShows the plugin's Authors\n&f/Logger reload &6- &bReloads the Plugin"));
 
             }

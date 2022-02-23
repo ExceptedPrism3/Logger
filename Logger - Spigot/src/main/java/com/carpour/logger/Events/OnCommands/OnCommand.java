@@ -18,66 +18,59 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class OnCommand implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerCmd(PlayerCommandPreprocessEvent event) {
-
-        Player player = event.getPlayer();
-        World world = player.getWorld();
-        String worldName = world.getName();
-        String playerName = player.getName();
-        String command = event.getMessage().replace("\\", "\\\\");
-        List<String> commandParts = Arrays.asList(event.getMessage().split("\\s+"));
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")
-                && main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) return;
-
-        // Stop Adding Message to Log if the Player has the correct Permissions
-        if (player.hasPermission("logger.exempt")) return;
-
-        // Blacklisted Commands
-        if (main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
-
-            for (String m : main.getConfig().getStringList("Player-Commands.Commands-to-Block")) {
-
-                if (commandParts.get(0).equalsIgnoreCase(m)) return;
-
-            }
-        }
+    public void onPlayerCmd(final PlayerCommandPreprocessEvent event) {
 
         // Commands Spy
-        if (main.getConfig().getBoolean("Spy-Features.Commands-Spy.Enable")) {
+        if (this.main.getConfig().getBoolean("Spy-Features.Commands-Spy.Enable")) {
 
-            OnCommandSpy commandSpy = new OnCommandSpy();
-            commandSpy.onCmdSpy(event);
+            new OnCommandSpy().onCmdSpy(event);
 
         }
 
         // Whitelist Commands
-        if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")){
+        if (isWhitelisted) {
 
-            OnCommandWhitelist whitelist = new OnCommandWhitelist();
-            whitelist.onWhitelistedCommand(event);
+            new OnCommandWhitelist().onWhitelistedCommand(event);
 
             return;
         }
 
-        // Logging to File if logging to File and Command Logging is enabled
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log-Player.Commands")) {
+        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Commands")) {
 
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            final Player player = event.getPlayer();
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+            if (player.hasPermission(loggerExempt) || (isWhitelisted && isBlacklisted)) return;
+
+            final World world = player.getWorld();
+            final String worldName = world.getName();
+            final String playerName = player.getName();
+            final String command = event.getMessage().replace("\\", "\\\\");
+            final List<String> commandParts = Arrays.asList(event.getMessage().split("\\s+"));
+
+            // Blacklisted Commands
+            if (isBlacklisted) {
+
+                for (String m : commandsToBlock) {
+
+                    if (commandParts.get(0).equalsIgnoreCase(m)) return;
+
+                }
+            }
+
+            if (isLogToFiles) {
+
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Staff")).isEmpty()) {
 
@@ -93,18 +86,18 @@ public class OnCommand implements Listener {
 
                     } catch (IOException e) {
 
-                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
 
-                    if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+                    if (isExternal && this.main.external.isConnected()) {
 
                         ExternalData.playerCommands(serverName, worldName, playerName, command, true);
 
                     }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                    if (isSqlite && this.main.getSqLite().isConnected()) {
 
                         SQLiteData.insertPlayerCommands(serverName, player, command, true);
 
@@ -122,45 +115,47 @@ public class OnCommand implements Listener {
 
                 } catch (IOException e) {
 
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             }
 
             // Discord
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+            if (!player.hasPermission(loggerExemptDiscord)) {
 
-                if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Staff")).isEmpty()) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%command%", command), false);
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Staff")).isEmpty()) {
 
-                }
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%command%", command), false);
 
-            } else {
+                    }
+                } else {
 
-                if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands")).isEmpty()) {
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands")).isEmpty()) {
 
-                    Discord.playerCommand(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%command%", command), false);
+                        Discord.playerCommand(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%command%", command), false);
+                    }
                 }
             }
 
             // Logging to MySQL if logging to MySQL and Command Logging is enabled
-            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+            if (isExternal && this.main.external.isConnected()) {
 
                 try {
 
-                    ExternalData.playerCommands(serverName, worldName, playerName, command, player.hasPermission("logger.staff.log"));
+                    ExternalData.playerCommands(serverName, worldName, playerName, command, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }
 
             // Logging to SQLite if logging to SQLite and Command Logging is enabled
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {
 
-                    SQLiteData.insertPlayerCommands(serverName, player, command, player.hasPermission("logger.staff.log"));
+                    SQLiteData.insertPlayerCommands(serverName, player, command, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

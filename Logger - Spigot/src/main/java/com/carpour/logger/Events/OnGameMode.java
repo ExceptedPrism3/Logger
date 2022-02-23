@@ -18,34 +18,34 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class OnGameMode implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onGameMode(PlayerGameModeChangeEvent event) {
+    public void onGameMode(final PlayerGameModeChangeEvent event) {
 
-        Player player = event.getPlayer();
-        String playerName = player.getName();
-        World world = player.getWorld();
-        String worldName = world.getName();
-        String gameMode = Objects.requireNonNull(main.getConfig().getString("Game-Mode"));
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Game-Mode")) {
 
-        if (player.hasPermission("logger.exempt") || gameMode.isEmpty()) return;
+            final String gameMode = gameModeConf;
+            final Player player = event.getPlayer();
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log-Player.Game-Mode")) {
+            if (player.hasPermission(loggerExempt) || gameMode.isEmpty()) return;
 
             if (event.getNewGameMode() == GameMode.valueOf(gameMode.toUpperCase())) {
 
-                // Log To Files Handling
-                if (main.getConfig().getBoolean("Log-to-Files")) {
+                final String playerName = player.getName();
+                final World world = player.getWorld();
+                final String worldName = world.getName();
 
-                    if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                // Log To Files Handling
+                if (isLogToFiles) {
+
+                    if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode-Staff")).isEmpty()) {
 
@@ -61,18 +61,18 @@ public class OnGameMode implements Listener {
 
                         } catch (IOException e) {
 
-                            main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                            this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
 
                         }
 
-                        if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+                        if (isExternal && this.main.external.isConnected()) {
 
                             ExternalData.gameMode(serverName, worldName, playerName, gameMode, true);
 
                         }
 
-                        if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                        if (isSqlite && this.main.getSqLite().isConnected()) {
 
                             SQLiteData.insertGameMode(serverName, worldName, playerName, gameMode, true);
 
@@ -90,23 +90,22 @@ public class OnGameMode implements Listener {
 
                     } catch (IOException e) {
 
-                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
                 }
 
                 // Discord Integration
-                if (!player.hasPermission("logger.exempt.discord")) {
+                if (!player.hasPermission(loggerExemptDiscord)) {
 
-                    if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                    if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode-Staff")).isEmpty()) {
 
                             Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%game-mode%", gameMode), false);
 
                         }
-
                     } else {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode")).isEmpty()) {
@@ -117,21 +116,21 @@ public class OnGameMode implements Listener {
                 }
 
                 // MySQL Handling
-                if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+                if (isExternal && this.main.external.isConnected()) {
 
                     try {
 
-                        ExternalData.gameMode(serverName, worldName, playerName, gameMode, player.hasPermission("logger.staff.log"));
+                        ExternalData.gameMode(serverName, worldName, playerName, gameMode, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
 
                 // SQLite Handling
-                if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                if (isSqlite && this.main.getSqLite().isConnected()) {
 
                     try {
 
-                        SQLiteData.insertGameMode(serverName, worldName, playerName, gameMode, player.hasPermission("logger.staff.log"));
+                        SQLiteData.insertGameMode(serverName, worldName, playerName, gameMode, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception exception) { exception.printStackTrace(); }
                 }

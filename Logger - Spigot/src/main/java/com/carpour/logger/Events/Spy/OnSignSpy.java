@@ -13,27 +13,30 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static com.carpour.logger.Utils.Data.*;
+
 public class OnSignSpy implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onSignSpy(SignChangeEvent event) {
+    public void onSignSpy(final SignChangeEvent event) {
 
-        Player player = event.getPlayer();
+        if (this.main.getConfig().getBoolean("Log-Player.Sign-Text")
+                && this.main.getConfig().getBoolean("Spy-Features.Sign-Spy.Enable")) {
 
-        if (player.hasPermission("logger.exempt") || player.hasPermission("logger.spy.bypass")) return;
+            final Player player = event.getPlayer();
 
-        if (main.getConfig().getBoolean("Log-Player.Sign-Text") && main.getConfig().getBoolean("Spy-Features.Sign-Spy.Enable")) {
+            if (player.hasPermission(loggerExempt) || player.hasPermission(loggerSpyBypass)) return;
 
-            List<String> lines = Arrays.asList(event.getLines());
+            final List<String> lines = Arrays.asList(event.getLines());
 
             for (Player players : Bukkit.getOnlinePlayers()) {
 
-                if (players.hasPermission("logger.spy")) {
+                if (players.hasPermission(loggerSpy)) {
 
                     players.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                            Objects.requireNonNull(main.getConfig().getString("Spy-Features.Sign-Spy.Message")).
+                            Objects.requireNonNull(this.main.getConfig().getString("Spy-Features.Sign-Spy.Message")).
                                     replace("%player%", player.getName()).
                                     replace("%line1%", lines.get(0).replace("\\", "\\\\")).
                                     replace("%line2%", lines.get(1).replace("\\", "\\\\")).

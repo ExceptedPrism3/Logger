@@ -17,8 +17,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class OnPlayerChat implements Listener {
 
@@ -27,22 +28,21 @@ public class OnPlayerChat implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(final AsyncPlayerChatEvent event) {
 
-        final Player player = event.getPlayer();
-        World world = player.getWorld();
-        final String worldName = world.getName();
-        final String playerName = player.getName();
-        String msg = event.getMessage().replace("\\", "\\\\");
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Chat")) {
 
-        if (player.hasPermission("logger.exempt")) return;
+            final Player player = event.getPlayer();
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log-Player.Chat")) {
+            if (player.hasPermission(loggerExempt)) return;
+
+            final World world = player.getWorld();
+            final String worldName = world.getName();
+            final String playerName = player.getName();
+            final String msg = event.getMessage().replace("\\", "\\\\");
 
             // Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (isLogToFiles) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat-Staff")).isEmpty()) {
 
@@ -58,18 +58,18 @@ public class OnPlayerChat implements Listener {
 
                     } catch (IOException e) {
 
-                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
 
-                    if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+                    if (isExternal && this.main.external.isConnected()) {
 
                         ExternalData.playerChat(serverName, worldName, playerName, msg, true);
 
                     }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                    if (isSqlite && this.main.getSqLite().isConnected()) {
 
                         SQLiteData.insertPlayerChat(serverName, player, msg, true);
 
@@ -87,23 +87,22 @@ public class OnPlayerChat implements Listener {
 
                 } catch (IOException e) {
 
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             }
 
             // Discord Integration
-            if (!player.hasPermission("logger.exempt.discord")) {
+            if (!player.hasPermission(loggerExemptDiscord)) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat-Staff")).isEmpty()) {
 
                         Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%message%", msg), false);
 
                     }
-
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Chat")).isEmpty()) {
@@ -114,21 +113,21 @@ public class OnPlayerChat implements Listener {
             }
 
             // MySQL Handling
-            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+            if (isExternal && this.main.external.isConnected()) {
 
                 try {
 
-                    ExternalData.playerChat(serverName, worldName, playerName, msg, player.hasPermission("logger.staff.log"));
+                    ExternalData.playerChat(serverName, worldName, playerName, msg, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite Handling
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {
 
-                    SQLiteData.insertPlayerChat(serverName, player, msg, player.hasPermission("logger.staff.log"));
+                    SQLiteData.insertPlayerChat(serverName, player, msg, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

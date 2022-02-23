@@ -10,27 +10,28 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import java.util.Objects;
 
+import static com.carpour.logger.Utils.Data.*;
+
 public class OnCommandSpy implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onCmdSpy(PlayerCommandPreprocessEvent event) {
+    public void onCmdSpy(final PlayerCommandPreprocessEvent event) {
 
-        Player player = event.getPlayer();
+        if (this.main.getConfig().getBoolean("Log-Player.Commands")
+                && this.main.getConfig().getBoolean("Spy-Features.Commands-Spy.Enable")) {
 
-        if (player.hasPermission("logger.exempt") ||
-                player.hasPermission("logger.spy.bypass")) return;
+            final Player player = event.getPlayer();
 
-        // Command Spy
-        if (main.getConfig().getBoolean("Log-Player.Commands") && main.getConfig().getBoolean("Spy-Features.Commands-Spy.Enable")) {
+            if (player.hasPermission(loggerExempt) || player.hasPermission(loggerSpyBypass)) return;
 
             for (Player players : Bukkit.getOnlinePlayers()) {
 
-                if (players.hasPermission("logger.spy")) {
+                if (players.hasPermission(loggerSpy)) {
 
                     players.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                            Objects.requireNonNull(main.getConfig().getString("Spy-Features.Commands-Spy.Message")).
+                            Objects.requireNonNull(this.main.getConfig().getString("Spy-Features.Commands-Spy.Message")).
                                     replace("%player%", player.getName()).
                                     replace("%cmd%", event.getMessage().replace("\\", "\\\\"))));
 

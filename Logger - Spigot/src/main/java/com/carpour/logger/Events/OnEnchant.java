@@ -19,47 +19,49 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class OnEnchant implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEnchanting(EnchantItemEvent event) {
+    public void onEnchanting(final EnchantItemEvent event) {
 
-        Player player = event.getEnchanter();
-        String playerName = player.getName();
-        World world = player.getWorld();
-        String worldName = world.getName();
-        String item = event.getItem().getType().toString();
-        int cost = event.getExpLevelCost();
-        int x = player.getLocation().getBlockX();
-        int y = player.getLocation().getBlockY();
-        int z = player.getLocation().getBlockZ();
-        List<String> enchs = new ArrayList<>();
-        int enchantmentLevel = 0;
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Enchanting")) {
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log-Player.Enchanting")) {
+            final Player player = event.getEnchanter();
+
+            if (player.hasPermission(loggerExempt)) return;
+
+            final String playerName = player.getName();
+            final World world = player.getWorld();
+            final String worldName = world.getName();
+            final String item = event.getItem().getType().toString();
+            final int cost = event.getExpLevelCost();
+            final int x = player.getLocation().getBlockX();
+            final int y = player.getLocation().getBlockY();
+            final int z = player.getLocation().getBlockZ();
+            final List<String> enchs = new ArrayList<>();
+            int enchantmentLevel = 0;
 
             for (Enchantment ench : event.getEnchantsToAdd().keySet()) {
 
                 enchs.add(FriendlyEnchants.getFriendlyEnchantment(ench).getFriendlyName());
 
             }
-            for (Map.Entry<Enchantment, Integer> list : event.getEnchantsToAdd().entrySet()){
+            for (Map.Entry<Enchantment, Integer> list : event.getEnchantsToAdd().entrySet()) {
 
                 enchantmentLevel = list.getValue();
 
             }
 
             // Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (isLogToFiles) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Enchanting-Staff")).isEmpty()) {
 
@@ -75,18 +77,18 @@ public class OnEnchant implements Listener {
 
                     } catch (IOException e) {
 
-                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
 
-                    if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+                    if (isExternal && this.main.external.isConnected()) {
 
                         ExternalData.enchant(serverName, worldName, playerName, x, y, z, enchs, enchantmentLevel, item, cost, true);
 
                     }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                    if (isSqlite && this.main.getSqLite().isConnected()) {
 
                         SQLiteData.insertEnchant(serverName, player, enchs, enchantmentLevel, item, cost, true);
 
@@ -104,23 +106,22 @@ public class OnEnchant implements Listener {
 
                 } catch (IOException e) {
 
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             }
 
             // Discord
-            if (!player.hasPermission("logger.exempt.discord")) {
+            if (!player.hasPermission(loggerExemptDiscord)) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Enchanting-Staff")).isEmpty()) {
 
                         Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Enchanting-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%item%", item).replaceAll("%level%", String.valueOf(cost)).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%item%", item).replaceAll("%enchantment%", String.valueOf(enchs)).replaceAll("%enchlevel%", String.valueOf(enchantmentLevel)), false);
 
                     }
-
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Enchanting")).isEmpty()) {
@@ -131,21 +132,21 @@ public class OnEnchant implements Listener {
             }
 
             // MySQL
-            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+            if (isExternal && this.main.external.isConnected()) {
 
                 try {
 
-                    ExternalData.enchant(serverName, worldName, playerName, x, y, z, enchs, enchantmentLevel, item, cost, player.hasPermission("logger.staff.log"));
+                    ExternalData.enchant(serverName, worldName, playerName, x, y, z, enchs, enchantmentLevel, item, cost, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {
 
-                    SQLiteData.insertEnchant(serverName, player, enchs, enchantmentLevel, item, cost, player.hasPermission("logger.staff.log"));
+                    SQLiteData.insertEnchant(serverName, player, enchs, enchantmentLevel, item, cost, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

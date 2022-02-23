@@ -7,6 +7,8 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.bukkit.entity.Player;
 
+import static com.carpour.logger.Utils.Data.isStaffEnabled;
+
 public class Discord {
 
     private final Main main = Main.getInstance();
@@ -52,7 +54,7 @@ public class Discord {
 
         if (DiscordFile.get().getBoolean("Discord.Enable")) {
 
-            String botToken = DiscordFile.get().getString("Discord.Bot-Token");
+            final String botToken = DiscordFile.get().getString("Discord.Bot-Token");
 
             try {
 
@@ -62,84 +64,86 @@ public class Discord {
 
             } catch (Exception e) {
 
-                main.getLogger().severe("An error has occurred whilst connecting to the Bot." +
+                this.main.getLogger().severe("An error has occurred whilst connecting to the Bot." +
                         " Is the Bot Key Valid?");
                 return;
 
             }
 
             // Player Side Part
-            String staffChannelID = DiscordFile.get().getString("Discord.Staff.Channel-ID");
+            final String staffChannelID = DiscordFile.get().getString("Discord.Staff.Channel-ID");
 
-            String playerChatChannelID = DiscordFile.get().getString("Discord.Player-Chat.Channel-ID");
+            final String playerChatChannelID = DiscordFile.get().getString("Discord.Player-Chat.Channel-ID");
 
-            String playerCommandsChannelID = DiscordFile.get().getString("Discord.Player-Commands.Channel-ID");
+            final String playerCommandsChannelID = DiscordFile.get().getString("Discord.Player-Commands.Channel-ID");
 
-            String playerSignTextChannelID = DiscordFile.get().getString("Discord.Player-Sign-Text.Channel-ID");
+            final String playerSignTextChannelID = DiscordFile.get().getString("Discord.Player-Sign-Text.Channel-ID");
 
-            String playerJoinChannelID = DiscordFile.get().getString("Discord.Player-Join.Channel-ID");
+            final String playerJoinChannelID = DiscordFile.get().getString("Discord.Player-Join.Channel-ID");
 
-            String playerLeaveChannelID = DiscordFile.get().getString("Discord.Player-Leave.Channel-ID");
+            final String playerLeaveChannelID = DiscordFile.get().getString("Discord.Player-Leave.Channel-ID");
 
-            String playerKickChannelID = DiscordFile.get().getString("Discord.Player-Kick.Channel-ID");
+            final String playerKickChannelID = DiscordFile.get().getString("Discord.Player-Kick.Channel-ID");
 
-            String playerDeathChannelID = DiscordFile.get().getString("Discord.Player-Death.Channel-ID");
+            final String playerDeathChannelID = DiscordFile.get().getString("Discord.Player-Death.Channel-ID");
 
-            String playerTeleportChannelID = DiscordFile.get().getString("Discord.Player-Teleport.Channel-ID");
+            final String playerTeleportChannelID = DiscordFile.get().getString("Discord.Player-Teleport.Channel-ID");
 
-            String playerLevelChannelID = DiscordFile.get().getString("Discord.Player-Level.Channel-ID");
+            final String playerLevelChannelID = DiscordFile.get().getString("Discord.Player-Level.Channel-ID");
 
-            String blockPlaceChannelID = DiscordFile.get().getString("Discord.Block-Place.Channel-ID");
+            final String blockPlaceChannelID = DiscordFile.get().getString("Discord.Block-Place.Channel-ID");
 
-            String blockBreakChannelID = DiscordFile.get().getString("Discord.Block-Break.Channel-ID");
+            final String blockBreakChannelID = DiscordFile.get().getString("Discord.Block-Break.Channel-ID");
 
-            String bucketFillChannelID = DiscordFile.get().getString("Discord.Bucket-Fill.Channel-ID");
+            final String bucketFillChannelID = DiscordFile.get().getString("Discord.Bucket-Fill.Channel-ID");
 
-            String bucketEmptyChannelID = DiscordFile.get().getString("Discord.Bucket-Empty.Channel-ID");
+            final String bucketEmptyChannelID = DiscordFile.get().getString("Discord.Bucket-Empty.Channel-ID");
 
-            String anvilChannelID = DiscordFile.get().getString("Discord.Anvil.Channel-ID");
+            final String anvilChannelID = DiscordFile.get().getString("Discord.Anvil.Channel-ID");
 
-            String itemDropChannelID = DiscordFile.get().getString("Discord.Item-Drop.Channel-ID");
+            final String itemDropChannelID = DiscordFile.get().getString("Discord.Item-Drop.Channel-ID");
 
-            String enchantingChannelID = DiscordFile.get().getString("Discord.Enchanting.Channel-ID");
+            final String enchantingChannelID = DiscordFile.get().getString("Discord.Enchanting.Channel-ID");
 
-            String bookEditingChannelID = DiscordFile.get().getString("Discord.Book-Editing.Channel-ID");
+            final String bookEditingChannelID = DiscordFile.get().getString("Discord.Book-Editing.Channel-ID");
 
-            String itemPickupChannelID = DiscordFile.get().getString("Discord.Item-Pickup.Channel-ID");
+            final String itemPickupChannelID = DiscordFile.get().getString("Discord.Item-Pickup.Channel-ID");
 
-            String furnaceChannelID = DiscordFile.get().getString("Discord.Furnace.Channel-ID");
+            final String furnaceChannelID = DiscordFile.get().getString("Discord.Furnace.Channel-ID");
 
-            String gameModeChannelID = DiscordFile.get().getString("Discord.Game-Mode.Channel-ID");
+            final String gameModeChannelID = DiscordFile.get().getString("Discord.Game-Mode.Channel-ID");
 
-            String craftChannelID = DiscordFile.get().getString("Discord.Craft.Channel-ID");
+            final String craftChannelID = DiscordFile.get().getString("Discord.Craft.Channel-ID");
 
             // Server Side Part
-            String serverStartChannelID = DiscordFile.get().getString("Discord.Server-Side.Start.Channel-ID");
+            final String serverStartChannelID = DiscordFile.get().getString("Discord.Server-Side.Start.Channel-ID");
 
-            String serverStopChannelID = DiscordFile.get().getString("Discord.Server-Side.Stop.Channel-ID");
+            final String serverStopChannelID = DiscordFile.get().getString("Discord.Server-Side.Stop.Channel-ID");
 
-            String consoleChannelID = DiscordFile.get().getString("Discord.Server-Side.Console-Commands.Channel-ID");
+            final String consoleChannelID = DiscordFile.get().getString("Discord.Server-Side.Console-Commands.Channel-ID");
 
-            String RAMChannelID = DiscordFile.get().getString("Discord.Server-Side.RAM.Channel-ID");
+            final String RAMChannelID = DiscordFile.get().getString("Discord.Server-Side.RAM.Channel-ID");
 
-            String TPSChannelID = DiscordFile.get().getString("Discord.Server-Side.TPS.Channel-ID");
+            final String TPSChannelID = DiscordFile.get().getString("Discord.Server-Side.TPS.Channel-ID");
 
-            String portalCreationChannelID = DiscordFile.get().getString("Discord.Server-Side.Portal-Creation.Channel-ID");
+            final String portalCreationChannelID = DiscordFile.get().getString("Discord.Server-Side.Portal-Creation.Channel-ID");
 
-            String rconChannelID = DiscordFile.get().getString("Discord.Server-Side.RCON.Channel-ID");
+            final String rconChannelID = DiscordFile.get().getString("Discord.Server-Side.RCON.Channel-ID");
 
             // Extras
-            String afkChannelID = DiscordFile.get().getString("Discord.Extras.AFK.Channel-ID");
+            final String afkChannelID = DiscordFile.get().getString("Discord.Extras.AFK.Channel-ID");
 
-            String wrongPasswordChannelID = DiscordFile.get().getString("Discord.Extras.Wrong-Password.Channel-ID");
+            final String wrongPasswordChannelID = DiscordFile.get().getString("Discord.Extras.Wrong-Password.Channel-ID");
 
-            String vaultChannelID = DiscordFile.get().getString("Discord.Extras.Vault.Channel-ID");
+            final String vaultChannelID = DiscordFile.get().getString("Discord.Extras.Vault.Channel-ID");
 
 
             try {
 
+                assert false;
+
                 // Player Side Part
-                if (!(staffChannelID.isEmpty()) && main.getConfig().getBoolean("Staff.Enabled") && !staffChannelID.equals("LINK_HERE")) {
+                if (!(staffChannelID.isEmpty()) && isStaffEnabled && !staffChannelID.equals("LINK_HERE")) {
 
                     staffChannel = jda.getTextChannelById(staffChannelID);
 
@@ -334,7 +338,7 @@ public class Discord {
                 }
             }catch (Exception e){
 
-                main.getLogger().severe("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
+                this.main.getLogger().severe("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
 
             }
         }
@@ -360,7 +364,7 @@ public class Discord {
 
         if (consoleChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("Console");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("Console");
 
         if (!contentinAuthorLine) builder.setDescription(content);
 
@@ -416,7 +420,7 @@ public class Discord {
 
         if (portalCreationChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("Portal Creation");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("Portal Creation");
 
         if (!contentinAuthorLine) builder.setDescription(content);
 
@@ -442,7 +446,7 @@ public class Discord {
 
         if (TPSChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("TPS");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("TPS");
 
         if (!contentinAuthorLine) builder.setDescription(content);
 
@@ -453,7 +457,7 @@ public class Discord {
 
         if (RAMChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("RAM");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("RAM");
 
         if (!contentinAuthorLine) builder.setDescription(content);
 
@@ -464,7 +468,7 @@ public class Discord {
 
         if (serverStartChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Start");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Start");
 
         if (!contentinAuthorLine) builder.setDescription(content);
 
@@ -475,7 +479,7 @@ public class Discord {
 
         if (rconChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("RCON");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("RCON");
 
         if (!contentinAuthorLine) builder.setDescription(content);
 
@@ -486,7 +490,7 @@ public class Discord {
 
         if (serverStopChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Stop");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Stop");
 
         if (!contentinAuthorLine) builder.setDescription(content);
 
@@ -546,7 +550,7 @@ public class Discord {
     private static void discordUtil(Player player, String content, boolean contentinAuthorLine, TextChannel channel) {
         if (channel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getName(),
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getName(),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);
@@ -562,11 +566,11 @@ public class Discord {
                 jda.shutdown();
                 jda = null;
                 DiscordStatus.getThreadPool().shutdown();
-                main.getLogger().info("Discord Bot Bridge has been closed!");
+                this.main.getLogger().info("Discord Bot Bridge has been closed!");
 
             } catch (Exception e) {
 
-                main.getLogger().severe("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
+                this.main.getLogger().severe("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
                         " If this Issue Persists, Contact the Authors!");
 
                 e.printStackTrace();

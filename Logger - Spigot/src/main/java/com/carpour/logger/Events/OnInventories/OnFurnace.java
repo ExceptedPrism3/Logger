@@ -17,35 +17,35 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class OnFurnace implements Listener {
 
     public final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onInv(FurnaceExtractEvent event){
+    public void onInv(final FurnaceExtractEvent event){
 
-        Player player = event.getPlayer();
-        String playerName = event.getPlayer().getName();
-        String worldName = player.getWorld().getName();
-        int blockX = event.getBlock().getLocation().getBlockX();
-        int blockY = event.getBlock().getLocation().getBlockY();
-        int blockZ = event.getBlock().getLocation().getBlockZ();
-        Material item = event.getItemType();
-        int amount = event.getItemAmount();
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (this.main.getConfig().getBoolean("Log-Player.Furnace")) {
 
-        if (player.hasPermission("logger.exempt")) return;
+            final Player player = event.getPlayer();
 
-        if (main.getConfig().getBoolean("Log-Player.Furnace")) {
+            if (player.hasPermission(loggerExempt)) return;
+
+            final String playerName = event.getPlayer().getName();
+            final String worldName = player.getWorld().getName();
+            final int blockX = event.getBlock().getLocation().getBlockX();
+            final int blockY = event.getBlock().getLocation().getBlockY();
+            final int blockZ = event.getBlock().getLocation().getBlockZ();
+            final Material item = event.getItemType();
+            final int amount = event.getItemAmount();
 
             //Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (isLogToFiles) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Furnace-Staff")).isEmpty()) {
 
@@ -61,19 +61,18 @@ public class OnFurnace implements Listener {
 
                     } catch (IOException e) {
 
-                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
 
-                    if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
-
+                    if (isExternal && this.main.external.isConnected()) {
 
                         ExternalData.furnace(serverName, worldName, playerName, item, amount, blockX, blockY, blockZ, true);
 
                     }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                    if (isSqlite && this.main.getSqLite().isConnected()) {
 
                         SQLiteData.insertFurnace(serverName, player, item, amount, blockX, blockY, blockZ, true);
 
@@ -91,16 +90,16 @@ public class OnFurnace implements Listener {
 
                 } catch (IOException e) {
 
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             }
 
             // Discord Integration
-            if (!player.hasPermission("logger.exempt.discord")) {
+            if (!player.hasPermission(loggerExemptDiscord)) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Furnace-Staff")).isEmpty()) {
 
@@ -118,21 +117,21 @@ public class OnFurnace implements Listener {
             }
 
             // MySQL Handling
-            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+            if (isExternal && this.main.external.isConnected()) {
 
                 try {
 
-                    ExternalData.furnace(serverName, worldName, playerName, item, amount, blockX, blockY, blockZ, player.hasPermission("logger.staff.log"));
+                    ExternalData.furnace(serverName, worldName, playerName, item, amount, blockX, blockY, blockZ, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite Handling
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {
 
-                    SQLiteData.insertFurnace(serverName, player, item, amount, blockX, blockY, blockZ, player.hasPermission("logger.staff.log"));
+                    SQLiteData.insertFurnace(serverName, player, item, amount, blockX, blockY, blockZ, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

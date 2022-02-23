@@ -11,34 +11,29 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class RAM implements Runnable {
 
     private final Main main = Main.getInstance();
 
-    long maxMemory = Runtime.getRuntime().maxMemory() / 1048576L;
-    long freeMemory = Runtime.getRuntime().freeMemory() / 1048576L;
-    long usedMemory = maxMemory - freeMemory;
-    double percentUsed = (double) usedMemory * 100.0D / (double) maxMemory;
-    String serverName = main.getConfig().getString("Server-Name");
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     public void run() {
 
-        if (main.getConfig().getInt("RAM.Percent") <= 0 || main.getConfig().getInt("RAM.Percent") >= 100) {
+        if (this.main.getConfig().getBoolean("Log-Server.RAM")) {
 
-            return;
+            if (ramPercent <= 0 || ramPercent >= 100) return;
 
-        }
+            final long maxMemory = Runtime.getRuntime().maxMemory() / 1048576L;
+            final long freeMemory = Runtime.getRuntime().freeMemory() / 1048576L;
+            final long usedMemory = maxMemory - freeMemory;
+            final double percentUsed = (double) usedMemory * 100.0D / (double) maxMemory;
 
-        if (main.getConfig().getInt("RAM.Percent") <= percentUsed) {
-
-            if (main.getConfig().getBoolean("Log-Server.RAM")) {
+            if (ramPercent <= percentUsed) {
 
                 // Log To Files Handling
-                if (main.getConfig().getBoolean("Log-to-Files")) {
+                if (isLogToFiles) {
 
                     try {
 
@@ -48,7 +43,7 @@ public class RAM implements Runnable {
 
                     } catch (IOException e) {
 
-                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
@@ -61,7 +56,7 @@ public class RAM implements Runnable {
                 }
 
                 // MySQL
-                if (main.getConfig().getBoolean("Database.Enable")  && main.external.isConnected()) {
+                if (isExternal && this.main.external.isConnected()) {
 
                     try {
 
@@ -71,7 +66,7 @@ public class RAM implements Runnable {
                 }
 
                 // SQLite
-                if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                if (isSqlite && this.main.getSqLite().isConnected()) {
 
                     try {
 

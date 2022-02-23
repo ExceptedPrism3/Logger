@@ -14,11 +14,11 @@ public class Messages {
 
     public static void Setup(){
 
-        messagesFile = new File(Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("Logger")).getDataFolder(), "messages.yml");
+        messagesFile = new File(Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("Logger")).getDataFolder(), "Messages/en.yml");
 
         if(!messagesFile.exists()){
 
-            Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("Logger")).saveResource("messages.yml", false);
+            Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("Logger")).saveResource("Messages/en.yml", false);
 
         }
 

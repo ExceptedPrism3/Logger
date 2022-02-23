@@ -17,6 +17,10 @@ permissions:
   loggerproxy.exempt:
     description: "Prevents the player from getting logged."
     default: op
+    children:
+      logger.exempt.discord: true
+  loggerproxy.exempt.discord:
+    description: "Prevents the Player from getting discord logged."
   loggerproxy.reload:
     description: "Allows to reload the Plugin."
     default: op

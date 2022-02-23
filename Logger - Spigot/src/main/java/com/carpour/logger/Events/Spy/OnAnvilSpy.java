@@ -16,48 +16,52 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Objects;
 
+import static com.carpour.logger.Utils.Data.*;
+
 public class OnAnvilSpy implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onAnvilSpy(InventoryClickEvent event) {
+    public void onAnvilSpy(final InventoryClickEvent event) {
 
-        Player player = (Player) event.getWhoClicked();
-        Inventory inv = event.getInventory();
+        if (this.main.getConfig().getBoolean("Log-Player.Anvil")
+                && this.main.getConfig().getBoolean("Spy-Features.Anvil-Spy.Enable")) {
 
-        if (player.hasPermission("logger.exempt") || player.hasPermission("logger.spy.bypass")) return;
+            final Player player = (Player) event.getWhoClicked();
 
-        if (main.getConfig().getBoolean("Log-Player.Anvil") && main.getConfig().getBoolean("Spy-Features.Anvil-Spy.Enable")) {
+            if (player.hasPermission(loggerExempt) || player.hasPermission(loggerSpyBypass)) return;
+
+            final Inventory inv = event.getInventory();
 
             if (inv instanceof AnvilInventory) {
 
-                InventoryView view = event.getView();
+                final InventoryView view = event.getView();
 
-                int rawSlot = event.getRawSlot();
+                final int rawSlot = event.getRawSlot();
 
                 if (rawSlot == view.convertSlot(rawSlot)) {
 
                     if (rawSlot == 2) {
 
-                        ItemStack item = event.getCurrentItem();
+                        final ItemStack item = event.getCurrentItem();
 
                         if (item != null) {
 
-                            ItemMeta meta = item.getItemMeta();
+                            final ItemMeta meta = item.getItemMeta();
 
                             if (meta != null) {
 
                                 if (meta.hasDisplayName()) {
 
-                                    String displayName = meta.getDisplayName().replace("\\", "\\\\");
+                                    final String displayName = meta.getDisplayName().replace("\\", "\\\\");
 
                                     for (Player players : Bukkit.getOnlinePlayers()) {
 
-                                        if (players.hasPermission("logger.spy")) {
+                                        if (players.hasPermission(loggerSpy)) {
 
                                             players.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                                                    Objects.requireNonNull(main.getConfig().getString("Spy-Features.Anvil-Spy.Message")).
+                                                    Objects.requireNonNull(this.main.getConfig().getString("Spy-Features.Anvil-Spy.Message")).
                                                             replace("%player%", player.getName()).
                                                             replace("%renamed%", displayName)));
 

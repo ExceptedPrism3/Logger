@@ -15,25 +15,24 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class RCON implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onConnection(RemoteServerCommandEvent event) {
+    public void onConnection(final RemoteServerCommandEvent event) {
 
-        String ip = event.getSender().getServer().getIp();
-        String command = event.getCommand();
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (this.main.getConfig().getBoolean("Log-Server.RCON")) {
 
-        if (main.getConfig().getBoolean("Log-Server.RCON")) {
+            final String ip = event.getSender().getServer().getIp();
+            final String command = event.getCommand();
 
             // Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (isLogToFiles) {
 
                 try {
 
@@ -43,7 +42,7 @@ public class RCON implements Listener {
 
                 } catch (IOException e) {
 
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -56,7 +55,7 @@ public class RCON implements Listener {
             }
 
             // MySQL
-            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+            if (isExternal && this.main.external.isConnected()) {
 
                 try {
 
@@ -66,13 +65,13 @@ public class RCON implements Listener {
             }
 
             // SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {
 
                     SQLiteData.insertRcon(serverName, ip, command);
 
-                } catch (Exception exception) { exception.printStackTrace(); }
+                } catch (Exception e) { e.printStackTrace(); }
             }
         }
     }

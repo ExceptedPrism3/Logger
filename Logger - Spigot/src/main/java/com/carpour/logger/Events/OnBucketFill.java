@@ -17,35 +17,35 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class OnBucketFill implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBucket(PlayerBucketFillEvent event){
+    public void onBucket(final PlayerBucketFillEvent event){
 
-        Player player = event.getPlayer();
-        String playerName = player.getName();
-        World world = event.getPlayer().getWorld();
-        String worldName = world.getName();
-        String bucket = Objects.requireNonNull(event.getItemStack()).getType().name().replaceAll("_", " ");
-        int x = event.getBlockClicked().getX();
-        int y = event.getBlockClicked().getY();
-        int z = event.getBlockClicked().getZ();
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (!event.isCancelled() && (this.main.getConfig().getBoolean("Log-Player.Bucket-Fill"))) {
 
-        if (player.hasPermission("logger.exempt")) return;
+            final Player player = event.getPlayer();
 
-        if (!event.isCancelled() && (main.getConfig().getBoolean("Log-Player.Bucket-Fill"))) {
+            if (player.hasPermission(loggerExempt)) return;
+
+            final String playerName = player.getName();
+            final World world = event.getPlayer().getWorld();
+            final String worldName = world.getName();
+            final String bucket = Objects.requireNonNull(event.getItemStack()).getType().name().replaceAll("_", " ");
+            final int x = event.getBlockClicked().getX();
+            final int y = event.getBlockClicked().getY();
+            final int z = event.getBlockClicked().getZ();
 
             // Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (isLogToFiles) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Fill-Staff")).isEmpty()) {
 
@@ -61,18 +61,18 @@ public class OnBucketFill implements Listener {
 
                     } catch (IOException e) {
 
-                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
 
-                    if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+                    if (isExternal && this.main.external.isConnected()) {
 
                         ExternalData.bucketFill(serverName, worldName, playerName, bucket, x, y, z, true);
 
                     }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                    if (isSqlite && this.main.getSqLite().isConnected()) {
 
                         SQLiteData.insertBucketFill(serverName, player, bucket, true);
 
@@ -90,23 +90,22 @@ public class OnBucketFill implements Listener {
 
                 } catch (IOException e) {
 
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             }
 
             // Discord
-            if (!player.hasPermission("logger.exempt.discord")) {
+            if (!player.hasPermission(loggerExemptDiscord)) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Fill-Staff")).isEmpty()) {
 
                         Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Fill-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket), false);
 
                     }
-
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Fill")).isEmpty()) {
@@ -117,21 +116,21 @@ public class OnBucketFill implements Listener {
             }
 
             // MySQL
-            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+            if (isExternal && this.main.external.isConnected()) {
 
                 try {
 
-                    ExternalData.bucketFill(serverName, worldName, playerName, bucket, x, y, z, player.hasPermission("logger.staff.log"));
+                    ExternalData.bucketFill(serverName, worldName, playerName, bucket, x, y, z, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {
 
-                    SQLiteData.insertBucketFill(serverName, player, bucket, player.hasPermission("logger.staff.log"));
+                    SQLiteData.insertBucketFill(serverName, player, bucket, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

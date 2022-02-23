@@ -45,8 +45,8 @@ public class ConfigManager {
     }
 
     public List<String> getStringList(String key) {
-        List<String> list = this.config.getStringList(key);
-        List<String> avail = new ArrayList<>();
+        final List<String> list = this.config.getStringList(key);
+        final List<String> avail = new ArrayList<>();
         for (String str : list)
             avail.add(ChatColor.translateAlternateColorCodes('&', str));
         return avail;
@@ -60,7 +60,7 @@ public class ConfigManager {
 
         if (!Main.getInstance().getDataFolder().exists()) Main.getInstance().getDataFolder().mkdir();
 
-        File file = getFile();
+        final File file = getFile();
 
         if (!file.exists()) {
 

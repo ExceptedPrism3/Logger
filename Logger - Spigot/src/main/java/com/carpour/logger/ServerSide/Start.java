@@ -11,8 +11,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class Start {
 
@@ -20,13 +21,10 @@ public class Start {
 
     public void run(){
 
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        if (main.getConfig().getBoolean("Log-Server.Start")) {
+        if (this.main.getConfig().getBoolean("Log-Server.Start")) {
 
             // Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (isLogToFiles) {
 
                 try {
 
@@ -36,7 +34,7 @@ public class Start {
 
                 } catch (IOException e) {
 
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -49,7 +47,7 @@ public class Start {
             }
 
             // MySQL
-            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+            if (isExternal && this.main.external.isConnected()) {
 
                 try {
 
@@ -59,20 +57,19 @@ public class Start {
             }
 
             // SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {
 
                     SQLiteData.insertServerStart(serverName);
 
-                } catch (Exception exception) { exception.printStackTrace(); }
+                } catch (Exception e) { e.printStackTrace(); }
             }
 
-            if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")
-                    && main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
+            if (isWhitelisted && isBlacklisted) {
 
-                main.getLogger().warning("Enabling both Whitelist and Blacklist isn't supported. " +
-                        "Please disable one of them to continue logging Player Commands");
+                this.main.getLogger().warning("Enabling both Whitelist and Blacklist isn't supported. " +
+                        "Disable one of them to continue logging Player Commands.");
 
             }
         }

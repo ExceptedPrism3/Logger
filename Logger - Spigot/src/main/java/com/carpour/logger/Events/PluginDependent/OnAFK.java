@@ -16,8 +16,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.logger.Utils.Data.*;
 
 
 public class OnAFK implements Listener {
@@ -25,117 +26,111 @@ public class OnAFK implements Listener {
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void afk(AfkStatusChangeEvent e) {
+    public void afk(final AfkStatusChangeEvent e) {
 
-        boolean afk = e.getAffected().isAfk();
+        if (!e.isCancelled() && this.main.getConfig().getBoolean("Log-Extras.Essentials-AFK")
+                && !e.getAffected().isAfk()) {
 
-        Player player = e.getAffected().getBase();
-        String playerName = player.getName();
-        int x = player.getLocation().getBlockX();
-        int y = player.getLocation().getBlockY();
-        int z = player.getLocation().getBlockZ();
-        String worldName = player.getWorld().getName();
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            final Player player = e.getAffected().getBase();
 
-        if (player.hasPermission("logger.exempt")) return;
+            if (player.hasPermission(loggerExempt)) return;
 
-        if (!afk) {
+            final String playerName = player.getName();
+            final int x = player.getLocation().getBlockX();
+            final int y = player.getLocation().getBlockY();
+            final int z = player.getLocation().getBlockZ();
+            final String worldName = player.getWorld().getName();
 
-            if (main.getConfig().getBoolean("Log-Extras.Essentials-AFK")) {
+            // Log To Files Handling
+            if (isLogToFiles) {
 
-                // Log To Files Handling
-                if (main.getConfig().getBoolean("Log-to-Files")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).isEmpty()) {
 
-                        if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).isEmpty()) {
-
-                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
-                        }
-
-                        try {
-
-                            BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                            out.write(Objects.requireNonNull(Messages.get().getString("Files.Extras.AFK-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)) + "\n");
-                            out.close();
-
-                        } catch (IOException event) {
-
-                            main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                            event.printStackTrace();
-
-                        }
-
-                        if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
-
-                            ExternalData.afk(serverName, worldName, playerName, x, y, z, true);
-
-                        }
-
-                        if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
-
-                            SQLiteData.insertAFK(serverName, player, true);
-
-                        }
-
-                        return;
-
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
                     }
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAfkFile(), true));
-                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Extras.AFK")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)) + "\n");
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
+                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Extras.AFK-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)) + "\n");
                         out.close();
 
                     } catch (IOException event) {
 
-                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                         event.printStackTrace();
 
                     }
+
+                    if (isExternal && this.main.external.isConnected()) {
+
+                        ExternalData.afk(serverName, worldName, playerName, x, y, z, true);
+
+                    }
+
+                    if (isSqlite && this.main.getSqLite().isConnected()) {
+
+                        SQLiteData.insertAFK(serverName, player, true);
+
+                    }
+
+                    return;
+
                 }
 
-                // Discord
-                if (!player.hasPermission("logger.exempt.discord")) {
+                try {
 
-                    if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAfkFile(), true));
+                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Extras.AFK")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)) + "\n");
+                    out.close();
 
-                        if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).isEmpty()) {
+                } catch (IOException event) {
 
-                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    event.printStackTrace();
 
-                        }
+                }
+            }
 
-                    } else {
+            // Discord
+            if (!player.hasPermission(loggerExemptDiscord)) {
 
-                        if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK")).isEmpty()) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                            Discord.afk(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
-                        }
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).isEmpty()) {
+
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+
+                    }
+                } else {
+
+                    if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK")).isEmpty()) {
+
+                        Discord.afk(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
                     }
                 }
+            }
 
-                // MySQL
-                if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+            // MySQL
+            if (isExternal && this.main.external.isConnected()) {
 
-                    try {
+                try {
 
-                        ExternalData.afk(serverName, worldName, playerName, x, y, z, player.hasPermission("logger.staff.log"));
+                    ExternalData.afk(serverName, worldName, playerName, x, y, z, player.hasPermission(loggerStaffLog));
 
-                    } catch (Exception event) { event.printStackTrace(); }
-                }
+                } catch (Exception event) { event.printStackTrace(); }
+            }
 
-                // SQLite
-                if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            // SQLite
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
-                    try {
+                try {
 
-                        SQLiteData.insertAFK(serverName, player, player.hasPermission("logger.staff.log"));
+                    SQLiteData.insertAFK(serverName, player, player.hasPermission(loggerStaffLog));
 
-                    } catch (Exception exception) { exception.printStackTrace(); }
-                }
+                } catch (Exception exception) { exception.printStackTrace(); }
             }
         }
     }

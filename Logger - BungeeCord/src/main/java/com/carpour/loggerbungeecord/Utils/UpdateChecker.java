@@ -10,31 +10,34 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
+import static com.carpour.loggerbungeecord.Utils.Data.pluginVersion;
+
 public class UpdateChecker {
 
-    private final String version = Main.getInstance().getDescription().getVersion();
+    private final String version = pluginVersion;
     private final String downloadURL = "https://www.spigotmc.org/resources/logger.94236/updates/";
 
     public void checkUpdates() {
+
         ProxyServer.getInstance().getScheduler().runAsync(Main.getInstance(), () -> {
 
-            String https_url = "https://api.spigotmc.org/legacy/update.php?resource=94236/";
+            final String https_url = "https://api.spigotmc.org/legacy/update.php?resource=94236/";
 
             try {
 
-                URL url = new URL(https_url);
-                HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+                final URL url = new URL(https_url);
+                final HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
                 if (con != null) {
 
                     try {
 
-                        BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                        final BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
                         String input;
 
                         while ((input = br.readLine()) != null) {
 
-                            if (!input.trim().equalsIgnoreCase(Main.getInstance().getDescription().getVersion().trim())) {
+                            if (!input.trim().equalsIgnoreCase(version.trim())) {
 
                                 Main.getInstance().getLogger().info(ChatColor.GOLD + "A new version is available for download " + ChatColor.GREEN + version);
                                 Main.getInstance().getLogger().info(ChatColor.GOLD + "Download Link: " + ChatColor.GREEN + downloadURL);

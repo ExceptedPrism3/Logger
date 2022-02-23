@@ -15,25 +15,24 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class PortalCreation implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPortalCreate(PortalCreateEvent event) {
+    public void onPortalCreate(final PortalCreateEvent event) {
 
-        String worldName = event.getWorld().getName();
-        PortalCreateEvent.CreateReason reason = event.getReason();
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Server.Portal-Creation")) {
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log-Server.Portal-Creation")) {
+            final String worldName = event.getWorld().getName();
+            final PortalCreateEvent.CreateReason reason = event.getReason();
 
             // Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (isLogToFiles) {
 
                 try {
 
@@ -43,7 +42,7 @@ public class PortalCreation implements Listener {
 
                 } catch (IOException e) {
 
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -56,7 +55,7 @@ public class PortalCreation implements Listener {
             }
 
             // MySQL
-            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+            if (isExternal && this.main.external.isConnected()) {
 
                 try {
 
@@ -66,7 +65,7 @@ public class PortalCreation implements Listener {
             }
 
             // SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {
 

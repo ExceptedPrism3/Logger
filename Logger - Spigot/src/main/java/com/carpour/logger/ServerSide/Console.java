@@ -15,27 +15,26 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class Console implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onConsoleCommand(ServerCommandEvent event) {
+    public void onConsoleCommand(final ServerCommandEvent event) {
 
-        String command = event.getCommand().replace("\\", "\\\\");
-        List<String> commandParts = Arrays.asList(event.getCommand().split("\\s+"));
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (this.main.getConfig().getBoolean("Log-Server.Console-Commands")) {
 
-        if (main.getConfig().getBoolean("Log-Server.Console-Commands")) {
+            final String command = event.getCommand().replace("\\", "\\\\");
+            final List<String> commandParts = Arrays.asList(event.getCommand().split("\\s+"));
 
             // Blacklisted Commands
-            if (main.getConfig().getBoolean("Console-Commands.Blacklist-Commands")) {
+            if (isConsoleCommands) {
 
-                for (String m : main.getConfig().getStringList("Console-Commands.Commands-to-Block")) {
+                for (String m : consoleCommandsToBlock) {
 
                     if (commandParts.get(0).equalsIgnoreCase(m)) {
                         event.setCancelled(true);
@@ -45,7 +44,7 @@ public class Console implements Listener {
             }
 
             // Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (isLogToFiles) {
 
                 try {
 
@@ -55,7 +54,7 @@ public class Console implements Listener {
 
                 } catch (IOException e) {
 
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -68,7 +67,7 @@ public class Console implements Listener {
             }
 
             // MySQL
-            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+            if (isExternal && this.main.external.isConnected()) {
 
                 try {
 
@@ -78,7 +77,7 @@ public class Console implements Listener {
             }
 
             // SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {
 

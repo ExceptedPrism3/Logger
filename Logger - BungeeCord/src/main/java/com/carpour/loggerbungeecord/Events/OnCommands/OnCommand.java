@@ -29,11 +29,11 @@ public class OnCommand implements Listener {
 
         if (event.isCommand()) {
 
-            ProxiedPlayer player = (ProxiedPlayer) event.getSender();
-            String playerName = player.getName();
-            String server = player.getServer().getInfo().getName();
-            String command = event.getMessage().replace("\\", "\\\\");
-            List<String> commandParts = Arrays.asList(command.split("\\s+"));
+            final ProxiedPlayer player = (ProxiedPlayer) event.getSender();
+            final String playerName = player.getName();
+            final String server = player.getServer().getInfo().getName();
+            final String command = event.getMessage().replace("\\", "\\\\");
+            final List<String> commandParts = Arrays.asList(command.split("\\s+"));
             String serverName = main.getConfig().getString("Server-Name");
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 

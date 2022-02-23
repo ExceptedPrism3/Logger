@@ -11,58 +11,39 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class TPS implements Runnable {
 
     private final Main main = Main.getInstance();
 
-    public static int tickCount = 0;
-    public static long[] TICKS = new long[600];
-    String serverName = main.getConfig().getString("Server-Name");
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-    public static double getTPS() {
-        return getTPS(100);
-    }
-
-    public static double getTPS(int ticks) {
-
-        if (tickCount <= ticks) return 20.0D;
-        int target = (tickCount - 1 - ticks) % TICKS.length;
-        long elapsed = System.currentTimeMillis() - TICKS[target];
-        return ticks / (elapsed / 1000.0D);
-
-    }
+    private int tickCount = 0;
+    final private long[] TICKS = new long[600];
 
     public void run() {
 
-        if (main.getConfig().getBoolean("Log-Server.TPS")) {
+        if (this.main.getConfig().getBoolean("Log-Server.TPS")) {
 
-            if (main.getConfig().getInt("TPS.Value-Medium") <= 0 || main.getConfig().getInt("TPS.Value-Medium") >= 20 ||
-                    main.getConfig().getInt("TPS.Value-Critical") <= 0 || main.getConfig().getInt("TPS.Value-Critical") >= 20) {
-
-                return;
-
-            }
+            if (tpsMedium <= 0 || tpsMedium >= 20 || tpsCritical <= 0 || tpsCritical >= 20) return;
 
             TICKS[(tickCount % TICKS.length)] = System.currentTimeMillis();
 
             tickCount += 1;
 
             // Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (isLogToFiles) {
 
                 try {
 
-                    if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
+                    if (getTPS() <= tpsMedium) {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
                         out.write(Objects.requireNonNull(Messages.get().getString("Files.Server-Side.TPS-Medium")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%TPS%", String.valueOf(getTPS())) + "\n");
                         out.close();
 
-                    } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
+                    } else if (getTPS() <= tpsCritical) {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
                         out.write(Objects.requireNonNull(Messages.get().getString("Files.Server-Side.TPS-Critical")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%TPS%", String.valueOf(getTPS())) + "\n");
@@ -72,13 +53,13 @@ public class TPS implements Runnable {
 
                 } catch (IOException e) {
 
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
 
                 // Discord
-                if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
+                if (getTPS() <= tpsMedium) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.TPS-Medium")).isEmpty()) {
 
@@ -86,7 +67,7 @@ public class TPS implements Runnable {
 
                     }
 
-                } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
+                } else if (getTPS() <= tpsCritical) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.TPS-Critical")).isEmpty()) {
 
@@ -95,39 +76,50 @@ public class TPS implements Runnable {
                 }
 
                 // MySQL
-                if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+                if (isExternal && this.main.external.isConnected()) {
 
                     try {
 
-                        if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
+                        if (getTPS() <= tpsMedium) {
 
                             ExternalData.TPS(serverName, getTPS());
 
-                        } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
+                        } else if (getTPS() <= tpsCritical) {
 
                             ExternalData.TPS(serverName, getTPS());
                         }
-
                     } catch (Exception e) { e.printStackTrace(); }
                 }
 
                 // SQLite
-                if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                if (isSqlite && this.main.getSqLite().isConnected()) {
 
                     try {
 
-                        if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
+                        if (getTPS() <= tpsMedium) {
 
                             SQLiteData.insertTPS(serverName, getTPS());
 
-                        } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
+                        } else if (getTPS() <= tpsCritical) {
 
                             SQLiteData.insertTPS(serverName, getTPS());
                         }
-
                     } catch (Exception e) { e.printStackTrace(); }
                 }
             }
         }
+    }
+
+    public double getTPS() {
+        return getTPS(100);
+    }
+
+    public double getTPS(int ticks) {
+
+        if (tickCount <= ticks) return 20.0D;
+        int target = (tickCount - 1 - ticks) % TICKS.length;
+        long elapsed = System.currentTimeMillis() - TICKS[target];
+        return ticks / (elapsed / 1000.0D);
+
     }
 }

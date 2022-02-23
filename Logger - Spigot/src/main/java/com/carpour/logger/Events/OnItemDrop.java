@@ -19,33 +19,40 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class OnItemDrop implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onDrop(PlayerDropItemEvent event){
+    public void onDrop(final PlayerDropItemEvent event){
 
-        Player player = event.getPlayer();
-        String playerName = player.getName();
-        World world = player.getWorld();
-        String worldName = world.getName();
-        String item = event.getItemDrop().getItemStack().getType().name().replace("_", " ");
-        String itemName = Objects.requireNonNull(event.getItemDrop().getItemStack().getItemMeta()).getDisplayName().replace("\\", "\\\\");
-        int amount = event.getItemDrop().getItemStack().getAmount();
-        int blockX = event.getItemDrop().getLocation().getBlockX();
-        int blockY = event.getItemDrop().getLocation().getBlockY();
-        int blockZ = event.getItemDrop().getLocation().getBlockZ();
-        List<String> enchs = new ArrayList<>();
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Item-Drop")) {
 
-        if (player.hasPermission("logger.exempt")) return;
+            final Player player = event.getPlayer();
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log-Player.Item-Drop")) {
+            if (player.hasPermission(loggerExempt)) return;
+
+            final String playerName = player.getName();
+            final World world = player.getWorld();
+            final String worldName = world.getName();
+            final String item = event.getItemDrop().getItemStack().getType().name().replace("_", " ");
+            String itemName = Objects.requireNonNull(event.getItemDrop().getItemStack().getItemMeta()).getDisplayName();
+
+            if (itemName != null) {
+
+                itemName = itemName.contains("\\") ? itemName : itemName.replace("\\", "\\\\");
+
+            } else itemName = " ";
+
+            final int amount = event.getItemDrop().getItemStack().getAmount();
+            final int blockX = event.getItemDrop().getLocation().getBlockX();
+            final int blockY = event.getItemDrop().getLocation().getBlockY();
+            final int blockZ = event.getItemDrop().getLocation().getBlockZ();
+            final List<String> enchs = new ArrayList<>();
 
             for (Enchantment ench : event.getItemDrop().getItemStack().getEnchantments().keySet()) {
 
@@ -54,9 +61,9 @@ public class OnItemDrop implements Listener {
             }
 
             // Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (isLogToFiles) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Item-Drop-Staff")).isEmpty()) {
 
@@ -71,18 +78,18 @@ public class OnItemDrop implements Listener {
 
                     } catch (IOException e) {
 
-                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
 
-                    if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+                    if (isExternal && this.main.external.isConnected()) {
 
                         ExternalData.itemDrop(serverName, worldName, playerName, item, amount, blockX, blockY, blockZ, enchs, itemName, true);
 
                     }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                    if (isSqlite && this.main.getSqLite().isConnected()) {
 
                         SQLiteData.insertItemDrop(serverName, player, item, blockX, amount, blockY, blockZ, enchs, itemName, true);
 
@@ -100,23 +107,22 @@ public class OnItemDrop implements Listener {
 
                 } catch (IOException e) {
 
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             }
 
             // Discord
-            if (!player.hasPermission("logger.exempt.discord")) {
+            if (!player.hasPermission(loggerExemptDiscord)) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Item-Drop-Staff")).isEmpty()) {
 
                         Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Item-Drop-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%item%", item).replaceAll("%amount%", String.valueOf(amount)).replaceAll("%x%", String.valueOf(blockX)).replaceAll("%y%", String.valueOf(blockY)).replaceAll("%z%", String.valueOf(blockZ)).replaceAll("%renamed%", String.valueOf(itemName)).replaceAll("%enchantment%", String.valueOf(enchs)), false);
 
                     }
-
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Item-Drop")).isEmpty()) {
@@ -127,21 +133,21 @@ public class OnItemDrop implements Listener {
             }
 
             // MySQL
-            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+            if (isExternal && this.main.external.isConnected()) {
 
                 try {
 
-                    ExternalData.itemDrop(serverName, worldName, playerName, item, amount, blockX, blockY, blockZ, enchs, itemName, player.hasPermission("logger.staff.log"));
+                    ExternalData.itemDrop(serverName, worldName, playerName, item, amount, blockX, blockY, blockZ, enchs, itemName, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {
 
-                    SQLiteData.insertItemDrop(serverName, player, item, amount, blockX, blockY, blockZ, enchs, itemName, player.hasPermission("logger.staff.log"));
+                    SQLiteData.insertItemDrop(serverName, player, item, amount, blockX, blockY, blockZ, enchs, itemName, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

@@ -18,46 +18,45 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class OnPlayerJoin implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        World world = player.getWorld();
-        String worldName = world.getName();
-        String playerName = player.getName();
-        InetSocketAddress ip = player.getAddress();
-        int x = player.getLocation().getBlockX();
-        int y = player.getLocation().getBlockY();
-        int z = player.getLocation().getBlockZ();
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public void onJoin(final PlayerJoinEvent event) {
 
-        if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")
-                && main.getConfig().getBoolean("Player-Commands.Blacklist-Commands") &&
-            player.hasPermission("logger.staff")) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    "&7[ &bLogger &7] &f| &cEnabling both Whitelist" +
-                            " and Blacklist isn't supported. Please disable one of them" +
-                            " to continue logging Player Commands"));
+        if (this.main.getConfig().getBoolean("Log-Player.Join")) {
 
-        }
+            final Player player = event.getPlayer();
 
-        if (!main.getConfig().getBoolean("Player-Join.Player-IP")) ip = null;
+            if (player.hasPermission(loggerExempt)) return;
 
-        if (player.hasPermission("logger.exempt")) return;
+            final World world = player.getWorld();
+            final String worldName = world.getName();
+            final String playerName = player.getName();
+            InetSocketAddress ip = player.getAddress();
+            final int x = player.getLocation().getBlockX();
+            final int y = player.getLocation().getBlockY();
+            final int z = player.getLocation().getBlockZ();
 
-        if (main.getConfig().getBoolean("Log-Player.Join")) {
+            if (isCommandsToBlock && isCommandsToLog && player.hasPermission(loggerStaff)) {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                        "&7[ &bLogger &7] &f| &cEnabling both Whitelist" +
+                                " and Blacklist isn't supported. Disable one of them" +
+                                " to continue logging Player Commands."));
+
+            }
+
+            if (!isPlayerIP) ip = null;
 
             // Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (isLogToFiles) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Join-Staff")).isEmpty()) {
 
@@ -73,18 +72,18 @@ public class OnPlayerJoin implements Listener {
 
                     } catch (IOException e) {
 
-                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
 
-                    if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+                    if (isExternal && this.main.external.isConnected()) {
 
                         ExternalData.playerJoin(serverName, worldName, playerName, x, y, z, ip, true);
 
                     }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                    if (isSqlite && this.main.getSqLite().isConnected()) {
 
                         SQLiteData.insertPlayerJoin(serverName, player, true);
 
@@ -102,23 +101,22 @@ public class OnPlayerJoin implements Listener {
 
                 } catch (IOException e) {
 
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             }
 
             // Discord
-            if (!player.hasPermission("logger.exempt.discord")) {
+            if (!player.hasPermission(loggerExemptDiscord)) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Join-Staff")).isEmpty()) {
 
                         Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Join-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%IP%", String.valueOf(ip)), false);
 
                     }
-
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Join")).isEmpty()) {
@@ -129,21 +127,21 @@ public class OnPlayerJoin implements Listener {
             }
 
             // MySQL
-            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+            if (isExternal && this.main.external.isConnected()) {
 
                 try {
 
-                    ExternalData.playerJoin(serverName, worldName, playerName, x, y, z, ip, player.hasPermission("logger.staff.log"));
+                    ExternalData.playerJoin(serverName, worldName, playerName, x, y, z, ip, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {
 
-                    SQLiteData.insertPlayerJoin(serverName, player, player.hasPermission("logger.staff.log"));
+                    SQLiteData.insertPlayerJoin(serverName, player, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

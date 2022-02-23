@@ -12,50 +12,50 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerEditBookEvent;
+import org.bukkit.inventory.meta.BookMeta;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class OnBook implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void bookEditing(PlayerEditBookEvent event){
-
-        Player player = event.getPlayer();
-        String playerName = player.getName();
-        String worldName = player.getWorld().getName();
-        int pageCount = event.getNewBookMeta().getPageCount();
-        List<String> pageContent = Collections.singletonList(event.getNewBookMeta().getPages().toString().replace("\\", "\\\\"));
-        String signature = event.getNewBookMeta().getAuthor();
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        if (player.hasPermission("logger.exempt")) return;
+    public void bookEditing(final PlayerEditBookEvent event){
 
         //Book Spy
-        if (main.getConfig().getBoolean("Spy-Features.Book-Spy.Enable")) {
+        if (this.main.getConfig().getBoolean("Spy-Features.Book-Spy.Enable")) {
 
-            OnBookSpy bookSpy = new OnBookSpy();
-            bookSpy.onBookSpy(event);
+            new OnBookSpy().onBookSpy(event);
 
         }
 
-        if (!event.isSigning()) signature = "no one";
+        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Book-Editing")) {
 
-        // Log To Files Handling
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log-Player.Book-Editing")) {
+            final Player player = event.getPlayer();
 
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (player.hasPermission(loggerExempt)) return;
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+            final String playerName = player.getName();
+            final String worldName = player.getWorld().getName();
+            final BookMeta bookMeta = event.getNewBookMeta();
+            final int pageCount = bookMeta.getPageCount();
+            final List<String> pageContent = Collections.singletonList(bookMeta.getPages().toString().replace("\\", "\\\\"));
+            String signature = bookMeta.getAuthor();
+
+            if (!event.isSigning()) signature = "no one";
+
+            if (isLogToFiles) {
+
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).isEmpty()) {
 
@@ -71,17 +71,17 @@ public class OnBook implements Listener {
 
                     } catch (IOException e) {
 
-                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
 
-                    if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+                    if (isExternal && this.main.external.isConnected()) {
 
                         ExternalData.bookEditing(serverName, worldName, playerName, pageCount, pageContent, signature, true);
 
                     }
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                    if (isSqlite && this.main.getSqLite().isConnected()) {
 
                         SQLiteData.insertBook(serverName, player, pageCount, pageContent, signature, true);
 
@@ -99,23 +99,22 @@ public class OnBook implements Listener {
 
                 } catch (IOException e) {
 
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             }
 
             // Discord
-            if (!player.hasPermission("logger.exempt.discord")) {
+            if (!player.hasPermission(loggerExemptDiscord)) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).isEmpty()) {
 
                         Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%page%", String.valueOf(pageCount)).replaceAll("%content%", String.valueOf(pageContent)).replaceAll("%sign%", String.valueOf(signature)), false);
 
                     }
-
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing")).isEmpty()) {
@@ -126,21 +125,21 @@ public class OnBook implements Listener {
             }
 
             // MySQL
-            if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+            if (isExternal && this.main.external.isConnected()) {
 
                 try {
 
-                    ExternalData.bookEditing(serverName, worldName, playerName, pageCount, pageContent, signature, false);
+                    ExternalData.bookEditing(serverName, worldName, playerName, pageCount, pageContent, signature, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {
 
-                    SQLiteData.insertBook(serverName, player, pageCount, pageContent, signature, player.hasPermission("logger.staff.log"));
+                    SQLiteData.insertBook(serverName, player, pageCount, pageContent, signature, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

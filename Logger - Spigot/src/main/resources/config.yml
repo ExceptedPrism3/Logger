@@ -19,6 +19,9 @@
 # Server Name
 Server-Name: "Server_Name"
 
+# Date & Time Formatter
+Time-Formatter: "yyyy-MM-dd HH:mm:ss"
+
 # How many Days for the logs to be deleted
 # Set it to -1 to cancel the Deletion
 File-Deletion: 7

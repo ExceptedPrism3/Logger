@@ -58,7 +58,7 @@ public class SQLiteData {
 
             playerDeath = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Death" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(40)," +
-                    "X INTEGER, Y INTEGER, Z INTEGER, Cause TEXT(100), By_Who TEXT(100), Is_Staff INTEGER)");
+                    "Player_Level INTEGER, X INTEGER, Y INTEGER, Z INTEGER, Cause TEXT(100), By_Who TEXT(100), Is_Staff INTEGER)");
 
             playerTeleport = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Teleport" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, World TEXT(100), Player_Name TEXT(40)," +
@@ -265,17 +265,18 @@ public class SQLiteData {
 
     public static void insertPlayerDeath(String serverName, Player player, String cause, String by_who, boolean isStaff) {
         try {
-            PreparedStatement playerDeath = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Player_Death (Server_Name, Date, World, Player_Name, X, Y, Z, Cause, By_Who, Is_Staff) VALUES (?,?,?,?,?,?,?,?,?,?)");
+            PreparedStatement playerDeath = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Player_Death (Server_Name, Date, World, Player_Name, Player_Level, X, Y, Z, Cause, By_Who, Is_Staff) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
             playerDeath.setString(1, serverName);
             playerDeath.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
             playerDeath.setString(3, player.getWorld().getName());
             playerDeath.setString(4, player.getName());
-            playerDeath.setInt(5, player.getLocation().getBlockX());
-            playerDeath.setInt(6, player.getLocation().getBlockY());
-            playerDeath.setInt(7, player.getLocation().getBlockZ());
-            playerDeath.setString(8, cause);
-            playerDeath.setString(9, by_who);
-            playerDeath.setBoolean(10, isStaff);
+            playerDeath.setInt(5, player.getLevel());
+            playerDeath.setInt(6, player.getLocation().getBlockX());
+            playerDeath.setInt(7, player.getLocation().getBlockY());
+            playerDeath.setInt(8, player.getLocation().getBlockZ());
+            playerDeath.setString(9, cause);
+            playerDeath.setString(10, by_who);
+            playerDeath.setBoolean(11, isStaff);
 
             playerDeath.executeUpdate();
 

@@ -16,33 +16,33 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.logger.Utils.Data.*;
 
 public class OnPlayerLevel implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onLevelChange(PlayerLevelChangeEvent event) {
+    public void onLevelChange(final PlayerLevelChangeEvent event) {
 
-        Player player = event.getPlayer();
-        String playerName = player.getName();
-        int logAbove = main.getConfig().getInt("Player-Level.Log-Above");
-        double playerLevel = event.getNewLevel();
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (this.main.getConfig().getBoolean("Log-Player.Level")) {
 
-        if (player.hasPermission("logger.exempt")) return;
+            final Player player = event.getPlayer();
 
-        if (main.getConfig().getBoolean("Log-Player.Level")) {
+            if (player.hasPermission(loggerExempt)) return;
+
+            final String playerName = player.getName();
+            final int logAbove = abovePlayerLevel;
+            final double playerLevel = event.getNewLevel();
 
             if (playerLevel == logAbove) {
 
                 // Log To Files Handling
-                if (main.getConfig().getBoolean("Log-to-Files")) {
+                if (isLogToFiles) {
 
-                    if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                    if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).isEmpty()) {
 
@@ -57,18 +57,18 @@ public class OnPlayerLevel implements Listener {
 
                         } catch (IOException e) {
 
-                            main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                            this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
 
                         }
 
-                        if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+                        if (isExternal && this.main.external.isConnected()) {
 
                             ExternalData.levelChange(serverName, playerName, true);
 
                         }
 
-                        if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                        if (isSqlite && this.main.getSqLite().isConnected()) {
 
                             SQLiteData.insertLevelChange(serverName, player, true);
 
@@ -85,23 +85,22 @@ public class OnPlayerLevel implements Listener {
 
                     } catch (IOException e) {
 
-                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
                 }
 
                 // Discord
-                if (!player.hasPermission("logger.exempt.discord")) {
+                if (!player.hasPermission(loggerExemptDiscord)) {
 
-                    if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+                    if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).isEmpty()) {
 
                             Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%level%", String.valueOf(logAbove)), false);
 
                         }
-
                     } else {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Level")).isEmpty()) {
@@ -112,21 +111,21 @@ public class OnPlayerLevel implements Listener {
                 }
 
                 // MySQL
-                if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
+                if (isExternal && this.main.external.isConnected()) {
 
                     try {
 
-                        ExternalData.levelChange(serverName, playerName, player.hasPermission("logger.staff.log"));
+                        ExternalData.levelChange(serverName, playerName, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
 
                 // SQLite
-                if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                if (isSqlite && this.main.getSqLite().isConnected()) {
 
                     try {
 
-                        SQLiteData.insertLevelChange(serverName, player, player.hasPermission("logger.staff.log"));
+                        SQLiteData.insertLevelChange(serverName, player, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

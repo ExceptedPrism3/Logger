@@ -8,7 +8,7 @@ public class EssentialsUtil {
 
     public static Essentials getEssentialsAPI(){
 
-        IEssentials essentials = (IEssentials) Bukkit.getPluginManager().getPlugin("Essentials");
+        final IEssentials essentials = (IEssentials) Bukkit.getPluginManager().getPlugin("Essentials");
 
         if (essentials instanceof Essentials){
 

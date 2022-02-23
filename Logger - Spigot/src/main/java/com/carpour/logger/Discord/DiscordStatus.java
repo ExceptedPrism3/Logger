@@ -14,8 +14,8 @@ public class DiscordStatus {
     private final Discord discord = new Discord();
     private final JDA jda = discord.getJda();
 
-    int currentIndex = 0;
-    List<List<String>> activities = (List<List<String>>) DiscordFile.get().get("ActivityCycling.Activities");
+    private int currentIndex = 0;
+    private final List<List<String>> activities = (List<List<String>>) DiscordFile.get().get("ActivityCycling.Activities");
 
     private static final ScheduledExecutorService threadPool = Executors.newSingleThreadScheduledExecutor();
 
@@ -23,8 +23,8 @@ public class DiscordStatus {
 
         try {
 
-            assert activities != null;
-            activities.forEach((list -> Activity.ActivityType.valueOf(list.
+            assert this.activities != null;
+            this.activities.forEach((list -> Activity.ActivityType.valueOf(list.
                     get(0).replace("playing", "streaming").toUpperCase())));
 
         }catch (Exception exception){
@@ -36,17 +36,17 @@ public class DiscordStatus {
 
         if (DiscordFile.get().getBoolean("ActivityCycling.Random")){
 
-            Collections.shuffle(activities);
+            Collections.shuffle(this.activities);
 
         }
 
         threadPool.scheduleWithFixedDelay(() -> {
 
-            jda.getPresence().setActivity(Activity.of(Activity.ActivityType.valueOf(
-                    activities.get(currentIndex).get(0).replaceAll("playing", "streaming")
-                            .toUpperCase()), activities.get(currentIndex).get(1)));
+            this.jda.getPresence().setActivity(Activity.of(Activity.ActivityType.valueOf(
+                    this.activities.get(this.currentIndex).get(0).replaceAll("playing", "streaming")
+                            .toUpperCase()), this.activities.get(this.currentIndex).get(1)));
 
-            currentIndex = (currentIndex + 1) % activities.size();
+            this.currentIndex = (this.currentIndex + 1) % this.activities.size();
 
         }, 0, DiscordFile.get().getInt("ActivityCycling.Time"), TimeUnit.SECONDS);
     }

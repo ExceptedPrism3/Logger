@@ -7,6 +7,8 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Command;
 
+import static com.carpour.loggerbungeecord.Utils.Data.*;
+
 public class Reload extends Command {
 
     private final Main main = Main.getInstance();
@@ -16,16 +18,16 @@ public class Reload extends Command {
     @Override
     public void execute(CommandSender sender, String[] args){
 
-        if (sender.hasPermission("loggerproxy.staff") || sender.hasPermission("loggerproxy.reload")) {
+        if (sender.hasPermission(loggerStaff) || sender.hasPermission(loggerReload)) {
 
             if (args.length == 0) {
 
-                sender.sendMessage(new TextComponent("Running Logger " + ChatColor.AQUA + ChatColor.BOLD + Main.getInstance().getDescription().getVersion()));
+                sender.sendMessage(new TextComponent("Running Logger " + ChatColor.AQUA + ChatColor.BOLD + pluginVersion));
 
             } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
 
-                main.getConfig().init();
-                new Messages().init();
+                this.main.getConfig().init();
+                Messages.init();
                 sender.sendMessage(new TextComponent(Messages.getString("General.Reload")));
 
             } else {

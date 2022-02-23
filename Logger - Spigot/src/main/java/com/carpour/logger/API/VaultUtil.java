@@ -13,7 +13,7 @@ public class VaultUtil {
 
         if (getServer().getPluginManager().getPlugin("Vault") == null) return false;
 
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        final RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
 
         if (rsp == null) return false;
 

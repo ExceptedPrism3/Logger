@@ -14,6 +14,9 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import static com.carpour.logger.Utils.Data.fileDeletion;
+import static com.carpour.logger.Utils.Data.isStaffEnabled;
+
 public class FileHandler {
 
     // Folders Part
@@ -101,11 +104,11 @@ public class FileHandler {
 
         dataFolder.mkdir();
 
-        File logsFolder = new File(dataFolder, "Logs");
+        final File logsFolder = new File(dataFolder, "Logs");
         logsFolder.mkdirs();
 
-        Date date = new Date();
-        SimpleDateFormat filenameDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        final Date date = new Date();
+        final SimpleDateFormat filenameDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         // Player Side Part
         staffFolder = new File(logsFolder, "Staff");
@@ -210,7 +213,7 @@ public class FileHandler {
 
             // Folder Handling
             // Player Side Part
-            if (main.getConfig().getBoolean("Staff.Enabled")) staffFolder.mkdir();
+            if (isStaffEnabled) staffFolder.mkdir();
 
             chatLogFolder.mkdir();
 
@@ -279,7 +282,7 @@ public class FileHandler {
 
             // Files Handling
             // Player Side
-            if (main.getConfig().getBoolean("Staff.Enabled")) staffFile.createNewFile();
+            if (isStaffEnabled) staffFile.createNewFile();
 
             chatLogFile.createNewFile();
 
@@ -417,7 +420,7 @@ public class FileHandler {
 
     public void deleteFile(File file) {
 
-        if (main.getConfig().getInt("File-Deletion") <= 0 ) return;
+        if (fileDeletion <= 0 ) return;
 
         FileTime creationTime = null;
 
@@ -431,16 +434,15 @@ public class FileHandler {
         }
 
         assert creationTime != null;
-        long offset = System.currentTimeMillis() - creationTime.toMillis();
-        long fileDeletionDays = main.getConfig().getInt("File-Deletion");
-        long maxAge = TimeUnit.DAYS.toMillis(fileDeletionDays);
+        final long offset = System.currentTimeMillis() - creationTime.toMillis();
+        final long maxAge = TimeUnit.DAYS.toMillis(fileDeletion);
 
         if (offset > maxAge) file.delete();
     }
 
     public void deleteFiles(){
 
-        if (main.getConfig().getInt("File-Deletion") <= 0 ) return;
+        if (fileDeletion <= 0 ) return;
 
         // Player Side
         for (File chatLog : Objects.requireNonNull(chatLogFolder.listFiles()))
