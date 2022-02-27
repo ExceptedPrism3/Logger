@@ -18,60 +18,57 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.carpour.loggervelocity.Utils.Data.*;
 
 public class OnCommand {
 
     @Subscribe
-    public void onCmd(CommandExecuteEvent event) {
+    public void onCmd(final CommandExecuteEvent event) {
 
-        Main main = Main.getInstance();
-        Messages messages = new Messages();
+        final Main main = Main.getInstance();
+        final Messages messages = new Messages();
 
-        CommandSource commandSource = event.getCommandSource();
+        final CommandSource commandSource = event.getCommandSource();
 
         if (commandSource instanceof Player){
 
-            Player player = (Player) commandSource;
-            String playerName = player.getUsername();
-            String command = event.getCommand().replace("\\", "\\\\");
-            String server = player.getCurrentServer().get().getServerInfo().getName();
-            List<String> commandParts = Arrays.asList(command.split("\\s+"));
-            String serverName = main.getConfig().getString("Server-Name");
-            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            final Player player = (Player) commandSource;
 
-            if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")
-                    && main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) return;
+            if (main.getConfig().getBoolean("Log-Player.Commands") && player.getCurrentServer().isPresent()) {
 
-            // Stop Adding Message to Log if the Player has the correct Permissions
-            if (player.hasPermission("loggerproxy.exempt")) return;
+                if (isWhitelisted && isBlacklisted) return;
 
-            if (main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
+                if (player.hasPermission(loggerExempt)) return;
 
-                for (String list : main.getConfig().getStringList("Player-Commands.Commands-to-Block")) {
+                final String playerName = player.getUsername();
+                final String command = event.getCommand().replace("\\", "\\\\");
+                final String server = player.getCurrentServer().get().getServerInfo().getName();
+                final List<String> commandParts = Arrays.asList(command.split("\\s+"));
 
-                    if (commandParts.contains(list)) return;
+                if (isBlacklisted) {
 
+                    for (String list : commandsToBlock) {
+
+                        if (commandParts.contains(list)) return;
+
+                    }
                 }
-            }
 
-            // Whitelist Commands
-            if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")){
+                // Whitelist Commands
+                if (isWhitelisted) {
 
-                OnCommandWhitelist whitelist = new OnCommandWhitelist();
-                whitelist.onWhitelistedCommand(event);
+                    new OnCommandWhitelist().onWhitelistedCommand(event);
 
-                return;
-            }
+                    return;
+                }
 
-            if (main.getConfig().getBoolean("Log-Player.Commands")) {
+                // Log To Files
+                if (isLogToFiles) {
 
-                // Log To Files Handling
-                if (main.getConfig().getBoolean("Log-to-Files")) {
-
-                    if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
+                    if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                         if (!messages.getString("Discord.Player-Commands-Staff").isEmpty()) {
 
@@ -81,7 +78,7 @@ public class OnCommand {
 
                         try {
 
-                            BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
+                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
                             out.write(messages.getString("Files.Player-Commands-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%player%", playerName).replaceAll("%command%", command) + "\n");
                             out.close();
 
@@ -92,13 +89,13 @@ public class OnCommand {
 
                         }
 
-                        if (main.getConfig().getBoolean("MySQL.Enable") && External.isConnected()) {
+                        if (isExternal && External.isConnected()) {
 
                             ExternalData.playerCommands(serverName, playerName, command, true);
 
                         }
 
-                        if (main.getConfig().getBoolean("SQLite.Enable") && SQLite.isConnected()) {
+                        if (isSqlite && SQLite.isConnected()) {
 
                             SQLiteData.insertPlayerCommands(serverName, playerName, command, true);
 
@@ -110,7 +107,7 @@ public class OnCommand {
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerCommandLogFile(), true));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerCommandLogFile(), true));
                         out.write(messages.getString("Files.Player-Commands").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%player%", playerName).replaceAll("%command%", command) + "\n");
                         out.close();
 
@@ -123,16 +120,15 @@ public class OnCommand {
                 }
 
                 // Discord
-                if (!player.hasPermission("logger.exempt.discord")) {
+                if (!player.hasPermission(loggerExemptDiscord)) {
 
-                    if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
+                    if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                         if (!messages.getString("Discord.Player-Commands-Staff").isEmpty()) {
 
                             Discord.staffChat(player, messages.getString("Discord.Player-Commands-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%command%", command), false);
 
                         }
-
                     } else {
 
                         if (!messages.getString("Discord.Player-Commands").isEmpty()) {
@@ -143,30 +139,29 @@ public class OnCommand {
                     }
                 }
 
-                // MySQL Handling
-                if (main.getConfig().getBoolean("MySQL.Enable") && External.isConnected()) {
+                // External
+                if (isExternal && External.isConnected()) {
 
                     try {
 
-                        ExternalData.playerCommands(serverName, playerName, command, player.hasPermission("loggerproxy.staff.log"));
+                        ExternalData.playerCommands(serverName, playerName, command, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
 
-                // SQLite Handling
-                if (main.getConfig().getBoolean("SQLite.Enable") && SQLite.isConnected()) {
+                // SQLite
+                if (isSqlite && SQLite.isConnected()) {
 
                     try {
 
-                        SQLiteData.insertPlayerCommands(serverName, playerName, command, player.hasPermission("loggerproxy.staff.log"));
+                        SQLiteData.insertPlayerCommands(serverName, playerName, command, player.hasPermission(loggerStaffLog));
 
-                    } catch (Exception exception) { exception.printStackTrace(); }
+                    } catch (Exception e) { e.printStackTrace(); }
                 }
             }
         }else{
 
-            Console oCC = new Console();
-            oCC.onConsole(event);
+            new Console().onConsole(event);
 
         }
     }

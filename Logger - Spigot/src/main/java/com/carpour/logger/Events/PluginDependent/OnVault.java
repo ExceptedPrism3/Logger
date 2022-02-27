@@ -76,7 +76,7 @@ public class OnVault implements Listener, Runnable {
 
                                 }
 
-                                if (isExternal && this.main.external.isConnected()) {
+                                if (isExternal && this.main.getExternal().isConnected()) {
 
                                     ExternalData.vault(serverName, playerName, oldBalance, newBalance, true);
 
@@ -127,7 +127,7 @@ public class OnVault implements Listener, Runnable {
                         }
 
                         // MySQL Handling
-                        if (isExternal && this.main.external.isConnected()) {
+                        if (isExternal && this.main.getExternal().isConnected()) {
 
                             try {
 

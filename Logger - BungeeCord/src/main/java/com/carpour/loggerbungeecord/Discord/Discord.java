@@ -7,6 +7,8 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
+import static com.carpour.loggerbungeecord.Utils.Data.isStaffEnabled;
+
 public class Discord {
 
     private final Main main = Main.getInstance();
@@ -30,7 +32,7 @@ public class Discord {
 
         if (DiscordFile.getBoolean("Discord.Enable")) {
 
-            String botToken = DiscordFile.getString("Discord.Bot-Token");
+            final String botToken = DiscordFile.getString("Discord.Bot-Token");
 
             try {
 
@@ -46,30 +48,30 @@ public class Discord {
 
             }
 
-            String staffChannelID = DiscordFile.getString("Discord.Staff.Channel-ID");
+            final String staffChannelID = DiscordFile.getString("Discord.Staff.Channel-ID");
 
-            String playerChatChannelID = DiscordFile.getString("Discord.Player-Chat.Channel-ID");
+            final String playerChatChannelID = DiscordFile.getString("Discord.Player-Chat.Channel-ID");
 
-            String playerCommandsChannelID = DiscordFile.getString("Discord.Player-Commands.Channel-ID");
+            final String playerCommandsChannelID = DiscordFile.getString("Discord.Player-Commands.Channel-ID");
 
-            String playerLoginChannelID = DiscordFile.getString("Discord.Player-Login.Channel-ID");
+            final String playerLoginChannelID = DiscordFile.getString("Discord.Player-Login.Channel-ID");
 
-            String playerLeaveChannelID = DiscordFile.getString("Discord.Player-Leave.Channel-ID");
+            final String playerLeaveChannelID = DiscordFile.getString("Discord.Player-Leave.Channel-ID");
 
-            String serverReloadChannelID = DiscordFile.getString("Discord.Server-Side.Restart.Channel-ID");
+            final String serverReloadChannelID = DiscordFile.getString("Discord.Server-Side.Restart.Channel-ID");
 
-            String serverStartChannelID = DiscordFile.getString("Discord.Server-Side.Start.Channel-ID");
+            final String serverStartChannelID = DiscordFile.getString("Discord.Server-Side.Start.Channel-ID");
 
-            String serverStopChannelID = DiscordFile.getString("Discord.Server-Side.Stop.Channel-ID");
+            final String serverStopChannelID = DiscordFile.getString("Discord.Server-Side.Stop.Channel-ID");
 
-            String ramChannelID = DiscordFile.getString("Discord.Server-Side.RAM.Channel-ID");
+            final String ramChannelID = DiscordFile.getString("Discord.Server-Side.RAM.Channel-ID");
 
-            String liteBansChannelID = DiscordFile.getString("Discord.Extra.LiteBans.Channel-ID");
+            final String liteBansChannelID = DiscordFile.getString("Discord.Extra.LiteBans.Channel-ID");
 
 
             try {
 
-                if (!(staffChannelID.isEmpty()) && main.getConfig().getBoolean("Staff.Enabled") && !staffChannelID.equals("LINK_HERE")) {
+                if (!(staffChannelID.isEmpty()) && isStaffEnabled && !staffChannelID.equals("LINK_HERE")) {
 
                     staffChannel = jda.getTextChannelById(staffChannelID);
 
@@ -130,7 +132,7 @@ public class Discord {
                 }
             }catch (Exception e){
 
-                main.getLogger().severe("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
+                Main.getInstance().getLogger().severe("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
 
             }
         }
@@ -166,7 +168,7 @@ public class Discord {
 
         if (serverReloadChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("Console Reload");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("Console Reload");
 
         if (!contentinAuthorLine) builder.setDescription(content);
 
@@ -177,7 +179,7 @@ public class Discord {
 
         if (serverStartChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Start");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Start");
 
         if (!contentinAuthorLine) builder.setDescription(content);
 
@@ -188,7 +190,7 @@ public class Discord {
 
         if (serverStopChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Stop");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Stop");
 
         if (!contentinAuthorLine) builder.setDescription(content);
 
@@ -199,7 +201,7 @@ public class Discord {
 
         if (ramChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("RAM");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("RAM");
 
         if (!contentinAuthorLine) builder.setDescription(content);
 
@@ -210,7 +212,7 @@ public class Discord {
 
         if (liteBansChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("LiteBans");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("LiteBans");
 
         if (!contentinAuthorLine) builder.setDescription(content);
 
@@ -220,7 +222,7 @@ public class Discord {
     private static void discordUtil(ProxiedPlayer player, String content, boolean contentinAuthorLine, TextChannel channel) {
         if (channel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getName(),
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getName(),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);

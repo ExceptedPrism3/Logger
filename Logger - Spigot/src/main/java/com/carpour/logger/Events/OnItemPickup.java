@@ -77,7 +77,7 @@ public class OnItemPickup implements Listener {
 
                     }
 
-                    if (isExternal && this.main.external.isConnected()) {
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
                         ExternalData.itemPickup(serverName, worldName, playerName, item, amount, blockX, blockY, blockZ, itemName, true);
 
@@ -127,7 +127,7 @@ public class OnItemPickup implements Listener {
             }
 
             // MySQL
-            if (isExternal && this.main.external.isConnected()) {
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 

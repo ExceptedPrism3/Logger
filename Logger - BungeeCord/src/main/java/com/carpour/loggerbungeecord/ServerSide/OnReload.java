@@ -16,34 +16,34 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.loggerbungeecord.Utils.Data.*;
 
 public class OnReload implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler
-    public void onServerReload(ProxyReloadEvent event){
+    public void onServerReload(final ProxyReloadEvent event){
 
-        CommandSender cS = event.getSender();
-        String playerName = event.getSender().getName();
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (this.main.getConfig().getBoolean("Log-Server.Reload")) {
 
-        if (main.getConfig().getBoolean("Log-Server.Reload")) {
+            final CommandSender cS = event.getSender();
 
             if (cS instanceof ProxiedPlayer) {
 
-                ProxiedPlayer player = (ProxiedPlayer) event.getSender();
-                String server = player.getServer().getInfo().getName();
+                final ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 
-                if (player.hasPermission("loggerproxy.exempt")) return;
+                if (player.hasPermission(loggerExempt)) return;
 
-                //Log To Files Handling
-                if (main.getConfig().getBoolean("Log-to-Files")) {
+                final String playerName = player.getName();
+                final String server = player.getServer().getInfo().getName();
 
-                    if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
+                // Log To Files Handling
+                if (isLogToFiles) {
+
+                    if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                         if (!Messages.getString("Discord.Server-Reload-Player-Staff").isEmpty()) {
 
@@ -53,25 +53,24 @@ public class OnReload implements Listener {
 
                         try {
 
-                            BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
+                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
                             out.write(Messages.getString("Files.Server-Reload-Player-Staff-").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%player%", playerName) + "\n");
                             out.close();
 
                         } catch (IOException e) {
 
-                            Main.getInstance().getLogger().warning("An error occurred while logging into the appropriate file.");
+                            Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
 
                         }
 
-                        if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
-
+                        if (isExternal && this.main.getExternal().isConnected()) {
 
                             ExternalData.serverReload(serverName, playerName, true);
 
                         }
 
-                        if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                        if (isSqlite && this.main.getSqLite().isConnected()) {
 
                             SQLiteData.insertServerReload(serverName, playerName, true);
 
@@ -83,112 +82,99 @@ public class OnReload implements Listener {
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getReloadLogFile(), true));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getReloadLogFile(), true));
                         out.write(Messages.getString("Files.Server-Reload-Player").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%player%", playerName) + "\n");
                         out.close();
 
                     } catch (IOException e) {
 
-                        Main.getInstance().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
                 }
 
-                //Discord Integration
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
+                // Discord Integration
+                if (!player.hasPermission(loggerExemptDiscord)) {
 
-                    if (!Messages.getString("Discord.Server-Reload-Player-Staff").isEmpty()) {
+                    if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Server-Reload-Player-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server), false);
+                        if (!Messages.getString("Discord.Server-Reload-Player-Staff").isEmpty()) {
 
-                    }
+                            Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Server-Reload-Player-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server), false);
 
-                } else {
+                        }
+                    } else {
 
-                    if (!Messages.getString("Discord.Server-Reload-Player").isEmpty()) {
+                        if (!Messages.getString("Discord.Server-Reload-Player").isEmpty()) {
 
-                        Discord.serverReload(playerName, Objects.requireNonNull(Messages.getString("Discord.Server-Reload-Player")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server), false);
+                            Discord.serverReload(playerName, Objects.requireNonNull(Messages.getString("Discord.Server-Reload-Player")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server), false);
 
-                    }
-                }
-
-                //MySQL Handling
-                if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
-
-                    try {
-
-                        ExternalData.serverReload(serverName, playerName, player.hasPermission("loggerproxy.staff.log"));
-
-                    } catch (Exception e) {
-
-                        e.printStackTrace();
-
+                        }
                     }
                 }
 
-                //SQLite Handling
-                if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                // External Handling
+                if (isExternal && this.main.getExternal().isConnected()) {
 
                     try {
 
-                        SQLiteData.insertServerReload(serverName, playerName, player.hasPermission("loggerproxy.staff.log"));
+                        ExternalData.serverReload(serverName, playerName, player.hasPermission(loggerStaffLog));
 
-                    } catch (Exception exception) {
+                    } catch (Exception e) { e.printStackTrace(); }
+                }
 
-                        exception.printStackTrace();
+                // SQLite Handling
+                if (isSqlite && this.main.getSqLite().isConnected()) {
 
-                    }
+                    try {
+
+                        SQLiteData.insertServerReload(serverName, playerName, player.hasPermission(loggerStaffLog));
+
+                    } catch (Exception e) { e.printStackTrace(); }
                 }
 
             } else {
 
+                // File Logging
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getReloadLogFile(), true));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getReloadLogFile(), true));
                     out.write(Messages.getString("Files.Server-Side.Reload-Console").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())) + "\n");
                     out.close();
 
                 } catch (IOException e) {
 
-                    Main.getInstance().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
 
-                //Discord
+                // Discord
                 if (!Messages.getString("Discord.Server-Side.Restart-Console").isEmpty()) {
 
                     Discord.serverReload(null, Objects.requireNonNull(Messages.getString("Discord.Server-Side.Restart-Console")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())), false);
 
                 }
 
-                //MySQL Handling
-                if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
+                // External Handling
+                if (isExternal && this.main.getExternal().isConnected()) {
 
                     try {
 
                         ExternalData.serverReload(serverName, null, true);
 
-                    } catch (Exception e) {
-
-                        e.printStackTrace();
-
-                    }
+                    } catch (Exception e) { e.printStackTrace(); }
                 }
 
-                //SQLite Handling
-                if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                // SQLite Handling
+                if (isSqlite && this.main.getSqLite().isConnected()) {
 
                     try {
 
                         SQLiteData.insertServerReload(serverName, null, true);
 
-                    } catch (Exception exception) {
-
-                        exception.printStackTrace();
-
-                    }
+                    } catch (Exception e) { e.printStackTrace(); }
                 }
             }
         }

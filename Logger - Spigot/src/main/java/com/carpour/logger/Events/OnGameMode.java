@@ -66,7 +66,7 @@ public class OnGameMode implements Listener {
 
                         }
 
-                        if (isExternal && this.main.external.isConnected()) {
+                        if (isExternal && this.main.getExternal().isConnected()) {
 
                             ExternalData.gameMode(serverName, worldName, playerName, gameMode, true);
 
@@ -116,7 +116,7 @@ public class OnGameMode implements Listener {
                 }
 
                 // MySQL Handling
-                if (isExternal && this.main.external.isConnected()) {
+                if (isExternal && this.main.getExternal().isConnected()) {
 
                     try {
 

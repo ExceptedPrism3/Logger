@@ -64,6 +64,7 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+        <!-- Extra Plugin Dependent API Repo -->
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
@@ -77,6 +78,7 @@
             <version>1.17-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Discord JDA -->
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
@@ -88,6 +90,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- DataBases -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -99,15 +102,16 @@
             <version>3.36.0.3</version>
         </dependency>
         <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>3.0.2-rc</version>
+        </dependency>
+        <!-- Plugin Dependent -->
+        <dependency>
             <groupId>com.gitlab.ruany</groupId>
             <artifactId>LiteBansAPI</artifactId>
             <version>LATEST</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
-            <version>3.0.2-rc</version>
         </dependency>
     </dependencies>
 </project>

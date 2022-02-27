@@ -16,34 +16,34 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+
+import static com.carpour.loggervelocity.Utils.Data.*;
 
 public class OnLeave {
 
     @Subscribe
-    public void onQuit(DisconnectEvent event) {
+    public void onQuit(final DisconnectEvent event) {
 
-        Main main = Main.getInstance();
-        Messages messages = new Messages();
-
-        Player player = event.getPlayer();
-        String playerName = player.getUsername();
-
-        // This resolves an error showing up if the targeted server is offline whist connecting
-        if (!event.getPlayer().getCurrentServer().isPresent()) return;
-
-        String server = player.getCurrentServer().get().getServerInfo().getName();
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        if (player.hasPermission("loggerproxy.exempt")) return;
+        final Main main = Main.getInstance();
+        final Messages messages = new Messages();
 
         if (main.getConfig().getBoolean("Log-Player.Leave")) {
 
-            // Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            final Player player = event.getPlayer();
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
+            if (player.hasPermission(loggerExempt)) return;
+
+            final String playerName = player.getUsername();
+
+            // This resolves an error showing up if the targeted server is offline whist connecting
+            if (!player.getCurrentServer().isPresent()) return;
+
+            final String server = player.getCurrentServer().get().getServerInfo().getName();
+
+            // Log To Files
+            if (isLogToFiles) {
+
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!messages.getString("Discord.Player-Leave-Staff").isEmpty()) {
 
@@ -53,7 +53,7 @@ public class OnLeave {
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
                         out.write(messages.getString("Files.Player-Leave-Staff").replaceAll("%server%", server).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName) + "\n");
                         out.close();
 
@@ -64,13 +64,13 @@ public class OnLeave {
 
                     }
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && External.isConnected()) {
+                    if (isExternal && External.isConnected()) {
 
                         ExternalData.playerLeave(serverName, playerName, true);
 
                     }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && SQLite.isConnected()) {
+                    if (isSqlite && SQLite.isConnected()) {
 
                         SQLiteData.insertPlayerLeave(serverName, playerName, true);
 
@@ -81,7 +81,7 @@ public class OnLeave {
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLeaveLogFile(), true));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLeaveLogFile(), true));
                     out.write(messages.getString("Files.Player-Leave").replaceAll("%server%", server).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName) + "\n");
                     out.close();
 
@@ -93,17 +93,16 @@ public class OnLeave {
                 }
             }
 
-            // Discord Integration
-            if (!player.hasPermission("logger.exempt.discord")) {
+            // Discord
+            if (!player.hasPermission(loggerExemptDiscord)) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!messages.getString("Discord.Player-Leave-Staff").isEmpty()) {
 
                         Discord.staffChat(player, messages.getString("Discord.Player-Leave-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server), false);
 
                     }
-
                 } else {
 
                     if (!messages.getString("Discord.Player-Leave").isEmpty()) {
@@ -114,24 +113,24 @@ public class OnLeave {
                 }
             }
 
-            // MySQL Handling
-            if (main.getConfig().getBoolean("MySQL.Enable") && External.isConnected()) {
+            // External
+            if (isExternal && External.isConnected()) {
 
                 try {
 
-                    ExternalData.playerLeave(serverName, playerName, player.hasPermission("loggerproxy.staff.log"));
+                    ExternalData.playerLeave(serverName, playerName, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
-            // SQLite Handling
-            if (main.getConfig().getBoolean("SQLite.Enable") && SQLite.isConnected()) {
+            // SQLite
+            if (isSqlite && SQLite.isConnected()) {
 
                 try {
 
-                    SQLiteData.insertPlayerLeave(serverName, playerName, player.hasPermission("loggerproxy.staff.log"));
+                    SQLiteData.insertPlayerLeave(serverName, playerName, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception exception) { exception.printStackTrace(); }
+                } catch (Exception e) { e.printStackTrace(); }
             }
         }
     }

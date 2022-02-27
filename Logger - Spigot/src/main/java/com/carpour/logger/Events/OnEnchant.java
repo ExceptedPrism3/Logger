@@ -82,7 +82,7 @@ public class OnEnchant implements Listener {
 
                     }
 
-                    if (isExternal && this.main.external.isConnected()) {
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
                         ExternalData.enchant(serverName, worldName, playerName, x, y, z, enchs, enchantmentLevel, item, cost, true);
 
@@ -132,7 +132,7 @@ public class OnEnchant implements Listener {
             }
 
             // MySQL
-            if (isExternal && this.main.external.isConnected()) {
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 

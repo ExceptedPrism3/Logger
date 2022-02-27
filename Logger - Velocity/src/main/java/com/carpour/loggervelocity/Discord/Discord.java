@@ -7,6 +7,8 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import static com.carpour.loggervelocity.Utils.Data.isStaffEnabled;
+
 public class Discord {
 
     private static JDA jda;
@@ -32,7 +34,7 @@ public class Discord {
 
         if (discordFile.getBoolean("Discord.Enable")) {
 
-            String botToken = discordFile.getString("Discord.Bot-Token");
+            final String botToken = discordFile.getString("Discord.Bot-Token");
 
             try {
 
@@ -48,29 +50,29 @@ public class Discord {
 
             }
 
-            String staffChannelID = discordFile.getString("Discord.Staff.Channel-ID");
+            final String staffChannelID = discordFile.getString("Discord.Staff.Channel-ID");
 
-            String playerChatChannelID = discordFile.getString("Discord.Player-Chat.Channel-ID");
+            final String playerChatChannelID = discordFile.getString("Discord.Player-Chat.Channel-ID");
 
-            String playerCommandsChannelID = discordFile.getString("Discord.Player-Commands.Channel-ID");
+            final String playerCommandsChannelID = discordFile.getString("Discord.Player-Commands.Channel-ID");
 
-            String playerLoginChannelID = discordFile.getString("Discord.Player-Login.Channel-ID");
+            final String playerLoginChannelID = discordFile.getString("Discord.Player-Login.Channel-ID");
 
-            String playerLeaveChannelID = discordFile.getString("Discord.Player-Leave.Channel-ID");
+            final String playerLeaveChannelID = discordFile.getString("Discord.Player-Leave.Channel-ID");
 
-            String consoleCommandsChannelID = discordFile.getString("Discord.Server-Side.Console-Commands.Channel-ID");
+            final String consoleCommandsChannelID = discordFile.getString("Discord.Server-Side.Console-Commands.Channel-ID");
 
-            String serverStartChannelID = discordFile.getString("Discord.Server-Side.Start.Channel-ID");
+            final String serverStartChannelID = discordFile.getString("Discord.Server-Side.Start.Channel-ID");
 
-            String serverStopChannelID = discordFile.getString("Discord.Server-Side.Stop.Channel-ID");
+            final String serverStopChannelID = discordFile.getString("Discord.Server-Side.Stop.Channel-ID");
 
-            String ramChannelID = discordFile.getString("Discord.Server-Side.RAM.Channel-ID");
+            final String ramChannelID = discordFile.getString("Discord.Server-Side.RAM.Channel-ID");
 
-            String liteBansChannelID = discordFile.getString("Discord.Extra.LiteBans.Channel-ID");
+            final String liteBansChannelID = discordFile.getString("Discord.Extra.LiteBans.Channel-ID");
 
             try {
 
-                if (!(staffChannelID.isEmpty()) && main.getConfig().getBoolean("Staff.Enabled") && !staffChannelID.equals("LINK_HERE")) {
+                if (!(staffChannelID.isEmpty()) && isStaffEnabled && !staffChannelID.equals("LINK_HERE")) {
 
                     staffChannel = jda.getTextChannelById(staffChannelID);
 
@@ -167,7 +169,7 @@ public class Discord {
 
         if (consoleCommandsChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("Console");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("Console");
 
         if (!contentinAuthorLine) builder.setDescription(content);
 
@@ -178,7 +180,7 @@ public class Discord {
 
         if (serverStartChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Start");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Start");
 
         if (!contentinAuthorLine) builder.setDescription(content);
 
@@ -189,7 +191,7 @@ public class Discord {
 
         if (serverStopChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Stop");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Stop");
 
         if (!contentinAuthorLine) builder.setDescription(content);
 
@@ -200,7 +202,7 @@ public class Discord {
 
         if (ramChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("RAM");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("RAM");
 
         if (!contentinAuthorLine) builder.setDescription(content);
 
@@ -211,7 +213,7 @@ public class Discord {
 
         if (liteBansChannel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("LiteBans");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("LiteBans");
 
         if (!contentinAuthorLine) builder.setDescription(content);
 
@@ -221,7 +223,7 @@ public class Discord {
     private static void discordUtil(Player player, String content, boolean contentinAuthorLine, TextChannel channel) {
         if (channel == null) return;
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getUsername(),
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getUsername(),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentinAuthorLine) builder.setDescription(content);

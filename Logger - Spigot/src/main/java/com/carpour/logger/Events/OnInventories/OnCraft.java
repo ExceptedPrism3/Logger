@@ -67,7 +67,7 @@ public class OnCraft implements Listener {
 
                     }
 
-                    if (isExternal && this.main.external.isConnected()) {
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
                         ExternalData.playerCraft(serverName, worldName, playerName, item, amount, x, y, z, true);
 
@@ -117,7 +117,7 @@ public class OnCraft implements Listener {
             }
 
             // MySQL Handling
-            if (isExternal && this.main.external.isConnected()) {
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 

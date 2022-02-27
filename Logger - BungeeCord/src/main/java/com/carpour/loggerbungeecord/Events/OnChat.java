@@ -15,130 +15,117 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.loggerbungeecord.Utils.Data.*;
 
 public class OnChat implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler
-    public void onPlayerChat(ChatEvent event){
+    public void onPlayerChat(final ChatEvent event){
 
-        if (!event.isCommand()) {
+        if (!event.isCommand() && !event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Chat")) {
 
-            ProxiedPlayer player = (ProxiedPlayer) event.getSender();
-            String server = player.getServer().getInfo().getName();
-            String message = event.getMessage().replace("\\", "\\\\");
-            String serverName = main.getConfig().getString("Server-Name");
-            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            final ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 
-            if (player.hasPermission("loggerproxy.exempt")) return;
+            if (player.hasPermission(loggerExempt)) return;
 
-            if (!event.isCancelled() && main.getConfig().getBoolean("Log-Player.Chat")) {
+            final String server = player.getServer().getInfo().getName();
+            final String message = event.getMessage().replace("\\", "\\\\");
 
-                //Log To Files Handling
-                if (main.getConfig().getBoolean("Log-to-Files")) {
+            // Log To Files Handling
+            if (isLogToFiles) {
 
-                    if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                        if (!Messages.getString("Discord.Player-Chat-Staff").isEmpty()) {
+                    if (!Messages.getString("Discord.Player-Chat-Staff").isEmpty()) {
 
-                            Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
-
-                        }
-
-                        try {
-
-                            BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
-                            out.write(Messages.getString("Files.Player-Chat-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%player%", player.getName()).replaceAll("%msg%", message) + "\n");
-                            out.close();
-
-                        } catch (IOException e) {
-
-                            Main.getInstance().getLogger().warning("An error occurred while logging into the appropriate file.");
-                            e.printStackTrace();
-
-                        }
-
-                        if (main.getConfig().getBoolean("Database.Enable") && main.external.isConnected()) {
-
-
-                            ExternalData.playerChat(serverName, player.getName(), message, true);
-
-                        }
-
-                        if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
-
-                            SQLiteData.insertPlayerChat(serverName, player.getName(), message, true);
-
-                        }
-
-                        return;
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
 
                     }
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getChatLogFile(), true));
-                        out.write(Messages.getString("Files.Player-Chat").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%player%", player.getName()).replaceAll("%msg%", message) + "\n");
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
+                        out.write(Messages.getString("Files.Player-Chat-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%player%", player.getName()).replaceAll("%msg%", message) + "\n");
                         out.close();
 
                     } catch (IOException e) {
 
-                        Main.getInstance().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
-                }
 
-                //Discord Integration
-                if (!player.hasPermission("logger.exempt.discord")) {
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
-                    if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
-
-                        if (!Messages.getString("Discord.Player-Chat-Staff").isEmpty()) {
-
-                            Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
-
-                        }
-
-                    } else {
-
-                        if (!Messages.getString("Discord.Player-Chat").isEmpty()) {
-
-                            Discord.playerChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
-                        }
-                    }
-                }
-
-                //MySQL Handling
-                if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
-
-                    try {
-
-                        ExternalData.playerChat(serverName, player.getName(), message, player.hasPermission("loggerproxy.staff.log"));
-
-                    } catch (Exception e) {
-
-                        e.printStackTrace();
+                        ExternalData.playerChat(serverName, player.getName(), message, true);
 
                     }
-                }
 
-                //SQLite Handling
-                if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                    if (isSqlite && this.main.getSqLite().isConnected()) {
 
-                    try {
-
-                        SQLiteData.insertPlayerChat(serverName, player.getName(), message, player.hasPermission("loggerproxy.staff.log"));
-
-                    } catch (Exception exception) {
-
-                        exception.printStackTrace();
+                        SQLiteData.insertPlayerChat(serverName, player.getName(), message, true);
 
                     }
+
+                    return;
+
                 }
+
+                try {
+
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getChatLogFile(), true));
+                    out.write(Messages.getString("Files.Player-Chat").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%player%", player.getName()).replaceAll("%msg%", message) + "\n");
+                    out.close();
+
+                } catch (IOException e) {
+
+                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
+
+                }
+            }
+
+            // Discord Integration
+            if (!player.hasPermission(loggerExemptDiscord)) {
+
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+
+                    if (!Messages.getString("Discord.Player-Chat-Staff").isEmpty()) {
+
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
+
+                    }
+                } else {
+
+                    if (!Messages.getString("Discord.Player-Chat").isEmpty()) {
+
+                        Discord.playerChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Chat")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", server).replaceAll("%msg%", message), false);
+                    }
+                }
+            }
+
+            // External Handling
+            if (isExternal && this.main.getExternal().isConnected()) {
+
+                try {
+
+                    ExternalData.playerChat(serverName, player.getName(), message, player.hasPermission(loggerStaffLog));
+
+                } catch (Exception e) { e.printStackTrace(); }
+            }
+
+            // SQLite Handling
+            if (isSqlite && this.main.getSqLite().isConnected()) {
+
+                try {
+
+                    SQLiteData.insertPlayerChat(serverName, player.getName(), message, player.hasPermission(loggerStaffLog));
+
+                } catch (Exception e) { e.printStackTrace(); }
             }
         }
     }

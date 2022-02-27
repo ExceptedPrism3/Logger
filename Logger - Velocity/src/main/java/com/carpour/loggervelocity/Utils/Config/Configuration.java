@@ -8,11 +8,6 @@ public final class Configuration {
     final Map<String, Object> self;
     private final Configuration defaults;
 
-    public Configuration()
-    {
-        this( null );
-    }
-
     public Configuration(Configuration defaults)
     {
         this( new LinkedHashMap<String, Object>(), defaults );
@@ -82,10 +77,9 @@ public final class Configuration {
         return ( val != null ) ? (T) val : def;
     }
 
-    public boolean contains(String path)
-    {
+    /*public boolean contains(String path) {
         return get( path, null ) != null;
-    }
+    }*/
 
     public Object get(String path)
     {
@@ -97,7 +91,7 @@ public final class Configuration {
         return ( defaults == null ) ? null : defaults.get( path );
     }
 
-    public void set(String path, Object value)
+    /*public void set(String path, Object value)
     {
         if ( value instanceof Map )
         {
@@ -118,7 +112,7 @@ public final class Configuration {
         {
             section.set( getChild( path ), value );
         }
-    }
+    }*/
 
     /*------------------------------------------------------------------------*/
     public Configuration getSection(String path)
@@ -132,13 +126,13 @@ public final class Configuration {
      *
      * @return top level keys for this section
      */
-    public Collection<String> getKeys()
+    /*public Collection<String> getKeys()
     {
         return new LinkedHashSet<>( self.keySet() );
-    }
+    }*/
 
     /*------------------------------------------------------------------------*/
-    public byte getByte(String path)
+    /*public byte getByte(String path)
     {
         Object def = getDefault( path );
         return getByte( path, ( def instanceof Number ) ? ( (Number) def ).byteValue() : 0 );
@@ -192,7 +186,7 @@ public final class Configuration {
         }
 
         return result;
-    }
+    }*/
 
     public int getInt(String path)
     {
@@ -202,11 +196,11 @@ public final class Configuration {
 
     public int getInt(String path, int def)
     {
-        Object val = get( path, def );
-        return ( val instanceof Number ) ? ( (Number) val ).intValue() : def;
+        Number val = get( path, def );
+        return (val != null) ? val.intValue() : def;
     }
 
-    public List<Integer> getIntList(String path)
+    /*public List<Integer> getIntList(String path)
     {
         List<?> list = getList( path );
         List<Integer> result = new ArrayList<>();
@@ -220,7 +214,7 @@ public final class Configuration {
         }
 
         return result;
-    }
+    }*/
 
     public long getLong(String path)
     {
@@ -230,11 +224,11 @@ public final class Configuration {
 
     public long getLong(String path, long def)
     {
-        Object val = get( path, def );
-        return ( val instanceof Number ) ? ( (Number) val ).longValue() : def;
+        Number val = get( path, def );
+        return (val != null) ? val.longValue() : def;
     }
 
-    public List<Long> getLongList(String path)
+    /*public List<Long> getLongList(String path)
     {
         List<?> list = getList( path );
         List<Long> result = new ArrayList<>();
@@ -304,7 +298,7 @@ public final class Configuration {
         }
 
         return result;
-    }
+    }*/
 
     public boolean getBoolean(String path)
     {
@@ -314,11 +308,11 @@ public final class Configuration {
 
     public boolean getBoolean(String path, boolean def)
     {
-        Object val = get( path, def );
-        return ( val instanceof Boolean ) ? (Boolean) val : def;
+        Boolean val = get( path, def );
+        return (val != null) ? val : def;
     }
 
-    public List<Boolean> getBooleanList(String path)
+    /*public List<Boolean> getBooleanList(String path)
     {
         List<?> list = getList( path );
         List<Boolean> result = new ArrayList<>();
@@ -360,7 +354,7 @@ public final class Configuration {
         }
 
         return result;
-    }
+    }*/
 
     public String getString(String path)
     {
@@ -370,8 +364,8 @@ public final class Configuration {
 
     public String getString(String path, String def)
     {
-        Object val = get( path, def );
-        return ( val instanceof String ) ? (String) val : def;
+        String val = get( path, def );
+        return (val != null) ? val : def;
     }
 
     public List<String> getStringList(String path)
@@ -399,7 +393,7 @@ public final class Configuration {
 
     public List<?> getList(String path, List<?> def)
     {
-        Object val = get( path, def );
-        return ( val instanceof List<?> ) ? (List<?>) val : def;
+        List<?> val = get( path, def );
+        return (val != null) ? val : def;
     }
 }

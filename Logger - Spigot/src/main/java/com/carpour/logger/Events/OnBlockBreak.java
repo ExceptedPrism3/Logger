@@ -67,7 +67,7 @@ public class OnBlockBreak implements Listener {
 
                     }
 
-                    if (isExternal && this.main.external.isConnected()) {
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
                         ExternalData.blockBreak(serverName, worldName, playerName, blockType.toString(), x, y, z, true);
 
@@ -117,7 +117,7 @@ public class OnBlockBreak implements Listener {
             }
 
             // MySQL
-            if (isExternal && this.main.external.isConnected()) {
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 

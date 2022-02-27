@@ -17,7 +17,7 @@ public class DiscordFile {
 
     public DiscordFile() {
 
-        File dataFolder = Main.getInstance().getFolder().toFile();
+        final File dataFolder = Main.getInstance().getFolder().toFile();
         this.file = new File(dataFolder, "discord - Velocity.yml");
 
         try {

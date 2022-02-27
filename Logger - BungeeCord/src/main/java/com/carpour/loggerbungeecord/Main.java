@@ -32,27 +32,24 @@ public final class Main extends Plugin {
 
     private SQLite sqLite;
 
-    private Discord discord;
-
     @Override
     public void onEnable() {
 
         instance = this;
 
-        this.cm = new ConfigManager();
-        this.cm.init();
+        cm = new ConfigManager();
+        cm.init();
 
-        initializer(new Data());
-        
         new Messages().init();
-        
+
         new DiscordFile().init();
-        
-        this.discord = new Discord();
-        this.discord.run();
+
+        new Discord().run();
         
         FileHandler fileHandler = new FileHandler(getDataFolder());
         fileHandler.deleteFiles();
+
+        initializer(new Data());
 
         databaseSetup();
 
@@ -76,7 +73,7 @@ public final class Main extends Plugin {
 
         new ASCIIArt().Art();
 
-        // bstats
+        // bStats
         new Metrics(this, 12036);
 
         // Update Checker
@@ -96,14 +93,19 @@ public final class Main extends Plugin {
 
         if (isSqlite && this.sqLite.isConnected()) this.sqLite.disconnect();
 
-        this.discord.disconnect();
+        new Discord().disconnect();
 
         getLogger().info("has been Disabled!");
     }
 
     private void initializer(Data data){
 
+        data.initializeDateFormatter();
+        data.initializeStrings();
+        data.initializeListOfStrings();
+        data.initializeIntegers();
         data.initializeBoolean();
+        data.initializePermissionStrings();
 
     }
 

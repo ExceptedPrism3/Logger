@@ -1,7 +1,6 @@
-package com.carpour.logger.Utils;
+package com.carpour.loggervelocity.Utils;
 
-import com.carpour.logger.Main;
-import org.bukkit.configuration.file.FileConfiguration;
+import com.carpour.loggervelocity.Main;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -10,15 +9,13 @@ import java.util.Objects;
 public class Data {
 
     private final Main main = Main.getInstance();
-    private final FileConfiguration config = main.getConfig();
+    ConfigManager config = main.getConfig();
 
     // Date Format
     public static DateTimeFormatter dateTimeFormatter;
 
     // String
-    public static String pluginVersion;
     public static String serverName;
-    public static String gameModeConf;
     public static String dbType;
     public static String dbHost;
     public static String dbUserName;
@@ -28,45 +25,41 @@ public class Data {
     // List<String>
     public static List<String> commandsToBlock;
     public static List<String> commandsToLog;
-    public static List<String> consoleCommandsToBlock;
 
     // Integer
-    public static int resource_ID;
-    public static int ramTpsChecker;
-    public static int vaultChecker;
-    public static int abovePlayerLevel;
+    public static int fileDeletion;
     public static int ramPercent;
-    public static int tpsMedium;
-    public static int tpsCritical;
-    public static int dbPort;
     public static int externalDataDel;
     public static int sqliteDataDel;
+    public static int dbPort;
 
     // Long
-    public static long fileDeletion;
+    public static long ramChecker;
 
     // Boolean
-    public static boolean isLogToFiles;
-    public static boolean isUpdateChecker;
     public static boolean isExternal;
     public static boolean isSqlite;
+    public static boolean isLogToFiles;
     public static boolean isStaffEnabled;
     public static boolean isWhitelisted;
     public static boolean isBlacklisted;
     public static boolean isCommandsToBlock;
     public static boolean isCommandsToLog;
     public static boolean isPlayerIP;
-    public static boolean isConsoleCommands;
+    public static boolean isLiteBansBan;
+    public static boolean isLiteBansTempBan;
+    public static boolean isLiteBansIpBan;
+    public static boolean isLiteBansTempIpBan;
+    public static boolean isLiteBansMute;
+    public static boolean isLiteBansTempMute;
+    public static boolean isLiteBansKick;
 
     // Permission String
+    public static String loggerStaff;
+    public static String loggerReload;
     public static String loggerExempt;
     public static String loggerExemptDiscord;
-    public static String loggerStaff;
     public static String loggerStaffLog;
-    public static String loggerUpdate;
-    public static String loggerSpyBypass;
-    public static String loggerSpy;
-    public static String loggerReload;
 
     public void initializeDateFormatter(){
 
@@ -77,13 +70,6 @@ public class Data {
     public void initializeStrings(){
 
         serverName = this.config.getString("Server-Name");
-        gameModeConf = this.config.getString("Game-Mode");
-        dbType = this.config.getString("Database.Type");
-        dbHost = this.config.getString("Database.Host");
-        dbUserName = this.config.getString("Database.Username");
-        dbPassword = this.config.getString("Database.Password");
-        dbName = this.config.getString("Database.Database");
-
 
     }
 
@@ -91,20 +77,18 @@ public class Data {
 
         commandsToBlock = this.config.getStringList("Player-Commands.Commands-to-Block");
         commandsToLog = this.config.getStringList("Player-Commands.Commands-to-Log");
-        consoleCommandsToBlock = this.config.getStringList("Console-Commands.Commands-to-Block");
+        dbType = this.config.getString("Database.Type");
+        dbHost = this.config.getString("Database.Host");
+        dbUserName = this.config.getString("Database.Username");
+        dbPassword = this.config.getString("Database.Password");
+        dbName = this.config.getString("Database.Database");
 
     }
 
     public void initializeIntegers(){
 
-        pluginVersion = this.main.getDescription().getVersion();
-        resource_ID = 94236;
-        ramTpsChecker = this.config.getInt("RAM-TPS-Checker");
-        vaultChecker = this.config.getInt("Vault.Checker");
-        abovePlayerLevel = this.config.getInt("Player-Level.Log-Above");
+        fileDeletion = this.config.getInt("File-Deletion");
         ramPercent = this.config.getInt("RAM.Percent");
-        tpsMedium = this.config.getInt("TPS.Value-Medium");
-        tpsCritical = this.config.getInt("TPS.Value-Critical");
         dbPort = this.config.getInt("Database.Port");
         externalDataDel = this.config.getInt("Database.Data-Deletion");
         sqliteDataDel = this.config.getInt("SQLite.Data-Deletion");
@@ -113,35 +97,41 @@ public class Data {
 
     public void initializeLongs(){
 
-        fileDeletion = this.config.getLong("File-Deletion");
+        ramChecker = this.config.getLong("RAM.Checker");
 
     }
 
-    public void initializeBooleans(){
+    public void initializeBoolean(){
 
-        isLogToFiles = this.config.getBoolean("Log-to-Files");
-        isUpdateChecker = this.config.getBoolean("Update-Checker");
         isExternal = this.config.getBoolean("Database.Enable");
         isSqlite = this.config.getBoolean("SQLite.Enable");
+        isLogToFiles = this.config.getBoolean("Log-to-Files");
         isStaffEnabled = this.config.getBoolean("Staff.Enabled");
         isWhitelisted = this.config.getBoolean("Player-Commands.Whitelist-Commands");
         isBlacklisted = this.config.getBoolean("Player-Commands.Blacklist-Commands");
         isCommandsToBlock = this.config.getBoolean("Player-Commands.Blacklist-Commands");
         isCommandsToLog = this.config.getBoolean("Player-Commands.Whitelist-Commands");
-        isPlayerIP = this.config.getBoolean("Player-Join.Player-IP");
-        isConsoleCommands = this.config.getBoolean("Console-Commands.Blacklist-Commands");
+        isPlayerIP = this.config.getBoolean("Player-Login.Player-IP");
+        isLiteBansIpBan = this.config.getBoolean("LiteBans.IP-Ban");
+        isLiteBansTempIpBan = this.config.getBoolean("LiteBans.Temp-IP-Ban");
+        isLiteBansBan = this.config.getBoolean("LiteBans.Ban");
+        isLiteBansTempBan = this.config.getBoolean("LiteBans.Temp-Ban");
+        isLiteBansMute = this.config.getBoolean("LiteBans.Mute");
+        isLiteBansTempMute = this.config.getBoolean("LiteBans.Temp-Mute");
+        isLiteBansKick = this.config.getBoolean("LiteBans.Kick");
 
     }
 
     public void initializePermissionStrings(){
 
+        loggerStaff = "loggerproxy.staff";
+        loggerReload = "loggerproxy.reload";
         loggerExempt = "logger.exempt";
         loggerExemptDiscord = "logger.exempt.discord";
-        loggerStaff = "logger.staff";
-        loggerStaffLog = "logger.staff.log";
-        loggerSpyBypass = "logger.spy.bypass";
-        loggerSpy = "logger.spy";
-        loggerReload = "logger.reload";
+        loggerStaffLog = "loggerproxy.staff.log";
 
     }
+
+
+
 }

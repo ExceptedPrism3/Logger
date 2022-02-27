@@ -45,14 +45,14 @@ public class ConfigManager {
         return this.file;
     }
 
-    public double getDouble(final String path) {
+    /*public double getDouble(final String path) {
 
         if (this.configuration.get(path) != null) {
 
             return this.configuration.getDouble(path);
 
         } return 0.0;
-    }
+    }*/
 
     public int getInt(final String path) {
 

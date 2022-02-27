@@ -76,7 +76,7 @@ public class OnSign implements Listener {
 
                     }
 
-                    if (isExternal && this.main.external.isConnected()) {
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
                         ExternalData.playerSignText(serverName, worldName, x, y, z, playerName, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", true);
 
@@ -125,7 +125,7 @@ public class OnSign implements Listener {
             }
 
             // MySQL
-            if (isExternal && this.main.external.isConnected()) {
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 

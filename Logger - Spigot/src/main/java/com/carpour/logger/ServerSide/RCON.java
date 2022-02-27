@@ -55,7 +55,7 @@ public class RCON implements Listener {
             }
 
             // MySQL
-            if (isExternal && this.main.external.isConnected()) {
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 

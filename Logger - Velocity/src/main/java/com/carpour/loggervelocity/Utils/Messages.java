@@ -18,7 +18,7 @@ public class Messages {
 
     public Messages() {
 
-        this.file = new File(dataFolder, "messages - Velocity.yml");
+        this.file = new File(dataFolder, "/en.yml");
 
         try {
 
@@ -28,7 +28,7 @@ public class Messages {
 
                 this.file.createNewFile();
 
-                try (final InputStream is = ConfigManager.class.getResourceAsStream("/messages - Velocity.yml");
+                try (final InputStream is = ConfigManager.class.getResourceAsStream("/en.yml");
                      final OutputStream os = new FileOutputStream(this.file)) {
                     assert is != null;
                     ByteStreams.copy(is, os);
@@ -43,7 +43,7 @@ public class Messages {
 
     private void load() {
 
-        this.file = new File(dataFolder, "messages - Velocity.yml");
+        this.file = new File(dataFolder, "/en.yml");
 
         try {
 

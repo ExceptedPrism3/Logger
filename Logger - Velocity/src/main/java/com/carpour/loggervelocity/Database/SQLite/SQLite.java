@@ -25,12 +25,12 @@ public class SQLite {
             try {
 
                 Class.forName("org.sqlite.JDBC");
-                connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile.getAbsolutePath());
-                logger.info("SQLite Connection has been established!");
+                connection = DriverManager.getConnection("jdbc:sqlite:" + this.databaseFile.getAbsolutePath());
+                this.logger.info("SQLite Connection has been established!");
 
             } catch (ClassNotFoundException | SQLException e) {
 
-                logger.error("Couldn't load SQLite Database, if the issue persists contact the Authors!");
+                this.logger.error("Couldn't load SQLite Database, if the issue persists contact the Authors!");
                 e.printStackTrace();
 
             }
@@ -44,11 +44,11 @@ public class SQLite {
             try {
 
                 connection.close();
-                logger.info("SQLite Database has been closed!");
+                this.logger.info("SQLite Database has been closed!");
 
             } catch (SQLException e) {
 
-                logger.error("SQLite Database couldn't be closed safely, if the issue persists contact the Authors!");
+                this.logger.error("SQLite Database couldn't be closed safely, if the issue persists contact the Authors!");
 
             }
         }

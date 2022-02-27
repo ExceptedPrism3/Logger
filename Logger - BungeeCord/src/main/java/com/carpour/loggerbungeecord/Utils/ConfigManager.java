@@ -38,7 +38,7 @@ public class ConfigManager {
 
     public int getInt(String key) { return this.config.getInt(key);}
 
-    public long getLong(String key) { return this.config.getLong(key);}
+//    public long getLong(String key) { return this.config.getLong(key);}
 
     public boolean getBoolean(String key) {
         return this.config.getBoolean(key);

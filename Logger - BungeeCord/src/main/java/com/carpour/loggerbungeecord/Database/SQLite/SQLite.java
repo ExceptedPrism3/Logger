@@ -13,10 +13,10 @@ public class SQLite {
 
     private Connection connection;
 
-    File databaseFile = new File(main.getDataFolder(), "LoggerData - Bungee.db");
+    private final File databaseFile = new File(this.main.getDataFolder(), "LoggerData - Bungee.db");
 
     public boolean isConnected() {
-        return (connection != null);
+        return (this.connection != null);
     }
 
     public void connect() {
@@ -26,12 +26,12 @@ public class SQLite {
             try {
 
                 Class.forName("org.sqlite.JDBC");
-                connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile.getAbsolutePath());
-                main.getLogger().info("SQLite Connection has been established!");
+                this.connection = DriverManager.getConnection("jdbc:sqlite:" + this.databaseFile.getAbsolutePath());
+                this.main.getLogger().info("SQLite Connection has been established!");
 
             } catch (ClassNotFoundException | SQLException e) {
 
-                main.getLogger().severe("Couldn't load SQLite Database, if the issue persists contact the Authors!");
+                this.main.getLogger().severe("Couldn't load SQLite Database, if the issue persists contact the Authors!");
                 e.printStackTrace();
 
             }
@@ -44,17 +44,17 @@ public class SQLite {
 
             try {
 
-                connection.close();
-                main.getLogger().info("SQLite Database has been closed!");
+                this.connection.close();
+                this.main.getLogger().info("SQLite Database has been closed!");
 
             } catch (SQLException e) {
 
-                main.getLogger().severe("SQLite Database couldn't be closed safely, if the issue persists contact the Authors!");
+                this.main.getLogger().severe("SQLite Database couldn't be closed safely, if the issue persists contact the Authors!");
 
             }
         }
     }
 
-    public Connection getConnection(){ return connection; }
+    public Connection getConnection(){ return this.connection; }
 
 }

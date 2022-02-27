@@ -64,7 +64,7 @@ public class OnAFK implements Listener {
 
                     }
 
-                    if (isExternal && this.main.external.isConnected()) {
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
                         ExternalData.afk(serverName, worldName, playerName, x, y, z, true);
 
@@ -114,7 +114,7 @@ public class OnAFK implements Listener {
             }
 
             // MySQL
-            if (isExternal && this.main.external.isConnected()) {
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 

@@ -1,6 +1,6 @@
 package com.carpour.loggerbungeecord.Commands;
 
-import com.carpour.loggerbungeecord.Main;
+import com.carpour.loggerbungeecord.Utils.ConfigManager;
 import com.carpour.loggerbungeecord.Utils.Messages;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -10,8 +10,6 @@ import net.md_5.bungee.api.plugin.Command;
 import static com.carpour.loggerbungeecord.Utils.Data.*;
 
 public class Reload extends Command {
-
-    private final Main main = Main.getInstance();
 
     public Reload(){ super("loggerproxy"); }
 
@@ -26,8 +24,8 @@ public class Reload extends Command {
 
             } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
 
-                this.main.getConfig().init();
-                Messages.init();
+                new ConfigManager().init();
+                new Messages().init();
                 sender.sendMessage(new TextComponent(Messages.getString("General.Reload")));
 
             } else {

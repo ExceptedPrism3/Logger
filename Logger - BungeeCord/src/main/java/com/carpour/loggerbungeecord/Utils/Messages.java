@@ -13,7 +13,7 @@ public class Messages {
 
     private static Configuration messages = null;
 
-    public static void init() {
+    public void init() {
 
         saveDefaultConfig();
 
@@ -38,7 +38,7 @@ public class Messages {
     }
 
     public static File getFile() {
-        return new File(Main.getInstance().getDataFolder(), "Messages/en.yml");
+        return new File(Main.getInstance().getDataFolder(), "messages - Bungee.yml");
     }
 
     private static void saveDefaultConfig() {
@@ -53,7 +53,7 @@ public class Messages {
 
                 file.createNewFile();
 
-                try (final InputStream is = Main.getInstance().getResourceAsStream("Messages/en.yml")) {
+                try (final InputStream is = Main.getInstance().getResourceAsStream("messages - Bungee.yml")) {
 
                     final OutputStream os = new FileOutputStream(file);
                     ByteStreams.copy(is, os);

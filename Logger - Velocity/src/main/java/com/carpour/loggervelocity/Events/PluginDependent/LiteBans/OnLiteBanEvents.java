@@ -17,8 +17,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.loggervelocity.Utils.Data.*;
 
 public class OnLiteBanEvents implements Runnable{
 
@@ -32,28 +33,26 @@ public class OnLiteBanEvents implements Runnable{
 
                 final Main main = Main.getInstance();
 
-                String entryType = entry.getType().toLowerCase();
-                String executorName = entry.getExecutorName();
-                String duration = entry.getDurationString();
-                String uuid = entry.getUuid();
-                String onWho = UsernameFetcher.playerNameFetcher(uuid);
-                String reason = entry.getReason();
-                boolean isSilent = entry.isSilent();
-                String serverName = main.getConfig().getString("Server-Name");
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-                File fileLog = null;
-
                 if (main.getConfig().getBoolean("Log-Extra.LiteBans")) {
+
+                    final String entryType = entry.getType().toLowerCase();
+                    final String executorName = entry.getExecutorName();
+                    final String duration = entry.getDurationString();
+                    final String uuid = entry.getUuid();
+                    final String onWho = UsernameFetcher.playerNameFetcher(uuid);
+                    final String reason = entry.getReason();
+                    final boolean isSilent = entry.isSilent();
+
+                    File fileLog = null;
 
                     switch (entryType) {
 
                         case "ban":
 
-                            if (!main.getConfig().getBoolean("LiteBans.IP-Ban")) return;
-                            if (!main.getConfig().getBoolean("LiteBans.Temp-IP-Ban")) return;
-                            if (!main.getConfig().getBoolean("LiteBans.Ban")) return;
-                            if (!main.getConfig().getBoolean("LiteBans.Temp-Ban")) return;
+                            if (!isLiteBansIpBan) return;
+                            if (!isLiteBansTempIpBan) return;
+                            if (!isLiteBansBan) return;
+                            if (!isLiteBansTempBan) return;
 
                             fileLog = FileHandler.getLiteBansBansLogFile();
 
@@ -61,8 +60,8 @@ public class OnLiteBanEvents implements Runnable{
 
                         case "mute":
 
-                            if (!main.getConfig().getBoolean("LiteBans.Mute")) return;
-                            if (!main.getConfig().getBoolean("LiteBans.Temp-Mute")) return;
+                            if (!isLiteBansMute) return;
+                            if (!isLiteBansTempMute) return;
 
                             fileLog = FileHandler.getLiteBansMuteLogFile();
 
@@ -70,7 +69,7 @@ public class OnLiteBanEvents implements Runnable{
 
                         case "kick":
 
-                            if (!main.getConfig().getBoolean("LiteBans.Kick")) return;
+                            if (!isLiteBansKick) return;
 
                             fileLog = FileHandler.getLiteBansKickLogFile();
 
@@ -83,34 +82,34 @@ public class OnLiteBanEvents implements Runnable{
 
                     assert executorName != null;
 
-                    // Log To Files Handling
-                    if (main.getConfig().getBoolean("Log-to-Files")) {
+                    // Log To Files
+                    if (isLogToFiles) {
 
                         assert fileLog != null;
 
                         try {
 
-                            BufferedWriter out = new BufferedWriter(new FileWriter(fileLog, true));
+                            final BufferedWriter out = new BufferedWriter(new FileWriter(fileLog, true));
                             out.write(Messages.getString("Files.Extra.LiteBans").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%on%", onWho).replaceAll("%duration%", duration).replaceAll("%reason%", reason).replaceAll("%executor%", executorName).replaceAll("%silent%", String.valueOf(isSilent)).replaceAll("%command%", entryType.toUpperCase()) + "\n");
                             out.close();
 
                         } catch (IOException e) {
 
-                            Main.getInstance().getLogger().error("An error occurred while logging into the appropriate file.");
+                            main.getLogger().error("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
 
                         }
                     }
 
-                    // Discord Integration
+                    // Discord
                     if (!Messages.getString("Discord.Extra.LiteBans").isEmpty()) {
 
                         Discord.liteBans(Objects.requireNonNull(Messages.getString("Discord.Extra.LiteBans")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%on%", onWho).replaceAll("%duration%", duration).replaceAll("%reason%", reason).replaceAll("%executor%", executorName).replaceAll("%silent%", String.valueOf(isSilent)).replaceAll("%command%", entryType.toUpperCase()), false);
 
                     }
 
-                    // MySQL Handling
-                    if (main.getConfig().getBoolean("MySQL.Enable") && External.isConnected()) {
+                    // External
+                    if (isExternal && External.isConnected()) {
 
                         try {
 
@@ -119,14 +118,14 @@ public class OnLiteBanEvents implements Runnable{
                         } catch (Exception e) { e.printStackTrace(); }
                     }
 
-                    // SQLite Handling
-                    if (main.getConfig().getBoolean("SQLite.Enable") && SQLite.isConnected()) {
+                    // SQLite
+                    if (isSqlite && SQLite.isConnected()) {
 
                         try {
 
                             SQLiteData.insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
 
-                        } catch (Exception exception) { exception.printStackTrace(); }
+                        } catch (Exception e) { e.printStackTrace(); }
                     }
                 }
             }

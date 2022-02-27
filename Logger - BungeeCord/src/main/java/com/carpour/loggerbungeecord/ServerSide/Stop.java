@@ -11,7 +11,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+
+import static com.carpour.loggerbungeecord.Utils.Data.*;
 
 public class Stop {
 
@@ -19,61 +20,50 @@ public class Stop {
 
     public void run() {
 
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (this.main.getConfig().getBoolean("Log-Server.Stop")) {
 
-        if (main.getConfig().getBoolean("Log-Server.Stop")) {
-
-            //Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            // Log To Files Handling
+            if (isLogToFiles) {
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStopLogFile(), true));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStopLogFile(), true));
                     out.write(Messages.getString("Files.Server-Side.Stop").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())) + "\n");
                     out.close();
 
                 } catch (IOException e) {
 
-                    Main.getInstance().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             }
 
-            //Discord
+            // Discord
             if (!Messages.getString("Discord.Server-Side.Stop").isEmpty()) {
 
                 Discord.serverStop(Messages.getString("Discord.Server-Side.Stop").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())), false);
 
             }
 
-            //MySQL
-            if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
+            // External
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 
                     ExternalData.serverStop(serverName);
 
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
 
-            //SQLite Handling
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            // SQLite
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {
 
                     SQLiteData.insertServerStop(serverName);
 
-                } catch (Exception exception) {
-
-                    exception.printStackTrace();
-
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
         }
     }

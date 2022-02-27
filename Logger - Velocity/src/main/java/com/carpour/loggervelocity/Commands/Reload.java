@@ -1,15 +1,15 @@
 package com.carpour.loggervelocity.Commands;
 
-import com.carpour.loggervelocity.Main;
 import com.carpour.loggervelocity.Utils.Messages;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 
+import static com.carpour.loggervelocity.Utils.Data.loggerReload;
+
 public class Reload implements SimpleCommand {
 
-    private final Main main = Main.getInstance();
     private final Messages messages = new Messages();
 
     @Override
@@ -18,7 +18,7 @@ public class Reload implements SimpleCommand {
         final CommandSource sender = invocation.source();
         final String[] args = invocation.arguments();
 
-        if (sender.hasPermission("logger.proxy")) {
+        if (sender.hasPermission(loggerReload)) {
 
             if (args.length == 0) {
 
@@ -26,18 +26,18 @@ public class Reload implements SimpleCommand {
 
             } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
 
-                main.getConfig().reload();
+                new Messages().reload();
                 messages.reload();
-                sender.sendMessage(Identity.nil(), Component.text(messages.getString("General.Reload")));
+                sender.sendMessage(Identity.nil(), Component.text(this.messages.getString("General.Reload")));
 
             } else {
 
-                sender.sendMessage(Identity.nil(), Component.text(messages.getString("General.Invalid-Syntax")));
+                sender.sendMessage(Identity.nil(), Component.text(this.messages.getString("General.Invalid-Syntax")));
 
             }
         } else {
 
-            sender.sendMessage(Identity.nil(), Component.text(messages.getString("General.No-Permission")));
+            sender.sendMessage(Identity.nil(), Component.text(this.messages.getString("General.No-Permission")));
 
         }
     }

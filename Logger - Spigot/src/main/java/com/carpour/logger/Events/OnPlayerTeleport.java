@@ -70,7 +70,7 @@ public class OnPlayerTeleport implements Listener {
 
                     }
 
-                    if (isExternal && this.main.external.isConnected()) {
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
                         ExternalData.playerTeleport(serverName, worldName, playerName, ox, oy, oz, tx, ty, tz, true);
 
@@ -120,7 +120,7 @@ public class OnPlayerTeleport implements Listener {
             }
 
             // MySQL
-            if (isExternal && this.main.external.isConnected()) {
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 

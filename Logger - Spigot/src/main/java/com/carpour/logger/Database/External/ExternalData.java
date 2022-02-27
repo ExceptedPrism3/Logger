@@ -12,6 +12,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+import static com.carpour.logger.Utils.Data.externalDataDel;
+
 public class ExternalData {
 
     private static Main plugin;
@@ -698,7 +700,7 @@ public class ExternalData {
 
     public void emptyTable(){
 
-        int when = plugin.getConfig().getInt("Database.Data-Deletion");
+        int when = externalDataDel;
 
         if (when <= 0) return;
 

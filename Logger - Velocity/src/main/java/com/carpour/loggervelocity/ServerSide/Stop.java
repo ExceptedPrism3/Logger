@@ -13,7 +13,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+
+import static com.carpour.loggervelocity.Utils.Data.*;
 
 public class Stop {
 
@@ -22,17 +23,14 @@ public class Stop {
         final Main main = Main.getInstance();
         final Messages messages = new Messages();
 
-        final String serverName = main.getConfig().getString("Server-Name");
-        final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
         if (main.getConfig().getBoolean("Log-Server.Stop")) {
 
             // Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (isLogToFiles) {
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStopLogFile(), true));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStopLogFile(), true));
                     out.write(messages.getString("Files.Server-Side.Stop").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())) + "\n");
                     out.close();
 
@@ -51,8 +49,8 @@ public class Stop {
 
             }
 
-            // MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && External.isConnected()) {
+            // External
+            if (isExternal && External.isConnected()) {
 
                 try {
 
@@ -61,14 +59,14 @@ public class Stop {
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
-            // SQLite Handling
-            if (main.getConfig().getBoolean("SQLite.Enable") && SQLite.isConnected()) {
+            // SQLite
+            if (isSqlite && SQLite.isConnected()) {
 
                 try {
 
                     SQLiteData.insertServerStop(serverName);
 
-                } catch (Exception exception) { exception.printStackTrace(); }
+                } catch (Exception e) { e.printStackTrace(); }
             }
         }
     }

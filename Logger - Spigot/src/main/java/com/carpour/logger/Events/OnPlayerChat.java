@@ -63,7 +63,7 @@ public class OnPlayerChat implements Listener {
 
                     }
 
-                    if (isExternal && this.main.external.isConnected()) {
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
                         ExternalData.playerChat(serverName, worldName, playerName, msg, true);
 
@@ -113,7 +113,7 @@ public class OnPlayerChat implements Listener {
             }
 
             // MySQL Handling
-            if (isExternal && this.main.external.isConnected()) {
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 

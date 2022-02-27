@@ -11,7 +11,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+
+import static com.carpour.loggerbungeecord.Utils.Data.*;
 
 public class Start {
 
@@ -19,70 +20,57 @@ public class Start {
 
     public void run(){
 
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (this.main.getConfig().getBoolean("Log-Server.Start")) {
 
-        if (main.getConfig().getBoolean("Log-Server.Start")) {
-
-            //Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            // Log To Files Handling
+            if (isLogToFiles) {
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStartLogFile(), true));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStartLogFile(), true));
                     out.write(Messages.getString("Files.Server-Side.Start").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())) + "\n");
                     out.close();
 
                 } catch (IOException e) {
 
-                    Main.getInstance().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             }
 
-            //Discord
+            // Discord
             if (!Messages.getString("Discord.Server-Side.Start").isEmpty()) {
 
                 Discord.serverStart(Messages.getString("Discord.Server-Side.Start").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())), false);
 
             }
 
-            //MySQL
-            if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
+            // External
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 
                     ExternalData.serverStart(serverName);
 
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
 
-            //SQLite Handling
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            // SQLite
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {
 
                     SQLiteData.insertServerStart(serverName);
 
-                } catch (Exception exception) {
-
-                    exception.printStackTrace();
-
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
+        }
+        if (isWhitelisted && isBlacklisted) {
 
-            if (main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")
-                    && main.getConfig().getBoolean("Player-Commands.Blacklist-Commands")) {
+            this.main.getLogger().warning("Enabling both Whitelist and Blacklist isn't supported. " +
+                    "Disable one of them to continue logging Player Commands.");
 
-                main.getLogger().warning("Enabling both Whitelist and Blacklist isn't supported. " +
-                        "Please disable one of them to continue logging Player Commands");
-
-            }
         }
     }
 }

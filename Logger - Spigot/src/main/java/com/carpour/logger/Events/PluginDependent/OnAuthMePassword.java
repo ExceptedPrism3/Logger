@@ -59,7 +59,7 @@ public class OnAuthMePassword implements Listener {
 
                     }
 
-                    if (isExternal && this.main.external.isConnected()) {
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
                         ExternalData.wrongPassword(serverName, worldName, playerName, true);
 
@@ -109,7 +109,7 @@ public class OnAuthMePassword implements Listener {
             }
 
             // MySQL
-            if (isExternal && this.main.external.isConnected()) {
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 

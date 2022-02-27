@@ -95,7 +95,7 @@ private final Main main = Main.getInstance();
 
                                             }
 
-                                            if (isExternal && this.main.external.isConnected()) {
+                                            if (isExternal && this.main.getExternal().isConnected()) {
 
                                                 ExternalData.anvil(serverName, playerName, displayName, true);
 
@@ -145,7 +145,7 @@ private final Main main = Main.getInstance();
                                     }
 
                                     // MySQL
-                                    if (isExternal && this.main.external.isConnected()) {
+                                    if (isExternal && this.main.getExternal().isConnected()) {
 
                                         try {
 

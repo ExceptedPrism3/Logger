@@ -62,7 +62,7 @@ public class OnPlayerLevel implements Listener {
 
                         }
 
-                        if (isExternal && this.main.external.isConnected()) {
+                        if (isExternal && this.main.getExternal().isConnected()) {
 
                             ExternalData.levelChange(serverName, playerName, true);
 
@@ -111,7 +111,7 @@ public class OnPlayerLevel implements Listener {
                 }
 
                 // MySQL
-                if (isExternal && this.main.external.isConnected()) {
+                if (isExternal && this.main.getExternal().isConnected()) {
 
                     try {
 

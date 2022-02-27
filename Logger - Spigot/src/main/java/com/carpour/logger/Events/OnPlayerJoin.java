@@ -77,7 +77,7 @@ public class OnPlayerJoin implements Listener {
 
                     }
 
-                    if (isExternal && this.main.external.isConnected()) {
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
                         ExternalData.playerJoin(serverName, worldName, playerName, x, y, z, ip, true);
 
@@ -127,7 +127,7 @@ public class OnPlayerJoin implements Listener {
             }
 
             // MySQL
-            if (isExternal && this.main.external.isConnected()) {
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 

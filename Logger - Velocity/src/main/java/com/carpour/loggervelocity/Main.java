@@ -27,6 +27,8 @@ import org.slf4j.Logger;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
+import static com.carpour.loggervelocity.Utils.Data.*;
+
 @Plugin(id = "logger-velocity", name = "Logger", version = "1.7.1", authors = {"prism3, thelooter"})
 public class Main{
 
@@ -37,11 +39,9 @@ public class Main{
     private static Main instance;
     private ConfigManager config;
 
-    private Discord discord;
+    private External external;
 
-    public External external;
-
-    public SQLite sqLite;
+    private SQLite sqLite;
 
     @Inject
     @DataDirectory
@@ -61,90 +61,112 @@ public class Main{
 
         instance = this;
 
-        config = new ConfigManager();
+        this.config = new ConfigManager();
         new Messages();
-        discord = new Discord();
-        discord.run();
+        new Discord().run();
 
-        ConfigManager config = new ConfigManager();
+        initializer(new Data());
 
         FileHandler fileHandler = new FileHandler(folder.toFile());
         fileHandler.deleteFiles();
 
-        // bstats
-        metricsFactory.make(this, Bstats.pluginID);
+        // bStats
+        metricsFactory.make(this, 12036);
 
         server.getEventManager().register(this, new OnChat());
         server.getEventManager().register(this, new OnCommand());
         server.getEventManager().register(this, new OnLogin());
         server.getEventManager().register(this, new OnLeave());
 
-        long timeRAM = new ConfigManager().getLong("RAM.Checker");
-        server.getScheduler().buildTask(this, new RAM()).repeat(timeRAM, TimeUnit.SECONDS).delay(10, TimeUnit.SECONDS).schedule();
+        server.getScheduler().buildTask(this, new RAM()).repeat(ramChecker, TimeUnit.SECONDS).delay(10, TimeUnit.SECONDS).schedule();
 
         server.getCommandManager().register("loggerproxy", new Reload());
 
-        if (config.getBoolean("MySQL.Enable")) {
+        dataBaseSetup();
 
-            external = new External();
-            external.connect();
-            ExternalData externalData = new ExternalData(this);
-            if (External.isConnected()) {
-                externalData.createTable();
-                externalData.emptyTable();
-            }
-        }
-
-        if (config.getBoolean("SQLite.Enable")) {
-
-            sqLite = new SQLite();
-            sqLite.connect();
-            SQLiteData sqLiteData = new SQLiteData(this);
-            if (SQLite.isConnected()) {
-                sqLiteData.createTable();
-                sqLiteData.emptyTable();
-            }
-        }
-
-        if (LiteBansUtil.getLiteBansAPI().isPresent()){
-
-            server.getScheduler().buildTask(this, new OnLiteBanEvents()).delay(5, TimeUnit.SECONDS).schedule();
-
-            getLogger().info("LiteBans Plugin Detected!");
-
-        }
+        loadPluginDependent();
 
         new Start().run();
 
 //        new ASCIIArt().Art();
 
-        logger.info("Plugin has been enabled");
+        this.logger.info("Plugin has been enabled");
 
     }
 
     @Subscribe
     public void onDisable(ProxyShutdownEvent event){
 
-        ConfigManager config = new ConfigManager();
-
         new Stop().run();
 
-        if (config.getBoolean("Database.Enable") && External.isConnected()) external.disconnect();
+        if (isExternal && External.isConnected()) this.external.disconnect();
 
-        if (config.getBoolean("SQLite.Enable") && SQLite.isConnected()) sqLite.disconnect();
+        if (isSqlite && SQLite.isConnected()) this.sqLite.disconnect();
 
-        discord.disconnect();
+        new Discord().disconnect();
 
-        logger.info("Plugin has been disabled");
+        this.logger.info("Plugin has been disabled");
+    }
+
+    private void initializer(Data data){
+
+        data.initializeDateFormatter();
+        data.initializeStrings();
+        data.initializeListOfStrings();
+        data.initializeIntegers();
+        data.initializeLongs();
+        data.initializeBoolean();
+        data.initializePermissionStrings();
+
+    }
+
+    private void dataBaseSetup(){
+
+        if (isExternal) {
+
+            this.external = new External();
+            this.external.connect();
+            final ExternalData externalData = new ExternalData(this);
+            if (External.isConnected()) {
+                externalData.createTable();
+                externalData.emptyTable();
+            }
+        }
+
+        if (isSqlite) {
+
+            this.sqLite = new SQLite();
+            this.sqLite.connect();
+            final SQLiteData sqLiteData = new SQLiteData(this);
+            if (SQLite.isConnected()) {
+                sqLiteData.createTable();
+                sqLiteData.emptyTable();
+            }
+        }
+    }
+
+    private void loadPluginDependent(){
+
+        if (LiteBansUtil.getLiteBansAPI().isPresent()){
+
+            server.getScheduler().buildTask(this, new OnLiteBanEvents()).delay(5, TimeUnit.SECONDS).schedule();
+
+            this.logger.info("LiteBans Plugin Detected!");
+
+        }
     }
 
     public static Main getInstance() { return instance; }
 
     public static ProxyServer getServer() { return server; }
 
-    public Logger getLogger(){ return logger; }
+    public Logger getLogger(){ return this.logger; }
 
-    public Path getFolder() { return folder; }
+    public Path getFolder() { return this.folder; }
 
-    public ConfigManager getConfig() { return config; }
+    public ConfigManager getConfig() { return this.config; }
+
+    public External getExternal() { return this.external; }
+
+    public SQLite getSqLite() { return this.sqLite; }
 }

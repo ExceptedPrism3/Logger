@@ -63,7 +63,7 @@ public class OnPlayerKick implements Listener {
 
                     }
 
-                    if (isExternal && this.main.external.isConnected()) {
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
                         ExternalData.playerKick(serverName, worldName, playerName, x, y, z, reason, true);
 
@@ -113,7 +113,7 @@ public class OnPlayerKick implements Listener {
             }
 
             // MySQL
-            if (isExternal && this.main.external.isConnected()) {
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 

@@ -48,7 +48,7 @@ public class FileHandler {
         dataFolder.mkdir();
 
         final File logsFolder = new File(dataFolder, "Logs");
-        logsFolder.mkdirs();
+        logsFolder.mkdir();
 
         final Date date = new Date();
         final SimpleDateFormat filenameDateFormat = new SimpleDateFormat("dd-MM-yyyy");

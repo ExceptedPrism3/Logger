@@ -13,38 +13,33 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+
+import static com.carpour.loggervelocity.Utils.Data.*;
 
 public class RAM implements Runnable{
 
     final Main main = Main.getInstance();
     final Messages messages = new Messages();
 
-    long maxMemory = Runtime.getRuntime().maxMemory() / 1048576L;
-    long freeMemory = Runtime.getRuntime().freeMemory() / 1048576L;
-    long usedMemory = maxMemory - freeMemory;
-    double percentUsed = (double) usedMemory * 100.0D / (double) maxMemory;
-    String serverName = main.getConfig().getString("Server-Name");
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     public void run() {
 
-        if (main.getConfig().getInt("RAM.Percent") <= 0 || main.getConfig().getInt("RAM.Percent") >= 100) {
+        if (main.getConfig().getBoolean("Log-Server.RAM")) {
 
-            return;
+            if (ramPercent <= 0 || ramPercent >= 100) return;
 
-        }
+            final long maxMemory = Runtime.getRuntime().maxMemory() / 1048576L;
+            final long freeMemory = Runtime.getRuntime().freeMemory() / 1048576L;
+            final long usedMemory = maxMemory - freeMemory;
+            final double percentUsed = (double) usedMemory * 100.0D / (double) maxMemory;
 
-        if (main.getConfig().getInt("RAM.Percent") <= percentUsed) {
+            if (ramPercent <= percentUsed) {
 
-            if (main.getConfig().getBoolean("Log-Server.RAM")) {
-
-                // Log To Files Handling
-                if (main.getConfig().getBoolean("Log-to-Files")) {
+                // Log To Files
+                if (isLogToFiles) {
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRamLogFile(), true));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRamLogFile(), true));
                         out.write(messages.getString("Files.Server-Side.RAM").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)) + "\n");
                         out.close();
 
@@ -63,8 +58,8 @@ public class RAM implements Runnable{
 
                 }
 
-                // MySQL
-                if (main.getConfig().getBoolean("MySQL.Enable") && External.isConnected()) {
+                // External
+                if (isExternal && External.isConnected()) {
 
                     try {
 
@@ -74,13 +69,13 @@ public class RAM implements Runnable{
                 }
 
                 // SQLite
-                if (main.getConfig().getBoolean("SQLite.Enable") && SQLite.isConnected()) {
+                if (isSqlite && SQLite.isConnected()) {
 
                     try {
 
                         SQLiteData.insertRAM(serverName, maxMemory, usedMemory, freeMemory);
 
-                    } catch (Exception exception) { exception.printStackTrace(); }
+                    } catch (Exception e) { e.printStackTrace(); }
                 }
             }
         }

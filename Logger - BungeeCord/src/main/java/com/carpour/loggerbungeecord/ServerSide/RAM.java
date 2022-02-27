@@ -11,83 +11,69 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.loggerbungeecord.Utils.Data.*;
 
 public class RAM implements Runnable{
 
     private final Main main = Main.getInstance();
 
-    long maxMemory = Runtime.getRuntime().maxMemory() / 1048576L;
-    long freeMemory = Runtime.getRuntime().freeMemory() / 1048576L;
-    long usedMemory = maxMemory - freeMemory;
-    double percentUsed = (double) usedMemory * 100.0D / (double) maxMemory;
-    String serverName = main.getConfig().getString("Server-Name");
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     public void run() {
 
-        if (main.getConfig().getInt("RAM.Percent") <= 0 || main.getConfig().getInt("RAM.Percent") >= 100) {
+        if (this.main.getConfig().getBoolean("Log-Server.RAM")) {
 
-            return;
+            if (ramPercent <= 0 || ramPercent >= 100) return;
 
-        }
+            long maxMemory = Runtime.getRuntime().maxMemory() / 1048576L;
+            long freeMemory = Runtime.getRuntime().freeMemory() / 1048576L;
+            long usedMemory = maxMemory - freeMemory;
+            double percentUsed = (double) usedMemory * 100.0D / (double) maxMemory;
 
-        if (main.getConfig().getInt("RAM.Percent") <= percentUsed) {
-
-            if (main.getConfig().getBoolean("Log-Server.RAM")) {
+            if (ramPercent <= percentUsed) {
 
                 //Log To Files Handling
-                if (main.getConfig().getBoolean("Log-to-Files")) {
+                if (isLogToFiles) {
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRAMLogFile(), true));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRAMLogFile(), true));
                         out.write(Objects.requireNonNull(Messages.getString("Files.Server-Side.RAM")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)) + "\n");
                         out.close();
 
-                    } catch (
-                            IOException e) {
+                    } catch (IOException e) {
 
-                        Main.getInstance().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
                 }
 
-                //Discord
+                // Discord
                 if (!Messages.getString("Discord.Server-Side.RAM").isEmpty()) {
 
                     Discord.ram(Objects.requireNonNull(Messages.getString("Discord.Server-Side.RAM")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)), false);
 
                 }
 
-                //MySQL
-                if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
+                // External
+                if (isExternal && this.main.getExternal().isConnected()) {
 
                     try {
 
                         ExternalData.RAM(serverName, maxMemory, usedMemory, freeMemory);
 
-                    } catch (Exception e) {
-
-                        e.printStackTrace();
-
-                    }
+                    } catch (Exception e) { e.printStackTrace(); }
                 }
 
-                //SQLite
-                if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                // SQLite
+                if (isSqlite && this.main.getSqLite().isConnected()) {
 
                     try {
 
                         SQLiteData.insertRAM(serverName, maxMemory, usedMemory, freeMemory);
 
-                    } catch (Exception exception) {
-
-                        exception.printStackTrace();
-
-                    }
+                    } catch (Exception e) { e.printStackTrace(); }
                 }
             }
         }

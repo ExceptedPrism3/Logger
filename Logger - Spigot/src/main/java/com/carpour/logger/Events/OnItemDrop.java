@@ -83,7 +83,7 @@ public class OnItemDrop implements Listener {
 
                     }
 
-                    if (isExternal && this.main.external.isConnected()) {
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
                         ExternalData.itemDrop(serverName, worldName, playerName, item, amount, blockX, blockY, blockZ, enchs, itemName, true);
 
@@ -133,7 +133,7 @@ public class OnItemDrop implements Listener {
             }
 
             // MySQL
-            if (isExternal && this.main.external.isConnected()) {
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 

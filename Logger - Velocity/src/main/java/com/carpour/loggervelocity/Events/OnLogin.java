@@ -17,32 +17,32 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+
+import static com.carpour.loggervelocity.Utils.Data.*;
 
 public class OnLogin {
 
     @Subscribe
-    public void onJoin(PostLoginEvent event) {
+    public void onJoin(final PostLoginEvent event) {
 
-        Main main = Main.getInstance();
-        Messages messages = new Messages();
-
-        Player player = event.getPlayer();
-        String playerName = player.getUsername();
-        InetSocketAddress playerIP = player.getRemoteAddress();
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        if (player.hasPermission("loggerproxy.exempt")) return;
+        final Main main = Main.getInstance();
+        final Messages messages = new Messages();
 
         if (main.getConfig().getBoolean("Log-Player.Login")) {
 
-            if (!main.getConfig().getBoolean("Player-Login.Player-IP")) playerIP = null;
+            final Player player = event.getPlayer();
 
-            // Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (player.hasPermission(loggerExempt)) return;
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
+            final String playerName = player.getUsername();
+            InetSocketAddress playerIP = player.getRemoteAddress();
+
+            if (!isPlayerIP) playerIP = null;
+
+            // Log To Files
+            if (isLogToFiles) {
+
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!messages.getString("Discord.Player-Login-Staff").isEmpty()) {
 
@@ -52,7 +52,7 @@ public class OnLogin {
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
                         out.write(messages.getString("Files.Player-Login-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%IP%", String.valueOf(playerIP)) + "\n");
                         out.close();
 
@@ -63,13 +63,13 @@ public class OnLogin {
 
                     }
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && External.isConnected()) {
+                    if (isExternal && External.isConnected()) {
 
                         ExternalData.playerLogin(serverName, playerName, playerIP, true);
 
                     }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && SQLite.isConnected()) {
+                    if (isSqlite && SQLite.isConnected()) {
 
                         SQLiteData.insertPlayerLogin(serverName, playerName, playerIP, true);
 
@@ -81,7 +81,7 @@ public class OnLogin {
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLoginLogFile(), true));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLoginLogFile(), true));
                     out.write(messages.getString("Files.Player-Login").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%IP%", String.valueOf(playerIP)) + "\n");
                     out.close();
 
@@ -93,17 +93,16 @@ public class OnLogin {
                 }
             }
 
-            // Discord Integration
-            if (!player.hasPermission("logger.exempt.discord")) {
+            // Discord
+            if (!player.hasPermission(loggerExemptDiscord)) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!messages.getString("Discord.Player-Login-Staff").isEmpty()) {
 
                         Discord.staffChat(player, messages.getString("Discord.Player-Login-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%IP%", String.valueOf(playerIP)), false);
 
                     }
-
                 } else {
 
                     if (!messages.getString("Discord.Player-Login").isEmpty()) {
@@ -114,24 +113,24 @@ public class OnLogin {
                 }
             }
 
-            // MySQL Handling
-            if (main.getConfig().getBoolean("MySQL.Enable") && External.isConnected()) {
+            // External
+            if (isExternal && External.isConnected()) {
 
                 try {
 
-                    ExternalData.playerLogin(serverName, playerName, playerIP, player.hasPermission("loggerproxy.staff.log"));
+                    ExternalData.playerLogin(serverName, playerName, playerIP, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
-            // SQLite Handling
-            if (main.getConfig().getBoolean("SQLite.Enable") && SQLite.isConnected()) {
+            // SQLite
+            if (isSqlite && SQLite.isConnected()) {
 
                 try {
 
-                    SQLiteData.insertPlayerLogin(serverName, playerName, playerIP, player.hasPermission("loggerproxy.staff.log"));
+                    SQLiteData.insertPlayerLogin(serverName, playerName, playerIP, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception exception) { exception.printStackTrace(); }
+                } catch (Exception e) { e.printStackTrace(); }
             }
         }
     }

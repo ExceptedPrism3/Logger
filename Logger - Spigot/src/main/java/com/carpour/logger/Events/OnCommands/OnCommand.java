@@ -91,7 +91,7 @@ public class OnCommand implements Listener {
 
                     }
 
-                    if (isExternal && this.main.external.isConnected()) {
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
                         ExternalData.playerCommands(serverName, worldName, playerName, command, true);
 
@@ -141,7 +141,7 @@ public class OnCommand implements Listener {
             }
 
             // Logging to MySQL if logging to MySQL and Command Logging is enabled
-            if (isExternal && this.main.external.isConnected()) {
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 

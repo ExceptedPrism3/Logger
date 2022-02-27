@@ -16,32 +16,32 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static com.carpour.loggerbungeecord.Utils.Data.*;
 
 public class OnLogin implements Listener {
 
     private final Main main = Main.getInstance();
 
     @EventHandler
-    public void onLogging(PostLoginEvent event){
+    public void onLogging(final PostLoginEvent event){
 
-        ProxiedPlayer player = event.getPlayer();
-        String playerName = player.getName();
-        InetSocketAddress playerIP = (InetSocketAddress) event.getPlayer().getSocketAddress();
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (this.main.getConfig().getBoolean("Log-Player.Login")) {
 
-        if (player.hasPermission("loggerproxy.exempt")) return;
+            final ProxiedPlayer player = event.getPlayer();
 
-        if (main.getConfig().getBoolean("Log-Player.Login")) {
+            if (player.hasPermission(loggerExempt)) return;
 
-            if (!main.getConfig().getBoolean("Player-Login.Player-IP")) playerIP = null;
+            final String playerName = player.getName();
+            InetSocketAddress playerIP = (InetSocketAddress) event.getPlayer().getSocketAddress();
 
-            //Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            if (!isPlayerIP) playerIP = null;
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
+            // Log To Files Handling
+            if (isLogToFiles) {
+
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Messages.getString("Discord.Player-Login-Staff").isEmpty()) {
 
@@ -51,25 +51,24 @@ public class OnLogin implements Listener {
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
                         out.write(Messages.getString("Files.Player-Login-Staff").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%IP%", String.valueOf(playerIP)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
 
-                        Main.getInstance().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
 
-                    if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
-
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
                         ExternalData.playerLogin(serverName, playerName, playerIP, true);
 
                     }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                    if (isSqlite && this.main.getSqLite().isConnected()) {
 
                         SQLiteData.insertPlayerLogin(serverName, playerName, playerIP, true);
 
@@ -81,29 +80,28 @@ public class OnLogin implements Listener {
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLoginLogFile(), true));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLoginLogFile(), true));
                     out.write(Messages.getString("Files.Player-Login").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%IP%", String.valueOf(playerIP)) + "\n");
                     out.close();
 
                 } catch (IOException e) {
 
-                    Main.getInstance().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             }
 
-            //Discord Integration
-            if (!player.hasPermission("logger.exempt.discord")) {
+            // Discord Integration
+            if (!player.hasPermission(loggerExemptDiscord)) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("loggerproxy.staff.log")) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Messages.getString("Discord.Player-Login-Staff").isEmpty()) {
 
                         Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Login-Staff")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%IP%", String.valueOf(playerIP)), false);
 
                     }
-
                 } else {
 
                     if (!Messages.getString("Discord.Player-Login").isEmpty()) {
@@ -114,32 +112,24 @@ public class OnLogin implements Listener {
                 }
             }
 
-            //MySQL Handling
-            if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
+            // External Handling
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 
-                    ExternalData.playerLogin(serverName, playerName, playerIP, player.hasPermission("loggerproxy.staff.log"));
+                    ExternalData.playerLogin(serverName, playerName, playerIP, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
 
-            //SQLite Handling
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+            // SQLite Handling
+            if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {
 
-                    SQLiteData.insertPlayerLogin(serverName, playerName, playerIP, player.hasPermission("loggerproxy.staff.log"));
+                    SQLiteData.insertPlayerLogin(serverName, playerName, playerIP, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception exception) {
-
-                    exception.printStackTrace();
-
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
         }
     }

@@ -5,22 +5,23 @@ import com.carpour.loggerbungeecord.Main;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Objects;
+
+import static com.carpour.loggerbungeecord.Utils.Data.*;
 
 public class External {
 
     private final Main main = Main.getInstance();
 
     private String jdbc;
-    private final String dataType = Objects.requireNonNull(main.getConfig().getString("Database.Type")).toLowerCase();
-    private final String host = main.getConfig().getString("Database.Host");
-    private final int port = main.getConfig().getInt("Database.Port");
-    private final String username = main.getConfig().getString("Database.Username");
-    private final String password = main.getConfig().getString("Database.Password");
-    private final String database = main.getConfig().getString("Database.Database");
+    private final String dataType = dbType.toLowerCase();
+    private final String host = dbHost;
+    private final int port = dbPort;
+    private final String username = dbUserName;
+    private final String password = dbPassword;
+    private final String database = dbName;
     private Connection connection;
 
-    public boolean isConnected(){ return connection != null; }
+    public boolean isConnected(){ return this.connection != null; }
 
     public void connect() {
 
@@ -33,18 +34,18 @@ public class External {
         switch (dataType){
 
             case "mysql":
-                jdbc = mySQL;
+                this.jdbc = mySQL;
                 jdbcDriver = mySQLDriver;
                 break;
 
             case "mariadb":
-                jdbc = mariaDB;
+                this.jdbc = mariaDB;
                 jdbcDriver = mariaDBDriver;
-                main.getLogger().warning(jdbc + " Type is still in Development. Report any issues on Discord or Github!");
+                this.main.getLogger().warning(this.jdbc + " Type is still in Development. Report any issues on Discord or Github!");
                 break;
 
             default:
-                main.getLogger().severe("Unknown Database Type. Available ones are: MySQL and MariaDB.");
+                this.main.getLogger().severe("Unknown Database Type. Available ones are: MySQL and MariaDB.");
                 return;
 
         }
@@ -54,12 +55,12 @@ public class External {
             try {
 
                 Class.forName(jdbcDriver);
-                connection = DriverManager.getConnection("jdbc:" + jdbc + "://" + host + ":" + port + "/" + database + "?AllowPublicKeyRetrieval=true?useSSL=false&jdbcCompliantTruncation=false", username, password);
-                main.getLogger().info(jdbc + " Connection has been established!");
+                this.connection = DriverManager.getConnection("jdbc:" + this.jdbc + "://" + this.host + ":" + this.port + "/" + this.database + "?AllowPublicKeyRetrieval=true?useSSL=false&jdbcCompliantTruncation=false", this.username, this.password);
+                this.main.getLogger().info(this.jdbc + " Connection has been established!");
 
             } catch (SQLException | ClassNotFoundException e) {
 
-                main.getLogger().severe("Could not connect to " + jdbc + " Database!");
+                this.main.getLogger().severe("Could not connect to " + this.jdbc + " Database!");
 
             }
         }
@@ -71,15 +72,15 @@ public class External {
 
             try {
 
-                connection.close();
-                Main.getInstance().getLogger().info(jdbc + " Connection has been closed!");
+                this.connection.close();
+                Main.getInstance().getLogger().info(this.jdbc + " Connection has been closed!");
 
             } catch (SQLException e) {
 
-                Main.getInstance().getLogger().severe(jdbc + " Database couldn't be closed safely, if the issue persists contact the Authors!");
+                Main.getInstance().getLogger().severe(this.jdbc + " Database couldn't be closed safely, if the issue persists contact the Authors!");
 
             }
         }
     }
-    public Connection getConnection(){ return connection; }
+    public Connection getConnection(){ return this.connection; }
 }

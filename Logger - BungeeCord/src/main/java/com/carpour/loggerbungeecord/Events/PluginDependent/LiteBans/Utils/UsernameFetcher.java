@@ -11,9 +11,9 @@ public class UsernameFetcher {
     public static String playerNameFetcher(String uuid){
 
         String name = "";
-        String query = "SELECT name from {history} WHERE uuid=? ORDER BY date DESC LIMIT 1";
+        final String query = "SELECT name from {history} WHERE uuid=? ORDER BY date DESC LIMIT 1";
 
-        try (PreparedStatement st = Database.get().prepareStatement(query)) {
+        try (final PreparedStatement st = Database.get().prepareStatement(query)) {
 
             st.setString(1, uuid);
 
@@ -26,11 +26,7 @@ public class UsernameFetcher {
                 }
             }
 
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-
-        }
+        } catch (SQLException e) { e.printStackTrace(); }
 
         return name;
     }

@@ -16,6 +16,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
+import static com.carpour.logger.Utils.Data.sqliteDataDel;
+
 public class SQLiteData {
 
     private static Main plugin;
@@ -577,6 +579,7 @@ public class SQLiteData {
                 enchantStatement.setBoolean(8, isStaff);
 
                 enchantStatement.executeUpdate();
+
             } catch (SQLException exception) { exception.printStackTrace(); }
         }
     }
@@ -614,6 +617,7 @@ public class SQLiteData {
             itemPickupStatement.setBoolean(11, isStaff);
 
             itemPickupStatement.executeUpdate();
+
         } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
@@ -632,6 +636,7 @@ public class SQLiteData {
             furnaceStatement.setBoolean(10, isStaff);
 
             furnaceStatement.executeUpdate();
+
         } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
@@ -678,6 +683,7 @@ public class SQLiteData {
             craftStatement.setBoolean(10, isStaff);
 
             craftStatement.executeUpdate();
+
         } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
@@ -692,13 +698,14 @@ public class SQLiteData {
             vault.setBoolean(6, isStaff);
 
             vault.executeUpdate();
+
         } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
 
     public void emptyTable() {
 
-        int when = plugin.getConfig().getInt("SQLite.Data-Deletion");
+        int when = sqliteDataDel;
 
         if (when <= 0) return;
 

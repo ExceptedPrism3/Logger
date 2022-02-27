@@ -16,10 +16,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+import static com.carpour.loggerbungeecord.Utils.Data.*;
+
 public class OnLiteBanEvents implements Listener, Runnable{
+
+    private final Main main = Main.getInstance();
 
     @Override
     public void run() {
@@ -29,30 +32,26 @@ public class OnLiteBanEvents implements Listener, Runnable{
             @Override
             public void entryAdded(Entry entry) {
 
-                final Main main = Main.getInstance();
+                if (main.getConfig().getBoolean("Log-Extra.LiteBans")) {
 
-                String entryType = entry.getType().toLowerCase();
-                String executorName = entry.getExecutorName();
-                String duration = entry.getDurationString();
-                String uuid = entry.getUuid();
-                String onWho = UsernameFetcher.playerNameFetcher(uuid);
-                String reason = entry.getReason();
-                boolean isSilent = entry.isSilent();
-                String serverName = main.getConfig().getString("Server-Name");
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                final String entryType = entry.getType().toLowerCase();
+                final String executorName = entry.getExecutorName();
+                final String duration = entry.getDurationString();
+                final String uuid = entry.getUuid();
+                final String onWho = UsernameFetcher.playerNameFetcher(uuid);
+                final String reason = entry.getReason();
+                final boolean isSilent = entry.isSilent();
 
                 File fileLog = null;
-
-                if (main.getConfig().getBoolean("Log-Extra.LiteBans")) {
 
                     switch (entryType) {
 
                         case "ban":
 
-                            if (!main.getConfig().getBoolean("LiteBans.IP-Ban")) return;
-                            if (!main.getConfig().getBoolean("LiteBans.Temp-IP-Ban")) return;
-                            if (!main.getConfig().getBoolean("LiteBans.Ban")) return;
-                            if (!main.getConfig().getBoolean("LiteBans.Temp-Ban")) return;
+                            if (!isLiteBansIpBan) return;
+                            if (!isLiteBansTempIpBan) return;
+                            if (!isLiteBansBan) return;
+                            if (!isLiteBansTempBan) return;
 
                             fileLog = FileHandler.getLiteBansBansLogFile();
 
@@ -60,8 +59,8 @@ public class OnLiteBanEvents implements Listener, Runnable{
 
                         case "mute":
 
-                            if (!main.getConfig().getBoolean("LiteBans.Mute")) return;
-                            if (!main.getConfig().getBoolean("LiteBans.Temp-Mute")) return;
+                            if (!isLiteBansMute) return;
+                            if (!isLiteBansTempMute) return;
 
                             fileLog = FileHandler.getLiteBansMuteLogFile();
 
@@ -69,7 +68,7 @@ public class OnLiteBanEvents implements Listener, Runnable{
 
                         case "kick":
 
-                            if (!main.getConfig().getBoolean("LiteBans.Kick")) return;
+                            if (!isLiteBansKick) return;
 
                             fileLog = FileHandler.getLiteBansKickLogFile();
 
@@ -83,19 +82,19 @@ public class OnLiteBanEvents implements Listener, Runnable{
                     assert executorName != null;
 
                     // Log To Files Handling
-                    if (main.getConfig().getBoolean("Log-to-Files")) {
+                    if (isLogToFiles) {
 
                         assert fileLog != null;
 
                         try {
 
-                            BufferedWriter out = new BufferedWriter(new FileWriter(fileLog, true));
+                            final BufferedWriter out = new BufferedWriter(new FileWriter(fileLog, true));
                             out.write(Messages.getString("Files.Extra.LiteBans").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%on%", onWho).replaceAll("%duration%", duration).replaceAll("%reason%", reason).replaceAll("%executor%", executorName).replaceAll("%silent%", String.valueOf(isSilent)).replaceAll("%command%", entryType.toUpperCase()) + "\n");
                             out.close();
 
                         } catch (IOException e) {
 
-                            Main.getInstance().getLogger().warning("An error occurred while logging into the appropriate file.");
+                            Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
 
                         }
@@ -108,32 +107,24 @@ public class OnLiteBanEvents implements Listener, Runnable{
 
                     }
 
-                    // MySQL Handling
-                    if (main.getConfig().getBoolean("External.Enable") && main.external.isConnected()) {
+                    // External Handling
+                    if (isExternal && main.getExternal().isConnected()) {
 
                         try {
 
                             ExternalData.liteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
 
-                        } catch (Exception e) {
-
-                            e.printStackTrace();
-
-                        }
+                        } catch (Exception e) { e.printStackTrace(); }
                     }
 
                     // SQLite Handling
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+                    if (isSqlite && main.getSqLite().isConnected()) {
 
                         try {
 
                             SQLiteData.insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
 
-                        } catch (Exception exception) {
-
-                            exception.printStackTrace();
-
-                        }
+                        } catch (Exception e) { e.printStackTrace(); }
                     }
                 }
             }

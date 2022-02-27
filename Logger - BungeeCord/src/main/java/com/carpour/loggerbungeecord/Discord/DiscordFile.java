@@ -56,7 +56,7 @@ public class DiscordFile {
 
         if (!Main.getInstance().getDataFolder().exists()) Main.getInstance().getDataFolder().mkdir();
 
-        File file = getFile();
+        final File file = getFile();
 
         if (!file.exists()) {
 

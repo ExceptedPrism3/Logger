@@ -77,7 +77,7 @@ public class OnPlayerDeath implements Listener {
 
                     }
 
-                    if (isExternal && this.main.external.isConnected()) {
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
                         ExternalData.playerDeath(serverName, worldName, playerName, playerLevel, x, y, z, cause, killer, true);
 
@@ -127,7 +127,7 @@ public class OnPlayerDeath implements Listener {
             }
 
             // MySQL
-            if (isExternal && this.main.external.isConnected()) {
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 

@@ -66,7 +66,7 @@ public class OnFurnace implements Listener {
 
                     }
 
-                    if (isExternal && this.main.external.isConnected()) {
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
                         ExternalData.furnace(serverName, worldName, playerName, item, amount, blockX, blockY, blockZ, true);
 
@@ -117,7 +117,7 @@ public class OnFurnace implements Listener {
             }
 
             // MySQL Handling
-            if (isExternal && this.main.external.isConnected()) {
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 

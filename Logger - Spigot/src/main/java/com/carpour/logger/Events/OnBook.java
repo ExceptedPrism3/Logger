@@ -76,7 +76,7 @@ public class OnBook implements Listener {
 
                     }
 
-                    if (isExternal && this.main.external.isConnected()) {
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
                         ExternalData.bookEditing(serverName, worldName, playerName, pageCount, pageContent, signature, true);
 
@@ -125,7 +125,7 @@ public class OnBook implements Listener {
             }
 
             // MySQL
-            if (isExternal && this.main.external.isConnected()) {
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 

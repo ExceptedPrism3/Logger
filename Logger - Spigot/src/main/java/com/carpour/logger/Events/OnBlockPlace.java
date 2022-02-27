@@ -67,7 +67,7 @@ public class OnBlockPlace implements Listener {
 
                     }
 
-                    if (isExternal && this.main.external.isConnected()) {
+                    if (isExternal && this.main.getExternal().isConnected()) {
 
                         ExternalData.blockPlace(serverName, worldName, playerName, blockType.toString(), x, y, z, true);
 
@@ -116,7 +116,7 @@ public class OnBlockPlace implements Listener {
             }
 
             // MySQL
-            if (isExternal && this.main.external.isConnected()) {
+            if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
 

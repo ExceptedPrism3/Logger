@@ -15,28 +15,27 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+
+import static com.carpour.loggervelocity.Utils.Data.*;
 
 public class Console {
 
     @Subscribe
-    public void onConsole(CommandExecuteEvent event){
+    public void onConsole(final CommandExecuteEvent event){
 
-        Main main = Main.getInstance();
-        Messages messages = new Messages();
-
-        String command = event.getCommand().replace("\\", "\\\\");
-        String serverName = main.getConfig().getString("Server-Name");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        final Main main = Main.getInstance();
+        final Messages messages = new Messages();
 
         if (main.getConfig().getBoolean("Log-Server.Console-Commands")) {
 
-            // Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+            final String command = event.getCommand().replace("\\", "\\\\");
+
+            // Log To Files
+            if (isLogToFiles) {
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getConsoleCommandLogFile(), true));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getConsoleCommandLogFile(), true));
                     out.write(messages.getString("Files.Server-Side.Console-Commands").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%command%", command) + "\n");
                     out.close();
 
@@ -54,8 +53,8 @@ public class Console {
                 Discord.console(messages.getString("Discord.Server-Side.Console-Commands").replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%command%", command), false);
             }
 
-            // MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && External.isConnected()) {
+            // External
+            if (isExternal && External.isConnected()) {
 
                 try {
 
@@ -65,7 +64,7 @@ public class Console {
             }
 
             // SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && SQLite.isConnected()) {
+            if (isSqlite && SQLite.isConnected()) {
 
                 try {
 
