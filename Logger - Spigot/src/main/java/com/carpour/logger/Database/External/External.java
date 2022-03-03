@@ -1,6 +1,7 @@
 package com.carpour.logger.Database.External;
 
 import com.carpour.logger.Main;
+import com.zaxxer.hikari.HikariDataSource;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,11 +20,11 @@ public class External {
     private final String username = dbUserName;
     private final String password = dbPassword;
     private final String database = dbName;
-    private Connection connection;
+    private HikariDataSource hikari;
 
-    public boolean isConnected(){ return this.connection != null; }
+    public boolean isConnected(){ return this.hikari != null; }
 
-    public void connect() {
+    public void connect() {/*
 
         String jdbcDriver;
         final String mySQL = "MySQL";
@@ -48,21 +49,22 @@ public class External {
                 this.main.getLogger().severe("Unknown Database Type. Available ones are: MySQL and MariaDB.");
                 return;
 
-        }
+        }*/
 
         if (!isConnected()) {
 
-            try {
+            hikari = new HikariDataSource();
+            hikari.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
+            hikari.addDataSourceProperty("serverName", host);
+            hikari.addDataSourceProperty("port", port);
+            hikari.addDataSourceProperty("databaseName", database);
+            hikari.addDataSourceProperty("user", username);
+            hikari.addDataSourceProperty("password", password);
 
-                Class.forName(jdbcDriver);
+                /*Class.forName(jdbcDriver);
                 this.connection = DriverManager.getConnection("jdbc:" + this.jdbc + "://" + this.host + ":" + this.port + "/" + this.database + "?AllowPublicKeyRetrieval=true?useSSL=false&jdbcCompliantTruncation=false", this.username, this.password);
-                this.main.getLogger().info(this.jdbc + " Connection has been established!");
+                this.main.getLogger().info(this.jdbc + " Connection has been established!");*/
 
-            } catch (SQLException | ClassNotFoundException e) {
-
-                this.main.getLogger().severe("Could not connect to " + this.jdbc + " Database!");
-
-            }
         }
     }
 
@@ -70,17 +72,10 @@ public class External {
 
         if (isConnected()) {
 
-            try {
+            this.hikari.close();
+            this.main.getLogger().info(this.jdbc + " Connection has been closed!");
 
-                this.connection.close();
-                this.main.getLogger().info(this.jdbc + " Connection has been closed!");
-
-            } catch (SQLException e) {
-
-                this.main.getLogger().severe(this.jdbc + " Database couldn't be closed safely, if the issue persists contact the Authors!");
-
-            }
         }
     }
-    public Connection getConnection(){ return this.connection; }
+    public HikariDataSource getHikari(){ return this.hikari; }
 }

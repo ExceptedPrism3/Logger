@@ -43,7 +43,7 @@ public class Console implements Listener {
                 }
             }
 
-            // Log To Files Handling
+            // Log To Files
             if (isLogToFiles) {
 
                 try {
@@ -66,7 +66,7 @@ public class Console implements Listener {
                 Discord.console(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Console-Commands")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%command%", command), false);
             }
 
-            // MySQL
+            // External
             if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {

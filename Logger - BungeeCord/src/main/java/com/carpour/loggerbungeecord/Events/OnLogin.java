@@ -38,7 +38,7 @@ public class OnLogin implements Listener {
 
             if (!isPlayerIP) playerIP = null;
 
-            // Log To Files Handling
+            // Log To Files
             if (isLogToFiles) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
@@ -112,7 +112,7 @@ public class OnLogin implements Listener {
                 }
             }
 
-            // External Handling
+            // External
             if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
@@ -122,7 +122,7 @@ public class OnLogin implements Listener {
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
-            // SQLite Handling
+            // SQLite
             if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {

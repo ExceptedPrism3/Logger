@@ -54,7 +54,7 @@ public class OnPlayerDeath implements Listener {
 
             }
 
-            // Log To Files Handling
+            // Log To Files
             if (isLogToFiles) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
@@ -126,7 +126,7 @@ public class OnPlayerDeath implements Listener {
                 }
             }
 
-            // MySQL
+            // External
             if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {

@@ -71,7 +71,7 @@ private final Main main = Main.getInstance();
 
                                     final String displayName = meta.getDisplayName().replace("\\", "\\\\");
 
-                                    // Log To Files Handling
+                                    // Log To Files
                                     if (isLogToFiles) {
 
                                         if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
@@ -144,7 +144,7 @@ private final Main main = Main.getInstance();
                                         }
                                     }
 
-                                    // MySQL
+                                    // External
                                     if (isExternal && this.main.getExternal().isConnected()) {
 
                                         try {

@@ -47,7 +47,7 @@ public class OnPlayerTeleport implements Listener {
             final int oy = player.getLocation().getBlockY();
             final int oz = player.getLocation().getBlockZ();
 
-            // Log To Files Handling
+            // Log To Files
             if (isLogToFiles) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
@@ -119,7 +119,7 @@ public class OnPlayerTeleport implements Listener {
                 }
             }
 
-            // MySQL
+            // External
             if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {

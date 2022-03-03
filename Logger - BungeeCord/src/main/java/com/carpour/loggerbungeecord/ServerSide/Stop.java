@@ -22,7 +22,7 @@ public class Stop {
 
         if (this.main.getConfig().getBoolean("Log-Server.Stop")) {
 
-            // Log To Files Handling
+            // Log To Files
             if (isLogToFiles) {
 
                 try {

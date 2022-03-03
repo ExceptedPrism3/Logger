@@ -31,7 +31,7 @@ public class PortalCreation implements Listener {
             final String worldName = event.getWorld().getName();
             final PortalCreateEvent.CreateReason reason = event.getReason();
 
-            // Log To Files Handling
+            // Log To Files
             if (isLogToFiles) {
 
                 try {
@@ -54,7 +54,7 @@ public class PortalCreation implements Listener {
                 Discord.portalCreation(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Portal-Creation")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%material%", String.valueOf(reason)), false);
             }
 
-            // MySQL
+            // External
             if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {

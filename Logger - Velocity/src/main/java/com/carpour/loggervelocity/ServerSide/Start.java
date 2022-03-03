@@ -25,7 +25,7 @@ public class Start {
 
         if (main.getConfig().getBoolean("Log-Server.Start")) {
 
-            // Log To Files Handling
+            // Log to Files
             if (isLogToFiles) {
 
                 try {

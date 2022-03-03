@@ -32,7 +32,7 @@ public class RAM implements Runnable {
 
             if (ramPercent <= percentUsed) {
 
-                // Log To Files Handling
+                // Log To Files
                 if (isLogToFiles) {
 
                     try {
@@ -55,7 +55,7 @@ public class RAM implements Runnable {
                     Discord.RAM(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.RAM")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)), false);
                 }
 
-                // MySQL
+                // External
                 if (isExternal && this.main.getExternal().isConnected()) {
 
                     try {

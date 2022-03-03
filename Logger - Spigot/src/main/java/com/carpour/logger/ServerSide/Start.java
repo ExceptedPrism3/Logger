@@ -23,7 +23,7 @@ public class Start {
 
         if (this.main.getConfig().getBoolean("Log-Server.Start")) {
 
-            // Log To Files Handling
+            // Log To Files
             if (isLogToFiles) {
 
                 try {
@@ -46,7 +46,7 @@ public class Start {
                 Discord.serverStart(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Start")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())), false);
             }
 
-            // MySQL
+            // External
             if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {

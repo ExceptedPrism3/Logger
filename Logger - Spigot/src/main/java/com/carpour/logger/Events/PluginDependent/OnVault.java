@@ -52,7 +52,7 @@ public class OnVault implements Listener, Runnable {
                         this.players.put(player.getUniqueId(), this.econ.getBalance(player.getPlayer()));
                         double newBalance = bal.getValue();
 
-                        // Log To Files Handling
+                        // Log To Files
                         if (isLogToFiles) {
 
                             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
@@ -126,7 +126,7 @@ public class OnVault implements Listener, Runnable {
                             }
                         }
 
-                        // MySQL Handling
+                        // External
                         if (isExternal && this.main.getExternal().isConnected()) {
 
                             try {
@@ -136,7 +136,7 @@ public class OnVault implements Listener, Runnable {
                             } catch (Exception e) { e.printStackTrace(); }
                         }
 
-                        // SQLite Handling
+                        // External
                         if (isSqlite && this.main.getSqLite().isConnected()) {
 
                             try {

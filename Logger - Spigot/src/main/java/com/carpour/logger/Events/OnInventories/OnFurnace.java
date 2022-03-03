@@ -116,7 +116,7 @@ public class OnFurnace implements Listener {
                 }
             }
 
-            // MySQL Handling
+            // External
             if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
@@ -126,7 +126,7 @@ public class OnFurnace implements Listener {
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
-            // SQLite Handling
+            // External
             if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {

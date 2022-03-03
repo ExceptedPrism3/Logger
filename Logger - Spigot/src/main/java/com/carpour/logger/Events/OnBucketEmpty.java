@@ -42,7 +42,7 @@ public class OnBucketEmpty implements Listener {
             final int y = player.getLocation().getBlockY();
             final int z = player.getLocation().getBlockZ();
 
-            // Log To Files Handling
+            // Log To Files
             if (isLogToFiles) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
@@ -115,7 +115,7 @@ public class OnBucketEmpty implements Listener {
                 }
             }
 
-            // MySQL
+            // External
             if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {

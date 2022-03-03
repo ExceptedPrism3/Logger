@@ -23,7 +23,7 @@ public class Stop {
 
         if (this.main.getConfig().getBoolean("Log-Server.Stop")) {
 
-            // Log To Files Handling
+            // Log To Files
             if (isLogToFiles) {
 
                 try {
@@ -46,7 +46,7 @@ public class Stop {
                 Discord.serverStop(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Stop")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())), false);
             }
 
-            // MySQL
+            // External
             if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {

@@ -1,9 +1,104 @@
-v1.7
+<-!------------------------------------------ v1.7 ------------------------------------------!->
 
-v1.7.1
+Additions
+    [+] BungeeCord Proxy support, that contains the following checkers:
+    [+] Player Chat
+    [+] Player Login
+    [+] Player Leave
+    [+] Server Start
+    [+] Server Stop
+    [+] Server Reload
+    [+] MySQL and Discord Support for Proxy Version
+    [+] messages.yml for both instances where every message is editable
 
-v1.7.2 [ DEV ]
+Bug Fixes & Tweaks
+    [!] Fixed the RAM Checker spamming in Discord
+    [!] Fixed Enchantments lists for Enchanting and Item-Drop Checkers showing only 1 if there's more
+    [!] Fixed a bug when using SQLite and Book-Editing is enabled where it wasn't possible to create its table
+    [!] Fixed Discord Player names showing with color codes symbols
+    [!] Fixed a small bug with File Deletion calculation
+    [!] Re-coded the commands for Spigot versions, now it's more stable / accurate
+    [!] TPS Checker has been improved
+    [!] Whitelisted Player-Commands has been improved
+    [!] Moved messages part from config.yml to the new messages file
+    [!] Minor Changes to the config.yml and discord.yml
+    [!] Renamed all Spigot classes and some variables to match Java convention
 
-v1.7.3 [ DEV ]
+                                            BIG CATCH
+                                           All in 1 Jar
 
-v1.8
+<-!------------------------------------------ v1.7.1 ------------------------------------------!->
+
+Additions
+    [+] Plugin Wiki
+    [+] Velocity Support that includes
+        [+] Player Side
+        [+] Player Chat
+        [+] Player Commands
+        [+] Player Login
+        [+] Player Leave
+        [+] Server Side
+        [+] Server Start
+        [+] Server Stop
+        [+] Console Commands
+        [+] RAM
+        [+] Discord Integration
+    [+] SQLite for BungeeCord
+    [+] Console Blacklist Commands for Bukkit
+    [+] Discord Activity Status for all instances
+    [+] Time Stamp in discord logs
+    [+] AuthMe Wrong Password Checker
+    [+] Game Mode Checker
+    [+] Bukkit Fill Checker
+    [+] Anvil Spy
+    [+] Text Sign Spy
+    [+] Book Editing Spy
+    [+] New Update Checker
+
+Fixes
+    [!] Player Leave console error [ Proxy only ] - This occurs when the targeted server is offline or unreachable
+    [!] Startup Errors when messages field is empty
+    [!] Messages and Discord files comment glitching out
+    [!] MySQL Errors on server startup when credentials are wrong
+
+Changes
+    [*] Remade the BungeeCord Database table names
+    [*] Removed emojis from messages.yml as it causes servers > 1.12 to crash / plugin not working
+    [*] Players IP has been turned off by default in the config
+    [*] Completely changed Config, Messages, and Discord files syntax
+    [*] Enchantments names are more detailed
+    [*] Players can no longer execute the plugin's command without the correct permission
+
+<-!------------------------------------------ v1.7.2 [ DEV ] ------------------------------------------!->
+
+Additions
+    [+] Player Crafting Checker
+    [+] Update Checker Disabler
+    [+] LiteBans Integration for only Proxies
+    [+] New permission logger.spy.bypass - Allows seeing logger.staff commands
+Fixes
+    [!] Update Notification appears even if logger.update permission is revoked
+    [!] MySQL Connection error spam on Proxies
+    [!] Player Sign Text not being logged in SQLite
+    [!] Error Spam when Discord Bot Token is left empty or Invalid & Discord Channel ID when left empty or invalid
+Changes
+    [*] Discord Status Activity Syntax Checker on Server Start
+    [*] Item Pickup Checker will now check for everything
+    [*] %time% placeholder will now display [ yyyy-MM-dd HH:mm:ss ] instead just [ HH:mm:ss ] Files and Discord Logging Features
+    [*] Granting logger.staff.log will auto revoke the logger.exempt for them
+Removed
+    [-] Player Death Item Used by the Killer - Due to not being compatible across all versions
+
+                                                    Extra
+                                        Any Contributions are Welcomed!
+
+<-!------------------------------------------ v1.7.3 [ DEV ] ------------------------------------------!->
+
+Additions
+    [+] MariaDB to Proxy ( BungeeCord, FlameCord, WaterFall, etc... ) & Velocity Instances
+    [+] Vault Checker - Checks for online player's balance changes
+Fixes
+    [!] Player-Chat / Commands / Sign any checker that requires player's input and ends with back-slash \ causes errors and not being logged
+    [!] LiteBans logging only from the console
+Changes
+    [*] Added enchantment level %enchlevel% to the Enchant Checker and updated its Databases Tables

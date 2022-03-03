@@ -31,7 +31,7 @@ public class RCON implements Listener {
             final String ip = event.getSender().getServer().getIp();
             final String command = event.getCommand();
 
-            // Log To Files Handling
+            // Log To Files
             if (isLogToFiles) {
 
                 try {
@@ -54,7 +54,7 @@ public class RCON implements Listener {
                 Discord.rcon(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.RCON")).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%time%", dateTimeFormatter.format(ZonedDateTime.now()).replaceAll("%IP%", ip).replaceAll("%command%", command)), false);
             }
 
-            // MySQL
+            // External
             if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {

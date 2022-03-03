@@ -39,7 +39,7 @@ public class OnPlayerLevel implements Listener {
 
             if (playerLevel == logAbove) {
 
-                // Log To Files Handling
+                // Log To Files
                 if (isLogToFiles) {
 
                     if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
@@ -110,7 +110,7 @@ public class OnPlayerLevel implements Listener {
                     }
                 }
 
-                // MySQL
+                // External
                 if (isExternal && this.main.getExternal().isConnected()) {
 
                     try {

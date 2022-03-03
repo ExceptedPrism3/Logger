@@ -53,7 +53,7 @@ public class OnPlayerJoin implements Listener {
 
             if (!isPlayerIP) ip = null;
 
-            // Log To Files Handling
+            // Log To Files
             if (isLogToFiles) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
@@ -126,7 +126,7 @@ public class OnPlayerJoin implements Listener {
                 }
             }
 
-            // MySQL
+            // External
             if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {

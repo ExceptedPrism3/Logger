@@ -43,7 +43,7 @@ public class OnBlockPlace implements Listener {
             final int z = event.getBlock().getLocation().getBlockZ();
             final Material blockType = event.getBlock().getType();
 
-            // Log To Files Handling
+            // Log To Files
             if (isLogToFiles) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
@@ -115,7 +115,7 @@ public class OnBlockPlace implements Listener {
                 }
             }
 
-            // MySQL
+            // External
             if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {

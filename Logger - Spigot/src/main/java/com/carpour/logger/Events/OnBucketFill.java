@@ -42,7 +42,7 @@ public class OnBucketFill implements Listener {
             final int y = event.getBlockClicked().getY();
             final int z = event.getBlockClicked().getZ();
 
-            // Log To Files Handling
+            // Log To Files
             if (isLogToFiles) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
@@ -115,7 +115,7 @@ public class OnBucketFill implements Listener {
                 }
             }
 
-            // MySQL
+            // External
             if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {

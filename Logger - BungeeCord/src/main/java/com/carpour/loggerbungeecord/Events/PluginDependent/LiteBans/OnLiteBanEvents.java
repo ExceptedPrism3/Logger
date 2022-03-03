@@ -81,7 +81,7 @@ public class OnLiteBanEvents implements Listener, Runnable{
 
                     assert executorName != null;
 
-                    // Log To Files Handling
+                    // Log To Files
                     if (isLogToFiles) {
 
                         assert fileLog != null;
@@ -107,7 +107,7 @@ public class OnLiteBanEvents implements Listener, Runnable{
 
                     }
 
-                    // External Handling
+                    // External
                     if (isExternal && main.getExternal().isConnected()) {
 
                         try {
@@ -117,7 +117,7 @@ public class OnLiteBanEvents implements Listener, Runnable{
                         } catch (Exception e) { e.printStackTrace(); }
                     }
 
-                    // SQLite Handling
+                    // SQLite
                     if (isSqlite && main.getSqLite().isConnected()) {
 
                         try {

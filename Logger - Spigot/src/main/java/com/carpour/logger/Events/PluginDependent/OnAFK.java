@@ -41,7 +41,7 @@ public class OnAFK implements Listener {
             final int z = player.getLocation().getBlockZ();
             final String worldName = player.getWorld().getName();
 
-            // Log To Files Handling
+            // Log To Files
             if (isLogToFiles) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
@@ -113,7 +113,7 @@ public class OnAFK implements Listener {
                 }
             }
 
-            // MySQL
+            // External
             if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {

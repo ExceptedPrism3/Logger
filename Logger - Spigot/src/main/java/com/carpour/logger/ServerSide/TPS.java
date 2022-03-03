@@ -24,6 +24,9 @@ public class TPS implements Runnable {
 
     public void run() {
 
+        // This should resolve the uncorrected TPS value e.g 0.125462498
+        if (getTPS() < 1 ) return;
+
         if (this.main.getConfig().getBoolean("Log-Server.TPS")) {
 
             if (tpsMedium <= 0 || tpsMedium >= 20 || tpsCritical <= 0 || tpsCritical >= 20) return;
@@ -32,7 +35,7 @@ public class TPS implements Runnable {
 
             tickCount += 1;
 
-            // Log To Files Handling
+            // Log To Files
             if (isLogToFiles) {
 
                 try {
@@ -75,7 +78,7 @@ public class TPS implements Runnable {
                     }
                 }
 
-                // MySQL
+                // External
                 if (isExternal && this.main.getExternal().isConnected()) {
 
                     try {

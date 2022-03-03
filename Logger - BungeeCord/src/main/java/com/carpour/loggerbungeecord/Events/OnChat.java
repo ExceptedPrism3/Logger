@@ -35,7 +35,7 @@ public class OnChat implements Listener {
             final String server = player.getServer().getInfo().getName();
             final String message = event.getMessage().replace("\\", "\\\\");
 
-            // Log To Files Handling
+            // Log To Files
             if (isLogToFiles) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
@@ -108,7 +108,7 @@ public class OnChat implements Listener {
                 }
             }
 
-            // External Handling
+            // External
             if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
@@ -118,7 +118,7 @@ public class OnChat implements Listener {
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
-            // SQLite Handling
+            // SQLite
             if (isSqlite && this.main.getSqLite().isConnected()) {
 
                 try {

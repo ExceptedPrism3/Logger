@@ -41,7 +41,7 @@ public class OnCommandWhitelist implements Listener {
 
             if (commandParts.get(0).equalsIgnoreCase(m)) {
 
-                // Log to Files Handling
+                // Log To Files
                 if (isLogToFiles) {
 
                     if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {

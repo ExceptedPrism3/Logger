@@ -42,7 +42,7 @@ public class OnGameMode implements Listener {
                 final World world = player.getWorld();
                 final String worldName = world.getName();
 
-                // Log To Files Handling
+                // Log To Files
                 if (isLogToFiles) {
 
                     if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
@@ -115,7 +115,7 @@ public class OnGameMode implements Listener {
                     }
                 }
 
-                // MySQL Handling
+                // External
                 if (isExternal && this.main.getExternal().isConnected()) {
 
                     try {
@@ -125,7 +125,7 @@ public class OnGameMode implements Listener {
                     } catch (Exception e) { e.printStackTrace(); }
                 }
 
-                // SQLite Handling
+                // External
                 if (isSqlite && this.main.getSqLite().isConnected()) {
 
                     try {

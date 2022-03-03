@@ -53,7 +53,7 @@ public class OnItemPickup implements Listener {
             final int blockY = event.getItem().getLocation().getBlockY();
             final int blockZ = event.getItem().getLocation().getBlockZ();
 
-            // Log To Files Handling
+            // Log To Files
             if (isLogToFiles) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
@@ -126,7 +126,7 @@ public class OnItemPickup implements Listener {
                 }
             }
 
-            // MySQL
+            // External
             if (isExternal && this.main.getExternal().isConnected()) {
 
                 try {
