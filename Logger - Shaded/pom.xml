@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>Logger</artifactId>
-        <groupId>com.carpour</groupId>
-        <version>1.7.3</version>
+        <groupId>me.prism3</groupId>
+        <version>1.7.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -56,19 +56,19 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.carpour</groupId>
+            <groupId>me.prism3</groupId>
             <artifactId>Logger-Spigot</artifactId>
-            <version>1.7.3</version>
+            <version>1.7.4</version>
         </dependency>
         <dependency>
-            <groupId>com.carpour</groupId>
+            <groupId>me.prism3</groupId>
             <artifactId>Logger-Bungeecord</artifactId>
-            <version>1.7.3</version>
+            <version>1.7.4</version>
         </dependency>
         <dependency>
-            <groupId>com.carpour</groupId>
+            <groupId>me.prism3</groupId>
             <artifactId>Logger-Velocity</artifactId>
-            <version>1.7.3</version>
+            <version>1.7.4</version>
         </dependency>
     </dependencies>
 </project>

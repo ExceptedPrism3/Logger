@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Logger-Velocity</artifactId>
-    <version>1.7.3</version>
+    <version>1.7.4</version>
     <packaging>jar</packaging>
 
     <name>Logger-Velocity</name>
@@ -18,8 +18,8 @@
 
     <parent>
         <artifactId>Logger</artifactId>
-        <groupId>com.carpour</groupId>
-        <version>1.7.3</version>
+        <groupId>me.prism3</groupId>
+        <version>1.7.4</version>
     </parent>
 
     <build>
@@ -91,7 +91,7 @@
                         <relocation>
                             <pattern>org.bstats</pattern>
                             <!-- Replace this with your package! -->
-                            <shadedPattern>com.carpour</shadedPattern>
+                            <shadedPattern>me.prism3</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -125,18 +125,21 @@
             <version>3.0.1</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.bstats</groupId>
-            <artifactId>bstats-velocity</artifactId>
-            <version>2.2.1</version>
-            <scope>compile</scope>
-        </dependency>
+        <!-- Lombok Extension -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.22</version>
             <scope>compile</scope>
         </dependency>
+        <!-- bStats -->
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-velocity</artifactId>
+            <version>3.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Discord JDA -->
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
@@ -148,6 +151,14 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- Plugin Dependency -->
+        <dependency>
+            <groupId>com.gitlab.ruany</groupId>
+            <artifactId>LiteBansAPI</artifactId>
+            <version>LATEST</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Databases -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -157,12 +168,6 @@
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.36.0.3</version>
-        </dependency>
-        <dependency>
-            <groupId>com.gitlab.ruany</groupId>
-            <artifactId>LiteBansAPI</artifactId>
-            <version>LATEST</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>

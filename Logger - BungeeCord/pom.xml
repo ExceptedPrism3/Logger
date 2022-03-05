@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Logger-Bungeecord</artifactId>
-    <version>1.7.3</version>
+    <version>1.7.4</version>
     <packaging>jar</packaging>
 
     <name>Logger-BungeeCord</name>
@@ -18,8 +18,8 @@
 
     <parent>
         <artifactId>Logger</artifactId>
-        <groupId>com.carpour</groupId>
-        <version>1.7.3</version>
+        <groupId>me.prism3</groupId>
+        <version>1.7.4</version>
     </parent>
 
     <build>
@@ -64,7 +64,6 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
-        <!-- Extra Plugin Dependent API Repo -->
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
@@ -106,7 +105,7 @@
             <artifactId>mariadb-java-client</artifactId>
             <version>3.0.2-rc</version>
         </dependency>
-        <!-- Plugin Dependent -->
+        <!-- Plugin Dependency -->
         <dependency>
             <groupId>com.gitlab.ruany</groupId>
             <artifactId>LiteBansAPI</artifactId>

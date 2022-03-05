@@ -1,6 +1,6 @@
 name: Logger-BungeeCord
 version: '${project.version}'
-main: com.carpour.loggerbungeecord.Main
+main: me.prism3.loggerbungeecord.Main
 description: Log all Activities from Players and Server Side!
 author: Prism3 & theloother
 softdepends: [LiteBans]

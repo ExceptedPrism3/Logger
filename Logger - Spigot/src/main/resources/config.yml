@@ -14,7 +14,7 @@
 # Discord: Prism3#9371 ID: 403667971089760257
 # Discord Server: https://discord.gg/MfR5mcpVfX
 #
-# Config 1.7.3
+# Config 1.7.4
 
 # Server Name
 Server-Name: "Server_Name"
@@ -107,10 +107,11 @@ Console-Commands:
     - op
     - ban
 
-# How often should we check for the Server's TPS and RAM
+# How often should the Checkers run
 # It's better to have it above 1 min to avoid any complications
 # Value in Ticks, 20 Ticks = 1 Second
 RAM-TPS-Checker: 6000
+Vault-Checker: 3000
 
 # Server RAM Log
 # Percent goes from 0 -> 100
@@ -135,13 +136,6 @@ Spy-Features:
   Anvil-Spy:
     Enable: false
     Message: "&8[&bLogger &8&l| &eAnvil-Spy&8] &7%player% >> %renamed%"
-
-
-# How often should we check for the Vault's Transactions
-# It's better to have it above 1 min to avoid any complications
-# Value in Ticks, 20 Ticks = 1 Second
-Vault:
-  Checker: 6000
 
 # External Database Feature
 # Available Types are MySQL and MariaDB

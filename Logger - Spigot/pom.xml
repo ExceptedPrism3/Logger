@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Logger-Spigot</artifactId>
-    <version>1.7.3</version>
+    <version>1.7.4</version>
     <packaging>jar</packaging>
 
     <name>Logger-Spigot</name>
@@ -18,8 +18,8 @@
 
     <parent>
         <artifactId>Logger</artifactId>
-        <groupId>com.carpour</groupId>
-        <version>1.7.3</version>
+        <groupId>me.prism3</groupId>
+        <version>1.7.4</version>
     </parent>
 
     <build>
@@ -41,7 +41,7 @@
                     <relocations>
                         <relocation>
                             <pattern>de.jeff_media.updatechecker</pattern>
-                            <shadedPattern>com.carpour.updatechecker</shadedPattern>
+                            <shadedPattern>me.prism3.updatechecker</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -110,7 +110,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.17.1-R0.1-SNAPSHOT</version>
+            <version>1.18.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- Discord JDA -->
@@ -152,18 +152,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.MilkBowl</groupId>
+            <groupId>com.GitHub.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
             <scope>provided</scope>
         </dependency>
         <!-- DataBases -->
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>LATEST</version>
-            <scope>compile</scope>
-        </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -172,7 +166,7 @@
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
-            <version>3.0.2-rc</version>
+            <version>3.0.3</version>
         </dependency>
     </dependencies>
 </project>

@@ -1,0 +1,138 @@
+package me.prism3.loggerbungeecord.Events;
+
+import me.prism3.loggerbungeecord.Database.External.ExternalData;
+import me.prism3.loggerbungeecord.Database.SQLite.SQLiteData;
+import me.prism3.loggerbungeecord.Discord.Discord;
+import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.Utils.FileHandler;
+import me.prism3.loggerbungeecord.Utils.Messages;
+import me.prism3.loggerbungeecord.Utils.Data;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.PlayerDisconnectEvent;
+import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.event.EventHandler;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.util.Objects;
+
+public class OnLeave implements Listener {
+
+    private final Main main = Main.getInstance();
+
+    @EventHandler
+    public void onQuit(final PlayerDisconnectEvent event) {
+
+        if (this.main.getConfig().getBoolean("Log-Player.Leave")) {
+
+            final ProxiedPlayer player = event.getPlayer();
+
+            if (player.hasPermission(Data.loggerExempt)) return;
+
+            String playerName = player.getName();
+
+            // This resolves an error showing up if the targeted server is offline whist connecting
+            if (player.getServer() == null) return;
+
+            final String playerServerName = player.getServer().getInfo().getName();
+
+            if (player.getServer() == null || playerServerName == null) return;
+
+            // Log To Files
+            if (Data.isLogToFiles) {
+
+                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+
+                    if (!Messages.getString("Discord.Player-Leave-Staff").isEmpty()) {
+
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Leave-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", playerServerName), false);
+
+                    }
+
+                    try {
+
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
+                        out.write(Messages.getString("Files.Player-Leave-Staff").replaceAll("%server%", playerServerName).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName) + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
+
+                    }
+
+                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+
+                        ExternalData.playerLeave(Data.serverName, playerName, true);
+
+                    }
+
+                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+
+                        SQLiteData.insertPlayerLeave(Data.serverName, playerName, true);
+
+                    }
+
+                    return;
+
+                }
+
+                try {
+
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLeaveLogFile(), true));
+                    out.write(Messages.getString("Files.Player-Leave").replaceAll("%server%", playerServerName).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName) + "\n");
+                    out.close();
+
+                } catch (IOException e) {
+
+                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
+
+                }
+            }
+
+            // Discord Integration
+            if (!player.hasPermission(Data.loggerExemptDiscord)) {
+
+                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+
+                    if (!Messages.getString("Discord.Player-Leave-Staff").isEmpty()) {
+
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.getString("Discord.Player-Leave-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", playerServerName), false);
+
+                    }
+                } else {
+
+                    if (!Messages.getString("Discord.Player-Leave").isEmpty()) {
+
+                        Discord.playerLeave(player, Objects.requireNonNull(Messages.getString("Discord.Player-Leave")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%server%", playerServerName), false);
+
+                    }
+                }
+            }
+
+            // External
+            if (Data.isExternal && this.main.getExternal().isConnected()) {
+
+                try {
+
+                    ExternalData.playerLeave(Data.serverName, playerName, player.hasPermission(Data.loggerStaffLog));
+
+                } catch (Exception e) { e.printStackTrace(); }
+            }
+
+            // SQLite
+            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+
+                try {
+
+                    SQLiteData.insertPlayerLeave(Data.serverName, playerName, player.hasPermission(Data.loggerStaffLog));
+
+                } catch (Exception e) { e.printStackTrace(); }
+            }
+        }
+    }
+}

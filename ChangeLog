@@ -102,3 +102,26 @@ Fixes
     [!] LiteBans logging only from the console
 Changes
     [*] Added enchantment level %enchlevel% to the Enchant Checker and updated its Databases Tables
+
+<-!------------------------------------------ v1.7.4 [ DEV ] ------------------------------------------!->
+
+Additions
+    [+] 1.18.2 Support
+    [+] Player levels on Player Death Checker
+    [+] Messages Folder added to Bukkit Instance for messages files to be added in the upcoming releases
+
+Fixes
+    [!] Craft Checker & Book Editing Permission checking whilst logging to External Databases
+    [!] Enchanting logger.exempt not working properly
+    [!] Block Break logging to file
+    [!] Block Place logging to file
+    [!] AuthMe-Wrong-Password Checker not logging to SQLite
+    [!] AuthMe-Wrong-Password Checker not logging to Discord
+    [!] AFK Checker not logging to Discord
+    [!] Server-Reload Checker discord exempt feature not working
+    [!] External Databases Tables Deletion not working properly
+    [!] External not working correctly on Proxy
+    [!] External Databases not working on Velocity
+    [!] loggerproxy.reload not working on Velocity
+
+Recoded most of the plugin and improved Databases queries and it's performance in general!

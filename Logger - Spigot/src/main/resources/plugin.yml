@@ -1,6 +1,6 @@
 name: Logger
 version: ${project.version}
-main: com.carpour.logger.Main
+main: me.prism3.logger.Main
 api-version: 1.13
 authors: [ Prism3 , thelooter ]
 description: Log all Activities from Players and Server Side!
