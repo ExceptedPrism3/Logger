@@ -28,20 +28,6 @@ public class DiscordFile {
 
     public static FileConfiguration get(){ return file; }
 
-    /*public static void save() {
-
-        try {
-
-            file.save(discordFile);
-
-        } catch (IOException e) {
-
-            Bukkit.getLogger().warning(ChatColor.RED + "Could not save into the messages file!");
-            e.printStackTrace();
-
-        }
-    }*/
-
     public static void reload(){
 
         file = YamlConfiguration.loadConfiguration(discordFile);

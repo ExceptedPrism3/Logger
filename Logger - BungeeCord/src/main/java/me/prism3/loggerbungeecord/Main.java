@@ -1,6 +1,7 @@
 package me.prism3.loggerbungeecord;
 
 import me.prism3.loggerbungeecord.API.LiteBansUtil;
+import me.prism3.loggerbungeecord.Database.External.ExternalUpdater;
 import me.prism3.loggerbungeecord.Events.OnChat;
 import me.prism3.loggerbungeecord.Events.OnCommands.OnCommand;
 import me.prism3.loggerbungeecord.Events.OnLeave;
@@ -34,6 +35,8 @@ public final class Main extends Plugin {
 
     private SQLite sqLite;
 
+    public ConfigChecker cF;
+
     @Override
     public void onEnable() {
 
@@ -53,7 +56,10 @@ public final class Main extends Plugin {
 
         this.initializer(new Data());
 
+        if (!this.configChecker()) return;
+
         this.databaseSetup();
+        new ExternalUpdater();
 
         if (isLogToFiles && isSqlite){
 
@@ -81,13 +87,15 @@ public final class Main extends Plugin {
         // Update Checker
         if (isUpdateChecker) new UpdateChecker().checkUpdates();
 
-        getLogger().info("has been Enabled!");
+        this.getLogger().info("has been Enabled!");
 
         new Start().run();
     }
 
     @Override
     public void onDisable() {
+
+        if (cF.getIsGood()) return;
 
         new Stop().run();
 
@@ -147,9 +155,18 @@ public final class Main extends Plugin {
         }
     }
 
-    public static Main getInstance() {
-        return instance;
+    private boolean configChecker(){
+
+        this.cF = new ConfigChecker();
+
+        if (!this.cF.getIsGood()) {
+            this.getProxy().getPluginManager().unregisterListeners(this);
+            this.getProxy().getPluginManager().unregisterCommands(this);
+            return false;
+        } return true;
     }
+
+    public static Main getInstance() { return instance; }
 
     public ConfigManager getConfig() { return this.cm; }
 

@@ -16,6 +16,7 @@ public class Data {
     public static DateTimeFormatter dateTimeFormatter;
 
     // String
+    public static String configVersion;
     public static String pluginVersion;
     public static String serverName;
     public static String gameModeConf;
@@ -24,6 +25,9 @@ public class Data {
     public static String dbUserName;
     public static String dbPassword;
     public static String dbName;
+    public static String langPath;
+    public static String fileType;
+    public static String selectedLang;
 
     // List<String>
     public static List<String> commandsToBlock;
@@ -57,6 +61,7 @@ public class Data {
     public static boolean isCommandsToLog;
     public static boolean isPlayerIP;
     public static boolean isConsoleCommands;
+    public static boolean isRegistration;
 
     // Permission String
     public static String loggerExempt;
@@ -76,6 +81,7 @@ public class Data {
 
     public void initializeStrings(){
 
+        configVersion = this.config.getString("Config");
         serverName = this.config.getString("Server-Name");
         gameModeConf = this.config.getString("Game-Mode");
         dbType = this.config.getString("Database.Type");
@@ -83,7 +89,9 @@ public class Data {
         dbUserName = this.config.getString("Database.Username");
         dbPassword = this.config.getString("Database.Password");
         dbName = this.config.getString("Database.Database");
-
+        langPath = "Messages";
+        fileType = ".yml";
+        selectedLang = this.config.getString("Language");
 
     }
 
@@ -130,6 +138,7 @@ public class Data {
         isCommandsToLog = this.config.getBoolean("Player-Commands.Whitelist-Commands");
         isPlayerIP = this.config.getBoolean("Player-Join.Player-IP");
         isConsoleCommands = this.config.getBoolean("Console-Commands.Blacklist-Commands");
+        isRegistration = this.config.getBoolean("Log-Player.Registration");
 
     }
 

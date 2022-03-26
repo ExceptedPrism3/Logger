@@ -1,4 +1,4 @@
-package me.prism3.logger.Database.SQLite;
+package me.prism3.logger.Database.SQLite.Global;
 
 import me.prism3.logger.Main;
 

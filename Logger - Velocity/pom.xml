@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Logger-Velocity</artifactId>
-    <version>1.7.4</version>
+    <version>1.7.5</version>
     <packaging>jar</packaging>
 
     <name>Logger-Velocity</name>
@@ -19,7 +19,7 @@
     <parent>
         <artifactId>Logger</artifactId>
         <groupId>me.prism3</groupId>
-        <version>1.7.4</version>
+        <version>1.7.5</version>
     </parent>
 
     <build>
@@ -155,14 +155,14 @@
         <dependency>
             <groupId>com.gitlab.ruany</groupId>
             <artifactId>LiteBansAPI</artifactId>
-            <version>LATEST</version>
+            <version>0.3.5</version>
             <scope>provided</scope>
         </dependency>
         <!-- Databases -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.26</version>
+            <version>8.0.28</version>
         </dependency>
         <dependency>
             <groupId>org.xerial</groupId>
@@ -172,7 +172,7 @@
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
-            <version>3.0.2-rc</version>
+            <version>3.0.3</version>
         </dependency>
     </dependencies>
 </project>

@@ -2,7 +2,7 @@ package me.prism3.logger.Events.PluginDependent;
 
 import me.prism3.logger.API.VaultUtil;
 import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Database.SQLite.SQLiteData;
+import me.prism3.logger.Database.SQLite.Global.SQLiteData;
 import me.prism3.logger.Discord.Discord;
 import me.prism3.logger.Main;
 import me.prism3.logger.Utils.FileHandler;
@@ -151,14 +151,14 @@ public class OnVault implements Listener, Runnable {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onJoin(final PlayerJoinEvent event){
+    private void onJoin(final PlayerJoinEvent event){
 
         this.players.put(event.getPlayer().getUniqueId(), this.econ.getBalance(event.getPlayer()));
 
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onLeave(final PlayerQuitEvent event){
+    private void onLeave(final PlayerQuitEvent event){
 
         this.players.remove(event.getPlayer().getUniqueId());
 

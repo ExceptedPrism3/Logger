@@ -4,7 +4,7 @@ import me.prism3.logger.Discord.Discord;
 import me.prism3.logger.Main;
 import me.prism3.logger.Database.External.ExternalData;
 import me.prism3.logger.Utils.FileHandler;
-import me.prism3.logger.Database.SQLite.SQLiteData;
+import me.prism3.logger.Database.SQLite.Global.SQLiteData;
 import me.prism3.logger.Utils.Messages;
 import me.prism3.logger.Utils.Data;
 
@@ -64,13 +64,19 @@ public class Start {
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
+        }
 
-            if (Data.isWhitelisted && Data.isBlacklisted) {
+        if (Data.isWhitelisted && Data.isBlacklisted) {
 
-                this.main.getLogger().warning("Enabling both Whitelist and Blacklist isn't supported. " +
-                        "Disable one of them to continue logging Player Commands.");
+            this.main.getLogger().warning("Enabling both Whitelist and Blacklist isn't supported. " +
+                    "Disable one of them to continue logging Player Commands.");
 
-            }
+        }
+
+        if (Messages.getOldMsg()) {
+
+            this.main.getLogger().warning("Old Message file has been found. Consider deleting it!");
+
         }
     }
 }

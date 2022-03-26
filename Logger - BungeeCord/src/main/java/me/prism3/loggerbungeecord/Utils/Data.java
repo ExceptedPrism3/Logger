@@ -22,6 +22,7 @@ public class Data {
     public static String dbUserName;
     public static String dbPassword;
     public static String dbName;
+    public static String configVersion;
 
     // List<String>
     public static List<String> commandsToBlock;
@@ -76,6 +77,7 @@ public class Data {
 
     public void initializeListOfStrings(){
 
+        configVersion = this.config.getString("Config");
         commandsToBlock = this.config.getStringList("Player-Commands.Commands-to-Block");
         commandsToLog = this.config.getStringList("Player-Commands.Commands-to-Log");
         dbType = this.config.getString("Database.Type");
@@ -123,8 +125,8 @@ public class Data {
 
         loggerStaff = "loggerproxy.staff";
         loggerReload = "loggerproxy.reload";
-        loggerExempt = "logger.exempt";
-        loggerExemptDiscord = "logger.exempt.discord";
+        loggerExempt = "loggerproxy.exempt";
+        loggerExemptDiscord = "loggerproxy.exempt.discord";
         loggerStaffLog = "loggerproxy.staff.log";
 
     }

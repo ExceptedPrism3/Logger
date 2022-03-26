@@ -6,12 +6,16 @@ import me.prism3.logger.API.VaultUtil;
 import me.prism3.logger.Main;
 import me.prism3.logger.Utils.Data;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.world.PortalCreateEvent;
 
 import java.net.InetSocketAddress;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ExternalData {
 
@@ -19,101 +23,116 @@ public class ExternalData {
 
     public ExternalData(Main plugin){ ExternalData.plugin = plugin; }
 
+    private static final List<String> tablesNames = Stream.of("Player_Chat", "Player_Commands", "Player_Sign_Text",
+            "Player_Death", "Player_Teleport", "Player_Join", "Player_Leave", "Block_Place", "Block_Break",
+            "Player_Kick", "Player_Level", "Bucket_Fill", "Bucket_Empty", "Anvil", "Item_Drop", "Enchanting",
+            "Book_Editing", "Item_Pickup", "Furnace", "Game_Mode", "Crafting", "Registration", "Server_Start",
+            "Server_Stop", "Console_Commands", "RAM", "TPS", "Portal_Creation", "RCON").collect(Collectors.toCollection(ArrayList::new));
+
     public void createTable(){
 
         PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave,
-                playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel,
+                playerDeath, playerTeleport, blockPlace, blockBreak, tps, ram, playerKick, portalCreation, playerLevel,
                 bucketFill, bucketEmpty, anvil, serverStart, serverStop, itemDrop, enchant, bookEditing, afk,
-                wrongPassword, itemPickup, furnace, rcon, gameMode, craft, vault;
+                wrongPassword, itemPickup, furnace, rcon, gameMode, craft, vault, registration;
 
         try {
 
             // Player Side Part
             playerChat = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Chat "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Playername VARCHAR(100),Message VARCHAR(200),Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "Player_Name VARCHAR(100),Message VARCHAR(200),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             playerCommands = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Commands "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Playername VARCHAR(100),Command VARCHAR(256),Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "Player_Name VARCHAR(100),Command VARCHAR(256),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             playerSignText = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Sign_Text "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "X INT,Y INT,Z INT,Playername VARCHAR(100),Line VARCHAR(60),Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "X INT,Y INT,Z INT,Player_Name VARCHAR(100),Line VARCHAR(60),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             playerDeath = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Death "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Playername VARCHAR(100), Player_Level INT, X INT,Y INT,Z INT,Cause VARCHAR(40),By_Who VARCHAR(30)," +
+                    "Player_Name VARCHAR(100), Player_Level INT, X INT,Y INT,Z INT,Cause VARCHAR(40),By_Who VARCHAR(30)," +
                     "Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             playerTeleport = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Teleport "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Playername VARCHAR(100),From_X INT,From_Y INT,From_Z INT,To_X INT,To_Y INT,To_Z INT," +
+                    "Player_Name VARCHAR(100),From_X INT,From_Y INT,From_Z INT,To_X INT,To_Y INT,To_Z INT," +
                     "Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             playerJoin = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Join "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Playername VARCHAR(100),X INT,Y INT,Z INT,IP INT UNSIGNED,Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "Player_Name VARCHAR(100),X INT,Y INT,Z INT,IP INT UNSIGNED,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             playerLeave = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Leave "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Playername VARCHAR(100),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "Player_Name VARCHAR(100),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             blockPlace = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Block_Place "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Playername VARCHAR(100),Block VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "Player_Name VARCHAR(100),Block VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             blockBreak = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Block_Break "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Playername VARCHAR(100),Block VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "Player_Name VARCHAR(100),Block VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             playerKick = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Kick "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Playername VARCHAR(100),X INT,Y INT,Z INT,Reason VARCHAR(50),Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "Player_Name VARCHAR(100),X INT,Y INT,Z INT,Reason VARCHAR(50),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             playerLevel = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Level "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                    "Playername VARCHAR(100),Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "Player_Name VARCHAR(100),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             bucketFill = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Bucket_Fill "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)" +
-                    ",Playername VARCHAR(100),Bucket VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    ",Player_Name VARCHAR(100),Bucket VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             bucketEmpty = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Bucket_Empty "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Playername VARCHAR(100),Bucket VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "Player_Name VARCHAR(100),Bucket VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             anvil = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Anvil "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                    "Playername VARCHAR(100),New_name VARCHAR(100),Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "Player_Name VARCHAR(100),New_name VARCHAR(100),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             itemDrop = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Item_Drop "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)" +
-                    ",Playername VARCHAR(100),Item VARCHAR(50),Amount INT,X INT,Y INT,Z INT,Enchantment VARCHAR(50)" +
+                    ",Player_Name VARCHAR(100),Item VARCHAR(50),Amount INT,X INT,Y INT,Z INT,Enchantment VARCHAR(50)" +
                     ",Changed_Name VARCHAR(50),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             enchant = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Enchanting "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Playername VARCHAR(100),X INT,Y INT,Z INT,Enchantment VARCHAR(50), Enchantment_Level INT, " +
+                    "Player_Name VARCHAR(100),X INT,Y INT,Z INT,Enchantment VARCHAR(50), Enchantment_Level INT, " +
                     "Item VARCHAR(50),Cost INT(5),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             bookEditing = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Book_Editing "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Playername VARCHAR(100),Page_Count INT,Page_Content VARCHAR(250),Signed_by VARCHAR(25)," +
+                    "Player_Name VARCHAR(100),Page_Count INT,Page_Content VARCHAR(250),Signed_by VARCHAR(25)," +
                     "Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             itemPickup = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Item_Pickup "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Playername VARCHAR(100),Item VARCHAR(250),Amount INT,X INT,Y INT,Z INT,Changed_Name VARCHAR(250)," +
+                    "Player_Name VARCHAR(100),Item VARCHAR(250),Amount INT,X INT,Y INT,Z INT,Changed_Name VARCHAR(250)," +
                     "Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             furnace = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Furnace "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Playername VARCHAR(100),Item VARCHAR(250),Amount INT,X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "Player_Name VARCHAR(100),Item VARCHAR(250),Amount INT,X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
 
             gameMode = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Game_Mode "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Playername VARCHAR(100),Game_Mode VARCHAR(15),Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "Player_Name VARCHAR(100),Game_Mode VARCHAR(15),Is_Staff TINYINT,PRIMARY KEY (Date))");
+
+            craft = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Crafting "
+                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+                    "Player_Name VARCHAR(100),Item VARCHAR(50),Amount INT,X INT,Y INT,Z INT," +
+                    "Is_Staff TINYINT,PRIMARY KEY (Date))");
+
+            registration = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Registration "
+                    + "(Server_Name VARCHAR(30), Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), Player_Name VARCHAR(30)," +
+                    " Player_UUID VARCHAR(80), Join_Date VARCHAR(30))");
 
             // Server Side Part
             serverStart = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Server_Start "
@@ -126,11 +145,11 @@ public class ExternalData {
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
                     "Command VARCHAR(256),PRIMARY KEY (Date))");
 
-            RAM = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS RAM "
+            ram = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS RAM "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
                     "Total_Memory INT,Used_Memory INT,Free_Memory INT,PRIMARY KEY (Date))");
 
-            TPS = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS TPS "
+            tps = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS TPS "
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
                     "TPS INT,PRIMARY KEY (Date))");
 
@@ -142,21 +161,18 @@ public class ExternalData {
                     + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
                     "IP INT UNSIGNED,Command VARCHAR(50),PRIMARY KEY (Date))");
 
-            craft = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Crafting "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Playername VARCHAR(100),Item VARCHAR(50),Amount INT,X INT,Y INT,Z INT," +
-                    "Is_Staff TINYINT,PRIMARY KEY (Date))");
-
             // Extras Side Part
             if (EssentialsUtil.getEssentialsAPI() != null) {
 
                 afk = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS AFK "
                         + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                        "World VARCHAR(100),Playername VARCHAR(100),X INT,Y INT,Z INT,Is_Staff TINYINT," +
+                        "World VARCHAR(100),Player_Name VARCHAR(100),X INT,Y INT,Z INT,Is_Staff TINYINT," +
                         "PRIMARY KEY (Date))");
 
                 afk.executeUpdate();
                 afk.close();
+
+                tablesNames.add("AFK");
             }
 
             if (AuthMeUtil.getAuthMeAPI() != null) {
@@ -164,13 +180,15 @@ public class ExternalData {
                 wrongPassword = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT " +
                         "EXISTS Wrong_Password (Server_Name VARCHAR(30)," +
                         "Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                        "Playername VARCHAR(100),Is_Staff TINYINT,PRIMARY KEY (Date))");
+                        "Player_Name VARCHAR(100),Is_Staff TINYINT,PRIMARY KEY (Date))");
 
                 wrongPassword.executeUpdate();
                 wrongPassword.close();
+
+                tablesNames.add("Wrong_Password");
             }
 
-            if (VaultUtil.getVaultAPI() && VaultUtil.getVault().isEnabled()) {
+            if (VaultUtil.getVaultAPI() && VaultUtil.getVault() != null) {
 
                 vault = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Vault "
                         + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
@@ -179,6 +197,8 @@ public class ExternalData {
 
                 vault.executeUpdate();
                 vault.close();
+
+                tablesNames.add("Vault");
             }
 
             playerChat.executeUpdate();
@@ -223,6 +243,8 @@ public class ExternalData {
             gameMode.close();
             craft.executeUpdate();
             craft.close();
+            registration.executeUpdate();
+            registration.close();
 
             serverStart.executeUpdate();
             serverStart.close();
@@ -230,10 +252,10 @@ public class ExternalData {
             serverStop.close();
             consoleCommands.executeUpdate();
             consoleCommands.close();
-            RAM.executeUpdate();
-            RAM.close();
-            TPS.executeUpdate();
-            TPS.close();
+            ram.executeUpdate();
+            ram.close();
+            tps.executeUpdate();
+            tps.close();
             portalCreation.executeUpdate();
             portalCreation.close();
             rcon.executeUpdate();
@@ -243,9 +265,10 @@ public class ExternalData {
     }
 
     public static void playerChat(String serverName, String worldName, String playerName, String msg, boolean staff){
+
         try {
-            String database = "Player_Chat";
-            PreparedStatement playerChat = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Message,Is_Staff) VALUES(?,?,?,?,?)");
+
+            final PreparedStatement playerChat = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Player_Chat (Server_Name,World,Player_Name,Message,Is_Staff) VALUES(?,?,?,?,?)");
             playerChat.setString(1, serverName);
             playerChat.setString(2, worldName);
             playerChat.setString(3, playerName);
@@ -259,9 +282,10 @@ public class ExternalData {
     }
 
     public static void playerCommands(String serverName, String worldName, String playerName, String msg, boolean staff){
+
         try {
-            String database = "Player_Commands";
-            PreparedStatement playerCommands = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Command,Is_Staff) VALUES(?,?,?,?,?)");
+
+            final PreparedStatement playerCommands = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Player_Commands (Server_Name,World,Player_Name,Command,Is_Staff) VALUES(?,?,?,?,?)");
             playerCommands.setString(1, serverName);
             playerCommands.setString(2, worldName);
             playerCommands.setString(3, playerName);
@@ -275,9 +299,10 @@ public class ExternalData {
     }
 
     public static void consoleCommands(String serverName, String msg){
+
         try {
-            String database = "Console_Commands";
-            PreparedStatement consoleCommands = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Command) VALUES(?,?)");
+
+            final PreparedStatement consoleCommands = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Console_Commands (Server_Name,Command) VALUES(?,?)");
             consoleCommands.setString(1, serverName);
             consoleCommands.setString(2, msg);
 
@@ -288,9 +313,10 @@ public class ExternalData {
     }
 
     public static void playerSignText(String serverName, String worldName, int x, int y, int z, String playerName, String Lines, boolean staff){
+
         try {
-            String database = "Player_Sign_Text";
-            PreparedStatement playerSignText = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,X,Y,Z,Playername,Line,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+
+            final PreparedStatement playerSignText = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Player_Sign_Text (Server_Name,World,X,Y,Z,Player_Name,Line,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
             playerSignText.setString(1, serverName);
             playerSignText.setString(2, worldName);
             playerSignText.setInt(3, x);
@@ -307,9 +333,10 @@ public class ExternalData {
     }
 
     public static void playerDeath(String serverName, String worldName, String playerName, int level, int x, int y, int z, String cause, String who, boolean staff){
+
         try {
-            String database = "Player_Death";
-            PreparedStatement playerDeath= plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Player_Level,X,Y,Z,Cause,By_Who,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
+
+            final PreparedStatement playerDeath= plugin.getExternal().getConnection().prepareStatement("INSERT INTO Player_Death (Server_Name,World,Player_Name,Player_Level,X,Y,Z,Cause,By_Who,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
             playerDeath.setString(1, serverName);
             playerDeath.setString(2, worldName);
             playerDeath.setString(3, playerName);
@@ -328,9 +355,10 @@ public class ExternalData {
     }
 
     public static void playerTeleport(String serverName, String worldName, String playerName, int ox, int oy, int oz, int tx, int ty, int tz, boolean staff){
+
         try {
-            String database = "Player_Teleport";
-            PreparedStatement playerTeleport = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,From_X,From_Y,From_Z,To_X,To_Y,To_Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
+
+            final PreparedStatement playerTeleport = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Player_Teleport (Server_Name,World,Player_Name,From_X,From_Y,From_Z,To_X,To_Y,To_Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
             playerTeleport.setString(1, serverName);
             playerTeleport.setString(2, worldName);
             playerTeleport.setString(3, playerName);
@@ -349,9 +377,10 @@ public class ExternalData {
     }
 
     public static void playerJoin(String serverName, String worldName, String playerName, int x, int y, int z, InetSocketAddress IP, boolean staff) {
+
         try {
-            String database = "Player_Join";
-            PreparedStatement playerJoin = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,IP,Is_Staff) VALUES(?,?,?,?,?,?,INET_ATON(?),?)");
+
+            final PreparedStatement playerJoin = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Player_Join (Server_Name,World,Player_Name,X,Y,Z,IP,Is_Staff) VALUES(?,?,?,?,?,?,INET_ATON(?),?)");
             playerJoin.setString(1, serverName);
             playerJoin.setString(2, worldName);
             playerJoin.setString(3, playerName);
@@ -373,9 +402,10 @@ public class ExternalData {
     }
 
     public static void playerLeave(String serverName, String worldName, String playerName, int x, int y, int z, boolean staff){
+
         try {
-            String database = "Player_Leave";
-            PreparedStatement playerLeave = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?)");
+
+            final PreparedStatement playerLeave = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Player_Leave (Server_Name,World,Player_Name,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?)");
             playerLeave.setString(1, serverName);
             playerLeave.setString(2, worldName);
             playerLeave.setString(3, playerName);
@@ -391,9 +421,10 @@ public class ExternalData {
     }
 
     public static void blockPlace(String serverName, String worldName, String playerName, String block, int x, int y, int z, boolean staff){
+
         try {
-            String database = "Block_Place";
-            PreparedStatement blockPlace = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Block,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+
+            final PreparedStatement blockPlace = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Block_Place (Server_Name,World,Player_Name,Block,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
             blockPlace.setString(1, serverName);
             blockPlace.setString(2, worldName);
             blockPlace.setString(3, playerName);
@@ -410,9 +441,10 @@ public class ExternalData {
     }
 
     public static void blockBreak(String serverName, String worldName, String playerName, String blockname, int x, int y, int z,boolean staff){
+
         try {
-            String database = "Block_Break";
-            PreparedStatement blockBreak = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Block,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+
+            final PreparedStatement blockBreak = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Block_Break (Server_Name,World,Player_Name,Block,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
             blockBreak.setString(1, serverName);
             blockBreak.setString(2, worldName);
             blockBreak.setString(3, playerName);
@@ -428,38 +460,41 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void TPS(String serverName, double tps){
-        try {
-            String database = "TPS";
-            PreparedStatement TPS = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,TPS) VALUES(?,?)");
-            TPS.setString(1, serverName);
-            TPS.setDouble(2, tps);
+    public static void tps(String serverName, double tpss){
 
-            TPS.executeUpdate();
-            TPS.close();
+        try {
+
+            final PreparedStatement tps = plugin.getExternal().getConnection().prepareStatement("INSERT INTO TPS (Server_Name,TPS) VALUES(?,?)");
+            tps.setString(1, serverName);
+            tps.setDouble(2, tpss);
+
+            tps.executeUpdate();
+            tps.close();
 
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void RAM(String serverName, long TM, long UM, long FM){
-        try {
-            String database = "RAM";
-            PreparedStatement RAM = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Total_Memory,Used_Memory,Free_Memory) VALUES(?,?,?,?)");
-            RAM.setString(1, serverName);
-            RAM.setLong(2, TM);
-            RAM.setLong(3, UM);
-            RAM.setLong(4, FM);
+    public static void ram(String serverName, long TM, long UM, long FM){
 
-            RAM.executeUpdate();
-            RAM.close();
+        try {
+
+            final PreparedStatement ram = plugin.getExternal().getConnection().prepareStatement("INSERT INTO RAM (Server_Name,Total_Memory,Used_Memory,Free_Memory) VALUES(?,?,?,?)");
+            ram.setString(1, serverName);
+            ram.setLong(2, TM);
+            ram.setLong(3, UM);
+            ram.setLong(4, FM);
+
+            ram.executeUpdate();
+            ram.close();
 
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
     public static void playerKick(String serverName, String worldName, String playerName, int x, int y, int z, String reason, boolean staff){
+
         try {
-            String database = "Player_Kick";
-            PreparedStatement playerKick = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Reason,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+
+            final PreparedStatement playerKick = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Player_Kick (Server_Name,World,Player_Name,X,Y,Z,Reason,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
             playerKick.setString(1, serverName);
             playerKick.setString(2, worldName);
             playerKick.setString(3, playerName);
@@ -476,9 +511,10 @@ public class ExternalData {
     }
 
     public static void portalCreate(String serverName, String worldName, PortalCreateEvent.CreateReason By){
+
         try {
-            String database = "Portal_Creation";
-            PreparedStatement portalCreation = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Caused_By) VALUES(?,?,?)");
+
+            final PreparedStatement portalCreation = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Portal_Creation (Server_Name,World,Caused_By) VALUES(?,?,?)");
             portalCreation.setString(1, serverName);
             portalCreation.setString(2, worldName);
             portalCreation.setString(3, By.toString());
@@ -490,9 +526,10 @@ public class ExternalData {
     }
 
     public static void levelChange(String serverName, String playerName, boolean staff){
+
         try {
-            String database = "Player_Level";
-            PreparedStatement playerLevel = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Playername,Is_Staff) VALUES(?,?,?)");
+
+            final PreparedStatement playerLevel = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Player_Level (Server_Name,Player_Name,Is_Staff) VALUES(?,?,?)");
             playerLevel.setString(1, serverName);
             playerLevel.setString(2, playerName);
             playerLevel.setBoolean(3, staff);
@@ -504,9 +541,10 @@ public class ExternalData {
     }
 
     public static void bucketFill(String serverName, String worldName, String playerName, String bucket, int x, int y, int z, boolean staff){
+
         try {
-            String database = "Bucket_Fill";
-            PreparedStatement bucketPlace = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Bucket,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+
+            final PreparedStatement bucketPlace = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Bucket_Fill (Server_Name,World,Player_Name,Bucket,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
             bucketPlace.setString(1, serverName);
             bucketPlace.setString(2, worldName);
             bucketPlace.setString(3, playerName);
@@ -523,9 +561,10 @@ public class ExternalData {
     }
 
     public static void bucketEmpty(String serverName, String worldName, String playerName, String bucket, int x, int y, int z, boolean staff){
+
         try {
-            String database = "Bucket_Empty";
-            PreparedStatement bucketPlace = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Bucket,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+
+            final PreparedStatement bucketPlace = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Bucket_Empty (Server_Name,World,Player_Name,Bucket,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
             bucketPlace.setString(1, serverName);
             bucketPlace.setString(2, worldName);
             bucketPlace.setString(3, playerName);
@@ -542,9 +581,10 @@ public class ExternalData {
     }
 
     public static void anvil(String serverName, String playerName, String newName, boolean staff){
+
         try {
-            String database = "Anvil";
-            PreparedStatement anvil = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Playername,New_name,Is_Staff) VALUES(?,?,?,?)");
+
+            final PreparedStatement anvil = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Anvil (Server_Name,Player_Name,New_name,Is_Staff) VALUES(?,?,?,?)");
             anvil.setString(1, serverName);
             anvil.setString(2, playerName);
             anvil.setString(3, newName);
@@ -557,9 +597,10 @@ public class ExternalData {
     }
 
     public static void serverStart(String serverName){
+
         try {
-            String database = "Server_Start";
-            PreparedStatement serverStart = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name) VALUES(?)");
+
+            final PreparedStatement serverStart = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Server_Start (Server_Name) VALUES(?)");
             serverStart.setString(1, serverName);
 
             serverStart.executeUpdate();
@@ -569,9 +610,10 @@ public class ExternalData {
     }
 
     public static void serverStop(String serverName){
+
         try {
-            String database = "Server_Stop";
-            PreparedStatement serverStop = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name) VALUES(?)");
+
+            final PreparedStatement serverStop = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Server_Stop (Server_Name) VALUES(?)");
             serverStop.setString(1, serverName);
 
             serverStop.executeUpdate();
@@ -581,9 +623,10 @@ public class ExternalData {
     }
 
     public static void itemDrop(String serverName, String world, String playerName, String item, int amount, int x, int y, int z, List<String> enchantment, String changedName, boolean staff){
+
         try {
-            String database = "Item_Drop";
-            PreparedStatement itemDrop = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Item,Amount,X,Y,Z,Enchantment,Changed_Name,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+
+            final PreparedStatement itemDrop = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Item_Drop (Server_Name,World,Player_Name,Item,Amount,X,Y,Z,Enchantment,Changed_Name,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
             itemDrop.setString(1, serverName);
             itemDrop.setString(2, world);
             itemDrop.setString(3, playerName);
@@ -603,9 +646,10 @@ public class ExternalData {
     }
 
     public static void enchant(String serverName, String world, String playerName, int x, int y, int z, List<String> enchantment, int enchantmentLevel, String item, int cost ,boolean staff){
+
         try {
-            String database = "Enchanting";
-            PreparedStatement enchanting = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Enchantment,Enchantment_Level,Item,Cost,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+
+            final PreparedStatement enchanting = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Enchanting (Server_Name,World,Player_Name,X,Y,Z,Enchantment,Enchantment_Level,Item,Cost,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
             enchanting.setString(1, serverName);
             enchanting.setString(2, world);
             enchanting.setString(3, playerName);
@@ -625,9 +669,10 @@ public class ExternalData {
     }
 
     public static void bookEditing(String serverName, String world, String playerName, int pages, List<String> content, String signed_by, boolean staff){
+
         try {
-            String database = "Book_Editing";
-            PreparedStatement enchanting = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Page_Count,Page_Content,Signed_by,Is_Staff) VALUES(?,?,?,?,?,?,?)");
+
+            final PreparedStatement enchanting = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Book_Editing (Server_Name,World,Player_Name,Page_Count,Page_Content,Signed_by,Is_Staff) VALUES(?,?,?,?,?,?,?)");
             enchanting.setString(1, serverName);
             enchanting.setString(2, world);
             enchanting.setString(3, playerName);
@@ -647,8 +692,8 @@ public class ExternalData {
         if (EssentialsUtil.getEssentialsAPI() != null) {
 
             try {
-                String database = "AFK";
-                PreparedStatement afk = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?)");
+
+                final PreparedStatement afk = plugin.getExternal().getConnection().prepareStatement("INSERT INTO AFK (Server_Name,World,Player_Name,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?)");
                 afk.setString(1, serverName);
                 afk.setString(2, world);
                 afk.setString(3, playerName);
@@ -669,8 +714,8 @@ public class ExternalData {
         if (AuthMeUtil.getAuthMeAPI() != null) {
 
             try {
-                String database = "Wrong_Password";
-                PreparedStatement wrongPassword = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Is_Staff) VALUES(?,?,?,?)");
+
+                final PreparedStatement wrongPassword = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Wrong_Password (Server_Name,World,Player_Name,Is_Staff) VALUES(?,?,?,?)");
                 wrongPassword.setString(1, serverName);
                 wrongPassword.setString(2, world);
                 wrongPassword.setString(3, playerName);
@@ -684,9 +729,10 @@ public class ExternalData {
     }
 
     public static void itemPickup(String serverName, String world, String playerName, Material item, int amount, int x, int y, int z, String changedName, boolean staff){
+
         try {
-            String database = "Item_Pickup";
-            PreparedStatement itemPickup = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Item,Amount,X,Y,Z,Changed_Name,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
+
+            final PreparedStatement itemPickup = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Item_Pickup (Server_Name,World,Player_Name,Item,Amount,X,Y,Z,Changed_Name,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
             itemPickup.setString(1, serverName);
             itemPickup.setString(2, world);
             itemPickup.setString(3, playerName);
@@ -705,9 +751,10 @@ public class ExternalData {
     }
 
     public static void furnace(String serverName, String world, String playerName, Material item, int amount, int x, int y, int z, boolean staff){
+
         try {
-            String database = "Furnace";
-            PreparedStatement furnace = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Item,Amount,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?)");
+
+            final PreparedStatement furnace = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Furnace (Server_Name,World,Player_Name,Item,Amount,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?)");
             furnace.setString(1, serverName);
             furnace.setString(2, world);
             furnace.setString(3, playerName);
@@ -725,9 +772,10 @@ public class ExternalData {
     }
 
     public static void rcon(String serverName, String IP, String command) {
+
         try {
-            String database = "RCON";
-            PreparedStatement rcon = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,IP,Command) VALUES(?,?,?)");
+
+            final PreparedStatement rcon = plugin.getExternal().getConnection().prepareStatement("INSERT INTO RCON (Server_Name,IP,Command) VALUES(?,?,?)");
             rcon.setString(1, serverName);
             rcon.setString(2, IP);
             rcon.setString(3, command);
@@ -739,9 +787,10 @@ public class ExternalData {
     }
 
     public static void gameMode(String serverName, String world, String playerName, String gameMode, boolean staff) {
+
         try {
-            String database = "Game_Mode";
-            PreparedStatement game_Mode = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Game_Mode,Is_Staff) VALUES(?,?,?,?,?)");
+
+            final PreparedStatement game_Mode = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Game_Mode (Server_Name,World,Player_Name,Game_Mode,Is_Staff) VALUES(?,?,?,?,?)");
             game_Mode.setString(1, serverName);
             game_Mode.setString(2, world);
             game_Mode.setString(3, playerName);
@@ -755,9 +804,10 @@ public class ExternalData {
     }
 
     public static void playerCraft(String serverName, String world, String playerName, String item, int amount, int x, int y, int z, boolean staff){
+
         try {
-            String database = "Crafting";
-            PreparedStatement craft = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,World,Playername,Item,Amount,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?)");
+
+            final PreparedStatement craft = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Crafting (Server_Name,World,Player_Name,Item,Amount,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?)");
             craft.setString(1, serverName);
             craft.setString(2, world);
             craft.setString(3, playerName);
@@ -775,9 +825,10 @@ public class ExternalData {
     }
 
     public static void vault(String serverName, String playerName, double oldBal, double newBal, boolean staff){
+
         try {
-            String database = "Vault";
-            PreparedStatement vault = plugin.getExternal().getConnection().prepareStatement("INSERT IGNORE INTO " + database + "(Server_Name,Player_Name,Old_Balance,New_Balance,Is_Staff) VALUES(?,?,?,?,?)");
+
+            final PreparedStatement vault = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Vault (Server_Name,Player_Name,Old_Balance,New_Balance,Is_Staff) VALUES(?,?,?,?,?)");
             vault.setString(1, serverName);
             vault.setString(2, playerName);
             vault.setDouble(3, oldBal);
@@ -790,6 +841,22 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
+    public static void playerRegistration(String serverName, Player player, String joinDate){
+
+        try {
+
+            final PreparedStatement register = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Registration (Server_Name,Player_Name,Player_UUID,Join_Date) VALUES(?,?,?,?)");
+            register.setString(1, serverName);
+            register.setString(2, player.getName());
+            register.setString(3, String.valueOf(player.getUniqueId()));
+            register.setString(4, joinDate);
+
+            register.executeUpdate();
+            register.close();
+
+        } catch (SQLException e){ e.printStackTrace(); }
+    }
+
     public void emptyTable(){
 
         if (Data.externalDataDel <= 0) return;
@@ -797,67 +864,69 @@ public class ExternalData {
         try{
 
             // Player Side Part
-            PreparedStatement player_Chat = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Chat WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement player_Chat = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Chat WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement player_Commands = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Commands WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement player_Commands = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Commands WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement player_Sign_Text = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Sign_Text WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement player_Sign_Text = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Sign_Text WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement player_Join = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Join WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement player_Join = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Join WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement player_Leave = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Leave WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement player_Leave = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Leave WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement player_Kick = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Kick WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement player_Kick = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Kick WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement player_Death = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Death WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement player_Death = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Death WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement player_Teleport = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Teleport WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement player_Teleport = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Teleport WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement player_Level = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Level WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement player_Level = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Level WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement block_Place = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Block_Place WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement block_Place = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Block_Place WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement block_Break = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Block_Break WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement block_Break = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Block_Break WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement bucket_Fill = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Bucket_Fill WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement bucket_Fill = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Bucket_Fill WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement bucket_Empty = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Bucket_Empty WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement bucket_Empty = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Bucket_Empty WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement anvil = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Anvil WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement anvil = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Anvil WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement item_Drop = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Item_Drop WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement item_Drop = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Item_Drop WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement enchanting = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Enchanting WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement enchanting = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Enchanting WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement book_Editing = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Book_Editing WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement book_Editing = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Book_Editing WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement item_pickup = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Item_Pickup WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement item_pickup = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Item_Pickup WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement furnace = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Furnace WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement furnace = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Furnace WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement gameMode = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Game_Mode WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement gameMode = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Game_Mode WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement craft = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Crafting WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement craft = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Crafting WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+
+            final PreparedStatement register = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Registration WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
             // Server Side Part
-            PreparedStatement server_Start = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Server_Start WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement server_Start = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Server_Start WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement server_Stop = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Server_Stop WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement server_Stop = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Server_Stop WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement console_Commands = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Console_Commands WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement console_Commands = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Console_Commands WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement RAM = plugin.getExternal().getConnection().prepareStatement("DELETE FROM RAM WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement ram = plugin.getExternal().getConnection().prepareStatement("DELETE FROM RAM WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement TPS = plugin.getExternal().getConnection().prepareStatement("DELETE FROM TPS WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement tps = plugin.getExternal().getConnection().prepareStatement("DELETE FROM TPS WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement portal_Creation = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Portal_Creation WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement portal_Creation = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Portal_Creation WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            PreparedStatement rcon = plugin.getExternal().getConnection().prepareStatement("DELETE FROM RCON WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement rcon = plugin.getExternal().getConnection().prepareStatement("DELETE FROM RCON WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
             // Extras Side Part
             if (EssentialsUtil.getEssentialsAPI() != null) {
 
-                PreparedStatement afk = plugin.getExternal().getConnection().prepareStatement("DELETE FROM AFK WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+                final PreparedStatement afk = plugin.getExternal().getConnection().prepareStatement("DELETE FROM AFK WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
                 afk.executeUpdate();
                 afk.close();
@@ -865,15 +934,15 @@ public class ExternalData {
 
             if (AuthMeUtil.getAuthMeAPI() != null) {
 
-                PreparedStatement wrong_password = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Wrong_Password WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+                final PreparedStatement wrong_password = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Wrong_Password WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
                 wrong_password.executeUpdate();
                 wrong_password.close();
             }
 
-            if (VaultUtil.getVaultAPI() && VaultUtil.getVault().isEnabled()) {
+            if (VaultUtil.getVaultAPI() && VaultUtil.getVault() != null) {
 
-                PreparedStatement vault = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Vault WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+                final PreparedStatement vault = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Vault WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
                 vault.executeUpdate();
                 vault.close();
@@ -921,6 +990,8 @@ public class ExternalData {
             gameMode.close();
             craft.executeUpdate();
             craft.close();
+            register.executeUpdate();
+            register.close();
 
             server_Start.executeUpdate();
             server_Start.close();
@@ -928,10 +999,10 @@ public class ExternalData {
             server_Stop.close();
             console_Commands.executeUpdate();
             console_Commands.close();
-            RAM.executeUpdate();
-            RAM.close();
-            TPS.executeUpdate();
-            TPS.close();
+            ram.executeUpdate();
+            ram.close();
+            tps.executeUpdate();
+            tps.close();
             portal_Creation.executeUpdate();
             portal_Creation.close();
             rcon.executeUpdate();
@@ -944,4 +1015,6 @@ public class ExternalData {
 
         }
     }
+
+    public static List<String> getTableNames() { return tablesNames; }
 }

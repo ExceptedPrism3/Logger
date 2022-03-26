@@ -4,7 +4,7 @@ import me.prism3.logger.Discord.Discord;
 import me.prism3.logger.Main;
 import me.prism3.logger.Utils.FileHandler;
 import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Database.SQLite.SQLiteData;
+import me.prism3.logger.Database.SQLite.Global.SQLiteData;
 import me.prism3.logger.Utils.Messages;
 import me.prism3.logger.Utils.Data;
 import org.bukkit.event.EventHandler;
@@ -25,8 +25,6 @@ public class Console implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onConsoleCommand(final ServerCommandEvent event) {
 
-        if (this.main.getConfig().getBoolean("Log-Server.Console-Commands")) {
-
             final String command = event.getCommand().replace("\\", "\\\\");
             final List<String> commandParts = Arrays.asList(event.getCommand().split("\\s+"));
 
@@ -41,6 +39,8 @@ public class Console implements Listener {
                     }
                 }
             }
+
+        if (this.main.getConfig().getBoolean("Log-Server.Console-Commands")) {
 
             // Log To Files
             if (Data.isLogToFiles) {

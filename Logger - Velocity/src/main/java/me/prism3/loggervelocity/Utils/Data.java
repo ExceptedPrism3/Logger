@@ -126,12 +126,9 @@ public class Data {
 
         loggerStaff = "loggerproxy.staff";
         loggerReload = "loggerproxy.reload";
-        loggerExempt = "logger.exempt";
-        loggerExemptDiscord = "logger.exempt.discord";
+        loggerExempt = "loggerproxy.exempt";
+        loggerExemptDiscord = "loggerproxy.exempt.discord";
         loggerStaffLog = "loggerproxy.staff.log";
 
     }
-
-
-
 }

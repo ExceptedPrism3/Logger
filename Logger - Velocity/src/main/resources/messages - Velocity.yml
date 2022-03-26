@@ -1,17 +1,12 @@
-# Messages for Logger Plugin [ Velocity Version ]
-#
-# Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
-#
-# Config 1.7.4
-
-
-# Plugin Messages
+#Messages for Logger Plugin [ Velocity Version ]
+#Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
+#Config 1.7.5
+#Plugin Messages
 General:
   No-Permission: "&cYou do not have permission to run this command."
   Reload: "&aConfigs Reloaded."
   Invalid-Syntax: "&cInvalid Syntax."
-
-# Files Instance
+#Files Instance
 Files:
   Player-Chat-Staff: "[%time%] [%server%] The Staff <%player%> has said => %msg%"
   Player-Chat: "[%time%] [%server%] The Player <%player%> has said => %msg%"
@@ -21,21 +16,17 @@ Files:
   Player-Login: "[%time%] [%server%] The Player <%player%> has joined with the current IP -> %IP%"
   Player-Leave-Staff: "[%time%] [%server%] The Staff <%player%> has left the server"
   Player-Leave: "[%time%] [%server%] The Player <%player%> has left the server"
-
-  # Server Side Part
+#Server Side Part
   Server-Side:
     Console-Commands: "[%time%] %command%"
     Start: "[%time%] The server has started"
     Stop: "[%time%] The server has stopped"
     RAM: "[%time%] The Server has exceeded the set amount of percentage of RAM Usage! Total Memory: %max% | Used Memory: %used% | Free Memory: %free%"
-
-  # Extra Side Part
+#Extra Side Part
   Extra:
     LiteBans: "[%time%] The command '%command%' has been executed on %on% by %executor% for '%duration%' for the reason %reason% | %silent%"
-
-
-# Discord Instance
-# Emojis can be found here https://emojipedia.org/ or elsewhere
+#Discord Instance
+#Emojis can be found here https://emojipedia.org/ or elsewhere. Emojis may not work on >1.12 Servers.
 Discord:
   Player-Chat-Staff: "**[%time%]** **[%server%]** **%msg%**"
   Player-Chat: "**[%time%]** **[%server%]** **%msg%**"
@@ -45,14 +36,12 @@ Discord:
   Player-Login: "**[%time%]** ||**%IP%**||"
   Player-Leave-Staff: "**[%time%]** **[%server%]** Left the server"
   Player-Leave: "**[%time%]** **[%server%]** Left the server"
-
-  # Server Side Part
+#Server Side Part
   Server-Side:
     Console-Commands: "**[%time%]** %command%"
     Start: "**[%time%]**"
     Stop: "**[%time%]**"
     RAM: "**[%time%]** The Server has exceeded the set amount of percentage of RAM Usage! Total Memory: **%max%** `|` Used Memory: **%used%** `|` Free Memory: **%free%**"
-
-  # Extra Side Part
+#Extra Side Part
   Extra:
     LiteBans: "**[%time%]** The command **%command%** has been executed on **%on%** by **%executor%** for **%duration%** for the reason **%reason%** | **%silent%**"

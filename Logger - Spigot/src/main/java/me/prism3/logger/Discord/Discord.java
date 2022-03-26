@@ -44,6 +44,7 @@ public class Discord {
     private static TextChannel TPSChannel;
     private static TextChannel portalCreationChannel;
     private static TextChannel rconChannel;
+    private static TextChannel registrationChannel;
 
     private static TextChannel afkChannel;
     private static TextChannel wrongPasswordChannel;
@@ -113,6 +114,8 @@ public class Discord {
             final String gameModeChannelID = DiscordFile.get().getString("Discord.Game-Mode.Channel-ID");
 
             final String craftChannelID = DiscordFile.get().getString("Discord.Craft.Channel-ID");
+
+            final String registrationChannelID = DiscordFile.get().getString("Discord.Registration.Channel-ID");
 
             // Server Side Part
             final String serverStartChannelID = DiscordFile.get().getString("Discord.Server-Side.Start.Channel-ID");
@@ -272,6 +275,12 @@ public class Discord {
 
                 }
 
+                if (!(registrationChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Registration") && !registrationChannelID.equals("LINK_HERE")) {
+
+                    registrationChannel = jda.getTextChannelById(registrationChannelID);
+
+                }
+
                 // Server Side Part
                 if (!(serverStartChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Server.Start") && !serverStartChannelID.equals("LINK_HERE")) {
 
@@ -341,216 +350,221 @@ public class Discord {
         }
     }
 
-    public static void staffChat(Player player, String content, boolean contentinAuthorLine) {
+    public static void staffChat(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, staffChannel);
+        discordUtil(player, content, contentInAuthorLine, staffChannel);
 
     }
 
-    public static void playerChat(Player player, String content, boolean contentinAuthorLine) {
+    public static void playerChat(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, playerChatChannel);
+        discordUtil(player, content, contentInAuthorLine, playerChatChannel);
     }
 
-    public static void playerCommand(Player player, String content, boolean contentinAuthorLine) {
+    public static void playerCommand(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, playerCommandsChannel);
+        discordUtil(player, content, contentInAuthorLine, playerCommandsChannel);
     }
 
-    public static void console(String content, boolean contentinAuthorLine) {
+    public static void console(String content, boolean contentInAuthorLine) {
 
         if (consoleChannel == null) return;
 
         final EmbedBuilder builder = new EmbedBuilder().setAuthor("Console");
 
-        if (!contentinAuthorLine) builder.setDescription(content);
+        if (!contentInAuthorLine) builder.setDescription(content);
 
         consoleChannel.sendMessage(builder.build()).queue();
     }
 
-    public static void playerSignText(Player player, String content, boolean contentinAuthorLine) {
+    public static void playerSignText(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, playerSignTextChannel);
+        discordUtil(player, content, contentInAuthorLine, playerSignTextChannel);
     }
 
-    public static void playerJoin(Player player, String content, boolean contentinAuthorLine) {
+    public static void playerJoin(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, playerJoinChannel);
+        discordUtil(player, content, contentInAuthorLine, playerJoinChannel);
     }
 
-    public static void playerLeave(Player player, String content, boolean contentinAuthorLine) {
+    public static void playerLeave(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, playerLeaveChannel);
+        discordUtil(player, content, contentInAuthorLine, playerLeaveChannel);
     }
 
-    public static void playerKick(Player player, String content, boolean contentinAuthorLine) {
+    public static void playerKick(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, playerKickChannel);
+        discordUtil(player, content, contentInAuthorLine, playerKickChannel);
     }
 
-    public static void playerDeath(Player player, String content, boolean contentinAuthorLine) {
+    public static void playerDeath(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, playerDeathChannel);
+        discordUtil(player, content, contentInAuthorLine, playerDeathChannel);
     }
 
-    public static void playerTeleport(Player player, String content, boolean contentinAuthorLine) {
+    public static void playerTeleport(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, playerTeleportChannel);
+        discordUtil(player, content, contentInAuthorLine, playerTeleportChannel);
     }
 
-    public static void playerLevel(Player player, String content, boolean contentinAuthorLine) {
+    public static void playerLevel(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, playerLevelChannel);
+        discordUtil(player, content, contentInAuthorLine, playerLevelChannel);
     }
 
-    public static void blockPlace(Player player, String content, boolean contentinAuthorLine) {
+    public static void blockPlace(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, blockPlaceChannel);
+        discordUtil(player, content, contentInAuthorLine, blockPlaceChannel);
     }
 
-    public static void blockBreak(Player player, String content, boolean contentinAuthorLine) {
+    public static void blockBreak(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, blockBreakChannel);
+        discordUtil(player, content, contentInAuthorLine, blockBreakChannel);
     }
 
-    public static void portalCreation(String content, boolean contentinAuthorLine) {
+    public static void portalCreation(String content, boolean contentInAuthorLine) {
 
         if (portalCreationChannel == null) return;
 
         final EmbedBuilder builder = new EmbedBuilder().setAuthor("Portal Creation");
 
-        if (!contentinAuthorLine) builder.setDescription(content);
+        if (!contentInAuthorLine) builder.setDescription(content);
 
         portalCreationChannel.sendMessage(builder.build()).queue();
     }
 
-    public static void bucketFill(Player player, String content, boolean contentinAuthorLine) {
+    public static void bucketFill(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, bucketFillChannel);
+        discordUtil(player, content, contentInAuthorLine, bucketFillChannel);
     }
 
-    public static void bucketEmpty(Player player, String content, boolean contentinAuthorLine) {
+    public static void bucketEmpty(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, bucketEmptyChannel);
+        discordUtil(player, content, contentInAuthorLine, bucketEmptyChannel);
     }
 
-    public static void anvil(Player player, String content, boolean contentinAuthorLine) {
+    public static void anvil(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, anvilChannel);
+        discordUtil(player, content, contentInAuthorLine, anvilChannel);
     }
 
-    public static void TPS(String content, boolean contentinAuthorLine) {
+    public static void TPS(String content, boolean contentInAuthorLine) {
 
         if (TPSChannel == null) return;
 
         final EmbedBuilder builder = new EmbedBuilder().setAuthor("TPS");
 
-        if (!contentinAuthorLine) builder.setDescription(content);
+        if (!contentInAuthorLine) builder.setDescription(content);
 
         TPSChannel.sendMessage(builder.build()).queue();
     }
 
-    public static void RAM(String content, boolean contentinAuthorLine) {
+    public static void RAM(String content, boolean contentInAuthorLine) {
 
         if (RAMChannel == null) return;
 
         final EmbedBuilder builder = new EmbedBuilder().setAuthor("RAM");
 
-        if (!contentinAuthorLine) builder.setDescription(content);
+        if (!contentInAuthorLine) builder.setDescription(content);
 
         RAMChannel.sendMessage(builder.build()).queue();
     }
 
-    public static void serverStart(String content, boolean contentinAuthorLine) {
+    public static void serverStart(String content, boolean contentInAuthorLine) {
 
         if (serverStartChannel == null) return;
 
         final EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Start");
 
-        if (!contentinAuthorLine) builder.setDescription(content);
+        if (!contentInAuthorLine) builder.setDescription(content);
 
         serverStartChannel.sendMessage(builder.build()).queue();
     }
 
-    public static void rcon(String content, boolean contentinAuthorLine) {
+    public static void rcon(String content, boolean contentInAuthorLine) {
 
         if (rconChannel == null) return;
 
         final EmbedBuilder builder = new EmbedBuilder().setAuthor("RCON");
 
-        if (!contentinAuthorLine) builder.setDescription(content);
+        if (!contentInAuthorLine) builder.setDescription(content);
 
         rconChannel.sendMessage(builder.build()).queue();
     }
 
-    public static void serverStop(String content, boolean contentinAuthorLine) {
+    public static void serverStop(String content, boolean contentInAuthorLine) {
 
         if (serverStopChannel == null) return;
 
         final EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Stop");
 
-        if (!contentinAuthorLine) builder.setDescription(content);
+        if (!contentInAuthorLine) builder.setDescription(content);
 
         serverStopChannel.sendMessage(builder.build()).queue();
     }
 
-    public static void itemDrop(Player player, String content, boolean contentinAuthorLine) {
+    public static void itemDrop(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, itemDropChannel);
+        discordUtil(player, content, contentInAuthorLine, itemDropChannel);
     }
 
-    public static void enchanting(Player player, String content, boolean contentinAuthorLine) {
+    public static void enchanting(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, enchantingChannel);
+        discordUtil(player, content, contentInAuthorLine, enchantingChannel);
     }
 
-    public static void bookEditing(Player player, String content, boolean contentinAuthorLine) {
+    public static void bookEditing(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, bookEditingChannel);
+        discordUtil(player, content, contentInAuthorLine, bookEditingChannel);
     }
 
-    public static void afk(Player player, String content, boolean contentinAuthorLine) {
+    public static void afk(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, afkChannel);
+        discordUtil(player, content, contentInAuthorLine, afkChannel);
     }
 
-    public static void wrongPassword(Player player, String content, boolean contentinAuthorLine) {
+    public static void wrongPassword(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, wrongPasswordChannel);
+        discordUtil(player, content, contentInAuthorLine, wrongPasswordChannel);
     }
 
-    public static void itemPickup(Player player, String content, boolean contentinAuthorLine) {
+    public static void itemPickup(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, itemPickupChannel);
+        discordUtil(player, content, contentInAuthorLine, itemPickupChannel);
     }
 
-    public static void furnace(Player player, String content, boolean contentinAuthorLine) {
+    public static void furnace(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, furnaceChannel);
+        discordUtil(player, content, contentInAuthorLine, furnaceChannel);
     }
 
-    public static void gameMode(Player player, String content, boolean contentinAuthorLine) {
+    public static void gameMode(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, gameModeChannel);
+        discordUtil(player, content, contentInAuthorLine, gameModeChannel);
     }
 
-    public static void playerCraft(Player player, String content, boolean contentinAuthorLine) {
+    public static void playerCraft(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, craftChannel);
+        discordUtil(player, content, contentInAuthorLine, craftChannel);
     }
 
-    public static void vault(Player player, String content, boolean contentinAuthorLine) {
+    public static void vault(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentinAuthorLine, vaultChannel);
+        discordUtil(player, content, contentInAuthorLine, vaultChannel);
     }
 
-    private static void discordUtil(Player player, String content, boolean contentinAuthorLine, TextChannel channel) {
+    public static void playerRegistration(Player player, String content, boolean contentInAuthorLine) {
+
+        discordUtil(player, content, contentInAuthorLine, registrationChannel);
+    }
+
+    private static void discordUtil(Player player, String content, boolean contentInAuthorLine, TextChannel channel) {
         if (channel == null) return;
 
-        final EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getName(),
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor(contentInAuthorLine ? content : player.getName(),
                 null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
-        if (!contentinAuthorLine) builder.setDescription(content);
+        if (!contentInAuthorLine) builder.setDescription(content);
 
         channel.sendMessage(builder.build()).queue();
     }

@@ -40,6 +40,8 @@ public class FileHandler {
     private static File furnaceFolder;
     private static File gameModeFolder;
     private static File craftFolder;
+    private static File registrationFolder;
+    private static File registrationDataFolder;
 
     // Server Side
     private static File serverStartFolder;
@@ -79,6 +81,7 @@ public class FileHandler {
     private static File furnaceFile;
     private static File gameModeFile;
     private static File craftFile;
+    private static File registrationFile;
 
     // Server Side
     private static File serverStartFile;
@@ -174,6 +177,11 @@ public class FileHandler {
         craftFolder = new File(logsFolder, "Crafting");
         craftFile = new File(craftFolder, filenameDateFormat.format(date) + ".log");
 
+        registrationFolder = new File(logsFolder, "Registration");
+        registrationFile = new File(registrationFolder, filenameDateFormat.format(date) + ".log");
+
+        registrationDataFolder = new File(registrationFolder, "Registration_Data");
+
         // Server Side Part
         serverStartFolder = new File(logsFolder, "Server Start");
         serverStartFile = new File(serverStartFolder, filenameDateFormat.format(date) + ".log");
@@ -254,6 +262,9 @@ public class FileHandler {
 
             craftFolder.mkdir();
 
+            registrationFolder.mkdir();
+            registrationDataFolder.mkdir();
+
             // Server Side Part
             serverStartFolder.mkdir();
 
@@ -323,6 +334,8 @@ public class FileHandler {
 
             craftFile.createNewFile();
 
+            registrationFile.createNewFile();
+
             // Server Side
             serverStartFile.createNewFile();
 
@@ -391,6 +404,8 @@ public class FileHandler {
     public static File getGameModeFile() { return gameModeFile; }
 
     public static File getCraftFile() { return craftFile; }
+
+    public static File getRegistrationFile() { return registrationFile; }
 
     // Server Side Part
     public static File getserverStartFile() { return serverStartFile; }
@@ -588,6 +603,13 @@ public class FileHandler {
         {
 
             deleteFile(craft);
+
+        }
+
+        for (File register : Objects.requireNonNull(registrationFolder.listFiles()))
+        {
+
+            deleteFile(register);
 
         }
 

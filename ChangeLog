@@ -125,3 +125,21 @@ Fixes
     [!] loggerproxy.reload not working on Velocity
 
 Recoded most of the plugin and improved Databases queries and it's performance in general!
+
+<-!------------------------------------------ v1.7.5 [ DEV ] ------------------------------------------!->
+
+Additions
+    [+] Player Registration
+    [+] Arabic, French and Chinese Simplified Languages
+
+Fixes
+    [!] Databases Logs not logging actions in the same second
+    [!] Console Blocking being disabled when Console Logging is disabled
+    [!] MariaDB not Connecting
+    [!] TPS going down to 0.2165432 (Hopefully it's fixed)
+    [!] Velocity Litebans table
+    [!] loggerproxy.discord.exempt for Proxies and Velocity
+
+Changes
+    [*] Databases Structure
+    [*] Messages & Discord Files structure for the future upcoming update

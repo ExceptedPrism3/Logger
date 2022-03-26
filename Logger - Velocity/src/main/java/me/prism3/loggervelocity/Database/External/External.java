@@ -28,7 +28,7 @@ public class External {
         String jdbcDriver;
         final String mySQL = "MySQL";
         final String mySQLDriver = "com.mysql.cj.jdbc.Driver";
-        final String mariaDB = "MariaDB";
+        final String mariaDB = "mariadb";
         final String mariaDBDriver = "org.mariadb.jdbc.Driver";
 
         switch (dataType){

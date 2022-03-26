@@ -4,6 +4,7 @@ import me.prism3.loggervelocity.API.LiteBansUtil;
 import me.prism3.loggervelocity.Commands.Reload;
 import me.prism3.loggervelocity.Database.External.External;
 import me.prism3.loggervelocity.Database.External.ExternalData;
+import me.prism3.loggervelocity.Database.External.ExternalUpdater;
 import me.prism3.loggervelocity.Database.SQLite.SQLite;
 import me.prism3.loggervelocity.Database.SQLite.SQLiteData;
 import me.prism3.loggervelocity.Discord.Discord;
@@ -34,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 import static me.prism3.loggervelocity.Utils.Data.*;
 
-@Plugin(id = "logger-velocity", name = "Logger", version = "1.7.1", authors = {"prism3, thelooter"})
+@Plugin(id = "logger-velocity", name = "Logger", version = "1.7.5", authors = {"prism3 & thelooter"})
 public class Main{
 
     private static ProxyServer server;
@@ -88,6 +89,7 @@ public class Main{
         server.getCommandManager().register("loggerproxy", new Reload());
 
         this.dataBaseSetup();
+        new ExternalUpdater();
 
         this.loadPluginDependent();
 

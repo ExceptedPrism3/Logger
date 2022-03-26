@@ -1,9 +1,10 @@
 package me.prism3.logger.Events;
+import me.prism3.logger.Database.SQLite.Registration.SQLiteDataRegistration;
 import me.prism3.logger.Discord.Discord;
 import me.prism3.logger.Main;
 import me.prism3.logger.Utils.FileHandler;
 import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Database.SQLite.SQLiteData;
+import me.prism3.logger.Database.SQLite.Global.SQLiteData;
 import me.prism3.logger.Utils.Messages;
 import me.prism3.logger.Utils.Data;
 import org.bukkit.ChatColor;
@@ -27,6 +28,13 @@ public class OnPlayerJoin implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(final PlayerJoinEvent event) {
+
+        if (Data.isRegistration && !SQLiteDataRegistration.playerExists(event.getPlayer())) {
+
+            SQLiteDataRegistration.insertRegistration(event.getPlayer());
+            new OnPlayerRegister();
+
+        }
 
         if (this.main.getConfig().getBoolean("Log-Player.Join")) {
 
@@ -142,7 +150,19 @@ public class OnPlayerJoin implements Listener {
 
                     SQLiteData.insertPlayerJoin(Data.serverName, player, player.hasPermission(Data.loggerStaffLog));
 
-                } catch (Exception exception) { exception.printStackTrace(); }
+                } catch (Exception e) { e.printStackTrace(); }
+            }
+        }
+
+        if (!main.cF.getIsUpdated()){
+
+            if (event.getPlayer().isOp() || event.getPlayer().hasPermission(Data.loggerStaff)){
+
+                event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&8&l[&b&lLogger&8&l] " +
+                        "&c&lPlugin Configs are not updated!"));
+                event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&8&l[&b&lLogger&8&l] " +
+                        "&c&lUpdate them to avoid any complications."));
+
             }
         }
     }

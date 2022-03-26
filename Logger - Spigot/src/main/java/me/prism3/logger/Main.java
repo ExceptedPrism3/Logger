@@ -4,8 +4,12 @@ import me.prism3.logger.API.AuthMeUtil;
 import me.prism3.logger.API.EssentialsUtil;
 import me.prism3.logger.API.VaultUtil;
 import me.prism3.logger.Commands.OnLogger;
+import me.prism3.logger.Commands.Getting.Chat;
 import me.prism3.logger.Database.External.External;
 import me.prism3.logger.Database.External.ExternalData;
+import me.prism3.logger.Database.External.ExternalUpdater;
+import me.prism3.logger.Database.SQLite.Registration.SQLiteDataRegistration;
+import me.prism3.logger.Database.SQLite.Registration.SQLiteRegistration;
 import me.prism3.logger.Discord.Discord;
 import me.prism3.logger.Discord.DiscordFile;
 import me.prism3.logger.Events.OnCommands.OnCommand;
@@ -14,8 +18,8 @@ import me.prism3.logger.Events.OnInventories.OnFurnace;
 import me.prism3.logger.Events.PluginDependent.OnAFK;
 import me.prism3.logger.Events.PluginDependent.OnAuthMePassword;
 import me.prism3.logger.Events.PluginDependent.OnVault;
-import me.prism3.logger.Database.SQLite.SQLite;
-import me.prism3.logger.Database.SQLite.SQLiteData;
+import me.prism3.logger.Database.SQLite.Global.SQLite;
+import me.prism3.logger.Database.SQLite.Global.SQLiteData;
 import de.jeff_media.updatechecker.UpdateChecker;
 import me.prism3.logger.Events.*;
 import me.prism3.logger.ServerSide.*;
@@ -23,15 +27,22 @@ import me.prism3.logger.Utils.*;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.SQLException;
 import java.util.Objects;
+
+import static me.prism3.logger.Utils.Data.*;
 
 public class Main extends JavaPlugin {
 
     private static Main instance;
 
+    public ConfigChecker cF;
+    public Messages mS;
+
     private External external;
 
     private SQLite sqLite;
+    private SQLiteRegistration sqLiteReg;
 
     private Discord discord;
 
@@ -45,8 +56,9 @@ public class Main extends JavaPlugin {
 
         this.initializer(new Data());
 
-        Messages.Setup();
-        Messages.get().options().copyDefaults(true);
+        if (!this.configChecker()) return;
+
+        if (!this.langChecker()) return;
 
         DiscordFile.Setup();
         DiscordFile.get().options().copyDefaults(true);
@@ -54,9 +66,7 @@ public class Main extends JavaPlugin {
         this.discord = new Discord();
         this.discord.run();
 
-        this.databaseSetup();
-
-        if (Data.isLogToFiles && Data.isSqlite){
+        if (Data.isLogToFiles && isSqlite){
 
             this.getLogger().warning("Logging to Files and SQLite are both enabled, this might impact your Server's Performance!");
 
@@ -65,36 +75,40 @@ public class Main extends JavaPlugin {
         FileHandler fileHandler = new FileHandler(this.getDataFolder());
         fileHandler.deleteFiles();
 
-        getServer().getPluginManager().registerEvents(new OnPlayerChat(), this);
-        getServer().getPluginManager().registerEvents(new OnCommand(), this);
-        getServer().getPluginManager().registerEvents(new Console(), this);
-        getServer().getPluginManager().registerEvents(new OnSign(), this);
-        getServer().getPluginManager().registerEvents(new OnPlayerJoin(), this);
-        getServer().getPluginManager().registerEvents(new OnPlayerLeave(), this);
-        getServer().getPluginManager().registerEvents(new OnPlayerKick(), this);
-        getServer().getPluginManager().registerEvents(new OnPlayerDeath(), this);
-        getServer().getPluginManager().registerEvents(new OnPlayerTeleport(), this);
-        getServer().getPluginManager().registerEvents(new OnPlayerLevel(), this);
-        getServer().getPluginManager().registerEvents(new OnBlockPlace(), this);
-        getServer().getPluginManager().registerEvents(new OnBlockBreak(), this);
-        getServer().getPluginManager().registerEvents(new PortalCreation(), this);
-        getServer().getPluginManager().registerEvents(new OnBucketFill(), this);
-        getServer().getPluginManager().registerEvents(new OnBucketEmpty(), this);
-        getServer().getPluginManager().registerEvents(new OnAnvil(), this);
-        getServer().getPluginManager().registerEvents(new OnItemPickup(), this);
-        getServer().getPluginManager().registerEvents(new OnItemDrop(), this);
-        getServer().getPluginManager().registerEvents(new OnEnchant(), this);
-        getServer().getPluginManager().registerEvents(new OnBook(), this);
-        getServer().getPluginManager().registerEvents(new RCON(), this);
-        getServer().getPluginManager().registerEvents(new OnGameMode(), this);
+        this.databaseSetup();
+        new ExternalUpdater();
 
-        getServer().getPluginManager().registerEvents(new OnFurnace(), this);
-        getServer().getPluginManager().registerEvents(new OnCraft(), this);
+        this.getServer().getPluginManager().registerEvents(new OnPlayerChat(), this);
+        this.getServer().getPluginManager().registerEvents(new OnCommand(), this);
+        this.getServer().getPluginManager().registerEvents(new Console(), this);
+        this.getServer().getPluginManager().registerEvents(new OnSign(), this);
+        this.getServer().getPluginManager().registerEvents(new OnPlayerJoin(), this);
+        this.getServer().getPluginManager().registerEvents(new OnPlayerLeave(), this);
+        this.getServer().getPluginManager().registerEvents(new OnPlayerKick(), this);
+        this.getServer().getPluginManager().registerEvents(new OnPlayerDeath(), this);
+        this.getServer().getPluginManager().registerEvents(new OnPlayerTeleport(), this);
+        this.getServer().getPluginManager().registerEvents(new OnPlayerLevel(), this);
+        this.getServer().getPluginManager().registerEvents(new OnBlockPlace(), this);
+        this.getServer().getPluginManager().registerEvents(new OnBlockBreak(), this);
+        this.getServer().getPluginManager().registerEvents(new PortalCreation(), this);
+        this.getServer().getPluginManager().registerEvents(new OnBucketFill(), this);
+        this.getServer().getPluginManager().registerEvents(new OnBucketEmpty(), this);
+        this.getServer().getPluginManager().registerEvents(new OnAnvil(), this);
+        this.getServer().getPluginManager().registerEvents(new OnItemPickup(), this);
+        this.getServer().getPluginManager().registerEvents(new OnItemDrop(), this);
+        this.getServer().getPluginManager().registerEvents(new OnEnchant(), this);
+        this.getServer().getPluginManager().registerEvents(new OnBook(), this);
+        this.getServer().getPluginManager().registerEvents(new RCON(), this);
+        this.getServer().getPluginManager().registerEvents(new OnGameMode(), this);
 
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new TPS(), 300L, Data.ramTpsChecker);
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new RAM(), 300L, Data.ramTpsChecker);
+        this.getServer().getPluginManager().registerEvents(new OnFurnace(), this);
+        this.getServer().getPluginManager().registerEvents(new OnCraft(), this);
+
+        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TPS(), 300L, Data.ramTpsChecker);
+        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new RAM(), 300L, Data.ramTpsChecker);
 
         Objects.requireNonNull(getCommand("logger")).setExecutor(new OnLogger());
+//        Objects.requireNonNull(getCommand("loggerget")).setExecutor(new Chat());
 
         new ASCIIArt().Art();
 
@@ -124,11 +138,15 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
 
+        if (cF.getIsGood() || mS.getIsValid()) return;
+
         new Stop().run();
 
-        if (Data.isExternal && this.external.isConnected()) this.external.disconnect();
+        if (isExternal && this.external.isConnected()) this.external.disconnect();
 
-        if (Data.isSqlite && this.sqLite.isConnected()) this.sqLite.disconnect();
+        if (isSqlite && this.sqLite.isConnected()) this.sqLite.disconnect();
+
+        if (isRegistration && this.sqLiteReg.isConnected()) this.sqLiteReg.disconnect();
 
         this.discord.disconnect();
 
@@ -150,7 +168,7 @@ public class Main extends JavaPlugin {
 
     private void databaseSetup(){
 
-        if (Data.isExternal) {
+        if (isExternal) {
 
             this.external = new External();
             this.external.connect();
@@ -161,7 +179,7 @@ public class Main extends JavaPlugin {
             }
         }
 
-        if (Data.isSqlite) {
+        if (isSqlite) {
 
             this.sqLite = new SQLite();
             this.sqLite.connect();
@@ -170,6 +188,14 @@ public class Main extends JavaPlugin {
                 sqLiteData.createTable();
                 sqLiteData.emptyTable();
             }
+        }
+
+        if (isRegistration){
+
+            this.sqLiteReg = new SQLiteRegistration();
+            this.sqLiteReg.connect();
+            SQLiteDataRegistration sqLiteDataRegistration = new SQLiteDataRegistration(this);
+            if (this.sqLiteReg.isConnected()) sqLiteDataRegistration.createTable();
         }
     }
 
@@ -193,16 +219,35 @@ public class Main extends JavaPlugin {
 
         if (VaultUtil.getVaultAPI()){
 
-            if (VaultUtil.getVault().isEnabled()) {
+            if (VaultUtil.getVault() != null) {
 
                 OnVault vault = new OnVault();
                 this.getServer().getPluginManager().registerEvents(vault, this);
                 this.getServer().getScheduler().scheduleSyncRepeatingTask(this, vault, 10L, Data.vaultChecker);
             }
-
             this.getLogger().info("Vault Plugin Detected!");
-
         }
+    }
+
+    private boolean langChecker(){
+
+        this.mS = new Messages();
+
+        if (!this.mS.getIsValid()) {
+
+            this.getServer().getPluginManager().disablePlugin(this);
+            return false;
+        } return true;
+    }
+
+    private boolean configChecker(){
+
+        this.cF = new ConfigChecker();
+
+        if (!this.cF.getIsGood()) {
+            this.getServer().getPluginManager().disablePlugin(this);
+            return false;
+        } return true;
     }
 
     public static Main getInstance() { return instance; }
@@ -210,4 +255,7 @@ public class Main extends JavaPlugin {
     public External getExternal() { return this.external; }
 
     public SQLite getSqLite() { return this.sqLite; }
+
+    public SQLiteRegistration getSqLiteReg() { return this.sqLiteReg; }
+
 }

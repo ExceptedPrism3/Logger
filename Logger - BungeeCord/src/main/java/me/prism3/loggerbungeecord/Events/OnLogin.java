@@ -7,6 +7,8 @@ import me.prism3.loggerbungeecord.Main;
 import me.prism3.loggerbungeecord.Utils.FileHandler;
 import me.prism3.loggerbungeecord.Utils.Messages;
 import me.prism3.loggerbungeecord.Utils.Data;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -129,6 +131,19 @@ public class OnLogin implements Listener {
                     SQLiteData.insertPlayerLogin(Data.serverName, playerName, playerIP, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
+            }
+        }
+
+        if (!main.cF.getIsUpdated()){
+
+            if (event.getPlayer().hasPermission(Data.loggerStaff)){
+
+                event.getPlayer().sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "&8&l[&b&lLogger&8&l] " +
+                        "&c&lPlugin Configs are not updated!")));
+
+                event.getPlayer().sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "&8&l[&b&lLogger&8&l] " +
+                        "&c&lUpdate them to avoid any complications.")));
+
             }
         }
     }
