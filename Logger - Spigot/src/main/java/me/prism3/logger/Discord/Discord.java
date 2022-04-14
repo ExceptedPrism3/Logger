@@ -36,6 +36,9 @@ public class Discord {
     private static TextChannel furnaceChannel;
     private static TextChannel gameModeChannel;
     private static TextChannel craftChannel;
+    private static TextChannel registrationChannel;
+    private static TextChannel primedTNTChannel;
+    private static TextChannel spawnEggChannel;
 
     private static TextChannel serverStartChannel;
     private static TextChannel serverStopChannel;
@@ -44,7 +47,6 @@ public class Discord {
     private static TextChannel TPSChannel;
     private static TextChannel portalCreationChannel;
     private static TextChannel rconChannel;
-    private static TextChannel registrationChannel;
 
     private static TextChannel afkChannel;
     private static TextChannel wrongPasswordChannel;
@@ -116,6 +118,10 @@ public class Discord {
             final String craftChannelID = DiscordFile.get().getString("Discord.Craft.Channel-ID");
 
             final String registrationChannelID = DiscordFile.get().getString("Discord.Registration.Channel-ID");
+
+            final String primedTNTChannelID = DiscordFile.get().getString("Discord.Primed-TNT.Channel-ID");
+
+            final String spawnEggChannelID = DiscordFile.get().getString("Discord.Spawn-Egg.Channel-ID");
 
             // Server Side Part
             final String serverStartChannelID = DiscordFile.get().getString("Discord.Server-Side.Start.Channel-ID");
@@ -278,6 +284,18 @@ public class Discord {
                 if (!(registrationChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Registration") && !registrationChannelID.equals("LINK_HERE")) {
 
                     registrationChannel = jda.getTextChannelById(registrationChannelID);
+
+                }
+
+                if (!(primedTNTChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Primed-TNT") && !primedTNTChannelID.equals("LINK_HERE")) {
+
+                    primedTNTChannel = jda.getTextChannelById(primedTNTChannelID);
+
+                }
+
+                if (!(spawnEggChannelID.isEmpty()) && main.getConfig().getBoolean("Log-Player.Spawn-Egg") && !spawnEggChannelID.equals("LINK_HERE")) {
+
+                    spawnEggChannel = jda.getTextChannelById(spawnEggChannelID);
 
                 }
 
@@ -554,6 +572,16 @@ public class Discord {
     }
 
     public static void playerRegistration(Player player, String content, boolean contentInAuthorLine) {
+
+        discordUtil(player, content, contentInAuthorLine, registrationChannel);
+    }
+
+    public static void primedTNT(Player player, String content, boolean contentInAuthorLine) {
+
+        discordUtil(player, content, contentInAuthorLine, registrationChannel);
+    }
+
+    public static void spawnEgg(Player player, String content, boolean contentInAuthorLine) {
 
         discordUtil(player, content, contentInAuthorLine, registrationChannel);
     }

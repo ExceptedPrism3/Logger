@@ -45,6 +45,7 @@ public class Data {
     public static int dbPort;
     public static int externalDataDel;
     public static int sqliteDataDel;
+    public static int allowedBackups;
 
     // Long
     public static long fileDeletion;
@@ -62,6 +63,7 @@ public class Data {
     public static boolean isPlayerIP;
     public static boolean isConsoleCommands;
     public static boolean isRegistration;
+    public static boolean isPlayerDeathBackup;
 
     // Permission String
     public static String loggerExempt;
@@ -116,6 +118,7 @@ public class Data {
         dbPort = this.config.getInt("Database.Port");
         externalDataDel = this.config.getInt("Database.Data-Deletion");
         sqliteDataDel = this.config.getInt("SQLite.Data-Deletion");
+        allowedBackups = this.config.getInt("Player-Death-Backup.Max-Backup");
 
     }
 
@@ -139,6 +142,7 @@ public class Data {
         isPlayerIP = this.config.getBoolean("Player-Join.Player-IP");
         isConsoleCommands = this.config.getBoolean("Console-Commands.Blacklist-Commands");
         isRegistration = this.config.getBoolean("Log-Player.Registration");
+        isPlayerDeathBackup = this.config.getBoolean("Player-Death-Backup.Enabled");
 
     }
 

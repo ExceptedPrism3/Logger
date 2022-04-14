@@ -2,36 +2,64 @@ package me.prism3.logger.Events;
 
 import me.prism3.logger.Discord.Discord;
 import me.prism3.logger.Main;
-import me.prism3.logger.Utils.FileHandler;
+import me.prism3.logger.Utils.*;
 import me.prism3.logger.Database.External.ExternalData;
 import me.prism3.logger.Database.SQLite.Global.SQLiteData;
-import me.prism3.logger.Utils.Messages;
-import me.prism3.logger.Utils.Data;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.ItemStack;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.time.ZonedDateTime;
-import java.util.Objects;
+import java.util.*;
+
+import static me.prism3.logger.Utils.Data.isPlayerDeathBackup;
 
 public class OnPlayerDeath implements Listener {
 
     private final Main main = Main.getInstance();
+    private final PlayerFolder playerDeathBackup = new PlayerFolder();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onDeath(final PlayerDeathEvent event) {
+    public void onDeath(final PlayerDeathEvent event) throws IOException, InvalidConfigurationException {
 
         if (this.main.getConfig().getBoolean("Log-Player.Death")) {
 
             final Player player = event.getEntity();
 
             if (player.hasPermission(Data.loggerExempt)) return;
+
+            // ******
+            // This Part almost gave me brain tumor while figuring out how to make it
+            if (isPlayerDeathBackup && this.playerDeathBackup.isAllowed(player)) {
+
+                this.playerDeathBackup.create(event.getEntity());
+
+                final File f1 = PlayerFolder.getPlayerFile(); // Gets the file location
+                final FileConfiguration f = YamlConfiguration.loadConfiguration(f1); // Loads the file with Yaml functions
+                f.load(f1); // Loads the file for use
+
+                ItemStack[] invContent = Arrays.stream(event.getEntity().getInventory().getContents()) // Turn the contents array into a Stream.
+                        .map(i -> i == null ? new ItemStack(Material.AIR) : i) // Map replaces the element with something else, so here if the item is null, we replace it with air, and if it isn't null, we set it to itself.
+                        .toArray(ItemStack[]::new); // Turn it back into an array.
+
+                ItemStack[] armorContent = Arrays.stream(event.getEntity().getInventory().getArmorContents()) // Turn the contents array into a Stream.
+                        .map(i -> i == null ? new ItemStack(Material.AIR) : i) // Map replaces the element with something else, so here if the item is null, we replace it with air, and if it isn't null, we set it to itself.
+                        .toArray(ItemStack[]::new); // Turn it back into an array.
+
+                f.set("Inventory", InventoryToBase64.toBase64(invContent)); // Converts the Player's Inventory into base64
+                f.set("Armor", InventoryToBase64.toBase64(armorContent)); // Converts the Player's Armor into base64
+                f.save(f1); // Save and Closes the file after editing
+            }
+            // ******
 
             final World world = player.getWorld();
             final String worldName = world.getName();

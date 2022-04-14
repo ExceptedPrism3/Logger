@@ -3,8 +3,9 @@ package me.prism3.logger;
 import me.prism3.logger.API.AuthMeUtil;
 import me.prism3.logger.API.EssentialsUtil;
 import me.prism3.logger.API.VaultUtil;
-import me.prism3.logger.Commands.OnLogger;
-import me.prism3.logger.Commands.Getting.Chat;
+import me.prism3.logger.Commands.CommandManager;
+import me.prism3.logger.Commands.Dump;
+import me.prism3.logger.Commands.SubCommands.PlayerInventoryCommand;
 import me.prism3.logger.Database.External.External;
 import me.prism3.logger.Database.External.ExternalData;
 import me.prism3.logger.Database.External.ExternalUpdater;
@@ -12,9 +13,12 @@ import me.prism3.logger.Database.SQLite.Registration.SQLiteDataRegistration;
 import me.prism3.logger.Database.SQLite.Registration.SQLiteRegistration;
 import me.prism3.logger.Discord.Discord;
 import me.prism3.logger.Discord.DiscordFile;
+import me.prism3.logger.Events.Misc.OnSpawnEgg;
+import me.prism3.logger.Events.Misc.OnPrimedTNT;
 import me.prism3.logger.Events.OnCommands.OnCommand;
 import me.prism3.logger.Events.OnInventories.OnCraft;
 import me.prism3.logger.Events.OnInventories.OnFurnace;
+import me.prism3.logger.Events.OnPlayerDeath;
 import me.prism3.logger.Events.PluginDependent.OnAFK;
 import me.prism3.logger.Events.PluginDependent.OnAuthMePassword;
 import me.prism3.logger.Events.PluginDependent.OnVault;
@@ -27,9 +31,6 @@ import me.prism3.logger.Utils.*;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.sql.SQLException;
-import java.util.Objects;
-
 import static me.prism3.logger.Utils.Data.*;
 
 public class Main extends JavaPlugin {
@@ -37,7 +38,7 @@ public class Main extends JavaPlugin {
     private static Main instance;
 
     public ConfigChecker cF;
-    public Messages mS;
+    private Messages mS;
 
     private External external;
 
@@ -100,6 +101,9 @@ public class Main extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new OnBook(), this);
         this.getServer().getPluginManager().registerEvents(new RCON(), this);
         this.getServer().getPluginManager().registerEvents(new OnGameMode(), this);
+        this.getServer().getPluginManager().registerEvents(new OnPrimedTNT(), this);
+        this.getServer().getPluginManager().registerEvents(new OnSpawnEgg(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerInventoryCommand(), this);
 
         this.getServer().getPluginManager().registerEvents(new OnFurnace(), this);
         this.getServer().getPluginManager().registerEvents(new OnCraft(), this);
@@ -107,8 +111,8 @@ public class Main extends JavaPlugin {
         this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TPS(), 300L, Data.ramTpsChecker);
         this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new RAM(), 300L, Data.ramTpsChecker);
 
-        Objects.requireNonNull(getCommand("logger")).setExecutor(new OnLogger());
-//        Objects.requireNonNull(getCommand("loggerget")).setExecutor(new Chat());
+        this.getCommand("logger").setExecutor(new CommandManager());
+        this.getCommand("loggerd").setExecutor(new Dump());
 
         new ASCIIArt().Art();
 
@@ -138,7 +142,7 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
 
-        if (cF.getIsGood() || mS.getIsValid()) return;
+        if (this.cF.getIsGood() || this.mS.getIsValid()) return;
 
         new Stop().run();
 

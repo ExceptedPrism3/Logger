@@ -30,7 +30,7 @@ public class External {
         final String mariaDB = "mariadb";
         final String mariaDBDriver = "org.mariadb.jdbc.Driver";
 
-        switch (dataType){
+        switch (dataType) {
 
             case "mysql":
                 this.jdbc = mySQL;
@@ -81,5 +81,5 @@ public class External {
             }
         }
     }
-    public Connection getConnection(){ return this.connection; }
+    public Connection getConnection() { return this.connection; }
 }

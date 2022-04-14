@@ -24,6 +24,7 @@ public class FileHandler {
     private static File playerJoinLogFolder;
     private static File playerLeaveLogFolder;
     private static File playerDeathLogFolder;
+    private static File playerDeathBackupLogFolder;
     private static File playerTeleportLogFolder;
     private static File blockPlaceLogFolder;
     private static File blockBreakLogFolder;
@@ -41,7 +42,8 @@ public class FileHandler {
     private static File gameModeFolder;
     private static File craftFolder;
     private static File registrationFolder;
-    private static File registrationDataFolder;
+    private static File primedTNTFolder;
+    private static File eggSpawnFolder;
 
     // Server Side
     private static File serverStartFolder;
@@ -82,6 +84,8 @@ public class FileHandler {
     private static File gameModeFile;
     private static File craftFile;
     private static File registrationFile;
+    private static File primedTNTFile;
+    private static File eggSpawnFile;
 
     // Server Side
     private static File serverStartFile;
@@ -132,6 +136,8 @@ public class FileHandler {
         playerDeathLogFolder = new File(logsFolder, "Player Death");
         playerDeathLogFile = new File(playerDeathLogFolder, filenameDateFormat.format(date) + ".log");
 
+        playerDeathBackupLogFolder = new File(playerDeathLogFolder, "Backups");
+
         playerTeleportLogFolder = new File(logsFolder, "Player Teleport");
         playerTeleportLogFile = new File(playerTeleportLogFolder, filenameDateFormat.format(date) + ".log");
 
@@ -180,7 +186,13 @@ public class FileHandler {
         registrationFolder = new File(logsFolder, "Registration");
         registrationFile = new File(registrationFolder, filenameDateFormat.format(date) + ".log");
 
-        registrationDataFolder = new File(registrationFolder, "Registration_Data");
+        final File registrationDataFolder = new File(registrationFolder, "Registration_Data");
+
+        primedTNTFolder = new File(logsFolder, "Primed TNT");
+        primedTNTFile = new File(primedTNTFolder, filenameDateFormat.format(date) + ".log");
+
+        eggSpawnFolder = new File(logsFolder, "Spawn Egg");
+        eggSpawnFile = new File(eggSpawnFolder, filenameDateFormat.format(date) + ".log");
 
         // Server Side Part
         serverStartFolder = new File(logsFolder, "Server Start");
@@ -232,6 +244,8 @@ public class FileHandler {
 
             playerDeathLogFolder.mkdir();
 
+            playerDeathBackupLogFolder.mkdir();
+
             playerTeleportLogFolder.mkdir();
 
             blockPlaceLogFolder.mkdir();
@@ -264,6 +278,10 @@ public class FileHandler {
 
             registrationFolder.mkdir();
             registrationDataFolder.mkdir();
+
+            primedTNTFolder.mkdir();
+
+            eggSpawnFolder.mkdir();
 
             // Server Side Part
             serverStartFolder.mkdir();
@@ -336,6 +354,10 @@ public class FileHandler {
 
             registrationFile.createNewFile();
 
+            primedTNTFile.createNewFile();
+
+            eggSpawnFile.createNewFile();
+
             // Server Side
             serverStartFile.createNewFile();
 
@@ -373,6 +395,8 @@ public class FileHandler {
 
     public static File getPlayerDeathLogFile() { return playerDeathLogFile; }
 
+    public static File getPlayerDeathBackupLogFolder() { return playerDeathBackupLogFolder; }
+
     public static File getPlayerTeleportLogFile() { return playerTeleportLogFile; }
 
     public static File getBlockPlaceLogFile() { return blockPlaceLogFile; }
@@ -406,6 +430,10 @@ public class FileHandler {
     public static File getCraftFile() { return craftFile; }
 
     public static File getRegistrationFile() { return registrationFile; }
+
+    public static File getPrimedTNTFile() { return primedTNTFile; }
+
+    public static File getEggSpawnFile() { return eggSpawnFile; }
 
     // Server Side Part
     public static File getserverStartFile() { return serverStartFile; }
@@ -610,6 +638,20 @@ public class FileHandler {
         {
 
             deleteFile(register);
+
+        }
+
+        for (File primedTNT : Objects.requireNonNull(primedTNTFolder.listFiles()))
+        {
+
+            deleteFile(primedTNT);
+
+        }
+
+        for (File eggSpawn : Objects.requireNonNull(eggSpawnFolder.listFiles()))
+        {
+
+            deleteFile(eggSpawn);
 
         }
 

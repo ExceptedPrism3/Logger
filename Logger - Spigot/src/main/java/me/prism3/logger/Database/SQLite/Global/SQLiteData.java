@@ -32,7 +32,7 @@ public class SQLiteData {
         final PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave,
                 playerDeath, playerTeleport, blockPlace, blockBreak, TPS, RAM, playerKick, portalCreation, playerLevel,
                 bucketFill, bucketEmpty, anvil, serverStart, serverStop, itemDrop, enchant, bookEditing, afk,
-                wrongPassword, itemPickup, furnace, rcon, gameMode, craft, vault, registration;
+                wrongPassword, itemPickup, furnace, rcon, gameMode, craft, vault, registration, primedTNT, spawnEgg;
 
         try {
 
@@ -123,6 +123,14 @@ public class SQLiteData {
             registration = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Registration" +
                     "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, Player_Name TEXT(40)," +
                     "Player_UUID INTEGER, Join_Date TEXT(30))");
+
+            primedTNT = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Primed_TNT" +
+                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, Player_Name TEXT(40)," +
+                    "World TEXT(50), X INTEGER, Y INTEGER, Z INTEGER, Is_Staff INTEGER)");
+
+            spawnEgg = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Spawn_Egg" +
+                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, Player_Name TEXT(40)," +
+                    "World TEXT(50), X INTEGER, Y INTEGER, Z INTEGER, Player_UUID INTEGER, Join_Date TEXT(30))");
 
             // Server Side Part
             serverStart = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Server_Start" +
@@ -219,6 +227,10 @@ public class SQLiteData {
             craft.close();
             registration.executeUpdate();
             registration.close();
+            primedTNT.executeUpdate();
+            primedTNT.close();
+            spawnEgg.executeUpdate();
+            spawnEgg.close();
 
             serverStart.executeUpdate();
             serverStart.close();
@@ -798,7 +810,6 @@ public class SQLiteData {
 
         } catch (SQLException e) { e.printStackTrace(); }
     }
-
 
     public void emptyTable() {
 

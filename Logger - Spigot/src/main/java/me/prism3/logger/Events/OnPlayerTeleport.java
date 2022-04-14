@@ -29,6 +29,8 @@ public class OnPlayerTeleport implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onTeleport(final PlayerTeleportEvent event){
 
+        if (event.getPlayer().hasMetadata("NPC")) return; // Return if player is NPC. Could be Villager or NPC from Citizens etc...
+
         if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Teleport")) {
 
             final Player player = event.getPlayer();

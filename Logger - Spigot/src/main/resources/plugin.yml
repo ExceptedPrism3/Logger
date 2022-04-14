@@ -2,18 +2,14 @@ name: Logger
 version: ${project.version}
 main: me.prism3.logger.Main
 api-version: 1.13
-authors: [ Prism3 , thelooter ]
+authors: [ Prism3 , thelooter, Sidna ]
 description: Log all Activities from Players and Server Side!
 softdepend: [Essentials, AuthMe, Vault, PlaceholderAPI]
 commands:
   logger:
     description: "Plugin command."
-  logger reload:
-    description: "Reloads the Plugin configs."
-  logger credits:
-    description: "Shows the Plugin authors."
-  loggerget:
-    description: "sadsa"
+  loggerd:
+    description: "Plugins command."
 permissions:
   logger.staff:
     description: "Allows the Player to execute Plugin Commands, spy on others actions, and view Plugin Updates."

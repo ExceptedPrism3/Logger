@@ -37,9 +37,9 @@ public class Messages {
 
     }
 
-    public static FileConfiguration get(){ return messages; }
+    public static FileConfiguration get() { return messages; }
 
-    public static void reload(){
+    public static void reload() {
 
         messages = YamlConfiguration.loadConfiguration(new File(main.getDataFolder() + "/" + langPath, main.getConfig().getString("Language") + fileType));
 
@@ -51,7 +51,6 @@ public class Messages {
         for (String l : langFiles)
             if (!new File(main.getDataFolder() + "/" + langPath + "/" + l + fileType).exists())
                 main.saveResource(langPath + "/" + l + fileType, false);
-
 
     }
 
