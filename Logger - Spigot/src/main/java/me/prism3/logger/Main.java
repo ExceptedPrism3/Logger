@@ -5,6 +5,7 @@ import me.prism3.logger.API.EssentialsUtil;
 import me.prism3.logger.API.VaultUtil;
 import me.prism3.logger.Commands.CommandManager;
 import me.prism3.logger.Commands.Dump;
+import me.prism3.logger.Commands.Getting.Chat;
 import me.prism3.logger.Commands.SubCommands.PlayerInventoryCommand;
 import me.prism3.logger.Database.External.External;
 import me.prism3.logger.Database.External.ExternalData;
@@ -113,6 +114,7 @@ public class Main extends JavaPlugin {
 
         this.getCommand("logger").setExecutor(new CommandManager());
         this.getCommand("loggerd").setExecutor(new Dump());
+        this.getCommand("loggerget").setExecutor(new Chat());
 
         new ASCIIArt().Art();
 

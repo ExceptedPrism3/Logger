@@ -11,7 +11,9 @@ import org.bukkit.event.world.PortalCreateEvent;
 
 import java.net.InetSocketAddress;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,235 +33,168 @@ public class ExternalData {
 
     public void createTable(){
 
-        final PreparedStatement playerChat, playerCommands, consoleCommands, playerSignText, playerJoin, playerLeave,
-                playerDeath, playerTeleport, blockPlace, blockBreak, tps, ram, playerKick, portalCreation, playerLevel,
-                bucketFill, bucketEmpty, anvil, serverStart, serverStop, itemDrop, enchant, bookEditing, afk,
-                wrongPassword, itemPickup, furnace, rcon, gameMode, craft, vault, registration;
-
         try {
-
+            Statement stsm = plugin.getExternal().getConnection().createStatement();
             // Player Side Part
-            playerChat = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Chat "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),Message VARCHAR(200),Is_Staff TINYINT,PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Player_Chat "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+                    "Player_Name VARCHAR(100),Message VARCHAR(200),Is_Staff TINYINT)");
 
-            playerCommands = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Commands "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),Command VARCHAR(256),Is_Staff TINYINT,PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Player_Commands "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+                    "Player_Name VARCHAR(100),Command VARCHAR(256),Is_Staff TINYINT)");
 
-            playerSignText = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Sign_Text "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "X INT,Y INT,Z INT,Player_Name VARCHAR(100),Line VARCHAR(60),Is_Staff TINYINT,PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Player_Sign_Text "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+                    "X INT,Y INT,Z INT,Player_Name VARCHAR(100),Line VARCHAR(60),Is_Staff TINYINT)");
 
-            playerDeath = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Death "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Player_Death "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
                     "Player_Name VARCHAR(100), Player_Level INT, X INT,Y INT,Z INT,Cause VARCHAR(40),By_Who VARCHAR(30)," +
-                    "Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "Is_Staff TINYINT)");
 
-            playerTeleport = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Teleport "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Player_Teleport "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
                     "Player_Name VARCHAR(100),From_X INT,From_Y INT,From_Z INT,To_X INT,To_Y INT,To_Z INT," +
-                    "Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "Is_Staff TINYINT)");
 
-            playerJoin = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Join "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),X INT,Y INT,Z INT,IP INT UNSIGNED,Is_Staff TINYINT,PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Player_Join "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+                    "Player_Name VARCHAR(100),X INT,Y INT,Z INT,IP INT UNSIGNED,Is_Staff TINYINT)");
 
-            playerLeave = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Leave "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Player_Leave "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+                    "Player_Name VARCHAR(100),X INT,Y INT,Z INT,Is_Staff TINYINT)");
 
-            blockPlace = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Block_Place "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),Block VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Block_Place "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+                    "Player_Name VARCHAR(100),Block VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT)");
 
-            blockBreak = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Block_Break "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),Block VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Block_Break "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+                    "Player_Name VARCHAR(100),Block VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT)");
 
-            playerKick = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Kick "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),X INT,Y INT,Z INT,Reason VARCHAR(50),Is_Staff TINYINT,PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Player_Kick "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+                    "Player_Name VARCHAR(100),X INT,Y INT,Z INT,Reason VARCHAR(50),Is_Staff TINYINT)");
 
-            playerLevel = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Level "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                    "Player_Name VARCHAR(100),Is_Staff TINYINT,PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Player_Level "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                    "Player_Name VARCHAR(100),Is_Staff TINYINT)");
 
-            bucketFill = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Bucket_Fill "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)" +
-                    ",Player_Name VARCHAR(100),Bucket VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Bucket_Fill "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)" +
+                    ",Player_Name VARCHAR(100),Bucket VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT)");
 
-            bucketEmpty = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Bucket_Empty "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),Bucket VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Bucket_Empty "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+                    "Player_Name VARCHAR(100),Bucket VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT)");
 
-            anvil = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Anvil "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                    "Player_Name VARCHAR(100),New_name VARCHAR(100),Is_Staff TINYINT,PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Anvil "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                    "Player_Name VARCHAR(100),New_name VARCHAR(100),Is_Staff TINYINT)");
 
-            itemDrop = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Item_Drop "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)" +
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Item_Drop "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)" +
                     ",Player_Name VARCHAR(100),Item VARCHAR(50),Amount INT,X INT,Y INT,Z INT,Enchantment VARCHAR(50)" +
-                    ",Changed_Name VARCHAR(50),Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    ",Changed_Name VARCHAR(50),Is_Staff TINYINT)");
 
-            enchant = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Enchanting "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Enchanting "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
                     "Player_Name VARCHAR(100),X INT,Y INT,Z INT,Enchantment VARCHAR(50), Enchantment_Level INT, " +
-                    "Item VARCHAR(50),Cost INT(5),Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "Item VARCHAR(50),Cost INT(5),Is_Staff TINYINT)");
 
-            bookEditing = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Book_Editing "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Book_Editing "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
                     "Player_Name VARCHAR(100),Page_Count INT,Page_Content VARCHAR(250),Signed_by VARCHAR(25)," +
-                    "Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "Is_Staff TINYINT)");
 
-            itemPickup = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Item_Pickup "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Item_Pickup "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
                     "Player_Name VARCHAR(100),Item VARCHAR(250),Amount INT,X INT,Y INT,Z INT,Changed_Name VARCHAR(250)," +
-                    "Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "Is_Staff TINYINT)");
 
-            furnace = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Furnace "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),Item VARCHAR(250),Amount INT,X INT,Y INT,Z INT,Is_Staff TINYINT,PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Furnace "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+                    "Player_Name VARCHAR(100),Item VARCHAR(250),Amount INT,X INT,Y INT,Z INT,Is_Staff TINYINT)");
 
-            gameMode = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Game_Mode "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),Game_Mode VARCHAR(15),Is_Staff TINYINT,PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Game_Mode "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+                    "Player_Name VARCHAR(100),Game_Mode VARCHAR(15),Is_Staff TINYINT)");
 
-            craft = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Crafting "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Crafting "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
                     "Player_Name VARCHAR(100),Item VARCHAR(50),Amount INT,X INT,Y INT,Z INT," +
-                    "Is_Staff TINYINT,PRIMARY KEY (Date))");
+                    "Is_Staff TINYINT)");
 
-            registration = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Registration "
-                    + "(Server_Name VARCHAR(30), Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), Player_Name VARCHAR(30)," +
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Registration "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30), Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), Player_Name VARCHAR(30)," +
                     " Player_UUID VARCHAR(80), Join_Date VARCHAR(30))");
 
             // Server Side Part
-            serverStart = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Server_Start "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Server_Start "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP())");
 
-            serverStop = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Server_Stop "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Server_Stop "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP())");
 
-            consoleCommands = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Console_Commands "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                    "Command VARCHAR(256),PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Console_Commands "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                    "Command VARCHAR(256))");
 
-            ram = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS RAM "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                    "Total_Memory INT,Used_Memory INT,Free_Memory INT,PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS RAM "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                    "Total_Memory INT,Used_Memory INT,Free_Memory INT)");
 
-            tps = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS TPS "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                    "TPS INT,PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS TPS "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                    "TPS INT)");
 
-            portalCreation = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Portal_Creation "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                    "World VARCHAR(100),Caused_By VARCHAR(50),PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Portal_Creation "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                    "World VARCHAR(100),Caused_By VARCHAR(50))");
 
-            rcon = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS RCON "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                    "IP INT UNSIGNED,Command VARCHAR(50),PRIMARY KEY (Date))");
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS RCON "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                    "IP INT UNSIGNED,Command VARCHAR(50))");
 
             // Extras Side Part
             if (EssentialsUtil.getEssentialsAPI() != null) {
 
-                afk = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS AFK "
-                        + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                stsm.executeUpdate("CREATE TABLE IF NOT EXISTS AFK "
+                        + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
                         "World VARCHAR(100),Player_Name VARCHAR(100),X INT,Y INT,Z INT,Is_Staff TINYINT," +
-                        "PRIMARY KEY (Date))");
-
-                afk.executeUpdate();
-                afk.close();
+                        "PRIMARY KEY (id))");
 
                 tablesNames.add("AFK");
             }
 
             if (AuthMeUtil.getAuthMeAPI() != null) {
 
-                wrongPassword = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT " +
-                        "EXISTS Wrong_Password (Server_Name VARCHAR(30)," +
+                stsm.executeUpdate("CREATE TABLE IF NOT " +
+                        "EXISTS Wrong_Password (id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30)," +
                         "Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                        "Player_Name VARCHAR(100),Is_Staff TINYINT,PRIMARY KEY (Date))");
+                        "Player_Name VARCHAR(100),Is_Staff TINYINT)");
 
-                wrongPassword.executeUpdate();
-                wrongPassword.close();
+         
 
                 tablesNames.add("Wrong_Password");
             }
 
             if (VaultUtil.getVaultAPI() && VaultUtil.getVault() != null) {
 
-                vault = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Vault "
-                        + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                stsm.executeUpdate("CREATE TABLE IF NOT EXISTS Vault "
+                        + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
                         "Player_Name VARCHAR(100), Old_Balance DOUBLE, New_Balance DOUBLE, " +
-                        "Is_Staff TINYINT,PRIMARY KEY (Date))");
+                        "Is_Staff TINYINT)");
 
-                vault.executeUpdate();
-                vault.close();
+          
 
                 tablesNames.add("Vault");
             }
 
-            playerChat.executeUpdate();
-            playerChat.close();
-            playerCommands.executeUpdate();
-            playerCommands.close();
-            playerSignText.executeUpdate();
-            playerSignText.close();
-            playerDeath.executeUpdate();
-            playerDeath.close();
-            playerTeleport.executeUpdate();
-            playerTeleport.close();
-            playerJoin.executeUpdate();
-            playerJoin.close();
-            playerLeave.executeUpdate();
-            playerLeave.close();
-            blockPlace.executeUpdate();
-            blockPlace.close();
-            blockBreak.executeUpdate();
-            blockBreak.close();
-            playerKick.executeUpdate();
-            playerKick.close();
-            playerLevel.executeUpdate();
-            playerChat.close();
-            bucketFill.executeUpdate();
-            bucketFill.close();
-            bucketEmpty.executeUpdate();
-            bucketEmpty.close();
-            anvil.executeUpdate();
-            anvil.close();
-            itemDrop.executeUpdate();
-            itemDrop.close();
-            bookEditing.executeUpdate();
-            bookEditing.close();
-            enchant.executeUpdate();
-            enchant.close();
-            itemPickup.executeUpdate();
-            itemPickup.close();
-            furnace.executeUpdate();
-            furnace.close();
-            gameMode.executeUpdate();
-            gameMode.close();
-            craft.executeUpdate();
-            craft.close();
-            registration.executeUpdate();
-            registration.close();
+            stsm.close();
 
-            serverStart.executeUpdate();
-            serverStart.close();
-            serverStop.executeUpdate();
-            serverStop.close();
-            consoleCommands.executeUpdate();
-            consoleCommands.close();
-            ram.executeUpdate();
-            ram.close();
-            tps.executeUpdate();
-            tps.close();
-            portalCreation.executeUpdate();
-            portalCreation.close();
-            rcon.executeUpdate();
-            rcon.close();
 
         }catch (SQLException e){ e.printStackTrace(); }
     }
@@ -274,7 +209,7 @@ public class ExternalData {
             playerChat.setString(3, playerName);
             playerChat.setString(4, msg);
             playerChat.setBoolean(5, staff);
-
+            
             playerChat.executeUpdate();
             playerChat.close();
 
@@ -856,157 +791,113 @@ public class ExternalData {
 
         } catch (SQLException e){ e.printStackTrace(); }
     }
+    public static ResultSet getMessages(String playerName, int offset) {
+        try {
+            
+            PreparedStatement getStatement = plugin.getExternal().getConnection().prepareStatement(
+                    "SELECT Message, id, Date FROM player_chat WHERE Player_Name=? ORDER BY id DESC, Date DESC LIMIT 10 OFFSET ?");
 
+            getStatement.setString(1, playerName);
+            getStatement.setInt(2, offset);
+
+            return getStatement.executeQuery();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+
+        }
+
+    }
     public void emptyTable(){
 
         if (Data.externalDataDel <= 0) return;
 
         try{
-
             // Player Side Part
-            final PreparedStatement player_Chat = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Chat WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            Statement stsm = plugin.getExternal().getConnection().createStatement();
+             stsm.executeUpdate("DELETE FROM Player_Chat WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement player_Commands = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Commands WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Player_Commands WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement player_Sign_Text = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Sign_Text WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Player_Sign_Text WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement player_Join = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Join WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Player_Join WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement player_Leave = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Leave WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Player_Leave WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement player_Kick = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Kick WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Player_Kick WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement player_Death = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Death WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Player_Death WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement player_Teleport = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Teleport WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Player_Teleport WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement player_Level = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Level WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Player_Level WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement block_Place = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Block_Place WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Block_Place WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement block_Break = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Block_Break WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Block_Break WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement bucket_Fill = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Bucket_Fill WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Bucket_Fill WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement bucket_Empty = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Bucket_Empty WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Bucket_Empty WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement anvil = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Anvil WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Anvil WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement item_Drop = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Item_Drop WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Item_Drop WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement enchanting = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Enchanting WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Enchanting WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement book_Editing = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Book_Editing WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Book_Editing WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement item_pickup = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Item_Pickup WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Item_Pickup WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement furnace = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Furnace WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Furnace WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement gameMode = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Game_Mode WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Game_Mode WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement craft = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Crafting WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Crafting WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement register = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Registration WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.executeUpdate("DELETE FROM Registration WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
             // Server Side Part
-            final PreparedStatement server_Start = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Server_Start WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM Server_Start WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement server_Stop = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Server_Stop WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM Server_Stop WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement console_Commands = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Console_Commands WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM Console_Commands WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement ram = plugin.getExternal().getConnection().prepareStatement("DELETE FROM RAM WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM RAM WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement tps = plugin.getExternal().getConnection().prepareStatement("DELETE FROM TPS WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM TPS WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement portal_Creation = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Portal_Creation WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM Portal_Creation WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            final PreparedStatement rcon = plugin.getExternal().getConnection().prepareStatement("DELETE FROM RCON WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM RCON WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
             // Extras Side Part
             if (EssentialsUtil.getEssentialsAPI() != null) {
 
-                final PreparedStatement afk = plugin.getExternal().getConnection().prepareStatement("DELETE FROM AFK WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+                stsm.executeUpdate("DELETE FROM AFK WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-                afk.executeUpdate();
-                afk.close();
+
             }
 
             if (AuthMeUtil.getAuthMeAPI() != null) {
 
-                final PreparedStatement wrong_password = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Wrong_Password WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+                stsm.executeUpdate("DELETE FROM Wrong_Password WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-                wrong_password.executeUpdate();
-                wrong_password.close();
+    
             }
 
             if (VaultUtil.getVaultAPI() && VaultUtil.getVault() != null) {
 
-                final PreparedStatement vault = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Vault WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+                stsm.executeUpdate("DELETE FROM Vault WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-                vault.executeUpdate();
-                vault.close();
+           
             }
 
-            player_Chat.executeUpdate();
-            player_Chat.close();
-            player_Commands.executeUpdate();
-            player_Commands.close();
-            player_Sign_Text.executeUpdate();
-            player_Sign_Text.close();
-            player_Join.executeUpdate();
-            player_Join.close();
-            player_Leave.executeUpdate();
-            player_Leave.close();
-            player_Kick.executeUpdate();
-            player_Kick.close();
-            player_Death.executeUpdate();
-            player_Death.close();
-            player_Teleport.executeUpdate();
-            player_Teleport.close();
-            player_Level.executeUpdate();
-            player_Level.close();
-            block_Place.executeUpdate();
-            block_Place.close();
-            block_Break.executeUpdate();
-            block_Break.close();
-            bucket_Fill.executeUpdate();
-            bucket_Fill.close();
-            bucket_Empty.executeUpdate();
-            bucket_Empty.close();
-            anvil.executeUpdate();
-            anvil.close();
-            item_Drop.executeUpdate();
-            item_Drop.close();
-            enchanting.executeUpdate();
-            enchanting.close();
-            book_Editing.executeUpdate();
-            book_Editing.close();
-            item_pickup.executeUpdate();
-            item_pickup.close();
-            furnace.executeUpdate();
-            furnace.close();
-            gameMode.executeUpdate();
-            gameMode.close();
-            craft.executeUpdate();
-            craft.close();
-            register.executeUpdate();
-            register.close();
-
-            server_Start.executeUpdate();
-            server_Start.close();
-            server_Stop.executeUpdate();
-            server_Stop.close();
-            console_Commands.executeUpdate();
-            console_Commands.close();
-            ram.executeUpdate();
-            ram.close();
-            tps.executeUpdate();
-            tps.close();
-            portal_Creation.executeUpdate();
-            portal_Creation.close();
-            rcon.executeUpdate();
-            rcon.close();
+            stsm.close();
 
         }catch (SQLException e){
 

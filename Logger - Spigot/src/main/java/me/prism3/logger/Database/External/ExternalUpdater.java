@@ -18,52 +18,45 @@ public class ExternalUpdater {
         boolean playerName = false;
 
         if (Data.isExternal && main.getExternal().isConnected()) {
+            final Connection connection = main.getExternal().getConnection();
+            final List<String> tableNames = ExternalData.getTableNames();
+            
 
-            final List<String> index = ExternalData.getTableNames();
-
-            // Primary Key removal Method
+            // Primary Key removal and adding method
             try {
-
-                for (String ignored : index) {
-
-                    final Connection connection = main.getExternal().getConnection();
+                Statement stsm = connection.createStatement();
+                int j = 0;
+                for (j = 0; j< tableNames.size() ;j++) {
                     final DatabaseMetaData databaseMetaData = connection.getMetaData();
-
-                    final ResultSet resultSet = databaseMetaData.getPrimaryKeys(null, null, index.get(i));
-
-                    while (resultSet.next()) {
-
-                        final String primaryKeys = resultSet.getString(4);
-
-                        if (primaryKeys.contains("Date")) {
-
-                            final PreparedStatement ps1 = connection.prepareStatement("ALTER TABLE " + index.get(i) + " DROP PRIMARY KEY");
-                            ps1.executeUpdate();
-                            ps1.close();
-
+                    final ResultSet primaryKeys = databaseMetaData.getPrimaryKeys(Data.dbName, null, tableNames.get(j));
+                    final ResultSet columns = databaseMetaData.getColumns(Data.dbName, null, tableNames.get(j), null);
+                    while (primaryKeys.next()) {
+                        final String pkName = primaryKeys.getString("COLUMN_NAME");
+                        if (pkName.contains("Date")) {
+                            stsm.executeUpdate("ALTER TABLE " + tableNames.get(i) + " DROP PRIMARY KEY");
                             keys = true;
                         }
+                        if(!pkName.contains("id"))
+                        {
+                            stsm.executeUpdate("ALTER TABLE " + tableNames.get(i) + " ADD id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT FIRST");
+
+                        }
                     }
-
-                    // Playername Renaming method
-
-                    final PreparedStatement desc = connection.prepareStatement("DESC " + index.get(i));
-                    final ResultSet query = desc.executeQuery();
-
-                    while (query.next()) {
-
-                        final String field = query.getString("Field");
-
-                        if (field.contains("Playername")) {
-
-                            final PreparedStatement pS2 = connection.prepareStatement("ALTER TABLE " + index.get(i) + " CHANGE Playername Player_Name Varchar(30)");
-                            pS2.executeUpdate();
-                            pS2.close();
-
+                
+                    while(columns.next())
+                    {
+                        
+                        if(columns.getString("COLUMN_NAME").contains("Playername"))
+                        {
+                            stsm.executeUpdate("ALTER TABLE " + tableNames.get(j) + " RENAME COLUMN Playername to Player_Name");
                             playerName = true;
                         }
                     }
-                    i++;
+
+
+                  
+                
+                stsm.close();
                 }
             } catch (Exception e) {
 
@@ -73,5 +66,5 @@ public class ExternalUpdater {
             }
         }
         if (keys && playerName) main.getLogger().info("All Tables have been Updated!");
-    }
+        }
 }
