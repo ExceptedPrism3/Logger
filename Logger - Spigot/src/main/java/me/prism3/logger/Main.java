@@ -176,11 +176,10 @@ public class Main extends JavaPlugin {
         if (isExternal) {
 
             this.external = new External();
-            this.external.connect();
-            new ExternalUpdater();
-
+            this.external.connect();   
             ExternalData externalData = new ExternalData(this);
             if (this.external.isConnected()) {
+                new ExternalUpdater();
                 externalData.createTable();
                 externalData.emptyTable();
             }
