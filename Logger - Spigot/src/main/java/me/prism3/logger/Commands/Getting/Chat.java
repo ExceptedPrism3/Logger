@@ -21,6 +21,7 @@ public class Chat implements CommandExecutor {
             String[] args) {
 
                 boolean containsResult;
+                //Unfinished
         if (args.length == 2) 
         {
             if(!args[1].matches("^[0-9]+$")) {
@@ -55,7 +56,7 @@ public class Chat implements CommandExecutor {
         {
         
             
-          containsResult = Chat.sendResults(ExternalData.getMessages(args[0], 10), sender, args[0]);
+          containsResult = Chat.sendResults(ExternalData.getMessages(args[0], 0), sender, args[0]);
           if(!containsResult) return true;
           sender.spigot().sendMessage(Chat.getTextComponent("next", "/loggerget "+ args[0] + " 10", "Next Page"));
                 

@@ -76,9 +76,8 @@ public class Main extends JavaPlugin {
 
         FileHandler fileHandler = new FileHandler(this.getDataFolder());
         fileHandler.deleteFiles();
-
         this.databaseSetup();
-        new ExternalUpdater();
+        
 
         this.getServer().getPluginManager().registerEvents(new OnPlayerChat(), this);
         this.getServer().getPluginManager().registerEvents(new OnCommand(), this);
@@ -178,6 +177,8 @@ public class Main extends JavaPlugin {
 
             this.external = new External();
             this.external.connect();
+            new ExternalUpdater();
+
             ExternalData externalData = new ExternalData(this);
             if (this.external.isConnected()) {
                 externalData.createTable();
