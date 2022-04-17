@@ -30,6 +30,7 @@ public class ExternalData {
             "Player_Kick", "Player_Level", "Bucket_Fill", "Bucket_Empty", "Anvil", "Item_Drop", "Enchanting",
             "Book_Editing", "Item_Pickup", "Furnace", "Game_Mode", "Crafting", "Registration", "Server_Start",
             "Server_Stop", "Console_Commands", "RAM", "TPS", "Portal_Creation", "RCON").collect(Collectors.toCollection(ArrayList::new));
+    
 
     public void createTable(){
 
@@ -163,9 +164,7 @@ public class ExternalData {
 
                 stsm.executeUpdate("CREATE TABLE IF NOT EXISTS afk "
                         + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                        "World VARCHAR(100),Player_Name VARCHAR(100),X INT,Y INT,Z INT,Is_Staff TINYINT," +
-                        "PRIMARY KEY (id))");
-
+                        "World VARCHAR(100),Player_Name VARCHAR(100),X INT,Y INT,Z INT,Is_Staff TINYINT)");
                 tablesNames.add("AFK");
             }
 
@@ -814,92 +813,99 @@ public class ExternalData {
         if (Data.externalDataDel <= 0) return;
 
         try{
-            // Player Side Part
+            plugin.getExternal().getConnection().setAutoCommit(false);
             Statement stsm = plugin.getExternal().getConnection().createStatement();
-             stsm.executeUpdate("DELETE FROM player_chat WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            // Player Side Part
+             stsm.addBatch("DELETE FROM player_chat WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM player_commands WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM player_commands WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM player_sign_text WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM player_sign_text WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM player_join WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM player_join WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM player_leave WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM player_leave WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM player_kick WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM player_kick WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM player_death WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM player_death WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM player_teleport WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM player_teleport WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM player_level WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM player_level WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM block_place WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM block_place WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM block_break WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM block_break WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM bucket_fill WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM bucket_fill WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM bucket_empty WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM bucket_empty WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM anvil WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM anvil WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM item_drop WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM item_drop WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM enchanting WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM enchanting WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM book_editing WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM book_editing WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM item_pickup WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM item_pickup WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM furnace WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM furnace WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM game_mode WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM game_mode WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM crafting WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM crafting WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM registration WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+             stsm.addBatch("DELETE FROM registration WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
             // Server Side Part
-            stsm.executeUpdate("DELETE FROM server_start WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.addBatch("DELETE FROM server_start WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            stsm.executeUpdate("DELETE FROM server_stop WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.addBatch("DELETE FROM server_stop WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            stsm.executeUpdate("DELETE FROM console_commands WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.addBatch("DELETE FROM console_commands WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            stsm.executeUpdate("DELETE FROM ram WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.addBatch("DELETE FROM ram WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            stsm.executeUpdate("DELETE FROM tps WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.addBatch("DELETE FROM tps WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            stsm.executeUpdate("DELETE FROM portal_creation WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.addBatch("DELETE FROM portal_creation WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
-            stsm.executeUpdate("DELETE FROM rcon WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.addBatch("DELETE FROM rcon WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
             // Extras Side Part
             if (EssentialsUtil.getEssentialsAPI() != null) {
 
-                stsm.executeUpdate("DELETE FROM afk WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+                stsm.addBatch("DELETE FROM afk WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
 
             }
 
             if (AuthMeUtil.getAuthMeAPI() != null) {
 
-                stsm.executeUpdate("DELETE FROM wrong_password WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+                stsm.addBatch("DELETE FROM wrong_password WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
     
             }
 
             if (VaultUtil.getVaultAPI() && VaultUtil.getVault() != null) {
 
-                stsm.executeUpdate("DELETE FROM vault WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+                stsm.addBatch("DELETE FROM vault WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
 
            
             }
-
+            stsm.executeBatch();
+            plugin.getExternal().getConnection().setAutoCommit(true);
             stsm.close();
 
         }catch (SQLException e){
+            try {
+                plugin.getExternal().getConnection().rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
 
             plugin.getLogger().severe("An error has occurred while cleaning the tables, if the error persists, contact the Authors!");
             e.printStackTrace();
