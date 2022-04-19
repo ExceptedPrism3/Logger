@@ -119,11 +119,6 @@ public class ExternalUpdater {
                 System.out.println(TimeUnit.MILLISECONDS.convert(System.nanoTime() - start, TimeUnit.NANOSECONDS));
             } catch (Exception e) {
 
-                try {
-                    connection.rollback();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
                 main.getLogger().severe("Unable to update the tables. If the issue persists contact the Author!");
                 e.printStackTrace();
 
