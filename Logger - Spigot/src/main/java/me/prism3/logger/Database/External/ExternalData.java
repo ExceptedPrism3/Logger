@@ -895,7 +895,6 @@ public class ExternalData {
 
            
             }
-
             stsm.close();
 
         }catch (SQLException e){
