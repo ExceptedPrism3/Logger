@@ -223,7 +223,6 @@ public class PlayerInventoryCommand extends SubCommand implements Listener {
 
         }
 
-        assert armorContent != null;
         lastInv.setItem(36, armorContent[0]);
         lastInv.setItem(37, armorContent[1]);
         lastInv.setItem(38, armorContent[2]);
