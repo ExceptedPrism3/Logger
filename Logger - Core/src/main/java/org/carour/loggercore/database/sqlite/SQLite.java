@@ -1,7 +1,5 @@
 package org.carour.loggercore.database.sqlite;
 
-import net.md_5.bungee.api.ChatColor;
-
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,62 +7,60 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class SQLite {
-    private Connection connection;
-    private final File databaseFile;
-    private final Logger logger;
+	private Connection connection;
+	private final File databaseFile;
+	private final Logger logger;
 
-    public SQLite(File dataFolder, Logger logger) {
-        databaseFile = new File(dataFolder, "LoggerData.db");
-        this.logger = logger;
-    }
+	public SQLite(File dataFolder, Logger logger) {
+		databaseFile = new File(dataFolder, "LoggerData.db");
+		this.logger = logger;
+	}
 
+	public boolean isConnected() {
+		return (connection != null);
+	}
 
-    public boolean isConnected() {
-        return (connection != null);
-    }
+	public void connect() {
 
-    public void connect() {
+		if (!isConnected()) {
 
-        if (!isConnected()) {
+			try {
 
-            try {
+				Class.forName("org.sqlite.JDBC");
+				connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile.getAbsolutePath());
 
-                Class.forName("org.sqlite.JDBC");
-                connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile.getAbsolutePath());
+				logger.info("SQLite Connection has been established!");
 
-                logger.info(ChatColor.GREEN + "SQLite Connection has been established!");
+			} catch (ClassNotFoundException | SQLException e) {
 
+				logger.warning("Couldn't load SQLite Database, if the issue persists contact the Authors!");
 
-            } catch (ClassNotFoundException | SQLException e) {
+				e.printStackTrace();
 
-                logger.warning(ChatColor.RED + "Couldn't load SQLite Database, if the issue persists contact the Authors!");
+			}
+		}
+	}
 
-                e.printStackTrace();
+	public void disconnect() {
 
-            }
-        }
-    }
+		if (isConnected()) {
 
-    public void disconnect() {
+			try {
 
-        if (isConnected()) {
+				logger.info("SQLite Database has been closed!");
 
-            try {
+				connection.close();
 
-                logger.info(ChatColor.GREEN + "SQLite Database has been closed!");
+			} catch (SQLException e) {
 
-                connection.close();
+				logger.warning("SQLite Database couldn't be closed safely, if the issue persists contact the Authors!");
 
-            } catch (SQLException e) {
+			}
+		}
+	}
 
-                logger.warning(ChatColor.RED + "SQLite Database couldn't be closed safely, if the issue persists contact the Authors!");
-
-            }
-        }
-    }
-
-    public Connection getConnection() {
-        return connection;
-    }
+	public Connection getConnection() {
+		return connection;
+	}
 
 }

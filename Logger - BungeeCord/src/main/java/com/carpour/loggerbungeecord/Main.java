@@ -11,10 +11,9 @@ import com.carpour.loggerbungeecord.ServerSide.Start;
 import com.carpour.loggerbungeecord.ServerSide.Stop;
 import com.carpour.loggerbungeecord.Utils.*;
 import net.md_5.bungee.api.plugin.Plugin;
-import org.carour.loggercore.database.mysql.MySQLTemplate;
 import org.carour.loggercore.util.SqlConfiguration;
 
-public final class Main extends Plugin implements MySQLTemplate<Plugin> {
+public final class Main extends Plugin {
 
     private static Main instance;
 

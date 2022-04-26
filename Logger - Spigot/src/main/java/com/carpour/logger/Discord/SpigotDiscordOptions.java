@@ -1,52 +1,60 @@
 package com.carpour.logger.Discord;
 
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.carour.loggercore.discord.DiscordOptions;
 
+import java.io.File;
+import java.io.IOException;
 
 public class SpigotDiscordOptions extends DiscordOptions {
 
-    FileConfiguration fileConfiguration;
+	File configFile;
 
-    public SpigotDiscordOptions(FileConfiguration fileConfiguration) {
-        this.fileConfiguration = fileConfiguration;
-        construct();
-    }
+	public SpigotDiscordOptions(File file) {
+		super(file);
+		this.configFile = file;
+	}
 
-    @Override
-    protected DiscordOptions construct() {
-        return construct(fileConfiguration);
-    }
+	@Override
+	protected void construct() {
+		FileConfiguration config = new YamlConfiguration();
+		File file = configFile;
+		try {
+			config.load(file);
+		} catch (IOException | InvalidConfigurationException e) {
+			throw new RuntimeException(e);
+		}
 
-    private DiscordOptions construct(FileConfiguration fileConfiguration) {
-        this.setStaffEnabled(fileConfiguration.getBoolean("Staff.Enabled"));
-        this.setPlayerChatEnabled(fileConfiguration.getBoolean("Log.Player-Chat"));
-        this.setPlayerCommandsEnabled(fileConfiguration.getBoolean("Log.Player-Commands"));
-        this.setPlayerCommandsEnabled(fileConfiguration.getBoolean("Log.Player-Commands"));
-        this.setConsoleCommandsEnabled(fileConfiguration.getBoolean("Log.Console-Commands"));
-        this.setPlayerSignTextEnabled(fileConfiguration.getBoolean("Log.Player-Sign-Text"));
-        this.setPlayerJoinEnabled(fileConfiguration.getBoolean("Log.Player-Join"));
-        this.setPlayerLeaveEnabled(fileConfiguration.getBoolean("Log.Player-Leave"));
-        this.setPlayerKickEnabled(fileConfiguration.getBoolean("Log.Player-Kick"));
-        this.setPlayerDeathEnabled(fileConfiguration.getBoolean("Log.Player-Death"));
-        this.setPlayerTeleportEnabled(fileConfiguration.getBoolean("Log.Player-Teleport"));
-        this.setPlayerLevelEnabled(fileConfiguration.getBoolean("Log.Player-Level"));
-        this.setBlockPlaceEnabled(fileConfiguration.getBoolean("Log.Block-Place"));
-        this.setBlockBreakEnabled(fileConfiguration.getBoolean("Log.Block-Break"));
-        this.setPortalCreateEnabled(fileConfiguration.getBoolean("Log.Portal-Creation"));
-        this.setBucketPlaceEnabled(fileConfiguration.getBoolean("Log.Bucket-Place"));
-        this.setAnvilUseEnabled(fileConfiguration.getBoolean("Log.Anvil"));
-        this.setTpsEnabled(fileConfiguration.getBoolean("Log.TPS"));
-        this.setRamEnabled(fileConfiguration.getBoolean("Log.RAM"));
-        this.setServerStartEnabled(fileConfiguration.getBoolean("Log.Server-Start"));
-        this.setServerStopEnabled(fileConfiguration.getBoolean("Log.Server-Stop"));
-        this.setItemDropEnabled(fileConfiguration.getBoolean("Log.Item-Drop"));
-        this.setEnchantEnabled(fileConfiguration.getBoolean("Log.Enchant"));
-        this.setBookEditEnabled(fileConfiguration.getBoolean("Log.Book-Editing"));
-        this.setAfkEnabled(fileConfiguration.getBoolean("Log.AFK"));
-        this.setItemPickupEnabled(fileConfiguration.getBoolean("Log.Item-Pickup"));
-        this.setFurnaceEnabled(fileConfiguration.getBoolean("Log.Furnace"));
+		this.setStaffEnabled(config.getBoolean("Staff.Enabled"));
+		this.setPlayerChatEnabled(config.getBoolean("Log.Player-Chat"));
+		this.setPlayerCommandsEnabled(config.getBoolean("Log.Player-Commands"));
+		this.setPlayerCommandsEnabled(config.getBoolean("Log.Player-Commands"));
+		this.setConsoleCommandsEnabled(config.getBoolean("Log.Console-Commands"));
+		this.setPlayerSignTextEnabled(config.getBoolean("Log.Player-Sign-Text"));
+		this.setPlayerJoinEnabled(config.getBoolean("Log.Player-Join"));
+		this.setPlayerLeaveEnabled(config.getBoolean("Log.Player-Leave"));
+		this.setPlayerKickEnabled(config.getBoolean("Log.Player-Kick"));
+		this.setPlayerDeathEnabled(config.getBoolean("Log.Player-Death"));
+		this.setPlayerTeleportEnabled(config.getBoolean("Log.Player-Teleport"));
+		this.setPlayerLevelEnabled(config.getBoolean("Log.Player-Level"));
+		this.setBlockPlaceEnabled(config.getBoolean("Log.Block-Place"));
+		this.setBlockBreakEnabled(config.getBoolean("Log.Block-Break"));
+		this.setPortalCreateEnabled(config.getBoolean("Log.Portal-Creation"));
+		this.setBucketPlaceEnabled(config.getBoolean("Log.Bucket-Place"));
+		this.setAnvilUseEnabled(config.getBoolean("Log.Anvil"));
+		this.setTpsEnabled(config.getBoolean("Log.TPS"));
+		this.setRamEnabled(config.getBoolean("Log.RAM"));
+		this.setServerStartEnabled(config.getBoolean("Log.Server-Start"));
+		this.setServerStopEnabled(config.getBoolean("Log.Server-Stop"));
+		this.setItemDropEnabled(config.getBoolean("Log.Item-Drop"));
+		this.setEnchantEnabled(config.getBoolean("Log.Enchant"));
+		this.setBookEditEnabled(config.getBoolean("Log.Book-Editing"));
+		this.setAfkEnabled(config.getBoolean("Log.AFK"));
+		this.setItemPickupEnabled(config.getBoolean("Log.Item-Pickup"));
+		this.setFurnaceEnabled(config.getBoolean("Log.Furnace"));
 
-        return this;
-    }
+	}
+
 }

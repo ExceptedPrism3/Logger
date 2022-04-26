@@ -1,0 +1,9 @@
+#Idea Folders and Files
+.idea
+*.iml
+
+#Target Folders
+*/target/
+
+#Maven Files
+dependency-reduced-pom.xml

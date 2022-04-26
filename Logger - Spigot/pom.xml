@@ -107,7 +107,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.26</version>
+            <version>8.0.28</version>
         </dependency>
         <dependency>
             <groupId>net.essentialsx</groupId>
@@ -124,13 +124,12 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.3.0</version>
+            <version>42.3.4</version>
         </dependency>
         <dependency>
             <groupId>com.carpour</groupId>
             <artifactId>Logger-Core</artifactId>
             <version>1.7</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

@@ -1,6 +1,5 @@
 package org.carour.loggercore.database.mysql;
 
-import net.md_5.bungee.api.ChatColor;
 import org.carour.loggercore.util.SqlConfiguration;
 
 import java.sql.Connection;
@@ -10,69 +9,70 @@ import java.util.logging.Logger;
 
 public class MySQL {
 
+	private final String host;
+	private final int port;
+	private final String username;
+	private final String password;
+	private final String database;
+	private Connection connection;
 
-    private final String host;
-    private final int port;
-    private final String username;
-    private final String password;
-    private final String database;
-    private Connection connection;
+	private final Logger logger;
 
-    private final Logger logger;
+	public MySQL(SqlConfiguration sqlConfiguration, Logger logger) {
+		this.host = sqlConfiguration.host();
+		this.port = sqlConfiguration.port();
+		this.username = sqlConfiguration.username();
+		this.password = sqlConfiguration.password();
+		this.database = sqlConfiguration.database();
 
-    public MySQL(SqlConfiguration sqlConfiguration, Logger logger) {
-        this.host = sqlConfiguration.getHost();
-        this.port = sqlConfiguration.getPort();
-        this.username = sqlConfiguration.getUsername();
-        this.password = sqlConfiguration.getPassword();
-        this.database = sqlConfiguration.getDatabase();
+		this.logger = logger;
+	}
 
-        this.logger = logger;
-    }
+	public boolean isConnected() {
+		return connection != null;
+	}
 
-    public boolean isConnected() {
-        return connection != null;
-    }
+	public void connect() {
 
-    public void connect() {
+		if (!isConnected()) {
 
-        if (!isConnected()) {
+			try {
 
-            try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				connection = DriverManager.getConnection(
+						"jdbc:mysql://" + host + ":" + port + "/" + database + "?AllowPublicKeyRetrieval=true?useSSL=false&jdbcCompliantTruncation=false",
+						username, password);
 
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?AllowPublicKeyRetrieval=true?useSSL=false&jdbcCompliantTruncation=false", username, password);
-                    logger.info(ChatColor.GREEN + "MySQL Connection has been established!");
+				logger.info("MySQL Connection has been established!");
 
-            } catch (SQLException | ClassNotFoundException e) {
+			} catch (SQLException | ClassNotFoundException e) {
 
-                    logger.warning(ChatColor.RED + "Could not connect to the MySQL Database!");
+				logger.warning("Could not connect to the MySQL Database!");
 
-            }
-        }
-    }
+			}
+		}
+	}
 
-    public void disconnect() {
+	public void disconnect() {
 
-        if (isConnected()) {
+		if (isConnected()) {
 
-            try {
+			try {
 
-                connection.close();
+				connection.close();
 
-                    logger.info(ChatColor.GREEN + "MySQL Connection has been closed!");
+				logger.info("MySQL Connection has been closed!");
 
-            } catch (SQLException e) {
+			} catch (SQLException e) {
 
-                    logger.warning(ChatColor.RED + "MySQL Database couldn't be closed safely, if the issue persists contact the Authors!");
+				logger.warning("MySQL Database couldn't be closed safely, if the issue persists contact the Authors!");
 
+			}
+		}
+	}
 
-            }
-        }
-    }
-
-    public Connection getConnection() {
-        return connection;
-    }
+	public Connection getConnection() {
+		return connection;
+	}
 
 }

@@ -7,263 +7,216 @@ import com.carpour.logger.Events.onCommands.OnCommand;
 import com.carpour.logger.Events.onInventories.OnFurnace;
 import com.carpour.logger.ServerSide.*;
 import com.carpour.logger.Utils.*;
+import com.carpour.logger.logging.SpigotLoggingOptions;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.carour.loggercore.database.mysql.MySQL;
 import org.carour.loggercore.database.mysql.MySQLData;
-import org.carour.loggercore.database.mysql.MySQLTemplate;
 import org.carour.loggercore.database.postgresql.PostgreSQL;
 import org.carour.loggercore.database.postgresql.PostgreSQLData;
-import org.carour.loggercore.database.postgresql.PostgreSQLTemplate;
 import org.carour.loggercore.database.sqlite.SQLite;
 import org.carour.loggercore.database.sqlite.SQLiteData;
-import org.carour.loggercore.database.sqlite.SQLiteTemplate;
 import org.carour.loggercore.discord.Discord;
-import org.carour.loggercore.discord.DiscordFile;
 import org.carour.loggercore.discord.DiscordOptions;
+import org.carour.loggercore.logging.LoggingOptions;
 import org.carour.loggercore.util.SqlConfiguration;
 
+import java.io.File;
 import java.util.Objects;
 
 @Getter
-public class Main extends JavaPlugin implements MySQLTemplate<JavaPlugin>, SQLiteTemplate<JavaPlugin>, PostgreSQLTemplate<JavaPlugin> {
+@Setter
+public class Main extends JavaPlugin {
 
-    private static Main instance;
+	private static Main instance;
 
-    public MySQL mySQL;
-    public MySQLData<Main> mySQLData;
+	public MySQL mySQL;
+	public MySQLData mySQLData;
 
-    private SQLite sqLite;
-    private SQLiteData<?> sqLiteData;
+	private SQLite sqLite;
+	private SQLiteData sqLiteData;
 
-    private PostgreSQL postgreSQL;
-    private PostgreSQLData<?> postgreSQLData;
+	private PostgreSQL postgreSQL;
+	private PostgreSQLData postgreSQLData;
 
-    public Start start;
-    public Stop stop;
+	public Start start;
+	public Stop stop;
 
-    public Discord discord;
-    private DiscordOptions discordOptions;
+	public Discord discord;
+	private DiscordOptions discordOptions;
 
-    public SQLite getSqLite() {
-        return sqLite;
-    }
+	private LoggingOptions loggingOptions;
 
-    public SQLiteData<?> getSqLiteData() {
-        return sqLiteData;
-    }
+	@Override
+	public void onEnable() {
+		instance = this;
 
+		saveDefaultConfig();
+		getConfig().options().copyDefaults();
 
-    @Override
-    public PostgreSQL getPostgreSQL() {
-        return postgreSQL;
-    }
+		Messages.Setup();
+		Messages.get().options().copyDefaults(true);
+		Messages.save();
 
-    public PostgreSQLData<?> getPostgreSQLData() {
-        return postgreSQLData;
-    }
+		discordOptions = new SpigotDiscordOptions(new File(getDataFolder(), "discord.yml"));
 
-    @Override
-    public void onEnable() {
-        instance = this;
+		discord = new Discord(discordOptions, getLogger());
+		discord.run();
 
-        saveDefaultConfig();
-        getConfig().options().copyDefaults();
+		loggingOptions = new SpigotLoggingOptions(new File(getDataFolder(), "config.yml"));
 
-        Messages.Setup();
-        Messages.get().options().copyDefaults(true);
-        Messages.save();
+		if (getConfig().getBoolean("MySQL.Enable")) {
 
-        DiscordFile.setup(getDataFolder());
-        DiscordFile.values();
-        DiscordFile.get().options().copyDefaults(true);
-        DiscordFile.save();
+			SqlConfiguration sqlConfiguration = new SqlConfiguration(
+					getConfig().getString("MySQL.Host"),
+					getConfig().getInt("MySQL.Port"),
+					getConfig().getString("MySQL.Database"),
+					getConfig().getString("MySQL.Username"),
+					getConfig().getString("MySQL.Password")
+			);
 
-        discord = new Discord(discordOptions);
-        discord.run();
+			mySQL = new MySQL(sqlConfiguration, getLogger());
+			mySQL.connect();
+			mySQLData = new MySQLData(mySQL, loggingOptions, getLogger());
+			if (mySQL.isConnected())
+				mySQLData.createTable();
+			mySQLData.emptyTable();
 
-        discordOptions = new SpigotDiscordOptions(getConfig());
+		}
 
-        if (getConfig().getBoolean("MySQL.Enable")) {
+		if (getConfig().getBoolean("SQLite.Enable")) {
 
-            SqlConfiguration sqlConfiguration = new SqlConfiguration(
-                    getConfig().getString("MySQL.Host"),
-                    Integer.parseInt(getConfig().getString("MySQL.Port")),
-                    getConfig().getString("MySQL.Database"),
-                    getConfig().getString("MySQL.Username"),
-                    getConfig().getString("MySQL.Password")
-            );
+			sqLite = new SQLite(getDataFolder(), getLogger());
+			sqLite.connect();
+			sqLiteData = new SQLiteData(sqLite);
+			if (sqLite.isConnected()) {
+				sqLiteData.createTable();
+			}
+			sqLiteData.emptyTable();
 
-            mySQL = new MySQL(sqlConfiguration, getLogger());
-            mySQL.connect();
-            mySQLData = new MySQLData<>(this);
-            if (mySQL.isConnected()) mySQLData.createTable();
-            mySQLData.emptyTable();
+		}
 
-        }
+		if (getConfig().getBoolean("PostgreSQL.Enable")) {
 
-        if (getConfig().getBoolean("SQLite.Enable")) {
+			SqlConfiguration sqlConfiguration = new SqlConfiguration(getConfig().getString("PostgreSQL.Host"),
+					Integer.parseInt(getConfig().getString("PostgreSQL.Port")),
+					getConfig().getString("PostgreSQL.Database"),
+					getConfig().getString("PostgreSQL.Username"),
+					getConfig().getString("PostgreSQL.Password"));
 
-            sqLite = new SQLite(getDataFolder(), getLogger());
-            sqLite.connect();
-            sqLiteData = new SQLiteData<>(this);
-            if (sqLite.isConnected()) {
-                sqLiteData.createTable();
-            }
-            sqLiteData.emptyTable();
+			postgreSQL = new PostgreSQL(sqlConfiguration, getLogger());
+			postgreSQL.connect();
 
-        }
+			postgreSQLData = new PostgreSQLData(postgreSQL);
 
-        if (getConfig().getBoolean("PostgreSQL.Enable")) {
+			if (postgreSQL.isConnected()) {
+				postgreSQLData.createTable();
+			}
+			/*postgreSQLData.emptyTable();*/
 
-            SqlConfiguration sqlConfiguration = new SqlConfiguration(getConfig().getString("PostgreSQL.Host"),
-                    Integer.parseInt(getConfig().getString("PostgreSQL.Port")),
-                    getConfig().getString("PostgreSQL.Database"),
-                    getConfig().getString("PostgreSQL.Username"),
-                    getConfig().getString("PostgreSQL.Password"));
+		}
 
+		if (getConfig().getBoolean("Log-to-Files") && getConfig().getBoolean("SQLite.Enable")) {
 
-            postgreSQL = new PostgreSQL(sqlConfiguration, getLogger());
-            postgreSQL.connect();
+			getLogger().warning("Logging to Files and SQLite are both enabled, this might impact your Server's Performance!");
 
-            postgreSQLData = new PostgreSQLData<>(this);
+		}
 
-            if (postgreSQL.isConnected()) {
-                postgreSQLData.createTable();
-            }
-            /*postgreSQLData.emptyTable();*/
+		FileHandler fileHandler = new FileHandler(getDataFolder());
+		fileHandler.deleteFiles();
 
-        }
+		getServer().getPluginManager().registerEvents(new OnChat(), this);
+		getServer().getPluginManager().registerEvents(new OnCommand(), this);
+		getServer().getPluginManager().registerEvents(new Console(), this);
+		getServer().getPluginManager().registerEvents(new OnSign(), this);
+		getServer().getPluginManager().registerEvents(new OnPlayerJoin(), this);
+		getServer().getPluginManager().registerEvents(new OnPlayerLeave(), this);
+		getServer().getPluginManager().registerEvents(new OnPlayerKick(), this);
+		getServer().getPluginManager().registerEvents(new OnPlayerDeath(), this);
+		getServer().getPluginManager().registerEvents(new OnPlayerTeleport(), this);
+		getServer().getPluginManager().registerEvents(new OnPlayerLevel(), this);
+		getServer().getPluginManager().registerEvents(new OnBlockPlace(), this);
+		getServer().getPluginManager().registerEvents(new OnBlockBreak(), this);
+		getServer().getPluginManager().registerEvents(new PortalCreation(), this);
+		getServer().getPluginManager().registerEvents(new OnBucketPlace(), this);
+		getServer().getPluginManager().registerEvents(new OnAnvil(), this);
+		getServer().getPluginManager().registerEvents(new OnItemPickup(), this);
+		getServer().getPluginManager().registerEvents(new OnItemDrop(), this);
+		getServer().getPluginManager().registerEvents(new OnEnchant(), this);
+		getServer().getPluginManager().registerEvents(new OnBook(), this);
 
-        if (getConfig().getBoolean("Log-to-Files") && getConfig().getBoolean("SQLite.Enable")) {
+		getServer().getPluginManager().registerEvents(new OnFurnace(), this);
+		//        getServer().getPluginManager().registerEvents(new onShulker(), this);
+		//        getServer().getPluginManager().registerEvents(new OnChest(), this);
 
-            getLogger().warning("Logging to Files and SQLite are both enabled, this might impact your Server's Performance!");
+		getServer().getScheduler().scheduleSyncRepeatingTask(this, new TPS(), 200L, getConfig().getInt("RAM-TPS-Checker"));
+		getServer().getScheduler().scheduleSyncRepeatingTask(this, new RAM(), 200L, getConfig().getInt("RAM-TPS-Checker"));
 
-        }
+		Objects.requireNonNull(getCommand("logger")).setExecutor(new OnLogger());
 
-        FileHandler fileHandler = new FileHandler(getDataFolder());
-        fileHandler.deleteFiles();
+		if (getAPI() != null) {
 
-        getServer().getPluginManager().registerEvents(new OnChat(), this);
-        getServer().getPluginManager().registerEvents(new OnCommand(), this);
-        getServer().getPluginManager().registerEvents(new Console(), this);
-        getServer().getPluginManager().registerEvents(new OnSign(), this);
-        getServer().getPluginManager().registerEvents(new OnPlayerJoin(), this);
-        getServer().getPluginManager().registerEvents(new OnPlayerLeave(), this);
-        getServer().getPluginManager().registerEvents(new OnPlayerKick(), this);
-        getServer().getPluginManager().registerEvents(new OnPlayerDeath(), this);
-        getServer().getPluginManager().registerEvents(new OnPlayerTeleport(), this);
-        getServer().getPluginManager().registerEvents(new OnPlayerLevel(), this);
-        getServer().getPluginManager().registerEvents(new OnBlockPlace(), this);
-        getServer().getPluginManager().registerEvents(new OnBlockBreak(), this);
-        getServer().getPluginManager().registerEvents(new PortalCreation(), this);
-        getServer().getPluginManager().registerEvents(new OnBucketPlace(), this);
-        getServer().getPluginManager().registerEvents(new OnAnvil(), this);
-        getServer().getPluginManager().registerEvents(new OnItemPickup(), this);
-        getServer().getPluginManager().registerEvents(new OnItemDrop(), this);
-        getServer().getPluginManager().registerEvents(new OnEnchant(), this);
-        getServer().getPluginManager().registerEvents(new OnBook(), this);
+			getServer().getPluginManager().registerEvents(new OnAFK(), this);
 
-        getServer().getPluginManager().registerEvents(new OnFurnace(), this);
-//        getServer().getPluginManager().registerEvents(new onShulker(), this);
-//        getServer().getPluginManager().registerEvents(new OnChest(), this);
+			getServer().getLogger().info("[Logger] Essentials Plugin was Found!");
 
+		}
 
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new TPS(), 200L, getConfig().getInt("RAM-TPS-Checker"));
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new RAM(), 200L, getConfig().getInt("RAM-TPS-Checker"));
+		new ASCIIArt().art();
 
-        Objects.requireNonNull(getCommand("logger")).setExecutor(new OnLogger());
+		//bstats
 
-        if (getAPI() != null) {
+		new Metrics(this, 12036);
 
-            getServer().getPluginManager().registerEvents(new OnAFK(), this);
+		//Update Checker
+		new UpdateChecker(this).checkForUpdate();
 
-            getServer().getLogger().info("[Logger] Essentials Plugin was Found!");
+		getServer().getConsoleSender().sendMessage(
+				"[Logger] " + ChatColor.GOLD + "Thank you " + ChatColor.GREEN + ChatColor.BOLD + "thelooter" + ChatColor.GOLD + " for the Contribution!");
 
-        }
+		getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.GREEN + "Plugin Enabled!");
 
-        new ASCIIArt().art();
+		start = new Start(this);
+		start.run();
+	}
 
-        //bstats
+	public static Main getInstance() {
+		return instance;
+	}
 
-        new Metrics(this, 12036);
 
-        //Update Checker
-        new UpdateChecker(this).checkForUpdate();
+	public Essentials getAPI() {
 
-        getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.GOLD + "Thank you " + ChatColor.GREEN + ChatColor.BOLD + "thelooter" + ChatColor.GOLD + " for the Contribution!");
+		IEssentials essentials = (IEssentials) Bukkit.getPluginManager().getPlugin("Essentials");
 
-        getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.GREEN + "Plugin Enabled!");
+		if (essentials instanceof Essentials) {
 
-        start = new Start();
-        start.run();
-    }
+			return (Essentials) essentials;
 
-    public static Main getInstance() {
-        return instance;
-    }
+		} else
+			return null;
+	}
 
-    @Override
-    public void setMySQL(MySQL mySQL) {
-        this.mySQL = mySQL;
-    }
+	@Override
+	public void onDisable() {
 
-    @Override
-    public MySQL getMySQL() {
-        return this.mySQL;
-    }
+		stop = new Stop();
+		stop.run();
 
-    @Override
-    public void setSQLite(SQLite sqLite) {
-        this.sqLite = sqLite;
-    }
+		if (getConfig().getBoolean("MySQL.Enable") && mySQL.isConnected())
+			mySQL.disconnect();
 
-    @Override
-    public SQLite getSQLite() {
-        return this.sqLite;
-    }
+		if (getConfig().getBoolean("SQLite.Enable") && sqLite.isConnected())
+			sqLite.disconnect();
 
-    @Override
-    public void setPostgreSQL(PostgreSQL postgreSQL) {
-        this.postgreSQL = postgreSQL;
-    }
+		discord.disconnect();
 
+		getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.RED + "Plugin Disabled!");
 
-    @Override
-    public Essentials getAPI() {
-
-        IEssentials essentials = (IEssentials) Bukkit.getPluginManager().getPlugin("Essentials");
-
-        if (essentials instanceof Essentials) {
-
-            return (Essentials) essentials;
-
-        } else return null;
-    }
-
-
-    @Override
-    public JavaPlugin getPlugin() {
-        return instance;
-    }
-
-    @Override
-    public void onDisable() {
-
-        stop = new Stop();
-        stop.run();
-
-        if (getConfig().getBoolean("MySQL.Enable") && mySQL.isConnected()) mySQL.disconnect();
-
-        if (getConfig().getBoolean("SQLite.Enable") && sqLite.isConnected()) sqLite.disconnect();
-
-        discord.disconnect();
-
-        getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.RED + "Plugin Disabled!");
-
-    }
+	}
 }

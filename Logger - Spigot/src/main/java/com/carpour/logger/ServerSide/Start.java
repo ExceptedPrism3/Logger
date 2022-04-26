@@ -1,7 +1,7 @@
 package com.carpour.logger.ServerSide;
 
-import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
+import lombok.RequiredArgsConstructor;
 import org.carour.loggercore.database.mysql.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
 import org.carour.loggercore.database.sqlite.SQLiteData;
@@ -15,9 +15,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
+@RequiredArgsConstructor
 public class Start {
 
-    private final Main main = Main.getInstance();
+    private final Main main;
+
 
     public void run(){
 

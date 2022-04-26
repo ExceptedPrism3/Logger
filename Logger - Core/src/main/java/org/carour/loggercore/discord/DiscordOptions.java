@@ -1,48 +1,80 @@
 package org.carour.loggercore.discord;
 
-
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 import java.io.File;
 
 @Getter
 @Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public abstract class DiscordOptions {
 
-    File file;
+	File file;
 
-    private boolean staffEnabled;
-    private boolean playerChatEnabled;
-    private boolean playerCommandsEnabled;
-    private boolean consoleCommandsEnabled;
-    private boolean playerSignTextEnabled;
-    private boolean playerJoinEnabled;
-    private boolean playerLeaveEnabled;
-    private boolean playerKickEnabled;
-    private boolean playerDeathEnabled;
-    private boolean playerTeleportEnabled;
-    private boolean playerLevelEnabled;
-    private boolean blockBreakEnabled;
-    private boolean blockPlaceEnabled;
-    private boolean portalCreateEnabled;
-    private boolean bucketPlaceEnabled;
-    private boolean anvilUseEnabled;
-    private boolean tpsEnabled;
-    private boolean ramEnabled;
-    private boolean serverStartEnabled;
-    private boolean serverStopEnabled;
-    private boolean itemDropEnabled;
-    private boolean itemPickupEnabled;
-    private boolean enchantEnabled;
-    private boolean bookEditEnabled;
-    private boolean furnaceEnabled;
-    private boolean afkEnabled;
+	boolean enabled;
+	String token;
 
-    public DiscordOptions() {
-    }
+	boolean staffEnabled;
+	boolean playerChatEnabled;
+	boolean playerCommandsEnabled;
+	boolean consoleCommandsEnabled;
+	boolean playerSignTextEnabled;
+	boolean playerJoinEnabled;
+	boolean playerLeaveEnabled;
+	boolean playerKickEnabled;
+	boolean playerDeathEnabled;
+	boolean playerTeleportEnabled;
+	boolean playerLevelEnabled;
+	boolean blockBreakEnabled;
+	boolean blockPlaceEnabled;
+	boolean portalCreateEnabled;
+	boolean bucketPlaceEnabled;
+	boolean anvilUseEnabled;
+	boolean tpsEnabled;
+	boolean ramEnabled;
+	boolean serverStartEnabled;
+	boolean serverStopEnabled;
+	boolean itemDropEnabled;
+	boolean itemPickupEnabled;
+	boolean enchantEnabled;
+	boolean bookEditEnabled;
+	boolean furnaceEnabled;
+	boolean afkEnabled;
 
+	String staffChannelID;
+	String playerChatChannelID;
+	String playerCommandsChannelID;
+	String consoleCommandsChannelID;
+	String playerSignTextChannelID;
+	String playerJoinChannelID;
+	String playerLeaveChannelID;
+	String playerKickChannelID;
+	String playerDeathChannelID;
+	String playerTeleportChannelID;
+	String playerLevelChannelID;
+	String blockBreakChannelID;
+	String blockPlaceChannelID;
+	String portalCreateChannelID;
+	String bucketPlaceChannelID;
+	String anvilUseChannelID;
+	String tpsChannelID;
+	String ramChannelID;
+	String serverStartChannelID;
+	String serverStopChannelID;
+	String itemDropChannelID;
+	String itemPickupChannelID;
+	String enchantChannelID;
+	String bookEditChannelID;
+	String furnaceChannelID;
+	String afkChannelID;
 
-    protected abstract DiscordOptions construct();
+	public DiscordOptions(File file) {
+		this.file = file;
+	}
+
+	protected abstract void construct();
 
 }

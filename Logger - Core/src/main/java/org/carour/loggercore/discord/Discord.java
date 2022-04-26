@@ -5,473 +5,489 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 
 import javax.security.auth.login.LoginException;
+import java.util.UUID;
+import java.util.logging.Logger;
 
 @Getter
 public class Discord {
 
-    private final DiscordOptions options;
-    private static JDA jda;
+	private final Logger logger;
 
-    private static TextChannel staffChannel;
-    private static TextChannel playerChatChannel;
-    private static TextChannel playerCommandsChannel;
-    private static TextChannel consoleChannel;
-    private static TextChannel playerSignTextChannel;
-    private static TextChannel playerJoinChannel;
-    private static TextChannel playerLeaveChannel;
-    private static TextChannel playerKickChannel;
-    private static TextChannel playerDeathChannel;
-    private static TextChannel playerTeleportChannel;
-    private static TextChannel playerLevelChannel;
-    private static TextChannel blockPlaceChannel;
-    private static TextChannel blockBreakChannel;
-    private static TextChannel portalCreationChannel;
-    private static TextChannel bucketPlaceChannel;
-    private static TextChannel anvilChannel;
-    private static TextChannel TPSChannel;
-    private static TextChannel RAMChannel;
-    private static TextChannel serverStartChannel;
-    private static TextChannel serverStopChannel;
-    private static TextChannel itemDropChannel;
-    private static TextChannel enchantingChannel;
-    private static TextChannel bookEditingChannel;
-    private static TextChannel afkChannel;
-    private static TextChannel itemPickupChannel;
-    private static TextChannel furnaceChannel;
+	private final DiscordOptions options;
+	private static JDA jda;
 
-    public Discord(DiscordOptions options) {
-        this.options = options;
-    }
+	private static TextChannel staffChannel;
+	private static TextChannel playerChatChannel;
+	private static TextChannel playerCommandsChannel;
+	private static TextChannel consoleChannel;
+	private static TextChannel playerSignTextChannel;
+	private static TextChannel playerJoinChannel;
+	private static TextChannel playerLeaveChannel;
+	private static TextChannel playerKickChannel;
+	private static TextChannel playerDeathChannel;
+	private static TextChannel playerTeleportChannel;
+	private static TextChannel playerLevelChannel;
+	private static TextChannel blockPlaceChannel;
+	private static TextChannel blockBreakChannel;
+	private static TextChannel portalCreationChannel;
+	private static TextChannel bucketPlaceChannel;
+	private static TextChannel anvilChannel;
+	private static TextChannel TPSChannel;
+	private static TextChannel RAMChannel;
+	private static TextChannel serverStartChannel;
+	private static TextChannel serverStopChannel;
+	private static TextChannel itemDropChannel;
+	private static TextChannel enchantingChannel;
+	private static TextChannel bookEditingChannel;
+	private static TextChannel afkChannel;
+	private static TextChannel itemPickupChannel;
+	private static TextChannel furnaceChannel;
 
-    public void run() {
+	public Discord(DiscordOptions options, Logger logger) {
+		this.options = options;
+		this.logger = logger;
+	}
 
-        if (DiscordFile.get().getBoolean("Discord.Enable")) {
+	public void run() {
 
-            String botToken = DiscordFile.get().getString("Discord.Bot-Token");
+		if (options.isEnabled()) {
 
-            try {
+			String botToken = options.getToken();
 
-                jda = JDABuilder.createDefault(botToken).build().awaitReady();
+			try {
 
-            } catch (InterruptedException | LoginException e) {
+				jda = JDABuilder.createDefault(botToken).build().awaitReady();
 
-                Bukkit.getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.RED + "An error has occurred whilst connecting to the Bot." +
-                        " Is the Bot Key Valid?");
-                return;
+			} catch (InterruptedException | LoginException e) {
 
-            }
+				logger.severe("An error has occurred whilst connecting to the Bot. Is the Bot Key Valid?");
 
-            String staffChannelID = DiscordFile.get().getString("Discord.Staff.Channel-ID");
+				return;
 
-            String playerChatChannelID = DiscordFile.get().getString("Discord.Player-Chat.Channel-ID");
+			}
 
-            String playerCommandsChannelID = DiscordFile.get().getString("Discord.Player-Commands.Channel-ID");
+			String staffChannelID = options.getStaffChannelID();
 
-            String consoleChannelID = DiscordFile.get().getString("Discord.Console-Commands.Channel-ID");
+			String playerChatChannelID = options.getPlayerChatChannelID();
 
-            String playerSignTextChannelID = DiscordFile.get().getString("Discord.Player-Sign-Text.Channel-ID");
+			String playerCommandsChannelID = options.getPlayerCommandsChannelID();
 
-            String playerJoinChannelID = DiscordFile.get().getString("Discord.Player-Join.Channel-ID");
+			String consoleCommandsChannelID = options.getConsoleCommandsChannelID();
 
-            String playerLeaveChannelID = DiscordFile.get().getString("Discord.Player-Leave.Channel-ID");
+			String playerSignTextChannelID = options.getPlayerSignTextChannelID();
 
-            String playerKickChannelID = DiscordFile.get().getString("Discord.Player-Kick.Channel-ID");
+			String playerJoinChannelID = options.getPlayerJoinChannelID();
 
-            String playerDeathChannelID = DiscordFile.get().getString("Discord.Player-Death.Channel-ID");
+			String playerLeaveChannelID = options.getPlayerLeaveChannelID();
 
-            String playerTeleportChannelID = DiscordFile.get().getString("Discord.Player-Teleport.Channel-ID");
+			String playerKickChannelID = options.getPlayerKickChannelID();
 
-            String playerLevelChannelID = DiscordFile.get().getString("Discord.Player-Level.Channel-ID");
+			String playerDeathChannelID = options.getPlayerDeathChannelID();
 
-            String blockPlaceChannelID = DiscordFile.get().getString("Discord.Block-Place.Channel-ID");
+			String playerTeleportChannelID = options.getPlayerTeleportChannelID();
 
-            String blockBreakChannelID = DiscordFile.get().getString("Discord.Block-Break.Channel-ID");
+			String playerLevelChannelID = options.getPlayerLevelChannelID();
 
-            String portalCreationChannelID = DiscordFile.get().getString("Discord.Portal-Creation.Channel-ID");
+			String blockPlaceChannelID = options.getBlockPlaceChannelID();
 
-            String bucketPlaceChannelID = DiscordFile.get().getString("Discord.Bucket-Place.Channel-ID");
+			String blockBreakChannelID = options.getBlockBreakChannelID();
 
-            String anvilChannelID = DiscordFile.get().getString("Discord.Anvil.Channel-ID");
+			String portalCreationChannelID = options.getPortalCreateChannelID();
 
-            String TPSChannelID = DiscordFile.get().getString("Discord.TPS.Channel-ID");
+			String bucketPlaceChannelID = options.getBucketPlaceChannelID();
 
-            String RAMChannelID = DiscordFile.get().getString("Discord.RAM.Channel-ID");
+			String anvilChannelID = options.getAnvilUseChannelID();
 
-            String serverStartChannelID = DiscordFile.get().getString("Discord.Server-Start.Channel-ID");
+			String TPSChannelID = options.getTpsChannelID();
 
-            String serverStopChannelID = DiscordFile.get().getString("Discord.Server-Stop.Channel-ID");
+			String RAMChannelID = options.getRamChannelID();
 
-            String itemDropChannelID = DiscordFile.get().getString("Discord.Item-Drop.Channel-ID");
+			String serverStartChannelID = options.getServerStartChannelID();
 
-            String enchantingChannelID = DiscordFile.get().getString("Discord.Enchanting.Channel-ID");
+			String serverStopChannelID = options.getServerStopChannelID();
 
-            String bookEditingChannelID = DiscordFile.get().getString("Discord.Book-Editing.Channel-ID");
+			String itemDropChannelID = options.getItemDropChannelID();
 
-            String afkChannelID = DiscordFile.get().getString("Discord.AFK.Channel-ID");
+			String enchantingChannelID = options.getEnchantChannelID();
 
-            String itemPickupChannelID = DiscordFile.get().getString("Discord.Item-Pickup.Channel-ID");
+			String bookEditingChannelID = options.getBookEditChannelID();
 
-            String furnaceChannelID = DiscordFile.get().getString("Discord.Furnace.Channel-ID");
+			String afkChannelID = options.getAfkChannelID();
 
+			String itemPickupChannelID = options.getItemPickupChannelID();
 
-            if (staffChannelID != null && options.isStaffEnabled() && !staffChannelID.equals("LINK_HERE")) {
+			String furnaceChannelID = options.getFurnaceChannelID();
 
-                staffChannel = jda.getTextChannelById(staffChannelID);
+			if (staffChannelID != null && options.isStaffEnabled() && !staffChannelID.equals("LINK_HERE")) {
 
-            }
+				staffChannel = jda.getTextChannelById(options.getStaffChannelID());
 
-            if (playerChatChannelID != null && options.isPlayerChatEnabled() && !playerChatChannelID.equals("LINK_HERE")) {
+			}
 
-                playerChatChannel = jda.getTextChannelById(playerChatChannelID);
+			if (playerChatChannelID != null && options.isPlayerChatEnabled() && !playerChatChannelID.equals("LINK_HERE")) {
 
-            }
+				playerChatChannel = jda.getTextChannelById(playerChatChannelID);
 
-            if (playerCommandsChannelID != null && options.isPlayerCommandsEnabled() && !playerCommandsChannelID.equals("LINK_HERE")) {
+			}
 
-                playerCommandsChannel = jda.getTextChannelById(playerCommandsChannelID);
+			if (playerCommandsChannelID != null && options.isPlayerCommandsEnabled() && !playerCommandsChannelID.equals("LINK_HERE")) {
 
-            }
+				playerCommandsChannel = jda.getTextChannelById(playerCommandsChannelID);
 
-            if (consoleChannelID != null && options.isConsoleCommandsEnabled() && !consoleChannelID.equals("LINK_HERE")) {
+			}
 
-                consoleChannel = jda.getTextChannelById(consoleChannelID);
+			if (consoleCommandsChannelID != null && options.isConsoleCommandsEnabled() && !consoleCommandsChannelID.equals("LINK_HERE")) {
 
-            }
+				consoleChannel = jda.getTextChannelById(consoleCommandsChannelID);
 
-            if (playerSignTextChannelID != null && options.isPlayerSignTextEnabled() && !playerSignTextChannelID.equals("LINK_HERE")) {
+			}
 
-                playerSignTextChannel = jda.getTextChannelById(playerSignTextChannelID);
+			if (playerSignTextChannelID != null && options.isPlayerSignTextEnabled() && !playerSignTextChannelID.equals("LINK_HERE")) {
 
-            }
+				playerSignTextChannel = jda.getTextChannelById(playerSignTextChannelID);
 
-            if (playerJoinChannelID != null && options.isPlayerJoinEnabled() && !playerJoinChannelID.equals("LINK_HERE")) {
+			}
 
-                playerJoinChannel = jda.getTextChannelById(playerJoinChannelID);
+			if (playerJoinChannelID != null && options.isPlayerJoinEnabled() && !playerJoinChannelID.equals("LINK_HERE")) {
 
-            }
+				playerJoinChannel = jda.getTextChannelById(playerJoinChannelID);
 
-            if (playerLeaveChannelID != null && options.isPlayerLeaveEnabled() && !playerLeaveChannelID.equals("LINK_HERE")) {
+			}
 
-                playerLeaveChannel = jda.getTextChannelById(playerLeaveChannelID);
+			if (playerLeaveChannelID != null && options.isPlayerLeaveEnabled() && !playerLeaveChannelID.equals("LINK_HERE")) {
 
-            }
+				playerLeaveChannel = jda.getTextChannelById(playerLeaveChannelID);
 
-            if (playerKickChannelID != null && options.isPlayerKickEnabled() && !playerKickChannelID.equals("LINK_HERE")) {
+			}
 
-                playerKickChannel = jda.getTextChannelById(playerKickChannelID);
+			if (playerKickChannelID != null && options.isPlayerKickEnabled() && !playerKickChannelID.equals("LINK_HERE")) {
 
-            }
+				playerKickChannel = jda.getTextChannelById(playerKickChannelID);
 
-            if (playerDeathChannelID != null && options.isPlayerDeathEnabled() && !playerDeathChannelID.equals("LINK_HERE")) {
+			}
 
-                playerDeathChannel = jda.getTextChannelById(playerDeathChannelID);
+			if (playerDeathChannelID != null && options.isPlayerDeathEnabled() && !playerDeathChannelID.equals("LINK_HERE")) {
 
-            }
+				playerDeathChannel = jda.getTextChannelById(playerDeathChannelID);
 
-            if (playerTeleportChannelID != null && options.isPlayerTeleportEnabled() && !playerTeleportChannelID.equals("LINK_HERE")) {
+			}
 
-                playerTeleportChannel = jda.getTextChannelById(playerTeleportChannelID);
+			if (playerTeleportChannelID != null && options.isPlayerTeleportEnabled() && !playerTeleportChannelID.equals("LINK_HERE")) {
 
-            }
+				playerTeleportChannel = jda.getTextChannelById(playerTeleportChannelID);
 
-            if (playerLevelChannelID != null && options.isPlayerLevelEnabled() && !playerLevelChannelID.equals("LINK_HERE")) {
+			}
 
-                playerLevelChannel = jda.getTextChannelById(playerLevelChannelID);
+			if (playerLevelChannelID != null && options.isPlayerLevelEnabled() && !playerLevelChannelID.equals("LINK_HERE")) {
 
-            }
+				playerLevelChannel = jda.getTextChannelById(playerLevelChannelID);
 
-            if (blockPlaceChannelID != null && options.isBlockPlaceEnabled() && !blockPlaceChannelID.equals("LINK_HERE")) {
+			}
 
-                blockPlaceChannel = jda.getTextChannelById(blockPlaceChannelID);
+			if (blockPlaceChannelID != null && options.isBlockPlaceEnabled() && !blockPlaceChannelID.equals("LINK_HERE")) {
 
-            }
+				blockPlaceChannel = jda.getTextChannelById(blockPlaceChannelID);
 
-            if (blockBreakChannelID != null && options.isBlockBreakEnabled() && !blockBreakChannelID.equals("LINK_HERE")) {
+			}
 
-                blockBreakChannel = jda.getTextChannelById(blockBreakChannelID);
+			if (blockBreakChannelID != null && options.isBlockBreakEnabled() && !blockBreakChannelID.equals("LINK_HERE")) {
 
-            }
+				blockBreakChannel = jda.getTextChannelById(blockBreakChannelID);
 
-            if (portalCreationChannelID != null && options.isPortalCreateEnabled() && !portalCreationChannelID.equals("LINK_HERE")) {
+			}
 
-                portalCreationChannel = jda.getTextChannelById(portalCreationChannelID);
+			if (portalCreationChannelID != null && options.isPortalCreateEnabled() && !portalCreationChannelID.equals("LINK_HERE")) {
 
-            }
+				portalCreationChannel = jda.getTextChannelById(portalCreationChannelID);
 
-            if (bucketPlaceChannelID != null && options.isBucketPlaceEnabled() && !bucketPlaceChannelID.equals("LINK_HERE")) {
+			}
 
-                bucketPlaceChannel = jda.getTextChannelById(bucketPlaceChannelID);
+			if (bucketPlaceChannelID != null && options.isBucketPlaceEnabled() && !bucketPlaceChannelID.equals("LINK_HERE")) {
 
-            }
+				bucketPlaceChannel = jda.getTextChannelById(bucketPlaceChannelID);
 
-            if (anvilChannelID != null && options.isAnvilUseEnabled() && !anvilChannelID.equals("LINK_HERE")) {
+			}
 
-                anvilChannel = jda.getTextChannelById(anvilChannelID);
+			if (anvilChannelID != null && options.isAnvilUseEnabled() && !anvilChannelID.equals("LINK_HERE")) {
 
-            }
+				anvilChannel = jda.getTextChannelById(anvilChannelID);
 
-            if (TPSChannelID != null && options.isTpsEnabled() && !TPSChannelID.equals("LINK_HERE")) {
+			}
 
-                TPSChannel = jda.getTextChannelById(TPSChannelID);
+			if (TPSChannelID != null && options.isTpsEnabled() && !TPSChannelID.equals("LINK_HERE")) {
 
-            }
+				TPSChannel = jda.getTextChannelById(TPSChannelID);
 
-            if (RAMChannelID != null && options.isRamEnabled() && !RAMChannelID.equals("LINK_HERE")) {
+			}
 
-                RAMChannel = jda.getTextChannelById(RAMChannelID);
+			if (RAMChannelID != null && options.isRamEnabled() && !RAMChannelID.equals("LINK_HERE")) {
 
-            }
+				RAMChannel = jda.getTextChannelById(RAMChannelID);
 
-            if (serverStartChannelID != null && options.isServerStartEnabled() && !serverStartChannelID.equals("LINK_HERE")) {
+			}
 
-                serverStartChannel = jda.getTextChannelById(serverStartChannelID);
+			if (serverStartChannelID != null && options.isServerStartEnabled() && !serverStartChannelID.equals("LINK_HERE")) {
 
-            }
+				serverStartChannel = jda.getTextChannelById(serverStartChannelID);
 
-            if (serverStopChannelID != null && options.isServerStopEnabled() && !serverStopChannelID.equals("LINK_HERE")) {
+			}
 
-                serverStopChannel = jda.getTextChannelById(serverStopChannelID);
+			if (serverStopChannelID != null && options.isServerStopEnabled() && !serverStopChannelID.equals("LINK_HERE")) {
 
-            }
+				serverStopChannel = jda.getTextChannelById(serverStopChannelID);
 
-            if (itemDropChannelID != null && options.isItemDropEnabled() && !itemDropChannelID.equals("LINK_HERE")) {
+			}
 
-                itemDropChannel = jda.getTextChannelById(itemDropChannelID);
+			if (itemDropChannelID != null && options.isItemDropEnabled() && !itemDropChannelID.equals("LINK_HERE")) {
 
-            }
+				itemDropChannel = jda.getTextChannelById(itemDropChannelID);
 
-            if (enchantingChannelID != null && options.isEnchantEnabled() && !enchantingChannelID.equals("LINK_HERE")) {
+			}
 
-                enchantingChannel = jda.getTextChannelById(enchantingChannelID);
+			if (enchantingChannelID != null && options.isEnchantEnabled() && !enchantingChannelID.equals("LINK_HERE")) {
 
-            }
+				enchantingChannel = jda.getTextChannelById(enchantingChannelID);
 
-            if (bookEditingChannelID != null && options.isBookEditEnabled() && !bookEditingChannelID.equals("LINK_HERE")) {
+			}
 
-                bookEditingChannel = jda.getTextChannelById(bookEditingChannelID);
+			if (bookEditingChannelID != null && options.isBookEditEnabled() && !bookEditingChannelID.equals("LINK_HERE")) {
 
-            }
+				bookEditingChannel = jda.getTextChannelById(bookEditingChannelID);
 
-            if (afkChannelID != null && options.isAfkEnabled() && !afkChannelID.equals("LINK_HERE")) {
+			}
 
-                afkChannel = jda.getTextChannelById(afkChannelID);
+			if (afkChannelID != null && options.isAfkEnabled() && !afkChannelID.equals("LINK_HERE")) {
 
-            }
+				afkChannel = jda.getTextChannelById(afkChannelID);
 
-            if (itemPickupChannelID != null && options.isItemPickupEnabled() && !itemPickupChannelID.equals("LINK_HERE")) {
+			}
 
-                itemPickupChannel = jda.getTextChannelById(itemPickupChannelID);
+			if (itemPickupChannelID != null && options.isItemPickupEnabled() && !itemPickupChannelID.equals("LINK_HERE")) {
 
-            }
+				itemPickupChannel = jda.getTextChannelById(itemPickupChannelID);
 
-            if (furnaceChannelID != null && options.isFurnaceEnabled() && !furnaceChannelID.equals("LINK_HERE")) {
+			}
 
-                furnaceChannel = jda.getTextChannelById(furnaceChannelID);
+			if (furnaceChannelID != null && options.isFurnaceEnabled() && !furnaceChannelID.equals("LINK_HERE")) {
 
-            }
-        }
-    }
+				furnaceChannel = jda.getTextChannelById(furnaceChannelID);
 
-    public void sendStaffChat(Player player, String content, boolean contentinAuthorLine) {
+			}
+		}
+	}
 
-        discordUtil(player, content, contentinAuthorLine, staffChannel);
+	public void sendStaffChat(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    }
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, staffChannel);
 
-    public void sendPlayerChat(Player player, String content, boolean contentInAuthorLine) {
+	}
 
-        discordUtil(player, content, contentInAuthorLine, playerChatChannel);
-    }
+	public void sendPlayerChat(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    public void sendPlayerCommand(Player player, String content, boolean contentinAuthorLine) {
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, playerChatChannel);
+	}
 
-        discordUtil(player, content, contentinAuthorLine, playerCommandsChannel);
-    }
+	public void sendPlayerCommand(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    public void sendConsole(String content, boolean contentinAuthorLine) {
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, playerCommandsChannel);
+	}
 
-        if (consoleChannel == null) return;
+	public void sendConsole(String content, boolean contentInAuthorLine) {
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("Console");
+		if (consoleChannel == null)
+			return;
 
-        if (!contentinAuthorLine) builder.setDescription(content);
+		EmbedBuilder builder = new EmbedBuilder().setAuthor("Console");
 
-        consoleChannel.sendMessage(builder.build()).queue();
-    }
+		if (!contentInAuthorLine)
+			builder.setDescription(content);
 
-    public void sendPlayerSignText(Player player, String content, boolean contentinAuthorLine) {
+		consoleChannel.sendMessage(builder.build()).queue();
+	}
 
-        discordUtil(player, content, contentinAuthorLine, playerSignTextChannel);
-    }
+	public void sendPlayerSignText(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    public void sendPlayerJoin(Player player, String content, boolean contentinAuthorLine) {
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, playerSignTextChannel);
+	}
 
-        discordUtil(player, content, contentinAuthorLine, playerJoinChannel);
-    }
+	public void sendPlayerJoin(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    public void sendPlayerLeave(Player player, String content, boolean contentinAuthorLine) {
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, playerJoinChannel);
+	}
 
-        discordUtil(player, content, contentinAuthorLine, playerLeaveChannel);
-    }
+	public void sendPlayerLeave(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    public void sendPlayerKick(Player player, String content, boolean contentinAuthorLine) {
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, playerLeaveChannel);
+	}
 
-        discordUtil(player, content, contentinAuthorLine, playerKickChannel);
-    }
+	public void sendPlayerKick(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    public void sendPlayerDeath(Player player, String content, boolean contentinAuthorLine) {
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, playerKickChannel);
+	}
 
-        discordUtil(player, content, contentinAuthorLine, playerDeathChannel);
-    }
+	public void sendPlayerDeath(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    public void sendPlayerTeleport(Player player, String content, boolean contentinAuthorLine) {
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, playerDeathChannel);
+	}
 
-        discordUtil(player, content, contentinAuthorLine, playerTeleportChannel);
-    }
+	public void sendPlayerTeleport(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    public void sendPlayerLevel(Player player, String content, boolean contentinAuthorLine) {
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, playerTeleportChannel);
+	}
 
-        discordUtil(player, content, contentinAuthorLine, playerLevelChannel);
-    }
+	public void sendPlayerLevel(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    public void sendBlockPlace(Player player, String content, boolean contentinAuthorLine) {
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, playerLevelChannel);
+	}
 
-        discordUtil(player, content, contentinAuthorLine, blockPlaceChannel);
-    }
+	public void sendBlockPlace(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    public void sendBlockBreak(Player player, String content, boolean contentinAuthorLine) {
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, blockPlaceChannel);
+	}
 
-        discordUtil(player, content, contentinAuthorLine, blockBreakChannel);
-    }
+	public void sendBlockBreak(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    public void sendPortalCreation(String content, boolean contentinAuthorLine) {
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, blockBreakChannel);
+	}
 
-        if (portalCreationChannel == null) return;
+	public void sendPortalCreation(String content, boolean contentInAuthorLine) {
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("Portal Creation");
+		if (portalCreationChannel == null)
+			return;
 
-        if (!contentinAuthorLine) builder.setDescription(content);
+		EmbedBuilder builder = new EmbedBuilder().setAuthor("Portal Creation");
 
-        portalCreationChannel.sendMessage(builder.build()).queue();
-    }
+		if (!contentInAuthorLine)
+			builder.setDescription(content);
 
-    public void sendBucketPlace(Player player, String content, boolean contentinAuthorLine) {
+		portalCreationChannel.sendMessage(builder.build()).queue();
+	}
 
-        discordUtil(player, content, contentinAuthorLine, bucketPlaceChannel);
-    }
+	public void sendBucketPlace(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    public void sendAnvil(Player player, String content, boolean contentinAuthorLine) {
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, bucketPlaceChannel);
+	}
 
-        discordUtil(player, content, contentinAuthorLine, anvilChannel);
-    }
+	public void sendAnvil(String playerName, UUID playerUUID,String content, boolean contentInAuthorLine) {
 
-    public void sendTPS(String content, boolean contentinAuthorLine) {
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, anvilChannel);
+	}
 
-        if (TPSChannel == null) return;
+	public void sendTPS(String content, boolean contentInAuthorLine) {
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("TPS");
+		if (TPSChannel == null)
+			return;
 
-        if (!contentinAuthorLine) builder.setDescription(content);
+		EmbedBuilder builder = new EmbedBuilder().setAuthor("TPS");
 
-        TPSChannel.sendMessage(builder.build()).queue();
-    }
+		if (!contentInAuthorLine)
+			builder.setDescription(content);
 
-    public void sendRAM(String content, boolean contentinAuthorLine) {
+		TPSChannel.sendMessage(builder.build()).queue();
+	}
 
-        if (RAMChannel == null) return;
+	public void sendRAM(String content, boolean contentInAuthorLine) {
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("RAM");
+		if (RAMChannel == null)
+			return;
 
-        if (!contentinAuthorLine) builder.setDescription(content);
+		EmbedBuilder builder = new EmbedBuilder().setAuthor("RAM");
 
-        RAMChannel.sendMessage(builder.build()).queue();
-    }
+		if (!contentInAuthorLine)
+			builder.setDescription(content);
 
-    public void sendServerStart(String content, boolean contentinAuthorLine) {
+		RAMChannel.sendMessage(builder.build()).queue();
+	}
 
-        if (serverStartChannel == null) return;
+	public void sendServerStart(String content, boolean contentInAuthorLine) {
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Start");
+		if (serverStartChannel == null)
+			return;
 
-        if (!contentinAuthorLine) builder.setDescription(content);
+		EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Start");
 
-        serverStartChannel.sendMessage(builder.build()).queue();
-    }
+		if (!contentInAuthorLine)
+			builder.setDescription(content);
 
-    public void sendServerStop(String content, boolean contentinAuthorLine) {
+		serverStartChannel.sendMessage(builder.build()).queue();
+	}
 
-        if (serverStopChannel == null) return;
+	public void sendServerStop(String content, boolean contentInAuthorLine) {
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Stop");
+		if (serverStopChannel == null)
+			return;
 
-        if (!contentinAuthorLine) builder.setDescription(content);
+		EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Stop");
 
-        serverStopChannel.sendMessage(builder.build()).queue();
-    }
+		if (!contentInAuthorLine)
+			builder.setDescription(content);
 
-    public void sendItemDrop(Player player, String content, boolean contentinAuthorLine) {
+		serverStopChannel.sendMessage(builder.build()).queue();
+	}
 
-        discordUtil(player, content, contentinAuthorLine, itemDropChannel);
-    }
+	public void sendItemDrop(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    public void sendEnchanting(Player player, String content, boolean contentinAuthorLine) {
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, itemDropChannel);
+	}
 
-        discordUtil(player, content, contentinAuthorLine, enchantingChannel);
-    }
+	public void sendEnchanting(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    public void sendBookEditing(Player player, String content, boolean contentinAuthorLine) {
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, enchantingChannel);
+	}
 
-        discordUtil(player, content, contentinAuthorLine, bookEditingChannel);
-    }
+	public void sendBookEditing(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    public void sendAfk(Player player, String content, boolean contentinAuthorLine) {
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, bookEditingChannel);
+	}
 
-        discordUtil(player, content, contentinAuthorLine, afkChannel);
-    }
+	public void sendAfk(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    public void sendItemPickup(Player player, String content, boolean contentinAuthorLine) {
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, afkChannel);
+	}
 
-        discordUtil(player, content, contentinAuthorLine, itemPickupChannel);
-    }
+	public void sendItemPickup(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    public void sendFurnace(Player player, String content, boolean contentinAuthorLine) {
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, itemPickupChannel);
+	}
 
-        discordUtil(player, content, contentinAuthorLine, furnaceChannel);
-    }
+	public void sendFurnace(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-    private void discordUtil(Player player, String content, boolean contentinAuthorLine, TextChannel channel) {
-        if (channel == null) return;
+		discordUtil(playerName,playerUUID, content, contentInAuthorLine, furnaceChannel);
+	}
 
-        EmbedBuilder builder = new EmbedBuilder().setAuthor(contentinAuthorLine ? content : player.getName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
+	private void discordUtil(String playerName, UUID uuid, String content, boolean contentInAuthorLine, TextChannel channel) {
+		if (channel == null)
+			return;
 
-        if (!contentinAuthorLine) builder.setDescription(content);
+		EmbedBuilder builder = new EmbedBuilder().setAuthor(contentInAuthorLine ? content : playerName,
+				null, "https://crafatar.com/avatars/" + uuid + "?overlay=1");
 
-        channel.sendMessage(builder.build()).queue();
-    }
+		if (!contentInAuthorLine)
+			builder.setDescription(content);
 
-    public void disconnect() {
+		channel.sendMessage(builder.build()).queue();
+	}
 
-        if (jda != null) {
-            try {
+	public void disconnect() {
 
-                jda.shutdown();
-                jda = null;
-                Bukkit.getServer().getConsoleSender().sendMessage("[Logger] " + ChatColor.GREEN + "Discord Bot Bridge has been closed!");
+		if (jda != null) {
+			try {
 
-            } catch (Exception e) {
+				jda.shutdown();
+				jda = null;
 
-                Bukkit.getServer().getLogger().warning("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
-                        "If this Issue Persists, Contact the Authors!");
+				logger.info("Discord Bot Bridge has been closed!");
+				
+			} catch (Exception e) {
+				
+				logger.severe("The Connection between the Server and the Discord Bot didn't Shutdown down Safely. If this Issue Persists, Contact the Authors!");
+				
 
-                e.printStackTrace();
+				e.printStackTrace();
 
-            }
-        }
-    }
+			}
+		}
+	}
 }
