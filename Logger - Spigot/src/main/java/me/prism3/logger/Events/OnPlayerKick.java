@@ -64,7 +64,7 @@ public class OnPlayerKick implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.playerKick(Data.serverName, worldName, playerName, x, y, z, reason, true);
+                        ExternalData.playerKick(Data.serverName, player, x, y, z, reason, true);
 
                     }
 
@@ -116,7 +116,7 @@ public class OnPlayerKick implements Listener {
 
                 try {
 
-                    ExternalData.playerKick(Data.serverName, worldName, playerName, x, y, z, reason, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.playerKick(Data.serverName, player, x, y, z, reason, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

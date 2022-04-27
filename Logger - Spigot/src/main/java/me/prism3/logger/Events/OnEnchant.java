@@ -83,7 +83,7 @@ public class OnEnchant implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.enchant(Data.serverName, worldName, playerName, x, y, z, enchs, enchantmentLevel, item, cost, true);
+                        ExternalData.enchant(Data.serverName, player, x, y, z, enchs, enchantmentLevel, item, cost, true);
 
                     }
 
@@ -135,7 +135,7 @@ public class OnEnchant implements Listener {
 
                 try {
 
-                    ExternalData.enchant(Data.serverName, worldName, playerName, x, y, z, enchs, enchantmentLevel, item, cost, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.enchant(Data.serverName, player, x, y, z, enchs, enchantmentLevel, item, cost, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

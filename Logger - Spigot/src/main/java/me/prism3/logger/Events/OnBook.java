@@ -77,7 +77,7 @@ public class OnBook implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.bookEditing(Data.serverName, worldName, playerName, pageCount, pageContent, signature, true);
+                        ExternalData.bookEditing(Data.serverName, player, pageCount, pageContent, signature, true);
 
                     }
                     if (Data.isSqlite && this.main.getSqLite().isConnected()) {
@@ -128,7 +128,7 @@ public class OnBook implements Listener {
 
                 try {
 
-                    ExternalData.bookEditing(Data.serverName, worldName, playerName, pageCount, pageContent, signature, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.bookEditing(Data.serverName, player, pageCount, pageContent, signature, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

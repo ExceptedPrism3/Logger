@@ -2,12 +2,13 @@ package me.prism3.loggerbungeecord.Database.SQLite;
 
 import me.prism3.loggerbungeecord.API.LiteBansUtil;
 import me.prism3.loggerbungeecord.Main;
-import me.prism3.loggerbungeecord.Utils.Data;
 
 import java.net.InetSocketAddress;
 import java.sql.*;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+
+import static me.prism3.loggerbungeecord.Utils.Data.sqliteDataDel;
 
 public class SQLiteData {
 
@@ -26,42 +27,42 @@ public class SQLiteData {
         try {
 
             // Player Side Part
-            playerChat = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Chat_Proxy" +
-                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, Player_Name TEXT(30)," +
-                    "Message TEXT(256), Is_Staff INTEGER)");
+            playerChat = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_chat_proxy" +
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, player_name TEXT(30)," +
+                    "message TEXT(256), is_staff INTEGER)");
 
-            playerCommands = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Commands_Proxy" +
-                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, Player_Name TEXT(30)," +
-                    "Command TEXT(100), Is_Staff INTEGER)");
+            playerCommands = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_commands_proxy" +
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, player_name TEXT(30)," +
+                    "command TEXT(100), is_staff INTEGER)");
 
-            playerLogin = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Login_Proxy" +
-                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%f', 'now')) ," +
-                    "Player_Name TEXT(30), IP TEXT, Is_Staff INTEGER)");
+            playerLogin = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_login_proxy" +
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%f', 'now')) ," +
+                    "player_name TEXT(30), ip TEXT, is_staff INTEGER)");
 
-            playerLeave = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Leave_Proxy " +
-                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, Player_Name TEXT(30), Is_Staff INTEGER)");
+            playerLeave = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_leave_proxy " +
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, player_name TEXT(30), is_staff INTEGER)");
 
             // Server Side Part
-            serverReload = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Server_Reload_Proxy" +
-                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, Player_Name TEXT(30), Command TEXT(256), Is_Staff INTEGER)");
+            serverReload = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS server_reload_proxy" +
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, player_name TEXT(30), command TEXT(256), is_staff INTEGER)");
 
-            serverStart = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Server_Start_Proxy" +
-                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
+            serverStart = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS server_start_proxy" +
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
 
-            serverStop = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Server_Stop_Proxy" +
-                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
+            serverStop = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS server_stop_proxy" +
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
 
-            ram = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS RAM_Proxy" +
-                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
-                    " Total_Memory INTEGER, Used_Memory INTEGER, Free_Memory INTEGER)");
+            ram = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS ram_proxy" +
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+                    " total_memory INTEGER, used_memory INTEGER, free_memory INTEGER)");
 
             // Extra Side Part
             if (LiteBansUtil.getLiteBansAPI() != null) {
 
-                liteBans = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS LiteBans_Proxy" +
-                        "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
-                        " Sender TEXT(30), Command TEXT(10), OnWho TEXT(30), Reason TEXT(60)," +
-                        " Duration TEXT(50), Is_Silent INTEGER)");
+                liteBans = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS litebans_proxy" +
+                        "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+                        " sender TEXT(30), command TEXT(10), onwho TEXT(30), reason TEXT(60)," +
+                        " duration TEXT(50), is_silent INTEGER)");
 
                 liteBans.executeUpdate();
                 liteBans.close();
@@ -95,7 +96,7 @@ public class SQLiteData {
         try {
 
             final PreparedStatement playerChat = plugin.getSqLite().getConnection().prepareStatement(
-                    "INSERT INTO Player_Chat_Proxy (Server_Name, Date, Player_Name, Message, Is_Staff) VALUES (?,?,?,?,?)");
+                    "INSERT INTO player_chat_proxy (server_name, date, player_name, message, is_staff) VALUES (?,?,?,?,?)");
 
             playerChat.setString(1, serverName);
             playerChat.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
@@ -114,7 +115,7 @@ public class SQLiteData {
         try {
 
             final PreparedStatement playerCommands = plugin.getSqLite().getConnection().prepareStatement(
-                    "INSERT INTO Player_Commands_Proxy (Server_Name, Date, Player_Name, Command, Is_Staff) VALUES (?,?,?,?,?)");
+                    "INSERT INTO player_commands_proxy (server_name, date, player_name, command, is_staff) VALUES (?,?,?,?,?)");
 
             playerCommands.setString(1, serverName);
             playerCommands.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
@@ -128,19 +129,19 @@ public class SQLiteData {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    public static void insertPlayerLogin(String serverName, String player, InetSocketAddress IP, boolean isStaff) {
+    public static void insertPlayerLogin(String serverName, String player, InetSocketAddress ip, boolean isStaff) {
 
         try {
 
             final PreparedStatement playerLogin = plugin.getSqLite().getConnection().prepareStatement(
-                    "INSERT INTO Player_Login_Proxy (Server_Name, Date, Player_Name, IP, Is_Staff) VALUES (?,?,?,?,?)");
+                    "INSERT INTO player_login_proxy (server_name, date, player_name, ip, is_staff) VALUES (?,?,?,?,?)");
 
             playerLogin.setString(1, serverName);
             playerLogin.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
             playerLogin.setString(3, player);
-            if (plugin.getConfig().getBoolean("Player-Login.Player-IP")) {
+            if (plugin.getConfig().getBoolean("Player-Login.Player-ip")) {
 
-                playerLogin.setString(4, IP.getHostString());
+                playerLogin.setString(4, ip.getHostString());
 
             }else{
 
@@ -159,7 +160,7 @@ public class SQLiteData {
         try {
 
             final PreparedStatement playerLeave = plugin.getSqLite().getConnection().prepareStatement(
-                    "INSERT INTO Player_Leave_Proxy (Server_Name, Date, Player_Name, Is_Staff) VALUES (?,?,?,?)");
+                    "INSERT INTO player_leave_proxy (server_name, date, player_name, is_staff) VALUES (?,?,?,?)");
 
             playerLeave.setString(1, serverName);
             playerLeave.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
@@ -178,7 +179,7 @@ public class SQLiteData {
         try {
 
             final PreparedStatement serverReload = plugin.getSqLite().getConnection().prepareStatement(
-                    "INSERT INTO Server_Reload_Proxy (Server_Name, Date, Player_Name, Is_Staff) VALUES (?,?,?,?)");
+                    "INSERT INTO server_reload_proxy (server_name, date, player_name, is_staff) VALUES (?,?,?,?)");
 
             serverReload.setString(1, serverName);
             serverReload.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
@@ -196,7 +197,7 @@ public class SQLiteData {
         try {
 
             final PreparedStatement serverStartStatement = plugin.getSqLite().getConnection().prepareStatement(
-                    "INSERT INTO Server_Start_Proxy (Server_Name, Date) VALUES (?,?)");
+                    "INSERT INTO server_start_proxy (server_name, date) VALUES (?,?)");
 
             serverStartStatement.setString(1, serverName);
             serverStartStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
@@ -212,7 +213,7 @@ public class SQLiteData {
         try {
 
             final PreparedStatement serverStopStatement = plugin.getSqLite().getConnection().prepareStatement(
-                    "INSERT INTO Server_Stop_Proxy (Server_Name, Date) VALUES (?,?)");
+                    "INSERT INTO server_stop_proxy (server_name, date) VALUES (?,?)");
 
             serverStopStatement.setString(1, serverName);
             serverStopStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
@@ -228,7 +229,7 @@ public class SQLiteData {
         try {
 
             final PreparedStatement ramStatement = plugin.getSqLite().getConnection().prepareStatement(
-                    "INSERT INTO RAM_Proxy (Server_Name, Date, Total_Memory, Used_Memory, Free_Memory) VALUES (?,?,?,?,?)");
+                    "INSERT INTO ram_proxy (server_name, date, total_memory, used_memory, free_memory) VALUES (?,?,?,?,?)");
 
             ramStatement.setString(1, serverName);
             ramStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
@@ -247,8 +248,8 @@ public class SQLiteData {
         try {
 
             final PreparedStatement liteBansStatement = plugin.getSqLite().getConnection().prepareStatement(
-                    "INSERT INTO LiteBans_Proxy (Server_Name, Date, Sender, Command, OnWho, Reason, " +
-                            "Duration, Is_Silent) VALUES(?,?,?,?,?,?,?,?)");
+                    "INSERT INTO litebans_proxy (server_name, date, sender, command, onwho, reason, " +
+                            "duration, is_silent) VALUES(?,?,?,?,?,?,?,?)");
 
             liteBansStatement.setString(1, serverName);
             liteBansStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
@@ -268,32 +269,32 @@ public class SQLiteData {
 
     public void emptyTable() {
 
-        if (Data.sqliteDataDel <= 0) return;
+        if (sqliteDataDel <= 0) return;
 
         try{
 
             // Player Side Part
-            final PreparedStatement player_Chat = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Chat_Proxy WHERE Date <= datetime('now','-" + Data.sqliteDataDel + " day')");
+            final PreparedStatement player_Chat = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM player_chat_proxy WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
-            final PreparedStatement player_Commands = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Commands_Proxy WHERE Date <= datetime('now','-" + Data.sqliteDataDel + " day')");
+            final PreparedStatement player_commands = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM player_commands_proxy WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
-            final PreparedStatement player_Login = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Login_Proxy WHERE Date <= datetime('now','-" + Data.sqliteDataDel + " day')");
+            final PreparedStatement player_Login = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM player_login_proxy WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
-            final PreparedStatement player_Leave = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Leave_Proxy WHERE Date <= datetime('now','-" + Data.sqliteDataDel + " day')");
+            final PreparedStatement player_Leave = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM player_leave_proxy WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
             // Server Side Part
-            final PreparedStatement server_Reload = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Server_Reload_Proxy WHERE Date <= datetime('now','-" + Data.sqliteDataDel + " day')");
+            final PreparedStatement server_Reload = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM server_reload_proxy WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
-            final PreparedStatement server_Start = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Server_Start_Proxy WHERE Date <= datetime('now','-" + Data.sqliteDataDel + " day')");
+            final PreparedStatement server_Start = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM server_start_proxy WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
-            final PreparedStatement server_Stop = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Server_Stop_Proxy WHERE Date <= datetime('now','-" + Data.sqliteDataDel + " day')");
+            final PreparedStatement server_Stop = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM server_stop_proxy WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
-            final PreparedStatement ram = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM RAM_Proxy WHERE Date <= datetime('now','-" + Data.sqliteDataDel + " day')");
+            final PreparedStatement ram = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM ram_proxy WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
             // Extra Side Part
             if (LiteBansUtil.getLiteBansAPI() != null) {
 
-                final PreparedStatement liteBans = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM LiteBans_Proxy WHERE Date <= datetime('now','-" + Data.sqliteDataDel + " day')");
+                final PreparedStatement liteBans = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM litebans_proxy WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
                 liteBans.executeUpdate();
                 liteBans.close();
@@ -301,8 +302,8 @@ public class SQLiteData {
 
             player_Chat.executeUpdate();
             player_Chat.close();
-            player_Commands.executeUpdate();
-            player_Commands.close();
+            player_commands.executeUpdate();
+            player_commands.close();
             player_Login.executeUpdate();
             player_Login.close();
             player_Leave.executeUpdate();
@@ -320,7 +321,6 @@ public class SQLiteData {
         }catch (SQLException e){
 
             plugin.getLogger().severe("An error has occurred while cleaning the tables, if the error persists, contact the Authors!");
-
             e.printStackTrace();
 
         }

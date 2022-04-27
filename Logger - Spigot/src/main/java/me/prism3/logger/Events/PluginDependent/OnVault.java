@@ -77,7 +77,7 @@ public class OnVault implements Listener, Runnable {
 
                                 if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                                    ExternalData.vault(Data.serverName, playerName, oldBalance, newBalance, true);
+                                    ExternalData.vault(Data.serverName, player, oldBalance, newBalance, true);
 
                                 }
 
@@ -130,7 +130,7 @@ public class OnVault implements Listener, Runnable {
 
                             try {
 
-                                ExternalData.vault(Data.serverName, playerName, oldBalance, newBalance, player.hasPermission(Data.loggerStaffLog));
+                                ExternalData.vault(Data.serverName, player, oldBalance, newBalance, player.hasPermission(Data.loggerStaffLog));
 
                             } catch (Exception e) { e.printStackTrace(); }
                         }

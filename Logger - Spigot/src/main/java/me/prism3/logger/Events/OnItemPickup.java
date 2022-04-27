@@ -78,7 +78,7 @@ public class OnItemPickup implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.itemPickup(Data.serverName, worldName, playerName, item, amount, blockX, blockY, blockZ, itemName, true);
+                        ExternalData.itemPickup(Data.serverName, player, item, amount, blockX, blockY, blockZ, itemName, true);
 
                     }
 
@@ -130,7 +130,7 @@ public class OnItemPickup implements Listener {
 
                 try {
 
-                    ExternalData.itemPickup(Data.serverName, worldName, playerName, item, amount, blockX, blockY, blockZ, itemName, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.itemPickup(Data.serverName, player, item, amount, blockX, blockY, blockZ, itemName, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

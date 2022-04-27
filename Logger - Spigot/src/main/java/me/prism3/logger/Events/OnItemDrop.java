@@ -84,7 +84,7 @@ public class OnItemDrop implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.itemDrop(Data.serverName, worldName, playerName, item, amount, blockX, blockY, blockZ, enchs, itemName, true);
+                        ExternalData.itemDrop(Data.serverName, player, item, amount, blockX, blockY, blockZ, enchs, itemName, true);
 
                     }
 
@@ -136,7 +136,7 @@ public class OnItemDrop implements Listener {
 
                 try {
 
-                    ExternalData.itemDrop(Data.serverName, worldName, playerName, item, amount, blockX, blockY, blockZ, enchs, itemName, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.itemDrop(Data.serverName, player, item, amount, blockX, blockY, blockZ, enchs, itemName, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

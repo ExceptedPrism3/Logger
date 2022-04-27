@@ -10,8 +10,6 @@ commands:
     description: "Plugin command."
   logger reload:
     description: "Reloads the Plugin configs."
-  logger credits:
-    description: "Shows the Plugin authors."
   loggerget:
     description: "Get Player's last messages"
     usage: "Usage: /loggerget <PlayerName> [page number | 1 - *]"

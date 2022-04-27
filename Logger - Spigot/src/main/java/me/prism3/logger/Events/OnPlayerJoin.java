@@ -86,7 +86,7 @@ public class OnPlayerJoin implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.playerJoin(Data.serverName, worldName, playerName, x, y, z, ip, true);
+                        ExternalData.playerJoin(Data.serverName, player, x, y, z, ip, true);
 
                     }
 
@@ -138,7 +138,7 @@ public class OnPlayerJoin implements Listener {
 
                 try {
 
-                    ExternalData.playerJoin(Data.serverName, worldName, playerName, x, y, z, ip, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.playerJoin(Data.serverName, player, x, y, z, ip, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

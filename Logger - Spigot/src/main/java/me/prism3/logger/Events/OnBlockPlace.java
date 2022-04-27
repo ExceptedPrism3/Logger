@@ -68,7 +68,7 @@ public class OnBlockPlace implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.blockPlace(Data.serverName, worldName, playerName, blockType.toString(), x, y, z, true);
+                        ExternalData.blockPlace(Data.serverName, player, blockType.toString(), x, y, z, true);
 
                     }
 
@@ -119,7 +119,7 @@ public class OnBlockPlace implements Listener {
 
                 try {
 
-                    ExternalData.blockPlace(Data.serverName, worldName, playerName, blockType.toString(), x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.blockPlace(Data.serverName, player, blockType.toString(), x, y, z, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

@@ -2,13 +2,15 @@ package me.prism3.loggervelocity.Database.SQLite;
 
 import me.prism3.loggervelocity.API.LiteBansUtil;
 import me.prism3.loggervelocity.Main;
-import me.prism3.loggervelocity.Utils.Data;
 
 import java.net.InetSocketAddress;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+
+import static me.prism3.loggervelocity.Utils.Data.isPlayerIP;
+import static me.prism3.loggervelocity.Utils.Data.sqliteDataDel;
 
 public class SQLiteData {
 
@@ -25,41 +27,41 @@ public class SQLiteData {
         try {
 
             // Player Side Part
-            playerChat = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Chat_Velocity" +
-                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, Player_Name TEXT(30)," +
-                    "Message TEXT(256), Is_Staff INTEGER)");
+            playerChat = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_chat_velocity" +
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, player_name TEXT(30)," +
+                    "message TEXT(256), is_staff INTEGER)");
 
-            playerCommands = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Commands_Velocity" +
-                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, Player_Name TEXT(30)," +
-                    "Command TEXT(100), Is_Staff INTEGER)");
+            playerCommands = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_commands_velocity" +
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, player_name TEXT(30)," +
+                    "command TEXT(100), is_staff INTEGER)");
 
-            playerLogin = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Login_Velocity" +
-                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%f', 'now'))  PRIMARY KEY," +
-                    "Player_Name TEXT(30), IP TEXT, Is_Staff INTEGER)");
+            playerLogin = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_login_velocity" +
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%f', 'now'))  PRIMARY KEY," +
+                    "player_name TEXT(30), ip TEXT, is_staff INTEGER)");
 
-            playerLeave = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS  Player_Leave_Velocity " +
-                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, Player_Name TEXT(30), Is_Staff INTEGER)");
+            playerLeave = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_leave_velocity " +
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, player_name TEXT(30), is_staff INTEGER)");
 
             // Server Side Part
-            consoleCommands = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Console_Commands_Velocity" +
-                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY,Command TEXT(256))");
+            consoleCommands = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS console_commands_velocity" +
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, command TEXT(256))");
 
-            serverStart = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Server_Start_Velocity" +
-                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY)");
+            serverStart = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS server_start_velocity" +
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY)");
 
-            serverStop = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE  IF NOT EXISTS Server_Stop_Velocity" +
-                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY )");
+            serverStop = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS server_stop_velocity" +
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY )");
 
-            ram = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS RAM_Velocity" +
-                    "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY," +
-                    " Total_Memory INTEGER, Used_Memory INTEGER, Free_Memory INTEGER)");
+            ram = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS ram_velocity" +
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY," +
+                    " total_memory INTEGER, used_memory INTEGER, free_memory INTEGER)");
 
             // Extra Side Part
             if (LiteBansUtil.getLiteBansAPI().isPresent()) {
-                liteBans = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS LiteBans_Proxy" +
-                        "(Server_Name TEXT(30), Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY," +
-                        " Sender TEXT(30), Command TEXT(10), OnWho TEXT(30), Reason TEXT(60)," +
-                        " Duration TEXT(50), Is_Silent INTEGER)");
+                liteBans = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS litebans_proxy" +
+                        "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY," +
+                        " sender TEXT(30), command TEXT(10), onwho TEXT(30), reason TEXT(60)," +
+                        " duration TEXT(50), is_silent INTEGER)");
 
                 liteBans.executeUpdate();
                 liteBans.close();
@@ -91,7 +93,7 @@ public class SQLiteData {
     public static void insertPlayerChat(String serverName, String player, String message, boolean staff) {
 
         try {
-            final PreparedStatement playerChat = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Player_Chat_Velocity (Server_Name, Date, Player_Name, Message, Is_Staff) VALUES (?,?,?,?,?)");
+            final PreparedStatement playerChat = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO player_chat_velocity (server_name, date, player_name, message, is_staff) VALUES (?,?,?,?,?)");
             playerChat.setString(1, serverName);
             playerChat.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
             playerChat.setString(3, player);
@@ -108,7 +110,7 @@ public class SQLiteData {
 
         try {
 
-            final PreparedStatement playerCommands = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Player_Commands_Velocity (Server_Name, Date, Player_Name, Command, Is_Staff) VALUES (?,?,?,?,?)");
+            final PreparedStatement playerCommands = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO player_commands_velocity (server_name, date, player_name, command, is_staff) VALUES (?,?,?,?,?)");
             playerCommands.setString(1, serverName);
             playerCommands.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
             playerCommands.setString(3, player);
@@ -121,22 +123,19 @@ public class SQLiteData {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    public static void insertPlayerLogin(String serverName, String player, InetSocketAddress IP, boolean isStaff) {
+    public static void insertPlayerLogin(String serverName, String player, InetSocketAddress ip, boolean isStaff) {
 
         try {
 
-            final PreparedStatement playerLogin = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Player_Login_Velocity (Server_Name, Date, Player_Name, IP, Is_Staff) VALUES (?,?,?,?,?)");
+            final PreparedStatement playerLogin = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO player_login_velocity (server_name, date, player_name, ip, is_staff) VALUES (?,?,?,?,?)");
             playerLogin.setString(1, serverName);
             playerLogin.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
             playerLogin.setString(3, player);
-            if (Data.isPlayerIP) {
+            if (isPlayerIP) {
 
-                playerLogin.setString(4, IP.getHostString());
+                playerLogin.setString(4, ip.getHostString());
 
-            }else{
-
-                playerLogin.setString(4, null);
-            }
+            } else playerLogin.setString(4, null);
 
             playerLogin.setBoolean(5, isStaff);
 
@@ -150,7 +149,7 @@ public class SQLiteData {
 
         try {
 
-            final PreparedStatement playerLeave = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Player_Leave_Velocity (Server_Name, Date, Player_Name, Is_Staff) VALUES (?,?,?,?)");
+            final PreparedStatement playerLeave = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO player_leave_velocity (server_name, date, player_name, is_staff) VALUES (?,?,?,?)");
             playerLeave.setString(1, serverName);
             playerLeave.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
             playerLeave.setString(3, player);
@@ -166,7 +165,7 @@ public class SQLiteData {
 
         try {
 
-            final PreparedStatement serverReload = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Console_Commands_Velocity (Server_Name, Date, Command) VALUES (?,?,?)");
+            final PreparedStatement serverReload = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO console_commands_velocity (server_name, date, command) VALUES (?,?,?)");
             serverReload.setString(1, serverName);
             serverReload.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
             serverReload.setString(3, command);
@@ -181,7 +180,7 @@ public class SQLiteData {
 
         try {
 
-            final PreparedStatement serverStartStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Server_Start_Velocity (Server_Name, Date) VALUES (?,?)");
+            final PreparedStatement serverStartStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO server_start_velocity (server_name, date) VALUES (?,?)");
             serverStartStatement.setString(1, serverName);
             serverStartStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
 
@@ -195,7 +194,7 @@ public class SQLiteData {
 
         try {
 
-            final PreparedStatement serverStopStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO Server_Stop_Velocity (Server_Name, Date) VALUES (?,?)");
+            final PreparedStatement serverStopStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO server_stop_velocity (server_name, date) VALUES (?,?)");
             serverStopStatement.setString(1, serverName);
             serverStopStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
 
@@ -209,7 +208,7 @@ public class SQLiteData {
 
         try {
 
-            final PreparedStatement ramStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO RAM_Velocity (Server_Name, Date, Total_Memory, Used_Memory, Free_Memory) VALUES (?,?,?,?,?)");
+            final PreparedStatement ramStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO ram_velocity (server_name, date, total_memory, used_memory, free_memory) VALUES (?,?,?,?,?)");
             ramStatement.setString(1, serverName);
             ramStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
             ramStatement.setLong(3, totalMemory);
@@ -226,7 +225,7 @@ public class SQLiteData {
 
         try {
 
-            final PreparedStatement liteBansStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO LiteBans_Proxy (Server_Name, Date, Sender, Command, OnWho, Reason, Duration, Is_Silent) VALUES(?,?,?,?,?,?,?,?)");
+            final PreparedStatement liteBansStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO litebans_proxy (server_name, date, sender, command, onwho, reason, duration, is_silent) VALUES(?,?,?,?,?,?,?,?)");
             liteBansStatement.setString(1, serverName);
             liteBansStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
             liteBansStatement.setString(3, executor);
@@ -245,32 +244,32 @@ public class SQLiteData {
 
     public void emptyTable() {
 
-        if (Data.sqliteDataDel <= 0) return;
+        if (sqliteDataDel <= 0) return;
 
         try{
 
             // Player Side Part
-            final PreparedStatement player_Chat = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Chat_Velocity WHERE Date <= datetime('now','-" + Data.sqliteDataDel + " day')");
+            final PreparedStatement player_Chat = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM player_chat_velocity WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
-            final PreparedStatement player_Commands = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Commands_Velocity WHERE Date <= datetime('now','-" + Data.sqliteDataDel + " day')");
+            final PreparedStatement player_Commands = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM player_commands_velocity WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
-            final PreparedStatement player_Login = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Login_Velocity WHERE Date <= datetime('now','-" + Data.sqliteDataDel + " day')");
+            final PreparedStatement player_Login = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM player_login_velocity WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
-            final PreparedStatement player_Leave = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Player_Leave_Velocity WHERE Date <= datetime('now','-" + Data.sqliteDataDel + " day')");
+            final PreparedStatement player_Leave = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM player_leave_velocity WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
             // Server Side Part
-            final PreparedStatement console_Commands = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Console_Commands_Velocity WHERE Date <= datetime('now','-" + Data.sqliteDataDel + " day')");
+            final PreparedStatement console_Commands = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM console_commands_velocity WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
-            final PreparedStatement server_Start = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Server_Start_Velocity WHERE Date <= datetime('now','-" + Data.sqliteDataDel + " day')");
+            final PreparedStatement server_Start = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM server_start_velocity WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
-            final PreparedStatement server_Stop = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM Server_Stop_Velocity WHERE Date <= datetime('now','-" + Data.sqliteDataDel + " day')");
+            final PreparedStatement server_Stop = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM server_stop_velocity WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
-            final PreparedStatement ram = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM RAM_Velocity WHERE Date <= datetime('now','-" + Data.sqliteDataDel + " day')");
+            final PreparedStatement ram = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM ram_velocity WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
             // Extra Side Part
             if (LiteBansUtil.getLiteBansAPI().isPresent()) {
 
-                final PreparedStatement liteBans = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM LiteBans_Proxy WHERE Date <= datetime('now','-" + Data.sqliteDataDel + " day')");
+                final PreparedStatement liteBans = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM litebans_proxy WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
                 liteBans.executeUpdate();
                 liteBans.close();

@@ -65,7 +65,7 @@ public class OnAFK implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.afk(Data.serverName, worldName, playerName, x, y, z, true);
+                        ExternalData.afk(Data.serverName, player, x, y, z, true);
 
                     }
 
@@ -117,7 +117,7 @@ public class OnAFK implements Listener {
 
                 try {
 
-                    ExternalData.afk(Data.serverName, worldName, playerName, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.afk(Data.serverName, player, x, y, z, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception event) { event.printStackTrace(); }
             }

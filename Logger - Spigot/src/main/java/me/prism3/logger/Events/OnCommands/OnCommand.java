@@ -92,7 +92,7 @@ public class OnCommand implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.playerCommands(Data.serverName, worldName, playerName, command, true);
+                        ExternalData.playerCommands(Data.serverName, player, command, true);
 
                     }
 
@@ -144,7 +144,7 @@ public class OnCommand implements Listener {
 
                 try {
 
-                    ExternalData.playerCommands(Data.serverName, worldName, playerName, command, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.playerCommands(Data.serverName, player, command, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

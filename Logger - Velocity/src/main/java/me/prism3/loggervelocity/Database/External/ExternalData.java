@@ -12,15 +12,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static me.prism3.loggervelocity.Utils.Data.externalDataDel;
+import static me.prism3.loggervelocity.Utils.Data.isPlayerIP;
+
 public class ExternalData {
 
     private static Main plugin = Main.getInstance();
 
     public ExternalData(Main plugin){ ExternalData.plugin = plugin; }
 
-    private static final List<String> tablesNames = Stream.of("Player_Chat_Velocity", "Player_Commands_Velocity",
-            "Player_Login_Velocity", "Player_Leave_Velocity", "Console_Commands_Velocity", "Server_Start_Velocity",
-            "Server_Stop_Velocity", "RAM_Velocity").collect(Collectors.toCollection(ArrayList::new));
+    private static final List<String> tablesNames = Stream.of("player_chat_velocity", "player_commands_velocity",
+            "player_login_velocity", "player_leave_velocity", "console_commands_velocity", "server_start_velocity",
+            "server_stop_velocity", "ram_velocity").collect(Collectors.toCollection(ArrayList::new));
 
     public void createTable(){
 
@@ -29,42 +32,42 @@ public class ExternalData {
 
         try {
 
-            playerChat = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Chat_Velocity "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Player_Name VARCHAR(100),Message VARCHAR(200),Is_Staff TINYINT)");
+            playerChat = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_chat_velocity "
+                    + "(server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), player_name VARCHAR(100), message VARCHAR(200), is_staff TINYINT)");
 
-            playerCommand = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Commands_Velocity "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Player_Name VARCHAR(100),Command VARCHAR(200),Is_Staff TINYINT)");
+            playerCommand = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_commands_velocity "
+                    + "(server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), player_name VARCHAR(100), command VARCHAR(200), is_staff TINYINT)");
 
-            playerLogin = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Login_Velocity "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Player_Name VARCHAR(100),IP INT UNSIGNED,Is_Staff TINYINT)");
+            playerLogin = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_login_velocity "
+                    + "(server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), player_name VARCHAR(100),ip INT UNSIGNED, is_staff TINYINT)");
 
-            playerLeave = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player_Leave_Velocity "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Player_Name VARCHAR(100),Is_Staff TINYINT)");
+            playerLeave = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_leave_velocity "
+                    + "(server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), player_name VARCHAR(100), is_staff TINYINT)");
 
             // Server Side Part
-            consoleCommands = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Console_Commands_Velocity "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Command VARCHAR(256))");
+            consoleCommands = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS console_commands_velocity "
+                    + "(server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), command VARCHAR(256))");
 
-            serverStart = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Server_Start_Velocity "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP())");
+            serverStart = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS server_start_velocity "
+                    + "(server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP())");
 
-            serverStop = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Server_Stop_Velocity "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP())");
+            serverStop = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS server_stop_velocity "
+                    + "(server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP())");
 
-            ram = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS RAM_Velocity "
-                    + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Total_Memory INT,Used_Memory INT,Free_Memory INT)");
+            ram = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS ram_velocity "
+                    + "(server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), total_memory INT, used_memory INT, free_memory INT)");
 
             // Extra Side Part
             if (LiteBansUtil.getLiteBansAPI().isPresent()) {
 
-                liteBans = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS LiteBans_Velocity "
-                        + "(Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),Sender VARCHAR(100),Command VARCHAR(20),OnWho VARCHAR(100)," +
-                        "Reason VARCHAR(200),Duration VARCHAR(30), Is_Silent TINYINT)");
+                liteBans = plugin.getExternal().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS litebans_velocity "
+                        + "(server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), sender VARCHAR(100), command VARCHAR(20), onwho VARCHAR(100)," +
+                        "reason VARCHAR(200), duration VARCHAR(30), is_silent TINYINT)");
 
                 liteBans.executeUpdate();
                 liteBans.close();
 
-                tablesNames.add("LiteBans_Velocity");
+                tablesNames.add("litebans_velocity");
             }
 
             playerChat.executeUpdate();
@@ -92,7 +95,7 @@ public class ExternalData {
 
         try {
 
-            final PreparedStatement playerChat = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Player_Chat_Velocity (Server_Name,Player_Name,Message,Is_Staff) VALUES(?,?,?,?)");
+            final PreparedStatement playerChat = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_chat_velocity (server_name, player_name, message, is_staff) VALUES(?,?,?,?)");
             playerChat.setString(1, serverName);
             playerChat.setString(2, playerName);
             playerChat.setString(3, message);
@@ -108,7 +111,7 @@ public class ExternalData {
 
         try {
 
-            final PreparedStatement playerCommand = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Player_Commands_Velocity (Server_Name,Player_Name,Command,Is_Staff) VALUES(?,?,?,?)");
+            final PreparedStatement playerCommand = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_commands_velocity (server_name, player_name, command, is_staff) VALUES(?,?,?,?)");
             playerCommand.setString(1, serverName);
             playerCommand.setString(2, playerName);
             playerCommand.setString(3, command);
@@ -120,16 +123,16 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void playerLogin(String serverName, String playerName, InetSocketAddress IP, boolean staff){
+    public static void playerLogin(String serverName, String playerName, InetSocketAddress ip, boolean staff){
 
         try {
 
-            final PreparedStatement playerLogin = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Player_Login_Velocity (Server_Name,Player_Name,IP,Is_Staff) VALUES(?,?,?,?)");
+            final PreparedStatement playerLogin = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_login_velocity (server_name, player_name, ip, is_staff) VALUES(?,?,?,?)");
             playerLogin.setString(1, serverName);
             playerLogin.setString(2, playerName);
-            if (Data.isPlayerIP) {
+            if (isPlayerIP) {
 
-                playerLogin.setString(3, IP.getHostString());
+                playerLogin.setString(3, ip.getHostString());
 
             }else{
 
@@ -147,7 +150,7 @@ public class ExternalData {
 
         try {
 
-            final PreparedStatement playerLeave = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Player_Leave_Velocity (Server_Name,Player_Name,Is_Staff) VALUES(?,?,?)");
+            final PreparedStatement playerLeave = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_leave_velocity (server_name, player_name, is_staff) VALUES(?,?,?)");
             playerLeave.setString(1, serverName);
             playerLeave.setString(2, playerName);
             playerLeave.setBoolean(3, staff);
@@ -162,7 +165,7 @@ public class ExternalData {
 
         try {
 
-            final PreparedStatement consoleCommands = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Console_Commands_Velocity (Server_Name,Command) VALUES(?,?)");
+            final PreparedStatement consoleCommands = plugin.getExternal().getConnection().prepareStatement("INSERT INTO console_commands_velocity (server_name, command) VALUES(?,?)");
             consoleCommands.setString(1, serverName);
             consoleCommands.setString(2, msg);
 
@@ -176,7 +179,7 @@ public class ExternalData {
 
         try {
 
-            final PreparedStatement serverStart = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Server_Start_Velocity (Server_Name) VALUES(?)");
+            final PreparedStatement serverStart = plugin.getExternal().getConnection().prepareStatement("INSERT INTO server_start_velocity (server_name) VALUES(?)");
             serverStart.setString(1, serverName);
 
             serverStart.executeUpdate();
@@ -189,7 +192,7 @@ public class ExternalData {
 
         try {
 
-            final PreparedStatement serverStop = plugin.getExternal().getConnection().prepareStatement("INSERT INTO Server_Stop_Velocity (Server_Name) VALUES(?)");
+            final PreparedStatement serverStop = plugin.getExternal().getConnection().prepareStatement("INSERT INTO server_stop_velocity (server_name) VALUES(?)");
             serverStop.setString(1, serverName);
 
             serverStop.executeUpdate();
@@ -198,18 +201,18 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void RAM(String serverName, long TM, long UM, long FM){
+    public static void ram(String serverName, long TM, long UM, long FM){
 
         try {
 
-            final PreparedStatement RAM = plugin.getExternal().getConnection().prepareStatement("INSERT INTO RAM_Velocity (Server_Name,Total_Memory,Used_Memory,Free_Memory) VALUES(?,?,?,?)");
-            RAM.setString(1, serverName);
-            RAM.setLong(2, TM);
-            RAM.setLong(3, UM);
-            RAM.setLong(4, FM);
+            final PreparedStatement ram = plugin.getExternal().getConnection().prepareStatement("INSERT INTO ram_velocity (server_name, total_memory, used_memory, free_memory) VALUES(?,?,?,?)");
+            ram.setString(1, serverName);
+            ram.setLong(2, TM);
+            ram.setLong(3, UM);
+            ram.setLong(4, FM);
 
-            RAM.executeUpdate();
-            RAM.close();
+            ram.executeUpdate();
+            ram.close();
 
         } catch (SQLException e){ e.printStackTrace(); }
     }
@@ -218,7 +221,7 @@ public class ExternalData {
 
         try {
 
-            final PreparedStatement liteBans = plugin.getExternal().getConnection().prepareStatement("INSERT INTO LiteBans_Proxy (Server_Name,Sender,Command,OnWho,Reason,Duration,Is_Silent) VALUES(?,?,?,?,?,?,?)");
+            final PreparedStatement liteBans = plugin.getExternal().getConnection().prepareStatement("INSERT INTO litebans_proxy (server_name, sender, command, onwho, reason, duration, is_silent) VALUES(?,?,?,?,?,?,?)");
             liteBans.setString(1, serverName);
             liteBans.setString(2, executor);
             liteBans.setString(3, command);
@@ -235,29 +238,29 @@ public class ExternalData {
 
     public void emptyTable(){
 
-        if (Data.externalDataDel <= 0) return;
+        if (externalDataDel <= 0) return;
 
         try{
 
-            final PreparedStatement player_Chat = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Chat_Velocity WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement player_Chat = plugin.getExternal().getConnection().prepareStatement("DELETE FROM player_chat_velocity WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-            final PreparedStatement player_Command = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Commands_Velocity WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement player_Command = plugin.getExternal().getConnection().prepareStatement("DELETE FROM player_commands_velocity WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-            final PreparedStatement player_Login = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Login_Velocity WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement player_Login = plugin.getExternal().getConnection().prepareStatement("DELETE FROM player_login_velocity WHERE Date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-            final PreparedStatement player_Leave = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Player_Leave_Velocity WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement player_Leave = plugin.getExternal().getConnection().prepareStatement("DELETE FROM player_leave_velocity WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-            final PreparedStatement console_Commands = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Console_Commands_Velocity WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement console_Commands = plugin.getExternal().getConnection().prepareStatement("DELETE FROM console_commands_velocity WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-            final PreparedStatement server_Start = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Server_Start_Velocity WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement server_Start = plugin.getExternal().getConnection().prepareStatement("DELETE FROM server_start_velocity WHERE Date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-            final PreparedStatement server_Stop = plugin.getExternal().getConnection().prepareStatement("DELETE FROM Server_Stop_Velocity WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement server_Stop = plugin.getExternal().getConnection().prepareStatement("DELETE FROM server_stop_velocity WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-            final PreparedStatement ram = plugin.getExternal().getConnection().prepareStatement("DELETE FROM RAM_Velocity WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            final PreparedStatement ram = plugin.getExternal().getConnection().prepareStatement("DELETE FROM ram_velocity WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
             if (LiteBansUtil.getLiteBansAPI().isPresent()) {
 
-                final PreparedStatement liteBans = plugin.getExternal().getConnection().prepareStatement("DELETE FROM LiteBans_Proxy WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+                final PreparedStatement liteBans = plugin.getExternal().getConnection().prepareStatement("DELETE FROM litebans_proxy WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
                 liteBans.executeUpdate();
                 liteBans.close();

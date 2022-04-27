@@ -60,7 +60,7 @@ public class OnAuthMePassword implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.wrongPassword(Data.serverName, worldName, playerName, true);
+                        ExternalData.wrongPassword(Data.serverName, player, true);
 
                     }
 
@@ -112,7 +112,7 @@ public class OnAuthMePassword implements Listener {
 
                 try {
 
-                    ExternalData.wrongPassword(Data.serverName, worldName, playerName, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.wrongPassword(Data.serverName, player, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception event) { event.printStackTrace(); }
             }

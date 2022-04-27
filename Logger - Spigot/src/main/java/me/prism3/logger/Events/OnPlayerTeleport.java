@@ -73,7 +73,7 @@ public class OnPlayerTeleport implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.playerTeleport(Data.serverName, worldName, playerName, ox, oy, oz, tx, ty, tz, true);
+                        ExternalData.playerTeleport(Data.serverName, player, ox, oy, oz, tx, ty, tz, true);
 
                     }
 
@@ -125,7 +125,7 @@ public class OnPlayerTeleport implements Listener {
 
                 try {
 
-                    ExternalData.playerTeleport(Data.serverName, worldName, playerName, ox, oy, oz, tx, ty, tz, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.playerTeleport(Data.serverName, player, ox, oy, oz, tx, ty, tz, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

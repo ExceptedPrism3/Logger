@@ -67,7 +67,7 @@ public class OnBucketFill implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.bucketFill(Data.serverName, worldName, playerName, bucket, x, y, z, true);
+                        ExternalData.bucketFill(Data.serverName, player, bucket, x, y, z, true);
 
                     }
 
@@ -119,7 +119,7 @@ public class OnBucketFill implements Listener {
 
                 try {
 
-                    ExternalData.bucketFill(Data.serverName, worldName, playerName, bucket, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.bucketFill(Data.serverName, player, bucket, x, y, z, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

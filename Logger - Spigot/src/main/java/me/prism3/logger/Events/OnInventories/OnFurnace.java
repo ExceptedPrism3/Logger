@@ -67,7 +67,7 @@ public class OnFurnace implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.furnace(Data.serverName, worldName, playerName, item, amount, blockX, blockY, blockZ, true);
+                        ExternalData.furnace(Data.serverName, player, item, amount, blockX, blockY, blockZ, true);
 
                     }
 
@@ -120,7 +120,7 @@ public class OnFurnace implements Listener {
 
                 try {
 
-                    ExternalData.furnace(Data.serverName, worldName, playerName, item, amount, blockX, blockY, blockZ, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.furnace(Data.serverName, player, item, amount, blockX, blockY, blockZ, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

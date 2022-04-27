@@ -2,7 +2,9 @@ package me.prism3.logger.Commands;
 
 import me.prism3.logger.Commands.SubCommands.PlayerInventoryCommand;
 import me.prism3.logger.Commands.SubCommands.ReloadCommand;
+import me.prism3.logger.Commands.SubCommands.ToggleSpyCommand;
 import me.prism3.logger.Utils.Data;
+import me.prism3.logger.Utils.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static me.prism3.logger.Utils.Data.loggerStaff;
 
@@ -24,6 +27,7 @@ public class CommandManager implements TabExecutor {
 
         this.subCommands.add(new ReloadCommand());
         this.subCommands.add(new PlayerInventoryCommand());
+        this.subCommands.add(new ToggleSpyCommand());
 
     }
 
@@ -32,7 +36,13 @@ public class CommandManager implements TabExecutor {
 
         if (sender instanceof Player) {
 
-            Player player = (Player) sender;
+            if (!sender.hasPermission(loggerStaff)) {
+
+                sender.sendMessage(Objects.requireNonNull(Messages.get().getString("General.No-Permission")).replaceAll("&", "§"));
+                return false;
+            }
+
+            final Player player = (Player) sender;
 
             if (args.length > 0) {
 
@@ -69,6 +79,7 @@ public class CommandManager implements TabExecutor {
             for (int i = 0; i < getSubCommands().size(); i++) {
                 subCommandsArgs.add(getSubCommands().get(i).getName());
             }
+
             return subCommandsArgs;
         } else if (args.length >= 2) {
 
@@ -80,7 +91,6 @@ public class CommandManager implements TabExecutor {
 
                 }
             }
-        }
-        return null;
+        } return null;
     }
 }

@@ -68,7 +68,7 @@ public class OnBlockBreak implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.blockBreak(Data.serverName, worldName, playerName, blockType.toString(), x, y, z, true);
+                        ExternalData.blockBreak(Data.serverName, player, blockType.toString(), x, y, z, true);
 
                     }
 
@@ -120,7 +120,7 @@ public class OnBlockBreak implements Listener {
 
                 try {
 
-                    ExternalData.blockBreak(Data.serverName, worldName, playerName, blockType.toString(), x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.blockBreak(Data.serverName, player, blockType.toString(), x, y, z, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

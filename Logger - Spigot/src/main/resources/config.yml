@@ -2,86 +2,53 @@
 # /                                                           /
 # /                      Logger Plugin                        /
 # /                                                           /
-# /                    [ Bukkit Version ]                     /
-# /                                                           /
 # /////////////////////////////////////////////////////////////
-#
 # Thank you for using Logger Plugin! If you are experiencing any issues
 # or have any suggestions / features you want to be implemented into the plugin
 # feel free to join the support Discord Server!
-#
 # Spigot: Prism3
-# Discord: Prism3#9371 ID: 403667971089760257
+# Discord: Prism3#5787 | ID: 403667971089760257
 # Discord Server: https://discord.gg/MfR5mcpVfX
-
-# Do not Touch this
-Config: 1.7.5
-
-
-# Messages file to use
-Language: en_en
-
-# Server Name
 Server-Name: "Server_Name"
-
-# Date & Time Formatter
-Time-Formatter: "yyyy-MM-dd HH:mm:ss"
-
-# How many Days for the logs to be deleted
-# Set it to -1 to cancel the Deletion
 File-Deletion: 7
-
-# Log to Files
 Log-to-Files: true
-
-# This will log players with the "logger.staff.log" permission node in their own folder / file
 Staff:
   Enabled: false
-
-# Logging features
-Log-Player:
-  Chat: true
-  Commands: true
-  Sign-Text: true
-  Join: true
-  Leave: true
-  Kick: true
-  Death: true
-  Teleport: true
-  Level: true
+Log:
+  Player-Chat: true
+  Player-Commands: true
+  Console-Commands: true
+  Player-Sign-Text: true
+  Player-Join: true
+  Player-Leave: true
+  Player-Kick: true
+  Player-Death: true
+  Player-Teleport: true
+  Player-Level: true
   Block-Place: true
   Block-Break: true
-  Bucket-Fill: true
-  Bucket-Empty: true
+  Portal-Creation: true
+  Bucket-Place: true
   Anvil: true
+  TPS: true
+  RAM: true
+  Server-Start: true
+  Server-Stop: true
   Item-Pickup: true
   Item-Drop: true
   Enchanting: true
   Book-Editing: true
+  AFK: true
   Furnace: true
-  Game-Mode: true
-  Craft: true
-  Registration: true
   Primed-TNT: true
-  Spawn-Egg: true
-
-Log-Server:
-  Start: true
-  Stop: true
-  Console-Commands: true
-  RAM: true
-  TPS: true
-  Portal-Creation: true
-  RCON: true
-
-# This Section requires other plugins to function
-Log-Extras:
-  Essentials-AFK: true
-  AuthMe-Wrong-Password: true
-  Vault: true
-
-# Only Log Specified Commands
-# Block Commands from getting Logged
+RAM-TPS-Checker: 6000
+TPS:
+  Value-Medium: 16
+  Value-Critical: 7
+RAM:
+  Percent: 50
+Player-Level:
+  Log-Above: 100
 Player-Commands:
   Whitelist-Commands: false
   Commands-to-Log:
@@ -95,79 +62,23 @@ Player-Commands:
     - /login
     - /changepassword
     - /register
-
-# Enable to show Player's IPs
-Player-Join:
-  Player-IP: false
-
-# Log players if their level exceeds the set amount
-Player-Level:
-  Log-Above: 100
-
-# Which Game-Mode to get logged?
-Game-Mode: Creative
-
-# Player Death Backup System
-Player-Death-Backup:
-  Enabled: true
-  Max-Backup: 7
-
-# Commands to be blocked in console
-Console-Commands:
-  Blacklist-Commands: false
-  Commands-to-Block:
-    - list
-    - op
-    - ban
-
-# How often should the Checkers run
-# It's better to have it above 1 min to avoid any complications
-# Value in Ticks, 20 Ticks = 1 Second
-RAM-TPS-Checker: 6000
-Vault-Checker: 3000
-
-# Server RAM Log
-# Percent goes from 0 -> 100
-RAM:
-  Percent: 50
-
-# Server TPS Logging
-TPS:
-  Value-Medium: 16
-  Value-Critical: 7
-
-Spy-Features:
   Commands-Spy:
     Enable: false
-    Message: "&8[&bLogger &8&l| &eCommand-Spy&8] &7%player% >> %cmd%"
-  Book-Spy:
-    Enable: false
-    Message: "&8[&bLogger &8&l| &eBook-Spy&8] &7%player% >> %content%"
-  Sign-Spy:
-    Enable: false
-    Message: "&8[&bLogger &8&l| &eSign-Spy&8] &7%player% >> %line1%, %line2%, %line3%, %line4%"
-  Anvil-Spy:
-    Enable: false
-    Message: "&8[&bLogger &8&l| &eAnvil-Spy&8] &7%player% >> %renamed%"
-
-# External Database Feature
-# Available Types are MySQL and MariaDB
-# Data-Deletion Value in Days, Set it -1 to cancel
-Database:
+    Message: "&8[&bLogger &8&l| &eSpy&8] &7%player% >> %cmd%"
+Player-Join:
+  Player-IP: true
+Item-Pickup:
+  - "APPLE"
+  - "BARRIER"
+  - "BEDROCK"
+MySQL:
   Enable: false
-  Type: MySQL
   Host: localhost
   Port: 3306
   Username: username
   Password: PassworD
   Database: database
   Data-Deletion: 7
-
-# SQLite Feature
-# Data-Deletion Value in Days, Set it -1 to cancel
 SQLite:
   Enable: false
   Data-Deletion: 7
-
-# Checks for Updates
-Update-Checker: true

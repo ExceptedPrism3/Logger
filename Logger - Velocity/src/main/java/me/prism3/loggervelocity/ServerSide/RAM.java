@@ -63,7 +63,7 @@ public class RAM implements Runnable{
 
                     try {
 
-                        ExternalData.RAM(serverName, maxMemory, usedMemory, freeMemory);
+                        ExternalData.ram(serverName, maxMemory, usedMemory, freeMemory);
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

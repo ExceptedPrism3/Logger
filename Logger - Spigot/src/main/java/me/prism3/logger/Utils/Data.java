@@ -28,6 +28,7 @@ public class Data {
     public static String langPath;
     public static String fileType;
     public static String selectedLang;
+    public static String discordSupportServer;
 
     // List<String>
     public static List<String> commandsToBlock;
@@ -94,6 +95,7 @@ public class Data {
         langPath = "Messages";
         fileType = ".yml";
         selectedLang = this.config.getString("Language");
+        discordSupportServer = "https://discord.gg/MfR5mcpVfX";
 
     }
 

@@ -67,13 +67,13 @@ public class OnGameMode implements Listener {
 
                         if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                            ExternalData.gameMode(Data.serverName, worldName, playerName, gameMode, true);
+                            ExternalData.gameMode(Data.serverName, player, gameMode, true);
 
                         }
 
                         if (Data.isSqlite && this.main.getSqLite().isConnected()) {
 
-                            SQLiteData.insertGameMode(Data.serverName, worldName, playerName, gameMode, true);
+                            SQLiteData.insertGameMode(Data.serverName, player, gameMode, true);
 
                         }
 
@@ -119,7 +119,7 @@ public class OnGameMode implements Listener {
 
                     try {
 
-                        ExternalData.gameMode(Data.serverName, worldName, playerName, gameMode, player.hasPermission(Data.loggerStaffLog));
+                        ExternalData.gameMode(Data.serverName, player, gameMode, player.hasPermission(Data.loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
@@ -129,7 +129,7 @@ public class OnGameMode implements Listener {
 
                     try {
 
-                        SQLiteData.insertGameMode(Data.serverName, worldName, playerName, gameMode, player.hasPermission(Data.loggerStaffLog));
+                        SQLiteData.insertGameMode(Data.serverName, player, gameMode, player.hasPermission(Data.loggerStaffLog));
 
                     } catch (Exception exception) { exception.printStackTrace(); }
                 }

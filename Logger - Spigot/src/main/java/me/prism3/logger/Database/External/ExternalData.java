@@ -4,7 +4,6 @@ import me.prism3.logger.API.AuthMeUtil;
 import me.prism3.logger.API.EssentialsUtil;
 import me.prism3.logger.API.VaultUtil;
 import me.prism3.logger.Main;
-import me.prism3.logger.Utils.Data;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.world.PortalCreateEvent;
@@ -19,210 +18,208 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static me.prism3.logger.Utils.Data.externalDataDel;
+
 public class ExternalData {
 
     private static Main plugin;
 
     public ExternalData(Main plugin){ ExternalData.plugin = plugin; }
 
-    private static final List<String> tablesNames = Stream.of("Player_Chat", "Player_Commands", "Player_Sign_Text",
-            "Player_Death", "Player_Teleport", "Player_Join", "Player_Leave", "Block_Place", "Block_Break",
-            "Player_Kick", "Player_Level", "Bucket_Fill", "Bucket_Empty", "Anvil", "Item_Drop", "Enchanting",
-            "Book_Editing", "Item_Pickup", "Furnace", "Game_Mode", "Crafting", "Registration", "Server_Start",
-            "Server_Stop", "Console_Commands", "RAM", "TPS", "Portal_Creation", "RCON").collect(Collectors.toCollection(ArrayList::new));
-    
+    private static final List<String> tablesNames = Stream.of("player_chat", "player_commands", "player_sign_text",
+            "player_death", "player_teleport", "player_join", "player_leave", "block_place", "block_break",
+            "player_kick", "player_level", "Bucket_fill", "bucket_empty", "anvil", "item_drop", "enchanting",
+            "book_editing", "item_pickup", "furnace", "game_mode", "crafting", "registration", "server_start",
+            "server_stop", "console_commands", "ram", "tps", "portal_creation", "rcon", "primed_tnt").collect(Collectors.toCollection(ArrayList::new));
 
     public void createTable(){
 
         try {
-            Statement stsm = plugin.getExternal().getConnection().createStatement();
+
+            final Statement stsm = plugin.getExternal().getConnection().createStatement();
+
             // Player Side Part
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS player_chat "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),Message VARCHAR(200),Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), message VARCHAR(200), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS player_commands "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),Command VARCHAR(256),Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), command VARCHAR(256), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS player_sign_text "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "X INT,Y INT,Z INT,Player_Name VARCHAR(100),Line VARCHAR(60),Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "x INT, y INT, z INT, player_name VARCHAR(100), line VARCHAR(60), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS player_death "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100), Player_Level INT, X INT,Y INT,Z INT,Cause VARCHAR(40),By_Who VARCHAR(30)," +
-                    "Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), player_level INT, x INT, y INT, z INT, cause VARCHAR(40), by_who VARCHAR(30), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS player_teleport "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),From_X INT,From_Y INT,From_Z INT,To_X INT,To_Y INT,To_Z INT," +
-                    "Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), from_x INT, from_y INT, from_z INT, to_x INT, to_y INT, to_z INT, is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS player_join "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),X INT,Y INT,Z INT,IP INT UNSIGNED,Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), x INT, y INT, z INT, ip INT UNSIGNED, is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS player_leave "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),X INT,Y INT,Z INT,Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), x INT, y INT, z INT, is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS block_place "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),Block VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), block VARCHAR(40), x INT, y INT, z INT, is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS block_break "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),Block VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), block VARCHAR(40), x INT, y INT, z INT, is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS player_kick "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),X INT,Y INT,Z INT,Reason VARCHAR(50),Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), x INT, y INT, z INT, reason VARCHAR(50), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS player_level "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                    "Player_Name VARCHAR(100),Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                    "player_name VARCHAR(100), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS bucket_fill "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)" +
-                    ",Player_Name VARCHAR(100),Bucket VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), bucket VARCHAR(40), x INT, y INT, z INT, is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS bucket_empty "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),Bucket VARCHAR(40),X INT,Y INT,Z INT,Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), bucket VARCHAR(40), x INT, y INT, z INT, is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS anvil "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                    "Player_Name VARCHAR(100),New_name VARCHAR(100),Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                    "player_name VARCHAR(100), new_name VARCHAR(100), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS item_drop "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)" +
-                    ",Player_Name VARCHAR(100),Item VARCHAR(50),Amount INT,X INT,Y INT,Z INT,Enchantment VARCHAR(50)" +
-                    ",Changed_Name VARCHAR(50),Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), item VARCHAR(50), amount INT, x INT, y INT, z INT, enchantment VARCHAR(50)," +
+                    "changed_name VARCHAR(50), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS enchanting "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),X INT,Y INT,Z INT,Enchantment VARCHAR(50), Enchantment_Level INT, " +
-                    "Item VARCHAR(50),Cost INT(5),Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), x INT, y INT, z INT, enchantment VARCHAR(50), enchantment_level INT, " +
+                    "item VARCHAR(50), cost INT(5), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS book_editing "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),Page_Count INT,Page_Content VARCHAR(250),Signed_by VARCHAR(25)," +
-                    "Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), page_count INT, page_content VARCHAR(250), signed_by VARCHAR(25), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS item_pickup "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),Item VARCHAR(250),Amount INT,X INT,Y INT,Z INT,Changed_Name VARCHAR(250)," +
-                    "Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), item VARCHAR(250), amount INT, x INT, y INT, z INT, changed_name VARCHAR(250), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS furnace "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),Item VARCHAR(250),Amount INT,X INT,Y INT,Z INT,Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), item VARCHAR(250), amount INT, x INT, y INT, z INT, is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS game_mode "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),Game_Mode VARCHAR(15),Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), game_mode VARCHAR(15), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS crafting "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                    "Player_Name VARCHAR(100),Item VARCHAR(50),Amount INT,X INT,Y INT,Z INT," +
-                    "Is_Staff TINYINT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), item VARCHAR(50), amount INT, x INT, y INT, z INT, is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS registration "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30), Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), Player_Name VARCHAR(30)," +
-                    " Player_UUID VARCHAR(80), Join_Date VARCHAR(30))");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), player_name VARCHAR(30)," +
+                    " player_uuid VARCHAR(80), join_date VARCHAR(30))");
+
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS primed_tnt "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), x INT, y INT, z INT, is_staff TINYINT)");
 
             // Server Side Part
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS server_start "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP())");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP())");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS server_stop "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP())");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP())");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS console_commands "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                    "Command VARCHAR(256))");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                    "command VARCHAR(256))");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS ram "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                    "Total_Memory INT,Used_Memory INT,Free_Memory INT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                    "total_memory INT, used_memory INT, free_memory INT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS tps "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                    "TPS INT)");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                    "tps INT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS portal_creation "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                    "World VARCHAR(100),Caused_By VARCHAR(50))");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                    "world VARCHAR(100), caused_by VARCHAR(50))");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS rcon "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                    "IP INT UNSIGNED,Command VARCHAR(50))");
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                    "ip INT UNSIGNED, command VARCHAR(50))");
 
             // Extras Side Part
             if (EssentialsUtil.getEssentialsAPI() != null) {
 
                 stsm.executeUpdate("CREATE TABLE IF NOT EXISTS afk "
-                        + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                        "World VARCHAR(100),Player_Name VARCHAR(100),X INT,Y INT,Z INT,Is_Staff TINYINT)");
-                tablesNames.add("AFK");
+                        + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                        "world VARCHAR(100), player_name VARCHAR(100), x INT, y INT, z INT, is_staff TINYINT)");
+
+                tablesNames.add("afk");
             }
 
             if (AuthMeUtil.getAuthMeAPI() != null) {
 
                 stsm.executeUpdate("CREATE TABLE IF NOT " +
-                        "EXISTS wrong_password (id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30)," +
-                        "Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),World VARCHAR(100)," +
-                        "Player_Name VARCHAR(100),Is_Staff TINYINT)");
+                        "EXISTS wrong_password (id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                        "date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                        "player_name VARCHAR(100), is_staff TINYINT)");
 
-         
-
-                tablesNames.add("Wrong_Password");
+                tablesNames.add("wrong_password");
             }
 
             if (VaultUtil.getVaultAPI() && VaultUtil.getVault() != null) {
 
                 stsm.executeUpdate("CREATE TABLE IF NOT EXISTS vault "
-                        + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT , Server_Name VARCHAR(30),Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                        "Player_Name VARCHAR(100), Old_Balance DOUBLE, New_Balance DOUBLE, " +
-                        "Is_Staff TINYINT)");
+                        + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                        "player_name VARCHAR(100), old_balance DOUBLE, new_balance DOUBLE, " +
+                        "is_staff TINYINT)");
 
-          
-
-                tablesNames.add("Vault");
+                tablesNames.add("vault");
             }
 
             stsm.close();
 
-
         }catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void playerChat(String serverName, String worldName, String playerName, String msg, boolean staff){
+    public static void playerChat(String serverName, Player player, String msg, boolean staff){
 
         try {
 
-            final PreparedStatement playerChat = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_chat (Server_Name,World,Player_Name,Message,Is_Staff) VALUES(?,?,?,?,?)");
+            final PreparedStatement playerChat = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_chat (server_name, world, player_name, message, is_staff) VALUES(?,?,?,?,?)");
             playerChat.setString(1, serverName);
-            playerChat.setString(2, worldName);
-            playerChat.setString(3, playerName);
+            playerChat.setString(2, player.getWorld().getName());
+            playerChat.setString(3, player.getName());
             playerChat.setString(4, msg);
             playerChat.setBoolean(5, staff);
-            
+
             playerChat.executeUpdate();
             playerChat.close();
 
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void playerCommands(String serverName, String worldName, String playerName, String msg, boolean staff){
+    public static void playerCommands(String serverName, Player player, String msg, boolean staff){
 
         try {
 
-            final PreparedStatement playerCommands = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_commands (Server_Name,World,Player_Name,Command,Is_Staff) VALUES(?,?,?,?,?)");
+            final PreparedStatement playerCommands = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_commands (server_name, world, player_name, command, is_staff) VALUES(?,?,?,?,?)");
             playerCommands.setString(1, serverName);
-            playerCommands.setString(2, worldName);
-            playerCommands.setString(3, playerName);
+            playerCommands.setString(2, player.getWorld().getName());
+            playerCommands.setString(3, player.getName());
             playerCommands.setString(4, msg);
             playerCommands.setBoolean(5, staff);
 
@@ -236,7 +233,7 @@ public class ExternalData {
 
         try {
 
-            final PreparedStatement consoleCommands = plugin.getExternal().getConnection().prepareStatement("INSERT INTO console_commands (Server_Name,Command) VALUES(?,?)");
+            final PreparedStatement consoleCommands = plugin.getExternal().getConnection().prepareStatement("INSERT INTO console_commands (server_name, command) VALUES(?,?)");
             consoleCommands.setString(1, serverName);
             consoleCommands.setString(2, msg);
 
@@ -246,17 +243,17 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void playerSignText(String serverName, String worldName, int x, int y, int z, String playerName, String Lines, boolean staff){
+    public static void playerSignText(String serverName, Player player, int x, int y, int z, String Lines, boolean staff){
 
         try {
 
-            final PreparedStatement playerSignText = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_sign_text (Server_Name,World,X,Y,Z,Player_Name,Line,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+            final PreparedStatement playerSignText = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_sign_text (server_name, world, x, y, z, player_name, line, is_staff) VALUES(?,?,?,?,?,?,?,?)");
             playerSignText.setString(1, serverName);
-            playerSignText.setString(2, worldName);
+            playerSignText.setString(2, player.getWorld().getName());
             playerSignText.setInt(3, x);
             playerSignText.setInt(4, y);
             playerSignText.setInt(5, z);
-            playerSignText.setString(6, playerName);
+            playerSignText.setString(6, player.getName());
             playerSignText.setString(7, Lines);
             playerSignText.setBoolean(8, staff);
 
@@ -266,14 +263,14 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void playerDeath(String serverName, String worldName, String playerName, int level, int x, int y, int z, String cause, String who, boolean staff){
+    public static void playerDeath(String serverName, Player player, int level, int x, int y, int z, String cause, String who, boolean staff){
 
         try {
 
-            final PreparedStatement playerDeath= plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_death (Server_Name,World,Player_Name,Player_Level,X,Y,Z,Cause,By_Who,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
+            final PreparedStatement playerDeath= plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_death (server_name, world, player_name, player_level, x, y, z, cause, by_who, is_staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
             playerDeath.setString(1, serverName);
-            playerDeath.setString(2, worldName);
-            playerDeath.setString(3, playerName);
+            playerDeath.setString(2, player.getWorld().getName());
+            playerDeath.setString(3, player.getName());
             playerDeath.setInt(4, level);
             playerDeath.setInt(5, x);
             playerDeath.setInt(6, y);
@@ -288,14 +285,14 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void playerTeleport(String serverName, String worldName, String playerName, int ox, int oy, int oz, int tx, int ty, int tz, boolean staff){
+    public static void playerTeleport(String serverName, Player player, int ox, int oy, int oz, int tx, int ty, int tz, boolean staff){
 
         try {
 
-            final PreparedStatement playerTeleport = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_teleport (Server_Name,World,Player_Name,From_X,From_Y,From_Z,To_X,To_Y,To_Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
+            final PreparedStatement playerTeleport = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_teleport (server_name, world, player_name, from_x, from_y, from_z, to_x, to_y, to_z, is_staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
             playerTeleport.setString(1, serverName);
-            playerTeleport.setString(2, worldName);
-            playerTeleport.setString(3, playerName);
+            playerTeleport.setString(2, player.getWorld().getName());
+            playerTeleport.setString(3, player.getName());
             playerTeleport.setInt(4, ox);
             playerTeleport.setInt(5, oy);
             playerTeleport.setInt(6, oz);
@@ -310,19 +307,19 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void playerJoin(String serverName, String worldName, String playerName, int x, int y, int z, InetSocketAddress IP, boolean staff) {
+    public static void playerJoin(String serverName, Player player, int x, int y, int z, InetSocketAddress ip, boolean staff) {
 
         try {
 
-            final PreparedStatement playerJoin = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_join (Server_Name,World,Player_Name,X,Y,Z,IP,Is_Staff) VALUES(?,?,?,?,?,?,INET_ATON(?),?)");
+            final PreparedStatement playerJoin = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_join (server_name, world, player_name, x, y, z, ip, is_staff) VALUES(?,?,?,?,?,?,INET_ATON(?),?)");
             playerJoin.setString(1, serverName);
-            playerJoin.setString(2, worldName);
-            playerJoin.setString(3, playerName);
+            playerJoin.setString(2, player.getWorld().getName());
+            playerJoin.setString(3, player.getName());
             playerJoin.setInt(4, x);
             playerJoin.setInt(5, y);
             playerJoin.setInt(6, z);
-            if (plugin.getConfig().getBoolean("Player-Join.Player-IP")) {
-                playerJoin.setString(7, IP.getHostString());
+            if (plugin.getConfig().getBoolean("Player-Join.Player-ip")) {
+                playerJoin.setString(7, ip.getHostString());
             }else{
 
                 playerJoin.setString(7, null);
@@ -335,14 +332,14 @@ public class ExternalData {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    public static void playerLeave(String serverName, String worldName, String playerName, int x, int y, int z, boolean staff){
+    public static void playerLeave(String serverName, Player player, int x, int y, int z, boolean staff){
 
         try {
 
-            final PreparedStatement playerLeave = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_leave (Server_Name,World,Player_Name,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?)");
+            final PreparedStatement playerLeave = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_leave (server_name, world, player_name, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?)");
             playerLeave.setString(1, serverName);
-            playerLeave.setString(2, worldName);
-            playerLeave.setString(3, playerName);
+            playerLeave.setString(2, player.getWorld().getName());
+            playerLeave.setString(3, player.getName());
             playerLeave.setInt(4, x);
             playerLeave.setInt(5, y);
             playerLeave.setInt(6, z);
@@ -354,14 +351,14 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void blockPlace(String serverName, String worldName, String playerName, String block, int x, int y, int z, boolean staff){
+    public static void blockPlace(String serverName, Player player, String block, int x, int y, int z, boolean staff){
 
         try {
 
-            final PreparedStatement blockPlace = plugin.getExternal().getConnection().prepareStatement("INSERT INTO block_place (Server_Name,World,Player_Name,Block,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+            final PreparedStatement blockPlace = plugin.getExternal().getConnection().prepareStatement("INSERT INTO block_place (server_name, world, player_name, block, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)");
             blockPlace.setString(1, serverName);
-            blockPlace.setString(2, worldName);
-            blockPlace.setString(3, playerName);
+            blockPlace.setString(2, player.getWorld().getName());
+            blockPlace.setString(3, player.getName());
             blockPlace.setString(4, block);
             blockPlace.setInt(5, x);
             blockPlace.setInt(6, y);
@@ -374,14 +371,14 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void blockBreak(String serverName, String worldName, String playerName, String blockname, int x, int y, int z,boolean staff){
+    public static void blockBreak(String serverName, Player player, String blockname, int x, int y, int z,boolean staff){
 
         try {
 
-            final PreparedStatement blockBreak = plugin.getExternal().getConnection().prepareStatement("INSERT INTO block_break (Server_Name,World,Player_Name,Block,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+            final PreparedStatement blockBreak = plugin.getExternal().getConnection().prepareStatement("INSERT INTO block_break (server_name, world, player_name, block, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)");
             blockBreak.setString(1, serverName);
-            blockBreak.setString(2, worldName);
-            blockBreak.setString(3, playerName);
+            blockBreak.setString(2, player.getWorld().getName());
+            blockBreak.setString(3, player.getName());
             blockBreak.setString(4, blockname);
             blockBreak.setInt(5, x);
             blockBreak.setInt(6, y);
@@ -398,7 +395,7 @@ public class ExternalData {
 
         try {
 
-            final PreparedStatement tps = plugin.getExternal().getConnection().prepareStatement("INSERT INTO tps (Server_Name,TPS) VALUES(?,?)");
+            final PreparedStatement tps = plugin.getExternal().getConnection().prepareStatement("INSERT INTO tps (server_name, tps) VALUES(?,?)");
             tps.setString(1, serverName);
             tps.setDouble(2, tpss);
 
@@ -412,7 +409,7 @@ public class ExternalData {
 
         try {
 
-            final PreparedStatement ram = plugin.getExternal().getConnection().prepareStatement("INSERT INTO ram (Server_Name,Total_Memory,Used_Memory,Free_Memory) VALUES(?,?,?,?)");
+            final PreparedStatement ram = plugin.getExternal().getConnection().prepareStatement("INSERT INTO ram (server_name, total_memory, used_memory, free_memory) VALUES(?,?,?,?)");
             ram.setString(1, serverName);
             ram.setLong(2, TM);
             ram.setLong(3, UM);
@@ -424,14 +421,14 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void playerKick(String serverName, String worldName, String playerName, int x, int y, int z, String reason, boolean staff){
+    public static void playerKick(String serverName, Player player, int x, int y, int z, String reason, boolean staff){
 
         try {
 
-            final PreparedStatement playerKick = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_kick (Server_Name,World,Player_Name,X,Y,Z,Reason,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+            final PreparedStatement playerKick = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_kick (server_name, world, player_name, x, y, z, reason, is_staff) VALUES(?,?,?,?,?,?,?,?)");
             playerKick.setString(1, serverName);
-            playerKick.setString(2, worldName);
-            playerKick.setString(3, playerName);
+            playerKick.setString(2, player.getWorld().getName());
+            playerKick.setString(3, player.getName());
             playerKick.setInt(4, x);
             playerKick.setInt(5, y);
             playerKick.setInt(6, z);
@@ -448,7 +445,7 @@ public class ExternalData {
 
         try {
 
-            final PreparedStatement portalCreation = plugin.getExternal().getConnection().prepareStatement("INSERT INTO portal_creation (Server_Name,World,Caused_By) VALUES(?,?,?)");
+            final PreparedStatement portalCreation = plugin.getExternal().getConnection().prepareStatement("INSERT INTO portal_creation (server_name, world, caused_by) VALUES(?,?,?)");
             portalCreation.setString(1, serverName);
             portalCreation.setString(2, worldName);
             portalCreation.setString(3, By.toString());
@@ -463,7 +460,7 @@ public class ExternalData {
 
         try {
 
-            final PreparedStatement playerLevel = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_level (Server_Name,Player_Name,Is_Staff) VALUES(?,?,?)");
+            final PreparedStatement playerLevel = plugin.getExternal().getConnection().prepareStatement("INSERT INTO player_level (server_name, player_name, is_staff) VALUES(?,?,?)");
             playerLevel.setString(1, serverName);
             playerLevel.setString(2, playerName);
             playerLevel.setBoolean(3, staff);
@@ -474,14 +471,14 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void bucketFill(String serverName, String worldName, String playerName, String bucket, int x, int y, int z, boolean staff){
+    public static void bucketFill(String serverName, Player player, String bucket, int x, int y, int z, boolean staff){
 
         try {
 
-            final PreparedStatement bucketPlace = plugin.getExternal().getConnection().prepareStatement("INSERT INTO bucket_fill (Server_Name,World,Player_Name,Bucket,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+            final PreparedStatement bucketPlace = plugin.getExternal().getConnection().prepareStatement("INSERT INTO bucket_fill (server_name, world, player_name, bucket, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)");
             bucketPlace.setString(1, serverName);
-            bucketPlace.setString(2, worldName);
-            bucketPlace.setString(3, playerName);
+            bucketPlace.setString(2, player.getWorld().getName());
+            bucketPlace.setString(3, player.getName());
             bucketPlace.setString(4, bucket);
             bucketPlace.setInt(5, x);
             bucketPlace.setInt(6, y);
@@ -494,14 +491,14 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void bucketEmpty(String serverName, String worldName, String playerName, String bucket, int x, int y, int z, boolean staff){
+    public static void bucketEmpty(String serverName, Player player, String bucket, int x, int y, int z, boolean staff){
 
         try {
 
-            final PreparedStatement bucketPlace = plugin.getExternal().getConnection().prepareStatement("INSERT INTO bucket_empty (Server_Name,World,Player_Name,Bucket,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?)");
+            final PreparedStatement bucketPlace = plugin.getExternal().getConnection().prepareStatement("INSERT INTO bucket_empty (server_name, world, player_name, bucket, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)");
             bucketPlace.setString(1, serverName);
-            bucketPlace.setString(2, worldName);
-            bucketPlace.setString(3, playerName);
+            bucketPlace.setString(2, player.getWorld().getName());
+            bucketPlace.setString(3, player.getName());
             bucketPlace.setString(4, bucket);
             bucketPlace.setInt(5, x);
             bucketPlace.setInt(6, y);
@@ -518,7 +515,7 @@ public class ExternalData {
 
         try {
 
-            final PreparedStatement anvil = plugin.getExternal().getConnection().prepareStatement("INSERT INTO anvil (Server_Name,Player_Name,New_name,Is_Staff) VALUES(?,?,?,?)");
+            final PreparedStatement anvil = plugin.getExternal().getConnection().prepareStatement("INSERT INTO anvil (server_name, player_name, new_name, is_staff) VALUES(?,?,?,?)");
             anvil.setString(1, serverName);
             anvil.setString(2, playerName);
             anvil.setString(3, newName);
@@ -534,7 +531,7 @@ public class ExternalData {
 
         try {
 
-            final PreparedStatement serverStart = plugin.getExternal().getConnection().prepareStatement("INSERT INTO server_start (Server_Name) VALUES(?)");
+            final PreparedStatement serverStart = plugin.getExternal().getConnection().prepareStatement("INSERT INTO server_start (server_name) VALUES(?)");
             serverStart.setString(1, serverName);
 
             serverStart.executeUpdate();
@@ -547,7 +544,7 @@ public class ExternalData {
 
         try {
 
-            final PreparedStatement serverStop = plugin.getExternal().getConnection().prepareStatement("INSERT INTO server_stop (Server_Name) VALUES(?)");
+            final PreparedStatement serverStop = plugin.getExternal().getConnection().prepareStatement("INSERT INTO server_stop (server_name) VALUES(?)");
             serverStop.setString(1, serverName);
 
             serverStop.executeUpdate();
@@ -556,14 +553,14 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void itemDrop(String serverName, String world, String playerName, String item, int amount, int x, int y, int z, List<String> enchantment, String changedName, boolean staff){
+    public static void itemDrop(String serverName, Player player, String item, int amount, int x, int y, int z, List<String> enchantment, String changedName, boolean staff){
 
         try {
 
-            final PreparedStatement itemDrop = plugin.getExternal().getConnection().prepareStatement("INSERT INTO item_drop (Server_Name,World,Player_Name,Item,Amount,X,Y,Z,Enchantment,Changed_Name,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+            final PreparedStatement itemDrop = plugin.getExternal().getConnection().prepareStatement("INSERT INTO item_drop (server_name, world, player_name, item, amount, x, y, z, enchantment, changed_name, is_staff) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
             itemDrop.setString(1, serverName);
-            itemDrop.setString(2, world);
-            itemDrop.setString(3, playerName);
+            itemDrop.setString(2, player.getWorld().getName());
+            itemDrop.setString(3, player.getName());
             itemDrop.setString(4, item);
             itemDrop.setInt(5, amount);
             itemDrop.setInt(6, x);
@@ -579,14 +576,14 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void enchant(String serverName, String world, String playerName, int x, int y, int z, List<String> enchantment, int enchantmentLevel, String item, int cost ,boolean staff){
+    public static void enchant(String serverName, Player player, int x, int y, int z, List<String> enchantment, int enchantmentLevel, String item, int cost ,boolean staff){
 
         try {
 
-            final PreparedStatement enchanting = plugin.getExternal().getConnection().prepareStatement("INSERT INTO enchanting (Server_Name,World,Player_Name,X,Y,Z,Enchantment,Enchantment_Level,Item,Cost,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+            final PreparedStatement enchanting = plugin.getExternal().getConnection().prepareStatement("INSERT INTO enchanting (server_name, world, player_name, x, y, z, enchantment, enchantment_level, item, cost, is_staff) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
             enchanting.setString(1, serverName);
-            enchanting.setString(2, world);
-            enchanting.setString(3, playerName);
+            enchanting.setString(2, player.getWorld().getName());
+            enchanting.setString(3, player.getName());
             enchanting.setInt(4, x);
             enchanting.setInt(5, y);
             enchanting.setInt(6, z);
@@ -602,14 +599,14 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void bookEditing(String serverName, String world, String playerName, int pages, List<String> content, String signed_by, boolean staff){
+    public static void bookEditing(String serverName, Player player, int pages, List<String> content, String signed_by, boolean staff){
 
         try {
 
-            final PreparedStatement enchanting = plugin.getExternal().getConnection().prepareStatement("INSERT INTO book_editing (Server_Name,World,Player_Name,Page_Count,Page_Content,Signed_by,Is_Staff) VALUES(?,?,?,?,?,?,?)");
+            final PreparedStatement enchanting = plugin.getExternal().getConnection().prepareStatement("INSERT INTO book_editing (server_name, world, player_name, page_count, page_content, signed_by, is_staff) VALUES(?,?,?,?,?,?,?)");
             enchanting.setString(1, serverName);
-            enchanting.setString(2, world);
-            enchanting.setString(3, playerName);
+            enchanting.setString(2, player.getWorld().getName());
+            enchanting.setString(3, player.getName());
             enchanting.setInt(4, pages);
             enchanting.setString(5, String.valueOf(content));
             enchanting.setString(6, signed_by);
@@ -621,16 +618,16 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void afk(String serverName, String world, String playerName, int x, int y, int z,boolean staff){
+    public static void afk(String serverName, Player player, int x, int y, int z,boolean staff){
 
         if (EssentialsUtil.getEssentialsAPI() != null) {
 
             try {
 
-                final PreparedStatement afk = plugin.getExternal().getConnection().prepareStatement("INSERT INTO afk (Server_Name,World,Player_Name,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?)");
+                final PreparedStatement afk = plugin.getExternal().getConnection().prepareStatement("INSERT INTO afk (server_name, world, player_name, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?)");
                 afk.setString(1, serverName);
-                afk.setString(2, world);
-                afk.setString(3, playerName);
+                afk.setString(2, player.getWorld().getName());
+                afk.setString(3, player.getName());
                 afk.setInt(4, x);
                 afk.setInt(5, y);
                 afk.setInt(6, z);
@@ -643,16 +640,16 @@ public class ExternalData {
         }
     }
 
-    public static void wrongPassword(String serverName, String world, String playerName,boolean staff){
+    public static void wrongPassword(String serverName, Player player, boolean staff){
 
         if (AuthMeUtil.getAuthMeAPI() != null) {
 
             try {
 
-                final PreparedStatement wrongPassword = plugin.getExternal().getConnection().prepareStatement("INSERT INTO wrong_password (Server_Name,World,Player_Name,Is_Staff) VALUES(?,?,?,?)");
+                final PreparedStatement wrongPassword = plugin.getExternal().getConnection().prepareStatement("INSERT INTO wrong_password (server_name, world, player_name, is_staff) VALUES(?,?,?,?)");
                 wrongPassword.setString(1, serverName);
-                wrongPassword.setString(2, world);
-                wrongPassword.setString(3, playerName);
+                wrongPassword.setString(2, player.getWorld().getName());
+                wrongPassword.setString(3, player.getName());
                 wrongPassword.setBoolean(4, staff);
 
                 wrongPassword.executeUpdate();
@@ -662,14 +659,14 @@ public class ExternalData {
         }
     }
 
-    public static void itemPickup(String serverName, String world, String playerName, Material item, int amount, int x, int y, int z, String changedName, boolean staff){
+    public static void itemPickup(String serverName, Player player, Material item, int amount, int x, int y, int z, String changedName, boolean staff){
 
         try {
 
-            final PreparedStatement itemPickup = plugin.getExternal().getConnection().prepareStatement("INSERT INTO item_pickup (Server_Name,World,Player_Name,Item,Amount,X,Y,Z,Changed_Name,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
+            final PreparedStatement itemPickup = plugin.getExternal().getConnection().prepareStatement("INSERT INTO item_pickup (server_name, world, player_name, item, amount, x, y, z, changed_name, is_staff) VALUES(?,?,?,?,?,?,?,?,?,?)");
             itemPickup.setString(1, serverName);
-            itemPickup.setString(2, world);
-            itemPickup.setString(3, playerName);
+            itemPickup.setString(2, player.getWorld().getName());
+            itemPickup.setString(3, player.getName());
             itemPickup.setString(4, String.valueOf(item));
             itemPickup.setInt(5, amount);
             itemPickup.setInt(6, x);
@@ -684,14 +681,14 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void furnace(String serverName, String world, String playerName, Material item, int amount, int x, int y, int z, boolean staff){
+    public static void furnace(String serverName, Player player, Material item, int amount, int x, int y, int z, boolean staff){
 
         try {
 
-            final PreparedStatement furnace = plugin.getExternal().getConnection().prepareStatement("INSERT INTO furnace (Server_Name,World,Player_Name,Item,Amount,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?)");
+            final PreparedStatement furnace = plugin.getExternal().getConnection().prepareStatement("INSERT INTO furnace (server_name, world, player_name, item, amount, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?,?)");
             furnace.setString(1, serverName);
-            furnace.setString(2, world);
-            furnace.setString(3, playerName);
+            furnace.setString(2, player.getWorld().getName());
+            furnace.setString(3, player.getName());
             furnace.setString(4, String.valueOf(item));
             furnace.setInt(5, amount);
             furnace.setInt(6, x);
@@ -705,13 +702,13 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void rcon(String serverName, String IP, String command) {
+    public static void rcon(String serverName, String ip, String command) {
 
         try {
 
-            final PreparedStatement rcon = plugin.getExternal().getConnection().prepareStatement("INSERT INTO rcon (Server_Name,IP,Command) VALUES(?,?,?)");
+            final PreparedStatement rcon = plugin.getExternal().getConnection().prepareStatement("INSERT INTO rcon (server_name, ip, command) VALUES(?,?,?)");
             rcon.setString(1, serverName);
-            rcon.setString(2, IP);
+            rcon.setString(2, ip);
             rcon.setString(3, command);
 
             rcon.executeUpdate();
@@ -720,14 +717,14 @@ public class ExternalData {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    public static void gameMode(String serverName, String world, String playerName, String gameMode, boolean staff) {
+    public static void gameMode(String serverName, Player player, String gameMode, boolean staff) {
 
         try {
 
-            final PreparedStatement game_Mode = plugin.getExternal().getConnection().prepareStatement("INSERT INTO game_mode (Server_Name,World,Player_Name,Game_Mode,Is_Staff) VALUES(?,?,?,?,?)");
+            final PreparedStatement game_Mode = plugin.getExternal().getConnection().prepareStatement("INSERT INTO game_mode (server_name, world, player_name, game_mode, is_staff) VALUES(?,?,?,?,?)");
             game_Mode.setString(1, serverName);
-            game_Mode.setString(2, world);
-            game_Mode.setString(3, playerName);
+            game_Mode.setString(2, player.getWorld().getName());
+            game_Mode.setString(3, player.getName());
             game_Mode.setString(4, gameMode);
             game_Mode.setBoolean(5, staff);
 
@@ -737,14 +734,14 @@ public class ExternalData {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    public static void playerCraft(String serverName, String world, String playerName, String item, int amount, int x, int y, int z, boolean staff){
+    public static void playerCraft(String serverName, Player player, String item, int amount, int x, int y, int z, boolean staff){
 
         try {
 
-            final PreparedStatement craft = plugin.getExternal().getConnection().prepareStatement("INSERT INTO crafting (Server_Name,World,Player_Name,Item,Amount,X,Y,Z,Is_Staff) VALUES(?,?,?,?,?,?,?,?,?)");
+            final PreparedStatement craft = plugin.getExternal().getConnection().prepareStatement("INSERT INTO crafting (server_name, world, player_name, item, amount, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?,?)");
             craft.setString(1, serverName);
-            craft.setString(2, world);
-            craft.setString(3, playerName);
+            craft.setString(2, player.getWorld().getName());
+            craft.setString(3, player.getName());
             craft.setString(4, item);
             craft.setInt(5, amount);
             craft.setInt(6, x);
@@ -758,13 +755,13 @@ public class ExternalData {
         } catch (SQLException e){ e.printStackTrace(); }
     }
 
-    public static void vault(String serverName, String playerName, double oldBal, double newBal, boolean staff){
+    public static void vault(String serverName, Player player, double oldBal, double newBal, boolean staff){
 
         try {
 
-            final PreparedStatement vault = plugin.getExternal().getConnection().prepareStatement("INSERT INTO vault (Server_Name,Player_Name,Old_Balance,New_Balance,Is_Staff) VALUES(?,?,?,?,?)");
+            final PreparedStatement vault = plugin.getExternal().getConnection().prepareStatement("INSERT INTO vault (server_name, player_name, old_balance, new_balance, is_staff) VALUES(?,?,?,?,?)");
             vault.setString(1, serverName);
-            vault.setString(2, playerName);
+            vault.setString(2, player.getName());
             vault.setDouble(3, oldBal);
             vault.setDouble(4, newBal);
             vault.setBoolean(5, staff);
@@ -779,10 +776,10 @@ public class ExternalData {
 
         try {
 
-            final PreparedStatement register = plugin.getExternal().getConnection().prepareStatement("INSERT INTO registration (Server_Name,Player_Name,Player_UUID,Join_Date) VALUES(?,?,?,?)");
+            final PreparedStatement register = plugin.getExternal().getConnection().prepareStatement("INSERT INTO registration (server_name, player_name, player_uuid, join_date) VALUES(?,?,?,?)");
             register.setString(1, serverName);
             register.setString(2, player.getName());
-            register.setString(3, String.valueOf(player.getUniqueId()));
+            register.setString(3, player.getUniqueId().toString());
             register.setString(4, joinDate);
 
             register.executeUpdate();
@@ -790,11 +787,32 @@ public class ExternalData {
 
         } catch (SQLException e){ e.printStackTrace(); }
     }
-    public static ResultSet getMessages(String playerName, int offset) {
+
+    public static void primedTNT(String serverName, Player player, int x, int y, int z, boolean staff){
+
         try {
-            
-            PreparedStatement getStatement = plugin.getExternal().getConnection().prepareStatement(
-                    "SELECT Message, id, Date FROM player_chat WHERE Player_Name=? ORDER BY id DESC, Date DESC LIMIT 10 OFFSET ?");
+
+            final PreparedStatement primedTNT = plugin.getExternal().getConnection().prepareStatement("INSERT INTO primed_tnt (server_name, world, player_name, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?)");
+            primedTNT.setString(1, serverName);
+            primedTNT.setString(2, player.getWorld().getName());
+            primedTNT.setString(3, player.getName());
+            primedTNT.setInt(4, x);
+            primedTNT.setInt(5, y);
+            primedTNT.setInt(6, z);
+            primedTNT.setBoolean(7, staff);
+
+            primedTNT.executeUpdate();
+            primedTNT.close();
+
+        } catch (SQLException e){ e.printStackTrace(); }
+    }
+
+    public static ResultSet getMessages(String playerName, int offset) {
+
+        try {
+
+            final PreparedStatement getStatement = plugin.getExternal().getConnection().prepareStatement(
+                    "SELECT message, id, Date FROM player_chat WHERE player_name=? ORDER BY id DESC, date DESC LIMIT 10 OFFSET ?");
 
             getStatement.setString(1, playerName);
             getStatement.setInt(2, offset);
@@ -802,102 +820,100 @@ public class ExternalData {
             return getStatement.executeQuery();
 
         } catch (Exception e) {
+
             e.printStackTrace();
             return null;
 
         }
-
     }
-    public void emptyTable(){
 
-        if (Data.externalDataDel <= 0) return;
+    public void emptyTable() {
 
-        try{
+        if (externalDataDel <= 0) return;
+
+        try {
             Statement stsm = plugin.getExternal().getConnection().createStatement();
             // Player Side Part
-             stsm.executeUpdate("DELETE FROM player_chat WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
-            
-             stsm.executeUpdate("DELETE FROM player_commands WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM player_chat WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM player_sign_text WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM player_commands WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM player_join WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM player_sign_text WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM player_leave WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM player_join WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM player_kick WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM player_leave WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM player_death WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM player_kick WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM player_teleport WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM player_death WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM player_level WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM player_teleport WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM block_place WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM player_level WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM block_break WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM block_place WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM bucket_fill WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM block_break WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM bucket_empty WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM bucket_fill WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM anvil WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM bucket_empty WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM item_drop WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM anvil WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM enchanting WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM item_drop WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM book_editing WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM enchanting WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM item_pickup WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM book_editing WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM furnace WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM item_pickup WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM game_mode WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM furnace WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM crafting WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM game_mode WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-             stsm.executeUpdate("DELETE FROM registration WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM crafting WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
+
+            stsm.executeUpdate("DELETE FROM registration WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
             // Server Side Part
-            stsm.executeUpdate("DELETE FROM server_start WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM server_start WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-            stsm.executeUpdate("DELETE FROM server_stop WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM server_stop WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-            stsm.executeUpdate("DELETE FROM console_commands WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM console_commands WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-            stsm.executeUpdate("DELETE FROM ram WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM ram WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-            stsm.executeUpdate("DELETE FROM tps WHERE Date < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM tps WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-            stsm.executeUpdate("DELETE FROM portal_creation WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM portal_creation WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-            stsm.executeUpdate("DELETE FROM rcon WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+            stsm.executeUpdate("DELETE FROM rcon WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
             // Extras Side Part
             if (EssentialsUtil.getEssentialsAPI() != null) {
 
-                stsm.executeUpdate("DELETE FROM afk WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
-
+                stsm.executeUpdate("DELETE FROM afk WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
             }
 
             if (AuthMeUtil.getAuthMeAPI() != null) {
 
-                stsm.executeUpdate("DELETE FROM wrong_password WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+                stsm.executeUpdate("DELETE FROM wrong_password WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-    
             }
 
             if (VaultUtil.getVaultAPI() && VaultUtil.getVault() != null) {
 
-                stsm.executeUpdate("DELETE FROM vault WHERE DATE < NOW() - INTERVAL " + Data.externalDataDel + " DAY");
+                stsm.executeUpdate("DELETE FROM vault WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
-           
             }
             stsm.close();
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
 
             plugin.getLogger().severe("An error has occurred while cleaning the tables, if the error persists, contact the Authors!");
             e.printStackTrace();

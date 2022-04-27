@@ -106,7 +106,7 @@ public class OnPlayerDeath implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.playerDeath(Data.serverName, worldName, playerName, playerLevel, x, y, z, cause, killer, true);
+                        ExternalData.playerDeath(Data.serverName, player, playerLevel, x, y, z, cause, killer, true);
 
                     }
 
@@ -158,7 +158,7 @@ public class OnPlayerDeath implements Listener {
 
                 try {
 
-                    ExternalData.playerDeath(Data.serverName, worldName, playerName, playerLevel, x, y, z, cause, killer, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.playerDeath(Data.serverName, player, playerLevel, x, y, z, cause, killer, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

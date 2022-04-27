@@ -68,7 +68,7 @@ public class OnCraft implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.playerCraft(Data.serverName, worldName, playerName, item, amount, x, y, z, true);
+                        ExternalData.playerCraft(Data.serverName, player, item, amount, x, y, z, true);
 
                     }
 
@@ -120,7 +120,7 @@ public class OnCraft implements Listener {
 
                 try {
 
-                    ExternalData.playerCraft(Data.serverName, worldName, playerName, item, amount, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.playerCraft(Data.serverName, player, item, amount, x, y, z, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

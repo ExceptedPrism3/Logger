@@ -53,6 +53,8 @@ Files:
   Player-Craft-Staff: "[%time%] [%world%] Le Staff <%player%> a fabriqué %amount% de %item% à X= %x%, Y= %y%, Z= %z%"
   Player-Craft: "[%time%] [%world%] Le Joueur <%player%> a fabriqué %amount% de %item% ŕ X= %x%, Y= %y%, Z= %z%"
   Player-Registration: "[%time%] Le Joueur <%player%> a rejoint le %date%"
+  Primed-TNT: "**[%time%]** **[%world%]** Le Joueur <%player%> a allumé un TNT à X= **%x%**, Y= **%y%**, Z= **%z%**"
+  Primed-TNT-Staff: "**[%time%]** **[%world%]** Le Staff <%player%> a allumé un TNT à X= **%x%**, Y= **%y%**, Z= **%z%**"
   Server-Side:
     Start: "[%time%]"
     Stop: "[%time%]"
@@ -119,6 +121,8 @@ Discord:
   Player-Craft-Staff: "**[%time%]** **[%world%]** ** ** a extrait **%amount%** de **%item%** d'un four situé à X= **%x%**, Y= **%y%**, Z= **%z%**"
   Player-Craft: "**[%time%]** **[%world%]** ** ** a extrait **%amount%** de **%item%** d'un four situé à X= **%x%**, Y= **%y%**, Z= **%z%**"
   Player-Registration: "**[%time%]** a rejoint le **%date%**"
+  Primed-TNT: "**[%time%]** **[%world%]** a allumé un TNT à X= **%x%**, Y= **%y%**, Z= **%z%**"
+  Primed-TNT-Staff: "**[%time%]** **[%world%]** a allumé un TNT à X= **%x%**, Y= **%y%**, Z= **%z%**"
   Server-Side:
     Start: "**%time%**"
     Stop: "**%time%**"

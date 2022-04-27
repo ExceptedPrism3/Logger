@@ -15,17 +15,15 @@ public class SQLiteDataRegistration {
 
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss:SSSXXX");
 
-    public SQLiteDataRegistration(Main plugin) {
-        SQLiteDataRegistration.plugin = plugin;
-    }
+    public SQLiteDataRegistration(Main plugin) { SQLiteDataRegistration.plugin = plugin; }
 
     public void createTable() {
 
         try {
 
             final PreparedStatement registration = plugin.getSqLiteReg().getConnection().prepareStatement("CREATE TABLE" +
-                    " IF NOT EXISTS Registration (Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, Player_Name TEXT(20)," +
-                    "Player_UUID INTEGER(70))");
+                    " IF NOT EXISTS registration (date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, player_name TEXT(20)," +
+                    "player_uuid INTEGER(70))");
 
             registration.executeUpdate();
             registration.close();
@@ -38,7 +36,7 @@ public class SQLiteDataRegistration {
         try {
 
             final PreparedStatement register = plugin.getSqLiteReg().getConnection().prepareStatement("INSERT INTO" +
-                    " Registration (Date, Player_Name, Player_UUID) VALUES (?,?,?)");
+                    " registration (date, player_name, player_uuid) VALUES (?,?,?)");
 
             register.setString(1, dateTimeFormatter.format(ZonedDateTime.now()));
             register.setString(2, player.getName());
@@ -54,7 +52,7 @@ public class SQLiteDataRegistration {
 
         try {
             final PreparedStatement statement = plugin.getSqLiteReg().getConnection().prepareStatement("SELECT " +
-                    "* FROM Registration WHERE Player_UUID=? LIMIT 1");
+                    "* FROM registration WHERE player_uuid=? LIMIT 1");
 
             statement.setString(1, String.valueOf(player.getUniqueId()));
             final ResultSet results = statement.executeQuery();

@@ -721,7 +721,7 @@ public class FileHandler {
             }
         }
 
-        if (AuthMeUtil.getAuthMeAPI() != null) {
+        if (VaultUtil.getVaultAPI() && VaultUtil.getVault() != null) {
             for (File password : Objects.requireNonNull(wrongPasswordFolder.listFiles())) {
 
                 deleteFile(password);

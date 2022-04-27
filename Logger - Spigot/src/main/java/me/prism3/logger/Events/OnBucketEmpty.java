@@ -67,7 +67,7 @@ public class OnBucketEmpty implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.bucketEmpty(Data.serverName, worldName, playerName, bucket, x, y, z, true);
+                        ExternalData.bucketEmpty(Data.serverName, player, bucket, x, y, z, true);
 
                     }
 
@@ -119,7 +119,7 @@ public class OnBucketEmpty implements Listener {
 
                 try {
 
-                    ExternalData.bucketEmpty(Data.serverName, worldName, playerName, bucket, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.bucketEmpty(Data.serverName, player, bucket, x, y, z, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

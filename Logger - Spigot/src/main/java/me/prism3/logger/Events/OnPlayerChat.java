@@ -64,7 +64,7 @@ public class OnPlayerChat implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.playerChat(Data.serverName, worldName, playerName, msg, true);
+                        ExternalData.playerChat(Data.serverName, player, msg, true);
 
                     }
 
@@ -116,7 +116,7 @@ public class OnPlayerChat implements Listener {
 
                 try {
 
-                    ExternalData.playerChat(Data.serverName, worldName, playerName, msg, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.playerChat(Data.serverName, player, msg, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

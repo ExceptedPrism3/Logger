@@ -65,7 +65,7 @@ public class OnPlayerLeave implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.playerLeave(Data.serverName, worldName, playerName, x, y, z, true);
+                        ExternalData.playerLeave(Data.serverName, player, x, y, z, true);
 
                     }
 
@@ -117,7 +117,7 @@ public class OnPlayerLeave implements Listener {
 
                 try {
 
-                    ExternalData.playerLeave(Data.serverName, worldName, playerName, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.playerLeave(Data.serverName, player, x, y, z, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
