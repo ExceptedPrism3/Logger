@@ -266,7 +266,6 @@ public class SQLiteData {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-
     public void emptyTable() {
 
         if (sqliteDataDel <= 0) return;

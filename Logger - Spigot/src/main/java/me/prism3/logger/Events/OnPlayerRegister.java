@@ -1,12 +1,12 @@
-package me.prism3.logger.Events;
+package me.prism3.logger.events;
 
-import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Database.SQLite.Global.SQLiteData;
-import me.prism3.logger.Discord.Discord;
+import me.prism3.logger.database.external.ExternalData;
+import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.discord.Discord;
 import me.prism3.logger.Main;
-import me.prism3.logger.Utils.Data;
-import me.prism3.logger.Utils.FileHandler;
-import me.prism3.logger.Utils.Messages;
+import me.prism3.logger.utils.Data;
+import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -47,7 +47,7 @@ public class OnPlayerRegister {
             try {
 
                 BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRegistrationFile(), true));
-                out.write(Objects.requireNonNull(Messages.get().getString("Files.Player-Registration")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%date%", dateFormat.format(ZonedDateTime.now())) + "\n");
+                out.write(Objects.requireNonNull(Messages.get().getString("Files.Player-Registration")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())) + "\n");
                 out.close();
 
             } catch (IOException e) {
@@ -63,7 +63,7 @@ public class OnPlayerRegister {
 
             if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Registration")).isEmpty()) {
 
-                Discord.playerRegistration(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Registration")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%date%", dateFormat.format(ZonedDateTime.now())), false);
+                Discord.playerRegistration(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Registration")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())), false);
             }
         }
 

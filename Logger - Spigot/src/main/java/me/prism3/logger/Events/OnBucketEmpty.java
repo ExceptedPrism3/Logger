@@ -1,12 +1,12 @@
-package me.prism3.logger.Events;
+package me.prism3.logger.events;
 
-import me.prism3.logger.Discord.Discord;
+import me.prism3.logger.discord.Discord;
 import me.prism3.logger.Main;
-import me.prism3.logger.Utils.FileHandler;
-import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Database.SQLite.Global.SQLiteData;
-import me.prism3.logger.Utils.Messages;
-import me.prism3.logger.Utils.Data;
+import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.database.external.ExternalData;
+import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.Messages;
+import me.prism3.logger.utils.Data;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -36,7 +36,7 @@ public class OnBucketEmpty implements Listener {
             final String playerName = player.getName();
             final World world = player.getWorld();
             final String worldName = world.getName();
-            final String bucket = event.getBucket().toString().replaceAll("_", " ").replaceAll("LEGACY", "");
+            final String bucket = event.getBucket().toString().replace("_", " ").replace("LEGACY", "");
             final int x = player.getLocation().getBlockX();
             final int y = player.getLocation().getBlockY();
             final int z = player.getLocation().getBlockZ();
@@ -48,14 +48,14 @@ public class OnBucketEmpty implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Empty-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Empty-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket), false);
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Empty-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket), false);
 
                     }
 
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Bucket-Empty-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket) + "\n");
+                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Bucket-Empty-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -84,7 +84,7 @@ public class OnBucketEmpty implements Listener {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBucketEmptyFolder(), true));
-                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Bucket-Empty")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket) + "\n");
+                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Bucket-Empty")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -102,14 +102,14 @@ public class OnBucketEmpty implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Empty-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Empty-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket), false);
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Empty-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket), false);
 
                     }
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Empty")).isEmpty()) {
 
-                        Discord.bucketEmpty(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Empty")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%bucket%", bucket), false);
+                        Discord.bucketEmpty(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Empty")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket), false);
                     }
                 }
             }

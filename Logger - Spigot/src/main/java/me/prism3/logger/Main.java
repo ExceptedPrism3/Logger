@@ -1,38 +1,36 @@
 package me.prism3.logger;
 
-import me.prism3.logger.API.AuthMeUtil;
-import me.prism3.logger.API.EssentialsUtil;
-import me.prism3.logger.API.VaultUtil;
-import me.prism3.logger.Commands.CommandManager;
-import me.prism3.logger.Commands.Dump;
-import me.prism3.logger.Commands.Getting.Chat;
-import me.prism3.logger.Commands.SubCommands.PlayerInventoryCommand;
-import me.prism3.logger.Database.External.External;
-import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Database.External.ExternalUpdater;
-import me.prism3.logger.Database.SQLite.Registration.SQLiteDataRegistration;
-import me.prism3.logger.Database.SQLite.Registration.SQLiteRegistration;
-import me.prism3.logger.Discord.Discord;
-import me.prism3.logger.Discord.DiscordFile;
-import me.prism3.logger.Events.Misc.OnSpawnEgg;
-import me.prism3.logger.Events.Misc.OnPrimedTNT;
-import me.prism3.logger.Events.OnCommands.OnCommand;
-import me.prism3.logger.Events.OnInventories.OnCraft;
-import me.prism3.logger.Events.OnInventories.OnFurnace;
-import me.prism3.logger.Events.OnPlayerDeath;
-import me.prism3.logger.Events.PluginDependent.OnAFK;
-import me.prism3.logger.Events.PluginDependent.OnAuthMePassword;
-import me.prism3.logger.Events.PluginDependent.OnVault;
-import me.prism3.logger.Database.SQLite.Global.SQLite;
-import me.prism3.logger.Database.SQLite.Global.SQLiteData;
+import me.prism3.logger.api.*;
+import me.prism3.logger.commands.CommandManager;
+import me.prism3.logger.commands.getting.Chat;
+import me.prism3.logger.commands.subcommands.PlayerInventoryCommand;
+import me.prism3.logger.database.external.External;
+import me.prism3.logger.database.external.ExternalData;
+import me.prism3.logger.database.external.ExternalUpdater;
+import me.prism3.logger.database.sqlite.registration.SQLiteDataRegistration;
+import me.prism3.logger.database.sqlite.registration.SQLiteRegistration;
+import me.prism3.logger.discord.Discord;
+import me.prism3.logger.discord.DiscordFile;
+import me.prism3.logger.events.misc.OnPrimedTNT;
+import me.prism3.logger.events.oncommands.OnCommand;
+import me.prism3.logger.events.oninventories.OnChestInteraction;
+import me.prism3.logger.events.oninventories.OnCraft;
+import me.prism3.logger.events.oninventories.OnFurnace;
+import me.prism3.logger.events.OnPlayerDeath;
+import me.prism3.logger.events.onversioncompatibility.OnWoodStripping;
+import me.prism3.logger.events.plugindependent.*;
+import me.prism3.logger.database.sqlite.global.SQLite;
+import me.prism3.logger.database.sqlite.global.SQLiteData;
 import de.jeff_media.updatechecker.UpdateChecker;
-import me.prism3.logger.Events.*;
-import me.prism3.logger.ServerSide.*;
-import me.prism3.logger.Utils.*;
+import me.prism3.logger.events.*;
+import me.prism3.logger.serverside.*;
+import me.prism3.logger.utils.*;
+import me.prism3.logger.utils.enums.NmsVersions;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import static me.prism3.logger.Utils.Data.*;
+import static me.prism3.logger.utils.Data.*;
 
 public class Main extends JavaPlugin {
 
@@ -48,13 +46,16 @@ public class Main extends JavaPlugin {
 
     private Discord discord;
 
+    private final NmsVersions version = NmsVersions.valueOf(Bukkit.getServer().getClass().getPackage().getName().replace(".",  ",").split(",")[3]);
+
     @Override
     public void onEnable() {
 
         instance = this;
 
         this.saveDefaultConfig();
-        this.getConfig().options().copyDefaults();
+
+        new ConfigUpdater(this.getDataFolder());
 
         this.initializer(new Data());
 
@@ -68,52 +69,20 @@ public class Main extends JavaPlugin {
         this.discord = new Discord();
         this.discord.run();
 
-        if (Data.isLogToFiles && isSqlite){
+        if (isLogToFiles && isSqlite) {
 
             this.getLogger().warning("Logging to Files and SQLite are both enabled, this might impact your Server's Performance!");
 
         }
 
-        FileHandler fileHandler = new FileHandler(this.getDataFolder());
+        final FileHandler fileHandler = new FileHandler(this.getDataFolder());
         fileHandler.deleteFiles();
+
         this.databaseSetup();
-        
 
-        this.getServer().getPluginManager().registerEvents(new OnPlayerChat(), this);
-        this.getServer().getPluginManager().registerEvents(new OnCommand(), this);
-        this.getServer().getPluginManager().registerEvents(new Console(), this);
-        this.getServer().getPluginManager().registerEvents(new OnSign(), this);
-        this.getServer().getPluginManager().registerEvents(new OnPlayerJoin(), this);
-        this.getServer().getPluginManager().registerEvents(new OnPlayerLeave(), this);
-        this.getServer().getPluginManager().registerEvents(new OnPlayerKick(), this);
-        this.getServer().getPluginManager().registerEvents(new OnPlayerDeath(), this);
-        this.getServer().getPluginManager().registerEvents(new OnPlayerTeleport(), this);
-        this.getServer().getPluginManager().registerEvents(new OnPlayerLevel(), this);
-        this.getServer().getPluginManager().registerEvents(new OnBlockPlace(), this);
-        this.getServer().getPluginManager().registerEvents(new OnBlockBreak(), this);
-        this.getServer().getPluginManager().registerEvents(new PortalCreation(), this);
-        this.getServer().getPluginManager().registerEvents(new OnBucketFill(), this);
-        this.getServer().getPluginManager().registerEvents(new OnBucketEmpty(), this);
-        this.getServer().getPluginManager().registerEvents(new OnAnvil(), this);
-        this.getServer().getPluginManager().registerEvents(new OnItemPickup(), this);
-        this.getServer().getPluginManager().registerEvents(new OnItemDrop(), this);
-        this.getServer().getPluginManager().registerEvents(new OnEnchant(), this);
-        this.getServer().getPluginManager().registerEvents(new OnBook(), this);
-        this.getServer().getPluginManager().registerEvents(new RCON(), this);
-        this.getServer().getPluginManager().registerEvents(new OnGameMode(), this);
-        this.getServer().getPluginManager().registerEvents(new OnPrimedTNT(), this);
-        this.getServer().getPluginManager().registerEvents(new OnSpawnEgg(), this);
-        this.getServer().getPluginManager().registerEvents(new PlayerInventoryCommand(), this);
+        this.eventsInitializer();
 
-        this.getServer().getPluginManager().registerEvents(new OnFurnace(), this);
-        this.getServer().getPluginManager().registerEvents(new OnCraft(), this);
-
-        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TPS(), 300L, Data.ramTpsChecker);
-        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new RAM(), 300L, Data.ramTpsChecker);
-
-        this.getCommand("logger").setExecutor(new CommandManager());
-        this.getCommand("loggerd").setExecutor(new Dump());
-        this.getCommand("loggerget").setExecutor(new Chat());
+        this.commandsInitializer();
 
         new ASCIIArt().Art();
 
@@ -133,7 +102,7 @@ public class Main extends JavaPlugin {
 
         this.loadPluginDepends();
 
-        this.getLogger().info(ChatColor.GOLD + "Thank you " + ChatColor.GREEN + ChatColor.BOLD + "thelooter" + ChatColor.GOLD + " for the Contribution!");
+        this.getLogger().info(ChatColor.GOLD + "Thanks to everyone's contributions that helped made this project possible!");
 
         this.getLogger().info("Plugin Enabled!");
 
@@ -159,7 +128,7 @@ public class Main extends JavaPlugin {
 
     }
 
-    private void initializer(Data data){
+    private void initializer(Data data) {
 
         data.initializeDateFormatter();
         data.initializeStrings();
@@ -171,15 +140,66 @@ public class Main extends JavaPlugin {
 
     }
 
-    private void databaseSetup(){
+    private void eventsInitializer() {
+
+        this.getServer().getPluginManager().registerEvents(new OnPlayerChat(), this);
+        this.getServer().getPluginManager().registerEvents(new OnCommand(), this);
+        this.getServer().getPluginManager().registerEvents(new Console(), this);
+        this.getServer().getPluginManager().registerEvents(new OnSign(), this);
+        this.getServer().getPluginManager().registerEvents(new OnPlayerJoin(), this);
+        this.getServer().getPluginManager().registerEvents(new OnPlayerLeave(), this);
+        this.getServer().getPluginManager().registerEvents(new OnPlayerKick(), this);
+        this.getServer().getPluginManager().registerEvents(new OnPlayerDeath(), this);
+        this.getServer().getPluginManager().registerEvents(new OnPlayerTeleport(), this);
+        this.getServer().getPluginManager().registerEvents(new OnPlayerLevel(), this);
+        this.getServer().getPluginManager().registerEvents(new OnBlockPlace(), this);
+        this.getServer().getPluginManager().registerEvents(new OnBlockBreak(), this);
+        this.getServer().getPluginManager().registerEvents(new PortalCreation(), this);
+        this.getServer().getPluginManager().registerEvents(new OnBucketFill(), this);
+        this.getServer().getPluginManager().registerEvents(new OnBucketEmpty(), this);
+        this.getServer().getPluginManager().registerEvents(new OnAnvil(), this);
+        this.getServer().getPluginManager().registerEvents(new OnItemPickup(), this);
+        this.getServer().getPluginManager().registerEvents(new OnItemDrop(), this);
+        this.getServer().getPluginManager().registerEvents(new OnEnchant(), this);
+        this.getServer().getPluginManager().registerEvents(new OnBook(), this);
+        this.getServer().getPluginManager().registerEvents(new RCON(), this);
+        this.getServer().getPluginManager().registerEvents(new OnGameMode(), this);
+        this.getServer().getPluginManager().registerEvents(new OnPrimedTNT(), this);
+//        this.getServer().getPluginManager().registerEvents(new OnSpawnEgg(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerInventoryCommand(), this);
+        this.getServer().getPluginManager().registerEvents(new OnCommandBlock(), this);
+
+        this.getServer().getPluginManager().registerEvents(new OnFurnace(), this);
+        this.getServer().getPluginManager().registerEvents(new OnCraft(), this);
+        this.getServer().getPluginManager().registerEvents(new OnChestInteraction(), this);
+
+        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TPS(), 300L, Data.ramTpsChecker);
+        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new RAM(), 300L, Data.ramTpsChecker);
+
+        // Version Exceptions
+        if (this.getVersion().isAtLeast(NmsVersions.v1_13_R1)) {
+
+            this.getServer().getPluginManager().registerEvents(new OnWoodStripping(), this);
+
+        }
+    }
+
+    private void commandsInitializer() {
+
+        this.getCommand("logger").setExecutor(new CommandManager());
+        this.getCommand("loggerget").setExecutor(new Chat());
+
+    }
+
+    private void databaseSetup() {
 
         if (isExternal) {
 
             this.external = new External();
             this.external.connect();   
-            ExternalData externalData = new ExternalData(this);
+            ExternalData externalData = new ExternalData();
             if (this.external.isConnected()) {
-                new ExternalUpdater();
+                ExternalUpdater.updater();
                 externalData.createTable();
                 externalData.emptyTable();
             }
@@ -196,7 +216,7 @@ public class Main extends JavaPlugin {
             }
         }
 
-        if (isRegistration){
+        if (isRegistration) {
 
             this.sqLiteReg = new SQLiteRegistration();
             this.sqLiteReg.connect();
@@ -205,9 +225,9 @@ public class Main extends JavaPlugin {
         }
     }
 
-    private void loadPluginDepends(){
+    private void loadPluginDepends() {
 
-        if (EssentialsUtil.getEssentialsAPI() != null){
+        if (EssentialsUtil.getEssentialsAPI() != null) {
 
             this.getServer().getPluginManager().registerEvents(new OnAFK(), this);
 
@@ -215,7 +235,7 @@ public class Main extends JavaPlugin {
 
         }
 
-        if (AuthMeUtil.getAuthMeAPI() != null){
+        if (AuthMeUtil.getAuthMeAPI() != null) {
 
             this.getServer().getPluginManager().registerEvents(new OnAuthMePassword(), this);
 
@@ -233,9 +253,23 @@ public class Main extends JavaPlugin {
             }
             this.getLogger().info("Vault Plugin Detected!");
         }
+
+        if (LiteBansUtil.getLiteBansAPI() != null) {
+
+            this.getServer().getScheduler().scheduleSyncDelayedTask(this, new OnLiteBanEvents(), 10L);
+
+            this.getLogger().info("LiteBans Plugin Detected!");
+        }
+
+        if (AdvancedBanUtil.getAdvancedBanAPI() != null) {
+
+            this.getServer().getPluginManager().registerEvents(new OnAdvancedBan(), this);
+
+            this.getLogger().info("AdvancedBan Plugin Detected!");
+        }
     }
 
-    private boolean langChecker(){
+    private boolean langChecker() {
 
         this.mS = new Messages();
 
@@ -246,7 +280,7 @@ public class Main extends JavaPlugin {
         } return true;
     }
 
-    private boolean configChecker(){
+    private boolean configChecker() {
 
         this.cF = new ConfigChecker();
 
@@ -263,5 +297,11 @@ public class Main extends JavaPlugin {
     public SQLite getSqLite() { return this.sqLite; }
 
     public SQLiteRegistration getSqLiteReg() { return this.sqLiteReg; }
+
+    public NmsVersions getVersion() {
+        return version;
+    }
+
+    public Discord getDiscord() { return this.discord; }
 
 }

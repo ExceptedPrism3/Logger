@@ -1,13 +1,13 @@
-package me.prism3.logger.Events;
+package me.prism3.logger.events;
 
-import me.prism3.logger.Discord.Discord;
-import me.prism3.logger.Events.Spy.OnAnvilSpy;
+import me.prism3.logger.discord.Discord;
+import me.prism3.logger.events.spy.OnAnvilSpy;
 import me.prism3.logger.Main;
-import me.prism3.logger.Utils.FileHandler;
-import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Database.SQLite.Global.SQLiteData;
-import me.prism3.logger.Utils.Messages;
-import me.prism3.logger.Utils.Data;
+import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.database.external.ExternalData;
+import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.Messages;
+import me.prism3.logger.utils.Data;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -77,14 +77,14 @@ private final Main main = Main.getInstance();
 
                                             if (!Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).isEmpty()) {
 
-                                                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%renamed%", displayName), false);
+                                                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%renamed%", displayName), false);
 
                                             }
 
                                             try {
 
                                                 BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                                                out.write(Objects.requireNonNull(Messages.get().getString("Files.Anvil-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%renamed%", displayName) + "\n");
+                                                out.write(Objects.requireNonNull(Messages.get().getString("Files.Anvil-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%renamed%", displayName) + "\n");
                                                 out.close();
 
                                             } catch (IOException e) {
@@ -113,7 +113,7 @@ private final Main main = Main.getInstance();
                                         try {
 
                                             BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAnvilFile(), true));
-                                            out.write(Objects.requireNonNull(Messages.get().getString("Files.Anvil")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%renamed%", displayName) + "\n");
+                                            out.write(Objects.requireNonNull(Messages.get().getString("Files.Anvil")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%renamed%", displayName) + "\n");
                                             out.close();
 
                                         } catch (IOException e) {
@@ -131,14 +131,14 @@ private final Main main = Main.getInstance();
 
                                             if (!Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).isEmpty()) {
 
-                                                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%renamed%", displayName), false);
+                                                Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%renamed%", displayName), false);
 
                                             }
                                         } else {
 
                                             if (!Objects.requireNonNull(Messages.get().getString("Discord.Anvil")).isEmpty()) {
 
-                                                Discord.anvil(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%renamed%", displayName), false);
+                                                Discord.anvil(player, Objects.requireNonNull(Messages.get().getString("Discord.Anvil")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%renamed%", displayName), false);
                                             }
                                         }
                                     }

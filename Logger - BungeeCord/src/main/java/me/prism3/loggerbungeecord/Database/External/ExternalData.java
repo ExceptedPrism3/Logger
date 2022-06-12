@@ -265,6 +265,7 @@ public class ExternalData {
                 liteBans.executeUpdate();
                 liteBans.close();
             }
+
             player_Chat.executeUpdate();
             player_Chat.close();
             player_Login.executeUpdate();

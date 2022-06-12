@@ -4,7 +4,7 @@ main: me.prism3.logger.Main
 api-version: 1.13
 authors: [ Prism3 , thelooter, Sidna ]
 description: Log all Activities from Players and Server Side!
-softdepend: [Essentials, AuthMe, Vault, PlaceholderAPI]
+softdepend: [Essentials, AuthMe, Vault, PlaceholderAPI, LiteBans, AdvancedBan]
 commands:
   logger:
     description: "Plugin command."
@@ -26,7 +26,6 @@ permissions:
       logger.update: true
   logger.exempt:
     description: "Prevents the Player from getting logged."
-    default: op
     children:
       logger.exempt.discord: true
   logger.exempt.discord:

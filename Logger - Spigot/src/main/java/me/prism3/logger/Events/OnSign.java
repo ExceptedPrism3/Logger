@@ -1,13 +1,13 @@
-package me.prism3.logger.Events;
+package me.prism3.logger.events;
 
-import me.prism3.logger.Discord.Discord;
-import me.prism3.logger.Events.Spy.OnSignSpy;
+import me.prism3.logger.discord.Discord;
+import me.prism3.logger.events.spy.OnSignSpy;
 import me.prism3.logger.Main;
-import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Utils.FileHandler;
-import me.prism3.logger.Database.SQLite.Global.SQLiteData;
-import me.prism3.logger.Utils.Messages;
-import me.prism3.logger.Utils.Data;
+import me.prism3.logger.database.external.ExternalData;
+import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.Messages;
+import me.prism3.logger.utils.Data;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -58,14 +58,14 @@ public class OnSign implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%line1%", lines.get(0).replace("\\", "\\\\")).replaceAll("%line2%", lines.get(1).replace("\\", "\\\\")).replaceAll("%line3%", lines.get(2).replace("\\", "\\\\")).replaceAll("%line4%", lines.get(3).replace("\\", "\\\\")), false);
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%line1%", lines.get(0).replace("\\", "\\\\")).replace("%line2%", lines.get(1).replace("\\", "\\\\")).replace("%line3%", lines.get(2).replace("\\", "\\\\")).replace("%line4%", lines.get(3).replace("\\", "\\\\")), false);
 
                     }
 
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Player-Sign-Text-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%line1%", lines.get(0).replace("\\", "\\\\")).replaceAll("%line2%", lines.get(1).replace("\\", "\\\\")).replaceAll("%line3%", lines.get(2).replace("\\", "\\\\")).replaceAll("%line4%", lines.get(3).replace("\\", "\\\\")) + "\n");
+                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Player-Sign-Text-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%line1%", lines.get(0).replace("\\", "\\\\")).replace("%line2%", lines.get(1).replace("\\", "\\\\")).replace("%line3%", lines.get(2).replace("\\", "\\\\")).replace("%line4%", lines.get(3).replace("\\", "\\\\")) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -93,7 +93,7 @@ public class OnSign implements Listener {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getSignLogFile(), true));
-                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Player-Sign-Text")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%line1%", lines.get(0).replace("\\", "\\\\")).replaceAll("%line2%", lines.get(1).replace("\\", "\\\\")).replaceAll("%line3%", lines.get(2).replace("\\", "\\\\")).replaceAll("%line4%", lines.get(3).replace("\\", "\\\\")) + "\n");
+                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Player-Sign-Text")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%line1%", lines.get(0).replace("\\", "\\\\")).replace("%line2%", lines.get(1).replace("\\", "\\\\")).replace("%line3%", lines.get(2).replace("\\", "\\\\")).replace("%line4%", lines.get(3).replace("\\", "\\\\")) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -111,14 +111,14 @@ public class OnSign implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%line1%", lines.get(0).replace("\\", "\\\\")).replaceAll("%line2%", lines.get(1).replace("\\", "\\\\")).replaceAll("%line3%", lines.get(2).replace("\\", "\\\\")).replaceAll("%line4%", lines.get(3).replace("\\", "\\\\")), false);
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%line1%", lines.get(0).replace("\\", "\\\\")).replace("%line2%", lines.get(1).replace("\\", "\\\\")).replace("%line3%", lines.get(2).replace("\\", "\\\\")).replace("%line4%", lines.get(3).replace("\\", "\\\\")), false);
 
                     }
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text")).isEmpty()) {
 
-                        Discord.playerSignText(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%line1%", lines.get(0).replace("\\", "\\\\")).replaceAll("%line2%", lines.get(1).replace("\\", "\\\\")).replaceAll("%line3%", lines.get(2).replace("\\", "\\\\")).replaceAll("%line4%", lines.get(3).replace("\\", "\\\\")), false);
+                        Discord.playerSignText(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Sign-Text-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%line1%", lines.get(0).replace("\\", "\\\\")).replace("%line2%", lines.get(1).replace("\\", "\\\\")).replace("%line3%", lines.get(2).replace("\\", "\\\\")).replace("%line4%", lines.get(3).replace("\\", "\\\\")), false);
                     }
                 }
             }

@@ -1,14 +1,14 @@
-package me.prism3.logger.Events;
+package me.prism3.logger.events;
 
-import me.prism3.logger.API.AuthMeUtil;
-import me.prism3.logger.Discord.Discord;
+import me.prism3.logger.api.AuthMeUtil;
+import me.prism3.logger.discord.Discord;
 import me.prism3.logger.Main;
-import me.prism3.logger.Utils.FileHandler;
-import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Database.SQLite.Global.SQLiteData;
-import me.prism3.logger.Utils.Messages;
+import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.database.external.ExternalData;
+import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.Messages;
 import fr.xephi.authme.api.v3.AuthMeApi;
-import me.prism3.logger.Utils.Data;
+import me.prism3.logger.utils.Data;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,7 +27,7 @@ public class OnPlayerTeleport implements Listener {
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onTeleport(final PlayerTeleportEvent event){
+    public void onTeleport(final PlayerTeleportEvent event) {
 
         if (event.getPlayer().hasMetadata("NPC")) return; // Return if player is NPC. Could be Villager or NPC from Citizens etc...
 
@@ -55,13 +55,13 @@ public class OnPlayerTeleport implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%oldX%", String.valueOf(ox)).replaceAll("%oldY%", String.valueOf(oy)).replaceAll("%oldZ%", String.valueOf(oz)).replaceAll("%newX%", String.valueOf(tx)).replaceAll("%newY%", String.valueOf(ty)).replaceAll("%newZ%", String.valueOf(tz)), false);
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%oldX%", String.valueOf(ox)).replace("%oldY%", String.valueOf(oy)).replace("%oldZ%", String.valueOf(oz)).replace("%newX%", String.valueOf(tx)).replace("%newY%", String.valueOf(ty)).replace("%newZ%", String.valueOf(tz)), false);
                     }
 
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Player-Teleport-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%oldX%", String.valueOf(ox)).replaceAll("%oldY%", String.valueOf(oy)).replaceAll("%oldZ%", String.valueOf(oz)).replaceAll("%newX%", String.valueOf(tx)).replaceAll("%newY%", String.valueOf(ty)).replaceAll("%newZ%", String.valueOf(tz)) + "\n");
+                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Player-Teleport-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%oldX%", String.valueOf(ox)).replace("%oldY%", String.valueOf(oy)).replace("%oldZ%", String.valueOf(oz)).replace("%newX%", String.valueOf(tx)).replace("%newY%", String.valueOf(ty)).replace("%newZ%", String.valueOf(tz)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -73,7 +73,7 @@ public class OnPlayerTeleport implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.playerTeleport(Data.serverName, player, ox, oy, oz, tx, ty, tz, true);
+                        ExternalData.playerTeleport(Data.serverName, player, tx, ty, tz, true);
 
                     }
 
@@ -90,7 +90,7 @@ public class OnPlayerTeleport implements Listener {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerTeleportLogFile(), true));
-                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Player-Teleport")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%oldX%", String.valueOf(ox)).replaceAll("%oldY%", String.valueOf(oy)).replaceAll("%oldZ%", String.valueOf(oz)).replaceAll("%newX%", String.valueOf(tx)).replaceAll("%newY%", String.valueOf(ty)).replaceAll("%newZ%", String.valueOf(tz)) + "\n");
+                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Player-Teleport")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%oldX%", String.valueOf(ox)).replace("%oldY%", String.valueOf(oy)).replace("%oldZ%", String.valueOf(oz)).replace("%newX%", String.valueOf(tx)).replace("%newY%", String.valueOf(ty)).replace("%newZ%", String.valueOf(tz)) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -108,14 +108,14 @@ public class OnPlayerTeleport implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%oldX%", String.valueOf(ox)).replaceAll("%oldY%", String.valueOf(oy)).replaceAll("%oldZ%", String.valueOf(oz)).replaceAll("%newX%", String.valueOf(tx)).replaceAll("%newY%", String.valueOf(ty)).replaceAll("%newZ%", String.valueOf(tz)), false);
+                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%oldX%", String.valueOf(ox)).replace("%oldY%", String.valueOf(oy)).replace("%oldZ%", String.valueOf(oz)).replace("%newX%", String.valueOf(tx)).replace("%newY%", String.valueOf(ty)).replace("%newZ%", String.valueOf(tz)), false);
 
                     }
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport")).isEmpty()) {
 
-                        Discord.playerTeleport(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%oldX%", String.valueOf(ox)).replaceAll("%oldY%", String.valueOf(oy)).replaceAll("%oldZ%", String.valueOf(oz)).replaceAll("%newX%", String.valueOf(tx)).replaceAll("%newY%", String.valueOf(ty)).replaceAll("%newZ%", String.valueOf(tz)), false);
+                        Discord.playerTeleport(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Teleport")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%oldX%", String.valueOf(ox)).replace("%oldY%", String.valueOf(oy)).replace("%oldZ%", String.valueOf(oz)).replace("%newX%", String.valueOf(tx)).replace("%newY%", String.valueOf(ty)).replace("%newZ%", String.valueOf(tz)), false);
                     }
                 }
             }
@@ -125,7 +125,7 @@ public class OnPlayerTeleport implements Listener {
 
                 try {
 
-                    ExternalData.playerTeleport(Data.serverName, player, ox, oy, oz, tx, ty, tz, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.playerTeleport(Data.serverName, player, tx, ty, tz, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

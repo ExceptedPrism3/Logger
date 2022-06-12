@@ -77,6 +77,15 @@ Discord:
       Channel-ID: 'LINK_HERE'
     Vault:
       Channel-ID: 'LINK_HERE'
+    LiteBans:
+      Channel-ID: 'LINK_HERE'
+    AdvancedBan:
+      Channel-ID: 'LINK_HERE'
+    Command-Block:
+      Channel-ID: 'LINK_HERE'
+  Version-Exceptions:
+    Wood-Stripping:
+      Channel-ID: 'LINK_HERE'
 # Bot Activity Status
 # Randomize the shown status
 # First Part must not be different from

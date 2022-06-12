@@ -1,13 +1,13 @@
-package me.prism3.logger.Events.PluginDependent;
+package me.prism3.logger.events.plugindependent;
 
-import me.prism3.logger.API.VaultUtil;
-import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Database.SQLite.Global.SQLiteData;
-import me.prism3.logger.Discord.Discord;
+import me.prism3.logger.api.VaultUtil;
+import me.prism3.logger.database.external.ExternalData;
+import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.discord.Discord;
 import me.prism3.logger.Main;
-import me.prism3.logger.Utils.FileHandler;
-import me.prism3.logger.Utils.Messages;
-import me.prism3.logger.Utils.Data;
+import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Messages;
+import me.prism3.logger.utils.Data;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -58,14 +58,14 @@ public class OnVault implements Listener, Runnable {
 
                                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault-Staff")).isEmpty()) {
 
-                                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%oldbal%", String.valueOf(oldBalance)).replaceAll("%newbal%", String.valueOf(newBalance)), false);
+                                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)), false);
 
                                 }
 
                                 try {
 
                                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Extras.Vault-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%oldbal%", String.valueOf(oldBalance)).replaceAll("%newbal%", String.valueOf(newBalance)) + "\n");
+                                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Extras.Vault-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)) + "\n");
                                     out.close();
 
                                 } catch (IOException e) {
@@ -94,7 +94,7 @@ public class OnVault implements Listener, Runnable {
                             try {
 
                                 BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getVaultFile(), true));
-                                out.write(Objects.requireNonNull(Messages.get().getString("Files.Extras.Vault")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%oldbal%", String.valueOf(oldBalance)).replaceAll("%newbal%", String.valueOf(newBalance)) + "\n");
+                                out.write(Objects.requireNonNull(Messages.get().getString("Files.Extras.Vault")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)) + "\n");
                                 out.close();
 
                             } catch (IOException e) {
@@ -112,7 +112,7 @@ public class OnVault implements Listener, Runnable {
 
                                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault-Staff")).isEmpty()) {
 
-                                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%oldbal%", String.valueOf(oldBalance)).replaceAll("%newbal%", String.valueOf(newBalance)), false);
+                                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)), false);
 
                                 }
 
@@ -120,7 +120,7 @@ public class OnVault implements Listener, Runnable {
 
                                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault")).isEmpty()) {
 
-                                    Discord.vault(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%oldbal%", String.valueOf(oldBalance)).replaceAll("%newbal%", String.valueOf(newBalance)), false);
+                                    Discord.vault(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)), false);
                                 }
                             }
                         }
@@ -151,14 +151,14 @@ public class OnVault implements Listener, Runnable {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    private void onJoin(final PlayerJoinEvent event){
+    private void onJoin(final PlayerJoinEvent event) {
 
         this.players.put(event.getPlayer().getUniqueId(), this.econ.getBalance(event.getPlayer()));
 
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    private void onLeave(final PlayerQuitEvent event){
+    private void onLeave(final PlayerQuitEvent event) {
 
         this.players.remove(event.getPlayer().getUniqueId());
 

@@ -1,4 +1,4 @@
-package me.prism3.logger.Events.Misc;
+package me.prism3.logger.events.misc;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,7 +12,7 @@ import java.util.Objects;
 public class OnSpawnEgg implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onSpawn(final PlayerInteractEvent event){
+    public void onSpawn(final PlayerInteractEvent event) {
 
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK && Objects.requireNonNull(event.getItem()).getType().name().contains("MONSTER_EGG")) {
 

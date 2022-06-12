@@ -37,7 +37,7 @@ public class Discord {
 
                 jda = JDABuilder.createDefault(botToken).build().awaitReady();
 
-                new DiscordStatus();
+                if (DiscordFile.getBoolean("ActivityCycling.Enabled")) new DiscordStatus();
 
             } catch (Exception e) {
 
@@ -236,7 +236,7 @@ public class Discord {
 
                 jda.shutdown();
                 jda = null;
-                DiscordStatus.getThreadPool().shutdown();
+                if (DiscordFile.getBoolean("ActivityCycling.Enabled")) DiscordStatus.getThreadPool().shutdown();
                 Main.getInstance().getLogger().info("Discord Bot Bridge has been closed!");
 
             } catch (Exception e) {

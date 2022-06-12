@@ -143,3 +143,24 @@ Fixes
 Changes
     [*] Databases Structure
     [*] Messages & Discord Files structure for the future upcoming update
+
+<-!------------------------------------------ v1.8 ------------------------------------------!->
+
+Additions
+    [+] Player Inventory Backup on Player Death
+    [+] LiteBans & AdvancedBans Support
+    [+] Chest open Checker
+    [+] TNT Explosion Checker
+    [+] Auto-Config Updater
+    [+] PlaceHolderAPI Plugin Support
+    [+] StripLog on 1.13+ server versions
+    [+] Added 1.19 Support
+    [+] Dump command (spigot only)
+
+Fixes
+    [!] Separated Command Blocks from Console Commands as they count the same
+    [!] OP now get logged by default
+    [!] Discord Status starting even if disabled in discord config
+
+Changes
+    [*] Databases Structure
