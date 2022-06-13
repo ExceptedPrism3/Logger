@@ -2,7 +2,6 @@ package me.prism3.logger.serverside;
 
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
-import me.prism3.logger.discord.Discord;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.Messages;
@@ -50,7 +49,7 @@ public class RCON implements Listener {
             // Discord
             if (!Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.RCON")).isEmpty()) {
 
-                Discord.rcon(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.RCON")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replaceAll("%IP%", ip).replaceAll("%command%", command)), false);
+                this.main.getDiscord().rCon(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.RCON")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replaceAll("%IP%", ip).replaceAll("%command%", command)), false);
             }
 
             // External

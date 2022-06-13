@@ -1,12 +1,11 @@
-package me.prism3.logger.Events.OnInventories;
+package me.prism3.logger.events.oninventories;
 
-import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Database.SQLite.Global.SQLiteData;
-import me.prism3.logger.Discord.Discord;
 import me.prism3.logger.Main;
-import me.prism3.logger.Utils.FileHandler;
-import me.prism3.logger.Utils.Messages;
-import me.prism3.logger.Utils.Data;
+import me.prism3.logger.database.external.ExternalData;
+import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.Data;
+import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Messages;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,7 +47,7 @@ public class OnFurnace implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Furnace-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Furnace-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(blockX)).replaceAll("%y%", String.valueOf(blockY)).replaceAll("%z%", String.valueOf(blockZ)).replaceAll("%amount%", String.valueOf(amount)).replaceAll("%item%", String.valueOf(item)), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Furnace-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(blockX)).replaceAll("%y%", String.valueOf(blockY)).replaceAll("%z%", String.valueOf(blockZ)).replaceAll("%amount%", String.valueOf(amount)).replaceAll("%item%", String.valueOf(item)), false);
 
                     }
 
@@ -102,7 +101,7 @@ public class OnFurnace implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Furnace-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Furnace-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(blockX)).replaceAll("%y%", String.valueOf(blockY)).replaceAll("%z%", String.valueOf(blockZ)).replaceAll("%amount%", String.valueOf(amount)).replaceAll("%item%", String.valueOf(item)), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Furnace-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(blockX)).replaceAll("%y%", String.valueOf(blockY)).replaceAll("%z%", String.valueOf(blockZ)).replaceAll("%amount%", String.valueOf(amount)).replaceAll("%item%", String.valueOf(item)), false);
 
                     }
 
@@ -110,7 +109,7 @@ public class OnFurnace implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Furnace")).isEmpty()) {
 
-                        Discord.furnace(player, Objects.requireNonNull(Messages.get().getString("Discord.Furnace")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(blockX)).replaceAll("%y%", String.valueOf(blockY)).replaceAll("%z%", String.valueOf(blockZ)).replaceAll("%amount%", String.valueOf(amount)).replaceAll("%item%", String.valueOf(item)), false);
+                        this.main.getDiscord().furnace(player, Objects.requireNonNull(Messages.get().getString("Discord.Furnace")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(blockX)).replaceAll("%y%", String.valueOf(blockY)).replaceAll("%z%", String.valueOf(blockZ)).replaceAll("%amount%", String.valueOf(amount)).replaceAll("%item%", String.valueOf(item)), false);
                     }
                 }
             }

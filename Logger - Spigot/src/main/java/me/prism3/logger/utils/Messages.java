@@ -15,7 +15,7 @@ import static me.prism3.logger.utils.Data.*;
 public class Messages {
 
     private static final Main main = Main.getInstance();
-    private static FileConfiguration messages;
+    private static FileConfiguration messagesFile;
     private final List<String> langFiles = Arrays.asList("ar", "fr_fr", "en_en", "zh_cn");
     private boolean isValid = true;
 
@@ -33,15 +33,15 @@ public class Messages {
 
         }
 
-        messages = YamlConfiguration.loadConfiguration(new File(main.getDataFolder() + "/" + langPath, main.getConfig().getString("Language") + fileType));
+        messagesFile = YamlConfiguration.loadConfiguration(new File(main.getDataFolder() + "/" + langPath, main.getConfig().getString("Language") + fileType));
 
     }
 
-    public static FileConfiguration get() { return messages; }
+    public static FileConfiguration get() { return messagesFile; }
 
     public static void reload() {
 
-        messages = YamlConfiguration.loadConfiguration(new File(main.getDataFolder() + "/" + langPath, main.getConfig().getString("Language") + fileType));
+        messagesFile = YamlConfiguration.loadConfiguration(new File(main.getDataFolder() + "/" + langPath, main.getConfig().getString("Language") + fileType));
 
     }
 

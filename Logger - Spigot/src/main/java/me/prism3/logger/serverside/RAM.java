@@ -1,6 +1,5 @@
 package me.prism3.logger.serverside;
 
-import me.prism3.logger.discord.Discord;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.database.external.ExternalData;
@@ -27,7 +26,7 @@ public class RAM implements Runnable {
             final long maxMemory = Runtime.getRuntime().maxMemory() / 1048576L;
             final long freeMemory = Runtime.getRuntime().freeMemory() / 1048576L;
             final long usedMemory = maxMemory - freeMemory;
-            final double percentUsed = (double) usedMemory * 100.0D / (double) maxMemory;
+            final double percentUsed = usedMemory * 100.0D / maxMemory;
 
             if (Data.ramPercent <= percentUsed) {
 
@@ -51,7 +50,7 @@ public class RAM implements Runnable {
                 // Discord
                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.RAM")).isEmpty()) {
 
-                    Discord.RAM(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.RAM")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)), false);
+                    this.main.getDiscord().ram(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.RAM")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)), false);
                 }
 
                 // External

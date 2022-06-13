@@ -1,7 +1,6 @@
-package me.prism3.logger.Events.OnInventories;
+package me.prism3.logger.events.oninventories;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.Utils.Enums.NmsVersions;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,7 +14,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class OnChestInteraction implements Listener {
-
+/*
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryOpenEvent(final InventoryOpenEvent event) {
 
@@ -58,5 +57,5 @@ public class OnChestInteraction implements Listener {
 
         System.out.println(playerName + " " + worldName + " " + chestName + " " + x + " " + y + " " + z + " " + Arrays.toString(strings));
 
-    }
+    }*/
 }

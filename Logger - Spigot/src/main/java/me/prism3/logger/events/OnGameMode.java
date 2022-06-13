@@ -1,12 +1,11 @@
-package me.prism3.logger.Events;
+package me.prism3.logger.events;
 
-import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Database.SQLite.Global.SQLiteData;
-import me.prism3.logger.Discord.Discord;
+import me.prism3.logger.database.external.ExternalData;
+import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.Main;
-import me.prism3.logger.Utils.FileHandler;
-import me.prism3.logger.Utils.Messages;
-import me.prism3.logger.Utils.Data;
+import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Messages;
+import me.prism3.logger.utils.Data;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -48,7 +47,7 @@ public class OnGameMode implements Listener {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode-Staff")).isEmpty()) {
 
-                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%game-mode%", gameMode), false);
+                            this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%game-mode%", gameMode), false);
 
                         }
 
@@ -102,14 +101,14 @@ public class OnGameMode implements Listener {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode-Staff")).isEmpty()) {
 
-                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%game-mode%", gameMode), false);
+                            this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%game-mode%", gameMode), false);
 
                         }
                     } else {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode")).isEmpty()) {
 
-                            Discord.gameMode(player, Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%game-mode%", gameMode), false);
+                            this.main.getDiscord().gameMode(player, Objects.requireNonNull(Messages.get().getString("Discord.Game-Mode")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%game-mode%", gameMode), false);
                         }
                     }
                 }

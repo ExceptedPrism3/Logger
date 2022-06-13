@@ -11,11 +11,9 @@ import java.time.format.DateTimeFormatter;
 
 public class SQLiteDataRegistration {
 
-    private static Main plugin;
+    private static final Main plugin = Main.getInstance();
 
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss:SSSXXX");
-
-    public SQLiteDataRegistration(Main plugin) { SQLiteDataRegistration.plugin = plugin; }
 
     public void createTable() {
 

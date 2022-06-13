@@ -43,7 +43,6 @@ public enum FriendlyEnchants  {
     VANISHING_CURSE("Curse of Vanishing",true),
     WATER_WORKER("Aqua Affinity");
 
-
     private final String friendlyName;
     private final boolean isCurse;
 

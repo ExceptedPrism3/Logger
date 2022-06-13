@@ -1,6 +1,5 @@
 package me.prism3.logger.events;
 
-import me.prism3.logger.discord.Discord;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.database.external.ExternalData;
@@ -45,7 +44,7 @@ public class OnPlayerLevel implements Listener {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).isEmpty()) {
 
-                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
+                            this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
                         }
 
                         try {
@@ -97,14 +96,14 @@ public class OnPlayerLevel implements Listener {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).isEmpty()) {
 
-                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
+                            this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
 
                         }
                     } else {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Level")).isEmpty()) {
 
-                            Discord.playerLevel(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
+                            this.main.getDiscord().playerLevel(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Level")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
                         }
                     }
                 }

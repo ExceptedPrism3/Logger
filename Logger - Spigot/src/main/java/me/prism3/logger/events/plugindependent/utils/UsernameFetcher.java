@@ -1,4 +1,4 @@
-package me.prism3.logger.Events.PluginDependent.Utils;
+package me.prism3.logger.events.plugindependent.utils;
 
 import litebans.api.Database;
 
@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UsernameFetcher {
+
+    private UsernameFetcher() {}
 
     public static String playerNameFetcher(String uuid) {
 

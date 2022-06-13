@@ -1,4 +1,4 @@
-package me.prism3.loggerbungeecord.Commands;
+package me.prism3.loggerbungeecord.commands;
 
 import me.prism3.loggerbungeecord.Utils.ConfigManager;
 import me.prism3.loggerbungeecord.Utils.Messages;

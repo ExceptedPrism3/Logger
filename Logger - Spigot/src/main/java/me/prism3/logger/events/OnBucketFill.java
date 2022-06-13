@@ -2,7 +2,6 @@ package me.prism3.logger.events;
 
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
-import me.prism3.logger.discord.Discord;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.Messages;
@@ -48,7 +47,7 @@ public class OnBucketFill implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Fill-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Fill-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Fill-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket), false);
 
                     }
 
@@ -102,14 +101,14 @@ public class OnBucketFill implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Fill-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Fill-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Fill-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket), false);
 
                     }
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Fill")).isEmpty()) {
 
-                        Discord.bucketFill(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Fill")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket), false);
+                        this.main.getDiscord().bucketFill(player, Objects.requireNonNull(Messages.get().getString("Discord.Bucket-Fill")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket), false);
                     }
                 }
             }

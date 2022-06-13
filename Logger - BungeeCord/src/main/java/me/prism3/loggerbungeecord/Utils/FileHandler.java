@@ -1,6 +1,6 @@
 package me.prism3.loggerbungeecord.Utils;
 
-import me.prism3.loggerbungeecord.API.LiteBansUtil;
+import me.prism3.loggerbungeecord.api.LiteBansUtil;
 import me.prism3.loggerbungeecord.Main;
 
 import java.io.File;

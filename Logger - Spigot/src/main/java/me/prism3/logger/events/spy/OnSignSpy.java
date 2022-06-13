@@ -1,7 +1,7 @@
-package me.prism3.logger.Events.Spy;
+package me.prism3.logger.events.spy;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.Utils.Data;
+import me.prism3.logger.utils.Data;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

@@ -1,6 +1,6 @@
 package me.prism3.loggerbungeecord;
 
-import me.prism3.loggerbungeecord.API.LiteBansUtil;
+import me.prism3.loggerbungeecord.api.LiteBansUtil;
 import me.prism3.loggerbungeecord.Database.External.ExternalUpdater;
 import me.prism3.loggerbungeecord.Events.OnChat;
 import me.prism3.loggerbungeecord.Events.OnCommands.OnCommand;
@@ -10,7 +10,7 @@ import me.prism3.loggerbungeecord.Events.PluginDependent.LiteBans.OnLiteBanEvent
 import me.prism3.loggerbungeecord.ServerSide.RAM;
 import me.prism3.loggerbungeecord.Database.SQLite.SQLite;
 import me.prism3.loggerbungeecord.Database.SQLite.SQLiteData;
-import me.prism3.loggerbungeecord.Commands.Reload;
+import me.prism3.loggerbungeecord.commands.Reload;
 import me.prism3.loggerbungeecord.Database.External.External;
 import me.prism3.loggerbungeecord.Database.External.ExternalData;
 import me.prism3.loggerbungeecord.Discord.Discord;

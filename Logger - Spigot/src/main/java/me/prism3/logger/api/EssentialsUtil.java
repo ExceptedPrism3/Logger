@@ -16,6 +16,6 @@ public class EssentialsUtil {
 
             return (Essentials) essentials;
 
-        }else return null;
+        } else return null;
     }
 }

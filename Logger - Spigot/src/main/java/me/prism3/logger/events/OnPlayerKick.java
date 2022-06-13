@@ -1,6 +1,5 @@
 package me.prism3.logger.events;
 
-import me.prism3.logger.discord.Discord;
 import me.prism3.logger.Main;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.utils.FileHandler;
@@ -46,7 +45,7 @@ public class OnPlayerKick implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%reason%", reason), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%reason%", reason), false);
                     }
 
                     try {
@@ -99,14 +98,14 @@ public class OnPlayerKick implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%reason%", reason), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%reason%", reason), false);
 
                     }
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick")).isEmpty()) {
 
-                        Discord.playerKick(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%reason%", reason), false);
+                        this.main.getDiscord().playerKick(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%reason%", reason), false);
                     }
                 }
             }

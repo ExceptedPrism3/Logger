@@ -32,7 +32,6 @@ public class ReloadCommand implements SubCommand {
     @Override
     public void perform(Player player, String[] args) {
 
-
         this.main.reloadConfig();
         Messages.reload();
         DiscordFile.reload();

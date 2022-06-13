@@ -2,7 +2,7 @@ package me.prism3.logger.database.sqlite.global;
 
 import me.prism3.logger.api.*;
 import me.prism3.logger.Main;
-import me.prism3.logger.utils.Enums.NmsVersions;
+import me.prism3.logger.utils.enums.NmsVersions;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,13 +19,9 @@ import static me.prism3.logger.utils.Data.sqliteDataDel;
 
 public class SQLiteData {
 
-    private static Main plugin;
+    private static final Main plugin = Main.getInstance();
 
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss:SSSXXX");
-
-    public SQLiteData(Main plugin) {
-        SQLiteData.plugin = plugin;
-    }
 
     public void createTable() {
 
@@ -947,7 +943,7 @@ public class SQLiteData {
 
         if (sqliteDataDel <= 0) return;
 
-        try{
+        try {
 
             // Player Side Part
             final PreparedStatement player_Chat = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM player_chat WHERE date <= datetime('now','-" + sqliteDataDel + " day')");

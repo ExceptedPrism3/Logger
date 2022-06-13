@@ -1,6 +1,5 @@
 package me.prism3.logger.serverside;
 
-import me.prism3.logger.discord.Discord;
 import me.prism3.logger.Main;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.utils.FileHandler;
@@ -42,7 +41,7 @@ public class Start {
             // Discord
             if (!Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Start")).isEmpty()) {
 
-                Discord.serverStart(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Start")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())), false);
+                this.main.getDiscord().serverStart(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Start")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())), false);
             }
 
             // External

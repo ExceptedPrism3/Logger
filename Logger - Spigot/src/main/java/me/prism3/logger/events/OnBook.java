@@ -2,7 +2,6 @@ package me.prism3.logger.events;
 
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
-import me.prism3.logger.discord.Discord;
 import me.prism3.logger.events.spy.OnBookSpy;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.FileHandler;
@@ -58,7 +57,7 @@ public class OnBook implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%page%", String.valueOf(pageCount)).replace("%content%", String.valueOf(pageContent)).replace("%sign%", String.valueOf(signature)), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%page%", String.valueOf(pageCount)).replace("%content%", String.valueOf(pageContent)).replace("%sign%", String.valueOf(signature)), false);
 
                     }
 
@@ -111,14 +110,14 @@ public class OnBook implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%page%", String.valueOf(pageCount)).replace("%content%", String.valueOf(pageContent)).replace("%sign%", String.valueOf(signature)), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%page%", String.valueOf(pageCount)).replace("%content%", String.valueOf(pageContent)).replace("%sign%", String.valueOf(signature)), false);
 
                     }
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing")).isEmpty()) {
 
-                        Discord.bookEditing(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%page%", String.valueOf(pageCount)).replace("%content%", String.valueOf(pageContent)).replace("%sign%", String.valueOf(signature)), false);
+                        this.main.getDiscord().bookEditing(player, Objects.requireNonNull(Messages.get().getString("Discord.Book-Editing")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%page%", String.valueOf(pageCount)).replace("%content%", String.valueOf(pageContent)).replace("%sign%", String.valueOf(signature)), false);
                     }
                 }
             }

@@ -1,4 +1,4 @@
-package me.prism3.loggerbungeecord.API;
+package me.prism3.loggerbungeecord.api;
 
 import me.prism3.loggerbungeecord.Main;
 import net.md_5.bungee.api.plugin.Plugin;

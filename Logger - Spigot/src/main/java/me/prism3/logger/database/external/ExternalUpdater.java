@@ -27,6 +27,7 @@ public class ExternalUpdater {
 
                 if (oldTables.stream().anyMatch(name::equalsIgnoreCase)) currentTables.add(name);
             }
+
             return currentTables;
 
         } catch (Exception e) {

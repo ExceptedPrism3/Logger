@@ -1,13 +1,12 @@
-package me.prism3.logger.Events.PluginDependent;
+package me.prism3.logger.events.plugindependent;
 
-import me.prism3.logger.API.VaultUtil;
-import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Database.SQLite.Global.SQLiteData;
-import me.prism3.logger.Discord.Discord;
 import me.prism3.logger.Main;
-import me.prism3.logger.Utils.FileHandler;
-import me.prism3.logger.Utils.Messages;
-import me.prism3.logger.Utils.Data;
+import me.prism3.logger.api.VaultUtil;
+import me.prism3.logger.database.external.ExternalData;
+import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.Data;
+import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Messages;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -58,7 +57,7 @@ public class OnVault implements Listener, Runnable {
 
                                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault-Staff")).isEmpty()) {
 
-                                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%oldbal%", String.valueOf(oldBalance)).replaceAll("%newbal%", String.valueOf(newBalance)), false);
+                                    this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%oldbal%", String.valueOf(oldBalance)).replaceAll("%newbal%", String.valueOf(newBalance)), false);
 
                                 }
 
@@ -112,7 +111,7 @@ public class OnVault implements Listener, Runnable {
 
                                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault-Staff")).isEmpty()) {
 
-                                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%oldbal%", String.valueOf(oldBalance)).replaceAll("%newbal%", String.valueOf(newBalance)), false);
+                                    this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%oldbal%", String.valueOf(oldBalance)).replaceAll("%newbal%", String.valueOf(newBalance)), false);
 
                                 }
 
@@ -120,7 +119,7 @@ public class OnVault implements Listener, Runnable {
 
                                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault")).isEmpty()) {
 
-                                    Discord.vault(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%oldbal%", String.valueOf(oldBalance)).replaceAll("%newbal%", String.valueOf(newBalance)), false);
+                                    this.main.getDiscord().vault(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.Vault")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%player%", playerName).replaceAll("%oldbal%", String.valueOf(oldBalance)).replaceAll("%newbal%", String.valueOf(newBalance)), false);
                                 }
                             }
                         }

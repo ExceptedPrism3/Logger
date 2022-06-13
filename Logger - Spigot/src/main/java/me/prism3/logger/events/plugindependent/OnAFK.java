@@ -1,12 +1,11 @@
-package me.prism3.logger.Events.PluginDependent;
+package me.prism3.logger.events.plugindependent;
 
-import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Database.SQLite.Global.SQLiteData;
-import me.prism3.logger.Discord.Discord;
 import me.prism3.logger.Main;
-import me.prism3.logger.Utils.FileHandler;
-import me.prism3.logger.Utils.Messages;
-import me.prism3.logger.Utils.Data;
+import me.prism3.logger.database.external.ExternalData;
+import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.Data;
+import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Messages;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,7 +46,7 @@ public class OnAFK implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
                     }
 
                     try {
@@ -100,14 +99,14 @@ public class OnAFK implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
 
                     }
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK")).isEmpty()) {
 
-                        Discord.afk(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
+                        this.main.getDiscord().afk(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AFK")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)), false);
                     }
                 }
             }

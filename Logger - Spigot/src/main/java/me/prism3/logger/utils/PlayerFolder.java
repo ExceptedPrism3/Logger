@@ -18,7 +18,7 @@ import static me.prism3.logger.utils.Data.allowedBackups;
 
 public class PlayerFolder {
 
-    private static File playerFile;
+    private File playerFile;
 
     // Create the backup file for the appropriate player
     public void create(Player player) {
@@ -28,15 +28,15 @@ public class PlayerFolder {
 
         final File backupFolder = new File(FileHandler.getPlayerDeathBackupLogFolder(), player.getName());
 
-        playerFile = new File(backupFolder, filenameDateFormat.format(date) + ".yml");
+        this.playerFile = new File(backupFolder, filenameDateFormat.format(date) + ".yml");
 
         try {
 
             if (!backupFolder.exists()) backupFolder.mkdir();
 
-            playerFile.createNewFile();
+            this.playerFile.createNewFile();
 
-            this.fileInput(playerFile, player);
+            this.fileInput(this.playerFile, player);
 
         } catch (Exception e) { e.printStackTrace(); }
     }
@@ -102,5 +102,5 @@ public class PlayerFolder {
         return backupCount(player) < allowedBackups; // We did '<' since backCount method starts at 0
     }
 
-    public static File getPlayerFile() { return playerFile; }
+    public File getPlayerFile() { return this.playerFile; }
 }

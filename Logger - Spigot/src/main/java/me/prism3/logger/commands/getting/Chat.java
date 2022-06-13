@@ -20,8 +20,10 @@ public class Chat implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
 
         boolean containsResult;
+
         //Unfinished
         if (args.length == 2) {
+
             if (!args[1].matches("^[0-9]+$")) {
                 sender.sendMessage(ChatColor.RED + "Use a numeric value for page number");
                 return true;
@@ -41,12 +43,9 @@ public class Chat implements CommandExecutor {
                 paging.addExtra(back);
                 sender.spigot().sendMessage(paging);
 
-
                 return true;
-            } catch (Exception e) {
-                e.printStackTrace();
 
-            }
+            } catch (Exception e) { e.printStackTrace(); }
 
         } else if (args.length == 1) {
 
@@ -56,14 +55,13 @@ public class Chat implements CommandExecutor {
             sender.spigot().sendMessage(Chat.getTextComponent("next", "/loggerget " + args[0] + " 10", "Next Page"));
 
 
-        } else {
-            sender.sendMessage(ChatColor.RED + command.getUsage());
-        }
+        } else sender.sendMessage(ChatColor.RED + command.getUsage());
 
         return true;
     }
 
     public static TextComponent getTextComponent(String text, String commandString, String hoverString) {
+
         TextComponent tc = new TextComponent(text);
         tc.setColor(ChatColor.GRAY);
         tc.setBold(true);
@@ -73,21 +71,23 @@ public class Chat implements CommandExecutor {
     }
 
     public static boolean sendResults(ResultSet rs, CommandSender sender, String searchedPlayer) {
+
         try {
 
             if (!rs.isBeforeFirst()) {
                 sender.sendMessage("Empty results");
                 return false;
             }
+
             while (rs.next()) {
                 sender.sendMessage(ChatColor.RED + rs.getTimestamp("Date").toString() + " " + searchedPlayer + ": " + ChatColor.GREEN + rs.getString("Message"));
             }
 
             return true;
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;
-
         }
     }
 }

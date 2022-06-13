@@ -1,12 +1,11 @@
-package me.prism3.logger.Events;
+package me.prism3.logger.events;
 
-import me.prism3.logger.Discord.Discord;
 import me.prism3.logger.Main;
-import me.prism3.logger.Utils.FileHandler;
-import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Database.SQLite.Global.SQLiteData;
-import me.prism3.logger.Utils.Messages;
-import me.prism3.logger.Utils.Data;
+import me.prism3.logger.database.external.ExternalData;
+import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.Data;
+import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Messages;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -49,7 +48,7 @@ public class OnBlockPlace implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
 
                     }
 
@@ -102,14 +101,14 @@ public class OnBlockPlace implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
 
                     }
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Block-Place")).isEmpty()) {
 
-                        Discord.blockPlace(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
+                        this.main.getDiscord().blockPlace(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
                     }
                 }
             }

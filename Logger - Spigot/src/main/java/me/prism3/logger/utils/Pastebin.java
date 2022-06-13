@@ -12,6 +12,8 @@ import java.util.StringJoiner;
 
 public class Pastebin {
 
+    private Pastebin() {}
+
     private static final String API_URL = "https://pastebin.com/api/api_post.php";
     private static final String USER_AGENT = "Mozilla/5.0";
     private static final String DEFAULT_INV = "\0";

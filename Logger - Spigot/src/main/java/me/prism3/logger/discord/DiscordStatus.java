@@ -34,7 +34,7 @@ public class DiscordStatus {
 
         }
 
-        if (DiscordFile.get().getBoolean("ActivityCycling.Random")){
+        if (DiscordFile.get().getBoolean("ActivityCycling.Random")) {
 
             Collections.shuffle(this.activities);
 

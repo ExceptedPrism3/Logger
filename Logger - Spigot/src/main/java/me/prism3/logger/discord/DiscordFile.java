@@ -16,7 +16,7 @@ public class DiscordFile {
 
         discordFile = new File(Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("Logger")).getDataFolder(), "discord.yml");
 
-        if(!discordFile.exists()){
+        if(!discordFile.exists()) {
 
             Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("Logger")).saveResource("discord.yml", false);
 

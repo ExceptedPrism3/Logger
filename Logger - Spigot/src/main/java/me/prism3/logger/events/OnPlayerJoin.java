@@ -1,12 +1,12 @@
-package me.prism3.logger.Events;
-import me.prism3.logger.Database.SQLite.Registration.SQLiteDataRegistration;
-import me.prism3.logger.Discord.Discord;
+package me.prism3.logger.events;
+
 import me.prism3.logger.Main;
-import me.prism3.logger.Utils.FileHandler;
-import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Database.SQLite.Global.SQLiteData;
-import me.prism3.logger.Utils.Messages;
-import me.prism3.logger.Utils.Data;
+import me.prism3.logger.database.sqlite.registration.SQLiteDataRegistration;
+import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.database.external.ExternalData;
+import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.Messages;
+import me.prism3.logger.utils.Data;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -67,7 +67,7 @@ public class OnPlayerJoin implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Join-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Join-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%IP%", String.valueOf(ip)), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Join-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%IP%", String.valueOf(ip)), false);
 
                     }
 
@@ -121,14 +121,14 @@ public class OnPlayerJoin implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Join-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Join-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%IP%", String.valueOf(ip)), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Join-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%IP%", String.valueOf(ip)), false);
 
                     }
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Join")).isEmpty()) {
 
-                        Discord.playerJoin(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Join")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%IP%", String.valueOf(ip)), false);
+                        this.main.getDiscord().playerJoin(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Join")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%IP%", String.valueOf(ip)), false);
                     }
                 }
             }
@@ -154,9 +154,9 @@ public class OnPlayerJoin implements Listener {
             }
         }
 
-        if (!main.cF.getIsUpdated()){
+        if (!main.cF.getIsUpdated()) {
 
-            if (event.getPlayer().isOp() || event.getPlayer().hasPermission(Data.loggerStaff)){
+            if (event.getPlayer().isOp() || event.getPlayer().hasPermission(Data.loggerStaff)) {
 
                 event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', "&8&l[&b&lLogger&8&l] " +
                         "&c&lPlugin Configs are not updated!"));

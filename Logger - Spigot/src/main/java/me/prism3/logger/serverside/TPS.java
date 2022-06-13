@@ -1,6 +1,5 @@
 package me.prism3.logger.serverside;
 
-import me.prism3.logger.discord.Discord;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.database.external.ExternalData;
@@ -19,7 +18,7 @@ public class TPS implements Runnable {
     private final Main main = Main.getInstance();
 
     private int tickCount = 0;
-    final private long[] TICKS = new long[600];
+    private final long[] ticks = new long[600];
 
     public void run() {
 
@@ -30,7 +29,7 @@ public class TPS implements Runnable {
 
             if (Data.tpsMedium <= 0 || Data.tpsMedium >= 20 || Data.tpsCritical <= 0 || Data.tpsCritical >= 20) return;
 
-            TICKS[(tickCount % TICKS.length)] = System.currentTimeMillis();
+            ticks[(tickCount % ticks.length)] = System.currentTimeMillis();
 
             tickCount += 1;
 
@@ -65,7 +64,7 @@ public class TPS implements Runnable {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.TPS-Medium")).isEmpty()) {
 
-                        Discord.TPS(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.TPS-Medium")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%TPS%", String.valueOf(getTPS())), false);
+                        this.main.getDiscord().tps(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.TPS-Medium")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%TPS%", String.valueOf(getTPS())), false);
 
                     }
 
@@ -73,7 +72,7 @@ public class TPS implements Runnable {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.TPS-Critical")).isEmpty()) {
 
-                        Discord.TPS(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.TPS-Critical")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%TPS%", String.valueOf(getTPS())), false);
+                        this.main.getDiscord().tps(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.TPS-Critical")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%TPS%", String.valueOf(getTPS())), false);
                     }
                 }
 
@@ -119,8 +118,8 @@ public class TPS implements Runnable {
     public double getTPS(int ticks) {
 
         if (tickCount <= ticks) return 20.0D;
-        int target = (tickCount - 1 - ticks) % TICKS.length;
-        long elapsed = System.currentTimeMillis() - TICKS[target];
+        int target = (tickCount - 1 - ticks) % this.ticks.length;
+        long elapsed = System.currentTimeMillis() - this.ticks[target];
         return ticks / (elapsed / 1000.0D);
 
     }

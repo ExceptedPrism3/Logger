@@ -1,13 +1,12 @@
-package me.prism3.logger.Events.PluginDependent;
+package me.prism3.logger.events.plugindependent;
 
 import me.leoko.advancedban.bukkit.event.PunishmentEvent;
-import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Database.SQLite.Global.SQLiteData;
-import me.prism3.logger.Discord.Discord;
 import me.prism3.logger.Main;
-import me.prism3.logger.Utils.Data;
-import me.prism3.logger.Utils.FileHandler;
-import me.prism3.logger.Utils.Messages;
+import me.prism3.logger.database.external.ExternalData;
+import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.Data;
+import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,7 +46,7 @@ public class OnAdvancedBan implements Listener {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.AdvancedBan")).isEmpty()) {
 
-                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AdvancedBan")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%executor%", executor).replaceAll("%executed_on%", executed_on).replaceAll("%reason%", reason).replaceAll("%expiration%", String.valueOf(expirationDate)).replaceAll("%type%", type), false);
+                            this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AdvancedBan")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%executor%", executor).replaceAll("%executed_on%", executed_on).replaceAll("%reason%", reason).replaceAll("%expiration%", String.valueOf(expirationDate)).replaceAll("%type%", type), false);
 
                         }
 
@@ -100,7 +99,7 @@ public class OnAdvancedBan implements Listener {
 
                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.AdvancedBan")).isEmpty()) {
 
-                    Discord.advancedBan(Objects.requireNonNull(Messages.get().getString("Discord.Extras.AdvancedBan")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%executor%", executor).replaceAll("%executed_on%", executed_on).replaceAll("%reason%", reason).replaceAll("%expiration%", String.valueOf(expirationDate)).replaceAll("%type%", type), false);
+                    this.main.getDiscord().advancedBan(Objects.requireNonNull(Messages.get().getString("Discord.Extras.AdvancedBan")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%executor%", executor).replaceAll("%executed_on%", executed_on).replaceAll("%reason%", reason).replaceAll("%expiration%", String.valueOf(expirationDate)).replaceAll("%type%", type), false);
                 }
             } else if (!player.hasPermission(Data.loggerExemptDiscord)) {
 
@@ -108,13 +107,13 @@ public class OnAdvancedBan implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.AdvancedBan")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AdvancedBan")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%executor%", executor).replaceAll("%executed_on%", executed_on).replaceAll("%reason%", reason).replaceAll("%expiration%", String.valueOf(expirationDate)).replaceAll("%type%", type), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.AdvancedBan")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%executor%", executor).replaceAll("%executed_on%", executed_on).replaceAll("%reason%", reason).replaceAll("%expiration%", String.valueOf(expirationDate)).replaceAll("%type%", type), false);
 
                     }
                 } else {
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.AdvancedBan")).isEmpty()) {
 
-                        Discord.advancedBan(Objects.requireNonNull(Messages.get().getString("Discord.Extras.AdvancedBan")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%executor%", executor).replaceAll("%executed_on%", executed_on).replaceAll("%reason%", reason).replaceAll("%expiration%", String.valueOf(expirationDate)).replaceAll("%type%", type), false);
+                        this.main.getDiscord().advancedBan(Objects.requireNonNull(Messages.get().getString("Discord.Extras.AdvancedBan")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%executor%", executor).replaceAll("%executed_on%", executed_on).replaceAll("%reason%", reason).replaceAll("%expiration%", String.valueOf(expirationDate)).replaceAll("%type%", type), false);
                     }
                 }
             }

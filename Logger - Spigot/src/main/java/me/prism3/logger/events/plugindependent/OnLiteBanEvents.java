@@ -1,15 +1,14 @@
-package me.prism3.logger.Events.PluginDependent;
+package me.prism3.logger.events.plugindependent;
 
 import litebans.api.Entry;
 import litebans.api.Events;
-import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Database.SQLite.Global.SQLiteData;
-import me.prism3.logger.Discord.Discord;
-import me.prism3.logger.Events.PluginDependent.Utils.UsernameFetcher;
 import me.prism3.logger.Main;
-import me.prism3.logger.Utils.Data;
-import me.prism3.logger.Utils.FileHandler;
-import me.prism3.logger.Utils.Messages;
+import me.prism3.logger.database.external.ExternalData;
+import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.events.plugindependent.utils.UsernameFetcher;
+import me.prism3.logger.utils.Data;
+import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -54,7 +53,7 @@ public class OnLiteBanEvents implements Listener, Runnable{
 
                                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.LiteBans")).isEmpty()) {
 
-                                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.LiteBans")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%executor%", executorName).replaceAll("%executed_on%", onWho).replaceAll("%reason%", reason).replaceAll("%expiration%", duration).replaceAll("%type%", entryType).replaceAll("%silent%", String.valueOf(isSilent)), false);
+                                        main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.LiteBans")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%executor%", executorName).replaceAll("%executed_on%", onWho).replaceAll("%reason%", reason).replaceAll("%expiration%", duration).replaceAll("%type%", entryType).replaceAll("%silent%", String.valueOf(isSilent)), false);
 
                                     }
 
@@ -107,7 +106,7 @@ public class OnLiteBanEvents implements Listener, Runnable{
 
                             if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.LiteBans")).isEmpty()) {
 
-                                Discord.advancedBan(Objects.requireNonNull(Messages.get().getString("Discord.Extras.LiteBans")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%executor%", executorName).replaceAll("%executed_on%", onWho).replaceAll("%reason%", reason).replaceAll("%expiration%", duration).replaceAll("%type%", entryType).replaceAll("%silent%", String.valueOf(isSilent)), false);
+                                main.getDiscord().advancedBan(Objects.requireNonNull(Messages.get().getString("Discord.Extras.LiteBans")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%executor%", executorName).replaceAll("%executed_on%", onWho).replaceAll("%reason%", reason).replaceAll("%expiration%", duration).replaceAll("%type%", entryType).replaceAll("%silent%", String.valueOf(isSilent)), false);
                             }
                         } else
                             if (!player.hasPermission(Data.loggerExemptDiscord)) {
@@ -116,13 +115,13 @@ public class OnLiteBanEvents implements Listener, Runnable{
 
                                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.LiteBans")).isEmpty()) {
 
-                                    Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.LiteBans")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%executor%", executorName).replaceAll("%executed_on%", onWho).replaceAll("%reason%", reason).replaceAll("%expiration%", duration).replaceAll("%type%", entryType).replaceAll("%silent%", String.valueOf(isSilent)), false);
+                                    main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Extras.LiteBans")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%executor%", executorName).replaceAll("%executed_on%", onWho).replaceAll("%reason%", reason).replaceAll("%expiration%", duration).replaceAll("%type%", entryType).replaceAll("%silent%", String.valueOf(isSilent)), false);
 
                                 }
                             } else {
                                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Extras.LiteBans")).isEmpty()) {
 
-                                    Discord.advancedBan(Objects.requireNonNull(Messages.get().getString("Discord.Extras.LiteBans")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%executor%", executorName).replaceAll("%executed_on%", onWho).replaceAll("%reason%", reason).replaceAll("%expiration%", duration).replaceAll("%type%", entryType).replaceAll("%silent%", String.valueOf(isSilent)), false);
+                                    main.getDiscord().advancedBan(Objects.requireNonNull(Messages.get().getString("Discord.Extras.LiteBans")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%executor%", executorName).replaceAll("%executed_on%", onWho).replaceAll("%reason%", reason).replaceAll("%expiration%", duration).replaceAll("%type%", entryType).replaceAll("%silent%", String.valueOf(isSilent)), false);
                                 }
                             }
                         }

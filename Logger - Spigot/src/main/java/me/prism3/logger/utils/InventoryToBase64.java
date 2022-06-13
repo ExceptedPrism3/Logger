@@ -11,6 +11,8 @@ import java.io.IOException;
 
 public class InventoryToBase64 {
 
+    private InventoryToBase64() {}
+
     public static String toBase64(ItemStack[] contents) {
         boolean convert = false;
 
@@ -76,7 +78,7 @@ public class InventoryToBase64 {
 
                 try { dataInput.close(); } catch (IOException ignored) {}
 
-                return null;
+                return new ItemStack[0];
             }
         }
 

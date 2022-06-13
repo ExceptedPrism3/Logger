@@ -1,6 +1,5 @@
 package me.prism3.logger.events;
 
-import me.prism3.logger.discord.Discord;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.*;
 import me.prism3.logger.database.external.ExternalData;
@@ -43,7 +42,7 @@ public class OnPlayerDeath implements Listener {
 
                 this.playerDeathBackup.create(event.getEntity());
 
-                final File f1 = PlayerFolder.getPlayerFile(); // Gets the file location
+                final File f1 = this.playerDeathBackup.getPlayerFile(); // Gets the file location
                 final FileConfiguration f = YamlConfiguration.loadConfiguration(f1); // Loads the file with Yaml functions
                 f.load(f1); // Loads the file for use
 
@@ -88,7 +87,7 @@ public class OnPlayerDeath implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Death-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Death-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Death-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
                     }
 
                     try {
@@ -141,14 +140,14 @@ public class OnPlayerDeath implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Death-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Death-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Death-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
 
                     }
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Death")).isEmpty()) {
 
-                        Discord.playerDeath(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Death")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
+                        this.main.getDiscord().playerDeath(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Death")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
                     }
                 }
             }

@@ -7,7 +7,7 @@ public class ASCIIArt {
 
     private final Main main = Main.getInstance();
 
-    public void Art() {
+    public void art() {
 
         main.getLogger().info(ChatColor.DARK_PURPLE + "|\n" +
                 ChatColor.DARK_PURPLE + "|" + ChatColor.AQUA + "     __                               \n" +

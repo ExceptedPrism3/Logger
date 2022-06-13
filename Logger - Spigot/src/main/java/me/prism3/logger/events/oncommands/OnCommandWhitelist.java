@@ -1,6 +1,5 @@
 package me.prism3.logger.events.oncommands;
 
-import me.prism3.logger.discord.Discord;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.database.external.ExternalData;
@@ -47,7 +46,7 @@ public class OnCommandWhitelist implements Listener {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Whitelisted-Staff")).isEmpty()) {
 
-                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Whitelisted-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
+                            this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Whitelisted-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
 
                         }
 
@@ -99,14 +98,14 @@ public class OnCommandWhitelist implements Listener {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Whitelisted-Staff")).isEmpty()) {
 
-                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Staff-Whitelisted")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
+                            this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Staff-Whitelisted")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
 
                         }
                     } else {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Whitelisted")).isEmpty()) {
 
-                            Discord.playerCommand(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Whitelisted")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
+                            this.main.getDiscord().playerCommand(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Commands-Whitelisted")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
                         }
                     }
                 }

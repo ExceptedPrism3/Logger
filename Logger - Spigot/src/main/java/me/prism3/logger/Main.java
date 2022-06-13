@@ -84,7 +84,7 @@ public class Main extends JavaPlugin {
 
         this.commandsInitializer();
 
-        new ASCIIArt().Art();
+        new ASCIIArt().art();
 
         // bStats
         new Metrics(this, 12036);
@@ -197,7 +197,7 @@ public class Main extends JavaPlugin {
 
             this.external = new External();
             this.external.connect();   
-            ExternalData externalData = new ExternalData();
+            final ExternalData externalData = new ExternalData();
             if (this.external.isConnected()) {
                 ExternalUpdater.updater();
                 externalData.createTable();
@@ -209,7 +209,7 @@ public class Main extends JavaPlugin {
 
             this.sqLite = new SQLite();
             this.sqLite.connect();
-            SQLiteData sqLiteData = new SQLiteData(this);
+            final SQLiteData sqLiteData = new SQLiteData();
             if (this.sqLite.isConnected()) {
                 sqLiteData.createTable();
                 sqLiteData.emptyTable();
@@ -220,7 +220,7 @@ public class Main extends JavaPlugin {
 
             this.sqLiteReg = new SQLiteRegistration();
             this.sqLiteReg.connect();
-            SQLiteDataRegistration sqLiteDataRegistration = new SQLiteDataRegistration(this);
+            final SQLiteDataRegistration sqLiteDataRegistration = new SQLiteDataRegistration();
             if (this.sqLiteReg.isConnected()) sqLiteDataRegistration.createTable();
         }
     }
@@ -243,7 +243,7 @@ public class Main extends JavaPlugin {
 
         }
 
-        if (VaultUtil.getVaultAPI()){
+        if (VaultUtil.getVaultAPI()) {
 
             if (VaultUtil.getVault() != null) {
 

@@ -1,6 +1,5 @@
 package me.prism3.logger.serverside;
 
-import me.prism3.logger.discord.Discord;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.database.external.ExternalData;
@@ -65,7 +64,7 @@ public class Console implements Listener {
             // Discord
             if (!Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Console-Commands")).isEmpty()) {
 
-                Discord.console(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Console-Commands")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%command%", command), false);
+                this.main.getDiscord().console(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Console-Commands")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%command%", command), false);
             }
 
             // External

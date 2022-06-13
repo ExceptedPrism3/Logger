@@ -1,13 +1,12 @@
-package me.prism3.logger.Events;
+package me.prism3.logger.events;
 
-import me.prism3.logger.Discord.Discord;
 import me.prism3.logger.Main;
-import me.prism3.logger.Database.External.ExternalData;
-import me.prism3.logger.Utils.Enums.FriendlyEnchants;
-import me.prism3.logger.Utils.FileHandler;
-import me.prism3.logger.Database.SQLite.Global.SQLiteData;
-import me.prism3.logger.Utils.Messages;
-import me.prism3.logger.Utils.Data;
+import me.prism3.logger.database.external.ExternalData;
+import me.prism3.logger.utils.enums.FriendlyEnchants;
+import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.Messages;
+import me.prism3.logger.utils.Data;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -64,7 +63,7 @@ public class OnEnchant implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Enchanting-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Enchanting-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%item%", item).replaceAll("%level%", String.valueOf(cost)).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%item%", item).replaceAll("%enchantment%", String.valueOf(enchs)).replaceAll("%enchlevel%", String.valueOf(enchantmentLevel)), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Enchanting-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%item%", item).replaceAll("%level%", String.valueOf(cost)).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%item%", item).replaceAll("%enchantment%", String.valueOf(enchs)).replaceAll("%enchlevel%", String.valueOf(enchantmentLevel)), false);
 
                     }
 
@@ -83,7 +82,7 @@ public class OnEnchant implements Listener {
 
                     if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-                        ExternalData.enchant(Data.serverName, player, x, y, z, enchs, enchantmentLevel, item, cost, true);
+                        ExternalData.enchant(Data.serverName, player, enchs, enchantmentLevel, item, cost, true);
 
                     }
 
@@ -118,14 +117,14 @@ public class OnEnchant implements Listener {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Enchanting-Staff")).isEmpty()) {
 
-                        Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Enchanting-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%item%", item).replaceAll("%level%", String.valueOf(cost)).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%item%", item).replaceAll("%enchantment%", String.valueOf(enchs)).replaceAll("%enchlevel%", String.valueOf(enchantmentLevel)), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Enchanting-Staff")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%item%", item).replaceAll("%level%", String.valueOf(cost)).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%item%", item).replaceAll("%enchantment%", String.valueOf(enchs)).replaceAll("%enchlevel%", String.valueOf(enchantmentLevel)), false);
 
                     }
                 } else {
 
                     if (!Objects.requireNonNull(Messages.get().getString("Discord.Enchanting")).isEmpty()) {
 
-                        Discord.enchanting(player, Objects.requireNonNull(Messages.get().getString("Discord.Enchanting")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%item%", item).replaceAll("%level%", String.valueOf(cost)).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%item%", item).replaceAll("%enchantment%", String.valueOf(enchs)).replaceAll("%enchlevel%", String.valueOf(enchantmentLevel)), false);
+                        this.main.getDiscord().enchanting(player, Objects.requireNonNull(Messages.get().getString("Discord.Enchanting")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%world%", worldName).replaceAll("%item%", item).replaceAll("%level%", String.valueOf(cost)).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%item%", item).replaceAll("%enchantment%", String.valueOf(enchs)).replaceAll("%enchlevel%", String.valueOf(enchantmentLevel)), false);
                     }
                 }
             }
@@ -135,7 +134,7 @@ public class OnEnchant implements Listener {
 
                 try {
 
-                    ExternalData.enchant(Data.serverName, player, x, y, z, enchs, enchantmentLevel, item, cost, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.enchant(Data.serverName, player, enchs, enchantmentLevel, item, cost, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

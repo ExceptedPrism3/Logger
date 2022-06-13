@@ -2,7 +2,6 @@ package me.prism3.logger.events.misc;
 
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
-import me.prism3.logger.discord.Discord;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.Messages;
@@ -51,7 +50,7 @@ public class OnPrimedTNT implements Listener {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Primed-TNT-Staff")).isEmpty()) {
 
-                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Primed-TNT-Staff")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
+                            this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Primed-TNT-Staff")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
 
                         }
 
@@ -105,14 +104,14 @@ public class OnPrimedTNT implements Listener {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Primed-TNT-Staff")).isEmpty()) {
 
-                            Discord.staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Primed-TNT-Staff")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
+                            this.main.getDiscord().staffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Primed-TNT-Staff")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
 
                         }
                     } else {
 
                         if (!Objects.requireNonNull(Messages.get().getString("Discord.Primed-TNT")).isEmpty()) {
 
-                            Discord.primedTNT(player, Objects.requireNonNull(Messages.get().getString("Discord.Primed-TNT")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
+                            this.main.getDiscord().primedTNT(player, Objects.requireNonNull(Messages.get().getString("Discord.Primed-TNT")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
                         }
                     }
                 }

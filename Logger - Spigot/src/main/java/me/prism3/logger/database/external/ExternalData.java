@@ -2,7 +2,7 @@ package me.prism3.logger.database.external;
 
 import me.prism3.logger.api.*;
 import me.prism3.logger.Main;
-import me.prism3.logger.utils.Enums.NmsVersions;
+import me.prism3.logger.utils.enums.NmsVersions;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.world.PortalCreateEvent;
@@ -345,7 +345,7 @@ public class ExternalData {
             playerJoin.setInt(6, z);
             if (plugin.getConfig().getBoolean("Player-Join.Player-ip")) {
                 playerJoin.setString(7, ip.getHostString());
-            }else{
+            } else{
 
                 playerJoin.setString(7, null);
             }

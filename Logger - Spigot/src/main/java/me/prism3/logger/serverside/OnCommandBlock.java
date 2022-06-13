@@ -2,7 +2,6 @@ package me.prism3.logger.serverside;
 
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
-import me.prism3.logger.discord.Discord;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -52,7 +51,7 @@ public class OnCommandBlock implements Listener {
                 // Discord
                 if (!Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Command-Block")).isEmpty()) {
 
-                    Discord.commandBlock(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Command-Block")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%command%", command), false);
+                    this.main.getDiscord().commandBlock(Objects.requireNonNull(Messages.get().getString("Discord.Server-Side.Command-Block")).replaceAll("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replaceAll("%command%", command), false);
                 }
 
                 // External
