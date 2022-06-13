@@ -1,4 +1,4 @@
-package me.prism3.logger.Events.Misc;
+package me.prism3.logger.events.misc;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

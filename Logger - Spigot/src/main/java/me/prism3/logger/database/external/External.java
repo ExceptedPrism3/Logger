@@ -17,15 +17,17 @@ public class External {
     private static final String DATABASE = Data.dbName;
     private HikariDataSource hikari;
 
-    public boolean isConnected() { return this.hikari != null; }
+    public boolean isConnected() {
+        return this.hikari != null;
+    }
 
     public void connect() {
 
         String jdbcDriver;
         final String mySQL = "MySQL";
-        final String mySQLDriver = "com.mysql.jdbc.jdbc2.optional.MysqlDataSource";
+        final String mySQLDriver = "com.mysql.cj.jdbc.Driver";
         final String mariaDB = "mariadb";
-        final String mariaDBDriver = "org.mariadb.jdbc.MariaDbDataSource";
+        final String mariaDBDriver = "org.mariadb.jdbc.Driver";
 
         switch (DATATYPE) {
 
@@ -37,7 +39,8 @@ public class External {
             case "mariadb":
                 this.jdbc = mariaDB;
                 jdbcDriver = mariaDBDriver;
-                this.main.getLogger().warning(this.jdbc + " Type is still in Development. Report any issues on Discord or Github!");
+                this.main.getLogger()
+                        .warning(this.jdbc + " Type is still in Development. Report any issues on Discord or Github!");
                 break;
 
             default:
@@ -49,10 +52,8 @@ public class External {
         if (!isConnected()) {
 
             hikari = new HikariDataSource();
-            hikari.setDataSourceClassName(jdbcDriver);
-            hikari.addDataSourceProperty("serverName", HOST);
-            hikari.addDataSourceProperty("port", PORT);
-            hikari.addDataSourceProperty("databaseName", DATABASE);
+            hikari.setDriverClassName(jdbcDriver);
+            hikari.setJdbcUrl(this.getJdbcUrl());
             hikari.addDataSourceProperty("user", USERNAME);
             hikari.addDataSourceProperty("password", PASSWORD);
             this.main.getLogger().info(this.jdbc + " Connection has been established!");
@@ -69,5 +70,14 @@ public class External {
 
         }
     }
-    public HikariDataSource getHikari() { return this.hikari; }
+
+    public String getJdbcUrl() {
+        return "jdbc:" + this.jdbc + "://" + External.HOST + ":" + External.PORT + "/" + External.DATABASE
+                + "?AllowPublicKeyRetrieval=true?useSSL=false&jdbcCompliantTruncation=false";
+
+    }
+
+    public HikariDataSource getHikari() {
+        return this.hikari;
+    }
 }

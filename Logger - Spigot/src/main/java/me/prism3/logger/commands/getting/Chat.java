@@ -21,7 +21,7 @@ public class Chat implements CommandExecutor {
 
         boolean containsResult;
 
-        //Unfinished
+        //UNFINISHED
         if (args.length == 2) {
 
             if (!args[1].matches("^[0-9]+$")) {
@@ -41,6 +41,7 @@ public class Chat implements CommandExecutor {
                 TextComponent back = Chat.getTextComponent("back", "/loggerget " + args[0] + " " + prevPage, "Previous Page");
                 paging.addExtra("     -    ");
                 paging.addExtra(back);
+                paging.addExtra("Count = "+ ExternalData.getMessagesCount(args[0]));
                 sender.spigot().sendMessage(paging);
 
                 return true;
