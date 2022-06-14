@@ -90,17 +90,17 @@ public class TPS implements Runnable {
                 }
 
                 //MySQL
-                if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+                if (main.getConfig().getBoolean("MySQL.Enable") && main.getMySQL().isConnected()) {
 
                     try {
 
                         if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
 
-                            MySQLData.TPS(serverName, getTPS());
+                            main.getMySQLData().TPS(serverName, getTPS());
 
                         } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
 
-                            MySQLData.TPS(serverName, getTPS());
+                            main.getMySQLData().TPS(serverName, getTPS());
                         }
 
                     } catch (Exception e) {
@@ -117,11 +117,11 @@ public class TPS implements Runnable {
 
                         if (getTPS() <= main.getConfig().getInt("TPS.Value-Medium")) {
 
-                            SQLiteData.insertTPS(serverName, getTPS());
+                            main.getSqLiteData().insertTPS(serverName, getTPS());
 
                         } else if (getTPS() <= main.getConfig().getInt("TPS.Value-Critical")) {
 
-                            SQLiteData.insertTPS(serverName, getTPS());
+                            main.getSqLiteData().insertTPS(serverName, getTPS());
                         }
 
                     } catch (Exception e) {

@@ -48,11 +48,11 @@ public class Stop {
             main.getDiscord().sendServerStop(Objects.requireNonNull(Messages.get().getString("Discord.Server-Stop")).replaceAll("%time%", dateFormat.format(date)), false);
 
             //MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.getMySQL().isConnected()) {
 
                 try {
 
-                    MySQLData.serverStop(serverName);
+                    main.getMySQLData().serverStop(serverName);
 
                 } catch (Exception e) {
 
@@ -66,7 +66,7 @@ public class Stop {
 
                 try {
 
-                    SQLiteData.insertServerStop(serverName);
+                    main.getSqLiteData().insertServerStop(serverName);
 
                 } catch (Exception exception) {
 

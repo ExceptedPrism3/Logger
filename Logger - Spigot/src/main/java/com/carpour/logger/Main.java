@@ -35,8 +35,8 @@ public class Main extends JavaPlugin {
 
 	private static Main instance;
 
-	public MySQL mySQL;
-	public MySQLData mySQLData;
+	private MySQL mySQL;
+	private MySQLData mySQLData;
 
 	private SQLite sqLite;
 	private SQLiteData sqLiteData;
@@ -44,8 +44,8 @@ public class Main extends JavaPlugin {
 	private PostgreSQL postgreSQL;
 	private PostgreSQLData postgreSQLData;
 
-	public Start start;
-	public Stop stop;
+	private Start start;
+  private Stop stop;
 
 	public Discord discord;
 	private DiscordOptions discordOptions;
@@ -93,7 +93,7 @@ public class Main extends JavaPlugin {
 
 			sqLite = new SQLite(getDataFolder(), getLogger());
 			sqLite.connect();
-			sqLiteData = new SQLiteData(sqLite);
+			sqLiteData = new SQLiteData(sqLite, loggingOptions, getLogger());
 			if (sqLite.isConnected()) {
 				sqLiteData.createTable();
 			}
@@ -112,12 +112,12 @@ public class Main extends JavaPlugin {
 			postgreSQL = new PostgreSQL(sqlConfiguration, getLogger());
 			postgreSQL.connect();
 
-			postgreSQLData = new PostgreSQLData(postgreSQL);
+			postgreSQLData = new PostgreSQLData(postgreSQL, loggingOptions, getLogger());
 
 			if (postgreSQL.isConnected()) {
 				postgreSQLData.createTable();
 			}
-			/*postgreSQLData.emptyTable();*/
+			postgreSQLData.emptyTable();
 
 		}
 

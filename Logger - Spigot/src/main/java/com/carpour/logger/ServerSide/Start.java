@@ -50,11 +50,11 @@ public class Start {
             main.getDiscord().sendServerStart(Objects.requireNonNull(Messages.get().getString("Discord.Server-Start")).replaceAll("%time%", dateFormat.format(date)), false);
 
             //MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.getMySQL().isConnected()) {
 
                 try {
 
-                    MySQLData.serverStart(serverName);
+                    main.getMySQLData().serverStart(serverName);
 
                 } catch (Exception e) {
 
@@ -68,7 +68,7 @@ public class Start {
 
                 try {
 
-                    SQLiteData.insertServerStart(serverName);
+                    main.getSqLiteData().insertServerStart(serverName);
 
                 } catch (Exception exception) {
 

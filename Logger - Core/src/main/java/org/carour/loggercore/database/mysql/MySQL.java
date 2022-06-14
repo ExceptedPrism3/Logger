@@ -1,5 +1,7 @@
 package org.carour.loggercore.database.mysql;
 
+
+
 import org.carour.loggercore.util.SqlConfiguration;
 
 import java.sql.Connection;

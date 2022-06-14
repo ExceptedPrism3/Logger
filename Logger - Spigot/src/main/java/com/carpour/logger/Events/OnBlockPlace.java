@@ -2,8 +2,6 @@ package com.carpour.logger.Events;
 
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import org.carour.loggercore.database.mysql.MySQLData;
-import org.carour.loggercore.database.sqlite.SQLiteData;
 import com.carpour.logger.Utils.Messages;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -23,115 +21,191 @@ import java.util.Objects;
 
 public class OnBlockPlace implements Listener {
 
-    private final Main main = Main.getInstance();
+  private Main main = Main.getInstance();
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlace(BlockPlaceEvent event) {
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void onPlace(BlockPlaceEvent event) {
 
-        Player player = event.getPlayer();
-        String playerName = player.getName();
-        World world = player.getWorld();
-        String worldName = world.getName();
-        int x = event.getBlock().getLocation().getBlockX();
-        int y = event.getBlock().getLocation().getBlockY();
-        int z = event.getBlock().getLocation().getBlockZ();
-        Material blockType = event.getBlock().getType();
-        String serverName = main.getConfig().getString("Server-Name");
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+    Player player = event.getPlayer();
+    String playerName = player.getName();
+    World world = player.getWorld();
+    String worldName = world.getName();
+    int x = event.getBlock().getLocation().getBlockX();
+    int y = event.getBlock().getLocation().getBlockY();
+    int z = event.getBlock().getLocation().getBlockZ();
+    Material blockType = event.getBlock().getType();
+    String serverName = main.getConfig().getString("Server-Name");
+    Date date = new Date();
+    DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (player.hasPermission("logger.exempt")) return;
+    if (player.hasPermission("logger.exempt")) return;
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log.Block-Place")) {
+    if (!event.isCancelled() && main.getConfig().getBoolean("Log.Block-Place")) {
 
-            //Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+      // Log To Files Handling
+      if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+        if (main.getConfig().getBoolean("Staff.Enabled")
+            && player.hasPermission("logger.staff.log")) {
 
-                    main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
+          main.getDiscord()
+              .sendStaffChat(
+                  playerName,
+                  player.getUniqueId(),
+                  Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff"))
+                      .replaceAll("%world%", worldName)
+                      .replaceAll("%x%", String.valueOf(x))
+                      .replaceAll("%y%", String.valueOf(y))
+                      .replaceAll("%z%", String.valueOf(z))
+                      .replaceAll("%block%", String.valueOf(blockType)),
+                  false);
 
-                    try {
+          try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Block-Place-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)) + "\n");
-                        out.close();
+            BufferedWriter out =
+                new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
+            out.write(
+                Objects.requireNonNull(Messages.get().getString("Files.Block-Place-Staff"))
+                        .replaceAll("%time%", dateFormat.format(date))
+                        .replaceAll("%world%", worldName)
+                        .replaceAll("%player%", playerName)
+                        .replaceAll("%x%", String.valueOf(x))
+                        .replaceAll("%y%", String.valueOf(y))
+                        .replaceAll("%z%", String.valueOf(z))
+                        .replaceAll("%block%", String.valueOf(blockType))
+                    + "\n");
+            out.close();
 
-                    } catch (IOException e) {
+          } catch (IOException e) {
 
-                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
+            main.getServer()
+                .getLogger()
+                .warning("An error occurred while logging into the appropriate file.");
+            e.printStackTrace();
+          }
 
-                    }
+          if (main.getConfig().getBoolean("MySQL.Enable") && main.getMySQL().isConnected()) {
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+            main.getMySQLData()
+                .blockPlace(serverName, worldName, playerName, blockType.toString(), x, y, z, true);
+          }
 
+          if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
-                        MySQLData.blockPlace(serverName, worldName, playerName, blockType.toString(), x, y, z, true);
+            main.getSqLiteData()
+                .insertBlockPlace(
+                    serverName, playerName, worldName, blockType.toString(), x, y, z, true);
+          }
 
-                    }
-
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
-
-                        SQLiteData.insertBlockPlace(serverName, player, blockType, true);
-                    }
-
-                    return;
-
-                }
-
-                try {
-
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBlockPlaceLogFile(), true));
-                    out.write("[" + dateFormat.format(date) + "] " + "[" + worldName + "] The Player <" + playerName + "> has placed " + blockType + " at X= " + x + " Y= " + y + " Z= " + z + "\n");
-                    out.close();
-
-                } catch (IOException e) {
-
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
-                }
-            }
-
-            //Discord
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
-
-                main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
-
-            } else {
-
-                main.getDiscord().sendBlockPlace(player, Objects.requireNonNull(Messages.get().getString("Discord.Block-Place")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%block%", String.valueOf(blockType)), false);
-
-            }
-
-            //MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
-
-                try {
-
-                    MySQLData.blockPlace(serverName, worldName, playerName, blockType.toString(), x, y, z, player.hasPermission("logger.staff.log"));
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
-            }
-
-            //SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
-
-                try {
-
-                    SQLiteData.insertBlockPlace(serverName, player, blockType, player.hasPermission("logger.staff.log"));
-
-                } catch (Exception exception) {
-
-                    exception.printStackTrace();
-
-                }
-            }
+          return;
         }
+
+        try {
+
+          BufferedWriter out =
+              new BufferedWriter(new FileWriter(FileHandler.getBlockPlaceLogFile(), true));
+          out.write(
+              "["
+                  + dateFormat.format(date)
+                  + "] "
+                  + "["
+                  + worldName
+                  + "] The Player <"
+                  + playerName
+                  + "> has placed "
+                  + blockType
+                  + " at X= "
+                  + x
+                  + " Y= "
+                  + y
+                  + " Z= "
+                  + z
+                  + "\n");
+          out.close();
+
+        } catch (IOException e) {
+
+          main.getServer()
+              .getLogger()
+              .warning("An error occurred while logging into the appropriate file.");
+          e.printStackTrace();
+        }
+      }
+
+      // Discord
+      if (main.getConfig().getBoolean("Staff.Enabled")
+          && player.hasPermission("logger.staff.log")) {
+
+        main.getDiscord()
+            .sendStaffChat(
+                playerName,
+                player.getUniqueId(),
+                Objects.requireNonNull(Messages.get().getString("Discord.Block-Place-Staff"))
+                    .replaceAll("%world%", worldName)
+                    .replaceAll("%x%", String.valueOf(x))
+                    .replaceAll("%y%", String.valueOf(y))
+                    .replaceAll("%z%", String.valueOf(z))
+                    .replaceAll("%block%", String.valueOf(blockType)),
+                false);
+
+      } else {
+
+        main.getDiscord()
+            .sendBlockPlace(
+                playerName,
+                player.getUniqueId(),
+                Objects.requireNonNull(Messages.get().getString("Discord.Block-Place"))
+                    .replaceAll("%world%", worldName)
+                    .replaceAll("%x%", String.valueOf(x))
+                    .replaceAll("%y%", String.valueOf(y))
+                    .replaceAll("%z%", String.valueOf(z))
+                    .replaceAll("%block%", String.valueOf(blockType)),
+                false);
+      }
+
+      // MySQL
+      if (main.getConfig().getBoolean("MySQL.Enable") && main.getMySQL().isConnected()) {
+
+        try {
+
+          main.getMySQLData()
+              .blockPlace(
+                  serverName,
+                  worldName,
+                  playerName,
+                  blockType.toString(),
+                  x,
+                  y,
+                  z,
+                  player.hasPermission("logger.staff.log"));
+
+        } catch (Exception e) {
+
+          e.printStackTrace();
+        }
+      }
+
+      // SQLite
+      if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+
+        try {
+
+          main.getSqLiteData()
+              .insertBlockPlace(
+                  serverName,
+                  playerName,
+                  worldName,
+                  blockType.toString(),
+                  x,
+                  y,
+                  z,
+                  player.hasPermission("logger.staff.log"));
+
+        } catch (Exception exception) {
+
+          exception.printStackTrace();
+        }
+      }
     }
+  }
 }

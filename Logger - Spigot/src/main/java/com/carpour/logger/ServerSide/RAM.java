@@ -1,10 +1,7 @@
 package com.carpour.logger.ServerSide;
 
-import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
 import com.carpour.logger.Utils.FileHandler;
-import org.carour.loggercore.database.mysql.MySQLData;
-import org.carour.loggercore.database.sqlite.SQLiteData;
 import com.carpour.logger.Utils.Messages;
 
 import java.io.BufferedWriter;
@@ -61,11 +58,11 @@ public class RAM implements Runnable {
                 main.getDiscord().sendRAM(Objects.requireNonNull(Messages.get().getString("Discord.RAM")).replaceAll("%max%", String.valueOf(maxMemory)).replaceAll("%used%", String.valueOf(usedMemory)).replaceAll("%free%", String.valueOf(freeMemory)), false);
 
                 //MySQL
-                if (main.getConfig().getBoolean("MySQL.Enable")  && main.mySQL.isConnected()) {
+                if (main.getConfig().getBoolean("MySQL.Enable")  && main.getMySQL().isConnected()) {
 
                     try {
 
-                        MySQLData.RAM(serverName, maxMemory, usedMemory, freeMemory);
+                        main.getMySQLData().RAM(serverName, maxMemory, usedMemory, freeMemory);
 
                     } catch (Exception e) {
 
@@ -79,7 +76,7 @@ public class RAM implements Runnable {
 
                     try {
 
-                        SQLiteData.insertRAM(serverName, maxMemory, usedMemory, freeMemory);
+                        main.getSqLiteData().insertRAM(serverName, maxMemory, usedMemory, freeMemory);
 
                     } catch (Exception exception) {
 
