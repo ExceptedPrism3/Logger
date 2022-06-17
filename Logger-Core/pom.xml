@@ -4,9 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.carpour</groupId>
     <artifactId>Logger-Core</artifactId>
     <version>1.7</version>
+
+    <parent>
+        <groupId>com.carpour</groupId>
+        <artifactId>Logger</artifactId>
+        <version>1.7</version>
+    </parent>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -106,11 +111,6 @@
                     <artifactId>opus-java</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.24</version>
         </dependency>
     </dependencies>
 
