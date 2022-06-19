@@ -1,10 +1,8 @@
 package com.carpour.logger.ServerSide;
 
-import com.carpour.logger.Discord.Discord;
 import com.carpour.logger.Main;
+
 import com.carpour.logger.Utils.FileHandler;
-import org.carour.loggercore.database.mysql.MySQLData;
-import org.carour.loggercore.database.sqlite.SQLiteData;
 import com.carpour.logger.Utils.Messages;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -54,11 +52,11 @@ public class Console implements Listener {
             main.getDiscord().sendConsole(Objects.requireNonNull(Messages.get().getString("Discord.Console-Commands")).replaceAll("%message%", msg), false);
 
             //MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.getMySQL().isConnected()) {
 
                 try {
 
-                    MySQLData.consoleCommands(serverName, msg);
+                    main.getMySQLData().consoleCommands(serverName, msg);
 
                 } catch (Exception e) {
 
@@ -72,7 +70,7 @@ public class Console implements Listener {
 
                 try {
 
-                    SQLiteData.insertConsoleCommands(serverName, msg);
+                    main.getSqLiteData().insertConsoleCommands(serverName, msg);
 
                 } catch (Exception e) {
 

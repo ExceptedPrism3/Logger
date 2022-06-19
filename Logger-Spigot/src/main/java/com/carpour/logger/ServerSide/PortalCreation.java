@@ -55,11 +55,11 @@ public class PortalCreation implements Listener {
             main.getDiscord().sendPortalCreation(Objects.requireNonNull(Messages.get().getString("Discord.Portal-Creation")).replaceAll("%world%", worldName).replaceAll("%material%", String.valueOf(reason)), false);
 
             //MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+            if (main.getConfig().getBoolean("MySQL.Enable") && main.getMySQL().isConnected()) {
 
                 try {
 
-                    MySQLData.portalCreate(serverName, worldName, reason);
+                    main.getMySQLData().portalCreate(serverName, worldName, reason.name());
 
                 } catch (Exception e) {
 
@@ -73,7 +73,7 @@ public class PortalCreation implements Listener {
 
                 try {
 
-                    SQLiteData.insertPortalCreate(serverName, worldName, reason);
+                    main.getSqLiteData().insertPortalCreate(serverName, worldName, reason.name());
 
                 } catch (Exception e) {
 

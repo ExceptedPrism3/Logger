@@ -1,9 +1,7 @@
 package com.carpour.logger.Events;
 
 import com.carpour.logger.Main;
-import org.carour.loggercore.database.mysql.MySQLData;
 import com.carpour.logger.Utils.FileHandler;
-import org.carour.loggercore.database.sqlite.SQLiteData;
 import com.carpour.logger.Utils.Messages;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,114 +19,190 @@ import java.util.Objects;
 
 public class OnPlayerKick implements Listener {
 
-    private final Main main = Main.getInstance();
+  private final Main main = Main.getInstance();
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onTabCompletion(PlayerKickEvent event){
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void onTabCompletion(PlayerKickEvent event) {
 
-        Player player = event.getPlayer();
-        String reason = event.getReason();
-        String worldName = player.getWorld().getName();
-        String playerName = player.getName();
-        double x = Math.floor(player.getLocation().getX());
-        double y = Math.floor(player.getLocation().getY());
-        double z = Math.floor(player.getLocation().getZ());
-        String serverName = main.getConfig().getString("Server-Name");
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+    Player player = event.getPlayer();
+    String reason = event.getReason();
+    String worldName = player.getWorld().getName();
+    String playerName = player.getName();
+    double x = Math.floor(player.getLocation().getX());
+    double y = Math.floor(player.getLocation().getY());
+    double z = Math.floor(player.getLocation().getZ());
+    String serverName = main.getConfig().getString("Server-Name");
+    Date date = new Date();
+    DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-        if (player.hasPermission("logger.exempt")) return;
+    if (player.hasPermission("logger.exempt")) return;
 
-        if (!event.isCancelled() && main.getConfig().getBoolean("Log.Player-Kick")) {
+    if (!event.isCancelled() && main.getConfig().getBoolean("Log.Player-Kick")) {
 
-            //Log To Files Handling
-            if (main.getConfig().getBoolean("Log-to-Files")) {
+      // Log To Files Handling
+      if (main.getConfig().getBoolean("Log-to-Files")) {
 
-                if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
+        if (main.getConfig().getBoolean("Staff.Enabled")
+            && player.hasPermission("logger.staff.log")) {
 
-                    main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%reason%", reason), false);
+          main.getDiscord()
+              .sendStaffChat(
+                  playerName,
+                  player.getUniqueId(),
+                  Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick-Staff"))
+                      .replaceAll("%world%", worldName)
+                      .replaceAll("%x%", String.valueOf(x))
+                      .replaceAll("%y%", String.valueOf(y))
+                      .replaceAll("%z%", String.valueOf(z))
+                      .replaceAll("%reason%", reason),
+                  false);
 
-                    try {
+          try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
-                        out.write(Objects.requireNonNull(Messages.get().getString("Files.Player-Kick-Staff")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%reason%", reason) + "\n");
-                        out.close();
+            BufferedWriter out =
+                new BufferedWriter(new FileWriter(FileHandler.getstaffFile(), true));
+            out.write(
+                Objects.requireNonNull(Messages.get().getString("Files.Player-Kick-Staff"))
+                        .replaceAll("%time%", dateFormat.format(date))
+                        .replaceAll("%world%", worldName)
+                        .replaceAll("%player%", playerName)
+                        .replaceAll("%x%", String.valueOf(x))
+                        .replaceAll("%y%", String.valueOf(y))
+                        .replaceAll("%z%", String.valueOf(z))
+                        .replaceAll("%reason%", reason)
+                    + "\n");
+            out.close();
 
-                    } catch (IOException e) {
+          } catch (IOException e) {
 
-                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
+            main.getServer()
+                .getLogger()
+                .warning("An error occurred while logging into the appropriate file.");
+            e.printStackTrace();
+          }
 
-                    }
+          if (main.getConfig().getBoolean("MySQL.Enable") && main.getMySQL().isConnected()) {
 
-                    if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
+            main.getMySQLData()
+                .playerKick(serverName, worldName, playerName, x, y, z, reason, true);
+          }
 
-                        MySQLData.playerKick(serverName, worldName, playerName, x, y, z, reason, true);
+          if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
 
-                    }
+            main.getSqLiteData()
+                .insertPlayerKick(
+                    serverName,
+                    playerName,
+                    worldName,
+                    player.getLocation().getBlockX(),
+                    player.getLocation().getBlockY(),
+                    player.getLocation().getBlockZ(),
+                    reason,
+                    true);
+          }
 
-                    if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
-
-                        SQLiteData.insertPlayerKick(serverName, player, reason, true);
-
-                    }
-
-                    return;
-
-                }
-
-                try {
-
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerKickLogFile(), true));
-                    out.write(Objects.requireNonNull(Messages.get().getString("Files.Player-Kick")).replaceAll("%time%", dateFormat.format(date)).replaceAll("%world%", worldName).replaceAll("%player%", playerName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%reason%", reason) + "\n");
-                    out.close();
-
-                } catch (IOException e) {
-
-                    main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
-                }
-            }
-
-            //Discord
-            if (main.getConfig().getBoolean("Staff.Enabled") && player.hasPermission("logger.staff.log")) {
-
-                main.getDiscord().sendStaffChat(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick-Staff")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%reason%", reason), false);
-
-            } else {
-
-                main.getDiscord().sendPlayerKick(player, Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick")).replaceAll("%world%", worldName).replaceAll("%x%", String.valueOf(x)).replaceAll("%y%", String.valueOf(y)).replaceAll("%z%", String.valueOf(z)).replaceAll("%reason%", reason), false);
-
-            }
-
-            //MySQL
-            if (main.getConfig().getBoolean("MySQL.Enable") && main.mySQL.isConnected()) {
-
-                try {
-
-                    MySQLData.playerKick(serverName, worldName, playerName, x, y, z, reason, player.hasPermission("logger.staff.log"));
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
-            }
-
-            //SQLite
-            if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
-
-                try {
-
-                    SQLiteData.insertPlayerKick(serverName, player, reason, player.hasPermission("logger.staff.log"));
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
-            }
+          return;
         }
+
+        try {
+
+          BufferedWriter out =
+              new BufferedWriter(new FileWriter(FileHandler.getPlayerKickLogFile(), true));
+          out.write(
+              Objects.requireNonNull(Messages.get().getString("Files.Player-Kick"))
+                      .replaceAll("%time%", dateFormat.format(date))
+                      .replaceAll("%world%", worldName)
+                      .replaceAll("%player%", playerName)
+                      .replaceAll("%x%", String.valueOf(x))
+                      .replaceAll("%y%", String.valueOf(y))
+                      .replaceAll("%z%", String.valueOf(z))
+                      .replaceAll("%reason%", reason)
+                  + "\n");
+          out.close();
+
+        } catch (IOException e) {
+
+          main.getServer()
+              .getLogger()
+              .warning("An error occurred while logging into the appropriate file.");
+          e.printStackTrace();
+        }
+      }
+
+      // Discord
+      if (main.getConfig().getBoolean("Staff.Enabled")
+          && player.hasPermission("logger.staff.log")) {
+
+        main.getDiscord()
+            .sendStaffChat(
+                playerName,
+                player.getUniqueId(),
+                Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick-Staff"))
+                    .replaceAll("%world%", worldName)
+                    .replaceAll("%x%", String.valueOf(x))
+                    .replaceAll("%y%", String.valueOf(y))
+                    .replaceAll("%z%", String.valueOf(z))
+                    .replaceAll("%reason%", reason),
+                false);
+
+      } else {
+
+        main.getDiscord()
+            .sendPlayerKick(
+                playerName,
+                player.getUniqueId(),
+                Objects.requireNonNull(Messages.get().getString("Discord.Player-Kick"))
+                    .replaceAll("%world%", worldName)
+                    .replaceAll("%x%", String.valueOf(x))
+                    .replaceAll("%y%", String.valueOf(y))
+                    .replaceAll("%z%", String.valueOf(z))
+                    .replaceAll("%reason%", reason),
+                false);
+      }
+
+      // MySQL
+      if (main.getConfig().getBoolean("MySQL.Enable") && main.getMySQL().isConnected()) {
+
+        try {
+
+          main.getMySQLData()
+              .playerKick(
+                  serverName,
+                  worldName,
+                  playerName,
+                  x,
+                  y,
+                  z,
+                  reason,
+                  player.hasPermission("logger.staff.log"));
+
+        } catch (Exception e) {
+
+          e.printStackTrace();
+        }
+      }
+
+      // SQLite
+      if (main.getConfig().getBoolean("SQLite.Enable") && main.getSqLite().isConnected()) {
+
+        try {
+
+          main.getSqLiteData()
+              .insertPlayerKick(
+                  serverName,
+                  playerName,
+                  worldName,
+                  player.getLocation().getBlockX(),
+                  player.getLocation().getBlockY(),
+                  player.getLocation().getBlockZ(),
+                  reason,
+                  player.hasPermission("logger.staff.log"));
+
+        } catch (Exception e) {
+
+          e.printStackTrace();
+        }
+      }
     }
+  }
 }
