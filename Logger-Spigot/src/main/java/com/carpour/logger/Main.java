@@ -1,12 +1,12 @@
 package com.carpour.logger;
 
-import com.carpour.logger.Commands.OnLogger;
-import com.carpour.logger.Discord.SpigotDiscordOptions;
-import com.carpour.logger.Events.*;
-import com.carpour.logger.Events.onCommands.OnCommand;
-import com.carpour.logger.Events.onInventories.OnFurnace;
-import com.carpour.logger.ServerSide.*;
-import com.carpour.logger.Utils.*;
+import com.carpour.logger.commands.OnLogger;
+import com.carpour.logger.discord.SpigotDiscordOptions;
+import com.carpour.logger.events.*;
+import com.carpour.logger.events.oncommands.OnCommand;
+import com.carpour.logger.events.oninventories.OnFurnace;
+import com.carpour.logger.serverside.*;
+import com.carpour.logger.utils.*;
 import com.carpour.logger.logging.SpigotLoggingOptions;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
