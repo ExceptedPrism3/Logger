@@ -147,20 +147,25 @@ Changes
 <-!------------------------------------------ v1.8 ------------------------------------------!->
 
 Additions
+    [+] Spy Feature toggle command in-game
     [+] Player Inventory Backup on Player Death
-    [+] LiteBans & AdvancedBans Support
+    [+] LiteBans & AdvancedBans Support (spigot only)
     [+] Chest open Checker
     [+] TNT Explosion Checker
     [+] Auto-Config Updater
     [+] PlaceHolderAPI Plugin Support
-    [+] StripLog on 1.13+ server versions
+    [+] StripLog for 1.13+ server versions
     [+] Added 1.19 Support
     [+] Dump command (spigot only)
+    [+] Discord Command
 
 Fixes
     [!] Separated Command Blocks from Console Commands as they count the same
     [!] OP now get logged by default
     [!] Discord Status starting even if disabled in discord config
+    [!] RAM not being logged on BungeeCord & Velocity
+    [!] Some languages not being logged into databases
+    [!] An issue that prevented to shutdown the databases correctly on Server Stop
 
 Changes
     [*] Databases Structure

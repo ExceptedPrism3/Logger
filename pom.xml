@@ -8,10 +8,10 @@
     <artifactId>Logger</artifactId>
     <version>1.7.5</version>
     <modules>
-        <module>Logger - Spigot</module>
-        <module>Logger - BungeeCord</module>
-        <module>Logger - Shaded</module>
-        <module>Logger - Velocity</module>
+        <module>Logger-Spigot</module>
+        <module>Logger-BungeeCord</module>
+        <module>Logger-Shaded</module>
+        <module>Logger-Velocity</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -37,10 +37,6 @@
             <id>dv8tion</id>
             <name>m2-dv8tion</name>
             <url>https://m2.dv8tion.net/releases</url>
-        </repository>
-        <repository>
-            <id>essentials-releases</id>
-            <url>https://repo.essentialsx.net/releases/</url>
         </repository>
     </repositories>
 </project>
