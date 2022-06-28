@@ -1,12 +1,12 @@
-#Messages for Logger Plugin [ Bukkit Version ]
-#Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
-#Config 1.7.5
-#Plugin Messages
+# Messages for Logger Plugin [ Bukkit Version ]
+# Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
+# Config 1.8
+# Plugin Messages
 General:
   No-Permission: "&c您无权使用此命令。"
   Reload: "&a配置重载成功。"
   Invalid-Syntax: "&c非法参数！检查您的输入是否有误。"
-#Files Instance
+# Files Instance
 Files:
   Player-Chat-Staff: "[%time%] [%world%] 白名单玩家 <%player%> 说 => %message%"
   Player-Chat: "[%time%] [%world%] <%player%> 说 => %message%"
@@ -69,8 +69,8 @@ Files:
     Wrong-Password: "[%time%] [%world%] <%player%> 输入了错误密码"
     Vault-Staff: "[%time%] <%player%> 金钱变化了： %oldbal% 变化至 %newbal%"
     Vault: "[%time%] 白名单玩家 <%player%> 金钱变化了： %oldbal% 变化至 %newbal%"
-#Discord Instance
-#Emojis can be found here https://emojipedia.org/ or elsewhere. Emojis may not work on >1.12 Servers.
+# Discord Instance
+# Emojis can be found here https://emojipedia.org/ or elsewhere. Emojis may not work on >1.12 Servers.
 Discord:
   Player-Chat-Staff: "**[%time%]** **[%world%]** **%message%**"
   Player-Chat: "**[%time%]** **[%world%]** **%message%**"

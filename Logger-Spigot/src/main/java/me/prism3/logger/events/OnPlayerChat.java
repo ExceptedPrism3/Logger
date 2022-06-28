@@ -3,6 +3,7 @@ package me.prism3.logger.events;
 import me.prism3.logger.Main;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.World;
@@ -29,12 +30,12 @@ public class OnPlayerChat implements Listener {
 
             final Player player = event.getPlayer();
 
-            if (player.hasPermission(Data.loggerExempt)) return;
+            if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
             final World world = player.getWorld();
             final String worldName = world.getName();
             final String playerName = player.getName();
-            final String msg = event.getMessage().replace("\\", "\\\\"); //TODO To look into
+            final String msg = event.getMessage().replace("\\", "\\\\");
 
             // Log To Files
             if (Data.isLogToFiles) {

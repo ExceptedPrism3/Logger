@@ -12,6 +12,11 @@ import java.util.StringJoiner;
 
 public class Pastebin {
 
+    /**
+     *
+     * Special Thanks to Redmoogle#3761 for his help!
+     */
+
     private Pastebin() {}
 
     private static final String API_URL = "https://pastebin.com/api/api_post.php";
@@ -19,7 +24,9 @@ public class Pastebin {
     private static final String DEFAULT_INV = "\0";
 
     public static String postPaste(PasteRequest request) throws IOException {
-        Map<String, String> arguments = new HashMap<>();
+
+        final Map<String, String> arguments = new HashMap<>();
+
         arguments.put("api_option", "paste");
         arguments.put("api_dev_key", request.getDevKey());
         arguments.put("api_paste_code", request.getPaste());
@@ -44,9 +51,9 @@ public class Pastebin {
             arguments.put("api_paste_expire_date", request.getPasteExpire());
 
 
-        String postData = postMap(arguments);
-        byte[] postDataB = postData.getBytes(StandardCharsets.UTF_8);
-        HttpURLConnection con = (HttpURLConnection) new URL(API_URL).openConnection();
+        final String postData = postMap(arguments);
+        final byte[] postDataB = postData.getBytes(StandardCharsets.UTF_8);
+        final HttpURLConnection con = (HttpURLConnection) new URL(API_URL).openConnection();
         con.setDoOutput(true);
         con.setFixedLengthStreamingMode(postDataB.length);
         con.setRequestMethod("POST");
@@ -58,9 +65,9 @@ public class Pastebin {
             os.write(postDataB);
         }
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;
-        StringBuilder response = new StringBuilder();
+        final StringBuilder response = new StringBuilder();
 
         while ((inputLine = in.readLine()) != null) {
             response.append(inputLine);
@@ -72,10 +79,13 @@ public class Pastebin {
     }
 
     private static String postMap(Map<String, String> arguments) throws UnsupportedEncodingException {
-        StringJoiner joiner = new StringJoiner("&");
+
+        final StringJoiner joiner = new StringJoiner("&");
+
         for (Map.Entry<String, String> entry : arguments.entrySet()) {
             joiner.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "=" + URLEncoder.encode(entry.getValue(), "UTF-8"));
         }
+
         return joiner.toString();
     }
 
@@ -157,8 +167,6 @@ public class Pastebin {
             this.pasteExpire = pasteExpire;
         }
 
-        public String postPaste() throws IOException {
-            return Pastebin.postPaste(this);
-        }
+        public String postPaste() throws IOException { return Pastebin.postPaste(this); }
     }
 }

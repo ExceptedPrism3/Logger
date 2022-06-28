@@ -43,6 +43,7 @@ public class FileHandler {
     private static File registrationFolder;
     private static File primedTNTFolder;
     private static File chestInteractionFolder;
+    private static File entityDeathFolder;
 
     // Server Side
     private static File serverStartFolder;
@@ -91,6 +92,7 @@ public class FileHandler {
     private static File registrationFile;
     private static File primedTNTFile;
     private static File chestInteractionFile;
+    private static File entityDeathFile;
 
     // Server Side
     private static File serverStartFile;
@@ -205,6 +207,9 @@ public class FileHandler {
         chestInteractionFolder = new File(logsFolder, "Chest Interaction");
         chestInteractionFile = new File(chestInteractionFolder, filenameDateFormat.format(date) + ".log");
 
+        entityDeathFolder = new File(logsFolder, "Entity Death");
+        entityDeathFile = new File(entityDeathFolder, filenameDateFormat.format(date) + ".log");
+
         // Server Side Part
         serverStartFolder = new File(logsFolder, "Server Start");
         serverStartFile = new File(serverStartFolder, filenameDateFormat.format(date) + ".log");
@@ -307,6 +312,8 @@ public class FileHandler {
 
             chestInteractionFolder.mkdir();
 
+            entityDeathFolder.mkdir();
+
             // Server Side Part
             serverStartFolder.mkdir();
 
@@ -390,6 +397,8 @@ public class FileHandler {
             primedTNTFile.createNewFile();
 
             chestInteractionFile.createNewFile();
+
+            entityDeathFile.createNewFile();
 
             // Server Side
             serverStartFile.createNewFile();
@@ -476,6 +485,8 @@ public class FileHandler {
     public static File getPrimedTNTFile() { return primedTNTFile; }
 
     public static File getChestInteractionFile() { return chestInteractionFile; }
+
+    public static File getEntityDeathFile() { return entityDeathFile; }
 
     // Server Side Part
     public static File getServerStartFile() { return serverStartFile; }
@@ -703,6 +714,13 @@ public class FileHandler {
         {
 
             deleteFile(chestInteraction);
+
+        }
+
+        for (File entityDeath : Objects.requireNonNull(entityDeathFolder.listFiles()))
+        {
+
+            deleteFile(entityDeath);
 
         }
 

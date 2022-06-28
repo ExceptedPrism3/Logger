@@ -1,6 +1,6 @@
 # Messages for Logger Plugin [ Bukkit Version ]
 # Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
-# Config 1.7.5
+# Config 1.8
 # Plugin Messages
 General:
   No-Permission: "&cYou do not have permission to run this command."
@@ -57,6 +57,8 @@ Files:
   Primed-TNT: "[%time%] [%world%] [%uuid%] The Player <%player%> has primed a TNT at X= %x%, Y= %y%, Z= %z%"
   Chest-Interaction-Staff: "[%time%] [%world%] [%uuid%] The Staff <%player%> has opened %chest% at X= %x%, Y= %y%, Z= %z% that contained %items%"
   Chest-Interaction: "[%time%] [%world%] [%uuid%] The Player <%player%> has opened %chest% at X= %x%, Y= %y%, Z= %z% that contained %items%"
+  Entity-Death-Staff: "[%time%] [%world%] [%uuid%] The Staff <%player%> has slain %mob% at X= %x%, Y= %y%, Z= %z%"
+  Entity-Death: "[%time%] [%world%] [%uuid%] The Player <%player%> has slain %mob% at X= %x%, Y= %y%, Z= %z%"
   Server-Side:
     Start: "[%time%]"
     Stop: "[%time%]"
@@ -133,6 +135,8 @@ Discord:
   Primed-TNT: "**[%time%]** **[%world%]** ** [%uuid%]** has primed a TNT at X= **%x%**, Y= **%y%**, Z= **%z%**"
   Chest-Interaction-Staff: "**[%time%]** **[%world%]** **[%uuid%]** has opened **%chest%** at X= **%x%**, Y= **%y%**, Z= **%z%** that contained **%items%**"
   Chest-Interaction: "**[%time%]** **[%world%]** **[%uuid%]** has opened **%chest%** at X= **%x%**, Y= **%y%**, Z= **%z%** that contained **%items%**"
+  Entity-Death-Staff: "**[%time%]** **[%world%]** **[%uuid%]** has slain **%mob%** at X= **%x%**, Y= **%y%**, Z= **%z%**"
+  Entity-Death: "**[%time%]** **[%world%]** **[%uuid%]** has slain **%mob%** at X= **%x%**, Y= **%y%**, Z= **%z%**"
   Server-Side:
     Start: "**%time%**"
     Stop: "**%time%**"

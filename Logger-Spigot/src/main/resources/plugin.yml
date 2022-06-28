@@ -2,19 +2,22 @@ name: Logger
 version: ${project.version}
 main: me.prism3.logger.Main
 api-version: 1.13
-authors: [ Prism3 , thelooter, Sidna ]
+authors: [ Prism3, thelooter, Sidna ]
 description: Log all Activities from Players and Server Side!
-softdepend: [Essentials, AuthMe, Vault, PlaceholderAPI, LiteBans, AdvancedBan]
+softdepend: [Essentials, AuthMe, Vault, PlaceholderAPI, LiteBans, AdvancedBan, PlaceholderAPI, Geyser, Floodgate]
 commands:
   logger:
     description: "Plugin command."
   logger reload:
     description: "Reloads the Plugin configs."
-  loggerget:
-    description: "Get Player's last messages"
-    usage: "Usage: /loggerget <PlayerName> [page number | 1 - *]"
-  loggerd:
-    description: "Plugins command."
+  logger dump:
+    description: "Creates an online pastebin url of the plugin's config and discord."
+  logger discord:
+    description: "Display the discord support server link."
+  logger playerinventory:
+    description: "Opens a menu with all online players and their available backups."
+  logger toggle:
+    description: "Toggle spy features ON/OFF."
 permissions:
   logger.staff:
     description: "Allows the Player to execute Plugin Commands, spy on others actions, and view Plugin Updates."
@@ -43,6 +46,7 @@ permissions:
       logger.spy: true
   logger.staff.log:
     description: "Logs Staff Members."
+    default: op
     children:
       logger.exempt: false
   logger.update:

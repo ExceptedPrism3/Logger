@@ -1,12 +1,12 @@
-#Messages for Logger Plugin [ Bukkit Version ]
-#Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
-#Config 1.7.5
-#Plugin Messages
+# Messages for Logger Plugin [ Bukkit Version ]
+# Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
+# Config 1.8
+# Plugin Messages
 General:
   No-Permission: "&cVous n'avez pas la permission d'exécuter cette commande."
   Reload: "&aConfigurations rechargées."
   Invalid-Syntax: "&cInvalid Syntax."
-#Files Instance
+# Files Instance
 Files:
   Player-Chat-Staff: "[%time%] [%world%] Le Staff <%player%> a dit => %message%"
   Player-Chat: "[%time%] [%world%] Le Joueur <%player%> a dit => %message%"
@@ -53,8 +53,6 @@ Files:
   Player-Craft-Staff: "[%time%] [%world%] Le Staff <%player%> a fabriqué %amount% de %item% à X= %x%, Y= %y%, Z= %z%"
   Player-Craft: "[%time%] [%world%] Le Joueur <%player%> a fabriqué %amount% de %item% ŕ X= %x%, Y= %y%, Z= %z%"
   Player-Registration: "[%time%] Le Joueur <%player%> a rejoint le %date%"
-  Primed-TNT: "**[%time%]** **[%world%]** Le Joueur <%player%> a allumé un TNT à X= **%x%**, Y= **%y%**, Z= **%z%**"
-  Primed-TNT-Staff: "**[%time%]** **[%world%]** Le Staff <%player%> a allumé un TNT à X= **%x%**, Y= **%y%**, Z= **%z%**"
   Server-Side:
     Start: "[%time%]"
     Stop: "[%time%]"
@@ -71,8 +69,8 @@ Files:
     Wrong-Password: "[%time%] [%world%] Le Joueur <%player%> a entré un Mot de Passe Incorrect"
     Vault-Staff: "[%time%] La balance du Joueur <%player%> a changé de %oldbal% à %newbal%"
     Vault: "[%time%] Le balance de Staff <%player%> a changé de %oldbal% à %newbal%"
-#Discord Instance
-#Emojis can be found here https://emojipedia.org/ or elsewhere. Emojis may not work on >1.12 Servers.
+# Discord Instance
+# Emojis can be found here https://emojipedia.org/ or elsewhere
 Discord:
   Player-Chat-Staff: "**[%time%]** **[%world%]** **%message%**"
   Player-Chat: "**[%time%]** **[%world%]** **%message%**"
@@ -121,8 +119,6 @@ Discord:
   Player-Craft-Staff: "**[%time%]** **[%world%]** ** ** a extrait **%amount%** de **%item%** d'un four situé à X= **%x%**, Y= **%y%**, Z= **%z%**"
   Player-Craft: "**[%time%]** **[%world%]** ** ** a extrait **%amount%** de **%item%** d'un four situé à X= **%x%**, Y= **%y%**, Z= **%z%**"
   Player-Registration: "**[%time%]** a rejoint le **%date%**"
-  Primed-TNT: "**[%time%]** **[%world%]** a allumé un TNT à X= **%x%**, Y= **%y%**, Z= **%z%**"
-  Primed-TNT-Staff: "**[%time%]** **[%world%]** a allumé un TNT à X= **%x%**, Y= **%y%**, Z= **%z%**"
   Server-Side:
     Start: "**%time%**"
     Stop: "**%time%**"

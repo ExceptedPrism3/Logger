@@ -3,6 +3,7 @@ package me.prism3.logger.events.misc;
 import me.prism3.logger.Main;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -32,7 +33,7 @@ public class OnPrimedTNT implements Listener {
 
             final Player player = (Player) ((TNTPrimed) event.getEntity()).getSource();
 
-            if (player == null || player.hasPermission(loggerExempt)) return;
+            if (player == null || player.hasPermission(loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
             final String playerName = player.getName();
             final UUID playerUUID = player.getUniqueId();

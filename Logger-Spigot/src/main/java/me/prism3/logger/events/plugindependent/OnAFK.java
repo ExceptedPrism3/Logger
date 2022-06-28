@@ -3,6 +3,7 @@ package me.prism3.logger.events.plugindependent;
 import me.prism3.logger.Main;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import net.ess3.api.events.AfkStatusChangeEvent;
@@ -30,7 +31,7 @@ public class OnAFK implements Listener {
 
             final Player player = e.getAffected().getBase();
 
-            if (player.hasPermission(Data.loggerExempt)) return;
+            if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
             final String playerName = player.getName();
             final int x = player.getLocation().getBlockX();

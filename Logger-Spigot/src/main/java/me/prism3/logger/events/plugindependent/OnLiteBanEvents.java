@@ -5,7 +5,7 @@ import litebans.api.Events;
 import me.prism3.logger.Main;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
-import me.prism3.logger.events.plugindependent.utils.UsernameFetcher;
+import me.prism3.logger.utils.litebansutil.UsernameFetcher;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.Bukkit;

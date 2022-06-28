@@ -44,28 +44,28 @@ public class ToggleSpyCommand implements SubCommand {
                     isToggled = !isToggled;
                     main.getConfig().set("Spy-Features.Commands-Spy.Enable", isToggled);
                     main.saveConfig();
-                    player.sendMessage("Changed.");
+                    player.sendMessage("Commands Spy Toggled.");
                     break;
                 case "book":
                     isToggled = main.getConfig().getBoolean("Spy-Features.Book-Spy.Enable");
                     isToggled = !isToggled;
                     main.getConfig().set("Spy-Features.Book-Spy.Enable", isToggled);
                     main.saveConfig();
-                    player.sendMessage("Changed.");
+                    player.sendMessage("Book Spy Toggled.");
                     break;
                 case "sign":
                     isToggled = main.getConfig().getBoolean("Spy-Features.Sign-Spy.Enable");
                     isToggled = !isToggled;
                     main.getConfig().set("Spy-Features.Sign-Spy.Enable", isToggled);
                     main.saveConfig();
-                    player.sendMessage("Changed.");
+                    player.sendMessage("Sign Spy Toggled.");
                     break;
                 case "anvil":
                     isToggled = main.getConfig().getBoolean("Spy-Features.Anvil-Spy.Enable");
                     isToggled = !isToggled;
                     main.getConfig().set("Spy-Features.Anvil-Spy.Enable", isToggled);
                     main.saveConfig();
-                    player.sendMessage("Changed.");
+                    player.sendMessage("Anvil Spy Toggled.");
                     break;
                 default:
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cInvalid option, correct options are [Commands | Book | Sign | Anvil]"));

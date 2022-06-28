@@ -26,7 +26,7 @@ public class ExternalData {
             "player_kick", "player_level", "Bucket_fill", "bucket_empty", "anvil", "item_drop", "enchanting",
             "book_editing", "item_pickup", "furnace", "game_mode", "crafting", "registration", "server_start",
             "server_stop", "console_commands", "ram", "tps", "portal_creation", "rcon", "primed_tnt", "command_block",
-            "chest_interaction").collect(Collectors.toCollection(ArrayList::new));
+            "chest_interaction", "entity_death").collect(Collectors.toCollection(ArrayList::new));
 
     public void createTable() {
 
@@ -131,6 +131,10 @@ public class ExternalData {
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS chest_interaction "
                     + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
                     "player_uuid VARCHAR(80), player_name VARCHAR(100), x INT, y INT, z INT, items VARCHAR(255), is_staff TINYINT)");
+
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS entity_death "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_uuid VARCHAR(80), player_name VARCHAR(100), mob VARCHAR(50), x INT, y INT, z INT, is_staff TINYINT)");
 
             // Server Side Part
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS server_start "
@@ -930,6 +934,27 @@ public class ExternalData {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
+    public static void entityDeath(String serverName, Player player, String mob, int x, int y, int z, boolean staff) {
+
+        try (Connection connection = plugin.getExternal().getHikari().getConnection();
+             final PreparedStatement entityDeath = connection.prepareStatement("INSERT INTO entity_death" +
+                     " (server_name, world, player_uuid, player_name, mob, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?,?)")) {
+
+            entityDeath.setString(1, serverName);
+            entityDeath.setString(2, player.getWorld().getName());
+            entityDeath.setString(3, player.getUniqueId().toString());
+            entityDeath.setString(4, player.getName());
+            entityDeath.setString(5, mob);
+            entityDeath.setInt(6, x);
+            entityDeath.setInt(7, y);
+            entityDeath.setInt(8, z);
+            entityDeath.setBoolean(9, staff);
+
+            entityDeath.executeUpdate();
+
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+
     public void emptyTable() {
 
         if (externalDataDel <= 0) return;
@@ -985,6 +1010,8 @@ public class ExternalData {
             stsm.executeUpdate("DELETE FROM primed_tnt WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
             stsm.executeUpdate("DELETE FROM chest_interaction WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
+
+            stsm.executeUpdate("DELETE FROM entity_death WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
             // Server Side Part
             stsm.executeUpdate("DELETE FROM server_start WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");

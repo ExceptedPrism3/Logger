@@ -149,23 +149,33 @@ Changes
 Additions
     [+] Spy Feature toggle command in-game
     [+] Player Inventory Backup on Player Death
-    [+] LiteBans & AdvancedBans Support (spigot only)
-    [+] Chest open Checker
+    [+] LiteBans & AdvancedBans Support ( spigot only )
+    [+] Chest Interaction Checker
     [+] TNT Explosion Checker
-    [+] Auto-Config Updater
+    [+] Config Auto-Updater
+    [+] Discord Auto-Updater
     [+] PlaceHolderAPI Plugin Support
-    [+] StripLog for 1.13+ server versions
+    [+] StripLog for 1.13+ Servers
     [+] Added 1.19 Support
-    [+] Dump command (spigot only)
+    [+] Dump command ( spigot only )
     [+] Discord Command
+    [+] Command Blocks Checker
+    [+] Chinese Traditional & Dutch Languages (Thanks to our Translation Team)
+    [+] Geyser & FloodGate Partial-Support ( spigot only )
 
 Fixes
     [!] Separated Command Blocks from Console Commands as they count the same
-    [!] OP now get logged by default
     [!] Discord Status starting even if disabled in discord config
     [!] RAM not being logged on BungeeCord & Velocity
-    [!] Some languages not being logged into databases
-    [!] An issue that prevented to shutdown the databases correctly on Server Stop
+    [!] Some languages were not being logged into databases
+    [!] An issue that prevented the shutdown of the databases correctly on Server Stop
+    [!] Error Spam on a rare occasion when a set of String contains the symbol '$'
+    [!] Some typos in translated files
 
 Changes
-    [*] Databases Structure
+    [*] Databases Structure ( No user interaction is required, the plugin will take care of it )
+    [*] OP now gets logged by default
+    [*] Vault Checker has been increased to 6000 in the config by default
+    [*] Vault Checker will no longer Log in if no one is online
+    [*] Commands handling improvements
+    [*] Huge improvement to the external database logging

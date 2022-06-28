@@ -14,7 +14,7 @@ public class Messages {
 
     private final Main main = Main.getInstance();
     private FileConfiguration messagesFile;
-    private final List<String> langFiles = Arrays.asList("ar", "fr_fr", "en_en", "zh_cn");
+    private final List<String> langFiles = Arrays.asList("ar", "fr_fr", "en_en", "zh_cn", "zh-cht");
     private boolean isValid = true;
 
     public Messages() {
@@ -53,4 +53,6 @@ public class Messages {
     }
 
     public boolean getIsValid() { return this.isValid; }
+
+    public List<String> getLangFiles() { return this.langFiles; }
 }

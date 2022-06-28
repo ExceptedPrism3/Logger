@@ -3,6 +3,7 @@ package me.prism3.logger.events;
 import me.prism3.logger.Main;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.GameMode;
@@ -31,7 +32,7 @@ public class OnGameMode implements Listener {
             final String gameMode = Data.gameModeConf;
             final Player player = event.getPlayer();
 
-            if (player.hasPermission(Data.loggerExempt) || gameMode.isEmpty()) return;
+            if (player.hasPermission(Data.loggerExempt) || gameMode.isEmpty() || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
             if (event.getNewGameMode() == GameMode.valueOf(gameMode.toUpperCase())) {
 

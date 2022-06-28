@@ -1,5 +1,6 @@
-package me.prism3.logger.utils;
+package me.prism3.logger.utils.playerdeathutils;
 
+import me.prism3.logger.utils.FileHandler;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

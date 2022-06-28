@@ -3,6 +3,7 @@ package me.prism3.logger.events.oninventories;
 import me.prism3.logger.Main;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.enums.NmsVersions;
@@ -36,7 +37,7 @@ public class OnChestInteraction implements Listener {
 
             final Player player = (Player) event.getPlayer();
 
-            if (player.hasPermission(Data.loggerExempt)) return;
+            if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
             String chestName;
 

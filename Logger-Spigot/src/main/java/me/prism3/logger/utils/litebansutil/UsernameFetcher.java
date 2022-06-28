@@ -1,4 +1,4 @@
-package me.prism3.logger.events.plugindependent.utils;
+package me.prism3.logger.utils.litebansutil;
 
 import litebans.api.Database;
 

@@ -3,6 +3,7 @@ package me.prism3.logger.events.onversioncompatibility;
 import me.prism3.logger.Main;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.enums.NmsVersions;
@@ -64,7 +65,7 @@ public class OnWoodStripping implements Listener {
 
             final Player player = event.getPlayer();
 
-            if (player.hasPermission(Data.loggerExempt)) return;
+            if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
             // If Action is NOT A Right Click, Stop
             if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;

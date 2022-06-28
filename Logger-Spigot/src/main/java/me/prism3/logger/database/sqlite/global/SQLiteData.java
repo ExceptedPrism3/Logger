@@ -30,7 +30,7 @@ public class SQLiteData {
                 playerDeath, playerTeleport, blockPlace, blockBreak, tps, ram, playerKick, portalCreation, playerLevel,
                 bucketFill, bucketEmpty, anvil, serverStart, serverStop, itemDrop, enchant, bookEditing, afk,
                 wrongPassword, itemPickup, furnace, rCon, gameMode, craft, vault, registration, primedTNT, chestInteraction, liteBans,
-                advancedBan, commandBlock, woodStripping;
+                advancedBan, commandBlock, woodStripping, entityDeath;
 
         try {
 
@@ -129,6 +129,10 @@ public class SQLiteData {
             chestInteraction = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS chest_interaction" +
                     "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, world TEXT(50), player_uuid INTEGER, " +
                     "player_name TEXT(40), x INTEGER, y INTEGER, z INTEGER, items TEXT(255), is_staff INTEGER)");
+
+            entityDeath = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS entity_death" +
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, world TEXT(50), player_uuid INTEGER, " +
+                    "player_name TEXT(40), mob TEXT(50), x INTEGER, y INTEGER, z INTEGER, is_staff INTEGER)");
 
             // Server Side Part
             serverStart = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS server_start" +
@@ -267,6 +271,8 @@ public class SQLiteData {
             primedTNT.close();
             chestInteraction.executeUpdate();
             chestInteraction.close();
+            entityDeath.executeUpdate();
+            entityDeath.close();
 
             serverStart.executeUpdate();
             serverStart.close();
@@ -961,6 +967,26 @@ public class SQLiteData {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
+    public static void insertEntityDeath(String serverName, Player player, String mob, int x, int y, int z, boolean isStaff) {
+        try {
+            final PreparedStatement entityDeathStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO entity_death (server_name, date, world, player_uuid, player_name, mob, x, y, z, is_staff) VALUES (?,?,?,?,?,?,?,?,?,?)");
+            entityDeathStatement.setString(1, serverName);
+            entityDeathStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
+            entityDeathStatement.setString(3, player.getWorld().getName());
+            entityDeathStatement.setString(4, player.getUniqueId().toString());
+            entityDeathStatement.setString(5, player.getName());
+            entityDeathStatement.setString(6, mob);
+            entityDeathStatement.setInt(7, x);
+            entityDeathStatement.setInt(8, y);
+            entityDeathStatement.setInt(9, z);
+            entityDeathStatement.setBoolean(10, isStaff);
+
+            entityDeathStatement.executeUpdate();
+            entityDeathStatement.close();
+
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+
     public void emptyTable() {
 
         if (sqliteDataDel <= 0) return;
@@ -1013,6 +1039,10 @@ public class SQLiteData {
             final PreparedStatement register = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM registration WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
             final PreparedStatement primedTNT = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM primed_tnt WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
+
+            final PreparedStatement chestInteraction = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM chest_interaction WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
+
+            final PreparedStatement entityDeath = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM entity_death WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
             // Server Side Part
             final PreparedStatement serverStart = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM server_start WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
@@ -1132,6 +1162,10 @@ public class SQLiteData {
             register.close();
             primedTNT.executeUpdate();
             primedTNT.close();
+            chestInteraction.executeUpdate();
+            chestInteraction.close();
+            entityDeath.executeUpdate();
+            entityDeath.close();
 
             serverStart.executeUpdate();
             serverStart.close();

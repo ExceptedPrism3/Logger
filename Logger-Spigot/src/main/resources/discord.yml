@@ -1,6 +1,6 @@
 # Discord Bridge Configuration for Logger Plugin [ Bukkit Version]
 # Need Support Join the Discord Server: https://discord.gg/MfR5mcpVfX
-# Config 1.7.5
+# Config 1.8
 # Leaving Channel-ID empty will disable the Channel
 Discord:
   Enable: false
@@ -51,9 +51,11 @@ Discord:
     Channel-ID: 'LINK_HERE'
   Registration:
     Channel-ID: 'LINK_HERE'
+  Primed-TNT:
+    Channel-ID: 'LINK_HERE'
   Chest-Interaction:
     Channel-ID: 'LINK_HERE'
-  Primed-TNT:
+  Entity-Death:
     Channel-ID: 'LINK_HERE'
   # Server Side Checkers
   Server-Side:

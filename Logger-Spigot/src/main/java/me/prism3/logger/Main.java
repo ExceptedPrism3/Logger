@@ -2,7 +2,6 @@ package me.prism3.logger;
 
 import me.prism3.logger.api.*;
 import me.prism3.logger.commands.CommandManager;
-import me.prism3.logger.commands.getting.Chat;
 import me.prism3.logger.commands.subcommands.PlayerInventoryCommand;
 import me.prism3.logger.database.external.External;
 import me.prism3.logger.database.external.ExternalData;
@@ -55,11 +54,11 @@ public class Main extends JavaPlugin {
 
         this.saveDefaultConfig();
 
-        new ConfigUpdater(this.getDataFolder());
-
         this.initializer(new Data());
 
         if (!this.langChecker()) return;
+
+        new FileUpdater(this.getDataFolder());
 
         this.discordFile = new DiscordFile();
         this.discordFile.setup();
@@ -68,11 +67,8 @@ public class Main extends JavaPlugin {
         this.discord = new Discord();
         this.discord.run();
 
-        if (isLogToFiles && isSqlite) {
-
-            this.getLogger().warning("Logging to Files and SQLite are both enabled, this might impact your Server's Performance!");
-
-        }
+        if (isLogToFiles && isSqlite)
+            this.getLogger().warning("File and SQLite logging are both enabled, this might impact your Server's Performance!");
 
         final FileHandler fileHandler = new FileHandler(this.getDataFolder());
         fileHandler.deleteFiles();
@@ -167,6 +163,7 @@ public class Main extends JavaPlugin {
 //        this.getServer().getPluginManager().registerEvents(new OnSpawnEgg(), this);
         this.getServer().getPluginManager().registerEvents(new PlayerInventoryCommand(), this);
         this.getServer().getPluginManager().registerEvents(new OnCommandBlock(), this);
+        this.getServer().getPluginManager().registerEvents(new OnEntityDeath(), this);
 
         this.getServer().getPluginManager().registerEvents(new OnFurnace(), this);
         this.getServer().getPluginManager().registerEvents(new OnCraft(), this);
@@ -186,7 +183,7 @@ public class Main extends JavaPlugin {
     private void commandsInitializer() {
 
         this.getCommand("logger").setExecutor(new CommandManager());
-        this.getCommand("loggerget").setExecutor(new Chat());
+//        this.getCommand("loggerget").setExecutor(new Chat());
 
     }
 
@@ -265,6 +262,17 @@ public class Main extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new OnAdvancedBan(), this);
 
             this.getLogger().info("AdvancedBan Plugin Detected!");
+        }
+
+        if (PlaceHolderAPIUtil.getPlaceHolderAPI() != null) {
+
+            this.getLogger().info("PlaceHolderAPI Plugin Detected!");
+        }
+
+        if (GeyserUtil.getGeyserAPI() != null && FloodGateUtil.getFloodGateAPI()) {
+
+            this.getLogger().info("Geyser & FloodGate Plugins Detected!");
+            this.getLogger().warning("Geyser & FloodGate are not fully supported! If any errors occurs, contact the authors.");
         }
     }
 

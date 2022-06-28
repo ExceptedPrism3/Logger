@@ -1,4 +1,4 @@
-package me.prism3.logger.utils;
+package me.prism3.logger.utils.playerdeathutils;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;

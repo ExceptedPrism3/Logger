@@ -11,8 +11,7 @@
 # Spigot: Prism3
 # Discord: Prism3#9371 ID: 403667971089760257
 # Discord Server: https://discord.gg/MfR5mcpVfX
-# Do not Touch this
-Config: 1.8
+# Config: 1.8
 Language: en_en
 Server-Name: "Server_Name"
 Time-Formatter: "yyyy-MM-dd HH:mm:ss"
@@ -43,8 +42,9 @@ Log-Player:
   Game-Mode: true
   Craft: true
   Registration: true
-  Chest-Interaction: true
   Primed-TNT: true
+  Chest-Interaction: true
+  Entity-Death: true
 Log-Server:
   Start: true
   Stop: true
@@ -90,7 +90,7 @@ Console-Commands:
     - op
     - ban
 RAM-TPS-Checker: 6000
-Vault-Checker: 3000
+Vault-Checker: 6000
 RAM:
   Percent: 50
 TPS:

@@ -47,6 +47,3 @@ To convert it back, just execute the following SQL Command:
 ```mysql
 SELECT INET_NTOA("value");
 ```
-
-## Contributing
-Pull requests are welcome. For major changes, open an issue or a ticket first to discuss what you would like to change.

@@ -4,6 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.database.sqlite.registration.SQLiteDataRegistration;
+import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.ChatColor;
@@ -39,7 +40,7 @@ public class OnPlayerJoin implements Listener {
 
             final Player player = event.getPlayer();
 
-            if (player.hasPermission(Data.loggerExempt)) return;
+            if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
             final World world = player.getWorld();
             final String worldName = world.getName();
@@ -51,10 +52,9 @@ public class OnPlayerJoin implements Listener {
 
             if (Data.isCommandsToBlock && Data.isCommandsToLog && player.hasPermission(Data.loggerStaff)) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        "&7[ &bLogger &7] &f| &cEnabling both Whitelist" +
+                        "&bLogger &8&l| &cEnabling both Whitelist" +
                                 " and Blacklist isn't supported. Disable one of them" +
                                 " to continue logging Player Commands."));
-
             }
 
             if (!Data.isPlayerIP) ip = null;

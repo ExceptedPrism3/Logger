@@ -4,6 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.api.VaultUtil;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import net.milkbowl.vault.economy.Economy;
@@ -37,7 +38,7 @@ public class OnVault implements Listener, Runnable {
 
             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 
-                if (player.hasPermission(Data.loggerExempt)) return;
+                if (player.hasPermission(Data.loggerExempt) || Bukkit.getOnlinePlayers().isEmpty() || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
                 for (Map.Entry<UUID, Double> bal : this.players.entrySet()) {
 

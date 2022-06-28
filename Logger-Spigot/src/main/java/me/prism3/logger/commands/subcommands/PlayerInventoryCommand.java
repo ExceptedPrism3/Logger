@@ -2,8 +2,8 @@ package me.prism3.logger.commands.subcommands;
 
 import me.prism3.logger.commands.SubCommand;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.InventoryToBase64;
-import me.prism3.logger.utils.PlayerFolder;
+import me.prism3.logger.utils.playerdeathutils.InventoryToBase64;
+import me.prism3.logger.utils.playerdeathutils.PlayerFolder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -25,11 +25,15 @@ import java.util.stream.Collectors;
 
 public class PlayerInventoryCommand implements Listener, SubCommand {
 
+    private Player selectedPlayer;
+    private Player selectedBy;
+    private File backupFile;
+
     @Override
     public String getName() { return "playerinventory"; }
 
     @Override
-    public String getDescription() { return "Opens a menu with all online players and their available backups."; }
+    public String getDescription() { return "Opens a menu with all online players and their available inventory backups."; }
 
     @Override
     public String getSyntax() { return "/logger playerinventory"; }
@@ -56,7 +60,7 @@ public class PlayerInventoryCommand implements Listener, SubCommand {
 
             final boolean isNewVersion = Arrays.stream(Material.values()).map(Material::name).collect(Collectors.toList()).contains("PLAYER_HEAD");
 
-            Material type = Material.matchMaterial(isNewVersion ? "PLAYER_HEAD" : "SKULL_ITEM");
+            final Material type = Material.matchMaterial(isNewVersion ? "PLAYER_HEAD" : "SKULL_ITEM");
 
             final ItemStack skull = new ItemStack(type, 1);
 
@@ -79,9 +83,6 @@ public class PlayerInventoryCommand implements Listener, SubCommand {
 
     }
 
-    File file;
-    Player playerNameInv;
-    Player playerNameBack;
 
     @EventHandler
     public void onClick(final InventoryClickEvent e) {
@@ -94,7 +95,7 @@ public class PlayerInventoryCommand implements Listener, SubCommand {
 
             e.setCancelled(true);
 
-            final Player player = (Player) e.getWhoClicked();
+            this.selectedBy = (Player) e.getWhoClicked();
 
             if (e.getCurrentItem() == null || !e.getCurrentItem().hasItemMeta()) return;
 
@@ -106,7 +107,8 @@ public class PlayerInventoryCommand implements Listener, SubCommand {
 
                 if (clickedItem.equals(ChatColor.GOLD + "" + ChatColor.BOLD + onlinePlayer.getName())) {
 
-                    this.stepTwo(player, onlinePlayer);
+                    this.selectedPlayer = onlinePlayer;
+                    this.stepTwo();
                     break;
 
                 }
@@ -117,14 +119,13 @@ public class PlayerInventoryCommand implements Listener, SubCommand {
 
                         if (list.equalsIgnoreCase(clickedItem)) {
 
-                            this.file = new File(list);
                             isPresent = true;
+                            this.backupFile = new File(FileHandler.getPlayerDeathBackupLogFolder(), onlinePlayer.getName() + File.separator + list);
+                            this.stepThree();
                             break;
 
                         }
                     }
-
-                    this.stepThree(player, onlinePlayer);
 
                     if (isPresent) break;
 
@@ -132,7 +133,7 @@ public class PlayerInventoryCommand implements Listener, SubCommand {
 
                 if (e.getCurrentItem().getType() == Material.ENDER_CHEST) {
 
-                    this.stepTwo(player, this.playerNameInv);
+                    this.stepTwo();
 
                 }
 
@@ -140,11 +141,11 @@ public class PlayerInventoryCommand implements Listener, SubCommand {
 
                     try {
 
-                        this.addItem(player, this.playerNameInv);
+                        this.addItem();
 
                     } catch (Exception except) {
 
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&9&lLogger &8&l| &rAn error has occurred whilst restoring " + playerNameInv + "'s Inventory"));
+                        this.selectedBy.sendMessage(ChatColor.translateAlternateColorCodes('&', "&9&lLogger &8&l| &rAn error has occurred whilst restoring " + selectedPlayer + "'s Inventory"));
                         except.printStackTrace();
 
                     }
@@ -155,19 +156,17 @@ public class PlayerInventoryCommand implements Listener, SubCommand {
     }
 
     // Opening the second GUI after selecting the player and displaying all available backups
-    private void stepTwo(Player staff, Player player) {
+    private void stepTwo() {
 
-        if (PlayerFolder.fileNames(player) == null || PlayerFolder.backupCount(player) == 0) return;
+        if (PlayerFolder.fileNames(this.selectedPlayer) == null || PlayerFolder.backupCount(this.selectedPlayer) == 0) return;
 
-        staff.closeInventory();
+        this.selectedBy.closeInventory();
 
-        int i = PlayerFolder.backupCount(player);
+        int i = PlayerFolder.backupCount(this.selectedPlayer);
 
-        final Inventory secondInv = Bukkit.createInventory(staff, 27,  player.getName() + "'s Backup(s)");
+        final Inventory secondInv = Bukkit.createInventory(this.selectedBy, 27,  this.selectedPlayer.getName() + "'s Backup(s)");
 
-        this.playerNameBack = player;
-
-        final String[] files = PlayerFolder.fileNames(player);
+        final String[] files = PlayerFolder.fileNames(this.selectedPlayer);
 
         for (int e = 0; e < i; e++) {
 
@@ -176,7 +175,6 @@ public class PlayerInventoryCommand implements Listener, SubCommand {
             final ItemMeta chestMeta = chest.getItemMeta();
 
             assert chestMeta != null;
-            assert files != null;
             chestMeta.setDisplayName(files[e]);
 
             chest.setItemMeta(chestMeta);
@@ -185,21 +183,17 @@ public class PlayerInventoryCommand implements Listener, SubCommand {
 
         }
 
-        staff.openInventory(secondInv);
+        this.selectedBy.openInventory(secondInv);
     }
 
     // Opening the last GUI based on the selected backup from the previous step, and displaying all items
-    public void stepThree(Player staff, Player player) {
+    public void stepThree() {
 
-        staff.closeInventory();
+        this.selectedBy.closeInventory();
 
-        final Inventory lastInv = Bukkit.createInventory(staff, 54, player.getName() + "'s Inventory");
+        final Inventory lastInv = Bukkit.createInventory(this.selectedBy, 54, this.selectedPlayer.getName() + "'s Inventory");
 
-        this.playerNameInv = player;
-        String fullPath = FileHandler.getPlayerDeathBackupLogFolder().getPath() + File.separator + player.getName() + File.separator + this.file.getName();
-        File testFile = new File(fullPath);
-
-        final FileConfiguration f = YamlConfiguration.loadConfiguration(testFile);
+        final FileConfiguration f = YamlConfiguration.loadConfiguration(this.backupFile);
 
         final ItemStack[] invContent = InventoryToBase64.stacksFromBase64(f.getString("inventory"));
         final ItemStack[] armorContent = InventoryToBase64.stacksFromBase64(f.getString("armor"));
@@ -214,10 +208,10 @@ public class PlayerInventoryCommand implements Listener, SubCommand {
 
         final ItemStack backupButton = new ItemStack(Material.EMERALD_BLOCK);
 
-        ItemMeta backupButtonMeta = backupButton.getItemMeta();
+        final ItemMeta backupButtonMeta = backupButton.getItemMeta();
         assert backupButtonMeta != null;
         backupButtonMeta.setDisplayName(ChatColor.AQUA + "Backup");
-        List<String> backupButtonLore = new ArrayList<>();
+        final List<String> backupButtonLore = new ArrayList<>();
         backupButtonLore.add(ChatColor.RED + "Clears Player's current Inventory!");
         backupButtonMeta.setLore(backupButtonLore);
 
@@ -240,27 +234,27 @@ public class PlayerInventoryCommand implements Listener, SubCommand {
         lastInv.setItem(45, backButton);
         lastInv.setItem(49, backupButton);
 
-        staff.openInventory(lastInv);
+        this.selectedBy.openInventory(lastInv);
     }
 
-    private void addItem(Player staff, Player player) {
+    private void addItem() {
 
-        final FileConfiguration f = YamlConfiguration.loadConfiguration(new File(FileHandler.getPlayerDeathBackupLogFolder() + File.separator + player.getName() + File.separator + this.file));
+        final FileConfiguration f = YamlConfiguration.loadConfiguration(this.backupFile);
 
-        player.getInventory().clear();
+        this.selectedPlayer.getInventory().clear();
 
         final ItemStack[] invContent = InventoryToBase64.stacksFromBase64(f.getString("inventory"));
         final ItemStack[] armorContent = InventoryToBase64.stacksFromBase64(f.getString("armor"));
 
         for (int i = 0; i < Objects.requireNonNull(invContent).length; i++) {
 
-            player.getInventory().setItem(i, invContent[i]);
+            this.selectedPlayer.getInventory().setItem(i, invContent[i]);
 
         }
 
-        player.getInventory().setArmorContents(armorContent);
+        this.selectedPlayer.getInventory().setArmorContents(armorContent);
 
-        staff.sendMessage(ChatColor.translateAlternateColorCodes('&', "&9&lLogger &8&l| &rInventory Restored."));
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8&l[ &6&lYour inventory has been restored! &8&l]"));
+        this.selectedBy.sendMessage(ChatColor.translateAlternateColorCodes('&', "&9&lLogger &8&l| &rInventory Restored."));
+        this.selectedPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8&l[ &6&lYour inventory has been restored! &8&l]"));
     }
 }

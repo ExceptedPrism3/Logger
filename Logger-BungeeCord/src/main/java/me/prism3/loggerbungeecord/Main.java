@@ -19,6 +19,7 @@ import me.prism3.loggerbungeecord.serverside.RAM;
 import me.prism3.loggerbungeecord.serverside.Start;
 import me.prism3.loggerbungeecord.serverside.Stop;
 import me.prism3.loggerbungeecord.utils.*;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.util.concurrent.TimeUnit;
@@ -89,6 +90,8 @@ public final class Main extends Plugin {
 
         // Update Checker
         if (isUpdateChecker) new UpdateChecker().checkUpdates();
+
+        this.getLogger().info(ChatColor.GOLD + "Thanks to everyone's contributions that helped made this project possible!");
 
         this.getLogger().info("has been Enabled!");
 

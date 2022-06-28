@@ -1,7 +1,7 @@
-#Discord Bridge Configuration for Logger Plugin [ Proxy Version ]
-#Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
-#Config 1.7.5
-#Leaving Channel-ID empty will disable the Channel
+# Discord Bridge Configuration for Logger Plugin [ Proxy Version ]
+# Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
+# Config 1.8
+# Leaving Channel-ID empty will disable the Channel
 Discord:
   Enable: false
   Bot-Token: BOT_KEY
@@ -15,7 +15,7 @@ Discord:
     Channel-ID: 'LINK_HERE'
   Player-Leave:
     Channel-ID: 'LINK_HERE'
-#Server Side
+# Server Side
   Server-Side:
     Restart:
       Channel-ID: 'LINK_HERE'
@@ -25,16 +25,16 @@ Discord:
       Channel-ID: 'LINK_HERE'
     RAM:
       Channel-ID: 'LINK_HERE'
-#Extra Side
+# Extra Side
   Extra:
     LiteBans:
       Channel-ID: 'LINK_HERE'
-#Bot Activity Status
-#Randomize the shown status
-#First Part must not be different from
-#Playing, Watching, Listening, Streaming, Competing
-#Otherwise it will not work
-#Time in Seconds
+# Bot Activity Status
+# Randomize the shown status
+# First Part must not be different from
+# Playing, Watching, Listening, Streaming, Competing
+# Otherwise it will not work
+# Time in Seconds
 ActivityCycling:
   Enabled: true
   Random: false

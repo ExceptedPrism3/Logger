@@ -5,6 +5,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.api.AuthMeUtil;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.World;
@@ -34,7 +35,8 @@ public class OnPlayerTeleport implements Listener {
             final Player player = event.getPlayer();
 
             if (player.hasPermission(Data.loggerExempt) ||
-                    (AuthMeUtil.getAuthMeAPI() != null && !AuthMeApi.getInstance().isAuthenticated(player))) return;
+                    (AuthMeUtil.getAuthMeAPI() != null && !AuthMeApi.getInstance().isAuthenticated(player))
+                    || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
             final World world = player.getWorld();
             final String worldName = world.getName();

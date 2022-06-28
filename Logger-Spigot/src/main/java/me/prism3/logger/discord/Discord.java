@@ -38,6 +38,7 @@ public class Discord {
     private TextChannel registrationChannel;
     private TextChannel primedTNTChannel;
     private TextChannel chestInteractionChannel;
+    private TextChannel entityDeathChannel;
 
     private TextChannel serverStartChannel;
     private TextChannel serverStopChannel;
@@ -126,6 +127,8 @@ public class Discord {
             final String primedTNTChannelID = this.main.getDiscordFile().get().getString("Discord.Primed-TNT.Channel-ID");
 
             final String chestInteractionChannelID = this.main.getDiscordFile().get().getString("Discord.Chest-Interaction.Channel-ID");
+
+            final String entityDeathChannelID = this.main.getDiscordFile().get().getString("Discord.Entity-Death.Channel-ID");
 
             // Server Side Part
             final String serverStartChannelID = this.main.getDiscordFile().get().getString("Discord.Server-Side.Start.Channel-ID");
@@ -309,6 +312,12 @@ public class Discord {
                 if (this.isValid(chestInteractionChannelID, "Log-Player.Chest-Interaction")) {
 
                     this.chestInteractionChannel = this.jda.getTextChannelById(chestInteractionChannelID);
+
+                }
+
+                if (this.isValid(entityDeathChannelID, "Log-Player.Entity-Death")) {
+
+                    this.entityDeathChannel = this.jda.getTextChannelById(entityDeathChannelID);
 
                 }
 
@@ -669,6 +678,11 @@ public class Discord {
     public void woodStripping(Player player, String content, boolean contentInAuthorLine) {
 
         discordUtil(player, content, contentInAuthorLine, this.woodStrippingChannel);
+    }
+
+    public void entityDeath(Player player, String content, boolean contentInAuthorLine) {
+
+        discordUtil(player, content, contentInAuthorLine, this.entityDeathChannel);
     }
 
     private static void discordUtil(Player player, String content, boolean contentInAuthorLine, TextChannel channel) {

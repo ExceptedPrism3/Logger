@@ -1,12 +1,12 @@
-#Messages for Logger Plugin [ Bukkit Version ]
-#Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
-#Config 1.7.5
-#Plugin Messages
+# Messages for Logger Plugin [ Bukkit Version ]
+# Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
+# Config 1.8
+# Plugin Messages
 General:
   No-Permission: "&cليس لديك إذن لتشغيل هذا الأمر."
   Reload: "&cتم إعادت تحميل الإعدادت."
   Invalid-Syntax: "&cالكتابة خاطئة."
-#Files Instance
+# Files Instance
 Files:
   Player-Chat-Staff: "[%time%] [%world%] الموظف <%player%> قال => %message%"
   Player-Chat: "[%time%] [%world%] اللاعب <%player%> قال => %message%"
@@ -69,8 +69,8 @@ Files:
     Wrong-Password: "[%time%] [%world%] قام اللاعب <%player%> بإدخال كلمة مرور خاطئة"
     Vault-Staff: "[%time%] رصيد اللاعب <%player%> تغير من %oldbal% إلى %newbal%"
     Vault: "[%time%] رصيد الموظف <%player%> تغير من %oldbal% إلى %newbal%"
-#Discord Instance
-#Emojis can be found here https://emojipedia.org/ or elsewhere. Emojis may not work on >1.12 Servers.
+# Discord Instance
+# Emojis can be found here https://emojipedia.org/ or elsewhere
 Discord:
   Player-Chat-Staff: "**[%time%]** **[%world%]** **%message%**"
   Player-Chat: "**[%time%]** **[%world%]** **%message%**"

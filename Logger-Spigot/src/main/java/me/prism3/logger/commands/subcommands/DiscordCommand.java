@@ -23,7 +23,7 @@ public class DiscordCommand implements SubCommand {
     @Override
     public void perform(Player player, String[] args) {
 
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "Discord Support Server: " + discordSupportServer));
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "Discord Support Server: &b" + discordSupportServer));
 
     }
 

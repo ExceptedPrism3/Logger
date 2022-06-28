@@ -3,10 +3,11 @@ package me.prism3.logger.events;
 import me.prism3.logger.Main;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
+import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.InventoryToBase64;
-import me.prism3.logger.utils.PlayerFolder;
+import me.prism3.logger.utils.playerdeathutils.InventoryToBase64;
+import me.prism3.logger.utils.playerdeathutils.PlayerFolder;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -41,7 +42,7 @@ public class OnPlayerDeath implements Listener {
 
             final Player player = event.getEntity();
 
-            if (player.hasPermission(Data.loggerExempt)) return;
+            if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
             // ******
             // This Part almost gave me brain tumor while figuring out how to make it
