@@ -4,7 +4,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Data;
 
@@ -39,7 +38,7 @@ public class ExternalUpdater {
       // Primary Key removal and adding method
       try (final Connection connection = main.getExternal().getHikari().getConnection();
            final Statement stsm = connection.createStatement()) {
-        long start = System.nanoTime();
+
         final DatabaseMetaData databaseMetaData = connection.getMetaData();
         final ResultSet tables = databaseMetaData.getTables(Data.dbName, null, null, null);
         List<String> currentTables = ExternalUpdater.getLoggerTables(tables);
@@ -101,9 +100,11 @@ public class ExternalUpdater {
             }
 
             if (!columnName.equals(lowerName)) {
+
               String sql = "ALTER TABLE " + currentTables.get(j) + " CHANGE COLUMN " + columnName
                       + " " + lowerName + "  " + dataType + " " + nullType + " DEFAULT " + defaultVal;
               stsm.executeUpdate(sql);
+
             }
           }
 

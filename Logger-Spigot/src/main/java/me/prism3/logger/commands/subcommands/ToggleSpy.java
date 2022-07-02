@@ -7,7 +7,7 @@ import me.prism3.logger.commands.SubCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-public class ToggleSpyCommand implements SubCommand {
+public class ToggleSpy implements SubCommand {
 
     public String getName() { return "toggle"; }
 

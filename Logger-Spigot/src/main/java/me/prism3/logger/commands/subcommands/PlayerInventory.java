@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class PlayerInventoryCommand implements Listener, SubCommand {
+public class PlayerInventory implements Listener, SubCommand {
 
     private Player selectedPlayer;
     private Player selectedBy;
@@ -85,21 +85,21 @@ public class PlayerInventoryCommand implements Listener, SubCommand {
 
 
     @EventHandler
-    public void onClick(final InventoryClickEvent e) {
+    public void onClick(final InventoryClickEvent event) {
 
-        if (e.getClickedInventory() == null) return;
+        if (event.getClickedInventory() == null) return;
 
-        final String title = e.getView().getTitle();
+        final String title = event.getView().getTitle();
 
         if (title.equals("Player Inventory Checker") || title.endsWith("'s Inventory") || title.endsWith("'s Backup(s)")) {
 
-            e.setCancelled(true);
+            event.setCancelled(true);
 
-            this.selectedBy = (Player) e.getWhoClicked();
+            this.selectedBy = (Player) event.getWhoClicked();
 
-            if (e.getCurrentItem() == null || !e.getCurrentItem().hasItemMeta()) return;
+            if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()) return;
 
-            final String clickedItem = Objects.requireNonNull(e.getCurrentItem().getItemMeta()).getDisplayName();
+            final String clickedItem = Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName();
 
             boolean isPresent = false;
 
@@ -113,7 +113,7 @@ public class PlayerInventoryCommand implements Listener, SubCommand {
 
                 }
 
-                if (e.getCurrentItem().getType() == Material.CHEST) {
+                if (event.getCurrentItem().getType() == Material.CHEST) {
 
                     for (String list : PlayerFolder.fileNames(onlinePlayer)) {
 
@@ -131,13 +131,13 @@ public class PlayerInventoryCommand implements Listener, SubCommand {
 
                 }
 
-                if (e.getCurrentItem().getType() == Material.ENDER_CHEST) {
+                if (event.getCurrentItem().getType() == Material.ENDER_CHEST) {
 
                     this.stepTwo();
 
                 }
 
-                if (e.getCurrentItem().getType() == Material.EMERALD_BLOCK) {
+                if (event.getCurrentItem().getType() == Material.EMERALD_BLOCK) {
 
                     try {
 

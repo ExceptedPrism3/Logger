@@ -39,8 +39,6 @@ public class External {
             case "mariadb":
                 this.jdbc = mariaDB;
                 jdbcDriver = mariaDBDriver;
-                this.main.getLogger()
-                        .warning(this.jdbc + " Type is still in Development. Report any issues on Discord or Github!");
                 break;
 
             default:

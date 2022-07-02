@@ -149,8 +149,8 @@ public class Main{
             this.external.connect();
             final ExternalData externalData = new ExternalData();
             if (this.external.isConnected()) {
-                externalData.createTable();
                 ExternalUpdater.updater();
+                externalData.createTable();
                 externalData.emptyTable();
             }
         }

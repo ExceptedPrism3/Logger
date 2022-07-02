@@ -9,7 +9,7 @@ commands:
     description: "Reloads the plugin configs"
 permissions:
   loggerproxy.staff:
-    description: "Allows to view Plugin updates."
+    description: "Allows to view Plugin commands."
     default: op
     children:
       loggerproxy.exempt: true

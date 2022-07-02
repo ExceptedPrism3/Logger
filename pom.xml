@@ -6,7 +6,7 @@
 
     <groupId>me.prism3</groupId>
     <artifactId>Logger</artifactId>
-    <version>1.8</version>
+    <version>1.8.0.1</version>
     <modules>
         <module>Logger-Spigot</module>
         <module>Logger-BungeeCord</module>

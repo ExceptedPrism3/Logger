@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class ReloadCommand implements SubCommand {
+public class Reload implements SubCommand {
 
     private final Main main = Main.getInstance();
 

@@ -2,7 +2,7 @@ package me.prism3.logger;
 
 import me.prism3.logger.api.*;
 import me.prism3.logger.commands.CommandManager;
-import me.prism3.logger.commands.subcommands.PlayerInventoryCommand;
+import me.prism3.logger.commands.subcommands.PlayerInventory;
 import me.prism3.logger.database.external.External;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.external.ExternalUpdater;
@@ -161,7 +161,7 @@ public class Main extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new OnGameMode(), this);
         this.getServer().getPluginManager().registerEvents(new OnPrimedTNT(), this);
 //        this.getServer().getPluginManager().registerEvents(new OnSpawnEgg(), this);
-        this.getServer().getPluginManager().registerEvents(new PlayerInventoryCommand(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerInventory(), this);
         this.getServer().getPluginManager().registerEvents(new OnCommandBlock(), this);
         this.getServer().getPluginManager().registerEvents(new OnEntityDeath(), this);
 
@@ -195,8 +195,8 @@ public class Main extends JavaPlugin {
             this.external.connect();
             final ExternalData externalData = new ExternalData();
             if (this.external.isConnected()) {
-                externalData.createTable();
                 ExternalUpdater.updater();
+                externalData.createTable();
                 externalData.emptyTable();
             }
         }

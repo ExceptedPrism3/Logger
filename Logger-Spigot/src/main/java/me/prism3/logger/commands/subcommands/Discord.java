@@ -9,7 +9,7 @@ import java.util.List;
 
 import static me.prism3.logger.utils.Data.discordSupportServer;
 
-public class DiscordCommand implements SubCommand {
+public class Discord implements SubCommand {
 
     @Override
     public String getName() { return "discord"; }

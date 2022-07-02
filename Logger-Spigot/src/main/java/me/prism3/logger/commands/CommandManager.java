@@ -24,10 +24,10 @@ public class CommandManager implements TabExecutor {
 
     public CommandManager() {
 
-        this.subCommands.add(new ReloadCommand());
-        this.subCommands.add(new PlayerInventoryCommand());
-        this.subCommands.add(new ToggleSpyCommand());
-        this.subCommands.add(new DiscordCommand());
+        this.subCommands.add(new Reload());
+        this.subCommands.add(new PlayerInventory());
+        this.subCommands.add(new ToggleSpy());
+        this.subCommands.add(new Discord());
         this.subCommands.add(new Dump());
 
     }

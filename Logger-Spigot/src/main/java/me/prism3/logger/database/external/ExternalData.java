@@ -403,7 +403,7 @@ public class ExternalData {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    public static void blockBreak(String serverName, Player player, String blockname, int x, int y, int z,boolean staff) {
+    public static void blockBreak(String serverName, Player player, String blockName, int x, int y, int z, boolean staff) {
 
         try (Connection connection = plugin.getExternal().getHikari().getConnection();
              final PreparedStatement blockBreak = connection.prepareStatement("INSERT INTO block_break" +
@@ -412,7 +412,7 @@ public class ExternalData {
             blockBreak.setString(1, serverName);
             blockBreak.setString(2, player.getWorld().getName());
             blockBreak.setString(3, player.getName());
-            blockBreak.setString(4, blockname);
+            blockBreak.setString(4, blockName);
             blockBreak.setInt(5, x);
             blockBreak.setInt(6, y);
             blockBreak.setInt(7, z);

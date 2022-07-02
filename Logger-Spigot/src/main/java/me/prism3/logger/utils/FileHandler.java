@@ -797,7 +797,7 @@ public class FileHandler {
             }
         }
 
-        if (VaultUtil.getVaultAPI() && VaultUtil.getVault() != null) {
+        if (AuthMeUtil.getAuthMeAPI() != null) {
             for (File password : Objects.requireNonNull(wrongPasswordFolder.listFiles())) {
 
                 deleteFile(password);
@@ -805,7 +805,7 @@ public class FileHandler {
             }
         }
 
-        if (VaultUtil.getVaultAPI()) {
+        if (VaultUtil.getVaultAPI() && VaultUtil.getVault() != null) {
             for (File vault : Objects.requireNonNull(vaultFolder.listFiles())) {
 
                 deleteFile(vault);
