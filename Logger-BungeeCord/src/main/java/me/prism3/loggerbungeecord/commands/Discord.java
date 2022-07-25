@@ -8,10 +8,11 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Command;
 
 import static me.prism3.loggerbungeecord.utils.Data.discordSupportServer;
+import static me.prism3.loggerbungeecord.utils.Data.pluginVersion;
 
 public class Discord extends Command {
 
-    public Discord() { super("loggerproxy"); }
+    public Discord() { super("loggerb"); }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
@@ -22,20 +23,20 @@ public class Discord extends Command {
 
             if (args.length == 0) {
 
-                sender.sendMessage(new TextComponent("Running Logger " + ChatColor.AQUA + ChatColor.BOLD + Data.pluginVersion));
+                sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "Running Logger &b&l" + Data.pluginVersion)));
 
             } else if (args.length == 1 && args[0].equalsIgnoreCase("discord")) {
 
-                sender.sendMessage(new TextComponent(discordSupportServer));
+                sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', pluginVersion + discordSupportServer)));
 
             } else {
 
-                sender.sendMessage(new TextComponent(main.getMessages().getString("General.Invalid-Syntax")));
+                sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', main.getMessages().getString("General.Invalid-Syntax").replace("%prefix%", pluginVersion))));
 
             }
         } else {
 
-            sender.sendMessage(new TextComponent(main.getMessages().getString("General.No-Permission")));
+            sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', main.getMessages().getString("General.No-Permission").replace("%prefix%", pluginVersion))));
 
         }
     }

@@ -3,9 +3,9 @@
 # Config 1.8
 # Plugin Messages
 General:
-  No-Permission: "&cJe hebt geen toestemming om dit commando uit te voeren."
-  Reload: "&aConfiguratie herladen."
-  Invalid-Syntax: "&cVerkeerde Syntax."
+  No-Permission: "%prefix% &cJe hebt geen toestemming om dit commando uit te voeren."
+  Reload: "%prefix% &aConfiguratie herladen."
+  Invalid-Syntax: "%prefix% &cVerkeerde Syntax."
 # Files Instance
 Files:
   Player-Chat-Staff: "[%time%] [%world%] Medewerker <%player%> heeft gezegd => %message%"

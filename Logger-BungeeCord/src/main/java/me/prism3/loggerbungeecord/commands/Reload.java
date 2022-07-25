@@ -7,9 +7,11 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Command;
 
+import static me.prism3.loggerbungeecord.utils.Data.pluginVersion;
+
 public class Reload extends Command {
 
-    public Reload() { super("loggerproxy"); }
+    public Reload() { super("loggerb"); }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
@@ -20,22 +22,23 @@ public class Reload extends Command {
 
             if (args.length == 0) {
 
-                sender.sendMessage(new TextComponent("Running Logger " + ChatColor.AQUA + ChatColor.BOLD + Data.pluginVersion));
+                sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "Running Logger &b&l" + Data.pluginVersion)));
 
             } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
 
                 main.getConfig().init();
                 main.getMessages().init();
-                sender.sendMessage(new TextComponent(main.getMessages().getString("General.Reload")));
+                main.initializer(new Data());
+                sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', main.getMessages().getString("General.Reload").replace("%prefix%", pluginVersion))));
 
             } else {
 
-                sender.sendMessage(new TextComponent(main.getMessages().getString("General.Invalid-Syntax")));
+                sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', main.getMessages().getString("General.Invalid-Syntax").replace("%prefix%", pluginVersion))));
 
             }
         } else {
 
-            sender.sendMessage(new TextComponent(main.getMessages().getString("General.No-Permission")));
+            sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', main.getMessages().getString("General.No-Permission").replace("%prefix%", pluginVersion))));
 
         }
     }

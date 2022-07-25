@@ -28,15 +28,15 @@ public class Discord {
 
     public void run() {
 
-        if (main.getDiscordFile().getBoolean("Discord.Enable")) {
+        if (this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-            final String botToken = main.getDiscordFile().getString("Discord.Bot-Token");
+            final String botToken = this.main.getDiscordFile().getString("Discord.Bot-Token");
 
             try {
 
-                jda = JDABuilder.createDefault(botToken).build().awaitReady();
+                this.jda = JDABuilder.createDefault(botToken).build().awaitReady();
 
-                if (main.getDiscordFile().getBoolean("ActivityCycling.Enabled")) new DiscordStatus();
+                if (this.main.getDiscordFile().getBoolean("ActivityCycling.Enabled")) new DiscordStatus();
 
             } catch (Exception e) {
 
@@ -46,25 +46,25 @@ public class Discord {
 
             }
 
-            final String staffChannelID = main.getDiscordFile().getString("Discord.Staff.Channel-ID");
+            final String staffChannelID = this.main.getDiscordFile().getString("Discord.Staff.Channel-ID");
 
-            final String playerChatChannelID = main.getDiscordFile().getString("Discord.Player-Chat.Channel-ID");
+            final String playerChatChannelID = this.main.getDiscordFile().getString("Discord.Player-Chat.Channel-ID");
 
-            final String playerCommandsChannelID = main.getDiscordFile().getString("Discord.Player-Commands.Channel-ID");
+            final String playerCommandsChannelID = this.main.getDiscordFile().getString("Discord.Player-Commands.Channel-ID");
 
-            final String playerLoginChannelID = main.getDiscordFile().getString("Discord.Player-Login.Channel-ID");
+            final String playerLoginChannelID = this.main.getDiscordFile().getString("Discord.Player-Login.Channel-ID");
 
-            final String playerLeaveChannelID = main.getDiscordFile().getString("Discord.Player-Leave.Channel-ID");
+            final String playerLeaveChannelID = this.main.getDiscordFile().getString("Discord.Player-Leave.Channel-ID");
 
-            final String serverReloadChannelID = main.getDiscordFile().getString("Discord.Server-Side.Restart.Channel-ID");
+            final String serverReloadChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Restart.Channel-ID");
 
-            final String serverStartChannelID = main.getDiscordFile().getString("Discord.Server-Side.Start.Channel-ID");
+            final String serverStartChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Start.Channel-ID");
 
-            final String serverStopChannelID = main.getDiscordFile().getString("Discord.Server-Side.Stop.Channel-ID");
+            final String serverStopChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Stop.Channel-ID");
 
-            final String ramChannelID = main.getDiscordFile().getString("Discord.Server-Side.RAM.Channel-ID");
+            final String ramChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.RAM.Channel-ID");
 
-            final String liteBansChannelID = main.getDiscordFile().getString("Discord.Extra.LiteBans.Channel-ID");
+            final String liteBansChannelID = this.main.getDiscordFile().getString("Discord.Extra.LiteBans.Channel-ID");
 
 
             try {
@@ -77,60 +77,60 @@ public class Discord {
 
                 if (this.isValid(playerChatChannelID, "Log-Player.Chat")) {
 
-                    this.playerChatChannel = jda.getTextChannelById(playerChatChannelID);
+                    this.playerChatChannel = this.jda.getTextChannelById(playerChatChannelID);
 
                 }
 
                 if (this.isValid(playerCommandsChannelID, "Log-Player.Commands")) {
 
-                    this.playerCommandsChannel = jda.getTextChannelById(playerCommandsChannelID);
+                    this.playerCommandsChannel = this.jda.getTextChannelById(playerCommandsChannelID);
 
                 }
 
                 if (this.isValid(playerLoginChannelID, "Log-Player.Login")) {
 
-                    this.playerLoginChannel = jda.getTextChannelById(playerLoginChannelID);
+                    this.playerLoginChannel = this.jda.getTextChannelById(playerLoginChannelID);
 
                 }
 
                 if (this.isValid(playerLeaveChannelID, "Log-Player.Leave")) {
 
-                    this.playerLeaveChannel = jda.getTextChannelById(playerLeaveChannelID);
+                    this.playerLeaveChannel = this.jda.getTextChannelById(playerLeaveChannelID);
 
                 }
 
                 if (this.isValid(serverReloadChannelID, "Log-Server.Reload")) {
 
-                    this.serverReloadChannel = jda.getTextChannelById(serverReloadChannelID);
+                    this.serverReloadChannel = this.jda.getTextChannelById(serverReloadChannelID);
 
                 }
 
                 if (this.isValid(serverStartChannelID, "Log-Server.Start")) {
 
-                    this.serverStartChannel = jda.getTextChannelById(serverStartChannelID);
+                    this.serverStartChannel = this.jda.getTextChannelById(serverStartChannelID);
 
                 }
 
                 if (this.isValid(serverStopChannelID, "Log-Server.Stop")) {
 
-                    this.serverStopChannel = jda.getTextChannelById(serverStopChannelID);
+                    this.serverStopChannel = this.jda.getTextChannelById(serverStopChannelID);
 
                 }
 
                 if (this.isValid(ramChannelID, "Log-Server.RAM")) {
 
-                    this.ramChannel = jda.getTextChannelById(ramChannelID);
+                    this.ramChannel = this.jda.getTextChannelById(ramChannelID);
 
                 }
 
                 if (this.isValid(liteBansChannelID, "Log-Extra.LiteBans")) {
 
-                    this.liteBansChannel = jda.getTextChannelById(liteBansChannelID);
+                    this.liteBansChannel = this.jda.getTextChannelById(liteBansChannelID);
 
                 }
             } catch (Exception e) {
 
-                Main.getInstance().getLogger().severe("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
+                this.main.getLogger().severe("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
 
             }
         }
@@ -140,34 +140,34 @@ public class Discord {
 
         if (channelID == null) return false;
 
-        return (!channelID.isEmpty() && main.getConfig().getBoolean(path) && !channelID.equals("LINK_HERE"));
+        return (!channelID.isEmpty() && this.main.getConfig().getBoolean(path) && !channelID.equals("LINK_HERE"));
 
     }
 
     public void staffChat(ProxiedPlayer player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.staffChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.staffChannel);
 
     }
 
     public void playerChat(ProxiedPlayer player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.playerChatChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.playerChatChannel);
     }
 
     public void playerCommands(ProxiedPlayer player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.playerCommandsChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.playerCommandsChannel);
     }
 
     public void playerLogin(ProxiedPlayer player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.playerLoginChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.playerLoginChannel);
     }
 
     public void playerLeave(ProxiedPlayer player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.playerLeaveChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.playerLeaveChannel);
     }
 
     public void serverReload(String player, String content, boolean contentInAuthorLine) {
@@ -225,7 +225,7 @@ public class Discord {
         this.liteBansChannel.sendMessage(builder.build()).queue();
     }
 
-    private static void discordUtil(ProxiedPlayer player, String content, boolean contentInAuthorLine, TextChannel channel) {
+    private void discordUtil(ProxiedPlayer player, String content, boolean contentInAuthorLine, TextChannel channel) {
         if (channel == null) return;
 
         final EmbedBuilder builder = new EmbedBuilder().setAuthor(contentInAuthorLine ? content : player.getName(),
@@ -238,12 +238,12 @@ public class Discord {
 
     public void disconnect() {
 
-        if (jda != null) {
+        if (this.jda != null) {
             try {
 
-                jda.shutdown();
-                jda = null;
-                if (main.getDiscordFile().getBoolean("ActivityCycling.Enabled")) DiscordStatus.getThreadPool().shutdown();
+                this.jda.shutdown();
+                this.jda = null;
+                if (this.main.getDiscordFile().getBoolean("ActivityCycling.Enabled")) DiscordStatus.getThreadPool().shutdown();
                 Main.getInstance().getLogger().info("Discord Bot Bridge has been closed!");
 
             } catch (Exception e) {
@@ -255,5 +255,5 @@ public class Discord {
             }
         }
     }
-    public JDA getJda() { return jda; }
+    public JDA getJda() { return this.jda; }
 }

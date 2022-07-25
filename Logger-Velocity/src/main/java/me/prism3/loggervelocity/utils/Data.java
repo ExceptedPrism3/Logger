@@ -21,6 +21,7 @@ public class Data {
     public static String dbPassword;
     public static String dbName;
     public static String discordSupportServer;
+    public static String pluginPrefix;
 
     // List<String>
     public static List<String> commandsToBlock;
@@ -71,6 +72,7 @@ public class Data {
 
         serverName = this.main.getConfig().getString("Server-Name");
         discordSupportServer = "https://discord.gg/MfR5mcpVfX";
+        pluginPrefix = this.main.getConfig().getString("Plugin-Prefix");
 
     }
 

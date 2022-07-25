@@ -123,7 +123,7 @@ public class Main extends JavaPlugin {
 
     }
 
-    private void initializer(Data data) {
+    public void initializer(Data data) {
 
         data.initializeDateFormatter();
         data.initializeStrings();
@@ -243,7 +243,7 @@ public class Main extends JavaPlugin {
 
             if (VaultUtil.getVault() != null) {
 
-                OnVault vault = new OnVault();
+                final OnVault vault = new OnVault();
                 this.getServer().getPluginManager().registerEvents(vault, this);
                 this.getServer().getScheduler().scheduleSyncRepeatingTask(this, vault, 10L, Data.vaultChecker);
             }
@@ -273,6 +273,11 @@ public class Main extends JavaPlugin {
 
             this.getLogger().info("Geyser & FloodGate Plugins Detected!");
             this.getLogger().warning("Geyser & FloodGate are not fully supported! If any errors occurs, contact the authors.");
+        }
+
+        if (ViaVersionUtil.getViaVersionAPI() != null) {
+
+            this.getLogger().info("ViaVersion Plugin Detected!");
         }
     }
 

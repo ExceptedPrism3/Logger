@@ -23,6 +23,8 @@ Server-Name: "Server_Name"
 # Date & Time Formatter
 Time-Formatter: "yyyy-MM-dd HH:mm:ss"
 
+Plugin-Prefix: "&bLogger&fVelocity &8&l| &r "
+
 # How many days for the logs to be deleted
 # Set it to -1 to cancel the Deletion
 File-Deletion: 7
@@ -49,7 +51,6 @@ Log-Server:
 
 Log-Extra:
   LiteBans: true
-
 
 # Player-Commands features
 # Do not add / at first

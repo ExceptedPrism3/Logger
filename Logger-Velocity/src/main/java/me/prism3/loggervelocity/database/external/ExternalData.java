@@ -236,7 +236,7 @@ public class ExternalData {
 
             if (LiteBansUtil.getLiteBansAPI().isPresent()) {
 
-                stsm.executeUpdate("DELETE FROM litebans_proxy WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
+                stsm.executeUpdate("DELETE FROM litebans_velocity WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
             }
 
         } catch (SQLException e) {

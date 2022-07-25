@@ -19,9 +19,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static me.prism3.logger.utils.Data.pluginPrefix;
 
 public class PlayerInventory implements Listener, SubCommand {
 
@@ -41,18 +42,14 @@ public class PlayerInventory implements Listener, SubCommand {
     @Override
     public void perform(Player player, String[] args) {
 
-        try {
-            this.stepOne(player);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.stepOne(player);
     }
 
     @Override
     public List<String> getSubCommandsArgs(Player player, String[] args) { return Collections.emptyList(); }
 
     // Opening the first GUI with all online players and their available backups
-    private void stepOne(Player player) throws IOException {
+    private void stepOne(Player player) {
 
         final Inventory firstInv = Bukkit.createInventory(null, 27, "Player Inventory Checker");
 
@@ -91,7 +88,7 @@ public class PlayerInventory implements Listener, SubCommand {
 
         final String title = event.getView().getTitle();
 
-        if (title.equals("Player Inventory Checker") || title.endsWith("'s Inventory") || title.endsWith("'s Backup(s)")) {
+        if (title.equals("Player Inventory Checker") || title.startsWith("Inventory") || title.startsWith("Backup(s)")) {
 
             event.setCancelled(true);
 
@@ -145,7 +142,7 @@ public class PlayerInventory implements Listener, SubCommand {
 
                     } catch (Exception except) {
 
-                        this.selectedBy.sendMessage(ChatColor.translateAlternateColorCodes('&', "&9&lLogger &8&l| &rAn error has occurred whilst restoring " + selectedPlayer + "'s Inventory"));
+                        this.selectedBy.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix + "An error has occurred whilst restoring " + selectedPlayer + "'s Inventory"));
                         except.printStackTrace();
 
                     }
@@ -164,7 +161,7 @@ public class PlayerInventory implements Listener, SubCommand {
 
         int i = PlayerFolder.backupCount(this.selectedPlayer);
 
-        final Inventory secondInv = Bukkit.createInventory(this.selectedBy, 27,  this.selectedPlayer.getName() + "'s Backup(s)");
+        final Inventory secondInv = Bukkit.createInventory(this.selectedBy, 27,  "Backup(s) of " + this.selectedPlayer.getName());
 
         final String[] files = PlayerFolder.fileNames(this.selectedPlayer);
 
@@ -191,7 +188,7 @@ public class PlayerInventory implements Listener, SubCommand {
 
         this.selectedBy.closeInventory();
 
-        final Inventory lastInv = Bukkit.createInventory(this.selectedBy, 54, this.selectedPlayer.getName() + "'s Inventory");
+        final Inventory lastInv = Bukkit.createInventory(this.selectedBy, 54, "Inventory of " + this.selectedPlayer.getName());
 
         final FileConfiguration f = YamlConfiguration.loadConfiguration(this.backupFile);
 
@@ -212,7 +209,7 @@ public class PlayerInventory implements Listener, SubCommand {
         assert backupButtonMeta != null;
         backupButtonMeta.setDisplayName(ChatColor.AQUA + "Backup");
         final List<String> backupButtonLore = new ArrayList<>();
-        backupButtonLore.add(ChatColor.RED + "Clears Player's current Inventory!");
+        backupButtonLore.add(ChatColor.RED + "Clears player's current Inventory!");
         backupButtonMeta.setLore(backupButtonLore);
 
         backupButton.setItemMeta(backupButtonMeta);
@@ -254,7 +251,7 @@ public class PlayerInventory implements Listener, SubCommand {
 
         this.selectedPlayer.getInventory().setArmorContents(armorContent);
 
-        this.selectedBy.sendMessage(ChatColor.translateAlternateColorCodes('&', "&9&lLogger &8&l| &rInventory Restored."));
-        this.selectedPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8&l[ &6&lYour inventory has been restored! &8&l]"));
+        this.selectedBy.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix + "Inventory Restored."));
+        this.selectedPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix + "&8&l[ &6&lYour inventory has been restored! &8&l]"));
     }
 }

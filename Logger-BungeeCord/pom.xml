@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Logger-Bungeecord</artifactId>
-    <version>1.8.0.1</version>
+    <version>1.8.0.2</version>
     <packaging>jar</packaging>
 
     <name>Logger-BungeeCord</name>
@@ -19,7 +19,7 @@
     <parent>
         <artifactId>Logger</artifactId>
         <groupId>me.prism3</groupId>
-        <version>1.8.0.1</version>
+        <version>1.8.0.2</version>
     </parent>
 
     <build>
@@ -68,6 +68,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>simonsators Repo</id>
+            <url>https://simonsator.de/repo</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -115,6 +119,12 @@
             <groupId>com.gitlab.ruany</groupId>
             <artifactId>LiteBansAPI</artifactId>
             <version>0.3.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.simonsator</groupId>
+            <artifactId>BungeecordPartyAndFriends</artifactId>
+            <version>1.0.86</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

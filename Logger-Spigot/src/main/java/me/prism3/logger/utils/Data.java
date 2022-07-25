@@ -27,6 +27,7 @@ public class Data {
     public static String fileType;
     public static String selectedLang;
     public static String discordSupportServer;
+    public static String pluginPrefix;
 
     // List<String>
     public static List<String> commandsToBlock;
@@ -94,6 +95,7 @@ public class Data {
         fileType = ".yml";
         selectedLang = this.main.getConfig().getString("Language");
         discordSupportServer = "https://discord.gg/MfR5mcpVfX";
+        pluginPrefix = this.main.getConfig().getString("Plugin-Prefix");
 
     }
 
@@ -110,7 +112,7 @@ public class Data {
         pluginVersion = this.main.getDescription().getVersion();
         resource_ID = 94236;
         ramTpsChecker = this.main.getConfig().getInt("RAM-TPS-Checker");
-        vaultChecker = this.main.getConfig().getInt("Vault.Checker");
+        vaultChecker = this.main.getConfig().getInt("Vault-Checker");
         abovePlayerLevel = this.main.getConfig().getInt("Player-Level.Log-Above");
         ramPercent = this.main.getConfig().getInt("RAM.Percent");
         tpsMedium = this.main.getConfig().getInt("TPS.Value-Medium");

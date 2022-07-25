@@ -426,18 +426,18 @@ public class Discord {
 
     public void staffChat(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.staffChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.staffChannel);
 
     }
 
     public void playerChat(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.playerChatChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.playerChatChannel);
     }
 
     public void playerCommand(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.playerCommandsChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.playerCommandsChannel);
     }
 
     public void console(String content, boolean contentInAuthorLine) {
@@ -464,47 +464,47 @@ public class Discord {
 
     public void playerSignText(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.playerSignTextChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.playerSignTextChannel);
     }
 
     public void playerJoin(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.playerJoinChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.playerJoinChannel);
     }
 
     public void playerLeave(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.playerLeaveChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.playerLeaveChannel);
     }
 
     public void playerKick(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.playerKickChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.playerKickChannel);
     }
 
     public void playerDeath(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.playerDeathChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.playerDeathChannel);
     }
 
     public void playerTeleport(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.playerTeleportChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.playerTeleportChannel);
     }
 
     public void playerLevel(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.playerLevelChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.playerLevelChannel);
     }
 
     public void blockPlace(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.blockPlaceChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.blockPlaceChannel);
     }
 
     public void blockBreak(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.blockBreakChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.blockBreakChannel);
     }
 
     public void portalCreation(String content, boolean contentInAuthorLine) {
@@ -520,17 +520,17 @@ public class Discord {
 
     public void bucketFill(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.bucketFillChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.bucketFillChannel);
     }
 
     public void bucketEmpty(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.bucketEmptyChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.bucketEmptyChannel);
     }
 
     public void anvil(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.anvilChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.anvilChannel);
     }
 
     public void tps(String content, boolean contentInAuthorLine) {
@@ -590,67 +590,67 @@ public class Discord {
 
     public void itemDrop(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.itemDropChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.itemDropChannel);
     }
 
     public void enchanting(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.enchantingChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.enchantingChannel);
     }
 
     public void bookEditing(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.bookEditingChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.bookEditingChannel);
     }
 
     public void afk(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.afkChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.afkChannel);
     }
 
     public void wrongPassword(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.wrongPasswordChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.wrongPasswordChannel);
     }
 
     public void itemPickup(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.itemPickupChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.itemPickupChannel);
     }
 
     public void furnace(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.furnaceChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.furnaceChannel);
     }
 
     public void gameMode(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.gameModeChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.gameModeChannel);
     }
 
     public void playerCraft(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.craftChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.craftChannel);
     }
 
     public void vault(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.vaultChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.vaultChannel);
     }
 
     public void playerRegistration(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.registrationChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.registrationChannel);
     }
 
     public void primedTNT(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.primedTNTChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.primedTNTChannel);
     }
 
     public void chestInteraction(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.chestInteractionChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.chestInteractionChannel);
     }
 
     public void liteBans(String content, boolean contentInAuthorLine) {
@@ -677,15 +677,15 @@ public class Discord {
 
     public void woodStripping(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.woodStrippingChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.woodStrippingChannel);
     }
 
     public void entityDeath(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.entityDeathChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.entityDeathChannel);
     }
 
-    private static void discordUtil(Player player, String content, boolean contentInAuthorLine, TextChannel channel) {
+    private void discordUtil(Player player, String content, boolean contentInAuthorLine, TextChannel channel) {
         if (channel == null) return;
 
         final EmbedBuilder builder = new EmbedBuilder().setAuthor(contentInAuthorLine ? content : player.getName(),

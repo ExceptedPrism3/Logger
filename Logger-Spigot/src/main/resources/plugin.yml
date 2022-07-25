@@ -4,7 +4,7 @@ main: me.prism3.logger.Main
 api-version: 1.13
 authors: [ Prism3, thelooter, Sidna ]
 description: Log all Activities from Players and Server Side!
-softdepend: [Essentials, AuthMe, Vault, PlaceholderAPI, LiteBans, AdvancedBan, PlaceholderAPI, Geyser, Floodgate]
+softdepend: [Essentials, AuthMe, Vault, PlaceholderAPI, LiteBans, AdvancedBan, PlaceholderAPI, Geyser, Floodgate, ViaVersion]
 commands:
   logger:
     description: "Plugin command."
@@ -21,9 +21,7 @@ commands:
 permissions:
   logger.staff:
     description: "Allows the Player to execute Plugin Commands, spy on others actions, and view Plugin Updates."
-    default: op
     children:
-      logger.exempt: true
       logger.reload: true
       logger.spy: true
       logger.update: true
@@ -42,8 +40,6 @@ permissions:
   logger.spy.bypass:
     description: "Ability to see other players and staff's Actions but others can not."
     default: op
-    children:
-      logger.spy: true
   logger.staff.log:
     description: "Logs Staff Members."
     default: op

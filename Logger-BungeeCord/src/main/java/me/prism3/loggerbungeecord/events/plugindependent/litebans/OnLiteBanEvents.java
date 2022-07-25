@@ -5,7 +5,7 @@ import litebans.api.Events;
 import me.prism3.loggerbungeecord.Main;
 import me.prism3.loggerbungeecord.database.external.ExternalData;
 import me.prism3.loggerbungeecord.database.sqlite.SQLiteData;
-import me.prism3.loggerbungeecord.events.plugindependent.litebans.utils.UsernameFetcher;
+import me.prism3.loggerbungeecord.utils.litebanutil.UsernameFetcher;
 import me.prism3.loggerbungeecord.utils.FileHandler;
 import net.md_5.bungee.api.plugin.Listener;
 

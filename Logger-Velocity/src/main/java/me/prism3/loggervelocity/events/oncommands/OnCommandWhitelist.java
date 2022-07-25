@@ -25,59 +25,30 @@ public class OnCommandWhitelist {
         final Main main = Main.getInstance();
         final Player player = (Player) event.getCommandSource();
 
-        if (main.getConfig().getBoolean("Log-Player.Commands") && player.getCurrentServer().isPresent()) {
+        final String playerName = player.getUsername();
+        final String command = event.getCommand().replace("\\", "\\\\");
+        final String server = player.getCurrentServer().get().getServerInfo().getName();
+        final List<String> commandParts = Arrays.asList(command.split("\\s+"));
 
-            final String playerName = player.getUsername();
-            final String command = event.getCommand().replace("\\", "\\\\");
-            final String server = player.getCurrentServer().get().getServerInfo().getName();
-            final List<String> commandParts = Arrays.asList(command.split("\\s+"));
+        for (String m : commandsToLog) {
 
-            for (String m : commandsToLog) {
+            if (commandParts.contains(m)) {
 
-                if (commandParts.contains(m)) {
+                // Log To Files
+                if (isLogToFiles) {
 
-                    // Log To Files
-                    if (isLogToFiles) {
+                    if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                        if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                        if (!main.getMessages().getString("Discord.Player-Commands-Staff").isEmpty()) {
 
-                            if (!main.getMessages().getString("Discord.Player-Commands-Staff").isEmpty()) {
+                            main.getDiscord().staffChat(player, main.getMessages().getString("Discord.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
 
-                                main.getDiscord().staffChat(player, main.getMessages().getString("Discord.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
-
-                            }
-
-                            try {
-
-                                final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
-                                out.write(main.getMessages().getString("Files.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", playerName).replace("%command%", command) + "\n");
-                                out.close();
-
-                            } catch (IOException e) {
-
-                                main.getLogger().error("An error occurred while logging into the appropriate file.");
-                                e.printStackTrace();
-
-                            }
-
-                            if (isExternal && main.getExternal().isConnected()) {
-
-                                ExternalData.playerCommands(serverName, playerName, command, true);
-
-                            }
-
-                            if (isSqlite && main.getSqLite().isConnected()) {
-
-                                SQLiteData.insertPlayerCommands(serverName, playerName, command, true);
-
-                            }
-                            return;
                         }
 
                         try {
 
-                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerCommandLogFile(), true));
-                            out.write(main.getMessages().getString("Files.Player-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", playerName).replace("%command%", command) + "\n");
+                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
+                            out.write(main.getMessages().getString("Files.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", playerName).replace("%command%", command) + "\n");
                             out.close();
 
                         } catch (IOException e) {
@@ -86,47 +57,73 @@ public class OnCommandWhitelist {
                             e.printStackTrace();
 
                         }
+
+                        if (isExternal && main.getExternal().isConnected()) {
+
+                            ExternalData.playerCommands(serverName, playerName, command, true);
+
+                        }
+
+                        if (isSqlite && main.getSqLite().isConnected()) {
+
+                            SQLiteData.insertPlayerCommands(serverName, playerName, command, true);
+
+                        }
+                        return;
                     }
 
-                    // Discord
-                    if (!player.hasPermission(loggerExemptDiscord)) {
+                    try {
 
-                        if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerCommandLogFile(), true));
+                        out.write(main.getMessages().getString("Files.Player-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", playerName).replace("%command%", command) + "\n");
+                        out.close();
 
-                            if (!main.getMessages().getString("Discord.Player-Commands-Staff").isEmpty()) {
+                    } catch (IOException e) {
 
-                                main.getDiscord().staffChat(player, main.getMessages().getString("Discord.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
+                        main.getLogger().error("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
 
-                            }
-                        } else {
+                    }
+                }
 
-                            if (!main.getMessages().getString("Discord.Player-Commands").isEmpty()) {
+                // Discord
+                if (!player.hasPermission(loggerExemptDiscord)) {
 
-                                main.getDiscord().playerCommands(player, main.getMessages().getString("Discord.Player-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
+                    if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                            }
+                        if (!main.getMessages().getString("Discord.Player-Commands-Staff").isEmpty()) {
+
+                            main.getDiscord().staffChat(player, main.getMessages().getString("Discord.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
+
+                        }
+                    } else {
+
+                        if (!main.getMessages().getString("Discord.Player-Commands").isEmpty()) {
+
+                            main.getDiscord().playerCommands(player, main.getMessages().getString("Discord.Player-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
+
                         }
                     }
+                }
 
-                    // External
-                    if (isExternal && main.getExternal().isConnected()) {
+                // External
+                if (isExternal && main.getExternal().isConnected()) {
 
-                        try {
+                    try {
 
-                            ExternalData.playerCommands(serverName, playerName, command, player.hasPermission(loggerStaffLog));
+                        ExternalData.playerCommands(serverName, playerName, command, player.hasPermission(loggerStaffLog));
 
-                        } catch (Exception e) { e.printStackTrace(); }
-                    }
+                    } catch (Exception e) { e.printStackTrace(); }
+                }
 
-                    // SQLite
-                    if (isSqlite && main.getSqLite().isConnected()) {
+                // SQLite
+                if (isSqlite && main.getSqLite().isConnected()) {
 
-                        try {
+                    try {
 
-                            SQLiteData.insertPlayerCommands(serverName, playerName, command, player.hasPermission(loggerStaffLog));
+                        SQLiteData.insertPlayerCommands(serverName, playerName, command, player.hasPermission(loggerStaffLog));
 
-                        } catch (Exception e) { e.printStackTrace(); }
-                    }
+                    } catch (Exception e) { e.printStackTrace(); }
                 }
             }
         }

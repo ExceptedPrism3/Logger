@@ -14,9 +14,9 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static me.prism3.logger.utils.Data.loggerStaff;
+import static me.prism3.logger.utils.Data.pluginPrefix;
 
 public class CommandManager implements TabExecutor {
 
@@ -37,36 +37,34 @@ public class CommandManager implements TabExecutor {
 
         final Main main = Main.getInstance();
 
-        if (sender instanceof Player) {
+        if (!sender.hasPermission(loggerStaff)) {
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', main.getMessages().get()
+                    .getString("General.No-Permission").replace("%prefix%", pluginPrefix)));
+            return false;
+        }
 
-            if (!sender.hasPermission(loggerStaff)) {
-                sender.sendMessage(Objects.requireNonNull(main.getMessages().get().getString("General.No-Permission")).replace("&", "§"));
-                return false;
+        final Player player = (Player) sender;
+
+        if (args.length > 0) {
+
+            for (int i = 0; i < getSubCommands().size(); i++) {
+                if (args[0].equalsIgnoreCase(getSubCommands().get(i).getName())) {
+                    try {
+                        getSubCommands().get(i).perform(player, args);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
+        } else {
 
-            final Player player = (Player) sender;
-
-            if (args.length > 0) {
-
+            if (player.hasPermission(loggerStaff)) {
+                player.sendMessage("--------------------------------------------");
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "Running Logger: &a&l" + Data.pluginVersion));
                 for (int i = 0; i < getSubCommands().size(); i++) {
-                    if (args[0].equalsIgnoreCase(getSubCommands().get(i).getName())) {
-                        try {
-                            getSubCommands().get(i).perform(player, args);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&9&l" + getSubCommands().get(i).getSyntax() + " &8&l| &r" + getSubCommands().get(i).getDescription()));
                 }
-            } else {
-
-                if (player.hasPermission(loggerStaff)) {
-                    player.sendMessage("--------------------------------------------");
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "Running Logger: &a&l" + Data.pluginVersion));
-                    for (int i = 0; i < getSubCommands().size(); i++) {
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&9&l " + getSubCommands().get(i).getSyntax() + " &8&l| &r" + getSubCommands().get(i).getDescription()));
-                    }
-                    player.sendMessage("--------------------------------------------");
-                }
+                player.sendMessage("--------------------------------------------");
             }
         }
         return true;

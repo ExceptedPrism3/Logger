@@ -29,7 +29,7 @@ public class OnBook implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void bookEditing(final PlayerEditBookEvent event) {
 
-        //Book Spy
+        // Book Spy
         if (this.main.getConfig().getBoolean("Spy-Features.Book-Spy.Enable")) {
 
             new OnBookSpy().onBookSpy(event);

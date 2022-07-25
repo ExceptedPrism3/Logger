@@ -3,12 +3,12 @@
   <parent>
     <artifactId>Logger</artifactId>
     <groupId>me.prism3</groupId>
-    <version>1.8.0.1</version>
+    <version>1.8.0.2</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>Logger-Spigot</artifactId>
   <name>Logger-Spigot</name>
-  <version>1.8.0.1</version>
+  <version>1.8.0.2</version>
   <description>Log all Activities from Players or Server Side!</description>
   <build>
     <resources>
@@ -88,6 +88,10 @@
     <repository>
       <id>placeholderapi</id>
       <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+    </repository>
+    <repository>
+      <id>viaversion-repo</id>
+      <url>https://repo.viaversion.com</url>
     </repository>
   </repositories>
   <dependencies>

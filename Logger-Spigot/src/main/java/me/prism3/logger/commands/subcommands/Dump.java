@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
+import static me.prism3.logger.utils.Data.pluginPrefix;
 import static me.prism3.logger.utils.Data.selectedLang;
 
 public class Dump implements SubCommand {
@@ -60,7 +61,7 @@ public class Dump implements SubCommand {
         request.setPasteState(1);
         request.setPasteExpire("10M");
         player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                "&b&lLogger &8&l| " + request.postPaste() + "\n&cDo not share this link at all!"));
+                pluginPrefix + request.postPaste() + "\n&cDo not share this link at all!"));
 
     }
 }

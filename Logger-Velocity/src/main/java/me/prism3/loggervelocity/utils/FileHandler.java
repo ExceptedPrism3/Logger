@@ -151,7 +151,7 @@ public class FileHandler {
     public static File getLiteBansKickLogFile() { return liteBansKickLogFile; }
 
 
-    public void deleteFile(File file) {
+    private void deleteFile(File file) {
 
         if (fileDeletion <= 0 ) { return; }
 
@@ -180,7 +180,7 @@ public class FileHandler {
 
             for (File staffLog : Objects.requireNonNull(staffLogFolder.listFiles())) {
 
-                deleteFile(staffLog);
+                this.deleteFile(staffLog);
 
             }
         }
@@ -188,56 +188,56 @@ public class FileHandler {
         for (File chatLog : Objects.requireNonNull(chatLogFolder.listFiles()))
         {
 
-            deleteFile(chatLog);
+            this.deleteFile(chatLog);
 
         }
 
         for (File commandsLog : Objects.requireNonNull(playerCommandLogFolder.listFiles()))
         {
 
-            deleteFile(commandsLog);
+            this.deleteFile(commandsLog);
 
         }
 
         for (File loginLog : Objects.requireNonNull(loginLogFolder.listFiles()))
         {
 
-            deleteFile(loginLog);
+            this.deleteFile(loginLog);
 
         }
 
         for (File leaveLog : Objects.requireNonNull(leaveLogFolder.listFiles()))
         {
 
-            deleteFile(leaveLog);
+            this.deleteFile(leaveLog);
 
         }
 
         for (File consoleCommandsLog : Objects.requireNonNull(consoleCommandLogFolder.listFiles()))
         {
 
-            deleteFile(consoleCommandsLog);
+            this.deleteFile(consoleCommandsLog);
 
         }
 
         for (File serverStartLog : Objects.requireNonNull(serverStartLogFolder.listFiles()))
         {
 
-            deleteFile(serverStartLog);
+            this.deleteFile(serverStartLog);
 
         }
 
         for (File serverStopLog : Objects.requireNonNull(serverStopLogFolder.listFiles()))
         {
 
-            deleteFile(serverStopLog);
+            this.deleteFile(serverStopLog);
 
         }
 
         for (File ramLog : Objects.requireNonNull(ramLogFolder.listFiles()))
         {
 
-            deleteFile(ramLog);
+            this.deleteFile(ramLog);
 
         }
 
@@ -246,7 +246,7 @@ public class FileHandler {
             for (File liteBansLog : Objects.requireNonNull(liteBansLogFolder.listFiles()))
             {
 
-                deleteFile(liteBansLog);
+                this.deleteFile(liteBansLog);
 
             }
         }

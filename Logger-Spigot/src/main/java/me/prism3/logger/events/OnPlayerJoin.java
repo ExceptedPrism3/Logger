@@ -4,6 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.database.sqlite.registration.SQLiteDataRegistration;
+import me.prism3.logger.events.plugindependent.OnViaVer;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -28,6 +29,8 @@ public class OnPlayerJoin implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(final PlayerJoinEvent event) {
+
+        new OnViaVer().onConnect(event.getPlayer());
 
         if (Data.isRegistration && !SQLiteDataRegistration.playerExists(event.getPlayer())) {
 

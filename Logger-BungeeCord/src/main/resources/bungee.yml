@@ -3,20 +3,20 @@ version: '${project.version}'
 main: me.prism3.loggerbungeecord.Main
 description: Log all Activities from Players and Server Side!
 author: Prism3 & theloother & Sidna
-softdepends: [LiteBans]
+softdepends: [LiteBans, PartyAndFriends]
 commands:
-  reload:
-    description: "Reloads the plugin configs"
+  loggerb reload:
+    description: "Reloads the plugin configs."
+  loggerb discord:
+    description: "Shows discord support server."
 permissions:
   loggerproxy.staff:
     description: "Allows to view Plugin commands."
-    default: op
     children:
       loggerproxy.exempt: true
       loggerproxy.reload: true
   loggerproxy.exempt:
     description: "Prevents the player from getting logged."
-    default: op
     children:
       logger.exempt.discord: true
   loggerproxy.exempt.discord:

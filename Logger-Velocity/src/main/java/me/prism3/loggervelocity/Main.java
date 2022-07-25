@@ -116,7 +116,7 @@ public class Main{
     }
 
     @Subscribe
-    public void onDisable(ProxyShutdownEvent event) {
+    public void onDisable(final ProxyShutdownEvent event) {
 
         new Stop().run();
 
@@ -192,7 +192,7 @@ public class Main{
 
     public Discord getDiscord() { return this.discord; }
 
-    public Messages getMessages() { return messages; }
+    public Messages getMessages() { return this.messages; }
 
     public External getExternal() { return this.external; }
 

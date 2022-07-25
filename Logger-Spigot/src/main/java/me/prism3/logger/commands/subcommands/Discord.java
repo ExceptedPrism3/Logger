@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static me.prism3.logger.utils.Data.discordSupportServer;
+import static me.prism3.logger.utils.Data.pluginPrefix;
 
 public class Discord implements SubCommand {
 
@@ -23,7 +24,7 @@ public class Discord implements SubCommand {
     @Override
     public void perform(Player player, String[] args) {
 
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "Discord Support Server: &b" + discordSupportServer));
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix + "Discord Support Server: &b" + discordSupportServer));
 
     }
 

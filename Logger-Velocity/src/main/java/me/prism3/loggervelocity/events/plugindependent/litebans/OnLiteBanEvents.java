@@ -6,7 +6,7 @@ import litebans.api.Events;
 import me.prism3.loggervelocity.Main;
 import me.prism3.loggervelocity.database.external.ExternalData;
 import me.prism3.loggervelocity.database.sqlite.SQLiteData;
-import me.prism3.loggervelocity.events.plugindependent.litebans.utils.UsernameFetcher;
+import me.prism3.loggervelocity.utils.litebansutil.UsernameFetcher;
 import me.prism3.loggervelocity.utils.FileHandler;
 
 import java.io.BufferedWriter;

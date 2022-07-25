@@ -2,11 +2,14 @@ package me.prism3.logger.commands.subcommands;
 
 import me.prism3.logger.commands.SubCommand;
 import me.prism3.logger.Main;
+import me.prism3.logger.utils.Data;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
+
+import static me.prism3.logger.utils.Data.pluginPrefix;
 
 public class Reload implements SubCommand {
 
@@ -33,7 +36,8 @@ public class Reload implements SubCommand {
         this.main.reloadConfig();
         this.main.getMessages().reload();
         this.main.getDiscordFile().reload();
-        player.sendMessage(Objects.requireNonNull(this.main.getMessages().get().getString("General.Reload")).replace("&", "§"));
+        this.main.initializer(new Data());
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getMessages().get().getString("General.Reload").replace("%prefix%", pluginPrefix)));
 
     }
 

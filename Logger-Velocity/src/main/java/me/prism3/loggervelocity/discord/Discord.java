@@ -39,7 +39,7 @@ public class Discord {
 
             } catch (Exception e) {
 
-                Main.getInstance().getLogger().error("An error has occurred whilst connecting to the Bot." +
+                this.main.getLogger().error("An error has occurred whilst connecting to the Bot." +
                         " Is the Bot Key Valid?");
                 return;
 
@@ -144,28 +144,28 @@ public class Discord {
 
     public void staffChat(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.staffChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.staffChannel);
 
     }
 
     public void playerChat(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.playerChatChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.playerChatChannel);
     }
 
     public void playerCommands(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.playerCommandsChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.playerCommandsChannel);
     }
 
     public void playerLogin(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.playerLoginChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.playerLoginChannel);
     }
 
     public void playerLeave(Player player, String content, boolean contentInAuthorLine) {
 
-        discordUtil(player, content, contentInAuthorLine, this.playerLeaveChannel);
+        this.discordUtil(player, content, contentInAuthorLine, this.playerLeaveChannel);
     }
 
     public void console(String content, boolean contentInAuthorLine) {
@@ -242,11 +242,11 @@ public class Discord {
                 this.jda.shutdown();
                 this.jda = null;
                 if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Enabled")) DiscordStatus.getThreadPool().shutdown();
-                Main.getInstance().getLogger().info("Discord Bot Bridge has been closed!");
+                this.main.getLogger().info("Discord Bot Bridge has been closed!");
 
             } catch (Exception e) {
 
-                Main.getInstance().getLogger().error("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
+                this.main.getLogger().error("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
                         " If this Issue Persists, Contact the Authors!");
 
                 e.printStackTrace();

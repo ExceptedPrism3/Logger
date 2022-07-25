@@ -3,9 +3,9 @@
 # Config 1.8
 # Plugin Messages
 General:
-  No-Permission: "&cYou do not have permission to run this command."
-  Reload: "&aConfigs Reloaded."
-  Invalid-Syntax: "&cInvalid Syntax."
+  No-Permission: "%prefix%  %prefix%%prefix% &cYou do not have permission to run this command."
+  Reload: "%prefix% %prefix% &aConfigs Reloaded."
+  Invalid-Syntax: "%prefix% %prefix% &cInvalid Syntax."
 # Files Instance
 Files:
   Player-Chat-Staff: "[%time%] [%world%] The Staff <%player%> has said => %message%"

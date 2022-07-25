@@ -27,38 +27,68 @@ public class OnEntityDeath implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onMobDeath(EntityDeathEvent event) {
 
-        if (event.getEntity().getKiller() == null || event.getEntity().getKiller() instanceof Player) return;
+        if (event.getEntity().getKiller() == null || !(event.getEntity().getKiller() instanceof Player)) return;
 
-        final Player player = event.getEntity().getKiller();
+        if (this.main.getConfig().getBoolean("Log-Player.Entity-Death")) {
 
-        assert player != null;
-        if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
+            final Player player = event.getEntity().getKiller();
 
-        final LivingEntity entity = event.getEntity();
-        final String playerName = player.getName();
-        final UUID playerUUID = player.getUniqueId();
-        final String worldName = player.getWorld().getName();
-        final String entityName = entity.getName();
-        final int x = entity.getLocation().getBlockX();
-        final int y = entity.getLocation().getBlockY();
-        final int z = entity.getLocation().getBlockZ();
+            assert player != null;
+            if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
+            final LivingEntity entity = event.getEntity();
+            final String playerName = player.getName();
+            final UUID playerUUID = player.getUniqueId();
+            final String worldName = player.getWorld().getName();
+            final String entityName = entity.getName();
+            final int x = entity.getLocation().getBlockX();
+            final int y = entity.getLocation().getBlockY();
+            final int z = entity.getLocation().getBlockZ();
 
-        // Log To Files
-        if (Data.isLogToFiles) {
+            // Log To Files
+            if (Data.isLogToFiles) {
 
-            if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Entity-Death-Staff")).isEmpty()) {
+                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Entity-Death-Staff")).isEmpty()) {
 
-                    this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Entity-Death-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Entity-Death-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
+
+                    }
+
+                    try {
+
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Entity-Death-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
+
+                    }
+
+                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+
+                        ExternalData.entityDeath(Data.serverName, player, entityName, x, y, z, true);
+
+                    }
+
+                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+
+                        SQLiteData.insertEntityDeath(Data.serverName, player, entityName, x, y, z, true);
+
+                    }
+
+                    return;
 
                 }
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Entity-Death-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getEntityDeathFile(), true));
+                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Entity-Death")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -67,74 +97,46 @@ public class OnEntityDeath implements Listener {
                     e.printStackTrace();
 
                 }
-
-                if (Data.isExternal && this.main.getExternal().isConnected()) {
-
-                    ExternalData.entityDeath(Data.serverName, player, entityName, x, y, z, true);
-
-                }
-
-                if (Data.isSqlite && this.main.getSqLite().isConnected()) {
-
-                    SQLiteData.insertEntityDeath(Data.serverName, player, entityName, x, y, z, true);
-
-                }
-
-                return;
-
             }
 
-            try {
+            // Discord Integration
+            if (!player.hasPermission(Data.loggerExemptDiscord)) {
 
-                final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getEntityDeathFile(), true));
-                out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Entity-Death")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-                out.close();
+                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-            } catch (IOException e) {
+                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Entity-Death-Staff")).isEmpty()) {
 
-                this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                e.printStackTrace();
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Entity-Death-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
 
-            }
-        }
+                    }
+                } else {
 
-        // Discord Integration
-        if (!player.hasPermission(Data.loggerExemptDiscord)) {
+                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Entity-Death")).isEmpty()) {
 
-            if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Entity-Death-Staff")).isEmpty()) {
-
-                    this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Entity-Death-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-
-                }
-            } else {
-
-                if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Entity-Death")).isEmpty()) {
-
-                    this.main.getDiscord().entityDeath(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Entity-Death")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
+                        this.main.getDiscord().entityDeath(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Entity-Death")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
+                    }
                 }
             }
-        }
 
-        // External
-        if (Data.isExternal && this.main.getExternal().isConnected()) {
+            // External
+            if (Data.isExternal && this.main.getExternal().isConnected()) {
 
-            try {
+                try {
 
-                ExternalData.entityDeath(Data.serverName, player, entityName, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    ExternalData.entityDeath(Data.serverName, player, entityName, x, y, z, player.hasPermission(Data.loggerStaffLog));
 
-            } catch (Exception e) { e.printStackTrace(); }
-        }
+                } catch (Exception e) { e.printStackTrace(); }
+            }
 
-        // SQLite
-        if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            // SQLite
+            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
 
-            try {
+                try {
 
-                SQLiteData.insertEntityDeath(Data.serverName, player, entityName, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    SQLiteData.insertEntityDeath(Data.serverName, player, entityName, x, y, z, player.hasPermission(Data.loggerStaffLog));
 
-            } catch (Exception e) { e.printStackTrace(); }
+                } catch (Exception e) { e.printStackTrace(); }
+            }
         }
     }
 }

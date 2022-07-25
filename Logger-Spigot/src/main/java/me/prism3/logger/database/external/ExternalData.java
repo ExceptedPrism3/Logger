@@ -351,7 +351,7 @@ public class ExternalData {
             playerJoin.setInt(4, x);
             playerJoin.setInt(5, y);
             playerJoin.setInt(6, z);
-            if (plugin.getConfig().getBoolean("Player-Join.Player-ip")) {
+            if (plugin.getConfig().getBoolean("Player-Join.Player-IP")) {
                 playerJoin.setString(7, ip.getHostString());
             } else {
 

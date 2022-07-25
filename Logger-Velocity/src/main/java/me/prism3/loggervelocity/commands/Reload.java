@@ -7,6 +7,7 @@ import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 
 import static me.prism3.loggervelocity.utils.Data.loggerReload;
+import static me.prism3.loggervelocity.utils.Data.pluginPrefix;
 
 public class Reload implements SimpleCommand {
 
@@ -28,16 +29,16 @@ public class Reload implements SimpleCommand {
 
                 this.main.getMessages().reload();
 
-                sender.sendMessage(Identity.nil(), Component.text(this.main.getMessages().getString("General.Reload")));
+                sender.sendMessage(Identity.nil(), Component.text(this.main.getMessages().getString("General.Reload").replace("%prefix%", pluginPrefix)));
 
             } else {
 
-                sender.sendMessage(Identity.nil(), Component.text(this.main.getMessages().getString("General.Invalid-Syntax")));
+                sender.sendMessage(Identity.nil(), Component.text(this.main.getMessages().getString("General.Invalid-Syntax").replace("%prefix%", pluginPrefix)));
 
             }
         } else {
 
-            sender.sendMessage(Identity.nil(), Component.text(this.main.getMessages().getString("General.No-Permission")));
+            sender.sendMessage(Identity.nil(), Component.text(this.main.getMessages().getString("General.No-Permission").replace("%prefix%", pluginPrefix)));
 
         }
     }

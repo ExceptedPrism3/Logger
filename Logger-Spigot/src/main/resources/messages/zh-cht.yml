@@ -3,9 +3,9 @@
 # Config 1.8
 # Plugin Messages
 General:
-  No-Permission: "&c您無權使用此命令。"
-  Reload: "&a配置重載成功。"
-  Invalid-Syntax: "&c非法參數！檢查您的輸入是否有誤。"
+  No-Permission: "%prefix% &c您無權使用此命令。"
+  Reload: "%prefix% &a配置重載成功。"
+  Invalid-Syntax: "%prefix% &c非法參數！檢查您的輸入是否有誤。"
 # Files Instance
 Files:
   Player-Chat-Staff: "[%time%] [%world%] Staff身分組玩家 <%player%> 說 => %message%"

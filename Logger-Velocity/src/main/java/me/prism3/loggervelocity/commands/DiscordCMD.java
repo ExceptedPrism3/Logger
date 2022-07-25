@@ -6,8 +6,7 @@ import me.prism3.loggervelocity.Main;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 
-import static me.prism3.loggervelocity.utils.Data.discordSupportServer;
-import static me.prism3.loggervelocity.utils.Data.loggerReload;
+import static me.prism3.loggervelocity.utils.Data.*;
 
 public class DiscordCMD implements SimpleCommand{
 
@@ -31,12 +30,12 @@ public class DiscordCMD implements SimpleCommand{
 
             } else {
 
-                sender.sendMessage(Identity.nil(), Component.text(this.main.getMessages().getString("General.Invalid-Syntax")));
+                sender.sendMessage(Identity.nil(), Component.text(this.main.getMessages().getString("General.Invalid-Syntax").replace("%prefix%", pluginPrefix)));
 
             }
         } else {
 
-            sender.sendMessage(Identity.nil(), Component.text(this.main.getMessages().getString("General.No-Permission")));
+            sender.sendMessage(Identity.nil(), Component.text(this.main.getMessages().getString("General.No-Permission").replace("%prefix%", pluginPrefix)));
 
         }
     }

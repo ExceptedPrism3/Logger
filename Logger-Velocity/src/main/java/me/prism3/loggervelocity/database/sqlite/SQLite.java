@@ -16,8 +16,6 @@ public class SQLite {
 
     private final File databaseFile = new File(Main.getInstance().getFolder().toFile(), "LoggerData - Velocity.db");
 
-    public boolean isConnected() { return (this.connection != null); }
-
     public void connect() {
 
         if (!isConnected()) {
@@ -54,5 +52,8 @@ public class SQLite {
             }
         }
     }
+
     public Connection getConnection() { return this.connection; }
+
+    public boolean isConnected() { return (this.connection != null); }
 }

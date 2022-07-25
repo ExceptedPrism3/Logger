@@ -1,6 +1,7 @@
 package me.prism3.loggerbungeecord;
 
 import me.prism3.loggerbungeecord.api.LiteBansUtil;
+import me.prism3.loggerbungeecord.api.PartyAndFriendsUtil;
 import me.prism3.loggerbungeecord.commands.Reload;
 import me.prism3.loggerbungeecord.database.external.External;
 import me.prism3.loggerbungeecord.database.external.ExternalData;
@@ -14,6 +15,7 @@ import me.prism3.loggerbungeecord.events.OnLeave;
 import me.prism3.loggerbungeecord.events.OnLogin;
 import me.prism3.loggerbungeecord.events.oncommands.OnCommand;
 import me.prism3.loggerbungeecord.events.plugindependent.litebans.OnLiteBanEvents;
+import me.prism3.loggerbungeecord.events.plugindependent.litebans.OnPartyAndFriends;
 import me.prism3.loggerbungeecord.serverside.OnReload;
 import me.prism3.loggerbungeecord.serverside.RAM;
 import me.prism3.loggerbungeecord.serverside.Start;
@@ -58,7 +60,7 @@ public final class Main extends Plugin {
         this.discord = new Discord();
         this.discord.run();
         
-        FileHandler fileHandler = new FileHandler(getDataFolder());
+        final FileHandler fileHandler = new FileHandler(getDataFolder());
         fileHandler.deleteFiles();
 
         this.initializer(new Data());
@@ -67,7 +69,7 @@ public final class Main extends Plugin {
 
         if (isLogToFiles && isSqlite) {
 
-            this.getLogger().warning("Logging to Files and SQLite are both enabled, this might impact your Server's Performance!");
+            this.getLogger().warning("File and SQLite logging are both enabled, this might impact your Server's Performance!");
 
         }
 
@@ -112,7 +114,7 @@ public final class Main extends Plugin {
         this.getLogger().info("has been Disabled!");
     }
 
-    private void initializer(Data data) {
+    public void initializer(Data data) {
 
         data.initializeDateFormatter();
         data.initializeStrings();
@@ -141,7 +143,7 @@ public final class Main extends Plugin {
 
             this.sqLite = new SQLite();
             this.sqLite.connect();
-            SQLiteData sqLiteData = new SQLiteData();
+            final SQLiteData sqLiteData = new SQLiteData();
             if (this.sqLite.isConnected()) {
                 sqLiteData.createTable();
                 sqLiteData.emptyTable();
@@ -156,6 +158,13 @@ public final class Main extends Plugin {
             this.getProxy().getScheduler().schedule(this, new OnLiteBanEvents(), 5L, 0, TimeUnit.SECONDS);
 
             this.getLogger().info("LiteBans Plugin Detected!");
+
+        }
+
+        if (PartyAndFriendsUtil.getPartyAndFriendsAPI() != null) {
+
+            this.getProxy().getPluginManager().registerListener(this, new OnPartyAndFriends());
+            this.getLogger().info("PartyAndFriends Plugin Detected!");
 
         }
     }
