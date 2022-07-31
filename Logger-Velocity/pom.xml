@@ -90,8 +90,19 @@
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <!-- Replace this with your package! -->
-                            <shadedPattern>me.prism3</shadedPattern>
+                            <shadedPattern>me.prism3.org.bstats</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.zaxxer</pattern>
+                            <shadedPattern>me.prism3.com.zaxxer</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.mariadb</pattern>
+                            <shadedPattern>me.prism3.org.mariadb</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.mysql</pattern>
+                            <shadedPattern>me.prism3.com.mysql</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -163,6 +174,13 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>4.0.3</version>
+            <exclusions>
+                <!-- Included in Velocity -->
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
