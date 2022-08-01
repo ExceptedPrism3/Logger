@@ -6,7 +6,6 @@
 
     <artifactId>Logger-Spigot</artifactId>
     <version>1.8.0.2</version>
-    <packaging>jar</packaging>
 
     <name>Logger-Spigot</name>
 
@@ -95,6 +94,18 @@
     </build>
 
     <repositories>
+
+
+        <repository>
+            <id>opencollab-snapshot-repo</id>
+            <url>https://repo.opencollab.dev/maven-snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
@@ -181,7 +192,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.GitHub.MilkBowl</groupId>
+            <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
             <scope>provided</scope>
@@ -206,7 +217,7 @@
         <dependency>
             <groupId>org.geysermc</groupId>
             <artifactId>connector</artifactId>
-            <version>1.2.1-SNAPSHOT</version>
+            <version>1.4.3-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

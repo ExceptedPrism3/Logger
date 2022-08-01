@@ -26,6 +26,10 @@
 
     <repositories>
         <repository>
+            <id>phoenix</id>
+            <url>https://repo.phoenix616.dev/</url>
+        </repository>
+        <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
