@@ -1,8 +1,6 @@
 package me.prism3.loggervelocity.serverside;
 
 import me.prism3.loggervelocity.Main;
-import me.prism3.loggervelocity.database.external.ExternalData;
-import me.prism3.loggervelocity.database.sqlite.SQLiteData;
 import me.prism3.loggervelocity.utils.FileHandler;
 
 import java.io.BufferedWriter;
@@ -45,21 +43,21 @@ public class Stop {
             }
 
             // External
-            if (isExternal && main.getExternal().isConnected()) {
+            if (isExternal ) {
 
                 try {
 
-                    ExternalData.serverStop(serverName);
+                    Main.getInstance().getDatabase().insertServerStop(serverName);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (isSqlite && main.getSqLite().isConnected()) {
+            if (isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertServerStop(serverName);
+                    Main.getInstance().getSqLite().insertServerStop(serverName);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

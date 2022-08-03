@@ -1,8 +1,6 @@
 package me.prism3.logger.events.plugindependent;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -62,15 +60,15 @@ public class OnAFK implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal  ) {
 
-                        ExternalData.afk(Data.serverName, player, x, y, z, true);
+                        Main.getInstance().getDatabase().insertAfk(Data.serverName, player, x, y, z, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
-                        SQLiteData.insertAFK(Data.serverName, player, true);
+                        Main.getInstance().getSqLite().insertAFK(Data.serverName, player, true);
 
                     }
 
@@ -112,21 +110,21 @@ public class OnAFK implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal  ) {
 
                 try {
 
-                    ExternalData.afk(Data.serverName, player, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertAfk(Data.serverName, player, x, y, z, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception event) { event.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertAFK(Data.serverName, player, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertAFK(Data.serverName, player, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

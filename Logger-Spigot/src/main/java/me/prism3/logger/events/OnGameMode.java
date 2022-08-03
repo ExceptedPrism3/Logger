@@ -1,8 +1,6 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -64,15 +62,15 @@ public class OnGameMode implements Listener {
 
                         }
 
-                        if (Data.isExternal && this.main.getExternal().isConnected()) {
+                        if (Data.isExternal  ) {
 
-                            ExternalData.gameMode(Data.serverName, player, gameMode, true);
+                            Main.getInstance().getDatabase().insertGamemode(Data.serverName, player, gameMode, true);
 
                         }
 
-                        if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                        if (Data.isSqlite ) {
 
-                            SQLiteData.insertGameMode(Data.serverName, player, gameMode, true);
+                            Main.getInstance().getSqLite().insertGameMode(Data.serverName, player, gameMode, true);
 
                         }
 
@@ -114,21 +112,21 @@ public class OnGameMode implements Listener {
                 }
 
                 // External
-                if (Data.isExternal && this.main.getExternal().isConnected()) {
+                if (Data.isExternal  ) {
 
                     try {
 
-                        ExternalData.gameMode(Data.serverName, player, gameMode, player.hasPermission(Data.loggerStaffLog));
+                        Main.getInstance().getDatabase().insertGamemode(Data.serverName, player, gameMode, player.hasPermission(Data.loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
 
                 // External
-                if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                if (Data.isSqlite ) {
 
                     try {
 
-                        SQLiteData.insertGameMode(Data.serverName, player, gameMode, player.hasPermission(Data.loggerStaffLog));
+                        Main.getInstance().getSqLite().insertGameMode(Data.serverName, player, gameMode, player.hasPermission(Data.loggerStaffLog));
 
                     } catch (Exception exception) { exception.printStackTrace(); }
                 }

@@ -1,8 +1,6 @@
 package me.prism3.logger.events.oninventories;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -65,15 +63,15 @@ public class OnCraft implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal  ) {
 
-                        ExternalData.playerCraft(Data.serverName, player, item, amount, true);
+                        Main.getInstance().getDatabase().insertPlayerCraft(Data.serverName, player, item, amount, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
-                        SQLiteData.insertPlayerCraft(Data.serverName, player, item, amount, x, y, z, true);
+                        Main.getInstance().getSqLite().insertPlayerCraft(Data.serverName, player, item, amount, x, y, z, true);
 
                     }
 
@@ -115,21 +113,21 @@ public class OnCraft implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal  ) {
 
                 try {
 
-                    ExternalData.playerCraft(Data.serverName, player, item, amount, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerCraft(Data.serverName, player, item, amount, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertPlayerCraft(Data.serverName, player, item, amount, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerCraft(Data.serverName, player, item, amount, x, y, z, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

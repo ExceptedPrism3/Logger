@@ -1,8 +1,6 @@
 package me.prism3.logger.events.oncommands;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.World;
@@ -62,15 +60,15 @@ public class OnCommandWhitelist implements Listener {
 
                         }
 
-                        if (Data.isExternal && this.main.getExternal().isConnected()) {
+                        if (Data.isExternal  ) {
 
-                            ExternalData.playerCommands(Data.serverName, player, command, true);
+                            Main.getInstance().getDatabase().insertPlayerCommands(Data.serverName, player, command, true);
 
                         }
 
-                        if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                        if (Data.isSqlite ) {
 
-                            SQLiteData.insertPlayerCommands(Data.serverName, player, command, true);
+                            Main.getInstance().getSqLite().insertPlayerCommands(Data.serverName, player, command, true);
 
                         }
                         return;
@@ -110,21 +108,21 @@ public class OnCommandWhitelist implements Listener {
                 }
 
                 // Logging to MySQL if logging to MySQL and Command Logging is enabled
-                if (Data.isExternal && this.main.getExternal().isConnected()) {
+                if (Data.isExternal  ) {
 
                     try {
 
-                        ExternalData.playerCommands(Data.serverName, player, command, player.hasPermission(Data.loggerStaffLog));
+                        Main.getInstance().getDatabase().insertPlayerCommands(Data.serverName, player, command, player.hasPermission(Data.loggerStaffLog));
 
                     } catch (Exception exception) { exception.printStackTrace(); }
                 }
 
                 // Logging to SQLite if logging to SQLite and Command Logging is enabled
-                if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                if (Data.isSqlite ) {
 
                     try {
 
-                        SQLiteData.insertPlayerCommands(Data.serverName, player, command, player.hasPermission(Data.loggerStaffLog));
+                        Main.getInstance().getSqLite().insertPlayerCommands(Data.serverName, player, command, player.hasPermission(Data.loggerStaffLog));
 
                     } catch (Exception exception) { exception.printStackTrace(); }
                 }

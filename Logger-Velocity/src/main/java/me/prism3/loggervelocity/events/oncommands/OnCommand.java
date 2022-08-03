@@ -5,8 +5,6 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.command.CommandExecuteEvent;
 import com.velocitypowered.api.proxy.Player;
 import me.prism3.loggervelocity.Main;
-import me.prism3.loggervelocity.database.external.ExternalData;
-import me.prism3.loggervelocity.database.sqlite.SQLiteData;
 import me.prism3.loggervelocity.serverside.Console;
 import me.prism3.loggervelocity.utils.FileHandler;
 
@@ -84,15 +82,15 @@ public class OnCommand {
 
                         }
 
-                        if (isExternal && main.getExternal().isConnected()) {
+                        if (isExternal ) {
 
-                            ExternalData.playerCommands(serverName, playerName, command, true);
+                            Main.getInstance().getDatabase().insertPlayerCommands(serverName, playerName, command, true);
 
                         }
 
-                        if (isSqlite && main.getSqLite().isConnected()) {
+                        if (isSqlite ) {
 
-                            SQLiteData.insertPlayerCommands(serverName, playerName, command, true);
+                            Main.getInstance().getSqLite().insertPlayerCommands(serverName, playerName, command, true);
 
                         }
 
@@ -135,21 +133,21 @@ public class OnCommand {
                 }
 
                 // External
-                if (isExternal && main.getExternal().isConnected()) {
+                if (isExternal ) {
 
                     try {
 
-                        ExternalData.playerCommands(serverName, playerName, command, player.hasPermission(loggerStaffLog));
+                        Main.getInstance().getDatabase().insertPlayerCommands(serverName, playerName, command, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
 
                 // SQLite
-                if (isSqlite && main.getSqLite().isConnected()) {
+                if (isSqlite ) {
 
                     try {
 
-                        SQLiteData.insertPlayerCommands(serverName, playerName, command, player.hasPermission(loggerStaffLog));
+                        Main.getInstance().getSqLite().insertPlayerCommands(serverName, playerName, command, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

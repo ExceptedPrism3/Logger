@@ -1,8 +1,6 @@
 package me.prism3.loggerbungeecord.serverside;
 
 import me.prism3.loggerbungeecord.Main;
-import me.prism3.loggerbungeecord.database.external.ExternalData;
-import me.prism3.loggerbungeecord.database.sqlite.SQLiteData;
 import me.prism3.loggerbungeecord.utils.Data;
 import me.prism3.loggerbungeecord.utils.FileHandler;
 
@@ -44,21 +42,21 @@ public class Stop {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal ) {
 
                 try {
 
-                    ExternalData.serverStop(Data.serverName);
+                    Main.getInstance().getDatabase().insertServerStop(Data.serverName);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertServerStop(Data.serverName);
+                    Main.getInstance().getSqLite().insertServerStop(Data.serverName);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

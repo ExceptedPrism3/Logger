@@ -1,4 +1,4 @@
-package com.carpour.loggercore.entity;
+package com.carpour.loggercore.database.entity;
 
 import lombok.Data;
 
@@ -10,12 +10,6 @@ public class EntityPlayer {
     private String worldName;
 
     private String playerUniqueID;
-
-    private int x;
-
-    private int y;
-
-    private int z;
 
     private boolean isStaff;
 

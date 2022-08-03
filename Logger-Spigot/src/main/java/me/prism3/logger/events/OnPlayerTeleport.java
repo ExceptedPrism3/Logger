@@ -3,8 +3,6 @@ package me.prism3.logger.events;
 import fr.xephi.authme.api.v3.AuthMeApi;
 import me.prism3.logger.Main;
 import me.prism3.logger.api.AuthMeUtil;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -71,15 +69,15 @@ public class OnPlayerTeleport implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal  ) {
 
-                        ExternalData.playerTeleport(Data.serverName, player, tx, ty, tz, true);
+                        Main.getInstance().getDatabase().insertPlayerTeleport(Data.serverName, player, tx, ty, tz, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
-                        SQLiteData.insertPlayerTeleport(Data.serverName, player, player.getLocation(), event.getTo(), true);
+                        Main.getInstance().getSqLite().insertPlayerTeleport(Data.serverName, player, player.getLocation(), event.getTo(), true);
 
                     }
 
@@ -121,21 +119,21 @@ public class OnPlayerTeleport implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal  ) {
 
                 try {
 
-                    ExternalData.playerTeleport(Data.serverName, player, tx, ty, tz, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerTeleport(Data.serverName, player, tx, ty, tz, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertPlayerTeleport(Data.serverName, player, player.getLocation(), event.getTo(), player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerTeleport(Data.serverName, player, player.getLocation(), event.getTo(), player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

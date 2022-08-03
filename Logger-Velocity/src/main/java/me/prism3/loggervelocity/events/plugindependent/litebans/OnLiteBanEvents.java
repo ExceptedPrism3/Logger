@@ -4,10 +4,8 @@ import com.mysql.cj.Messages;
 import litebans.api.Entry;
 import litebans.api.Events;
 import me.prism3.loggervelocity.Main;
-import me.prism3.loggervelocity.database.external.ExternalData;
-import me.prism3.loggervelocity.database.sqlite.SQLiteData;
-import me.prism3.loggervelocity.utils.litebansutil.UsernameFetcher;
 import me.prism3.loggervelocity.utils.FileHandler;
+import me.prism3.loggervelocity.utils.litebansutil.UsernameFetcher;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -106,21 +104,21 @@ public class OnLiteBanEvents implements Runnable {
                     }
 
                     // External
-                    if (isExternal && main.getExternal().isConnected()) {
+                    if (isExternal ) {
 
                         try {
 
-                            ExternalData.liteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
+                            Main.getInstance().getDatabase().insertLitebans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
 
                         } catch (Exception e) { e.printStackTrace(); }
                     }
 
                     // SQLite
-                    if (isSqlite && main.getSqLite().isConnected()) {
+                    if (isSqlite ) {
 
                         try {
 
-                            SQLiteData.insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
+                            Main.getInstance().getSqLite().insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
 
                         } catch (Exception e) { e.printStackTrace(); }
                     }

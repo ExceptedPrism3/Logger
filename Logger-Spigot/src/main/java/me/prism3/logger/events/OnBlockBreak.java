@@ -1,8 +1,6 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -65,15 +63,15 @@ public class OnBlockBreak implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal ) {
 
-                        ExternalData.blockBreak(Data.serverName, player, blockType.toString(), x, y, z, true);
+                        Main.getInstance().getDatabase().insertBlockBreak(Data.serverName, player, blockType.toString(), x, y, z, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
-                        SQLiteData.insertBlockBreak(Data.serverName, player, blockType, true);
+                        Main.getInstance().getSqLite().insertBlockBreak(Data.serverName, player, blockType, true);
                     }
 
                     return;
@@ -115,21 +113,21 @@ public class OnBlockBreak implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal ) {
 
                 try {
 
-                    ExternalData.blockBreak(Data.serverName, player, blockType.toString(), x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertBlockBreak(Data.serverName, player, blockType.toString(), x, y, z, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertBlockBreak(Data.serverName, player, blockType, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertBlockBreak(Data.serverName, player, blockType, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

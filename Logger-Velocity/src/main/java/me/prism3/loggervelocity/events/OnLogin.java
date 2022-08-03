@@ -4,8 +4,6 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.proxy.Player;
 import me.prism3.loggervelocity.Main;
-import me.prism3.loggervelocity.database.external.ExternalData;
-import me.prism3.loggervelocity.database.sqlite.SQLiteData;
 import me.prism3.loggervelocity.utils.FileHandler;
 
 import java.io.BufferedWriter;
@@ -58,15 +56,15 @@ public class OnLogin {
 
                     }
 
-                    if (isExternal && main.getExternal().isConnected()) {
+                    if (isExternal ) {
 
-                        ExternalData.playerLogin(serverName, playerName, playerIP, true);
+                        Main.getInstance().getDatabase().insertPlayerLogin(serverName, playerName, playerIP, true);
 
                     }
 
-                    if (isSqlite && main.getSqLite().isConnected()) {
+                    if (isSqlite ) {
 
-                        SQLiteData.insertPlayerLogin(serverName, playerName, playerIP, true);
+                        Main.getInstance().getSqLite().insertPlayerLogin(serverName, playerName, playerIP, true);
 
                     }
 
@@ -113,17 +111,17 @@ public class OnLogin {
 
                 try {
 
-                    ExternalData.playerLogin(serverName, playerName, playerIP, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerLogin(serverName, playerName, playerIP, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (isSqlite && main.getSqLite().isConnected()) {
+            if (isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertPlayerLogin(serverName, playerName, playerIP, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerLogin(serverName, playerName, playerIP, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

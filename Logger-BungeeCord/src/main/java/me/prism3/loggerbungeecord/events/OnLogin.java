@@ -1,8 +1,6 @@
 package me.prism3.loggerbungeecord.events;
 
 import me.prism3.loggerbungeecord.Main;
-import me.prism3.loggerbungeecord.database.external.ExternalData;
-import me.prism3.loggerbungeecord.database.sqlite.SQLiteData;
 import me.prism3.loggerbungeecord.utils.Data;
 import me.prism3.loggerbungeecord.utils.FileHandler;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -59,15 +57,15 @@ public class OnLogin implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal ) {
 
-                        ExternalData.playerLogin(Data.serverName, playerName, playerIP, true);
+                        Main.getInstance().getDatabase().insertPlayerLogin(Data.serverName, playerName, playerIP, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
-                        SQLiteData.insertPlayerLogin(Data.serverName, playerName, playerIP, true);
+                        Main.getInstance().getSqLite().insertPlayerLogin(Data.serverName, playerName, playerIP, true);
 
                     }
 
@@ -110,21 +108,21 @@ public class OnLogin implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal ) {
 
                 try {
 
-                    ExternalData.playerLogin(Data.serverName, playerName, playerIP, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerLogin(Data.serverName, playerName, playerIP, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertPlayerLogin(Data.serverName, playerName, playerIP, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerLogin(Data.serverName, playerName, playerIP, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

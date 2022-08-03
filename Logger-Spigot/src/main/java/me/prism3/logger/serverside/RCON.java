@@ -1,8 +1,6 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.event.EventHandler;
@@ -52,21 +50,21 @@ public class RCON implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal  ) {
 
                 try {
 
-                    ExternalData.rCon(Data.serverName, ip, command);
+                    Main.getInstance().getDatabase().insertRCON(Data.serverName, ip, command);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertRcon(Data.serverName, ip, command);
+                    Main.getInstance().getSqLite().insertRcon(Data.serverName, ip, command);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

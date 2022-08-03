@@ -1,8 +1,6 @@
 package me.prism3.loggerbungeecord.serverside;
 
 import me.prism3.loggerbungeecord.Main;
-import me.prism3.loggerbungeecord.database.external.ExternalData;
-import me.prism3.loggerbungeecord.database.sqlite.SQLiteData;
 import me.prism3.loggerbungeecord.utils.FileHandler;
 
 import java.io.BufferedWriter;
@@ -55,21 +53,21 @@ public class RAM implements Runnable {
                 }
 
                 // External
-                if (isExternal && this.main.getExternal().isConnected()) {
+                if (isExternal ) {
 
                     try {
 
-                        ExternalData.ram(serverName, maxMemory, usedMemory, freeMemory);
+                        Main.getInstance().getDatabase().insertRam(serverName, maxMemory, usedMemory, freeMemory);
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
 
                 // SQLite
-                if (isSqlite && this.main.getSqLite().isConnected()) {
+                if (isSqlite ) {
 
                     try {
 
-                        SQLiteData.insertRAM(serverName, maxMemory, usedMemory, freeMemory);
+                        Main.getInstance().getSqLite().insertRAM(serverName, maxMemory, usedMemory, freeMemory);
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

@@ -1,8 +1,7 @@
 package me.prism3.logger.events;
 
+import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -84,15 +83,18 @@ public class OnEnchant implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
-
-                        ExternalData.enchant(Data.serverName, player, enchs, enchantmentLevel, item, cost, true);
+                    if (Data.isExternal) {
+                        final EntityPlayer ePlayer = new EntityPlayer();
+                        ePlayer.setPlayerName(player.getName());
+                        ePlayer.setWorldName(player.getWorld().getName());
+                        ePlayer.setPlayerUniqueID(player.getUniqueId().toString());
+                        Main.getInstance().getDatabase().insertEnchant(Data.serverName, ePlayer, enchs, enchantmentLevel, item, cost, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
-                        SQLiteData.insertEnchant(Data.serverName, player, enchs, enchantmentLevel, item, cost, true);
+                        Main.getInstance().getSqLite().insertEnchant(Data.serverName, player, enchs, enchantmentLevel, item, cost, true);
 
                     }
 
@@ -134,21 +136,24 @@ public class OnEnchant implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal) {
 
                 try {
-
-                    ExternalData.enchant(Data.serverName, player, enchs, enchantmentLevel, item, cost, player.hasPermission(Data.loggerStaffLog));
+                    final EntityPlayer ePlayer = new EntityPlayer();
+                    ePlayer.setPlayerName(player.getName());
+                    ePlayer.setWorldName(player.getWorld().getName());
+                    ePlayer.setPlayerUniqueID(player.getUniqueId().toString());
+                    Main.getInstance().getDatabase().insertEnchant(Data.serverName, ePlayer, enchs, enchantmentLevel, item, cost, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertEnchant(Data.serverName, player, enchs, enchantmentLevel, item, cost, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertEnchant(Data.serverName, player, enchs, enchantmentLevel, item, cost, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

@@ -145,8 +145,8 @@ public final class Main extends Plugin {
             this.sqLite.connect();
             final SQLiteData sqLiteData = new SQLiteData();
             if (this.sqLite.isConnected()) {
-                sqLiteData.createTable();
-                sqLiteData.emptyTable();
+                Main.getInstance().getSqLite().createTable();
+                Main.getInstance().getSqLite().emptyTable();
             }
         }
     }

@@ -1,7 +1,6 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -61,13 +60,13 @@ public class OnPlayerKick implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal  ) {
 
-                        ExternalData.playerKick(Data.serverName, player, x, y, z, reason, true);
+                        Main.getInstance().getDatabase().insertPlayerKick(Data.serverName, player, x, y, z, reason, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
                         SQLiteData.insertPlayerKick(Data.serverName, player, reason, true);
 
@@ -111,17 +110,17 @@ public class OnPlayerKick implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal  ) {
 
                 try {
 
-                    ExternalData.playerKick(Data.serverName, player, x, y, z, reason, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerKick(Data.serverName, player, x, y, z, reason, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 

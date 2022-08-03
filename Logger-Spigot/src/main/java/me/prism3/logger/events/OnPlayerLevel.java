@@ -1,8 +1,6 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -60,15 +58,15 @@ public class OnPlayerLevel implements Listener {
 
                         }
 
-                        if (Data.isExternal && this.main.getExternal().isConnected()) {
+                        if (Data.isExternal  ) {
 
-                            ExternalData.levelChange(Data.serverName, playerName, true);
+                            Main.getInstance().getDatabase().insertLevelChange(Data.serverName, playerName, true);
 
                         }
 
-                        if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                        if (Data.isSqlite ) {
 
-                            SQLiteData.insertLevelChange(Data.serverName, player, true);
+                            Main.getInstance().getSqLite().insertLevelChange(Data.serverName, player, true);
 
                         }
 
@@ -109,21 +107,21 @@ public class OnPlayerLevel implements Listener {
                 }
 
                 // External
-                if (Data.isExternal && this.main.getExternal().isConnected()) {
+                if (Data.isExternal  ) {
 
                     try {
 
-                        ExternalData.levelChange(Data.serverName, playerName, player.hasPermission(Data.loggerStaffLog));
+                        Main.getInstance().getDatabase().insertLevelChange(Data.serverName, playerName, player.hasPermission(Data.loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
 
                 // SQLite
-                if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                if (Data.isSqlite ) {
 
                     try {
 
-                        SQLiteData.insertLevelChange(Data.serverName, player, player.hasPermission(Data.loggerStaffLog));
+                        Main.getInstance().getSqLite().insertLevelChange(Data.serverName, player, player.hasPermission(Data.loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

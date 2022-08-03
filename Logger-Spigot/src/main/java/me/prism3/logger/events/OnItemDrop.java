@@ -1,8 +1,6 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -83,15 +81,15 @@ public class OnItemDrop implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal  ) {
 
-                        ExternalData.itemDrop(Data.serverName, player, item, amount, blockX, blockY, blockZ, enchs, itemName, true);
+                        Main.getInstance().getDatabase().insertItemDrop(Data.serverName, player, item, amount, blockX, blockY, blockZ, enchs, itemName, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
-                        SQLiteData.insertItemDrop(Data.serverName, player, item, blockX, amount, blockY, blockZ, enchs, itemName, true);
+                        Main.getInstance().getSqLite().insertItemDrop(Data.serverName, player, item, blockX, amount, blockY, blockZ, enchs, itemName, true);
 
                     }
 
@@ -133,21 +131,21 @@ public class OnItemDrop implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal  ) {
 
                 try {
 
-                    ExternalData.itemDrop(Data.serverName, player, item, amount, blockX, blockY, blockZ, enchs, itemName, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertItemDrop(Data.serverName, player, item, amount, blockX, blockY, blockZ, enchs, itemName, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertItemDrop(Data.serverName, player, item, amount, blockX, blockY, blockZ, enchs, itemName, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertItemDrop(Data.serverName, player, item, amount, blockX, blockY, blockZ, enchs, itemName, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

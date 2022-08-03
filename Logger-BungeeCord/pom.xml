@@ -147,5 +147,11 @@
             <version>1.0.86</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Database-Core -->
+        <dependency>
+            <groupId>com.carpour.loggercore</groupId>
+            <artifactId>Logger-Core</artifactId>
+            <version>1.8.0.2</version>
+        </dependency>
     </dependencies>
 </project>

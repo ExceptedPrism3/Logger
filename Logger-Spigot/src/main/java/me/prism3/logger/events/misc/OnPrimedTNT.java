@@ -1,8 +1,6 @@
 package me.prism3.logger.events.misc;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.World;
@@ -67,15 +65,15 @@ public class OnPrimedTNT implements Listener {
 
                     }
 
-                    if (isExternal && this.main.getExternal().isConnected()) {
+                    if (isExternal  ) {
 
-                        ExternalData.primedTNT(serverName, player, x, y, z, true);
+                        Main.getInstance().getDatabase().insertPrimedtnt(serverName, player, x, y, z, true);
 
                     }
 
-                    if (isSqlite && this.main.getSqLite().isConnected()) {
+                    if (isSqlite ) {
 
-                        SQLiteData.insertPrimedTNT(serverName, player, x, y, z, true);
+                        Main.getInstance().getSqLite().insertPrimedTNT(serverName, player, x, y, z, true);
 
                     }
 
@@ -117,21 +115,21 @@ public class OnPrimedTNT implements Listener {
             }
 
             // External
-            if (isExternal && this.main.getExternal().isConnected()) {
+            if (isExternal  ) {
 
                 try {
 
-                    ExternalData.primedTNT(serverName, player, x, y, z, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPrimedtnt(serverName, player, x, y, z, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (isSqlite && this.main.getSqLite().isConnected()) {
+            if (isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertPrimedTNT(serverName, player, x, y, z, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPrimedTNT(serverName, player, x, y, z, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

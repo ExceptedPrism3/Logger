@@ -1,7 +1,6 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -111,13 +110,13 @@ public class OnPlayerDeath implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal  ) {
 
-                        ExternalData.playerDeath(Data.serverName, player, playerLevel, cause, killer, true);
+                        Main.getInstance().getDatabase().insertPlayerDeath(Data.serverName, player, playerLevel, cause, killer, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
                         SQLiteData.insertPlayerDeath(Data.serverName, player, cause, killer, true);
 
@@ -161,17 +160,17 @@ public class OnPlayerDeath implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal  ) {
 
                 try {
 
-                    ExternalData.playerDeath(Data.serverName, player, playerLevel, cause, killer, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerDeath(Data.serverName, player, playerLevel, cause, killer, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 

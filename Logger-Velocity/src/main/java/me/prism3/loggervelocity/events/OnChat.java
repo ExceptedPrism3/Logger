@@ -1,11 +1,10 @@
 package me.prism3.loggervelocity.events;
 
+import com.carpour.loggercore.database.entity.EntityPlayer;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.proxy.Player;
 import me.prism3.loggervelocity.Main;
-import me.prism3.loggervelocity.database.external.ExternalData;
-import me.prism3.loggervelocity.database.sqlite.SQLiteData;
 import me.prism3.loggervelocity.utils.FileHandler;
 
 import java.io.BufferedWriter;
@@ -55,15 +54,16 @@ public class OnChat{
 
                     }
 
-                    if (isExternal && main.getExternal().isConnected()) {
-
-                        ExternalData.playerChat(serverName, playerName, message, true);
+                    if (isExternal) {
+                        EntityPlayer ePlayer = new EntityPlayer();
+                        ePlayer.setPlayerName(playerName);
+                        Main.getInstance().getDatabase().insertPlayerChat(serverName, ePlayer, message, true);
 
                     }
 
-                    if (isSqlite && main.getSqLite().isConnected()) {
+                    if (isSqlite ) {
 
-                        SQLiteData.insertPlayerChat(serverName, playerName, message, true);
+                        Main.getInstance().getSqLite().insertPlayerChat(serverName, playerName, message, true);
 
                     }
 
@@ -106,21 +106,21 @@ public class OnChat{
             }
 
             // External
-            if (isExternal && main.getExternal().isConnected()) {
+            if (isExternal) {
 
                 try {
 
-                    ExternalData.playerChat(serverName, playerName, message, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerChat(serverName, playerName, message, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (isSqlite && main.getSqLite().isConnected()) {
+            if (isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertPlayerChat(serverName, playerName, message, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerChat(serverName, playerName, message, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

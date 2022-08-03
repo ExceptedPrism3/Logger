@@ -1,8 +1,6 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -64,15 +62,15 @@ public class OnBucketFill implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal  ) {
 
-                        ExternalData.bucketFill(Data.serverName, player, bucket, x, y, z, true);
+                        Main.getInstance().getDatabase().insertBucketFill(Data.serverName, player, bucket, x, y, z, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
-                        SQLiteData.insertBucketFill(Data.serverName, player, bucket, true);
+                        Main.getInstance().getSqLite().insertBucketFill(Data.serverName, player, bucket, true);
 
                     }
 
@@ -114,21 +112,21 @@ public class OnBucketFill implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal  ) {
 
                 try {
 
-                    ExternalData.bucketFill(Data.serverName, player, bucket, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertBucketFill(Data.serverName, player, bucket, x, y, z, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertBucketFill(Data.serverName, player, bucket, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertBucketFill(Data.serverName, player, bucket, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

@@ -3,11 +3,9 @@ package me.prism3.logger.events.plugindependent;
 import litebans.api.Entry;
 import litebans.api.Events;
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
-import me.prism3.logger.utils.litebansutil.UsernameFetcher;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.litebansutil.UsernameFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -69,15 +67,15 @@ public class OnLiteBanEvents implements Listener, Runnable {
 
                                     }
 
-                                    if (Data.isExternal && main.getExternal().isConnected()) {
+                                    if (Data.isExternal ) {
 
-                                        ExternalData.liteBans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
+                                        Main.getInstance().getDatabase().insertLitebans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
 
                                     }
 
-                                    if (Data.isSqlite && main.getSqLite().isConnected()) {
+                                    if (Data.isSqlite ) {
 
-                                        SQLiteData.insertLiteBans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
+                                        Main.getInstance().getSqLite().insertLiteBans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
 
                                     }
 
@@ -126,21 +124,21 @@ public class OnLiteBanEvents implements Listener, Runnable {
                         }
 
                         // External
-                        if (Data.isExternal && main.getExternal().isConnected()) {
+                        if (Data.isExternal ) {
 
                             try {
 
-                                ExternalData.liteBans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
+                                Main.getInstance().getDatabase().insertLitebans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
 
                             } catch (Exception e) { e.printStackTrace(); }
                         }
 
                         // SQLite
-                        if (Data.isSqlite && main.getSqLite().isConnected()) {
+                        if (Data.isSqlite ) {
 
                             try {
 
-                                SQLiteData.insertLiteBans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
+                                Main.getInstance().getSqLite().insertLiteBans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
 
                             } catch (Exception e) { e.printStackTrace(); }
                         }

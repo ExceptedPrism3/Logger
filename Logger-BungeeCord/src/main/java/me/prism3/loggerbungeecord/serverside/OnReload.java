@@ -1,8 +1,6 @@
 package me.prism3.loggerbungeecord.serverside;
 
 import me.prism3.loggerbungeecord.Main;
-import me.prism3.loggerbungeecord.database.external.ExternalData;
-import me.prism3.loggerbungeecord.database.sqlite.SQLiteData;
 import me.prism3.loggerbungeecord.utils.FileHandler;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -62,15 +60,15 @@ public class OnReload implements Listener {
 
                         }
 
-                        if (isExternal && this.main.getExternal().isConnected()) {
+                        if (isExternal ) {
 
                             ExternalData.serverReload(serverName, playerName, true);
 
                         }
 
-                        if (isSqlite && this.main.getSqLite().isConnected()) {
+                        if (isSqlite ) {
 
-                            SQLiteData.insertServerReload(serverName, playerName, true);
+                            Main.getInstance().getSqLite().insertServerReload(serverName, playerName, true);
 
                         }
 
@@ -113,7 +111,7 @@ public class OnReload implements Listener {
                 }
 
                 // External
-                if (isExternal && this.main.getExternal().isConnected()) {
+                if (isExternal ) {
 
                     try {
 
@@ -123,11 +121,11 @@ public class OnReload implements Listener {
                 }
 
                 // SQLite
-                if (isSqlite && this.main.getSqLite().isConnected()) {
+                if (isSqlite ) {
 
                     try {
 
-                        SQLiteData.insertServerReload(serverName, playerName, player.hasPermission(loggerStaffLog));
+                        Main.getInstance().getSqLite().insertServerReload(serverName, playerName, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
@@ -156,7 +154,7 @@ public class OnReload implements Listener {
                 }
 
                 // External
-                if (isExternal && this.main.getExternal().isConnected()) {
+                if (isExternal ) {
 
                     try {
 
@@ -166,11 +164,11 @@ public class OnReload implements Listener {
                 }
 
                 // SQLite
-                if (isSqlite && this.main.getSqLite().isConnected()) {
+                if (isSqlite ) {
 
                     try {
 
-                        SQLiteData.insertServerReload(serverName, null, true);
+                        Main.getInstance().getSqLite().insertServerReload(serverName, null, true);
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

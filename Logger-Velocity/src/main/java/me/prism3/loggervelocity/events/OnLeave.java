@@ -1,11 +1,10 @@
 package me.prism3.loggervelocity.events;
 
+import com.carpour.loggercore.database.entity.EntityPlayer;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.proxy.Player;
 import me.prism3.loggervelocity.Main;
-import me.prism3.loggervelocity.database.external.ExternalData;
-import me.prism3.loggervelocity.database.sqlite.SQLiteData;
 import me.prism3.loggervelocity.utils.FileHandler;
 
 import java.io.BufferedWriter;
@@ -59,15 +58,15 @@ public class OnLeave {
 
                     }
 
-                    if (isExternal && main.getExternal().isConnected()) {
+                    if (isExternal ) {
 
-                        ExternalData.playerLeave(serverName, playerName, true);
+                        Main.getInstance().getDatabase().insertPlayerLeave(serverName, playerName, true);
 
                     }
 
-                    if (isSqlite && main.getSqLite().isConnected()) {
+                    if (isSqlite ) {
 
-                        SQLiteData.insertPlayerLeave(serverName, playerName, true);
+                        Main.getInstance().getSqLite().insertPlayerLeave(serverName, playerName, true);
 
                     }
 
@@ -109,21 +108,22 @@ public class OnLeave {
             }
 
             // External
-            if (isExternal && main.getExternal().isConnected()) {
+            if (isExternal ) {
 
                 try {
-
-                    ExternalData.playerLeave(serverName, playerName, player.hasPermission(loggerStaffLog));
+                    final EntityPlayer ePlayer = new EntityPlayer();
+                    ePlayer.setPlayerName(playerName);
+                    Main.getInstance().getDatabase().insertPlayerLeave(serverName, playerName, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (isSqlite && main.getSqLite().isConnected()) {
+            if (isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertPlayerLeave(serverName, playerName, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerLeave(serverName, playerName, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

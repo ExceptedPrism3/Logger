@@ -1,8 +1,6 @@
 package me.prism3.logger.events.oninventories;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -102,15 +100,15 @@ public class OnChestInteraction implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal  ) {
 
-                        ExternalData.chestInteraction(Data.serverName, player, x, y, z, items, true);
+                        Main.getInstance().getDatabase().insertChestInterationInteraction(Data.serverName, player, x, y, z, items, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
-                        SQLiteData.insertChestInteraction(Data.serverName, player, x, y, z, items, true);
+                        Main.getInstance().getSqLite().insertChestInteraction(Data.serverName, player, x, y, z, items, true);
 
                     }
 
@@ -152,21 +150,21 @@ public class OnChestInteraction implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal  ) {
 
                 try {
 
-                    ExternalData.chestInteraction(Data.serverName, player, x, y, z, items, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertChestInterationInteraction(Data.serverName, player, x, y, z, items, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertChestInteraction(Data.serverName, player, x, y, z, items, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertChestInteraction(Data.serverName, player, x, y, z, items, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

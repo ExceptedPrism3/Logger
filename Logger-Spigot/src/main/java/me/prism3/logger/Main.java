@@ -1,33 +1,31 @@
 package me.prism3.logger;
 
+import com.carpour.loggercore.database.DataSourceInterface;
+import com.carpour.loggercore.database.data.Options;
+import com.carpour.loggercore.database.mysql.MySQL;
+import de.jeff_media.updatechecker.UpdateChecker;
 import me.prism3.logger.api.*;
 import me.prism3.logger.commands.CommandManager;
 import me.prism3.logger.commands.subcommands.PlayerInventory;
-import me.prism3.logger.database.external.External;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.external.ExternalUpdater;
-import me.prism3.logger.database.sqlite.registration.SQLiteDataRegistration;
 import me.prism3.logger.database.sqlite.registration.SQLiteRegistration;
 import me.prism3.logger.discord.Discord;
 import me.prism3.logger.discord.DiscordFile;
+import me.prism3.logger.events.*;
 import me.prism3.logger.events.misc.OnPrimedTNT;
 import me.prism3.logger.events.oncommands.OnCommand;
 import me.prism3.logger.events.oninventories.OnChestInteraction;
 import me.prism3.logger.events.oninventories.OnCraft;
 import me.prism3.logger.events.oninventories.OnFurnace;
-import me.prism3.logger.events.OnPlayerDeath;
 import me.prism3.logger.events.onversioncompatibility.OnWoodStripping;
 import me.prism3.logger.events.plugindependent.*;
-import me.prism3.logger.database.sqlite.global.SQLite;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
-import de.jeff_media.updatechecker.UpdateChecker;
-import me.prism3.logger.events.*;
 import me.prism3.logger.serverside.*;
 import me.prism3.logger.utils.*;
 import me.prism3.logger.utils.enums.NmsVersions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.sql.SQLException;
 
 import static me.prism3.logger.utils.Data.*;
 
@@ -37,9 +35,11 @@ public class Main extends JavaPlugin {
 
     private Messages messages;
 
-    private External external;
+private DataSourceInterface database;
 
-    private SQLite sqLite;
+private Options options;
+
+private DataSourceInterface sqLite;
     private SQLiteRegistration sqLiteReg;
 
     private Discord discord;
@@ -111,7 +111,6 @@ public class Main extends JavaPlugin {
 
         new Stop().run();
 
-        if (isExternal && this.external.isConnected()) this.external.disconnect();
 
         if (isSqlite && this.sqLite.isConnected()) this.sqLite.disconnect();
 
@@ -189,45 +188,24 @@ public class Main extends JavaPlugin {
 
     private void databaseSetup() {
 
-        if (isExternal) {
-
-            this.external = new External();
-            this.external.connect();
-            final ExternalData externalData = new ExternalData();
-            if (this.external.isConnected()) {
-                ExternalUpdater.updater();
-                externalData.createTable();
-                externalData.emptyTable();
-            }
+        try {
+            this.database = new MySQL(Data.databaseCredentials, Data.options);
+        } catch (SQLException e) {
+            this.getLogger().severe(e.getMessage());
         }
 
-        if (isSqlite) {
-
-            this.sqLite = new SQLite();
-            this.sqLite.connect();
-            final SQLiteData sqLiteData = new SQLiteData();
-            if (this.sqLite.isConnected()) {
-                sqLiteData.createTable();
-                sqLiteData.emptyTable();
-            }
-        }
-
-        if (isRegistration) {
-
-            this.sqLiteReg = new SQLiteRegistration();
-            this.sqLiteReg.connect();
-            final SQLiteDataRegistration sqLiteDataRegistration = new SQLiteDataRegistration();
-            if (this.sqLiteReg.isConnected()) sqLiteDataRegistration.createTable();
-        }
+//TODO chno had registration
     }
 
     private void loadPluginDepends() {
-
+this.options = new Options();
         if (EssentialsUtil.getEssentialsAPI() != null) {
 
             this.getServer().getPluginManager().registerEvents(new OnAFK(), this);
 
             this.getLogger().info("Essentials Plugin Detected!");
+
+            this.options.setEssentialsEnabled(true);
 
         }
 
@@ -236,6 +214,8 @@ public class Main extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new OnAuthMePassword(), this);
 
             this.getLogger().info("AuthMe Plugin Detected!");
+
+            this.options.setAuthMeEnabled(true);
 
         }
 
@@ -247,6 +227,7 @@ public class Main extends JavaPlugin {
                 this.getServer().getPluginManager().registerEvents(vault, this);
                 this.getServer().getScheduler().scheduleSyncRepeatingTask(this, vault, 10L, Data.vaultChecker);
             }
+            this.options.setVaultEnabled(true);
             this.getLogger().info("Vault Plugin Detected!");
         }
 
@@ -255,6 +236,8 @@ public class Main extends JavaPlugin {
             this.getServer().getScheduler().scheduleSyncDelayedTask(this, new OnLiteBanEvents(), 10L);
 
             this.getLogger().info("LiteBans Plugin Detected!");
+
+            this.options.setLiteBansEnabled(true);
         }
 
         if (AdvancedBanUtil.getAdvancedBanAPI() != null) {
@@ -262,23 +245,32 @@ public class Main extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new OnAdvancedBan(), this);
 
             this.getLogger().info("AdvancedBan Plugin Detected!");
+
+            this.options.setAdvancedBanEnabled(true);
         }
 
         if (PlaceHolderAPIUtil.getPlaceHolderAPI() != null) {
 
             this.getLogger().info("PlaceHolderAPI Plugin Detected!");
+
         }
 
         if (GeyserUtil.getGeyserAPI() != null && FloodGateUtil.getFloodGateAPI()) {
 
             this.getLogger().info("Geyser & FloodGate Plugins Detected!");
             this.getLogger().warning("Geyser & FloodGate are not fully supported! If any errors occurs, contact the authors.");
+
         }
 
         if (ViaVersionUtil.getViaVersionAPI() != null) {
 
             this.getLogger().info("ViaVersion Plugin Detected!");
+
+            this.options.setAtleastVersion(true);
         }
+        this.options.setDataDelete(this.getConfig().getInt("Database.Data-Deletion"));
+        this.options.setPlayerIPEnabled(this.getConfig().getBoolean("Player-Join.Player-IP"));
+
     }
 
     private boolean langChecker() {
@@ -294,9 +286,7 @@ public class Main extends JavaPlugin {
 
     public static Main getInstance() { return instance; }
 
-    public External getExternal() { return this.external; }
 
-    public SQLite getSqLite() { return this.sqLite; }
 
     public SQLiteRegistration getSqLiteReg() { return this.sqLiteReg; }
 
@@ -307,4 +297,14 @@ public class Main extends JavaPlugin {
     public DiscordFile getDiscordFile() { return this.discordFile; }
 
     public Messages getMessages() { return this.messages; }
+
+    public DataSourceInterface getDatabase()
+    {
+        return this.database;
+    }
+
+    public DataSourceInterface getSqLite()
+    {
+        return this.sqLite;
+    }
 }

@@ -3,8 +3,6 @@ package me.prism3.loggervelocity.serverside;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.command.CommandExecuteEvent;
 import me.prism3.loggervelocity.Main;
-import me.prism3.loggervelocity.database.external.ExternalData;
-import me.prism3.loggervelocity.database.sqlite.SQLiteData;
 import me.prism3.loggervelocity.utils.FileHandler;
 
 import java.io.BufferedWriter;
@@ -49,21 +47,21 @@ public class Console {
             }
 
             // External
-            if (isExternal && main.getExternal().isConnected()) {
+            if (isExternal ) {
 
                 try {
 
-                    ExternalData.consoleCommands(serverName, command);
+                    Main.getInstance().getDatabase().insertConsoleCommandeCommands(serverName, command);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (isSqlite && main.getSqLite().isConnected()) {
+            if (isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertConsoleCommands(serverName, command);
+                    Main.getInstance().getSqLite().insertConsoleCommands(serverName, command);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

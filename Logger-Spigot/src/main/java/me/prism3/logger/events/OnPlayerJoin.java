@@ -1,8 +1,6 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.database.sqlite.registration.SQLiteDataRegistration;
 import me.prism3.logger.events.plugindependent.OnViaVer;
 import me.prism3.logger.utils.BedrockChecker;
@@ -86,15 +84,15 @@ public class OnPlayerJoin implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal  ) {
 
-                        ExternalData.playerJoin(Data.serverName, player, x, y, z, ip, true);
+                        Main.getInstance().getDatabase().insertPlayerJoin(Data.serverName, player, x, y, z, ip, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
-                        SQLiteData.insertPlayerJoin(Data.serverName, player, true);
+                        Main.getInstance().getSqLite().insertPlayerJoin(Data.serverName, player, true);
 
                     }
 
@@ -136,21 +134,21 @@ public class OnPlayerJoin implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal  ) {
 
                 try {
 
-                    ExternalData.playerJoin(Data.serverName, player, x, y, z, ip, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerJoin(Data.serverName, player, x, y, z, ip, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertPlayerJoin(Data.serverName, player, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerJoin(Data.serverName, player, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

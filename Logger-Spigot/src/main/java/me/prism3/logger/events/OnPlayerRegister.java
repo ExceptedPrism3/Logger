@@ -1,8 +1,6 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.Bukkit;
@@ -66,21 +64,21 @@ public class OnPlayerRegister {
         }
 
         // External
-        if (Data.isExternal && this.main.getExternal().isConnected()) {
+        if (Data.isExternal  ) {
 
             try {
 
-                ExternalData.playerRegistration(Data.serverName, player, dateFormat.format(ZonedDateTime.now()));
+                Main.getInstance().getDatabase().insertPlayerRegistration(Data.serverName, player, dateFormat.format(ZonedDateTime.now()));
 
             } catch (Exception e) { e.printStackTrace(); }
         }
 
         // SQLite
-        if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+        if (Data.isSqlite ) {
 
             try {
 
-                SQLiteData.insertRegistration(Data.serverName, player, dateFormat.format(ZonedDateTime.now()));
+                Main.getInstance().getSqLite().insertRegistration(Data.serverName, player, dateFormat.format(ZonedDateTime.now()));
 
             } catch (Exception e) { e.printStackTrace(); }
         }

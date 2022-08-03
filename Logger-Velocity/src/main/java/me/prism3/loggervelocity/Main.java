@@ -1,5 +1,6 @@
 package me.prism3.loggervelocity;
 
+import com.carpour.loggercore.database.DataSourceInterface;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
@@ -10,11 +11,6 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import me.prism3.loggervelocity.api.LiteBansUtil;
 import me.prism3.loggervelocity.commands.DiscordCMD;
 import me.prism3.loggervelocity.commands.Reload;
-import me.prism3.loggervelocity.database.external.External;
-import me.prism3.loggervelocity.database.external.ExternalData;
-import me.prism3.loggervelocity.database.external.ExternalUpdater;
-import me.prism3.loggervelocity.database.sqlite.SQLite;
-import me.prism3.loggervelocity.database.sqlite.SQLiteData;
 import me.prism3.loggervelocity.discord.Discord;
 import me.prism3.loggervelocity.discord.DiscordFile;
 import me.prism3.loggervelocity.events.OnChat;
@@ -35,7 +31,7 @@ import org.slf4j.Logger;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
-import static me.prism3.loggervelocity.utils.Data.*;
+import static me.prism3.loggervelocity.utils.Data.ramChecker;
 
 @Plugin(id = "logger-velocity", name = "Logger", version = "1.7.5", authors = {"prism3 & thelooter & sidna"})
 public class Main{
@@ -52,10 +48,8 @@ public class Main{
     private Discord discord;
     private DiscordFile discordFile;
 
-    private External external;
-
-    private SQLite sqLite;
-
+    private DataSourceInterface database;
+    private DataSourceInterface sqLite;
     @Inject
     @DataDirectory
     private Path folder;
@@ -120,10 +114,6 @@ public class Main{
 
         new Stop().run();
 
-        if (isExternal && this.external.isConnected()) this.external.disconnect();
-
-        if (isSqlite && this.sqLite.isConnected()) this.sqLite.disconnect();
-
         this.discord.disconnect();
 
         this.logger.info("Plugin has been disabled");
@@ -143,28 +133,7 @@ public class Main{
 
     private void dataBaseSetup() {
 
-        if (isExternal) {
 
-            this.external = new External();
-            this.external.connect();
-            final ExternalData externalData = new ExternalData();
-            if (this.external.isConnected()) {
-                ExternalUpdater.updater();
-                externalData.createTable();
-                externalData.emptyTable();
-            }
-        }
-
-        if (isSqlite) {
-
-            this.sqLite = new SQLite();
-            this.sqLite.connect();
-            final SQLiteData sqLiteData = new SQLiteData();
-            if (this.sqLite.isConnected()) {
-                sqLiteData.createTable();
-                sqLiteData.emptyTable();
-            }
-        }
     }
 
     private void loadPluginDependent() {
@@ -194,7 +163,17 @@ public class Main{
 
     public Messages getMessages() { return this.messages; }
 
-    public External getExternal() { return this.external; }
+    public DataSourceInterface getDatabase()
+    {
+        return this.database;
+    }
 
-    public SQLite getSqLite() { return this.sqLite; }
+    public DataSourceInterface getSqLite()
+    {
+        return this.sqLite;
+    }
+
+
+
+
 }

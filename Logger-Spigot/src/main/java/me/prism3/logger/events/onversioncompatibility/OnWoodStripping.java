@@ -1,8 +1,6 @@
 package me.prism3.logger.events.onversioncompatibility;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -111,15 +109,15 @@ public class OnWoodStripping implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal  ) {
 
-                        ExternalData.woodStripping(Data.serverName, player, logName, x, y, z, true);
+                        Main.getInstance().getDatabase().insertWoodStrippingStripping(Data.serverName, player, logName, x, y, z, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
-                        SQLiteData.insertWoodStripping(Data.serverName, player, logName, x, y, z, true);
+                        Main.getInstance().getSqLite().insertWoodStripping(Data.serverName, player, logName, x, y, z, true);
 
                     }
 
@@ -161,21 +159,21 @@ public class OnWoodStripping implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal  ) {
 
                 try {
 
-                    ExternalData.woodStripping(Data.serverName, player, logName, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertWoodStrippingStripping(Data.serverName, player, logName, x, y, z, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertWoodStripping(Data.serverName, player, logName, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertWoodStripping(Data.serverName, player, logName, x, y, z, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

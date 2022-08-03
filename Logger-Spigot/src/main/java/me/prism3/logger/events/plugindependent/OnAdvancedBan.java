@@ -2,8 +2,6 @@ package me.prism3.logger.events.plugindependent;
 
 import me.leoko.advancedban.bukkit.event.PunishmentEvent;
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.Bukkit;
@@ -62,15 +60,15 @@ public class OnAdvancedBan implements Listener {
 
                         }
 
-                        if (Data.isExternal && this.main.getExternal().isConnected()) {
+                        if (Data.isExternal  ) {
 
-                            ExternalData.advancedBanData(Data.serverName, type, executor, executed_on, reason, expirationDate);
+                            Main.getInstance().getDatabase().insertAdvanceBanData(Data.serverName, type, executor, executed_on, reason, expirationDate);
 
                         }
 
-                        if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                        if (Data.isSqlite ) {
 
-                            SQLiteData.insertAdvancedBan(Data.serverName, type, executor, executed_on, reason, expirationDate);
+                            Main.getInstance().getSqLite().insertAdvancedBan(Data.serverName, type, executor, executed_on, reason, expirationDate);
 
                         }
 
@@ -118,21 +116,21 @@ public class OnAdvancedBan implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal  ) {
 
                 try {
 
-                    ExternalData.advancedBanData(Data.serverName, type, executor, executed_on, reason, expirationDate);
+                    Main.getInstance().getDatabase().insertAdvanceBanData(Data.serverName, type, executor, executed_on, reason, expirationDate);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertAdvancedBan(Data.serverName, type, executor, executed_on, reason, expirationDate);
+                    Main.getInstance().getSqLite().insertAdvancedBan(Data.serverName, type, executor, executed_on, reason, expirationDate);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

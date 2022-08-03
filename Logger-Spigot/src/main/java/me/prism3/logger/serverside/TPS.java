@@ -1,8 +1,6 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 
@@ -76,33 +74,34 @@ public class TPS implements Runnable {
                 }
 
                 // External
-                if (Data.isExternal && this.main.getExternal().isConnected()) {
+                if (Data.isExternal  ) {
 
                     try {
 
                         if (this.getTPS() <= Data.tpsMedium) {
 
-                            ExternalData.tps(Data.serverName, this.getTPS());
+                            Main.getInstance().getDatabase().insertTps(Data.serverName, this.getTPS());
 
                         } else if (this.getTPS() <= Data.tpsCritical) {
 
-                            ExternalData.tps(Data.serverName, this.getTPS());
+                            Main.getInstance().getDatabase().insertTps(Data.serverName, this.getTPS());
+
                         }
                     } catch (Exception e) { e.printStackTrace(); }
                 }
 
                 // SQLite
-                if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                if (Data.isSqlite ) {
 
                     try {
 
                         if (this.getTPS() <= Data.tpsMedium) {
 
-                            SQLiteData.insertTPS(Data.serverName, this.getTPS());
+                            Main.getInstance().getSqLite().insertTPS(Data.serverName, this.getTPS());
 
                         } else if (this.getTPS() <= Data.tpsCritical) {
 
-                            SQLiteData.insertTPS(Data.serverName, this.getTPS());
+                            Main.getInstance().getSqLite().insertTPS(Data.serverName, this.getTPS());
                         }
                     } catch (Exception e) { e.printStackTrace(); }
                 }

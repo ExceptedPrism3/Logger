@@ -1,8 +1,6 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.command.BlockCommandSender;
@@ -54,21 +52,21 @@ public class OnCommandBlock implements Listener {
                 }
 
                 // External
-                if (Data.isExternal && this.main.getExternal().isConnected()) {
+                if (Data.isExternal  ) {
 
                     try {
 
-                        ExternalData.commandBlock(Data.serverName, command);
+                        Main.getInstance().getDatabase().insertCommandBlockandBlock(Data.serverName, command);
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
 
                 // SQLite
-                if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                if (Data.isSqlite ) {
 
                     try {
 
-                        SQLiteData.insertCommandBlock(Data.serverName, command);
+                        Main.getInstance().getSqLite().insertCommandBlock(Data.serverName, command);
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

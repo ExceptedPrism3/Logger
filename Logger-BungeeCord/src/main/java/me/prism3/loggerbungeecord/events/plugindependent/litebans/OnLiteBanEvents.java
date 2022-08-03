@@ -3,10 +3,8 @@ package me.prism3.loggerbungeecord.events.plugindependent.litebans;
 import litebans.api.Entry;
 import litebans.api.Events;
 import me.prism3.loggerbungeecord.Main;
-import me.prism3.loggerbungeecord.database.external.ExternalData;
-import me.prism3.loggerbungeecord.database.sqlite.SQLiteData;
-import me.prism3.loggerbungeecord.utils.litebanutil.UsernameFetcher;
 import me.prism3.loggerbungeecord.utils.FileHandler;
+import me.prism3.loggerbungeecord.utils.litebanutil.UsernameFetcher;
 import net.md_5.bungee.api.plugin.Listener;
 
 import java.io.BufferedWriter;
@@ -106,21 +104,21 @@ public class OnLiteBanEvents implements Listener, Runnable {
                     }
 
                     // External
-                    if (isExternal && main.getExternal().isConnected()) {
+                    if (isExternal ) {
 
                         try {
 
-                            ExternalData.liteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
+                            Main.getInstance().getDatabase().insertLitebans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
 
                         } catch (Exception e) { e.printStackTrace(); }
                     }
 
                     // SQLite
-                    if (isSqlite && main.getSqLite().isConnected()) {
+                    if (isSqlite ) {
 
                         try {
 
-                            SQLiteData.insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
+                            Main.getInstance().getSqLite().insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
 
                         } catch (Exception e) { e.printStackTrace(); }
                     }

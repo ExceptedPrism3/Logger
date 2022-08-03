@@ -1,8 +1,6 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -69,15 +67,15 @@ public class OnEntityDeath implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal  ) {
 
-                        ExternalData.entityDeath(Data.serverName, player, entityName, x, y, z, true);
+                        Main.getInstance().getDatabase().insertEntityDeath(Data.serverName, player, entityName, x, y, z, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
-                        SQLiteData.insertEntityDeath(Data.serverName, player, entityName, x, y, z, true);
+                        Main.getInstance().getSqLite().insertEntityDeath(Data.serverName, player, entityName, x, y, z, true);
 
                     }
 
@@ -119,21 +117,21 @@ public class OnEntityDeath implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal  ) {
 
                 try {
 
-                    ExternalData.entityDeath(Data.serverName, player, entityName, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertEntityDeath(Data.serverName, player, entityName, x, y, z, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertEntityDeath(Data.serverName, player, entityName, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertEntityDeath(Data.serverName, player, entityName, x, y, z, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

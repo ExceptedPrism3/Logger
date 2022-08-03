@@ -1,8 +1,6 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 
@@ -53,21 +51,21 @@ public class RAM implements Runnable {
                 }
 
                 // External
-                if (Data.isExternal && this.main.getExternal().isConnected()) {
+                if (Data.isExternal  ) {
 
                     try {
 
-                        ExternalData.ram(Data.serverName, maxMemory, usedMemory, freeMemory);
+                        Main.getInstance().getDatabase().insertRam(Data.serverName, maxMemory, usedMemory, freeMemory);
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
 
                 // SQLite
-                if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                if (Data.isSqlite ) {
 
                     try {
 
-                        SQLiteData.insertRAM(Data.serverName, maxMemory, usedMemory, freeMemory);
+                        Main.getInstance().getSqLite().insertRAM(Data.serverName, maxMemory, usedMemory, freeMemory);
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

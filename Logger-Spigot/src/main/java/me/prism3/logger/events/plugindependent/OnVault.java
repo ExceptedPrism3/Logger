@@ -2,8 +2,6 @@ package me.prism3.logger.events.plugindependent;
 
 import me.prism3.logger.Main;
 import me.prism3.logger.api.VaultUtil;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -74,15 +72,15 @@ public class OnVault implements Listener, Runnable {
 
                                 }
 
-                                if (Data.isExternal && this.main.getExternal().isConnected()) {
+                                if (Data.isExternal  ) {
 
-                                    ExternalData.vault(Data.serverName, player, oldBalance, newBalance, true);
+                                    Main.getInstance().getDatabase().insertVault(Data.serverName, player, oldBalance, newBalance, true);
 
                                 }
 
-                                if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                                if (Data.isSqlite ) {
 
-                                    SQLiteData.insertVault(Data.serverName, player, oldBalance, newBalance, true);
+                                    Main.getInstance().getSqLite().insertVault(Data.serverName, player, oldBalance, newBalance, true);
 
                                 }
 
@@ -125,21 +123,21 @@ public class OnVault implements Listener, Runnable {
                         }
 
                         // External
-                        if (Data.isExternal && this.main.getExternal().isConnected()) {
+                        if (Data.isExternal  ) {
 
                             try {
 
-                                ExternalData.vault(Data.serverName, player, oldBalance, newBalance, player.hasPermission(Data.loggerStaffLog));
+                                Main.getInstance().getDatabase().insertVault(Data.serverName, player, oldBalance, newBalance, player.hasPermission(Data.loggerStaffLog));
 
                             } catch (Exception e) { e.printStackTrace(); }
                         }
 
                         // External
-                        if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                        if (Data.isSqlite ) {
 
                             try {
 
-                                SQLiteData.insertVault(Data.serverName, player, oldBalance, newBalance, player.hasPermission(Data.loggerStaffLog));
+                                Main.getInstance().getSqLite().insertVault(Data.serverName, player, oldBalance, newBalance, player.hasPermission(Data.loggerStaffLog));
 
                             } catch (Exception exception) { exception.printStackTrace(); }
                         }

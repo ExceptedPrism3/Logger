@@ -1,11 +1,15 @@
 package me.prism3.logger.database.external;
 
-import java.sql.*;
+import me.prism3.logger.Main;
+import me.prism3.logger.utils.Data;
+
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import me.prism3.logger.Main;
-import me.prism3.logger.utils.Data;
 
 public class ExternalUpdater {
 
@@ -34,7 +38,7 @@ public class ExternalUpdater {
   public static void updater() {
     final Main main = Main.getInstance();
 
-    if (Data.isExternal && main.getExternal().isConnected()) {
+    if (Data.isExternal ) {
       // Primary Key removal and adding method
       try (final Connection connection = main.getExternal().getHikari().getConnection();
            final Statement stsm = connection.createStatement()) {

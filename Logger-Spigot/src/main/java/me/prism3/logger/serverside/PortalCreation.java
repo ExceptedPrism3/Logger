@@ -1,8 +1,6 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.event.EventHandler;
@@ -52,21 +50,21 @@ public class PortalCreation implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal  ) {
 
                 try {
 
-                    ExternalData.portalCreate(Data.serverName, worldName, reason);
+                    this.main.getDatabase().insertPortalCreate(Data.serverName, worldName, reason.toString());
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertPortalCreate(Data.serverName, worldName, reason);
+                    Main.getInstance().getSqLite().insertPortalCreate(Data.serverName, worldName, reason);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

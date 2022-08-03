@@ -1,8 +1,6 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.events.spy.OnBookSpy;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -74,14 +72,14 @@ public class OnBook implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal  ) {
 
-                        ExternalData.bookEditing(Data.serverName, player, pageCount, pageContent, signature, true);
+                        Main.getInstance().getDatabase().insertBookEditing(Data.serverName, player, pageCount, pageContent, signature, true);
 
                     }
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
-                        SQLiteData.insertBook(Data.serverName, player, pageCount, pageContent, signature, true);
+                        Main.getInstance().getSqLite().insertBook(Data.serverName, player, pageCount, pageContent, signature, true);
 
                     }
 
@@ -123,21 +121,21 @@ public class OnBook implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal  ) {
 
                 try {
 
-                    ExternalData.bookEditing(Data.serverName, player, pageCount, pageContent, signature, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertBookEditing(Data.serverName, player, pageCount, pageContent, signature, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertBook(Data.serverName, player, pageCount, pageContent, signature, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertBook(Data.serverName, player, pageCount, pageContent, signature, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

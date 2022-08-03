@@ -1,8 +1,6 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.events.spy.OnAnvilSpy;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -89,15 +87,15 @@ private final Main main = Main.getInstance();
 
                                     }
 
-                                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                                    if (Data.isExternal ) {
 
-                                        ExternalData.anvil(Data.serverName, playerName, displayName, true);
+                                        Main.getInstance().getDatabase().insertAnvil(Data.serverName, playerName, displayName, true);
 
                                     }
 
-                                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                                    if (Data.isSqlite ) {
 
-                                        SQLiteData.insertAnvil(Data.serverName, player, displayName, true);
+                                        Main.getInstance().getSqLite().insertAnvil(Data.serverName, player, displayName, true);
 
                                     }
 
@@ -139,21 +137,21 @@ private final Main main = Main.getInstance();
                             }
 
                             // External
-                            if (Data.isExternal && this.main.getExternal().isConnected()) {
+                            if (Data.isExternal ) {
 
                                 try {
 
-                                    ExternalData.anvil(Data.serverName, playerName, displayName, player.hasPermission(Data.loggerStaffLog));
+                                    Main.getInstance().getDatabase().insertAnvil(Data.serverName, playerName, displayName, player.hasPermission(Data.loggerStaffLog));
 
                                 } catch (Exception e) { e.printStackTrace(); }
                             }
 
                             // SQLite
-                            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                            if (Data.isSqlite ) {
 
                                 try {
 
-                                    SQLiteData.insertAnvil(Data.serverName, player, displayName, player.hasPermission(Data.loggerStaffLog));
+                                    Main.getInstance().getSqLite().insertAnvil(Data.serverName, player, displayName, player.hasPermission(Data.loggerStaffLog));
 
                                 } catch (Exception e) { e.printStackTrace(); }
                             }

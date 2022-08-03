@@ -1,8 +1,6 @@
 package me.prism3.logger.events.oninventories;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -64,15 +62,15 @@ public class OnFurnace implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal  ) {
 
-                        ExternalData.furnace(Data.serverName, player, item, amount, blockX, blockY, blockZ, true);
+                        Main.getInstance().getDatabase().insertFurnacenace(Data.serverName, player, item, amount, blockX, blockY, blockZ, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
-                        SQLiteData.insertFurnace(Data.serverName, player, item, amount, blockX, blockY, blockZ, true);
+                        Main.getInstance().getSqLite().insertFurnace(Data.serverName, player, item, amount, blockX, blockY, blockZ, true);
 
                     }
 
@@ -115,21 +113,21 @@ public class OnFurnace implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal  ) {
 
                 try {
 
-                    ExternalData.furnace(Data.serverName, player, item, amount, blockX, blockY, blockZ, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertFurnacenace(Data.serverName, player, item, amount, blockX, blockY, blockZ, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertFurnace(Data.serverName, player, item, amount, blockX, blockY, blockZ, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertFurnace(Data.serverName, player, item, amount, blockX, blockY, blockZ, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

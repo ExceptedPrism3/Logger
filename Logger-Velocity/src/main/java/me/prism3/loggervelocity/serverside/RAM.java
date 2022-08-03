@@ -1,8 +1,6 @@
 package me.prism3.loggervelocity.serverside;
 
 import me.prism3.loggervelocity.Main;
-import me.prism3.loggervelocity.database.external.ExternalData;
-import me.prism3.loggervelocity.database.sqlite.SQLiteData;
 import me.prism3.loggervelocity.utils.FileHandler;
 
 import java.io.BufferedWriter;
@@ -54,21 +52,21 @@ public class RAM implements Runnable {
                 }
 
                 // External
-                if (isExternal && main.getExternal().isConnected()) {
+                if (isExternal ) {
 
                     try {
 
-                        ExternalData.ram(serverName, maxMemory, usedMemory, freeMemory);
+                        Main.getInstance().getDatabase().insertRam(serverName, maxMemory, usedMemory, freeMemory);
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
 
                 // SQLite
-                if (isSqlite && main.getSqLite().isConnected()) {
+                if (isSqlite ) {
 
                     try {
 
-                        SQLiteData.insertRAM(serverName, maxMemory, usedMemory, freeMemory);
+                        Main.getInstance().getSqLite().insertRAM(serverName, maxMemory, usedMemory, freeMemory);
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

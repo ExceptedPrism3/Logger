@@ -1,8 +1,6 @@
 package me.prism3.loggerbungeecord.events.oncommands;
 
 import me.prism3.loggerbungeecord.Main;
-import me.prism3.loggerbungeecord.database.external.ExternalData;
-import me.prism3.loggerbungeecord.database.sqlite.SQLiteData;
 import me.prism3.loggerbungeecord.utils.Data;
 import me.prism3.loggerbungeecord.utils.FileHandler;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -79,16 +77,16 @@ public class OnCommand implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal ) {
 
 
-                        ExternalData.playerCommands(Data.serverName, playerName, command, true);
+                        Main.getInstance().getDatabase().insertPlayerCommands(Data.serverName, playerName, command, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
-                        SQLiteData.insertPlayerCommands(Data.serverName, playerName, command, true);
+                        Main.getInstance().getSqLite().insertPlayerCommands(Data.serverName, playerName, command, true);
 
                     }
 
@@ -131,21 +129,21 @@ public class OnCommand implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal ) {
 
                 try {
 
-                    ExternalData.playerCommands(Data.serverName, playerName, command, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerCommands(Data.serverName, playerName, command, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertPlayerCommands(Data.serverName, playerName, command, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerCommands(Data.serverName, playerName, command, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

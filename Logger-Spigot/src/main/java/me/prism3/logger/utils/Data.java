@@ -1,5 +1,7 @@
 package me.prism3.logger.utils;
 
+import com.carpour.loggercore.database.data.DatabaseCredentials;
+import com.carpour.loggercore.database.data.Options;
 import me.prism3.logger.Main;
 
 import java.time.format.DateTimeFormatter;
@@ -18,11 +20,7 @@ public class Data {
     public static String pluginVersion;
     public static String serverName;
     public static String gameModeConf;
-    public static String dbType;
-    public static String dbHost;
-    public static String dbUserName;
-    public static String dbPassword;
-    public static String dbName;
+
     public static String langPath;
     public static String fileType;
     public static String selectedLang;
@@ -42,8 +40,7 @@ public class Data {
     public static int ramPercent;
     public static int tpsMedium;
     public static int tpsCritical;
-    public static int dbPort;
-    public static int externalDataDel;
+
     public static int sqliteDataDel;
     public static int allowedBackups;
 
@@ -74,7 +71,8 @@ public class Data {
     public static String loggerSpyBypass;
     public static String loggerSpy;
     public static String loggerReload;
-
+public static Options options;
+public static DatabaseCredentials databaseCredentials;
     public void initializeDateFormatter() {
 
         dateTimeFormatter = DateTimeFormatter.ofPattern(Objects.requireNonNull(this.main.getConfig().getString("Time-Formatter")));
@@ -86,17 +84,24 @@ public class Data {
         configVersion = this.main.getConfig().getString("Config");
         serverName = this.main.getConfig().getString("Server-Name");
         gameModeConf = this.main.getConfig().getString("Game-Mode");
-        dbType = this.main.getConfig().getString("Database.Type");
-        dbHost = this.main.getConfig().getString("Database.Host");
-        dbUserName = this.main.getConfig().getString("Database.Username");
-        dbPassword = this.main.getConfig().getString("Database.Password");
-        dbName = this.main.getConfig().getString("Database.Database");
         langPath = "messages";
         fileType = ".yml";
         selectedLang = this.main.getConfig().getString("Language");
         discordSupportServer = "https://discord.gg/MfR5mcpVfX";
         pluginPrefix = this.main.getConfig().getString("Plugin-Prefix");
 
+    }
+    private void initializeDatabaseCredentials()
+    {
+        Data.databaseCredentials =  new DatabaseCredentials(
+                this.main.getConfig().getString("Database.Type"),
+                this.main.getConfig().getString("Database.Host"),
+                this.main.getConfig().getString("Database.Username"),
+                this.main.getConfig().getString("Database.Password"),
+                this.main.getConfig().getString("Database.Database"),
+                this.main.getConfig().getInt("Database.Port"),
+                true
+                );
     }
 
     public void initializeListOfStrings() {
@@ -117,8 +122,6 @@ public class Data {
         ramPercent = this.main.getConfig().getInt("RAM.Percent");
         tpsMedium = this.main.getConfig().getInt("TPS.Value-Medium");
         tpsCritical = this.main.getConfig().getInt("TPS.Value-Critical");
-        dbPort = this.main.getConfig().getInt("Database.Port");
-        externalDataDel = this.main.getConfig().getInt("Database.Data-Deletion");
         sqliteDataDel = this.main.getConfig().getInt("SQLite.Data-Deletion");
         allowedBackups = this.main.getConfig().getInt("Player-Death-Backup.Max-Backup");
 
@@ -141,7 +144,7 @@ public class Data {
         isBlacklisted = this.main.getConfig().getBoolean("Player-Commands.Blacklist-Commands");
         isCommandsToBlock = this.main.getConfig().getBoolean("Player-Commands.Blacklist-Commands");
         isCommandsToLog = this.main.getConfig().getBoolean("Player-Commands.Whitelist-Commands");
-        isPlayerIP = this.main.getConfig().getBoolean("Player-Join.Player-IP");
+        isPlayerIP =
         isConsoleCommands = this.main.getConfig().getBoolean("Console-Commands.Blacklist-Commands");
         isRegistration = this.main.getConfig().getBoolean("Log-Player.Registration");
         isPlayerDeathBackup = this.main.getConfig().getBoolean("Player-Death-Backup.Enabled");

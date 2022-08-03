@@ -1,8 +1,6 @@
 package me.prism3.loggerbungeecord.events;
 
 import me.prism3.loggerbungeecord.Main;
-import me.prism3.loggerbungeecord.database.external.ExternalData;
-import me.prism3.loggerbungeecord.database.sqlite.SQLiteData;
 import me.prism3.loggerbungeecord.utils.Data;
 import me.prism3.loggerbungeecord.utils.FileHandler;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -56,15 +54,15 @@ public class OnChat implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal) {
 
-                        ExternalData.playerChat(Data.serverName, player.getName(), message, true);
+                        Main.getInstance().getDatabase().insertPlayerChat(Data.serverName, player.getName(), message, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
-                        SQLiteData.insertPlayerChat(Data.serverName, player.getName(), message, true);
+                        Main.getInstance().getSqLite().insertPlayerChat(Data.serverName, player.getName(), message, true);
 
                     }
 
@@ -106,21 +104,21 @@ public class OnChat implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal ) {
 
                 try {
 
-                    ExternalData.playerChat(Data.serverName, player.getName(), message, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerChat(Data.serverName, player.getName(), message, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertPlayerChat(Data.serverName, player.getName(), message, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerChat(Data.serverName, player.getName(), message, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

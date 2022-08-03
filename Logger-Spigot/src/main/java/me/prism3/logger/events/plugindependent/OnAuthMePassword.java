@@ -2,8 +2,6 @@ package me.prism3.logger.events.plugindependent;
 
 import fr.xephi.authme.events.FailedLoginEvent;
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -57,15 +55,15 @@ public class OnAuthMePassword implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal  ) {
 
-                        ExternalData.wrongPassword(Data.serverName, player, true);
+                        Main.getInstance().getDatabase().insertWrongPasswordongPassword(Data.serverName, player, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
-                        SQLiteData.insertWrongPassword(Data.serverName, player, true);
+                        Main.getInstance().getSqLite().insertWrongPassword(Data.serverName, player, true);
 
                     }
 
@@ -107,21 +105,21 @@ public class OnAuthMePassword implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal  ) {
 
                 try {
 
-                    ExternalData.wrongPassword(Data.serverName, player, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertWrongPasswordongPassword(Data.serverName, player, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception event) { event.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertWrongPassword(Data.serverName, player, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertWrongPassword(Data.serverName, player, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

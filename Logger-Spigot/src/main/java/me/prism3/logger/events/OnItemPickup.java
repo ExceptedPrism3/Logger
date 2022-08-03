@@ -1,8 +1,6 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.external.ExternalData;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -75,15 +73,15 @@ public class OnItemPickup implements Listener {
 
                     }
 
-                    if (Data.isExternal && this.main.getExternal().isConnected()) {
+                    if (Data.isExternal  ) {
 
-                        ExternalData.itemPickup(Data.serverName, player, item, amount, blockX, blockY, blockZ, itemName, true);
+                        Main.getInstance().getDatabase().insertItemPickup(Data.serverName, player, item, amount, blockX, blockY, blockZ, itemName, true);
 
                     }
 
-                    if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+                    if (Data.isSqlite ) {
 
-                        SQLiteData.insertItemPickup(Data.serverName, player, item, blockX, amount, blockY, blockZ, itemName, true);
+                        Main.getInstance().getSqLite().insertItemPickup(Data.serverName, player, item, blockX, amount, blockY, blockZ, itemName, true);
 
                     }
 
@@ -125,21 +123,21 @@ public class OnItemPickup implements Listener {
             }
 
             // External
-            if (Data.isExternal && this.main.getExternal().isConnected()) {
+            if (Data.isExternal  ) {
 
                 try {
 
-                    ExternalData.itemPickup(Data.serverName, player, item, amount, blockX, blockY, blockZ, itemName, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertItemPickup(Data.serverName, player, item, amount, blockX, blockY, blockZ, itemName, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite && this.main.getSqLite().isConnected()) {
+            if (Data.isSqlite ) {
 
                 try {
 
-                    SQLiteData.insertItemPickup(Data.serverName, player, item, amount, blockX, blockY, blockZ, itemName, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertItemPickup(Data.serverName, player, item, amount, blockX, blockY, blockZ, itemName, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }
