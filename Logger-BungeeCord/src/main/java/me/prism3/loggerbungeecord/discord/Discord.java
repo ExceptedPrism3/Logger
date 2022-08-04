@@ -19,11 +19,11 @@ public class Discord {
     private TextChannel playerLoginChannel;
     private TextChannel playerLeaveChannel;
 
+    private TextChannel serverSwitchChannel;
     private TextChannel serverReloadChannel;
     private TextChannel serverStartChannel;
     private TextChannel serverStopChannel;
     private TextChannel ramChannel;
-
     private TextChannel liteBansChannel;
 
     public void run() {
@@ -55,6 +55,7 @@ public class Discord {
             final String playerLoginChannelID = this.main.getDiscordFile().getString("Discord.Player-Login.Channel-ID");
 
             final String playerLeaveChannelID = this.main.getDiscordFile().getString("Discord.Player-Leave.Channel-ID");
+            final String serverSwitchChannelID = this.main.getDiscordFile().getString("Discord.Server-Switch-Channel-ID");
 
             final String serverReloadChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Restart.Channel-ID");
 
@@ -97,6 +98,10 @@ public class Discord {
 
                     this.playerLeaveChannel = this.jda.getTextChannelById(playerLeaveChannelID);
 
+                }
+
+                if (this.isValid(serverSwitchChannelID, "Log-Player.Switch")) {
+                    this.serverSwitchChannel = this.jda.getTextChannelById(serverSwitchChannelID);
                 }
 
                 if (this.isValid(serverReloadChannelID, "Log-Server.Reload")) {
@@ -168,6 +173,11 @@ public class Discord {
     public void playerLeave(ProxiedPlayer player, String content, boolean contentInAuthorLine) {
 
         this.discordUtil(player, content, contentInAuthorLine, this.playerLeaveChannel);
+    }
+
+    public void playerServerSwitch(ProxiedPlayer player, String content, boolean contentInAuthorLine) {
+
+        this.discordUtil(player, content, contentInAuthorLine, this.serverSwitchChannel);
     }
 
     public void serverReload(String player, String content, boolean contentInAuthorLine) {
