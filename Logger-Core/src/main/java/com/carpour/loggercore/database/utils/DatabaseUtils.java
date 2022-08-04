@@ -9,6 +9,7 @@ import java.sql.Statement;
 public class DatabaseUtils {
 
     private DatabaseUtils(){}
+
     public static boolean checkConnectionIfAlright(HikariDataSource dataSource) {
 
         try (final Connection connection = dataSource.getConnection();
@@ -16,9 +17,8 @@ public class DatabaseUtils {
 
             statement.execute("SELECT 1");
 
-        } catch (SQLException e) { return false; }
+        } catch (final SQLException e) { return false; }
 
         return true;
     }
-
 }

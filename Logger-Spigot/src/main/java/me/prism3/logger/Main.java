@@ -7,7 +7,7 @@ import de.jeff_media.updatechecker.UpdateChecker;
 import me.prism3.logger.api.*;
 import me.prism3.logger.commands.CommandManager;
 import me.prism3.logger.commands.subcommands.PlayerInventory;
-import me.prism3.logger.database.sqlite.registration.SQLiteRegistration;
+import me.prism3.logger.database.sqlite.global.registration.SQLiteRegistration;
 import me.prism3.logger.discord.Discord;
 import me.prism3.logger.discord.DiscordFile;
 import me.prism3.logger.events.*;
@@ -35,17 +35,17 @@ public class Main extends JavaPlugin {
 
     private Messages messages;
 
-private DataSourceInterface database;
+    private DataSourceInterface database;
 
-private Options options;
+    private Options options;
 
-private DataSourceInterface sqLite;
+    private DataSourceInterface sqLite;
     private SQLiteRegistration sqLiteReg;
 
     private Discord discord;
     private DiscordFile discordFile;
 
-    private final NmsVersions version = NmsVersions.valueOf(Bukkit.getServer().getClass().getPackage().getName().replace(".",  ",").split(",")[3]);
+    private final NmsVersions version = NmsVersions.valueOf(Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3]);
 
     @Override
     public void onEnable() {
@@ -92,7 +92,6 @@ private DataSourceInterface sqLite;
                     .setChangelogLink(Data.resource_ID)
                     .setNotifyByPermissionOnJoin(Data.loggerUpdate)
                     .checkNow();
-
         }
 
         this.loadPluginDepends();
@@ -110,7 +109,6 @@ private DataSourceInterface sqLite;
         if (!this.messages.getIsValid()) return;
 
         new Stop().run();
-
 
         if (isSqlite && this.sqLite.isConnected()) this.sqLite.disconnect();
 
@@ -172,11 +170,8 @@ private DataSourceInterface sqLite;
         this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new RAM(), 300L, Data.ramTpsChecker);
 
         // Version Exceptions
-        if (this.getVersion().isAtLeast(NmsVersions.v1_13_R1)) {
-
+        if (this.getVersion().isAtLeast(NmsVersions.v1_13_R1))
             this.getServer().getPluginManager().registerEvents(new OnWoodStripping(), this);
-
-        }
     }
 
     private void commandsInitializer() {
@@ -189,16 +184,16 @@ private DataSourceInterface sqLite;
     private void databaseSetup() {
 
         try {
-            this.database = new MySQL(Data.databaseCredentials, Data.options);
-        } catch (SQLException e) {
-            this.getLogger().severe(e.getMessage());
-        }
 
-//TODO chno had registration
+            this.database = new MySQL(Data.databaseCredentials, Data.options);
+
+        } catch (SQLException e) { this.getLogger().severe(e.getMessage()); }
     }
 
     private void loadPluginDepends() {
-this.options = new Options();
+
+        this.options = new Options();
+
         if (EssentialsUtil.getEssentialsAPI() != null) {
 
             this.getServer().getPluginManager().registerEvents(new OnAFK(), this);
@@ -227,8 +222,9 @@ this.options = new Options();
                 this.getServer().getPluginManager().registerEvents(vault, this);
                 this.getServer().getScheduler().scheduleSyncRepeatingTask(this, vault, 10L, Data.vaultChecker);
             }
-            this.options.setVaultEnabled(true);
+
             this.getLogger().info("Vault Plugin Detected!");
+            this.options.setVaultEnabled(true);
         }
 
         if (LiteBansUtil.getLiteBansAPI() != null) {
@@ -266,11 +262,10 @@ this.options = new Options();
 
             this.getLogger().info("ViaVersion Plugin Detected!");
 
-            this.options.setAtleastVersion(true);
+            this.options.setViaVersion(true);
         }
         this.options.setDataDelete(this.getConfig().getInt("Database.Data-Deletion"));
         this.options.setPlayerIPEnabled(this.getConfig().getBoolean("Player-Join.Player-IP"));
-
     }
 
     private boolean langChecker() {
@@ -278,15 +273,13 @@ this.options = new Options();
         this.messages = new Messages();
 
         if (!this.messages.getIsValid()) {
-
             this.getServer().getPluginManager().disablePlugin(this);
             return false;
-        } return true;
+        }
+        return true;
     }
 
     public static Main getInstance() { return instance; }
-
-
 
     public SQLiteRegistration getSqLiteReg() { return this.sqLiteReg; }
 
@@ -298,13 +291,7 @@ this.options = new Options();
 
     public Messages getMessages() { return this.messages; }
 
-    public DataSourceInterface getDatabase()
-    {
-        return this.database;
-    }
+    public DataSourceInterface getDatabase() { return this.database; }
 
-    public DataSourceInterface getSqLite()
-    {
-        return this.sqLite;
-    }
+    public DataSourceInterface getSqLite() { return this.sqLite; }
 }

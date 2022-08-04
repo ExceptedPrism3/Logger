@@ -13,6 +13,4 @@ public final class DatabaseCredentials {
     private final int dbPort;
     private final boolean isEnabled;
 
-
-    
 }

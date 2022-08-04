@@ -16,12 +16,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class AbstractDataSource implements DataSourceInterface {
+
     protected static final List<String> tablesNames = Stream.of("player_chat", "player_commands", "player_sign_text",
             "player_death", "player_teleport", "player_join", "player_leave", "block_place", "block_break",
             "player_kick", "player_level", "Bucket_fill", "bucket_empty", "anvil", "item_drop", "enchanting",
             "book_editing", "item_pickup", "furnace", "game_mode", "crafting", "registration", "server_start",
             "server_stop", "console_commands", "ram", "tps", "portal_creation", "rcon", "primed_tnt", "command_block",
             "chest_interaction", "entity_death", "logger_playertime").collect(Collectors.toCollection(ArrayList::new));
+
     protected final DatabaseCredentials databaseCredentials;
     private final String className;
     protected final Logger logger = Logger.getLogger(AbstractDataSource.class.getName());
@@ -30,41 +32,32 @@ public abstract class AbstractDataSource implements DataSourceInterface {
     protected final Options options;
 
     protected AbstractDataSource(DatabaseCredentials databaseCredentials, Options options,
-                                  String className) throws SQLException {
+                                 String className) throws SQLException {
 
         this.className = className;
         this.databaseCredentials = databaseCredentials;
         this.options = options;
         this.initializeDataSource();
 
-
         if (!DatabaseUtils.checkConnectionIfAlright(this.dataSource))
-        {
-
             throw new SQLException("Failed to connect to database!");
 
-        }
         this.createTables();
 
     }
 
-
-
-    public void createTables() {
-    this.createPlayerTime();
-
-    }
-
+    public void createTables() { this.createPlayerTime(); }
 
     private void createPlayerTime() {
+
         try (final Connection connection = this.dataSource.getConnection();
              final Statement statement = connection.createStatement()) {
 
-            String sql = "CREATE TABLE IF NOT EXISTS logger_playertime(`player_name` VARCHAR(30)  NOT NULL, player_time int UNSIGNED DEFAULT 0, PRIMARY KEY(player_name)) CHARACTER SET = utf8;";
+            final String sql = "CREATE TABLE IF NOT EXISTS logger_playertime(`player_name` VARCHAR(30)  NOT NULL," +
+                    " player_time int UNSIGNED DEFAULT 0, PRIMARY KEY(player_name)) CHARACTER SET = utf8;";
             statement.execute(sql);
-        } catch (SQLException e) {
-            this.logger.log(Level.SEVERE, e.getMessage(), e);
-        }
+
+        } catch (SQLException e) { this.logger.log(Level.SEVERE, e.getMessage(), e); }
     }
 
 

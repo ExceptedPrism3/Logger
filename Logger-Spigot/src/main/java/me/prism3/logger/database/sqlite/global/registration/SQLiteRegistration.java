@@ -1,4 +1,4 @@
-package me.prism3.logger.database.sqlite.registration;
+package me.prism3.logger.database.sqlite.global.registration;
 
 import me.prism3.logger.Main;
 

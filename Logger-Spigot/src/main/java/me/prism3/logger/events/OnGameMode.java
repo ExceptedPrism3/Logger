@@ -64,7 +64,7 @@ public class OnGameMode implements Listener {
 
                         if (Data.isExternal  ) {
 
-                            Main.getInstance().getDatabase().insertGamemode(Data.serverName, player, gameMode, true);
+                            Main.getInstance().getDatabase().insertGameMode(Data.serverName, player, gameMode, true);
 
                         }
 
@@ -116,7 +116,7 @@ public class OnGameMode implements Listener {
 
                     try {
 
-                        Main.getInstance().getDatabase().insertGamemode(Data.serverName, player, gameMode, player.hasPermission(Data.loggerStaffLog));
+                        Main.getInstance().getDatabase().insertGameMode(Data.serverName, player, gameMode, player.hasPermission(Data.loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

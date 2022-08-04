@@ -1,7 +1,7 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.sqlite.registration.SQLiteDataRegistration;
+import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
 import me.prism3.logger.events.plugindependent.OnViaVer;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;

@@ -71,8 +71,9 @@ public class Data {
     public static String loggerSpyBypass;
     public static String loggerSpy;
     public static String loggerReload;
-public static Options options;
-public static DatabaseCredentials databaseCredentials;
+    public static Options options;
+    public static DatabaseCredentials databaseCredentials;
+
     public void initializeDateFormatter() {
 
         dateTimeFormatter = DateTimeFormatter.ofPattern(Objects.requireNonNull(this.main.getConfig().getString("Time-Formatter")));
@@ -91,9 +92,9 @@ public static DatabaseCredentials databaseCredentials;
         pluginPrefix = this.main.getConfig().getString("Plugin-Prefix");
 
     }
-    private void initializeDatabaseCredentials()
-    {
-        Data.databaseCredentials =  new DatabaseCredentials(
+
+    private void initializeDatabaseCredentials() {
+        Data.databaseCredentials = new DatabaseCredentials(
                 this.main.getConfig().getString("Database.Type"),
                 this.main.getConfig().getString("Database.Host"),
                 this.main.getConfig().getString("Database.Username"),
@@ -101,7 +102,7 @@ public static DatabaseCredentials databaseCredentials;
                 this.main.getConfig().getString("Database.Database"),
                 this.main.getConfig().getInt("Database.Port"),
                 true
-                );
+        );
     }
 
     public void initializeListOfStrings() {
@@ -144,7 +145,7 @@ public static DatabaseCredentials databaseCredentials;
         isBlacklisted = this.main.getConfig().getBoolean("Player-Commands.Blacklist-Commands");
         isCommandsToBlock = this.main.getConfig().getBoolean("Player-Commands.Blacklist-Commands");
         isCommandsToLog = this.main.getConfig().getBoolean("Player-Commands.Whitelist-Commands");
-        isPlayerIP =
+        isPlayerIP = this.main.getConfig().getBoolean("Player-Join.Player-IP");
         isConsoleCommands = this.main.getConfig().getBoolean("Console-Commands.Blacklist-Commands");
         isRegistration = this.main.getConfig().getBoolean("Log-Player.Registration");
         isPlayerDeathBackup = this.main.getConfig().getBoolean("Player-Death-Backup.Enabled");

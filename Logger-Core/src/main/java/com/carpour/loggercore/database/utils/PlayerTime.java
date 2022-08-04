@@ -3,44 +3,44 @@ package com.carpour.loggercore.database.utils;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Map;
 
 public class PlayerTime {
-    public final static HashMap<String, PlayerTime> playersTime = new HashMap<>();
+
+    public static final Map<String, PlayerTime> playersTime = new HashMap<>();
     private LocalDateTime joinTime;
     private final String playerName;
     private final String serverName;
-    public PlayerTime(String serverName, String playerName)
-    {
+
+    public PlayerTime(String serverName, String playerName) {
         this.playerName = playerName;
-        setJoinTimeToNow();
+        this.setJoinTimeToNow();
         this.serverName = serverName;
         PlayerTime.playersTime.put(this.playerName, this);
-
-
     }
-    public void setJoinTimeToNow()
-    {
+
+    public void setJoinTimeToNow() {
         this.joinTime = LocalDateTime.now();
     }
-    public long getCurrentSessionTime()
-    {
+
+    public long getCurrentSessionTime() {
         return Duration.between(this.joinTime, LocalDateTime.now()).getSeconds();
     }
 
     public String getPlayerName() {
-        return playerName;
+        return this.playerName;
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     @Override
     public String toString() {
         return "PlayerTime{" +
-                "joinTime=" + joinTime +
-                ", playerName='" + playerName + '\'' +
-                ", serverName='" + serverName + '\'' +
+                "joinTime=" + this.joinTime +
+                ", playerName='" + this.playerName + '\'' +
+                ", serverName='" + this.serverName + '\'' +
                 '}';
     }
 }

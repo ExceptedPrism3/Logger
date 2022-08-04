@@ -1,5 +1,7 @@
 package me.prism3.logger.events.misc;
 
+import com.carpour.loggercore.database.entity.Coordinates;
+import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.FileHandler;
@@ -41,6 +43,62 @@ public class OnPrimedTNT implements Listener {
             final int y = event.getLocation().getBlockY();
             final int z = event.getLocation().getBlockZ();
 
+            final Coordinates coordinates = new Coordinates(x, y, z, worldName);
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+
+            // File Logging
+            if (isLogToFiles) {
+
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+
+                    try {
+
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Primed-TNT-Staff")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()) + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
+
+                    }
+                } else {
+
+                    try {
+
+                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPrimedTNTFile(), true));
+                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Primed-TNT")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()) + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
+
+                    }
+                }
+            }
+
+            // Discord Integration
+            if (!player.hasPermission(loggerExemptDiscord)) {
+
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+
+                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Primed-TNT-Staff")).isEmpty()) {
+
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Primed-TNT-Staff")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()), false);
+
+                    }
+                } else {
+
+                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Primed-TNT")).isEmpty()) {
+
+                        this.main.getDiscord().primedTNT(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Primed-TNT")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()), false);
+                    }
+                }
+            }
+/*
             // Log To Files
             if (isLogToFiles) {
 
@@ -67,7 +125,7 @@ public class OnPrimedTNT implements Listener {
 
                     if (isExternal  ) {
 
-                        Main.getInstance().getDatabase().insertPrimedtnt(serverName, player, x, y, z, true);
+                        Main.getInstance().getDatabase().insertPrimedTnt(serverName, new EntityPlayer(), dsa);
 
                     }
 
@@ -113,23 +171,23 @@ public class OnPrimedTNT implements Listener {
                     }
                 }
             }
-
+*/
             // External
-            if (isExternal  ) {
+            if (isExternal) {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPrimedtnt(serverName, player, x, y, z, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPrimedTnt(serverName, entityPlayer, coordinates);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (isSqlite ) {
+            if (isSqlite) {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPrimedTNT(serverName, player, x, y, z, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPrimedTnt(serverName, entityPlayer, coordinates);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
