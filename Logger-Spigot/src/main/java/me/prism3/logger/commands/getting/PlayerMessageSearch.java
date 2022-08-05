@@ -1,19 +1,14 @@
 package me.prism3.logger.commands.getting;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import me.prism3.logger.Main;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 public class PlayerMessageSearch {
-
-  public static Connection getNewConnection() throws SQLException {
-    return Main.getInstance().getExternal().getHikari().getConnection();
-  }
-
+//FIXME
   private CommandSender sender;
   private String searchedPlayer;
   private Pager pager;
@@ -39,7 +34,7 @@ public class PlayerMessageSearch {
   public void fetchAndSendResults() {
     String sql =
             "SELECT message, id, date FROM player_chat WHERE player_name=? ORDER BY  DATE ASC, id DESC LIMIT 10 OFFSET ?";
-    try (Connection connection = PlayerMessageSearch.getNewConnection();
+    try (Connection connection = null;
          final PreparedStatement getStatement = connection.prepareStatement(sql)) {
       getStatement.setString(1, this.searchedPlayer);
       getStatement.setInt(2, this.pager.getCurrentOffset());
@@ -62,7 +57,7 @@ public class PlayerMessageSearch {
    * @return int
    */
   public static int getMessagesCount(String playerName) {
-    try (Connection connection = PlayerMessageSearch.getNewConnection();
+    try (Connection connection = null;
          final PreparedStatement getStatement = connection
                  .prepareStatement("SELECT COUNT(*) as total FROM player_chat WHERE player_name = ?")) {
       getStatement.setString(1, playerName);
@@ -80,7 +75,7 @@ public class PlayerMessageSearch {
   /**
    * Send results to sender
    *
-   * @param ResultSet rs
+   *
    */
   private void sendResults(ResultSet rs) {
     // TODO format datetime 
@@ -94,4 +89,5 @@ public class PlayerMessageSearch {
       e.printStackTrace();
     }
   }
+
 }
