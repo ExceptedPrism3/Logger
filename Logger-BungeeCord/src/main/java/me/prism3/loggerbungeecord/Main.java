@@ -13,6 +13,7 @@ import me.prism3.loggerbungeecord.discord.DiscordFile;
 import me.prism3.loggerbungeecord.events.OnChat;
 import me.prism3.loggerbungeecord.events.OnLeave;
 import me.prism3.loggerbungeecord.events.OnLogin;
+import me.prism3.loggerbungeecord.events.onServerSwitch;
 import me.prism3.loggerbungeecord.events.oncommands.OnCommand;
 import me.prism3.loggerbungeecord.events.plugindependent.litebans.OnLiteBanEvents;
 import me.prism3.loggerbungeecord.events.plugindependent.litebans.OnPartyAndFriends;
@@ -76,6 +77,7 @@ public final class Main extends Plugin {
         this.getProxy().getPluginManager().registerListener(this, new OnChat());
         this.getProxy().getPluginManager().registerListener(this, new OnLogin());
         this.getProxy().getPluginManager().registerListener(this, new OnLeave());
+        this.getProxy().getPluginManager().registerListener(this, new onServerSwitch());
         this.getProxy().getPluginManager().registerListener(this, new OnReload());
         this.getProxy().getPluginManager().registerListener(this, new OnCommand());
 

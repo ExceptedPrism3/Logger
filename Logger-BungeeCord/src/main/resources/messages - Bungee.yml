@@ -38,6 +38,8 @@ Discord:
   Player-Login: "**[%time%]** ||**%IP%**||"
   Player-Leave-Staff: "**[%time%]** **[%server%]** Left the server"
   Player-Leave: "**[%time%]** **[%server%]** Left the server"
+  Player-ServerSwitch-Staff: "**[%time%]** Has gone from server %from% to server %destination%!"
+  Player-ServerSwitch: "**[%time%]** Has gone from server %from% to server %destination%!"
   Server-Reload-Player-Staff: "**[%time%]** **[%server%]** Has reloaded the server"
   Server-Reload-Player: "**[%time%]** **[%server%]** Has reloaded the server"
 # Server Side Part
