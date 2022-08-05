@@ -1,5 +1,7 @@
 package me.prism3.logger.events.onversioncompatibility;
 
+import com.carpour.loggercore.database.entity.Coordinates;
+import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -21,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
+import static me.prism3.logger.utils.Data.loggerStaffLog;
 
 public class OnWoodStripping implements Listener {
 
@@ -85,20 +89,17 @@ public class OnWoodStripping implements Listener {
             final int z = event.getClickedBlock().getZ();
             final String logName = event.getClickedBlock().getType().name();
 
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final Coordinates coordinates = new Coordinates(x, y, z, worldName);
+
             // Log To Files
             if (Data.isLogToFiles) {
 
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping-Staff")).isEmpty()) {
-
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-
-                    }
+                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                         out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Version-Exceptions.Wood-Stripping-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%player%", playerName) + "\n");
                         out.close();
 
@@ -108,41 +109,27 @@ public class OnWoodStripping implements Listener {
                         e.printStackTrace();
 
                     }
+                } else {
 
-                    if (Data.isExternal  ) {
+                    try {
 
-                        Main.getInstance().getDatabase().insertWoodStrippingStripping(Data.serverName, player, logName, x, y, z, true);
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getWoodStrippingFile(), true));
+                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Version-Exceptions.Wood-Stripping")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%player%", playerName) + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
 
                     }
-
-                    if (Data.isSqlite ) {
-
-                        Main.getInstance().getSqLite().insertWoodStripping(Data.serverName, player, logName, x, y, z, true);
-
-                    }
-
-                    return;
-
-                }
-
-                try {
-
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getWoodStrippingFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Version-Exceptions.Wood-Stripping")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%player%", playerName) + "\n");
-                    out.close();
-
-                } catch (IOException e) {
-
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
                 }
             }
 
             // Discord Integration
             if (!player.hasPermission(Data.loggerExemptDiscord)) {
 
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping-Staff")).isEmpty()) {
 
@@ -159,21 +146,21 @@ public class OnWoodStripping implements Listener {
             }
 
             // External
-            if (Data.isExternal  ) {
+            if (Data.isExternal) {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertWoodStrippingStripping(Data.serverName, player, logName, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertWoodStripping(Data.serverName, entityPlayer, logName, coordinates);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite ) {
+            if (Data.isSqlite) {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertWoodStripping(Data.serverName, player, logName, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertWoodStripping(Data.serverName, entityPlayer, logName, coordinates);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

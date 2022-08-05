@@ -1,5 +1,7 @@
 package me.prism3.logger.events;
 
+import com.carpour.loggercore.database.entity.Coordinates;
+import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -17,6 +19,8 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
+
+import static me.prism3.logger.utils.Data.loggerStaffLog;
 
 public class OnEntityDeath implements Listener {
 
@@ -43,21 +47,31 @@ public class OnEntityDeath implements Listener {
             final int y = entity.getLocation().getBlockY();
             final int z = entity.getLocation().getBlockZ();
 
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final Coordinates coordinates = new Coordinates(x, y, z, worldName);
+
             // Log To Files
             if (Data.isLogToFiles) {
 
                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Entity-Death-Staff")).isEmpty()) {
+                    try {
 
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Entity-Death-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Entity-Death-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
+                        out.close();
 
+                    } catch (IOException e) {
+
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
                     }
+                } else {
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Entity-Death-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getEntityDeathFile(), true));
+                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Entity-Death")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -66,34 +80,6 @@ public class OnEntityDeath implements Listener {
                         e.printStackTrace();
 
                     }
-
-                    if (Data.isExternal  ) {
-
-                        Main.getInstance().getDatabase().insertEntityDeath(Data.serverName, player, entityName, x, y, z, true);
-
-                    }
-
-                    if (Data.isSqlite ) {
-
-                        Main.getInstance().getSqLite().insertEntityDeath(Data.serverName, player, entityName, x, y, z, true);
-
-                    }
-
-                    return;
-
-                }
-
-                try {
-
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getEntityDeathFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Entity-Death")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-                    out.close();
-
-                } catch (IOException e) {
-
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
                 }
             }
 
@@ -117,21 +103,21 @@ public class OnEntityDeath implements Listener {
             }
 
             // External
-            if (Data.isExternal  ) {
+            if (Data.isExternal) {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertEntityDeath(Data.serverName, player, entityName, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertEntityDeath(Data.serverName, entityPlayer, entityName, coordinates);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite ) {
+            if (Data.isSqlite) {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertEntityDeath(Data.serverName, player, entityName, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertEntityDeath(Data.serverName, entityPlayer, entityName, coordinates);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

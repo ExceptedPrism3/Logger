@@ -1,5 +1,6 @@
 package me.prism3.logger.events;
 
+import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -17,6 +18,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Objects;
+import java.util.UUID;
+
+import static me.prism3.logger.utils.Data.loggerStaffLog;
 
 public class OnGameMode implements Listener {
 
@@ -35,23 +39,20 @@ public class OnGameMode implements Listener {
             if (event.getNewGameMode() == GameMode.valueOf(gameMode.toUpperCase())) {
 
                 final String playerName = player.getName();
+                final UUID playerUUID = player.getUniqueId();
                 final World world = player.getWorld();
                 final String worldName = world.getName();
+
+                final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
 
                 // Log To Files
                 if (Data.isLogToFiles) {
 
                     if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                        if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Game-Mode-Staff")).isEmpty()) {
-
-                            this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Game-Mode-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%game-mode%", gameMode), false);
-
-                        }
-
                         try {
 
-                            BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                             out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Game-Mode-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%game-mode%", gameMode) + "\n");
                             out.close();
 
@@ -61,34 +62,20 @@ public class OnGameMode implements Listener {
                             e.printStackTrace();
 
                         }
+                    } else {
 
-                        if (Data.isExternal  ) {
+                        try {
 
-                            Main.getInstance().getDatabase().insertGameMode(Data.serverName, player, gameMode, true);
+                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getGameModeFile(), true));
+                            out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Game-Mode")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%game-mode%", gameMode) + "\n");
+                            out.close();
+
+                        } catch (IOException e) {
+
+                            this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                            e.printStackTrace();
 
                         }
-
-                        if (Data.isSqlite ) {
-
-                            Main.getInstance().getSqLite().insertGameMode(Data.serverName, player, gameMode, true);
-
-                        }
-
-                        return;
-
-                    }
-
-                    try {
-
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getGameModeFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Game-Mode")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%game-mode%", gameMode) + "\n");
-                        out.close();
-
-                    } catch (IOException e) {
-
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-
                     }
                 }
 
@@ -112,23 +99,23 @@ public class OnGameMode implements Listener {
                 }
 
                 // External
-                if (Data.isExternal  ) {
+                if (Data.isExternal) {
 
                     try {
 
-                        Main.getInstance().getDatabase().insertGameMode(Data.serverName, player, gameMode, player.hasPermission(Data.loggerStaffLog));
+                        Main.getInstance().getDatabase().insertGameMode(Data.serverName, entityPlayer, gameMode, worldName);
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
 
                 // External
-                if (Data.isSqlite ) {
+                if (Data.isSqlite) {
 
                     try {
 
-                        Main.getInstance().getSqLite().insertGameMode(Data.serverName, player, gameMode, player.hasPermission(Data.loggerStaffLog));
+                        Main.getInstance().getSqLite().insertGameMode(Data.serverName, entityPlayer, gameMode, worldName);
 
-                    } catch (Exception exception) { exception.printStackTrace(); }
+                    } catch (Exception e) { e.printStackTrace(); }
                 }
             }
         }

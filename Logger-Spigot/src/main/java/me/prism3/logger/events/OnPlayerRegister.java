@@ -1,5 +1,6 @@
 package me.prism3.logger.events;
 
+import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -15,6 +16,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.UUID;
+
+import static me.prism3.logger.utils.Data.loggerStaffLog;
 
 public class OnPlayerRegister {
 
@@ -32,17 +36,20 @@ public class OnPlayerRegister {
     private void onRegister(Player player) {
 
         final String playerName = player.getName();
+        final UUID playerUUID = player.getUniqueId();
 
         final LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(player.getFirstPlayed()), ZoneId.systemDefault());
 
         final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+        final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
 
         // Log To Files
         if (Data.isLogToFiles) {
 
             try {
 
-                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRegistrationFile(), true));
+                final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRegistrationFile(), true));
                 out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Registration")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())) + "\n");
                 out.close();
 
@@ -55,30 +62,29 @@ public class OnPlayerRegister {
         }
 
         // Discord Integration
-        if (!player.hasPermission(Data.loggerExemptDiscord)) {
+        if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getMessages().get().getString("Discord.Player-Registration").isEmpty()){
 
-            if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Registration")).isEmpty()) {
 
-                this.main.getDiscord().playerRegistration(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Registration")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())), false);
-            }
+            this.main.getDiscord().playerRegistration(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Registration")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())), false);
+
         }
 
         // External
-        if (Data.isExternal  ) {
+        if (Data.isExternal) {
 
             try {
 
-                Main.getInstance().getDatabase().insertPlayerRegistration(Data.serverName, player, dateFormat.format(ZonedDateTime.now()));
+                Main.getInstance().getDatabase().insertPlayerRegistration(Data.serverName, entityPlayer, dateFormat.format(ZonedDateTime.now()));
 
             } catch (Exception e) { e.printStackTrace(); }
         }
 
         // SQLite
-        if (Data.isSqlite ) {
+        if (Data.isSqlite) {
 
             try {
 
-                Main.getInstance().getSqLite().insertRegistration(Data.serverName, player, dateFormat.format(ZonedDateTime.now()));
+                Main.getInstance().getSqLite().insertPlayerRegistration(Data.serverName, entityPlayer, dateFormat.format(ZonedDateTime.now()));
 
             } catch (Exception e) { e.printStackTrace(); }
         }

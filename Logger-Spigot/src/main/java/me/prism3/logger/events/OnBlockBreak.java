@@ -1,5 +1,7 @@
 package me.prism3.logger.events;
 
+import com.carpour.loggercore.database.entity.Coordinates;
+import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -17,6 +19,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Objects;
+import java.util.UUID;
+
+import static me.prism3.logger.utils.Data.loggerStaffLog;
 
 public class OnBlockBreak implements Listener {
 
@@ -32,6 +37,7 @@ public class OnBlockBreak implements Listener {
             if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
             final String playerName = player.getName();
+            final UUID playerUUID = player.getUniqueId();
             final World world = player.getWorld();
             final String worldName = world.getName();
             final int x = event.getBlock().getLocation().getBlockX();
@@ -39,20 +45,17 @@ public class OnBlockBreak implements Listener {
             final int z = event.getBlock().getLocation().getBlockZ();
             final Material blockType = event.getBlock().getType();
 
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final Coordinates coordinates = new Coordinates(x, y, z, worldName);
+
             // Log To Files
             if (Data.isLogToFiles) {
 
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Block-Break-Staff")).isEmpty()) {
-
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Block-Break-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%block%", String.valueOf(blockType)), false);
-
-                    }
+                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                         out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Block-Break-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%block%", String.valueOf(blockType)) + "\n");
                         out.close();
 
@@ -62,40 +65,27 @@ public class OnBlockBreak implements Listener {
                         e.printStackTrace();
 
                     }
+                } else {
 
-                    if (Data.isExternal ) {
+                    try {
 
-                        Main.getInstance().getDatabase().insertBlockBreak(Data.serverName, player, blockType.toString(), x, y, z, true);
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBlockBreakLogFile(), true));
+                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Block-Break")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%block%", String.valueOf(blockType)) + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
 
                     }
-
-                    if (Data.isSqlite ) {
-
-                        Main.getInstance().getSqLite().insertBlockBreak(Data.serverName, player, blockType, true);
-                    }
-
-                    return;
-
-                }
-
-                try {
-
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBlockBreakLogFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Block-Break")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%block%", String.valueOf(blockType)) + "\n");
-                    out.close();
-
-                } catch (IOException e) {
-
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
                 }
             }
 
             // Discord
             if (!player.hasPermission(Data.loggerExemptDiscord)) {
 
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Block-Break-Staff")).isEmpty()) {
 
@@ -117,17 +107,17 @@ public class OnBlockBreak implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertBlockBreak(Data.serverName, player, blockType.toString(), x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertBlockBreak(Data.serverName, entityPlayer, blockType.name(), coordinates);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite ) {
+            if (Data.isSqlite) {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertBlockBreak(Data.serverName, player, blockType, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertBlockBreak(Data.serverName, entityPlayer, blockType.name(), coordinates);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

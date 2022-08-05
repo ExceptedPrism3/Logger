@@ -32,7 +32,7 @@ public class RAM implements Runnable {
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRAMLogFile(), true));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRAMLogFile(), true));
                         out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.RAM")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)) + "\n");
                         out.close();
 
@@ -45,13 +45,11 @@ public class RAM implements Runnable {
                 }
 
                 // Discord
-                if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.RAM")).isEmpty()) {
-
+                if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.RAM")).isEmpty())
                     this.main.getDiscord().ram(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.RAM")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)), false);
-                }
 
                 // External
-                if (Data.isExternal  ) {
+                if (Data.isExternal) {
 
                     try {
 
@@ -61,11 +59,11 @@ public class RAM implements Runnable {
                 }
 
                 // SQLite
-                if (Data.isSqlite ) {
+                if (Data.isSqlite) {
 
                     try {
 
-                        Main.getInstance().getSqLite().insertRAM(Data.serverName, maxMemory, usedMemory, freeMemory);
+                        Main.getInstance().getSqLite().insertRam(Data.serverName, maxMemory, usedMemory, freeMemory);
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

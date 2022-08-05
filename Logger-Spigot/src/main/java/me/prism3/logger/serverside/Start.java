@@ -23,7 +23,7 @@ public class Start {
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStartFile(), true));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStartFile(), true));
                     out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.Start")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())) + "\n");
                     out.close();
 
@@ -36,13 +36,11 @@ public class Start {
             }
 
             // Discord
-            if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Start")).isEmpty()) {
-
+            if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Start")).isEmpty())
                 this.main.getDiscord().serverStart(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Start")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())), false);
-            }
 
             // External
-            if (Data.isExternal  ) {
+            if (Data.isExternal) {
 
                 try {
 
@@ -52,7 +50,7 @@ public class Start {
             }
 
             // SQLite
-            if (Data.isSqlite ) {
+            if (Data.isSqlite) {
 
                 try {
 

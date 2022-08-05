@@ -36,57 +36,20 @@ public class OnLiteBanEvents implements Listener, Runnable {
                     final String duration = entry.getDurationString();
                     final String onWho = UsernameFetcher.playerNameFetcher(entry.getUuid());
                     final String reason = entry.getReason();
-                    final boolean isSilent = entry.isSilent();{
+                    final boolean isSilent = entry.isSilent();
 
-                        assert executorName != null;
-                        final Player player = Bukkit.getPlayer(executorName);
-                        assert player != null;
+                    assert executorName != null;
+                    final Player player = Bukkit.getPlayer(executorName);
+                    assert player != null;
 
-                        // Log To Files
-                        if (Data.isLogToFiles) {
+                    // Log To Files
+                    if (Data.isLogToFiles) {
 
-                            if (Data.isStaffEnabled) {
-                                if (player.hasPermission(Data.loggerStaffLog)) {
-
-                                    if (!Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).isEmpty()) {
-
-                                        main.getDiscord().staffChat(player, Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
-
-                                    }
-
-                                    try {
-
-                                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                                        out.write(Objects.requireNonNull(main.getMessages().get().getString("Files.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)) + "\n");
-                                        out.close();
-
-                                    } catch (IOException e) {
-
-                                        main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                                        e.printStackTrace();
-
-                                    }
-
-                                    if (Data.isExternal ) {
-
-                                        Main.getInstance().getDatabase().insertLitebans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
-
-                                    }
-
-                                    if (Data.isSqlite ) {
-
-                                        Main.getInstance().getSqLite().insertLiteBans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
-
-                                    }
-
-                                    return;
-
-                                }
-                            }
+                        if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
                             try {
 
-                                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLiteBansFile(), true));
+                                final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                                 out.write(Objects.requireNonNull(main.getMessages().get().getString("Files.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)) + "\n");
                                 out.close();
 
@@ -96,56 +59,67 @@ public class OnLiteBanEvents implements Listener, Runnable {
                                 e.printStackTrace();
 
                             }
-                        }
+                        } else {
 
-                        // Discord Integration
-                        if (player == null) { // This is essential when performed by the console
+                        try {
 
-                            if (!Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).isEmpty()) {
+                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLiteBansFile(), true));
+                            out.write(Objects.requireNonNull(main.getMessages().get().getString("Files.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)) + "\n");
+                            out.close();
 
-                                main.getDiscord().advancedBan(Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
-                            }
-                        } else
-                            if (!player.hasPermission(Data.loggerExemptDiscord)) {
+                        } catch (IOException e) {
 
-                            if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+                            main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                            e.printStackTrace();
 
-                                if (!Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).isEmpty()) {
-
-                                    main.getDiscord().staffChat(player, Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
-
-                                }
-                            } else {
-                                if (!Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).isEmpty()) {
-
-                                    main.getDiscord().advancedBan(Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
-                                }
-                            }
-                        }
-
-                        // External
-                        if (Data.isExternal ) {
-
-                            try {
-
-                                Main.getInstance().getDatabase().insertLitebans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
-
-                            } catch (Exception e) { e.printStackTrace(); }
-                        }
-
-                        // SQLite
-                        if (Data.isSqlite ) {
-
-                            try {
-
-                                Main.getInstance().getSqLite().insertLiteBans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
-
-                            } catch (Exception e) { e.printStackTrace(); }
                         }
                     }
+                }
 
+                // Discord Integration
+                if (player == null) { // This is essential when performed by the console
+
+                    if (!Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).isEmpty())
+
+                        main.getDiscord().advancedBan(Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
+
+                } else if (!player.hasPermission(Data.loggerExemptDiscord)) {
+
+                    if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+
+                        if (!Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).isEmpty())
+
+                            main.getDiscord().staffChat(player, Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
+
+                    } else {
+                        if (!Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).isEmpty())
+
+                            main.getDiscord().advancedBan(Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
+
+                    }
+                }
+
+                // External
+                if (Data.isExternal) {
+
+                    try {
+
+                        Main.getInstance().getDatabase().insertLiteBans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
+
+                    } catch (Exception e) { e.printStackTrace(); }
+                }
+
+                // SQLite
+                if (Data.isSqlite) {
+
+                    try {
+
+                        Main.getInstance().getSqLite().insertLiteBans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
+
+                    } catch (Exception e) { e.printStackTrace(); }
                 }
             }
+        }
         });
     }
 }

@@ -10,8 +10,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-import java.util.Objects;
-
 public class OnCommandSpy implements Listener {
 
     private final Main main = Main.getInstance();
@@ -31,9 +29,9 @@ public class OnCommandSpy implements Listener {
                 if (players.hasPermission(Data.loggerSpy)) {
 
                     players.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                            Objects.requireNonNull(this.main.getConfig().getString("Spy-Features.Commands-Spy.Message")).
+                            this.main.getConfig().getString("Spy-Features.Commands-Spy.Message")).
                                     replace("%player%", player.getName()).
-                                    replace("%cmd%", event.getMessage().replace("\\", "\\\\"))));
+                                    replace("%cmd%", event.getMessage().replace("\\", "\\\\")));
 
                 }
             }

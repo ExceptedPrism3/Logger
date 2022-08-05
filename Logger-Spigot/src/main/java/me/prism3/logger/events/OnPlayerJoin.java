@@ -1,8 +1,9 @@
 package me.prism3.logger.events;
 
+import com.carpour.loggercore.database.entity.Coordinates;
+import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
-import me.prism3.logger.events.plugindependent.OnViaVer;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -20,6 +21,9 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.time.ZonedDateTime;
 import java.util.Objects;
+import java.util.UUID;
+
+import static me.prism3.logger.utils.Data.loggerStaffLog;
 
 public class OnPlayerJoin implements Listener {
 
@@ -27,8 +31,6 @@ public class OnPlayerJoin implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(final PlayerJoinEvent event) {
-
-        new OnViaVer().onConnect(event.getPlayer());
 
         if (Data.isRegistration && !SQLiteDataRegistration.playerExists(event.getPlayer())) {
 
@@ -46,6 +48,7 @@ public class OnPlayerJoin implements Listener {
             final World world = player.getWorld();
             final String worldName = world.getName();
             final String playerName = player.getName();
+            final UUID playerUUID = player.getUniqueId();
             InetSocketAddress ip = player.getAddress();
             final int x = player.getLocation().getBlockX();
             final int y = player.getLocation().getBlockY();
@@ -60,20 +63,17 @@ public class OnPlayerJoin implements Listener {
 
             if (!Data.isPlayerIP) ip = null;
 
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final Coordinates coordinates = new Coordinates(x, y, z, worldName);
+
             // Log To Files
             if (Data.isLogToFiles) {
 
                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Join-Staff")).isEmpty()) {
-
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Join-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%IP%", String.valueOf(ip)), false);
-
-                    }
-
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                         out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Join-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%IP%", String.valueOf(ip)) + "\n");
                         out.close();
 
@@ -83,34 +83,20 @@ public class OnPlayerJoin implements Listener {
                         e.printStackTrace();
 
                     }
+                } else {
 
-                    if (Data.isExternal  ) {
+                    try {
 
-                        Main.getInstance().getDatabase().insertPlayerJoin(Data.serverName, player, x, y, z, ip, true);
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerJoinLogFile(), true));
+                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Join")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%IP%", String.valueOf(ip)) + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
 
                     }
-
-                    if (Data.isSqlite ) {
-
-                        Main.getInstance().getSqLite().insertPlayerJoin(Data.serverName, player, true);
-
-                    }
-
-                    return;
-
-                }
-
-                try {
-
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerJoinLogFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Join")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%IP%", String.valueOf(ip)) + "\n");
-                    out.close();
-
-                } catch (IOException e) {
-
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
                 }
             }
 
@@ -134,21 +120,21 @@ public class OnPlayerJoin implements Listener {
             }
 
             // External
-            if (Data.isExternal  ) {
+            if (Data.isExternal) {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerJoin(Data.serverName, player, x, y, z, ip, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerJoin(Data.serverName, entityPlayer, coordinates, ip);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite ) {
+            if (Data.isSqlite) {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerJoin(Data.serverName, player, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerJoin(Data.serverName, entityPlayer, coordinates, ip);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

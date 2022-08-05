@@ -48,7 +48,7 @@ public class Console implements Listener {
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getConsoleLogFile(), true));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getConsoleLogFile(), true));
                     out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.Console-Commands")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command) + "\n");
                     out.close();
 
@@ -61,27 +61,25 @@ public class Console implements Listener {
             }
 
             // Discord
-            if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Console-Commands")).isEmpty()) {
-
+            if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Console-Commands")).isEmpty())
                 this.main.getDiscord().console(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Console-Commands")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command), false);
-            }
 
             // External
-            if (Data.isExternal  ) {
+            if (Data.isExternal) {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertConsoleCommandeCommands(Data.serverName, command);
+                    Main.getInstance().getDatabase().insertConsoleCommand(Data.serverName, command);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite ) {
+            if (Data.isSqlite) {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertConsoleCommands(Data.serverName, command);
+                    Main.getInstance().getSqLite().insertConsoleCommand(Data.serverName, command);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

@@ -15,8 +15,6 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Objects;
-
 public class OnAnvilSpy implements Listener {
 
     private final Main main = Main.getInstance();
@@ -39,30 +37,27 @@ public class OnAnvilSpy implements Listener {
 
                 final int rawSlot = event.getRawSlot();
 
-                if (rawSlot == view.convertSlot(rawSlot)) {
+                if (rawSlot == view.convertSlot(rawSlot) && (rawSlot == 2)) {
 
-                    if (rawSlot == 2) {
+                    final ItemStack item = event.getCurrentItem();
 
-                        final ItemStack item = event.getCurrentItem();
+                    if (item != null) {
 
-                        if (item != null) {
+                        final ItemMeta meta = item.getItemMeta();
 
-                            final ItemMeta meta = item.getItemMeta();
+                        if (meta != null && meta.hasDisplayName()) {
 
-                            if (meta != null && meta.hasDisplayName()) {
+                            final String displayName = meta.getDisplayName().replace("\\", "\\\\");
 
-                                final String displayName = meta.getDisplayName().replace("\\", "\\\\");
+                            for (Player players : Bukkit.getOnlinePlayers()) {
 
-                                for (Player players : Bukkit.getOnlinePlayers()) {
+                                if (players.hasPermission(Data.loggerSpy)) {
 
-                                    if (players.hasPermission(Data.loggerSpy)) {
+                                    players.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                                            this.main.getConfig().getString("Spy-Features.Anvil-Spy.Message")).
+                                                    replace("%player%", player.getName()).
+                                                    replace("%renamed%", displayName));
 
-                                        players.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                                                Objects.requireNonNull(this.main.getConfig().getString("Spy-Features.Anvil-Spy.Message")).
-                                                        replace("%player%", player.getName()).
-                                                        replace("%renamed%", displayName)));
-
-                                    }
                                 }
                             }
                         }

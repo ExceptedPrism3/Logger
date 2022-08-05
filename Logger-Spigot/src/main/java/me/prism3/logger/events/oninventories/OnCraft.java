@@ -1,5 +1,7 @@
 package me.prism3.logger.events.oninventories;
 
+import com.carpour.loggercore.database.entity.Coordinates;
+import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -16,6 +18,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Objects;
+import java.util.UUID;
+
+import static me.prism3.logger.utils.Data.loggerStaffLog;
 
 public class OnCraft implements Listener {
 
@@ -31,6 +36,7 @@ public class OnCraft implements Listener {
             if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
             final String playerName = player.getName();
+            final UUID playerUUID = player.getUniqueId();
             final World world = player.getWorld();
             final String worldName = world.getName();
             final String item = Objects.requireNonNull(event.getCurrentItem()).getType().name().replace("_", " ");
@@ -39,20 +45,17 @@ public class OnCraft implements Listener {
             final int y = player.getLocation().getBlockY();
             final int z = player.getLocation().getBlockZ();
 
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final Coordinates coordinates = new Coordinates(x, y, z, worldName);
+
             // Log To Files
             if (Data.isLogToFiles) {
 
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Craft-Staff")).isEmpty()) {
-
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Craft-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-
-                    }
+                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                         out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Craft-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
                         out.close();
 
@@ -62,41 +65,27 @@ public class OnCraft implements Listener {
                         e.printStackTrace();
 
                     }
+                } else {
 
-                    if (Data.isExternal  ) {
+                    try {
 
-                        Main.getInstance().getDatabase().insertPlayerCraft(Data.serverName, player, item, amount, true);
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCraftFile(), true));
+                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Craft")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
 
                     }
-
-                    if (Data.isSqlite ) {
-
-                        Main.getInstance().getSqLite().insertPlayerCraft(Data.serverName, player, item, amount, x, y, z, true);
-
-                    }
-
-                    return;
-
-                }
-
-                try {
-
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCraftFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Craft")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-                    out.close();
-
-                } catch (IOException e) {
-
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
                 }
             }
 
             // Discord Integration
             if (!player.hasPermission(Data.loggerExemptDiscord)) {
 
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Craft-Staff")).isEmpty()) {
 
@@ -113,21 +102,21 @@ public class OnCraft implements Listener {
             }
 
             // External
-            if (Data.isExternal  ) {
+            if (Data.isExternal) {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerCraft(Data.serverName, player, item, amount, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerCraft(Data.serverName, entityPlayer, item, amount, coordinates);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite ) {
+            if (Data.isSqlite) {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerCraft(Data.serverName, player, item, amount, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerCraft(Data.serverName, entityPlayer, item, amount, coordinates);
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

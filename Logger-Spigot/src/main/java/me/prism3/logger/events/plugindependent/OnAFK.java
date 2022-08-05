@@ -1,5 +1,7 @@
 package me.prism3.logger.events.plugindependent;
 
+import com.carpour.loggercore.database.entity.Coordinates;
+import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -15,7 +17,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
+import static me.prism3.logger.utils.Data.loggerStaffLog;
 
 public class OnAFK implements Listener {
 
@@ -32,24 +36,23 @@ public class OnAFK implements Listener {
             if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
             final String playerName = player.getName();
+            final UUID playerUUID = player.getUniqueId();
             final int x = player.getLocation().getBlockX();
             final int y = player.getLocation().getBlockY();
             final int z = player.getLocation().getBlockZ();
             final String worldName = player.getWorld().getName();
 
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final Coordinates coordinates = new Coordinates(x, y, z, worldName);
+
             // Log To Files
             if (Data.isLogToFiles) {
 
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Extras.AFK-Staff")).isEmpty()) {
-
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Extras.AFK-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-                    }
+                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                         out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Extras.AFK-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
                         out.close();
 
@@ -59,41 +62,27 @@ public class OnAFK implements Listener {
                         event.printStackTrace();
 
                     }
+                } else {
 
-                    if (Data.isExternal  ) {
+                    try {
 
-                        Main.getInstance().getDatabase().insertAfk(Data.serverName, player, x, y, z, true);
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAfkFile(), true));
+                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Extras.AFK")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
+                        out.close();
+
+                    } catch (IOException event) {
+
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        event.printStackTrace();
 
                     }
-
-                    if (Data.isSqlite ) {
-
-                        Main.getInstance().getSqLite().insertAFK(Data.serverName, player, true);
-
-                    }
-
-                    return;
-
-                }
-
-                try {
-
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAfkFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Extras.AFK")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-                    out.close();
-
-                } catch (IOException event) {
-
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                    event.printStackTrace();
-
                 }
             }
 
             // Discord
             if (!player.hasPermission(Data.loggerExemptDiscord)) {
 
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Extras.AFK-Staff")).isEmpty()) {
 
@@ -110,21 +99,21 @@ public class OnAFK implements Listener {
             }
 
             // External
-            if (Data.isExternal  ) {
+            if (Data.isExternal) {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertAfk(Data.serverName, player, x, y, z, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertAfk(Data.serverName, entityPlayer, coordinates);
 
                 } catch (Exception event) { event.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite ) {
+            if (Data.isSqlite) {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertAFK(Data.serverName, player, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertAfk(Data.serverName, entityPlayer, coordinates);
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

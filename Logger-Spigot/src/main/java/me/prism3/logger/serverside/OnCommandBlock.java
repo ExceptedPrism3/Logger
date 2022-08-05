@@ -33,7 +33,7 @@ public class OnCommandBlock implements Listener {
 
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandBlockFile(), true));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandBlockFile(), true));
                         out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.Command-Block")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command) + "\n");
                         out.close();
 
@@ -46,23 +46,21 @@ public class OnCommandBlock implements Listener {
                 }
 
                 // Discord
-                if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Command-Block")).isEmpty()) {
-
+                if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Command-Block")).isEmpty())
                     this.main.getDiscord().commandBlock(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Command-Block")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command), false);
-                }
 
                 // External
-                if (Data.isExternal  ) {
+                if (Data.isExternal) {
 
                     try {
 
-                        Main.getInstance().getDatabase().insertCommandBlockandBlock(Data.serverName, command);
+                        Main.getInstance().getDatabase().insertCommandBlock(Data.serverName, command);
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
 
                 // SQLite
-                if (Data.isSqlite ) {
+                if (Data.isSqlite) {
 
                     try {
 

@@ -1,5 +1,6 @@
 package me.prism3.logger.events.plugindependent;
 
+import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.api.VaultUtil;
 import me.prism3.logger.utils.BedrockChecker;
@@ -23,6 +24,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import static me.prism3.logger.utils.Data.loggerStaffLog;
+
 public class OnVault implements Listener, Runnable {
 
     private final Main main = Main.getInstance();
@@ -38,9 +41,12 @@ public class OnVault implements Listener, Runnable {
 
                 if (player.hasPermission(Data.loggerExempt) || Bukkit.getOnlinePlayers().isEmpty() || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
-                for (Map.Entry<UUID, Double> bal : this.players.entrySet()) {
+                final String playerName = player.getName();
+                final UUID playerUUID = player.getUniqueId();
 
-                    final String playerName = player.getName();
+                final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+
+                for (Map.Entry<UUID, Double> bal : this.players.entrySet()) {
 
                     if (this.econ.getBalance(player.getPlayer()) != this.players.get(player.getUniqueId())) {
 
@@ -51,17 +57,11 @@ public class OnVault implements Listener, Runnable {
                         // Log To Files
                         if (Data.isLogToFiles) {
 
-                            if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                                if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Extras.Vault-Staff")).isEmpty()) {
-
-                                    this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Extras.Vault-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)), false);
-
-                                }
+                            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                                 try {
 
-                                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                                     out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Extras.Vault-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)) + "\n");
                                     out.close();
 
@@ -71,41 +71,27 @@ public class OnVault implements Listener, Runnable {
                                     e.printStackTrace();
 
                                 }
+                            } else {
 
-                                if (Data.isExternal  ) {
+                                try {
 
-                                    Main.getInstance().getDatabase().insertVault(Data.serverName, player, oldBalance, newBalance, true);
+                                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getVaultFile(), true));
+                                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Extras.Vault")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)) + "\n");
+                                    out.close();
+
+                                } catch (IOException e) {
+
+                                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                                    e.printStackTrace();
 
                                 }
-
-                                if (Data.isSqlite ) {
-
-                                    Main.getInstance().getSqLite().insertVault(Data.serverName, player, oldBalance, newBalance, true);
-
-                                }
-
-                                return;
-
-                            }
-
-                            try {
-
-                                BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getVaultFile(), true));
-                                out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Extras.Vault")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)) + "\n");
-                                out.close();
-
-                            } catch (IOException e) {
-
-                                this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                                e.printStackTrace();
-
                             }
                         }
 
                         // Discord Integration
                         if (!player.hasPermission(Data.loggerExemptDiscord)) {
 
-                            if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+                            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                                 if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Extras.Vault-Staff")).isEmpty()) {
 
@@ -123,21 +109,21 @@ public class OnVault implements Listener, Runnable {
                         }
 
                         // External
-                        if (Data.isExternal  ) {
+                        if (Data.isExternal) {
 
                             try {
 
-                                Main.getInstance().getDatabase().insertVault(Data.serverName, player, oldBalance, newBalance, player.hasPermission(Data.loggerStaffLog));
+                                Main.getInstance().getDatabase().insertVault(Data.serverName, entityPlayer, oldBalance, newBalance);
 
                             } catch (Exception e) { e.printStackTrace(); }
                         }
 
                         // External
-                        if (Data.isSqlite ) {
+                        if (Data.isSqlite) {
 
                             try {
 
-                                Main.getInstance().getSqLite().insertVault(Data.serverName, player, oldBalance, newBalance, player.hasPermission(Data.loggerStaffLog));
+                                Main.getInstance().getSqLite().insertVault(Data.serverName, entityPlayer, oldBalance, newBalance);
 
                             } catch (Exception exception) { exception.printStackTrace(); }
                         }

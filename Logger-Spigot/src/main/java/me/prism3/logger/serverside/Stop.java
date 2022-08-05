@@ -23,7 +23,7 @@ public class Stop {
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStopFile(), true));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStopFile(), true));
                     out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.Stop")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())) + "\n");
                     out.close();
 
@@ -36,13 +36,11 @@ public class Stop {
             }
 
             // Discord
-            if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Stop")).isEmpty()) {
-
+            if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Stop")).isEmpty())
                 this.main.getDiscord().serverStop(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Stop")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())), false);
-            }
 
             // External
-            if (Data.isExternal  ) {
+            if (Data.isExternal) {
 
                 try {
 
@@ -52,7 +50,7 @@ public class Stop {
             }
 
             // SQLite
-            if (Data.isSqlite ) {
+            if (Data.isSqlite) {
 
                 try {
 

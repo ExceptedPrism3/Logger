@@ -74,15 +74,9 @@ public class OnCommand implements Listener {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Commands-Staff")).isEmpty()) {
-
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Commands-Staff")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
-
-                    }
-
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                         out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Commands-Staff")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%command%", command) + "\n");
                         out.close();
 
@@ -92,34 +86,20 @@ public class OnCommand implements Listener {
                         e.printStackTrace();
 
                     }
+                } else {
 
-                    if (isExternal  ) {
+                    try {
 
-                        Main.getInstance().getDatabase().insertPlayerCommands(serverName, player, command, true);
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true));
+                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Commands")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%command%", command) + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
 
                     }
-
-                    if (isSqlite ) {
-
-                        Main.getInstance().getSqLite().insertPlayerCommands(serverName, player, command, true);
-
-                    }
-
-                    return;
-
-                }
-
-                try {
-
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Commands")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%command%", command) + "\n");
-                    out.close();
-
-                } catch (IOException e) {
-
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
                 }
             }
 
@@ -142,22 +122,22 @@ public class OnCommand implements Listener {
                 }
             }
 
-            // Logging to MySQL if logging to MySQL and Command Logging is enabled
-            if (isExternal  ) {
+            // External
+            if (isExternal) {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerCommands(serverName, player, command, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerCommands(serverName, entityPlayer, worldName, command);
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }
 
-            // Logging to SQLite if logging to SQLite and Command Logging is enabled
-            if (isSqlite ) {
+            // SQLite
+            if (isSqlite) {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerCommands(serverName, player, command, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerCommands(serverName, entityPlayer, worldName, command);
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

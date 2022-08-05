@@ -20,7 +20,7 @@ public class TPS implements Runnable {
     public void run() {
 
         // This should resolve the uncorrected TPS value e.g 0.125462498
-        if (this.getTPS() <= 1 ) return;
+        if (this.getTPS() <= 1) return;
 
         if (this.main.getConfig().getBoolean("Log-Server.TPS")) {
 
@@ -37,13 +37,13 @@ public class TPS implements Runnable {
 
                     if (this.getTPS() <= Data.tpsMedium) {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
                         out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.TPS-Medium")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())) + "\n");
                         out.close();
 
                     } else if (this.getTPS() <= Data.tpsCritical) {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
                         out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.TPS-Critical")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())) + "\n");
                         out.close();
 
@@ -57,24 +57,18 @@ public class TPS implements Runnable {
                 }
 
                 // Discord
-                if (this.getTPS() <= Data.tpsMedium) {
+                if (this.getTPS() <= Data.tpsMedium && this.main.getMessages().get().getString("Discord.Server-Side.TPS-Medium").isEmpty()) {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.TPS-Medium")).isEmpty()) {
+                    this.main.getDiscord().tps(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.TPS-Medium")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())), false);
 
-                        this.main.getDiscord().tps(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.TPS-Medium")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())), false);
+                } else if (this.getTPS() <= Data.tpsCritical && this.main.getMessages().get().getString("Discord.Server-Side.TPS-Critical").isEmpty()) {
 
-                    }
+                    this.main.getDiscord().tps(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.TPS-Critical")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())), false);
 
-                } else if (this.getTPS() <= Data.tpsCritical) {
-
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.TPS-Critical")).isEmpty()) {
-
-                        this.main.getDiscord().tps(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.TPS-Critical")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())), false);
-                    }
                 }
 
                 // External
-                if (Data.isExternal  ) {
+                if (Data.isExternal) {
 
                     try {
 
@@ -91,17 +85,17 @@ public class TPS implements Runnable {
                 }
 
                 // SQLite
-                if (Data.isSqlite ) {
+                if (Data.isSqlite) {
 
                     try {
 
                         if (this.getTPS() <= Data.tpsMedium) {
 
-                            Main.getInstance().getSqLite().insertTPS(Data.serverName, this.getTPS());
+                            Main.getInstance().getSqLite().insertTps(Data.serverName, this.getTPS());
 
                         } else if (this.getTPS() <= Data.tpsCritical) {
 
-                            Main.getInstance().getSqLite().insertTPS(Data.serverName, this.getTPS());
+                            Main.getInstance().getSqLite().insertTps(Data.serverName, this.getTPS());
                         }
                     } catch (Exception e) { e.printStackTrace(); }
                 }

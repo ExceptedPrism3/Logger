@@ -1,5 +1,6 @@
 package me.prism3.logger.events;
 
+import com.carpour.loggercore.database.entity.Coordinates;
 import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
@@ -18,10 +19,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+
+import static me.prism3.logger.utils.Data.loggerStaffLog;
 
 public class OnEnchant implements Listener {
 
@@ -37,6 +37,7 @@ public class OnEnchant implements Listener {
             if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
             final String playerName = player.getName();
+            final UUID playerUUID = player.getUniqueId();
             final World world = player.getWorld();
             final String worldName = world.getName();
             final String item = event.getItem().getType().toString();
@@ -59,20 +60,17 @@ public class OnEnchant implements Listener {
 
             }
 
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final Coordinates coordinates = new Coordinates(x, y, z, worldName);
+
             // Log To Files
             if (Data.isLogToFiles) {
 
                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Enchanting-Staff")).isEmpty()) {
-
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Enchanting-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%level%", String.valueOf(cost)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%item%", item).replace("%enchantment%", String.valueOf(enchs)).replace("%enchlevel%", String.valueOf(enchantmentLevel)), false);
-
-                    }
-
                     try {
 
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                         out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Enchanting-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%level%", String.valueOf(cost)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%enchantment%", String.valueOf(enchs)).replace("%enchlevel%", String.valueOf(enchantmentLevel)) + "\n");
                         out.close();
 
@@ -82,37 +80,20 @@ public class OnEnchant implements Listener {
                         e.printStackTrace();
 
                     }
+                } else {
 
-                    if (Data.isExternal) {
-                        final EntityPlayer ePlayer = new EntityPlayer();
-                        ePlayer.setPlayerName(player.getName());
-                        ePlayer.setWorldName(player.getWorld().getName());
-                        ePlayer.setPlayerUniqueID(player.getUniqueId().toString());
-                        Main.getInstance().getDatabase().insertEnchant(Data.serverName, ePlayer, enchs, enchantmentLevel, item, cost, true);
+                    try {
+
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getEnchantFile(), true));
+                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Enchanting")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%item%", item).replace("%enchantment%", String.valueOf(enchs)).replace("%level%", String.valueOf(cost)).replace("%enchlevel%", String.valueOf(enchantmentLevel)) + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
 
                     }
-
-                    if (Data.isSqlite ) {
-
-                        Main.getInstance().getSqLite().insertEnchant(Data.serverName, player, enchs, enchantmentLevel, item, cost, true);
-
-                    }
-
-                    return;
-
-                }
-
-                try {
-
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getEnchantFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Enchanting")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%item%", item).replace("%enchantment%", String.valueOf(enchs)).replace("%level%", String.valueOf(cost)).replace("%enchlevel%", String.valueOf(enchantmentLevel)) + "\n");
-                    out.close();
-
-                } catch (IOException e) {
-
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
                 }
             }
 
@@ -139,23 +120,20 @@ public class OnEnchant implements Listener {
             if (Data.isExternal) {
 
                 try {
-                    final EntityPlayer ePlayer = new EntityPlayer();
-                    ePlayer.setPlayerName(player.getName());
-                    ePlayer.setWorldName(player.getWorld().getName());
-                    ePlayer.setPlayerUniqueID(player.getUniqueId().toString());
-                    Main.getInstance().getDatabase().insertEnchant(Data.serverName, ePlayer, enchs, enchantmentLevel, item, cost, player.hasPermission(Data.loggerStaffLog));
+
+                    Main.getInstance().getDatabase().insertEnchant(Data.serverName, entityPlayer, enchs, enchantmentLevel, item, cost, coordinates);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
-            if (Data.isSqlite ) {
+            if (Data.isSqlite) {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertEnchant(Data.serverName, player, enchs, enchantmentLevel, item, cost, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertEnchant(Data.serverName, entityPlayer, enchs, enchantmentLevel, item, cost, coordinates);
 
-                } catch (Exception exception) { exception.printStackTrace(); }
+                } catch (Exception e) { e.printStackTrace(); }
             }
         }
     }

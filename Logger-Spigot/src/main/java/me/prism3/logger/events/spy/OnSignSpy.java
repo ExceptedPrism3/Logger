@@ -12,7 +12,6 @@ import org.bukkit.event.block.SignChangeEvent;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class OnSignSpy implements Listener {
 
@@ -35,12 +34,12 @@ public class OnSignSpy implements Listener {
                 if (players.hasPermission(Data.loggerSpy)) {
 
                     players.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                            Objects.requireNonNull(this.main.getConfig().getString("Spy-Features.Sign-Spy.Message")).
+                            this.main.getConfig().getString("Spy-Features.Sign-Spy.Message")).
                                     replace("%player%", player.getName()).
                                     replace("%line1%", lines.get(0).replace("\\", "\\\\")).
                                     replace("%line2%", lines.get(1).replace("\\", "\\\\")).
                                     replace("%line3%", lines.get(2).replace("\\", "\\\\")).
-                                    replace("%line4%", lines.get(3).replace("\\", "\\\\"))));
+                                    replace("%line4%", lines.get(3).replace("\\", "\\\\")));
 
                 }
             }

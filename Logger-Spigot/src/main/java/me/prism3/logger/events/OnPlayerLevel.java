@@ -40,14 +40,9 @@ public class OnPlayerLevel implements Listener {
 
                     if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                        if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Level-Staff")).isEmpty()) {
-
-                            this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Level-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
-                        }
-
                         try {
 
-                            BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                             out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Level-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%level%", String.valueOf(logAbove)) + "\n");
                             out.close();
 
@@ -57,33 +52,20 @@ public class OnPlayerLevel implements Listener {
                             e.printStackTrace();
 
                         }
+                    } else {
 
-                        if (Data.isExternal  ) {
+                        try {
 
-                            Main.getInstance().getDatabase().insertLevelChange(Data.serverName, playerName, true);
+                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerLevelFile(), true));
+                            out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Level")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%level%", String.valueOf(logAbove)) + "\n");
+                            out.close();
+
+                        } catch (IOException e) {
+
+                            this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                            e.printStackTrace();
 
                         }
-
-                        if (Data.isSqlite ) {
-
-                            Main.getInstance().getSqLite().insertLevelChange(Data.serverName, player, true);
-
-                        }
-
-                        return;
-                    }
-
-                    try {
-
-                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerLevelFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Level")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%level%", String.valueOf(logAbove)) + "\n");
-                        out.close();
-
-                    } catch (IOException e) {
-
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-
                     }
                 }
 
@@ -107,7 +89,7 @@ public class OnPlayerLevel implements Listener {
                 }
 
                 // External
-                if (Data.isExternal  ) {
+                if (Data.isExternal) {
 
                     try {
 
@@ -117,11 +99,11 @@ public class OnPlayerLevel implements Listener {
                 }
 
                 // SQLite
-                if (Data.isSqlite ) {
+                if (Data.isSqlite) {
 
                     try {
 
-                        Main.getInstance().getSqLite().insertLevelChange(Data.serverName, player, player.hasPermission(Data.loggerStaffLog));
+                        Main.getInstance().getSqLite().insertLevelChange(Data.serverName, playerName, player.hasPermission(Data.loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

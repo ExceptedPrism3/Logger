@@ -11,7 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerEditBookEvent;
 
 import java.util.List;
-import java.util.Objects;
 
 public class OnBookSpy implements Listener{
 
@@ -34,9 +33,9 @@ public class OnBookSpy implements Listener{
                 if (players.hasPermission(Data.loggerSpy)) {
 
                     players.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                            Objects.requireNonNull(this.main.getConfig().getString("Spy-Features.Book-Spy.Message")).
+                            this.main.getConfig().getString("Spy-Features.Book-Spy.Message")).
                                     replace("%player%", player.getName()).
-                                    replace("%content%", pageContent.toString().replace("\\", "\\\\"))));
+                                    replace("%content%", pageContent.toString().replace("\\", "\\\\")));
 
                 }
             }

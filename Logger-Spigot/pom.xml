@@ -94,8 +94,6 @@
     </build>
 
     <repositories>
-
-
         <repository>
             <id>opencollab-snapshot-repo</id>
             <url>https://repo.opencollab.dev/maven-snapshots/</url>
@@ -140,6 +138,7 @@
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
+        <!-- ViaVersion Repo-->
         <repository>
             <id>viaversion-repo</id>
             <url>https://repo.viaversion.com</url>

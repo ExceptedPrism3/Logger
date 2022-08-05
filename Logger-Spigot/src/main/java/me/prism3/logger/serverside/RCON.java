@@ -31,7 +31,7 @@ public class RCON implements Listener {
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRconFile(), true));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRconFile(), true));
                     out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.RCON")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%IP%", ip).replace("%command%", command)) + "\n");
                     out.close();
 
@@ -44,13 +44,11 @@ public class RCON implements Listener {
             }
 
             // Discord
-            if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.RCON")).isEmpty()) {
-
+            if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.RCON")).isEmpty())
                 this.main.getDiscord().rCon(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.RCON")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%IP%", ip).replace("%command%", command)), false);
-            }
 
             // External
-            if (Data.isExternal  ) {
+            if (Data.isExternal) {
 
                 try {
 
@@ -60,11 +58,11 @@ public class RCON implements Listener {
             }
 
             // SQLite
-            if (Data.isSqlite ) {
+            if (Data.isSqlite) {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertRcon(Data.serverName, ip, command);
+                    Main.getInstance().getSqLite().insertRCON(Data.serverName, ip, command);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

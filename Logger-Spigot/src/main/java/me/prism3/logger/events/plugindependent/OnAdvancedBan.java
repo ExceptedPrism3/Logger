@@ -38,56 +38,34 @@ public class OnAdvancedBan implements Listener {
             // Log To Files
             if (Data.isLogToFiles) {
 
-                if (Data.isStaffEnabled) {
-                    if (player.hasPermission(Data.loggerStaffLog)) {
+                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                        if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Extras.AdvancedBan")).isEmpty()) {
+                    try {
 
-                            this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Extras.AdvancedBan")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type), false);
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Extras.AdvancedBan")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type) + "\n");
+                        out.close();
 
-                        }
+                    } catch (IOException e) {
 
-                        try {
-
-                            BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                            out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Extras.AdvancedBan")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type) + "\n");
-                            out.close();
-
-                        } catch (IOException e) {
-
-                            this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                            e.printStackTrace();
-
-                        }
-
-                        if (Data.isExternal  ) {
-
-                            Main.getInstance().getDatabase().insertAdvanceBanData(Data.serverName, type, executor, executed_on, reason, expirationDate);
-
-                        }
-
-                        if (Data.isSqlite ) {
-
-                            Main.getInstance().getSqLite().insertAdvancedBan(Data.serverName, type, executor, executed_on, reason, expirationDate);
-
-                        }
-
-                        return;
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
 
                     }
-                }
+                } else {
 
-                try {
+                    try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAdvancedBanFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Extras.AdvancedBan")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type) + "\n");
-                    out.close();
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAdvancedBanFile(), true));
+                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Extras.AdvancedBan")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type) + "\n");
+                        out.close();
 
-                } catch (IOException e) {
+                    } catch (IOException e) {
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
 
+                    }
                 }
             }
 
@@ -116,7 +94,7 @@ public class OnAdvancedBan implements Listener {
             }
 
             // External
-            if (Data.isExternal  ) {
+            if (Data.isExternal) {
 
                 try {
 
@@ -126,11 +104,11 @@ public class OnAdvancedBan implements Listener {
             }
 
             // SQLite
-            if (Data.isSqlite ) {
+            if (Data.isSqlite) {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertAdvancedBan(Data.serverName, type, executor, executed_on, reason, expirationDate);
+                    Main.getInstance().getSqLite().insertAdvanceBanData(Data.serverName, type, executor, executed_on, reason, expirationDate);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

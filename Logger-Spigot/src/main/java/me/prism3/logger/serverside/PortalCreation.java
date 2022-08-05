@@ -31,7 +31,7 @@ public class PortalCreation implements Listener {
 
                 try {
 
-                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPortalCreateFile(), true));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPortalCreateFile(), true));
                     out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.Portal-Creation")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%material%", String.valueOf(reason)) + "\n");
                     out.close();
 
@@ -44,13 +44,11 @@ public class PortalCreation implements Listener {
             }
 
             // Discord
-            if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Portal-Creation")).isEmpty()) {
-
+            if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Portal-Creation")).isEmpty())
                 this.main.getDiscord().portalCreation(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Portal-Creation")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%material%", String.valueOf(reason)), false);
-            }
 
             // External
-            if (Data.isExternal  ) {
+            if (Data.isExternal) {
 
                 try {
 
@@ -60,11 +58,11 @@ public class PortalCreation implements Listener {
             }
 
             // SQLite
-            if (Data.isSqlite ) {
+            if (Data.isSqlite) {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPortalCreate(Data.serverName, worldName, reason);
+                    Main.getInstance().getSqLite().insertPortalCreate(Data.serverName, worldName, reason.toString());
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

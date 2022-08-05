@@ -68,15 +68,9 @@ private final Main main = Main.getInstance();
 
                                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Anvil-Staff")).isEmpty()) {
-
-                                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Anvil-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%renamed%", displayName), false);
-
-                                    }
-
                                     try {
 
-                                        BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                                         out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Anvil-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%renamed%", displayName) + "\n");
                                         out.close();
 
@@ -86,34 +80,20 @@ private final Main main = Main.getInstance();
                                         e.printStackTrace();
 
                                     }
+                                } else {
 
-                                    if (Data.isExternal ) {
+                                    try {
 
-                                        Main.getInstance().getDatabase().insertAnvil(Data.serverName, playerName, displayName, true);
+                                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAnvilFile(), true));
+                                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Anvil")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%renamed%", displayName) + "\n");
+                                        out.close();
+
+                                    } catch (IOException e) {
+
+                                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                                        e.printStackTrace();
 
                                     }
-
-                                    if (Data.isSqlite ) {
-
-                                        Main.getInstance().getSqLite().insertAnvil(Data.serverName, player, displayName, true);
-
-                                    }
-
-                                    return;
-
-                                }
-
-                                try {
-
-                                    BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAnvilFile(), true));
-                                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Anvil")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%renamed%", displayName) + "\n");
-                                    out.close();
-
-                                } catch (IOException e) {
-
-                                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                                    e.printStackTrace();
-
                                 }
                             }
 
@@ -147,11 +127,11 @@ private final Main main = Main.getInstance();
                             }
 
                             // SQLite
-                            if (Data.isSqlite ) {
+                            if (Data.isSqlite) {
 
                                 try {
 
-                                    Main.getInstance().getSqLite().insertAnvil(Data.serverName, player, displayName, player.hasPermission(Data.loggerStaffLog));
+                                    Main.getInstance().getSqLite().insertAnvil(Data.serverName, playerName, displayName, player.hasPermission(Data.loggerStaffLog));
 
                                 } catch (Exception e) { e.printStackTrace(); }
                             }
