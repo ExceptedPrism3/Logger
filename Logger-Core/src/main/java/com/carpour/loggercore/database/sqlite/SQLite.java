@@ -19,10 +19,240 @@ public final class SQLite extends AbstractDataSource {
         super(dbSettings, options, "org.sqlite.SQLiteDataSource");
     }
 
+
+    public void createTable() {
+
+        try (final Connection connection = this.dataSource.getConnection();
+             final Statement statement = connection.createStatement()) {
+
+            // Player Side Part
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_chat "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), message VARCHAR(200), is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_commands "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), command VARCHAR(256), is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_sign_text "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "x INT, y INT, z INT, player_name VARCHAR(100), line VARCHAR(60), is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_death "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), player_level INT, x INT, y INT, z INT," +
+                    " cause VARCHAR(40), by_who VARCHAR(30), is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_teleport "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), from_x INT, from_y INT, from_z INT, to_x INT," +
+                    " to_y INT, to_z INT, is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_join "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), x INT, y INT, z INT, ip INT UNSIGNED, is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_leave "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), x INT, y INT, z INT, is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS block_place "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), block VARCHAR(40), x INT, y INT, z INT, is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS block_break "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), block VARCHAR(40), x INT, y INT, z INT, is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_kick "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), x INT, y INT, z INT, reason VARCHAR(50), is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_level "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                    "player_name VARCHAR(100), is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS bucket_fill "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), bucket VARCHAR(40), x INT, y INT, z INT, is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS bucket_empty "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_name VARCHAR(100), bucket VARCHAR(40), x INT, y INT, z INT, is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS anvil "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), player_name VARCHAR(100)," +
+                    " new_name VARCHAR(100), is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS item_drop "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_name VARCHAR(100)," +
+                    " item VARCHAR(50), amount INT, x INT, y INT, z INT, enchantment VARCHAR(50)," +
+                    " changed_name VARCHAR(50), is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS enchanting "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_name VARCHAR(100)," +
+                    " x INT, y INT, z INT, enchantment VARCHAR(50), enchantment_level INT, item VARCHAR(50)," +
+                    " cost INT(5), is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS book_editing "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_name VARCHAR(100)," +
+                    " page_count INT, page_content VARCHAR(250), signed_by VARCHAR(25), is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS item_pickup "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_name VARCHAR(100)," +
+                    " item VARCHAR(250), amount INT, x INT, y INT, z INT,  changed_name VARCHAR(250), is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS furnace "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_name VARCHAR(100)," +
+                    " item VARCHAR(250), amount INT, x INT, y INT, z INT, is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS game_mode "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_name VARCHAR(100)," +
+                    " game_mode VARCHAR(15), is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS crafting "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_name VARCHAR(100)," +
+                    " item VARCHAR(50), amount INT, x INT, y INT, z INT, is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS registration "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), player_name VARCHAR(30)," +
+                    " player_uuid VARCHAR(80), join_date VARCHAR(30))");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS primed_tnt "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_uuid VARCHAR(80)," +
+                    " player_name VARCHAR(100), x INT, y INT, z INT, is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS chest_interaction "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_uuid VARCHAR(80)," +
+                    " player_name VARCHAR(100), x INT, y INT, z INT, items VARCHAR(255), is_staff TINYINT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS entity_death "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_uuid VARCHAR(80)," +
+                    " player_name VARCHAR(100), mob VARCHAR(50), x INT, y INT, z INT, is_staff TINYINT)");
+
+            // Server Side Part
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS server_start "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP())");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS server_stop "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP())");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS console_commands "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), command VARCHAR(256))");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS ram "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), total_memory INT, used_memory INT, free_memory INT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS tps "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), tps INT)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS portal_creation "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), caused_by VARCHAR(50))");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS rcon "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), ip INT UNSIGNED, command VARCHAR(50))");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS command_block "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), command VARCHAR(256))");
+
+            // Extras Side Part
+            if (this.options.isEssentialsEnabled()) {
+
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS afk (id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
+                        " server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                        " player_name VARCHAR(100), x INT, y INT, z INT, is_staff TINYINT)");
+
+                tablesNames.add("afk");
+            }
+
+            if (this.options.isAuthMeEnabled()) {
+
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS wrong_password (id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
+                        " server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                        "player_name VARCHAR(100), is_staff TINYINT)");
+
+                tablesNames.add("wrong_password");
+            }
+
+            if (this.options.isVaultEnabled()) {
+
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS vault (id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
+                        " server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), " +
+                        "player_name VARCHAR(100), old_balance DOUBLE, new_balance DOUBLE, is_staff TINYINT)");
+
+                tablesNames.add("vault");
+            }
+
+            if (this.options.isLiteBansEnabled()) {
+
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS litebans "
+                        + "(server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
+                        " sender VARCHAR(100), command VARCHAR(20), onwho VARCHAR(100), reason VARCHAR(200)," +
+                        " duration VARCHAR(30), is_silent TINYINT)");
+
+                tablesNames.add("litebans");
+            }
+
+            if (this.options.isAdvancedBanEnabled()) {
+
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS advanced_ban (server_name VARCHAR(30)," +
+                        " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), type VARCHAR(30),executor VARCHAR(30)," +
+                        " executed_on VARCHAR(30), reason VARCHAR(100), expiration_date VARCHAR(50))");
+
+                tablesNames.add("advanced_ban");
+            }
+
+            // Version Exceptions Part
+            if (this.options.isViaVersion()) {
+
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS wood_stripping (id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
+                        " server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), " +
+                        "uuid VARCHAR(100), player_name VARCHAR(100), log_name VARCHAR(30), x INT, y INT, z INT, is_staff TINYINT)");
+
+                tablesNames.add("wood_stripping");
+            }
+
+        } catch (final SQLException e) { e.printStackTrace(); }
+    }
+
     @Override
     public void addPlayerTime(String playerName, int playtime) {
 
-        final String sql = "INSERT INTO logger_playertime(player_name, player_time) values(?, ?) ON DUPLICATE KEY UPDATE player_time = player_time + ?";
+        final String sql = "INSERT INTO logger_playertime(player_name, player_time) values(?, ?)" +
+                " ON DUPLICATE KEY UPDATE player_time = player_time + ?";
 
         try (final Connection connection = this.dataSource.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -101,7 +331,7 @@ public final class SQLite extends AbstractDataSource {
     }
 
     @Override
-    public void insertPlayerChat(String serverName, EntityPlayer player, String msg, String worldName) {
+    public void insertPlayerChat(String serverName, EntityPlayer player, String worldName, String msg) {
 
         try (final Connection connection = this.dataSource.getConnection();
              final PreparedStatement playerChat = connection.prepareStatement("INSERT INTO player_chat" +
@@ -119,7 +349,7 @@ public final class SQLite extends AbstractDataSource {
     }
 
     @Override
-    public void insertPlayerCommands(String serverName, EntityPlayer player, String command, String worldName) {
+    public void insertPlayerCommands(String serverName, EntityPlayer player, String worldName, String command) {
 
         try (final Connection connection = this.dataSource.getConnection();
              final PreparedStatement playerCommands = connection.prepareStatement("INSERT INTO player_commands" +
@@ -487,7 +717,7 @@ public final class SQLite extends AbstractDataSource {
 
     @Override
     public void insertEnchant(String serverName, EntityPlayer player, List<String> enchantment, int enchantmentLevel,
-                              String item, int cost, Coordinates coords) {
+                              String item, int cost, Coordinates coordinates) {
 
         try (final Connection connection = this.dataSource.getConnection();
              final PreparedStatement enchanting = connection.prepareStatement("INSERT INTO enchanting" +
@@ -495,11 +725,11 @@ public final class SQLite extends AbstractDataSource {
                      " VALUES(?,?,?,?,?,?,?,?,?,?,?)")) {
 
             enchanting.setString(1, serverName);
-            enchanting.setString(2, coords.getWorldName());
+            enchanting.setString(2, coordinates.getWorldName());
             enchanting.setString(3, player.getPlayerName());
-            enchanting.setInt(4, coords.getX());
-            enchanting.setInt(5, coords.getY());
-            enchanting.setInt(6, coords.getZ());
+            enchanting.setInt(4, coordinates.getX());
+            enchanting.setInt(5, coordinates.getY());
+            enchanting.setInt(6, coordinates.getZ());
             enchanting.setString(7, enchantment.toString());
             enchanting.setInt(8, enchantmentLevel);
             enchanting.setString(9, item);
@@ -512,7 +742,7 @@ public final class SQLite extends AbstractDataSource {
     }
 
     @Override
-    public void insertBookEditing(String serverName, EntityPlayer player, int pages, List<String> content, String signedBy, String worldName) {
+    public void insertBookEditing(String serverName, EntityPlayer player, String worldName, int pages, List<String> content, String signedBy) {
 
         try (final Connection connection = this.dataSource.getConnection();
              final PreparedStatement enchanting = connection.prepareStatement("INSERT INTO book_editing" +
@@ -558,7 +788,6 @@ public final class SQLite extends AbstractDataSource {
              final PreparedStatement wrongPassword = connection.prepareStatement("INSERT INTO wrong_password" +
                      " (server_name, world, player_name, is_staff) VALUES(?,?,?,?)")) {
 
-
             wrongPassword.setString(1, serverName);
             wrongPassword.setString(2, worldName);
             wrongPassword.setString(3, player.getPlayerName());
@@ -579,7 +808,7 @@ public final class SQLite extends AbstractDataSource {
             itemPickup.setString(1, serverName);
             itemPickup.setString(2, coords.getWorldName());
             itemPickup.setString(3, player.getPlayerName());
-            itemPickup.setString(4, item);
+            itemPickup.setString(4, item.toString());
             itemPickup.setInt(5, amount);
             itemPickup.setInt(6, coords.getX());
             itemPickup.setInt(7, coords.getY());
@@ -631,7 +860,7 @@ public final class SQLite extends AbstractDataSource {
     }
 
     @Override
-    public void insertGamemode(String serverName, EntityPlayer player, String theGameMode, String worldName) {
+    public void insertGameMode(String serverName, EntityPlayer player, String theGameMode, String worldName) {
 
         try (final Connection connection = this.dataSource.getConnection();
              final PreparedStatement gameMode = connection.prepareStatement("INSERT INTO game_mode" +
@@ -649,20 +878,20 @@ public final class SQLite extends AbstractDataSource {
     }
 
     @Override
-    public void insertPlayerCraft(String serverName, EntityPlayer player, String item, int amount, Coordinates coords) {
+    public void insertPlayerCraft(String serverName, EntityPlayer player, String item, int amount, Coordinates coordinates) {
 
         try (final Connection connection = this.dataSource.getConnection();
              final PreparedStatement craft = connection.prepareStatement("INSERT INTO crafting" +
                      " (server_name, world, player_name, item, amount, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?,?)")) {
 
             craft.setString(1, serverName);
-            craft.setString(2, coords.getWorldName());
+            craft.setString(2, coordinates.getWorldName());
             craft.setString(3, player.getPlayerName());
             craft.setString(4, item);
             craft.setInt(5, amount);
-            craft.setInt(6, coords.getX());
-            craft.setInt(7, coords.getY());
-            craft.setInt(8, coords.getZ());
+            craft.setInt(6, coordinates.getX());
+            craft.setInt(7, coordinates.getY());
+            craft.setInt(8, coordinates.getZ());
             craft.setBoolean(9, player.isStaff());
 
             craft.executeUpdate();
@@ -706,7 +935,7 @@ public final class SQLite extends AbstractDataSource {
     }
 
     @Override
-    public void insertPrimedtnt(String serverName, EntityPlayer player, Coordinates coords) {
+    public void insertPrimedTnt(String serverName, EntityPlayer player, Coordinates coords) {
 
         try (final Connection connection = this.dataSource.getConnection();
              final PreparedStatement primedTNT = connection.prepareStatement("INSERT INTO primed_tnt" +
@@ -766,14 +995,14 @@ public final class SQLite extends AbstractDataSource {
     }
 
     @Override
-    public void insertCommandBlock(String serverName, String command) {
+    public void insertCommandBlock(String serverName, String msg) {
 
         try (final Connection connection = this.dataSource.getConnection();
              final PreparedStatement commandBlock = connection.prepareStatement("INSERT INTO command_block" +
                      " (server_name, command) VALUES(?,?)")) {
 
             commandBlock.setString(1, serverName);
-            commandBlock.setString(2, command);
+            commandBlock.setString(2, msg);
 
             commandBlock.executeUpdate();
 
@@ -842,235 +1071,6 @@ public final class SQLite extends AbstractDataSource {
             entityDeath.setBoolean(9, player.isStaff());
 
             entityDeath.executeUpdate();
-
-        } catch (final SQLException e) { e.printStackTrace(); }
-    }
-
-    public void createTable() {
-
-        try (final Connection connection = this.dataSource.getConnection();
-             final Statement statement = connection.createStatement()) {
-
-            // Player Side Part
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_chat "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), message VARCHAR(200), is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_commands "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), command VARCHAR(256), is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_sign_text "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "x INT, y INT, z INT, player_name VARCHAR(100), line VARCHAR(60), is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_death "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), player_level INT, x INT, y INT, z INT, cause VARCHAR(40)," +
-                    " by_who VARCHAR(30), is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_teleport "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), from_x INT, from_y INT, from_z INT, to_x INT, to_y INT, to_z INT, is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_join "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), x INT, y INT, z INT, ip INT UNSIGNED, is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_leave "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), x INT, y INT, z INT, is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS block_place "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), block VARCHAR(40), x INT, y INT, z INT, is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS block_break "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), block VARCHAR(40), x INT, y INT, z INT, is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_kick "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), x INT, y INT, z INT, reason VARCHAR(50), is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_level "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), player_name VARCHAR(100), is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS bucket_fill "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), bucket VARCHAR(40), x INT, y INT, z INT, is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS bucket_empty "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), bucket VARCHAR(40), x INT, y INT, z INT, is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS anvil "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), player_name VARCHAR(100)," +
-                    " new_name VARCHAR(100), is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS item_drop "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), item VARCHAR(50), amount INT, x INT, y INT, z INT," +
-                    " enchantment VARCHAR(50), changed_name VARCHAR(50), is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS enchanting "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), x INT, y INT, z INT, enchantment VARCHAR(50), enchantment_level INT, " +
-                    "item VARCHAR(50), cost INT(5), is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS book_editing "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), page_count INT, page_content VARCHAR(250), signed_by VARCHAR(25)," +
-                    " is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS item_pickup "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), item VARCHAR(250), amount INT, x INT, y INT, z INT," +
-                    " changed_name VARCHAR(250), is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS furnace "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), item VARCHAR(250), amount INT, x INT, y INT, z INT, is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS game_mode "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), game_mode VARCHAR(15), is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS crafting "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), item VARCHAR(50), amount INT, x INT, y INT, z INT, is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS registration "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), player_name VARCHAR(30)," +
-                    " player_uuid VARCHAR(80), join_date VARCHAR(30))");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS primed_tnt "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_uuid VARCHAR(80), player_name VARCHAR(100), x INT, y INT, z INT, is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS chest_interaction "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_uuid VARCHAR(80), player_name VARCHAR(100), x INT, y INT, z INT," +
-                    " items VARCHAR(255), is_staff TINYINT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS entity_death "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_uuid VARCHAR(80), player_name VARCHAR(100), mob VARCHAR(50)," +
-                    " x INT, y INT, z INT, is_staff TINYINT)");
-
-            // Server Side Part
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS server_start "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP())");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS server_stop "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP())");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS console_commands "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), command VARCHAR(256))");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS ram "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), total_memory INT, used_memory INT, free_memory INT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS tps "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), tps INT)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS portal_creation "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), caused_by VARCHAR(50))");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS rcon "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), ip INT UNSIGNED, command VARCHAR(50))");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS command_block "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), command VARCHAR(256))");
-
-            // Extras Side Part
-            if (this.options.isEssentialsEnabled()) {
-
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS afk (id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
-                        " server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                        " player_name VARCHAR(100), x INT, y INT, z INT, is_staff TINYINT)");
-
-                tablesNames.add("afk");
-            }
-
-            if (this.options.isAuthMeEnabled()) {
-
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS wrong_password (id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
-                        " server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                        "player_name VARCHAR(100), is_staff TINYINT)");
-
-                tablesNames.add("wrong_password");
-            }
-
-            if (this.options.isVaultEnabled()) {
-
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS vault (id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
-                        " server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), " +
-                        "player_name VARCHAR(100), old_balance DOUBLE, new_balance DOUBLE, is_staff TINYINT)");
-
-                tablesNames.add("vault");
-            }
-
-            if (this.options.isLiteBansEnabled()) {
-
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS litebans "
-                        + "(server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), sender VARCHAR(100), command VARCHAR(20), onwho VARCHAR(100)," +
-                        "reason VARCHAR(200), duration VARCHAR(30), is_silent TINYINT)");
-
-                tablesNames.add("litebans");
-            }
-
-            if (this.options.isAdvancedBanEnabled()) {
-
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS advanced_ban (server_name VARCHAR(30)," +
-                        " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), type VARCHAR(30),executor VARCHAR(30)," +
-                        " executed_on VARCHAR(30), reason VARCHAR(100), expiration_date VARCHAR(50))");
-
-                tablesNames.add("advanced_ban");
-            }
-
-            // Version Exceptions Part
-            if (this.options.isViaVersion()) {
-
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS wood_stripping (id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
-                        " server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), " +
-                        "uuid VARCHAR(100), player_name VARCHAR(100), log_name VARCHAR(30), x INT, y INT, z INT, is_staff TINYINT)");
-
-                tablesNames.add("wood_stripping");
-            }
 
         } catch (final SQLException e) { e.printStackTrace(); }
     }

@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
-public final class MySQL extends AbstractDataSource implements MySQL2 {
+public final class MySQL extends AbstractDataSource{
 
     public MySQL(DatabaseCredentials dbSettings, Options options) throws SQLException {
         super(dbSettings, options, "com.mysql.cj.jdbc.Driver");
