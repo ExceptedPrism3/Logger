@@ -1,217 +1,259 @@
 package com.carpour.loggercore.database.sqlite;
 
 import com.carpour.loggercore.database.AbstractDataSource;
-import com.carpour.loggercore.database.data.DatabaseCredentials;
+import com.carpour.loggercore.database.DataSourceInterface;
 import com.carpour.loggercore.database.data.Options;
 import com.carpour.loggercore.database.entity.Coordinates;
 import com.carpour.loggercore.database.entity.EntityPlayer;
-import com.carpour.loggercore.database.utils.PlayerTime;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public final class SQLite extends AbstractDataSource {
+public final class SQLite implements DataSourceInterface {
+    protected static final List<String> tablesNames = Stream.of("player_chat", "player_commands", "player_sign_text",
+            "player_death", "player_teleport", "player_join", "player_leave", "block_place", "block_break",
+            "player_kick", "player_level", "Bucket_fill", "bucket_empty", "anvil", "item_drop", "enchanting",
+            "book_editing", "item_pickup", "furnace", "game_mode", "crafting", "registration", "server_start",
+            "server_stop", "console_commands", "ram", "tps", "portal_creation", "rcon", "primed_tnt", "command_block",
+            "chest_interaction", "entity_death", "logger_playertime").collect(Collectors.toCollection(ArrayList::new));
+    private final File databaseFile;
+    private final Options options;
+    private final Logger logger = Logger.getLogger(AbstractDataSource.class.getName());
 
-    public SQLite(DatabaseCredentials dbSettings, Options options) throws SQLException {
-        super(dbSettings, options, "org.sqlite.SQLiteDataSource");
+    public SQLite(Options options, File databaseFile) throws SQLException {
+        this.options = options;
+        this.databaseFile = databaseFile;
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        this.createDatabaseFile();
+        this.createTable();
+
+
+    }
+
+    public Connection getConnection() throws SQLException {
+        return DriverManager.getConnection("jdbc:sqlite:" + this.databaseFile.getAbsolutePath());
+
+    }
+
+    private void createDatabaseFile() {
+        try {
+            if (!this.databaseFile.exists()) {
+                this.databaseFile.createNewFile();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String getJdbcUrl() {
+        return ("jdbc:sqlite:" + this.databaseFile.getAbsolutePath());
     }
 
 
-    public void createTable() {
+    private void createTable() {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final Statement statement = connection.createStatement()) {
 
             // Player Side Part
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_chat "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), message VARCHAR(200), is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_chat"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
+                    "player_name TEXT, message TEXT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_commands "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), command VARCHAR(256), is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_commands"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
+                    "player_name TEXT, command VARCHAR(256), is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_sign_text "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "x INT, y INT, z INT, player_name VARCHAR(100), line VARCHAR(60), is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_sign_text"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
+                    "x INT, y INT, z INT, player_name TEXT, line VARCHAR(60), is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_death "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), player_level INT, x INT, y INT, z INT," +
-                    " cause VARCHAR(40), by_who VARCHAR(30), is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_death"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
+                    "player_name TEXT, player_level INT, x INT, y INT, z INT," +
+                    " cause VARCHAR(40), by_who TEXT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_teleport "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), from_x INT, from_y INT, from_z INT, to_x INT," +
-                    " to_y INT, to_z INT, is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_teleport"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
+                    "player_name TEXT, from_x INT, from_y INT, from_z INT, to_x INT," +
+                    " to_y INT, to_z INT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_join "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), x INT, y INT, z INT, ip INT UNSIGNED, is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_join"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
+                    "player_name TEXT, x INT, y INT, z INT, ip INT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_leave "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), x INT, y INT, z INT, is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_leave"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
+                    "player_name TEXT, x INT, y INT, z INT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS block_place "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), block VARCHAR(40), x INT, y INT, z INT, is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS block_place"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
+                    "player_name TEXT, block VARCHAR(40), x INT, y INT, z INT, is_staff BOOLEAN)");
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS block_break "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), block VARCHAR(40), x INT, y INT, z INT, is_staff TINYINT)");
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
+                    "player_name TEXT, block VARCHAR(40), x INT, y INT, z INT, is_staff BOOLEAN)");
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_kick "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), x INT, y INT, z INT, reason VARCHAR(50), is_staff TINYINT)");
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
+                    "player_name TEXT, x INT, y INT, z INT, reason TEXT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_level "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                    "player_name VARCHAR(100), is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_level"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP," +
+                    "player_name TEXT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS bucket_fill "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), bucket VARCHAR(40), x INT, y INT, z INT, is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS bucket_fill"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
+                    "player_name TEXT, bucket VARCHAR(40), x INT, y INT, z INT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS bucket_empty "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), bucket VARCHAR(40), x INT, y INT, z INT, is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS bucket_empty"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
+                    "player_name TEXT, bucket VARCHAR(40), x INT, y INT, z INT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS anvil "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), player_name VARCHAR(100)," +
-                    " new_name VARCHAR(100), is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS anvil"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, player_name TEXT," +
+                    " new_name TEXT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS item_drop "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_name VARCHAR(100)," +
-                    " item VARCHAR(50), amount INT, x INT, y INT, z INT, enchantment VARCHAR(50)," +
-                    " changed_name VARCHAR(50), is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS item_drop"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, player_name TEXT," +
+                    " item TEXT, amount INT, x INT, y INT, z INT, enchantment TEXT," +
+                    " changed_name TEXT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS enchanting "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_name VARCHAR(100)," +
-                    " x INT, y INT, z INT, enchantment VARCHAR(50), enchantment_level INT, item VARCHAR(50)," +
-                    " cost INT(5), is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS enchanting"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, player_name TEXT," +
+                    " x INT, y INT, z INT, enchantment TEXT, enchantment_level INT, item TEXT," +
+                    " cost INT(5), is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS book_editing "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_name VARCHAR(100)," +
-                    " page_count INT, page_content VARCHAR(250), signed_by VARCHAR(25), is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS book_editing"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, player_name TEXT," +
+                    " page_count INT, page_content VARCHAR(250), signed_by VARCHAR(25), is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS item_pickup "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_name VARCHAR(100)," +
-                    " item VARCHAR(250), amount INT, x INT, y INT, z INT,  changed_name VARCHAR(250), is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS item_pickup"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, player_name TEXT," +
+                    " item VARCHAR(250), amount INT, x INT, y INT, z INT,  changed_name VARCHAR(250), is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS furnace "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_name VARCHAR(100)," +
-                    " item VARCHAR(250), amount INT, x INT, y INT, z INT, is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS furnace"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, player_name TEXT," +
+                    " item VARCHAR(250), amount INT, x INT, y INT, z INT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS game_mode "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_name VARCHAR(100)," +
-                    " game_mode VARCHAR(15), is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS game_mode"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, player_name TEXT," +
+                    " game_mode VARCHAR(15), is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS crafting "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_name VARCHAR(100)," +
-                    " item VARCHAR(50), amount INT, x INT, y INT, z INT, is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS crafting"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, player_name TEXT," +
+                    " item TEXT, amount INT, x INT, y INT, z INT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS registration "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), player_name VARCHAR(30)," +
-                    " player_uuid VARCHAR(80), join_date VARCHAR(30))");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS registration"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, player_name TEXT," +
+                    " player_uuid VARCHAR(80), join_date TEXT)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS primed_tnt "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_uuid VARCHAR(80)," +
-                    " player_name VARCHAR(100), x INT, y INT, z INT, is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS primed_tnt"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, player_uuid VARCHAR(80)," +
+                    " player_name TEXT, x INT, y INT, z INT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS chest_interaction "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_uuid VARCHAR(80)," +
-                    " player_name VARCHAR(100), x INT, y INT, z INT, items VARCHAR(255), is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS chest_interaction"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, player_uuid VARCHAR(80)," +
+                    " player_name TEXT, x INT, y INT, z INT, items VARCHAR(255), is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS entity_death "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), player_uuid VARCHAR(80)," +
-                    " player_name VARCHAR(100), mob VARCHAR(50), x INT, y INT, z INT, is_staff TINYINT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS entity_death"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, player_uuid VARCHAR(80)," +
+                    " player_name TEXT, mob TEXT, x INT, y INT, z INT, is_staff BOOLEAN)");
 
             // Server Side Part
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS server_start "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP())");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS server_start"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS server_stop "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP())");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS server_stop"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS console_commands "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), command VARCHAR(256))");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS console_commands"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, command VARCHAR(256))");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS ram "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), total_memory INT, used_memory INT, free_memory INT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS ram"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, total_memory INT, used_memory INT, free_memory INT)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS tps "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), tps INT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS tps"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, tps INT)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS portal_creation "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), caused_by VARCHAR(50))");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS portal_creation"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, caused_by TEXT)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS rcon "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), ip INT UNSIGNED, command VARCHAR(50))");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS rcon"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, ip INT, command TEXT)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS command_block "
-                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30)," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), command VARCHAR(256))");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS command_block"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, command VARCHAR(256))");
 
             // Extras Side Part
             if (this.options.isEssentialsEnabled()) {
 
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS afk (id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
-                        " server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                        " player_name VARCHAR(100), x INT, y INT, z INT, is_staff TINYINT)");
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS afk(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
+                        " player_name TEXT, x INT, y INT, z INT, is_staff BOOLEAN)");
 
                 tablesNames.add("afk");
             }
 
             if (this.options.isAuthMeEnabled()) {
 
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS wrong_password (id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
-                        " server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                        "player_name VARCHAR(100), is_staff TINYINT)");
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS wrong_password(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
+                        "player_name TEXT, is_staff BOOLEAN)");
 
                 tablesNames.add("wrong_password");
             }
 
             if (this.options.isVaultEnabled()) {
 
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS vault (id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
-                        " server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), " +
-                        "player_name VARCHAR(100), old_balance DOUBLE, new_balance DOUBLE, is_staff TINYINT)");
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS vault(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
+                        "player_name TEXT, old_balance DOUBLE, new_balance DOUBLE, is_staff BOOLEAN)");
 
                 tablesNames.add("vault");
             }
@@ -219,18 +261,18 @@ public final class SQLite extends AbstractDataSource {
             if (this.options.isLiteBansEnabled()) {
 
                 statement.executeUpdate("CREATE TABLE IF NOT EXISTS litebans "
-                        + "(server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                        " sender VARCHAR(100), command VARCHAR(20), onwho VARCHAR(100), reason VARCHAR(200)," +
-                        " duration VARCHAR(30), is_silent TINYINT)");
+                        + "(server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP," +
+                        " sender TEXT, command TEXT, onwho TEXT, reason TEXT," +
+                        " duration TEXT, is_silent BOOLEAN)");
 
                 tablesNames.add("litebans");
             }
 
             if (this.options.isAdvancedBanEnabled()) {
 
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS advanced_ban (server_name VARCHAR(30)," +
-                        " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), type VARCHAR(30),executor VARCHAR(30)," +
-                        " executed_on VARCHAR(30), reason VARCHAR(100), expiration_date VARCHAR(50))");
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS advanced_ban (server_name TEXT," +
+                        " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, type TEXT,executor TEXT," +
+                        " executed_on TEXT, reason TEXT, expiration_date TEXT)");
 
                 tablesNames.add("advanced_ban");
             }
@@ -238,102 +280,23 @@ public final class SQLite extends AbstractDataSource {
             // Version Exceptions Part
             if (this.options.isViaVersion()) {
 
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS wood_stripping (id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
-                        " server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), " +
-                        "uuid VARCHAR(100), player_name VARCHAR(100), log_name VARCHAR(30), x INT, y INT, z INT, is_staff TINYINT)");
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS wood_stripping (id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, " +
+                        "uuid TEXT, player_name TEXT, log_name TEXT, x INT, y INT, z INT, is_staff BOOLEAN)");
 
                 tablesNames.add("wood_stripping");
             }
 
-        } catch (final SQLException e) { e.printStackTrace(); }
-    }
-
-    @Override
-    public void addPlayerTime(String playerName, int playtime) {
-
-        final String sql = "INSERT INTO logger_playertime(player_name, player_time) values(?, ?)" +
-                " ON DUPLICATE KEY UPDATE player_time = player_time + ?";
-
-        try (final Connection connection = this.dataSource.getConnection();
-             final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setString(1, playerName);
-            preparedStatement.setInt(2, playtime);
-            preparedStatement.setInt(3, playtime);
-
-            preparedStatement.executeUpdate();
-
         } catch (final SQLException e) {
-
-            this.logger.log(Level.WARNING, e.getMessage(), e);
-
-        } catch (final Exception e) { e.printStackTrace(); }
+            e.printStackTrace();
+        }
     }
 
-    @Override
-    public int getPlayerTime(String playerName) {
-
-        final String sql = "SELECT player_time from logger_playertime WHERE player_name = ?";
-
-        try (final Connection connection = this.dataSource.getConnection();
-             final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setString(1, playerName);
-
-            final ResultSet res = preparedStatement.executeQuery();
-            if (res.next())
-                return res.getInt(1);
-
-        } catch (final SQLException e) {
-
-            this.logger.log(Level.WARNING, e.getMessage(), e);
-
-        } catch (final Exception e) { e.printStackTrace(); }
-        return 0;
-    }
-
-    @Override
-    public void pushPlayerTimesToDatabase() {
-
-        final String sql = "INSERT INTO logger_playertime(player_name, player_time) values(?, ?) ON DUPLICATE KEY UPDATE player_time = player_time + ?";
-
-        try (final Connection connection = this.dataSource.getConnection();
-             final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            for (PlayerTime playerTime : PlayerTime.playersTime.values()) {
-                preparedStatement.setString(1, playerTime.getPlayerName());
-                preparedStatement.setInt(2, (int) playerTime.getCurrentSessionTime());
-                preparedStatement.setInt(3, (int) playerTime.getCurrentSessionTime());
-                playerTime.setJoinTimeToNow();
-                preparedStatement.addBatch();
-            }
-            preparedStatement.executeBatch();
-
-        } catch (final SQLException e) { this.logger.log(Level.WARNING, e.getMessage(), e); }
-    }
-
-    @Override
-    public void pushSinglePTimeToDatabase(String playerName) {
-
-        final String sql = "INSERT INTO player_time(player_name, player_time) values(?, ?) ON DUPLICATE KEY UPDATE player_time = player_time + ?";
-
-        try (final Connection connection = this.dataSource.getConnection();
-             final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            final PlayerTime playerTime = PlayerTime.playersTime.get(playerName);
-
-            preparedStatement.setString(1, playerTime.getPlayerName());
-            preparedStatement.setInt(2, (int) playerTime.getCurrentSessionTime());
-            preparedStatement.setInt(3, (int) playerTime.getCurrentSessionTime());
-            preparedStatement.executeUpdate();
-
-        } catch (final SQLException e) { this.logger.log(Level.WARNING, e.getMessage(), e); }
-    }
 
     @Override
     public void insertPlayerChat(String serverName, EntityPlayer player, String worldName, String msg) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement playerChat = connection.prepareStatement("INSERT INTO player_chat" +
                      " (server_name, world, player_name, message, is_staff) VALUES(?,?,?,?,?)")) {
 
@@ -345,13 +308,15 @@ public final class SQLite extends AbstractDataSource {
 
             playerChat.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertPlayerCommands(String serverName, EntityPlayer player, String worldName, String command) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement playerCommands = connection.prepareStatement("INSERT INTO player_commands" +
                      " (server_name, world, player_name, command, is_staff) VALUES(?,?,?,?,?)")) {
 
@@ -363,13 +328,15 @@ public final class SQLite extends AbstractDataSource {
 
             playerCommands.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertPlayerSignText(String serverName, EntityPlayer player, Coordinates coords, String lines) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement playerSignText = connection.prepareStatement("INSERT INTO player_sign_text" +
                      " (server_name, world, x, y, z, player_name, line, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
 
@@ -384,13 +351,15 @@ public final class SQLite extends AbstractDataSource {
 
             playerSignText.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertPlayerDeath(String serverName, EntityPlayer player, int level, String cause, String who, Coordinates coordinates) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement playerDeath = connection.prepareStatement("INSERT INTO player_death" +
                      " (server_name, world, player_name, player_level, x, y, z, cause, by_who, is_staff) VALUES(?,?,?,?,?,?,?,?,?,?)")) {
 
@@ -407,13 +376,15 @@ public final class SQLite extends AbstractDataSource {
 
             playerDeath.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertPlayerTeleport(String serverName, EntityPlayer player, Coordinates oldCoords, Coordinates newCoords) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement playerTeleport = connection.prepareStatement("INSERT INTO player_teleport" +
                      " (server_name, world, player_name, from_x, from_y, from_z, to_x, to_y, to_z, is_staff)" +
                      " VALUES(?,?,?,?,?,?,?,?,?,?)")) {
@@ -431,13 +402,15 @@ public final class SQLite extends AbstractDataSource {
 
             playerTeleport.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertPlayerJoin(String serverName, EntityPlayer player, Coordinates coords, InetSocketAddress ip) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement playerJoin = connection.prepareStatement("INSERT INTO player_join" +
                      " (server_name, world, player_name, x, y, z, ip, is_staff) VALUES(?,?,?,?,?,?,INET_ATON(?),?)")) {
 
@@ -455,13 +428,15 @@ public final class SQLite extends AbstractDataSource {
 
             playerJoin.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertPlayerLeave(String serverName, EntityPlayer player, Coordinates coords) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement playerLeave = connection.prepareStatement("INSERT INTO player_leave" +
                      " (server_name, world, player_name, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?)")) {
 
@@ -475,13 +450,15 @@ public final class SQLite extends AbstractDataSource {
 
             playerLeave.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertBlockPlace(String serverName, EntityPlayer player, String block, Coordinates coords) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement blockPlace = connection.prepareStatement("INSERT INTO block_place" +
                      " (server_name, world, player_name, block, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
 
@@ -496,13 +473,15 @@ public final class SQLite extends AbstractDataSource {
 
             blockPlace.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertBlockBreak(String serverName, EntityPlayer player, String blockName, Coordinates coords) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement blockBreak = connection.prepareStatement("INSERT INTO block_break" +
                      " (server_name, world, player_name, block, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
 
@@ -517,13 +496,15 @@ public final class SQLite extends AbstractDataSource {
 
             blockBreak.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertTps(String serverName, double tpss) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement tps = connection.prepareStatement("INSERT INTO tps (server_name, tps) VALUES(?,?)")) {
 
             tps.setString(1, serverName);
@@ -531,13 +512,15 @@ public final class SQLite extends AbstractDataSource {
 
             tps.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertRam(String serverName, long tm, long um, long fm) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement ram = connection.prepareStatement("INSERT INTO ram" +
                      " (server_name, total_memory, used_memory, free_memory) VALUES(?,?,?,?)")) {
 
@@ -548,13 +531,15 @@ public final class SQLite extends AbstractDataSource {
 
             ram.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertPlayerKick(String serverName, EntityPlayer player, Coordinates coords, String reason) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement playerKick = connection.prepareStatement("INSERT INTO player_kick" +
                      " (server_name, world, player_name, x, y, z, reason, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
 
@@ -569,13 +554,15 @@ public final class SQLite extends AbstractDataSource {
 
             playerKick.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertPortalCreate(String serverName, String worldName, String by) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement portalCreation = connection.prepareStatement("INSERT INTO portal_creation" +
                      " (server_name, world, caused_by) VALUES(?,?,?)")) {
 
@@ -585,13 +572,15 @@ public final class SQLite extends AbstractDataSource {
 
             portalCreation.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertLevelChange(String serverName, String playerName, boolean isStaff) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement playerLevel = connection.prepareStatement("INSERT INTO player_level" +
                      " (server_name, player_name, is_staff) VALUES(?,?,?)")) {
 
@@ -601,13 +590,15 @@ public final class SQLite extends AbstractDataSource {
 
             playerLevel.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertBucketFill(String serverName, EntityPlayer player, String bucket, Coordinates coords) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement bucketPlace = connection.prepareStatement("INSERT INTO bucket_fill" +
                      " (server_name, world, player_name, bucket, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
 
@@ -622,13 +613,15 @@ public final class SQLite extends AbstractDataSource {
 
             bucketPlace.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertBucketEmpty(String serverName, EntityPlayer player, String bucket, Coordinates coords) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement bucketPlace = connection.prepareStatement("INSERT INTO bucket_empty" +
                      " (server_name, world, player_name, bucket, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
 
@@ -644,13 +637,15 @@ public final class SQLite extends AbstractDataSource {
 
             bucketPlace.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertAnvil(String serverName, String playerName, String newName, boolean isStaff) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement anvil = connection.prepareStatement("INSERT INTO anvil" +
                      " (server_name, player_name, new_name, is_staff) VALUES(?,?,?,?)")) {
 
@@ -661,39 +656,45 @@ public final class SQLite extends AbstractDataSource {
 
             anvil.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertServerStart(String serverName) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement serverStart = connection.prepareStatement("INSERT INTO server_start (server_name) VALUES(?)")) {
 
             serverStart.setString(1, serverName);
 
             serverStart.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertServerStop(String serverName) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement serverStop = connection.prepareStatement("INSERT INTO server_stop (server_name) VALUES(?)")) {
 
             serverStop.setString(1, serverName);
 
             serverStop.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertItemDrop(String serverName, EntityPlayer player, String item, int amount, Coordinates coords, List<String> enchantment, String changedName) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement itemDrop = connection.prepareStatement("INSERT INTO item_drop" +
                      " (server_name, world, player_name, item, amount, x, y, z, enchantment, changed_name, is_staff)" +
                      " VALUES(?,?,?,?,?,?,?,?,?,?,?)")) {
@@ -712,14 +713,16 @@ public final class SQLite extends AbstractDataSource {
 
             itemDrop.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertEnchant(String serverName, EntityPlayer player, List<String> enchantment, int enchantmentLevel,
                               String item, int cost, Coordinates coordinates) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement enchanting = connection.prepareStatement("INSERT INTO enchanting" +
                      " (server_name, world, player_name, x, y, z, enchantment, enchantment_level, item, cost, is_staff)" +
                      " VALUES(?,?,?,?,?,?,?,?,?,?,?)")) {
@@ -738,13 +741,15 @@ public final class SQLite extends AbstractDataSource {
 
             enchanting.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertBookEditing(String serverName, EntityPlayer player, String worldName, int pages, List<String> content, String signedBy) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement enchanting = connection.prepareStatement("INSERT INTO book_editing" +
                      " (server_name, world, player_name, page_count, page_content, signed_by, is_staff) VALUES(?,?,?,?,?,?,?)")) {
 
@@ -758,13 +763,15 @@ public final class SQLite extends AbstractDataSource {
 
             enchanting.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertAfk(String serverName, EntityPlayer player, Coordinates coords) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement afk = connection.prepareStatement("INSERT INTO afk" +
                      " (server_name, world, player_name, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?)")) {
 
@@ -778,13 +785,15 @@ public final class SQLite extends AbstractDataSource {
 
             afk.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertWrongPassword(String serverName, EntityPlayer player, String worldName) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement wrongPassword = connection.prepareStatement("INSERT INTO wrong_password" +
                      " (server_name, world, player_name, is_staff) VALUES(?,?,?,?)")) {
 
@@ -795,20 +804,22 @@ public final class SQLite extends AbstractDataSource {
 
             wrongPassword.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertItemPickup(String serverName, EntityPlayer player, String item, int amount, Coordinates coords, String changedName) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement itemPickup = connection.prepareStatement("INSERT INTO item_pickup" +
                      " (server_name, world, player_name, item, amount, x, y, z, changed_name, is_staff) VALUES(?,?,?,?,?,?,?,?,?,?)")) {
 
             itemPickup.setString(1, serverName);
             itemPickup.setString(2, coords.getWorldName());
             itemPickup.setString(3, player.getPlayerName());
-            itemPickup.setString(4, item.toString());
+            itemPickup.setString(4, item);
             itemPickup.setInt(5, amount);
             itemPickup.setInt(6, coords.getX());
             itemPickup.setInt(7, coords.getY());
@@ -818,13 +829,15 @@ public final class SQLite extends AbstractDataSource {
 
             itemPickup.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertFurnace(String serverName, EntityPlayer player, String item, int amount, Coordinates coords) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement furnace = connection.prepareStatement("INSERT INTO furnace" +
                      " (server_name, world, player_name, item, amount, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?,?)")) {
 
@@ -840,13 +853,15 @@ public final class SQLite extends AbstractDataSource {
 
             furnace.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertRCON(String serverName, String ip, String command) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement rCon = connection.prepareStatement("INSERT INTO rcon" +
                      " (server_name, ip, command) VALUES(?,?,?)")) {
 
@@ -856,13 +871,15 @@ public final class SQLite extends AbstractDataSource {
 
             rCon.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertGameMode(String serverName, EntityPlayer player, String theGameMode, String worldName) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement gameMode = connection.prepareStatement("INSERT INTO game_mode" +
                      " (server_name, world, player_name, game_mode, is_staff) VALUES(?,?,?,?,?)")) {
 
@@ -874,13 +891,15 @@ public final class SQLite extends AbstractDataSource {
 
             gameMode.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertPlayerCraft(String serverName, EntityPlayer player, String item, int amount, Coordinates coordinates) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement craft = connection.prepareStatement("INSERT INTO crafting" +
                      " (server_name, world, player_name, item, amount, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?,?)")) {
 
@@ -896,13 +915,15 @@ public final class SQLite extends AbstractDataSource {
 
             craft.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertVault(String serverName, EntityPlayer player, double oldBal, double newBal) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement vault = connection.prepareStatement("INSERT INTO vault" +
                      " (server_name, player_name, old_balance, new_balance, is_staff) VALUES(?,?,?,?,?)")) {
 
@@ -914,13 +935,15 @@ public final class SQLite extends AbstractDataSource {
 
             vault.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertPlayerRegistration(String serverName, EntityPlayer player, String joinDate) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement register = connection.prepareStatement("INSERT INTO registration" +
                      " (server_name, player_name, player_uuid, join_date) VALUES(?,?,?,?)")) {
 
@@ -931,13 +954,15 @@ public final class SQLite extends AbstractDataSource {
 
             register.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertPrimedTnt(String serverName, EntityPlayer player, Coordinates coords) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement primedTNT = connection.prepareStatement("INSERT INTO primed_tnt" +
                      " (server_name, world, player_uuid, player_name, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
 
@@ -952,13 +977,15 @@ public final class SQLite extends AbstractDataSource {
 
             primedTNT.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertLiteBans(String serverName, String executor, String command, String onWho, String duration, String reason, boolean isSilent) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement liteBans = connection.prepareStatement("INSERT INTO litebans" +
                      " (server_name, sender, command, onwho, reason, duration, is_silent) VALUES(?,?,?,?,?,?,?)")) {
 
@@ -972,13 +999,15 @@ public final class SQLite extends AbstractDataSource {
 
             liteBans.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertAdvanceBanData(String serverName, String type, String executor, String executedOn, String reason, long expirationDate) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement advancedBan = connection.prepareStatement("INSERT INTO advanced_ban" +
                      " (server_name, type, executor, executed_on, reason, expiration_date) VALUES(?,?,?,?,?,?)")) {
 
@@ -991,13 +1020,15 @@ public final class SQLite extends AbstractDataSource {
 
             advancedBan.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertCommandBlock(String serverName, String msg) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement commandBlock = connection.prepareStatement("INSERT INTO command_block" +
                      " (server_name, command) VALUES(?,?)")) {
 
@@ -1006,13 +1037,15 @@ public final class SQLite extends AbstractDataSource {
 
             commandBlock.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertWoodStripping(String serverName, EntityPlayer player, String logName, Coordinates coords) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement woodStripping = connection.prepareStatement("INSERT INTO wood_stripping" +
                      " (server_name, world, uuid, player_name, log_name, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?,?)")) {
 
@@ -1028,13 +1061,15 @@ public final class SQLite extends AbstractDataSource {
 
             woodStripping.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertChestInteraction(String serverName, EntityPlayer player, Coordinates coords, String[] items) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement chestInteraction = connection.prepareStatement("INSERT INTO chest_interaction" +
                      " (server_name, world, player_uuid, player_name, x, y, z, items, is_staff) VALUES(?,?,?,?,?,?,?,?,?)")) {
 
@@ -1050,13 +1085,15 @@ public final class SQLite extends AbstractDataSource {
 
             chestInteraction.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void insertEntityDeath(String serverName, EntityPlayer player, String mob, Coordinates coords) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement entityDeath = connection.prepareStatement("INSERT INTO entity_death" +
                      " (server_name, world, player_uuid, player_name, mob, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?,?)")) {
 
@@ -1072,117 +1109,16 @@ public final class SQLite extends AbstractDataSource {
 
             entityDeath.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
-    }
-
-    public void emptyTable() {
-
-        if (this.options.getDataDelete() <= 0) return;
-
-        try (final Connection connection = this.dataSource.getConnection();
-             final Statement statement = connection.createStatement()) {
-
-            // Player Side Part
-
-            statement.executeUpdate("DELETE FROM player_chat WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM player_commands WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM player_sign_text WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM player_join WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM player_leave WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM player_kick WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM player_death WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM player_teleport WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM player_level WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM block_place WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM block_break WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM bucket_fill WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM bucket_empty WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM anvil WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM item_drop WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM enchanting WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM book_editing WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM item_pickup WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM furnace WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM game_mode WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM crafting WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM registration WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM primed_tnt WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM chest_interaction WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM entity_death WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            // Server Side Part
-            statement.executeUpdate("DELETE FROM server_start WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM server_stop WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM console_commands WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM ram WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM tps WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM portal_creation WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM rcon WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            statement.executeUpdate("DELETE FROM command_block WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            // Extras Side Part
-            if (this.options.isEssentialsEnabled())
-                statement.executeUpdate("DELETE FROM afk WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            if (this.options.isAuthMeEnabled())
-                statement.executeUpdate("DELETE FROM wrong_password WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            if (this.options.isVaultEnabled())
-                statement.executeUpdate("DELETE FROM vault WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            if (this.options.isLiteBansEnabled())
-                statement.executeUpdate("DELETE FROM litebans WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            if (this.options.isAdvancedBanEnabled())
-                statement.executeUpdate("DELETE FROM advanced_ban WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
-            // Version Exception Part
-            if (this.options.isViaVersion())
-                statement.executeUpdate("DELETE FROM wood_stripping WHERE date < NOW() - INTERVAL " + this.options.getDataDelete() + " DAY");
-
         } catch (final SQLException e) {
-
-            this.logger.severe("An error has occurred while cleaning the tables, if the error persists, contact the Authors!");
             e.printStackTrace();
-
         }
     }
+
 
     @Override
     public void insertConsoleCommand(String serverName, String msg) {
 
-        try (final Connection connection = this.dataSource.getConnection();
+        try (final Connection connection = this.getConnection();
              final PreparedStatement consoleCommands = connection.prepareStatement("INSERT INTO console_commands" +
                      " (server_name, command) VALUES(?,?)")) {
 
@@ -1191,14 +1127,10 @@ public final class SQLite extends AbstractDataSource {
 
             consoleCommands.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Override
-    protected String getJdbcUrl() {
-        return ("jdbc:mysql://"
-                + this.databaseCredentials.getDbHost()
-                + ":" + this.databaseCredentials.getDbPort()
-                + "/" + this.databaseCredentials.getDbName());
-    }
+
 }

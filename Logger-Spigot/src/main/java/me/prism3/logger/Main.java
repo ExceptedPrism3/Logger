@@ -3,6 +3,7 @@ package me.prism3.logger;
 import com.carpour.loggercore.database.DataSourceInterface;
 import com.carpour.loggercore.database.data.Options;
 import com.carpour.loggercore.database.mysql.MySQL;
+import com.carpour.loggercore.database.sqlite.SQLite;
 import de.jeff_media.updatechecker.UpdateChecker;
 import me.prism3.logger.api.*;
 import me.prism3.logger.commands.CommandManager;
@@ -25,6 +26,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.sql.SQLException;
 
 import static me.prism3.logger.utils.Data.*;
@@ -73,6 +75,8 @@ public class Main extends JavaPlugin {
         final FileHandler fileHandler = new FileHandler(this.getDataFolder());
         fileHandler.deleteFiles();
 
+        this.loadPluginDepends();
+
         this.databaseSetup();
 
         this.eventsInitializer();
@@ -94,7 +98,7 @@ public class Main extends JavaPlugin {
                     .checkNow();
         }
 
-        this.loadPluginDepends();
+
 
         this.getLogger().info(ChatColor.GOLD + "Thanks to everyone's contributions that helped made this project possible!");
 
@@ -129,6 +133,7 @@ public class Main extends JavaPlugin {
         data.initializeLongs();
         data.initializeBooleans();
         data.initializePermissionStrings();
+        data.initializeDatabaseCredentials();
 
     }
 
@@ -185,7 +190,8 @@ public class Main extends JavaPlugin {
 
         try {
 
-            this.database = new MySQL(Data.databaseCredentials, Data.options);
+            this.database = new MySQL(Data.databaseCredentials, this.options);
+            this.sqLite = new SQLite(this.options, new File(this.getDataFolder(), "LoggerData.db"));
 
         } catch (SQLException e) { this.getLogger().severe(e.getMessage()); }
     }

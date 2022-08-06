@@ -8,13 +8,6 @@ import java.util.List;
 
 public interface DataSourceInterface {
 
-    void addPlayerTime(String playerName, int playtime);
-
-    int getPlayerTime(String playerName);
-
-    void pushPlayerTimesToDatabase();
-
-    void pushSinglePTimeToDatabase(String playerName);
 
     void insertPlayerChat(String serverName, EntityPlayer player, String worldName, String msg);
 

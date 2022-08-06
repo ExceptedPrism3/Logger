@@ -93,7 +93,7 @@ public class Data {
 
     }
 
-    private void initializeDatabaseCredentials() {
+    public void initializeDatabaseCredentials() {
         Data.databaseCredentials = new DatabaseCredentials(
                 this.main.getConfig().getString("Database.Type"),
                 this.main.getConfig().getString("Database.Host"),
