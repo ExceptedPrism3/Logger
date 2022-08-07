@@ -4,7 +4,6 @@ import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.events.spy.OnCommandSpy;
 import me.prism3.logger.utils.BedrockChecker;
-import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.World;
 import org.bukkit.entity.Player;

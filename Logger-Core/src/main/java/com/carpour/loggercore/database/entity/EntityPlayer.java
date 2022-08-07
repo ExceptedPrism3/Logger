@@ -15,5 +15,6 @@ public class EntityPlayer {
         this.playerName = playerName;
         this.playerUniqueID = playerUniqueID;
         this.isStaff = isStaff;
+
     }
 }

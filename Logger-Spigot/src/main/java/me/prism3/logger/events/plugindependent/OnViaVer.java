@@ -2,7 +2,6 @@ package me.prism3.logger.events.plugindependent;
 
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import org.bukkit.entity.Player;
 
 public class OnViaVer {

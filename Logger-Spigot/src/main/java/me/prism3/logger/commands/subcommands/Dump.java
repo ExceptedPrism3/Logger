@@ -2,13 +2,14 @@ package me.prism3.logger.commands.subcommands;
 
 import com.google.common.io.Files;
 import io.github.cdimascio.dotenv.Dotenv;
-import me.prism3.logger.commands.SubCommand;
 import me.prism3.logger.Main;
+import me.prism3.logger.commands.SubCommand;
 import me.prism3.logger.utils.Pastebin;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;

@@ -2,7 +2,7 @@ package me.prism3.logger;
 
 import com.carpour.loggercore.database.DataSourceInterface;
 import com.carpour.loggercore.database.data.Options;
-import com.carpour.loggercore.database.mysql.MySQL;
+import com.carpour.loggercore.database.datasource.Database;
 import com.carpour.loggercore.database.sqlite.SQLite;
 import de.jeff_media.updatechecker.UpdateChecker;
 import me.prism3.logger.api.*;
@@ -189,8 +189,7 @@ public class Main extends JavaPlugin {
     private void databaseSetup() {
 
         try {
-
-            this.database = new MySQL(Data.databaseCredentials, this.options);
+            this.database = new Database(databaseCredentials);
             this.sqLite = new SQLite(this.options, new File(this.getDataFolder(), "LoggerData.db"));
 
         } catch (SQLException e) { this.getLogger().severe(e.getMessage()); }

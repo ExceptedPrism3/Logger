@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,8 +38,6 @@ public abstract class AbstractDataSource implements DataSourceInterface {
 
         if (!DatabaseUtils.checkConnectionIfAlright(this.dataSource))
             throw new SQLException("Failed to connect to database!");
-
-
 
 
     }
@@ -272,17 +269,6 @@ public abstract class AbstractDataSource implements DataSourceInterface {
         } catch (final SQLException e) { e.printStackTrace(); }
     }
 
-    private void createPlayerTime() {
-
-        try (final Connection connection = this.dataSource.getConnection();
-             final Statement statement = connection.createStatement()) {
-
-            final String sql = "CREATE TABLE IF NOT EXISTS logger_playertime(`player_name` VARCHAR(30)  NOT NULL," +
-                    " player_time int UNSIGNED DEFAULT 0, PRIMARY KEY(player_name)) CHARACTER SET = utf8;";
-            statement.execute(sql);
-
-        } catch (SQLException e) { this.logger.log(Level.SEVERE, e.getMessage(), e); }
-    }
 
 
     protected void initializeDataSource() {
@@ -291,6 +277,7 @@ public abstract class AbstractDataSource implements DataSourceInterface {
         this.dataSource.setMaxLifetime(1800 * 1000L);
         this.dataSource.setMaximumPoolSize(100);
         this.dataSource.setIdleTimeout(600000);
+        this.dataSource.setJdbcUrl(this.getJdbcUrl());
         this.dataSource.setUsername(this.databaseCredentials.getDbUsername());
         this.dataSource.setPassword(this.databaseCredentials.getDbPassword());
         this.dataSource.setDriverClassName(this.className);

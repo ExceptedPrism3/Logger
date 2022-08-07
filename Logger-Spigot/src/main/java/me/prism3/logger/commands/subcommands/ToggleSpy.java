@@ -1,11 +1,12 @@
 package me.prism3.logger.commands.subcommands;
 
-import java.util.Collections;
-import java.util.List;
 import me.prism3.logger.Main;
 import me.prism3.logger.commands.SubCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import java.util.Collections;
+import java.util.List;
 
 import static me.prism3.logger.utils.Data.pluginPrefix;
 
