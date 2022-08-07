@@ -39,10 +39,6 @@
                 <configuration>
                     <relocations>
                         <relocation>
-                            <pattern>de.jeff_media.updatechecker</pattern>
-                            <shadedPattern>me.prism3.updatechecker</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>com.zaxxer</pattern>
                             <shadedPattern>me.prism3.com.zaxxer</shadedPattern>
                         </relocation>
@@ -112,30 +108,18 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.29</version>
-            <scope>provided</scope>
 
         </dependency>
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
-            <scope>provided</scope>
             <version>3.0.5</version>
         </dependency>
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>4.0.3</version>
-            <scope>provided</scope>
-
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>6.1.2.Final</version>
-
         </dependency>
-
         <!-- LamBok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
