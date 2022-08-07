@@ -24,7 +24,7 @@ public final class DatabaseCredentials {
         properties.setProperty("hibernate.connection.password", this.getDbPassword());
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
         properties.setProperty("show_sql", "true");
-        properties.setProperty("hibernate.connection.pool_size", "10");
+        properties.setProperty("hibernate.connection.provider_class","org.hibernate.hikaricp.internal.HikariCPConnectionProvider");
         //properties.setProperty("hibernate.connection.autocommit", "true");
 
        return properties;

@@ -120,6 +120,11 @@
             <artifactId>hibernate-core</artifactId>
             <version>6.1.2.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-hikaricp</artifactId>
+            <version>6.1.2.Final</version>
+        </dependency>
         <!-- LamBok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
