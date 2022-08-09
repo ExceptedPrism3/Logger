@@ -1,7 +1,6 @@
 package com.carpour.loggercore.database.entity;
 
-import jakarta.persistence.*;
-
+import javax.persistence.*;
 import java.time.Instant;
 
 @Entity

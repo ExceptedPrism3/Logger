@@ -1,12 +1,46 @@
 package com.carpour.loggercore.database.data;
 
-import lombok.Data;
 
 import java.util.Properties;
 
-@Data
-
 public final class DatabaseCredentials {
+    public String getDbType() {
+        return dbType;
+    }
+
+    public String getDbHost() {
+        return dbHost;
+    }
+
+    public String getDbUsername() {
+        return dbUsername;
+    }
+
+    public String getDbPassword() {
+        return dbPassword;
+    }
+
+    public String getDbName() {
+        return dbName;
+    }
+
+    public int getDbPort() {
+        return dbPort;
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public DatabaseCredentials(String dbType, String dbHost, String dbUsername, String dbPassword, String dbName, int dbPort, boolean isEnabled) {
+        this.dbType = dbType;
+        this.dbHost = dbHost;
+        this.dbUsername = dbUsername;
+        this.dbPassword = dbPassword;
+        this.dbName = dbName;
+        this.dbPort = dbPort;
+        this.isEnabled = isEnabled;
+    }
 
     private final String dbType;
     private final String dbHost;
@@ -25,6 +59,7 @@ public final class DatabaseCredentials {
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
         properties.setProperty("show_sql", "true");
         properties.setProperty("hibernate.connection.provider_class","org.hibernate.hikaricp.internal.HikariCPConnectionProvider");
+
         //properties.setProperty("hibernate.connection.autocommit", "true");
 
        return properties;

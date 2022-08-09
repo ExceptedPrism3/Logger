@@ -1,7 +1,6 @@
 package com.carpour.loggercore.database.entity;
 
-import jakarta.persistence.*;
-
+import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
@@ -21,8 +20,6 @@ public class Enchanting {
     @Column(name = "world", length = 100)
     private String world;
 
-    @Column(name = "player_name", length = 100)
-    private String playerName;
 
     @Column(name = "x")
     private Integer x;
@@ -45,8 +42,17 @@ public class Enchanting {
     @Column(name = "cost")
     private Integer cost;
 
-    @Column(name = "is_staff")
-    private Boolean isStaff;
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "entity_player_id", nullable = false)
+    private EntityPlayer entityPlayer;
+
+    public EntityPlayer getEntityPlayer() {
+        return entityPlayer;
+    }
+
+    public void setEntityPlayer(EntityPlayer entityPlayer) {
+        this.entityPlayer = entityPlayer;
+    }
 
     public Long getId() {
         return id;
@@ -78,14 +84,6 @@ public class Enchanting {
 
     public void setWorld(String world) {
         this.world = world;
-    }
-
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
     }
 
     public Integer getX() {
@@ -144,12 +142,5 @@ public class Enchanting {
         this.cost = cost;
     }
 
-    public Boolean getIsStaff() {
-        return isStaff;
-    }
-
-    public void setIsStaff(Boolean isStaff) {
-        this.isStaff = isStaff;
-    }
 
 }

@@ -1,7 +1,6 @@
 package com.carpour.loggercore.database.entity;
 
-import jakarta.persistence.*;
-
+import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
@@ -21,8 +20,6 @@ public class BucketFill {
     @Column(name = "world", length = 100)
     private String world;
 
-    @Column(name = "player_name", length = 100)
-    private String playerName;
 
     @Column(name = "bucket", length = 40)
     private String bucket;
@@ -36,8 +33,18 @@ public class BucketFill {
     @Column(name = "z")
     private Integer z;
 
-    @Column(name = "is_staff")
-    private Boolean isStaff;
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "entity_player_id", nullable = false)
+    private EntityPlayer entityPlayer;
+
+    public EntityPlayer getEntityPlayer() {
+        return entityPlayer;
+    }
+
+    public void setEntityPlayer(EntityPlayer entityPlayer) {
+        this.entityPlayer = entityPlayer;
+    }
+
 
     public Long getId() {
         return id;
@@ -71,13 +78,6 @@ public class BucketFill {
         this.world = world;
     }
 
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
-    }
 
     public String getBucket() {
         return bucket;
@@ -111,12 +111,5 @@ public class BucketFill {
         this.z = z;
     }
 
-    public Boolean getIsStaff() {
-        return isStaff;
-    }
-
-    public void setIsStaff(Boolean isStaff) {
-        this.isStaff = isStaff;
-    }
 
 }

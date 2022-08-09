@@ -1,5 +1,6 @@
 package me.prism3.logger.events;
 
+import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.events.spy.OnAnvilSpy;
 import me.prism3.logger.utils.BedrockChecker;
@@ -22,6 +23,8 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
+import static me.prism3.logger.utils.Data.loggerStaffLog;
+
 public class OnAnvil implements Listener {
 
 private final Main main = Main.getInstance();
@@ -39,6 +42,7 @@ private final Main main = Main.getInstance();
         if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Anvil")) {
 
             final Player player = (Player) event.getWhoClicked();
+            final EntityPlayer ePlayer = new EntityPlayer(player.getName(), player.getUniqueId().toString(), player.hasPermission(loggerStaffLog));
 
             if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
@@ -121,7 +125,7 @@ private final Main main = Main.getInstance();
 
                                 try {
 
-                                    Main.getInstance().getDatabase().insertAnvil(Data.serverName, playerName, displayName, player.hasPermission(Data.loggerStaffLog));
+                                    Main.getInstance().getDatabase().insertAnvil(Data.serverName, ePlayer, displayName);
 
                                 } catch (Exception e) { e.printStackTrace(); }
                             }
@@ -131,7 +135,7 @@ private final Main main = Main.getInstance();
 
                                 try {
 
-                                    Main.getInstance().getSqLite().insertAnvil(Data.serverName, playerName, displayName, player.hasPermission(Data.loggerStaffLog));
+                                    Main.getInstance().getSqLite().insertAnvil(Data.serverName, ePlayer, displayName);
 
                                 } catch (Exception e) { e.printStackTrace(); }
                             }

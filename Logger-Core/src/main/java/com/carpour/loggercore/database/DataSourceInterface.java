@@ -35,13 +35,13 @@ public interface DataSourceInterface {
 
     void insertPortalCreate(String serverName, String worldName, String by);
 
-    void insertLevelChange(String serverName, String playerName, boolean isStaff);
+    void insertLevelChange(String serverName, EntityPlayer player);
 
     void insertBucketFill(String serverName, EntityPlayer player, String bucket, Coordinates coords);
 
     void insertBucketEmpty(String serverName, EntityPlayer player, String bucket, Coordinates coords);
 
-    void insertAnvil(String serverName, String playerName, String newName, boolean isStaff);
+    void insertAnvil(String serverName, EntityPlayer player, String newName);
 
     void insertServerStart(String serverName);
 

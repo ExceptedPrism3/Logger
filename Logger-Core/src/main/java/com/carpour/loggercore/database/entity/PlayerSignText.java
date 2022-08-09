@@ -1,7 +1,6 @@
 package com.carpour.loggercore.database.entity;
 
-import jakarta.persistence.*;
-
+import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
@@ -28,15 +27,19 @@ public class PlayerSignText {
 
     @Column(name = "z")
     private Integer z;
-
-    @Column(name = "player_name", length = 100)
-    private String playerName;
-
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "entity_player_id", nullable = false)
+    private EntityPlayer entityPlayer;
     @Column(name = "line", length = 60)
     private String line;
 
-    @Column(name = "is_staff")
-    private Boolean isStaff;
+    public EntityPlayer getEntityPlayer() {
+        return entityPlayer;
+    }
+
+    public void setEntityPlayer(EntityPlayer entityPlayer) {
+        this.entityPlayer = entityPlayer;
+    }
 
     public Long getId() {
         return id;
@@ -94,13 +97,6 @@ public class PlayerSignText {
         this.z = z;
     }
 
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
-    }
 
     public String getLine() {
         return line;
@@ -110,16 +106,8 @@ public class PlayerSignText {
         this.line = line;
     }
 
-    public Boolean getIsStaff() {
-        return isStaff;
-    }
 
-    public void setIsStaff(Boolean isStaff) {
-        this.isStaff = isStaff;
-    }
-
-    public void setCoordinates(Coordinates c)
-    {
+    public void setCoordinates(Coordinates c) {
         this.x = c.getX();
         this.y = c.getY();
         this.z = c.getZ();

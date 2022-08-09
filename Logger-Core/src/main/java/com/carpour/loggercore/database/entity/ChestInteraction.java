@@ -1,7 +1,6 @@
 package com.carpour.loggercore.database.entity;
 
-import jakarta.persistence.*;
-
+import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
@@ -21,11 +20,6 @@ public class ChestInteraction {
     @Column(name = "world", length = 100)
     private String world;
 
-    @Column(name = "player_uuid", length = 80)
-    private String playerUuid;
-
-    @Column(name = "player_name", length = 100)
-    private String playerName;
 
     @Column(name = "x")
     private Integer x;
@@ -39,8 +33,18 @@ public class ChestInteraction {
     @Column(name = "items")
     private String items;
 
-    @Column(name = "is_staff")
-    private Boolean isStaff;
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "entity_player_id", nullable = false)
+    private EntityPlayer entityPlayer;
+
+    public EntityPlayer getEntityPlayer() {
+        return entityPlayer;
+    }
+
+    public void setEntityPlayer(EntityPlayer entityPlayer) {
+        this.entityPlayer = entityPlayer;
+    }
+
 
     public Long getId() {
         return id;
@@ -74,21 +78,6 @@ public class ChestInteraction {
         this.world = world;
     }
 
-    public String getPlayerUuid() {
-        return playerUuid;
-    }
-
-    public void setPlayerUuid(String playerUuid) {
-        this.playerUuid = playerUuid;
-    }
-
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
-    }
 
     public Integer getX() {
         return x;
@@ -122,12 +111,5 @@ public class ChestInteraction {
         this.items = items;
     }
 
-    public Boolean getIsStaff() {
-        return isStaff;
-    }
-
-    public void setIsStaff(Boolean isStaff) {
-        this.isStaff = isStaff;
-    }
 
 }

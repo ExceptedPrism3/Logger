@@ -578,6 +578,10 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
+    public void insertLevelChange(String serverName, EntityPlayer player) {
+
+    }
+
     public void insertLevelChange(String serverName, String playerName, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
@@ -643,6 +647,10 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
+    public void insertAnvil(String serverName, EntityPlayer player, String newName) {
+
+    }
+
     public void insertAnvil(String serverName, String playerName, String newName, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();

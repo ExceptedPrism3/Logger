@@ -225,6 +225,8 @@
             <groupId>com.viaversion</groupId>
             <artifactId>viaversion-api</artifactId>
             <version>LATEST</version>
+            <scope>provided</scope>
+
         </dependency>
         <!-- DotEnv -->
         <dependency>
@@ -237,13 +239,6 @@
             <groupId>com.carpour.loggercore</groupId>
             <artifactId>Logger-Core</artifactId>
             <version>1.8.0.2</version>
-        </dependency>
-        <!-- Lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.24</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

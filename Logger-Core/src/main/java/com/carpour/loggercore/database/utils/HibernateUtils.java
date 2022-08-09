@@ -1,11 +1,11 @@
 package com.carpour.loggercore.database.utils;
 
 import com.carpour.loggercore.database.data.DatabaseCredentials;
-import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import javax.persistence.EntityManager;
 import java.util.Properties;
 
 public class HibernateUtils {
@@ -31,6 +31,7 @@ public class HibernateUtils {
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.ConsoleCommand"));
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Crafting"));
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Enchanting"));
+            a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.EntityPlayer"));
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.EntityDeath"));
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Furnace"));
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.GameMode"));
@@ -43,7 +44,6 @@ public class HibernateUtils {
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PlayerKick"));
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PlayerLeave"));
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PlayerLevel"));
-            a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PlayerMessage"));
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PlayerSignText"));
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PlayerTeleport"));
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PortalCreation"));
@@ -54,10 +54,6 @@ public class HibernateUtils {
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.ServerStart"));
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.ServerStop"));
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Tp"));
-
-
-
-
 
             sessionFactory = a.buildSessionFactory();
 
@@ -91,9 +87,4 @@ public class HibernateUtils {
     public static void closeSessionFactory() {
         sessionFactory.close();
     }
-    public static void setProperties(Properties properties)
-    {
-        HibernateUtils.databaseCredentials = properties;
-    }
-
 }

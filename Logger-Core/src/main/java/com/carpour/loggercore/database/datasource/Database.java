@@ -11,24 +11,28 @@ import java.time.Instant;
 import java.util.List;
 
 public final class Database implements DataSourceInterface {
-public Database(DatabaseCredentials databaseCredentials)
-{
-    HibernateUtils.initializeHibernate(databaseCredentials);
-}
+    public Database(DatabaseCredentials databaseCredentials) {
+        HibernateUtils.initializeHibernate(databaseCredentials);
+    }
+
     @Override
     public void insertPlayerChat(String serverName, EntityPlayer player, String worldName, String msg) {
 
-        Session session = HibernateUtils.getSession();session.beginTransaction();
-
-        PlayerChat p  = new PlayerChat();
-
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = HibernateUtils.getSession()
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .setHint("org.hibernate.cacheable", true)
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        PlayerChat p = new PlayerChat();
         p.setDate(Instant.now());
         p.setServerName(serverName);
         p.setMessage(msg);
         p.setWorld(worldName);
-        p.setIsStaff(player.isStaff());
-        p.setPlayerName(player.getPlayerName());
-
+        p.setEntityPlayer(loggerPlayer);
         session.persist(p);
         session.getTransaction().commit();
 
@@ -37,16 +41,22 @@ public Database(DatabaseCredentials databaseCredentials)
     @Override
     public void insertPlayerCommands(String serverName, EntityPlayer player, String worldName, String command) {
 
-        Session session = HibernateUtils.getSession();session.beginTransaction();
-
-        PlayerCommand p  = new PlayerCommand();
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        PlayerCommand p = new PlayerCommand();
 
         p.setDate(Instant.now());
         p.setServerName(serverName);
         p.setCommand(command);
         p.setWorld(worldName);
-        p.setIsStaff(player.isStaff());
-        p.setPlayerName(player.getPlayerName());
+        p.setEntityPlayer(loggerPlayer);
+
 
         session.persist(p);
         session.getTransaction().commit();
@@ -56,16 +66,21 @@ public Database(DatabaseCredentials databaseCredentials)
     @Override
     public void insertPlayerSignText(String serverName, EntityPlayer player, Coordinates coords, String lines) {
 
-        Session session = HibernateUtils.getSession();session.beginTransaction();
-
-        PlayerSignText p  = new PlayerSignText();
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        PlayerSignText p = new PlayerSignText();
 
         p.setDate(Instant.now());
         p.setServerName(serverName);
         p.setCoordinates(coords);
         p.setWorld(coords.getWorldName());
-        p.setIsStaff(player.isStaff());
-        p.setPlayerName(player.getPlayerName());
+        p.setEntityPlayer(loggerPlayer);
 
         session.persist(p);
         session.getTransaction().commit();
@@ -75,9 +90,15 @@ public Database(DatabaseCredentials databaseCredentials)
     @Override
     public void insertPlayerDeath(String serverName, EntityPlayer player, int level, String cause, String who, Coordinates coordinates) {
 
-        Session session = HibernateUtils.getSession();session.beginTransaction();
-
-        PlayerDeath p  = new PlayerDeath();
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        PlayerDeath p = new PlayerDeath();
 
         p.setDate(Instant.now());
         p.setServerName(serverName);
@@ -86,8 +107,7 @@ public Database(DatabaseCredentials databaseCredentials)
         p.setX(coordinates.getX());
         p.setY(coordinates.getY());
         p.setZ(coordinates.getZ());
-        p.setIsStaff(player.isStaff());
-        p.setPlayerName(player.getPlayerName());
+        p.setEntityPlayer(loggerPlayer);
         p.setCause(cause);
         p.setByWho(who);
 
@@ -99,9 +119,15 @@ public Database(DatabaseCredentials databaseCredentials)
     @Override
     public void insertPlayerTeleport(String serverName, EntityPlayer player, Coordinates oldCoords, Coordinates newCoords) {
 
-        Session session = HibernateUtils.getSession();session.beginTransaction();
-
-        PlayerTeleport p  = new PlayerTeleport();
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        PlayerTeleport p = new PlayerTeleport();
 
         p.setDate(Instant.now());
         p.setServerName(serverName);
@@ -112,8 +138,7 @@ public Database(DatabaseCredentials databaseCredentials)
         p.setToX(newCoords.getX());
         p.setToY(newCoords.getY());
         p.setToZ(newCoords.getZ());
-        p.setIsStaff(player.isStaff());
-        p.setPlayerName(player.getPlayerName());
+        p.setEntityPlayer(loggerPlayer);
 
         session.persist(p);
         session.getTransaction().commit();
@@ -123,9 +148,15 @@ public Database(DatabaseCredentials databaseCredentials)
     @Override
     public void insertPlayerJoin(String serverName, EntityPlayer player, Coordinates coords, InetSocketAddress ip) {
 
-        Session session = HibernateUtils.getSession();session.beginTransaction();
-
-        PlayerJoin p  = new PlayerJoin();
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        PlayerJoin p = new PlayerJoin();
 
         p.setDate(Instant.now());
         p.setServerName(serverName);
@@ -135,8 +166,7 @@ public Database(DatabaseCredentials databaseCredentials)
         p.setWorld(coords.getWorldName());
         //TODO
         //ip
-        p.setIsStaff(player.isStaff());
-        p.setPlayerName(player.getPlayerName());
+        p.setEntityPlayer(loggerPlayer);
 
         session.persist(p);
         session.getTransaction().commit();
@@ -146,8 +176,14 @@ public Database(DatabaseCredentials databaseCredentials)
     @Override
     public void insertPlayerLeave(String serverName, EntityPlayer player, Coordinates coords) {
 
-        Session session = HibernateUtils.getSession();session.beginTransaction();
-
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
         PlayerLeave p = new PlayerLeave();
 
         p.setDate(Instant.now());
@@ -157,19 +193,25 @@ public Database(DatabaseCredentials databaseCredentials)
         p.setX(coords.getX());
         p.setY(coords.getY());
         p.setZ(coords.getZ());
-        p.setIsStaff(player.isStaff());
-        p.setPlayerName(player.getPlayerName());
+        p.setEntityPlayer(loggerPlayer);
 
         session.persist(p);
         session.getTransaction().commit();
 
 
     }
+
     @Override
     public void insertBlockPlace(String serverName, EntityPlayer player, String block, Coordinates coords) {
 
-        Session session = HibernateUtils.getSession();session.beginTransaction();
-
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
         BlockPlace p = new BlockPlace();
 
         p.setDate(Instant.now());
@@ -180,8 +222,7 @@ public Database(DatabaseCredentials databaseCredentials)
         p.setY(coords.getY());
         p.setZ(coords.getZ());
         p.setBlock(block);
-        p.setIsStaff(player.isStaff());
-        p.setPlayerName(player.getPlayerName());
+        p.setEntityPlayer(loggerPlayer);
 
         session.persist(p);
         session.getTransaction().commit();
@@ -191,8 +232,14 @@ public Database(DatabaseCredentials databaseCredentials)
     @Override
     public void insertBlockBreak(String serverName, EntityPlayer player, String blockName, Coordinates coords) {
 
-        Session session = HibernateUtils.getSession();session.beginTransaction();
-
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
         BlockBreak p = new BlockBreak();
 
         p.setDate(Instant.now());
@@ -203,8 +250,8 @@ public Database(DatabaseCredentials databaseCredentials)
         p.setY(coords.getY());
         p.setZ(coords.getZ());
         p.setBlock(blockName);
-        p.setIsStaff(player.isStaff());
-        p.setPlayerName(player.getPlayerName());
+        p.setEntityPlayer(loggerPlayer);
+
 
         session.persist(p);
         session.getTransaction().commit();
@@ -214,7 +261,8 @@ public Database(DatabaseCredentials databaseCredentials)
     @Override
     public void insertTps(String serverName, double tpss) {
 
-        Session session = HibernateUtils.getSession();session.beginTransaction();
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
 
         Tp p = new Tp();
 
@@ -231,7 +279,8 @@ public Database(DatabaseCredentials databaseCredentials)
     @Override
     public void insertRam(String serverName, long tm, long um, long fm) {
 
-        Session session = HibernateUtils.getSession();session.beginTransaction();
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
 
         Ram p = new Ram();
 
@@ -250,8 +299,14 @@ public Database(DatabaseCredentials databaseCredentials)
     @Override
     public void insertPlayerKick(String serverName, EntityPlayer player, Coordinates coords, String reason) {
 
-        Session session = HibernateUtils.getSession();session.beginTransaction();
-
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
         PlayerKick p = new PlayerKick();
 
         p.setDate(Instant.now());
@@ -262,8 +317,7 @@ public Database(DatabaseCredentials databaseCredentials)
         p.setY(coords.getY());
         p.setZ(coords.getZ());
         p.setReason(reason);
-        p.setIsStaff(player.isStaff());
-        p.setPlayerName(player.getPlayerName());
+        p.setEntityPlayer(loggerPlayer);
 
         session.persist(p);
         session.getTransaction().commit();
@@ -273,7 +327,8 @@ public Database(DatabaseCredentials databaseCredentials)
     @Override
     public void insertPortalCreate(String serverName, String worldName, String by) {
 
-        Session session = HibernateUtils.getSession();session.beginTransaction();
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
 
         PortalCreation p = new PortalCreation();
 
@@ -288,34 +343,107 @@ public Database(DatabaseCredentials databaseCredentials)
     }
 
     @Override
-    public void insertLevelChange(String serverName, String playerName, boolean isStaff) {
+    public void insertLevelChange(String serverName, EntityPlayer player) {
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        PlayerLevel p = new PlayerLevel();
 
+        p.setDate(Instant.now());
+        p.setServerName(serverName);
+
+        p.setEntityPlayer(loggerPlayer);
+
+        session.persist(p);
+        session.getTransaction().commit();
 
     }
 
     @Override
     public void insertBucketFill(String serverName, EntityPlayer player, String bucket, Coordinates coords) {
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        BucketFill b = new BucketFill();
 
+        b.setDate(Instant.now());
+        b.setServerName(serverName);
+
+        b.setWorld(coords.getWorldName());
+        b.setX(coords.getX());
+        b.setY(coords.getY());
+        b.setZ(coords.getZ());
+        b.setEntityPlayer(loggerPlayer);
+
+        session.persist(b);
+        session.getTransaction().commit();
 
     }
 
     @Override
     public void insertBucketEmpty(String serverName, EntityPlayer player, String bucket, Coordinates coords) {
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        BucketEmpty b = new BucketEmpty();
 
+        b.setDate(Instant.now());
+        b.setServerName(serverName);
+
+        b.setWorld(coords.getWorldName());
+        b.setX(coords.getX());
+        b.setY(coords.getY());
+        b.setZ(coords.getZ());
+        b.setEntityPlayer(loggerPlayer);
+
+        session.persist(b);
+        session.getTransaction().commit();
 
     }
 
     @Override
-    public void insertAnvil(String serverName, String playerName, String newName, boolean isStaff) {
+    public void insertAnvil(String serverName, EntityPlayer player, String newName) {
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        Anvil b = new Anvil();
 
+        b.setDate(Instant.now());
+        b.setServerName(serverName);
+        b.setEntityPlayer(loggerPlayer);
+        b.setNewName(newName);
+
+        session.persist(b);
+        session.getTransaction().commit();
 
     }
 
     @Override
     public void insertServerStart(String serverName) {
-        Session session = HibernateUtils.getSession();session.beginTransaction();
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
 
-        ServerStart s  = new ServerStart();
+        ServerStart s = new ServerStart();
         s.setDate(Instant.now());
         s.setServerName(serverName);
 
@@ -327,9 +455,10 @@ public Database(DatabaseCredentials databaseCredentials)
 
     @Override
     public void insertServerStop(String serverName) {
-        Session session = HibernateUtils.getSession();session.beginTransaction();
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
 
-        ServerStop s  = new ServerStop();
+        ServerStop s = new ServerStop();
         s.setDate(Instant.now());
         s.setServerName(serverName);
         session.persist(s);
@@ -340,20 +469,83 @@ public Database(DatabaseCredentials databaseCredentials)
 
     @Override
     public void insertItemDrop(String serverName, EntityPlayer player, String item, int amount, Coordinates coords, List<String> enchantment, String changedName) {
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        ItemDrop b = new ItemDrop();
 
+        b.setDate(Instant.now());
+        b.setServerName(serverName);
+
+        b.setWorld(coords.getWorldName());
+        b.setX(coords.getX());
+        b.setY(coords.getY());
+        b.setZ(coords.getZ());
+        b.setChangedName(changedName);
+        b.setItem(item);
+        b.setEnchantment(enchantment.toString());
+        b.setEntityPlayer(loggerPlayer);
+
+        session.persist(b);
+        session.getTransaction().commit();
 
     }
 
     @Override
     public void insertEnchant(String serverName, EntityPlayer player, List<String> enchantment, int enchantmentLevel,
                               String item, int cost, Coordinates coordinates) {
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        Enchanting e = new Enchanting();
 
+        e.setDate(Instant.now());
+        e.setServerName(serverName);
+        e.setWorld(coordinates.getWorldName());
+        e.setX(coordinates.getX());
+        e.setY(coordinates.getY());
+        e.setZ(coordinates.getZ());
+        e.setItem(item);
+        e.setCost(cost);
+        e.setEnchantment(enchantment.toString());
+        e.setEnchantmentLevel(enchantmentLevel);
+        e.setEntityPlayer(loggerPlayer);
+
+        session.persist(e);
+        session.getTransaction().commit();
 
     }
 
     @Override
     public void insertBookEditing(String serverName, EntityPlayer player, String worldName, int pages, List<String> content, String signedBy) {
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        BookEditing b = new BookEditing();
+        b.setDate(Instant.now());
+        b.setServerName(serverName);
+        b.setWorld(worldName);
+        b.setPageContent(content.toString());
+        b.setSignedBy(signedBy);
+        b.setEntityPlayer(loggerPlayer);
 
+        session.persist(b);
+        session.getTransaction().commit();
 
     }
 
@@ -371,31 +563,121 @@ public Database(DatabaseCredentials databaseCredentials)
 
     @Override
     public void insertItemPickup(String serverName, EntityPlayer player, String item, int amount, Coordinates coords, String changedName) {
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        ItemPickup b = new ItemPickup();
 
+        b.setDate(Instant.now());
+        b.setServerName(serverName);
+
+        b.setWorld(coords.getWorldName());
+        b.setX(coords.getX());
+        b.setY(coords.getY());
+        b.setZ(coords.getZ());
+        b.setChangedName(changedName);
+        b.setItem(item);
+        b.setEntityPlayer(loggerPlayer);
+
+        session.persist(b);
+        session.getTransaction().commit();
 
     }
 
     @Override
     public void insertFurnace(String serverName, EntityPlayer player, String item, int amount, Coordinates coords) {
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        Furnace b = new Furnace();
 
+        b.setDate(Instant.now());
+        b.setServerName(serverName);
+
+        b.setWorld(coords.getWorldName());
+        b.setX(coords.getX());
+        b.setY(coords.getY());
+        b.setZ(coords.getZ());
+        b.setItem(item);
+        b.setEntityPlayer(loggerPlayer);
+
+        session.persist(b);
+        session.getTransaction().commit();
 
     }
 
     @Override
     public void insertRCON(String serverName, String ip, String command) {
 
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+
+        Rcon b = new Rcon();
+        b.setDate(Instant.now());
+        b.setServerName(serverName);
+        b.setIp(Long.getLong(ip));
+
+        session.persist(b);
+        session.getTransaction().commit();
+    }
+
+    @Override
+    public void insertGameMode(String serverName, EntityPlayer player, String gameMode, String worldName) {
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        GameMode b = new GameMode();
+
+        b.setDate(Instant.now());
+        b.setServerName(serverName);
+        b.setWorld(worldName);
+        b.setGameMode(gameMode);
+        b.setEntityPlayer(loggerPlayer);
+
+        session.persist(b);
+        session.getTransaction().commit();
 
     }
 
     @Override
-    public void insertGameMode(String serverName, EntityPlayer player, String theGameMode, String worldName) {
+    public void insertPlayerCraft(String serverName, EntityPlayer player, String item, int amount, Coordinates coords) {
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        Crafting b = new Crafting();
 
+        b.setDate(Instant.now());
+        b.setServerName(serverName);
+        b.setX(coords.getX());
+        b.setY(coords.getY());
+        b.setZ(coords.getZ());
+        b.setAmount(amount);
+        b.setItem(item);
+        b.setWorld(coords.getWorldName());
+        b.setEntityPlayer(loggerPlayer);
 
-    }
-
-    @Override
-    public void insertPlayerCraft(String serverName, EntityPlayer player, String item, int amount, Coordinates coordinates) {
-
+        session.persist(b);
+        session.getTransaction().commit();
 
     }
 
@@ -407,14 +689,40 @@ public Database(DatabaseCredentials databaseCredentials)
 
     @Override
     public void insertPlayerRegistration(String serverName, EntityPlayer player, String joinDate) {
-
-
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        session.persist(loggerPlayer);
+        session.getTransaction().commit();
     }
 
     @Override
     public void insertPrimedTnt(String serverName, EntityPlayer player, Coordinates coords) {
 
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        PrimedTnt b = new PrimedTnt();
 
+        b.setDate(Instant.now());
+        b.setServerName(serverName);
+        b.setX(coords.getX());
+        b.setY(coords.getY());
+        b.setZ(coords.getZ());
+        b.setEntityPlayer(loggerPlayer);
+
+        session.persist(b);
+        session.getTransaction().commit();
     }
 
     @Override
@@ -431,7 +739,17 @@ public Database(DatabaseCredentials databaseCredentials)
 
     @Override
     public void insertCommandBlock(String serverName, String msg) {
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
 
+        CommandBlock b = new CommandBlock();
+
+        b.setDate(Instant.now());
+        b.setServerName(serverName);
+        b.setCommand(msg);
+
+        session.persist(b);
+        session.getTransaction().commit();
 
     }
 
@@ -443,14 +761,54 @@ public Database(DatabaseCredentials databaseCredentials)
 
     @Override
     public void insertChestInteraction(String serverName, EntityPlayer player, Coordinates coords, String[] items) {
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        ChestInteraction b = new ChestInteraction();
 
+        b.setDate(Instant.now());
+        b.setServerName(serverName);
+
+        b.setWorld(coords.getWorldName());
+        b.setX(coords.getX());
+        b.setY(coords.getY());
+        b.setZ(coords.getZ());
+        b.setEntityPlayer(loggerPlayer);
+        b.setItems(String.join(",", items));
+        session.persist(b);
+        session.getTransaction().commit();
 
     }
 
     @Override
     public void insertEntityDeath(String serverName, EntityPlayer player, String mob, Coordinates coords) {
 
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        EntityPlayer loggerPlayer = session
+                .createQuery("SELECT p FROM EntityPlayer p WHERE playerName = :name", EntityPlayer.class)
+                .setParameter("name", player.getPlayerName())
+                .getResultStream()
+                .findFirst()
+                .orElse(player);
+        EntityDeath b = new EntityDeath();
 
+        b.setDate(Instant.now());
+        b.setServerName(serverName);
+
+        b.setWorld(coords.getWorldName());
+        b.setX(coords.getX());
+        b.setY(coords.getY());
+        b.setZ(coords.getZ());
+        b.setEntityPlayer(loggerPlayer);
+
+        session.persist(b);
+        session.getTransaction().commit();
     }
 
     public void emptyTable() {

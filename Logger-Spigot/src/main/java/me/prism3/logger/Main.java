@@ -3,7 +3,6 @@ package me.prism3.logger;
 import com.carpour.loggercore.database.DataSourceInterface;
 import com.carpour.loggercore.database.data.Options;
 import com.carpour.loggercore.database.datasource.Database;
-import com.carpour.loggercore.database.sqlite.SQLite;
 import de.jeff_media.updatechecker.UpdateChecker;
 import me.prism3.logger.api.*;
 import me.prism3.logger.commands.CommandManager;
@@ -25,9 +24,6 @@ import me.prism3.logger.utils.enums.NmsVersions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-import java.sql.SQLException;
 
 import static me.prism3.logger.utils.Data.*;
 
@@ -190,9 +186,9 @@ public class Main extends JavaPlugin {
 
         try {
             this.database = new Database(databaseCredentials);
-            this.sqLite = new SQLite(this.options, new File(this.getDataFolder(), "LoggerData.db"));
+            this.sqLite = null;
 
-        } catch (SQLException e) { this.getLogger().severe(e.getMessage()); }
+        } catch (Exception e) { this.getLogger().severe(e.getMessage()); }
     }
 
     private void loadPluginDepends() {
