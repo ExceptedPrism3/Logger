@@ -28,6 +28,8 @@ public class BlockBreak {
     private Integer y;
     @Column(name = "z")
     private Integer z;
+    @Column(name = "is_staff")
+    private Boolean isStaff;
 
     public EntityPlayer getEntityPlayer() {
         return entityPlayer;
@@ -69,7 +71,6 @@ public class BlockBreak {
         this.world = world;
     }
 
-
     public String getBlock() {
         return block;
     }
@@ -102,5 +103,11 @@ public class BlockBreak {
         this.z = z;
     }
 
+    public Boolean isStaff() {
+        return isStaff;
+    }
 
+    public void isStaff(Boolean staff) {
+        isStaff = staff;
+    }
 }

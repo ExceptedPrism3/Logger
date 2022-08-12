@@ -33,6 +33,8 @@ public class PlayerLeave {
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "entity_player_id", nullable = false)
     private EntityPlayer entityPlayer;
+    @Column(name = "is_staff")
+    private Boolean isStaff;
 
     public EntityPlayer getEntityPlayer() {
         return entityPlayer;
@@ -74,7 +76,6 @@ public class PlayerLeave {
         this.world = world;
     }
 
-
     public Integer getX() {
         return x;
     }
@@ -99,5 +100,12 @@ public class PlayerLeave {
         this.z = z;
     }
 
+    public Boolean isStaff() {
+        return isStaff;
+    }
+
+    public void isStaff(Boolean staff) {
+        isStaff = staff;
+    }
 
 }

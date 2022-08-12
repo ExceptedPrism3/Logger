@@ -36,6 +36,8 @@ public class EntityDeath {
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "entity_player_id", nullable = false)
     private EntityPlayer entityPlayer;
+    @Column(name = "is_staff")
+    private Boolean isStaff;
 
     public EntityPlayer getEntityPlayer() {
         return entityPlayer;
@@ -77,7 +79,6 @@ public class EntityDeath {
         this.world = world;
     }
 
-
     public String getMob() {
         return mob;
     }
@@ -110,5 +111,12 @@ public class EntityDeath {
         this.z = z;
     }
 
+    public Boolean isStaff() {
+        return isStaff;
+    }
+
+    public void isStaff(Boolean staff) {
+        isStaff = staff;
+    }
 
 }

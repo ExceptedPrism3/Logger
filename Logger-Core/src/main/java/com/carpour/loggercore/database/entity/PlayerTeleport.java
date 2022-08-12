@@ -132,4 +132,11 @@ public class PlayerTeleport {
         this.entityPlayer = entityPlayer;
     }
 
+    public Boolean isStaff() {
+        return isStaff;
+    }
+
+    public void isStaff(Boolean staff) {
+        isStaff = staff;
+    }
 }

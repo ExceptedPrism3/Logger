@@ -23,6 +23,8 @@ public class Anvil {
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "entity_player_id", nullable = false)
     private EntityPlayer entityPlayer;
+    @Column(name = "is_staff")
+    private Boolean isStaff;
 
     public EntityPlayer getEntityPlayer() {
         return entityPlayer;
@@ -56,13 +58,20 @@ public class Anvil {
         this.date = date;
     }
 
-
     public String getNewName() {
         return newName;
     }
 
     public void setNewName(String newName) {
         this.newName = newName;
+    }
+
+    public Boolean isStaff() {
+        return isStaff;
+    }
+
+    public void isStaff(Boolean staff) {
+        isStaff = staff;
     }
 
 

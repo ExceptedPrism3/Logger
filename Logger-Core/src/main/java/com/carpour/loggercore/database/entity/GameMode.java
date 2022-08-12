@@ -27,6 +27,8 @@ public class GameMode {
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "entity_player_id", nullable = false)
     private EntityPlayer entityPlayer;
+    @Column(name = "is_staff")
+    private Boolean isStaff;
 
     public EntityPlayer getEntityPlayer() {
         return entityPlayer;
@@ -68,7 +70,6 @@ public class GameMode {
         this.world = world;
     }
 
-
     public String getGameMode() {
         return gameMode;
     }
@@ -77,5 +78,12 @@ public class GameMode {
         this.gameMode = gameMode;
     }
 
+    public Boolean isStaff() {
+        return isStaff;
+    }
+
+    public void isStaff(Boolean staff) {
+        isStaff = staff;
+    }
 
 }

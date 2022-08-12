@@ -27,6 +27,8 @@ public class PlayerChat {
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "entity_player_id", nullable = false)
     private EntityPlayer entityPlayer;
+    @Column(name = "is_staff")
+    private Boolean isStaff;
 
     public EntityPlayer getEntityPlayer() {
         return entityPlayer;
@@ -68,7 +70,6 @@ public class PlayerChat {
         this.world = world;
     }
 
-
     public String getMessage() {
         return message;
     }
@@ -77,5 +78,11 @@ public class PlayerChat {
         this.message = message;
     }
 
+    public Boolean isStaff() {
+        return isStaff;
+    }
 
+    public void isStaff(Boolean staff) {
+        isStaff = staff;
+    }
 }

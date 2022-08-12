@@ -30,6 +30,8 @@ public class PlayerJoin {
     private Integer z;
     @Column(name = "ip", columnDefinition = "INT UNSIGNED")
     private Long ip;
+    @Column(name = "is_staff")
+    private Boolean isStaff;
 
     public EntityPlayer getEntityPlayer() {
         return entityPlayer;
@@ -71,7 +73,6 @@ public class PlayerJoin {
         this.world = world;
     }
 
-
     public Integer getX() {
         return x;
     }
@@ -104,5 +105,12 @@ public class PlayerJoin {
         this.ip = ip;
     }
 
+    public Boolean isStaff() {
+        return isStaff;
+    }
+
+    public void isStaff(Boolean staff) {
+        isStaff = staff;
+    }
 
 }

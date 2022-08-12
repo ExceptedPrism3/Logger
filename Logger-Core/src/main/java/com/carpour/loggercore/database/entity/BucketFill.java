@@ -36,6 +36,8 @@ public class BucketFill {
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "entity_player_id", nullable = false)
     private EntityPlayer entityPlayer;
+    @Column(name = "is_staff")
+    private Boolean isStaff;
 
     public EntityPlayer getEntityPlayer() {
         return entityPlayer;
@@ -44,7 +46,6 @@ public class BucketFill {
     public void setEntityPlayer(EntityPlayer entityPlayer) {
         this.entityPlayer = entityPlayer;
     }
-
 
     public Long getId() {
         return id;
@@ -78,7 +79,6 @@ public class BucketFill {
         this.world = world;
     }
 
-
     public String getBucket() {
         return bucket;
     }
@@ -111,5 +111,11 @@ public class BucketFill {
         this.z = z;
     }
 
+    public Boolean isStaff() {
+        return isStaff;
+    }
 
+    public void isStaff(Boolean staff) {
+        isStaff = staff;
+    }
 }

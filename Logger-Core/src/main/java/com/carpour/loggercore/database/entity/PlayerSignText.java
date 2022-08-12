@@ -32,6 +32,8 @@ public class PlayerSignText {
     private EntityPlayer entityPlayer;
     @Column(name = "line", length = 60)
     private String line;
+    @Column(name = "is_staff")
+    private Boolean isStaff;
 
     public EntityPlayer getEntityPlayer() {
         return entityPlayer;
@@ -97,7 +99,6 @@ public class PlayerSignText {
         this.z = z;
     }
 
-
     public String getLine() {
         return line;
     }
@@ -106,7 +107,6 @@ public class PlayerSignText {
         this.line = line;
     }
 
-
     public void setCoordinates(Coordinates c) {
         this.x = c.getX();
         this.y = c.getY();
@@ -114,4 +114,11 @@ public class PlayerSignText {
         this.world = c.getWorldName();
     }
 
+    public Boolean isStaff() {
+        return isStaff;
+    }
+
+    public void isStaff(Boolean staff) {
+        isStaff = staff;
+    }
 }

@@ -5,7 +5,13 @@ import java.io.Serializable;
 import java.time.Instant;
 
 @Entity
-@Table(name = "logger_users", uniqueConstraints = {@UniqueConstraint(columnNames = {"player_name", "player_unique_id"})})
+@Table(name = "logger_users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"player_name", "player_unique_id"})
+})
+@NamedQueries({
+        @NamedQuery(name = "EntityPlayer.findOneByName", query = "select e from EntityPlayer e where e.playerName = :playerName")
+})
+
 public class EntityPlayer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,24 +21,21 @@ public class EntityPlayer implements Serializable {
     private String playerName;
     @Column(name = "player_unique_id")
     private String playerUniqueID;
-    @Column(name = "is_staff")
-    private boolean isStaff;
 
     @Column(name = "created_at")
     private Instant createdAt;
 
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
     public EntityPlayer() {
     }
 
-    public EntityPlayer(String playerName, String playerUniqueID, boolean isStaff) {
+    public EntityPlayer(String playerName, String playerUniqueID) {
         this.playerName = playerName;
         this.playerUniqueID = playerUniqueID;
-        this.isStaff = isStaff;
 
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
     }
 
     public String getPlayerName() {
@@ -51,14 +54,6 @@ public class EntityPlayer implements Serializable {
         this.playerUniqueID = playerUniqueID;
     }
 
-    public boolean isStaff() {
-        return isStaff;
-    }
-
-    public void isStaff(boolean staff) {
-        isStaff = staff;
-    }
-
     public Long getId() {
         return id;
     }
@@ -70,6 +65,8 @@ public class EntityPlayer implements Serializable {
 
     @PostPersist
     public void postPersist() {
-    this.createdAt = Instant.now();
+        this.createdAt = Instant.now();
     }
+
+
 }
