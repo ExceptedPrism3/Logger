@@ -793,7 +793,7 @@ public final class Database implements DataSourceInterface {
     }
 
     @Override
-    public void insertEntityDeath(String serverName, EntityPlayer player, String mob, Coordinates coords) {
+    public void insertEntityDeath(String serverName, EntityPlayer player, String mob, Coordinates coords, boolean isStaff) {
 
         Session session = HibernateUtils.getSession();
         session.beginTransaction();

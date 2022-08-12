@@ -84,7 +84,7 @@ public interface DataSourceInterface {
 
     void insertChestInteraction(String serverName, EntityPlayer player, Coordinates coords, String[] items, boolean isStaff);
 
-    void insertEntityDeath(String serverName, EntityPlayer player, String mob, Coordinates coords);
+    void insertEntityDeath(String serverName, EntityPlayer player, String mob, Coordinates coords, boolean isStaff);
 
     void insertConsoleCommand(String serverName, String msg);
 }

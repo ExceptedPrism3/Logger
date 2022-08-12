@@ -294,7 +294,7 @@ public final class SQLite implements DataSourceInterface {
 
 
     @Override
-    public void insertPlayerChat(String serverName, EntityPlayer player, String worldName, String msg) {
+    public void insertPlayerChat(String serverName, EntityPlayer player, String worldName, String msg, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement playerChat = connection.prepareStatement("INSERT INTO player_chat" +
@@ -304,7 +304,7 @@ public final class SQLite implements DataSourceInterface {
             playerChat.setString(2, worldName);
             playerChat.setString(3, player.getPlayerName());
             playerChat.setString(4, msg);
-            playerChat.setBoolean(5, player.isStaff());
+            playerChat.setBoolean(5, isStaff);
 
             playerChat.executeUpdate();
 
@@ -314,7 +314,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertPlayerCommands(String serverName, EntityPlayer player, String worldName, String command) {
+    public void insertPlayerCommands(String serverName, EntityPlayer player, String worldName, String command, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement playerCommands = connection.prepareStatement("INSERT INTO player_commands" +
@@ -324,7 +324,7 @@ public final class SQLite implements DataSourceInterface {
             playerCommands.setString(2, worldName);
             playerCommands.setString(3, player.getPlayerName());
             playerCommands.setString(4, command);
-            playerCommands.setBoolean(5, player.isStaff());
+            playerCommands.setBoolean(5, isStaff);
 
             playerCommands.executeUpdate();
 
@@ -334,7 +334,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertPlayerSignText(String serverName, EntityPlayer player, Coordinates coords, String lines) {
+    public void insertPlayerSignText(String serverName, EntityPlayer player, Coordinates coords, String lines, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement playerSignText = connection.prepareStatement("INSERT INTO player_sign_text" +
@@ -347,7 +347,7 @@ public final class SQLite implements DataSourceInterface {
             playerSignText.setInt(5, coords.getZ());
             playerSignText.setString(6, player.getPlayerName());
             playerSignText.setString(7, lines);
-            playerSignText.setBoolean(8, player.isStaff());
+            playerSignText.setBoolean(8, isStaff);
 
             playerSignText.executeUpdate();
 
@@ -357,7 +357,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertPlayerDeath(String serverName, EntityPlayer player, int level, String cause, String who, Coordinates coordinates) {
+    public void insertPlayerDeath(String serverName, EntityPlayer player, int level, String cause, String who, Coordinates coordinates, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement playerDeath = connection.prepareStatement("INSERT INTO player_death" +
@@ -372,7 +372,7 @@ public final class SQLite implements DataSourceInterface {
             playerDeath.setInt(7, coordinates.getZ());
             playerDeath.setString(8, cause);
             playerDeath.setString(9, who);
-            playerDeath.setBoolean(10, player.isStaff());
+            playerDeath.setBoolean(10, isStaff);
 
             playerDeath.executeUpdate();
 
@@ -382,7 +382,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertPlayerTeleport(String serverName, EntityPlayer player, Coordinates oldCoords, Coordinates newCoords) {
+    public void insertPlayerTeleport(String serverName, EntityPlayer player, Coordinates oldCoords, Coordinates newCoords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement playerTeleport = connection.prepareStatement("INSERT INTO player_teleport" +
@@ -398,7 +398,7 @@ public final class SQLite implements DataSourceInterface {
             playerTeleport.setInt(7, newCoords.getX());
             playerTeleport.setInt(8, newCoords.getY());
             playerTeleport.setInt(9, newCoords.getZ());
-            playerTeleport.setBoolean(10, player.isStaff());
+            playerTeleport.setBoolean(10, isStaff);
 
             playerTeleport.executeUpdate();
 
@@ -408,7 +408,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertPlayerJoin(String serverName, EntityPlayer player, Coordinates coords, InetSocketAddress ip) {
+    public void insertPlayerJoin(String serverName, EntityPlayer player, Coordinates coords, InetSocketAddress ip, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement playerJoin = connection.prepareStatement("INSERT INTO player_join" +
@@ -424,7 +424,7 @@ public final class SQLite implements DataSourceInterface {
                 playerJoin.setString(7, ip.getHostString());
             else
                 playerJoin.setString(7, null);
-            playerJoin.setBoolean(8, player.isStaff());
+            playerJoin.setBoolean(8, isStaff);
 
             playerJoin.executeUpdate();
 
@@ -434,7 +434,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertPlayerLeave(String serverName, EntityPlayer player, Coordinates coords) {
+    public void insertPlayerLeave(String serverName, EntityPlayer player, Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement playerLeave = connection.prepareStatement("INSERT INTO player_leave" +
@@ -446,7 +446,7 @@ public final class SQLite implements DataSourceInterface {
             playerLeave.setInt(4, coords.getX());
             playerLeave.setInt(5, coords.getY());
             playerLeave.setInt(6, coords.getZ());
-            playerLeave.setBoolean(7, player.isStaff());
+            playerLeave.setBoolean(7, isStaff);
 
             playerLeave.executeUpdate();
 
@@ -456,7 +456,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertBlockPlace(String serverName, EntityPlayer player, String block, Coordinates coords) {
+    public void insertBlockPlace(String serverName, EntityPlayer player, String block, Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement blockPlace = connection.prepareStatement("INSERT INTO block_place" +
@@ -469,7 +469,7 @@ public final class SQLite implements DataSourceInterface {
             blockPlace.setInt(5, coords.getX());
             blockPlace.setInt(6, coords.getY());
             blockPlace.setInt(7, coords.getZ());
-            blockPlace.setBoolean(8, player.isStaff());
+            blockPlace.setBoolean(8, isStaff);
 
             blockPlace.executeUpdate();
 
@@ -479,7 +479,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertBlockBreak(String serverName, EntityPlayer player, String blockName, Coordinates coords) {
+    public void insertBlockBreak(String serverName, EntityPlayer player, String blockName, Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement blockBreak = connection.prepareStatement("INSERT INTO block_break" +
@@ -492,7 +492,7 @@ public final class SQLite implements DataSourceInterface {
             blockBreak.setInt(5, coords.getX());
             blockBreak.setInt(6, coords.getY());
             blockBreak.setInt(7, coords.getZ());
-            blockBreak.setBoolean(8, player.isStaff());
+            blockBreak.setBoolean(8, isStaff);
 
             blockBreak.executeUpdate();
 
@@ -537,7 +537,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertPlayerKick(String serverName, EntityPlayer player, Coordinates coords, String reason) {
+    public void insertPlayerKick(String serverName, EntityPlayer player, Coordinates coords, String reason, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement playerKick = connection.prepareStatement("INSERT INTO player_kick" +
@@ -550,7 +550,7 @@ public final class SQLite implements DataSourceInterface {
             playerKick.setInt(5, coords.getY());
             playerKick.setInt(6, coords.getZ());
             playerKick.setString(7, reason);
-            playerKick.setBoolean(8, player.isStaff());
+            playerKick.setBoolean(8, isStaff);
 
             playerKick.executeUpdate();
 
@@ -578,7 +578,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertLevelChange(String serverName, EntityPlayer player) {
+    public void insertLevelChange(String serverName, EntityPlayer player, boolean isStaff) {
 
     }
 
@@ -600,7 +600,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertBucketFill(String serverName, EntityPlayer player, String bucket, Coordinates coords) {
+    public void insertBucketFill(String serverName, EntityPlayer player, String bucket, Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement bucketPlace = connection.prepareStatement("INSERT INTO bucket_fill" +
@@ -613,7 +613,7 @@ public final class SQLite implements DataSourceInterface {
             bucketPlace.setInt(5, coords.getX());
             bucketPlace.setInt(6, coords.getY());
             bucketPlace.setInt(7, coords.getZ());
-            bucketPlace.setBoolean(8, player.isStaff());
+            bucketPlace.setBoolean(8, isStaff);
 
             bucketPlace.executeUpdate();
 
@@ -623,7 +623,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertBucketEmpty(String serverName, EntityPlayer player, String bucket, Coordinates coords) {
+    public void insertBucketEmpty(String serverName, EntityPlayer player, String bucket, Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement bucketPlace = connection.prepareStatement("INSERT INTO bucket_empty" +
@@ -637,7 +637,7 @@ public final class SQLite implements DataSourceInterface {
             bucketPlace.setInt(5, coords.getX());
             bucketPlace.setInt(6, coords.getY());
             bucketPlace.setInt(7, coords.getZ());
-            bucketPlace.setBoolean(8, player.isStaff());
+            bucketPlace.setBoolean(8, isStaff);
 
             bucketPlace.executeUpdate();
 
@@ -647,7 +647,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertAnvil(String serverName, EntityPlayer player, String newName) {
+    public void insertAnvil(String serverName, EntityPlayer player, String newName, boolean isStaff) {
 
     }
 
@@ -700,7 +700,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertItemDrop(String serverName, EntityPlayer player, String item, int amount, Coordinates coords, List<String> enchantment, String changedName) {
+    public void insertItemDrop(String serverName, EntityPlayer player, String item, int amount, Coordinates coords, List<String> enchantment, String changedName, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement itemDrop = connection.prepareStatement("INSERT INTO item_drop" +
@@ -717,7 +717,7 @@ public final class SQLite implements DataSourceInterface {
             itemDrop.setInt(8, coords.getZ());
             itemDrop.setString(9, enchantment.toString());
             itemDrop.setString(10, changedName);
-            itemDrop.setBoolean(11, player.isStaff());
+            itemDrop.setBoolean(11, isStaff);
 
             itemDrop.executeUpdate();
 
@@ -728,7 +728,7 @@ public final class SQLite implements DataSourceInterface {
 
     @Override
     public void insertEnchant(String serverName, EntityPlayer player, List<String> enchantment, int enchantmentLevel,
-                              String item, int cost, Coordinates coordinates) {
+                              String item, int cost, Coordinates coordinates, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement enchanting = connection.prepareStatement("INSERT INTO enchanting" +
@@ -745,7 +745,7 @@ public final class SQLite implements DataSourceInterface {
             enchanting.setInt(8, enchantmentLevel);
             enchanting.setString(9, item);
             enchanting.setInt(10, cost);
-            enchanting.setBoolean(11, player.isStaff());
+            enchanting.setBoolean(11, isStaff);
 
             enchanting.executeUpdate();
 
@@ -755,7 +755,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertBookEditing(String serverName, EntityPlayer player, String worldName, int pages, List<String> content, String signedBy) {
+    public void insertBookEditing(String serverName, EntityPlayer player, String worldName, int pages, List<String> content, String signedBy, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement enchanting = connection.prepareStatement("INSERT INTO book_editing" +
@@ -767,7 +767,7 @@ public final class SQLite implements DataSourceInterface {
             enchanting.setInt(4, pages);
             enchanting.setString(5, content.toString());
             enchanting.setString(6, signedBy);
-            enchanting.setBoolean(7, player.isStaff());
+            enchanting.setBoolean(7, isStaff);
 
             enchanting.executeUpdate();
 
@@ -777,7 +777,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertAfk(String serverName, EntityPlayer player, Coordinates coords) {
+    public void insertAfk(String serverName, EntityPlayer player, Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement afk = connection.prepareStatement("INSERT INTO afk" +
@@ -789,7 +789,7 @@ public final class SQLite implements DataSourceInterface {
             afk.setInt(4, coords.getX());
             afk.setInt(5, coords.getY());
             afk.setInt(6, coords.getZ());
-            afk.setBoolean(7, player.isStaff());
+            afk.setBoolean(7, isStaff);
 
             afk.executeUpdate();
 
@@ -799,7 +799,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertWrongPassword(String serverName, EntityPlayer player, String worldName) {
+    public void insertWrongPassword(String serverName, EntityPlayer player, String worldName, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement wrongPassword = connection.prepareStatement("INSERT INTO wrong_password" +
@@ -808,7 +808,7 @@ public final class SQLite implements DataSourceInterface {
             wrongPassword.setString(1, serverName);
             wrongPassword.setString(2, worldName);
             wrongPassword.setString(3, player.getPlayerName());
-            wrongPassword.setBoolean(4, player.isStaff());
+            wrongPassword.setBoolean(4, isStaff);
 
             wrongPassword.executeUpdate();
 
@@ -818,7 +818,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertItemPickup(String serverName, EntityPlayer player, String item, int amount, Coordinates coords, String changedName) {
+    public void insertItemPickup(String serverName, EntityPlayer player, String item, int amount, Coordinates coords, String changedName, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement itemPickup = connection.prepareStatement("INSERT INTO item_pickup" +
@@ -833,7 +833,7 @@ public final class SQLite implements DataSourceInterface {
             itemPickup.setInt(7, coords.getY());
             itemPickup.setInt(8, coords.getZ());
             itemPickup.setString(9, changedName);
-            itemPickup.setBoolean(10, player.isStaff());
+            itemPickup.setBoolean(10, isStaff);
 
             itemPickup.executeUpdate();
 
@@ -843,7 +843,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertFurnace(String serverName, EntityPlayer player, String item, int amount, Coordinates coords) {
+    public void insertFurnace(String serverName, EntityPlayer player, String item, int amount, Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement furnace = connection.prepareStatement("INSERT INTO furnace" +
@@ -857,7 +857,7 @@ public final class SQLite implements DataSourceInterface {
             furnace.setInt(6, coords.getX());
             furnace.setInt(7, coords.getY());
             furnace.setInt(8, coords.getZ());
-            furnace.setBoolean(9, player.isStaff());
+            furnace.setBoolean(9, isStaff);
 
             furnace.executeUpdate();
 
@@ -885,7 +885,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertGameMode(String serverName, EntityPlayer player, String theGameMode, String worldName) {
+    public void insertGameMode(String serverName, EntityPlayer player, String theGameMode, String worldName, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement gameMode = connection.prepareStatement("INSERT INTO game_mode" +
@@ -895,7 +895,7 @@ public final class SQLite implements DataSourceInterface {
             gameMode.setString(2, worldName);
             gameMode.setString(3, player.getPlayerName());
             gameMode.setString(4, theGameMode);
-            gameMode.setBoolean(5, player.isStaff());
+            gameMode.setBoolean(5, isStaff);
 
             gameMode.executeUpdate();
 
@@ -905,7 +905,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertPlayerCraft(String serverName, EntityPlayer player, String item, int amount, Coordinates coordinates) {
+    public void insertPlayerCraft(String serverName, EntityPlayer player, String item, int amount, Coordinates coordinates, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement craft = connection.prepareStatement("INSERT INTO crafting" +
@@ -919,7 +919,7 @@ public final class SQLite implements DataSourceInterface {
             craft.setInt(6, coordinates.getX());
             craft.setInt(7, coordinates.getY());
             craft.setInt(8, coordinates.getZ());
-            craft.setBoolean(9, player.isStaff());
+            craft.setBoolean(9, isStaff);
 
             craft.executeUpdate();
 
@@ -929,7 +929,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertVault(String serverName, EntityPlayer player, double oldBal, double newBal) {
+    public void insertVault(String serverName, EntityPlayer player, double oldBal, double newBal, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement vault = connection.prepareStatement("INSERT INTO vault" +
@@ -939,7 +939,7 @@ public final class SQLite implements DataSourceInterface {
             vault.setString(2, player.getPlayerName());
             vault.setDouble(3, oldBal);
             vault.setDouble(4, newBal);
-            vault.setBoolean(5, player.isStaff());
+            vault.setBoolean(5, isStaff);
 
             vault.executeUpdate();
 
@@ -968,7 +968,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertPrimedTnt(String serverName, EntityPlayer player, Coordinates coords) {
+    public void insertPrimedTnt(String serverName, EntityPlayer player, Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement primedTNT = connection.prepareStatement("INSERT INTO primed_tnt" +
@@ -981,7 +981,7 @@ public final class SQLite implements DataSourceInterface {
             primedTNT.setInt(5, coords.getX());
             primedTNT.setInt(6, coords.getY());
             primedTNT.setInt(7, coords.getZ());
-            primedTNT.setBoolean(8, player.isStaff());
+            primedTNT.setBoolean(8, isStaff);
 
             primedTNT.executeUpdate();
 
@@ -1051,7 +1051,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertWoodStripping(String serverName, EntityPlayer player, String logName, Coordinates coords) {
+    public void insertWoodStripping(String serverName, EntityPlayer player, String logName, Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement woodStripping = connection.prepareStatement("INSERT INTO wood_stripping" +
@@ -1065,7 +1065,7 @@ public final class SQLite implements DataSourceInterface {
             woodStripping.setInt(6, coords.getX());
             woodStripping.setInt(7, coords.getY());
             woodStripping.setInt(8, coords.getZ());
-            woodStripping.setBoolean(9, player.isStaff());
+            woodStripping.setBoolean(9, isStaff);
 
             woodStripping.executeUpdate();
 
@@ -1075,7 +1075,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertChestInteraction(String serverName, EntityPlayer player, Coordinates coords, String[] items) {
+    public void insertChestInteraction(String serverName, EntityPlayer player, Coordinates coords, String[] items, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement chestInteraction = connection.prepareStatement("INSERT INTO chest_interaction" +
@@ -1089,7 +1089,7 @@ public final class SQLite implements DataSourceInterface {
             chestInteraction.setInt(6, coords.getY());
             chestInteraction.setInt(7, coords.getZ());
             chestInteraction.setString(8, Arrays.toString(items));
-            chestInteraction.setBoolean(9, player.isStaff());
+            chestInteraction.setBoolean(9, isStaff);
 
             chestInteraction.executeUpdate();
 
@@ -1099,7 +1099,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertEntityDeath(String serverName, EntityPlayer player, String mob, Coordinates coords) {
+    public void insertEntityDeath(String serverName, EntityPlayer player, String mob, Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement entityDeath = connection.prepareStatement("INSERT INTO entity_death" +
@@ -1113,7 +1113,7 @@ public final class SQLite implements DataSourceInterface {
             entityDeath.setInt(6, coords.getX());
             entityDeath.setInt(7, coords.getY());
             entityDeath.setInt(8, coords.getZ());
-            entityDeath.setBoolean(9, player.isStaff());
+            entityDeath.setBoolean(9, isStaff);
 
             entityDeath.executeUpdate();
 
