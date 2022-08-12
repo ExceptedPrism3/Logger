@@ -18,49 +18,45 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class SQLite implements DataSourceInterface {
+
     protected static final List<String> tablesNames = Stream.of("player_chat", "player_commands", "player_sign_text",
             "player_death", "player_teleport", "player_join", "player_leave", "block_place", "block_break",
             "player_kick", "player_level", "Bucket_fill", "bucket_empty", "anvil", "item_drop", "enchanting",
             "book_editing", "item_pickup", "furnace", "game_mode", "crafting", "registration", "server_start",
             "server_stop", "console_commands", "ram", "tps", "portal_creation", "rcon", "primed_tnt", "command_block",
             "chest_interaction", "entity_death", "logger_playertime").collect(Collectors.toCollection(ArrayList::new));
+
     private final File databaseFile;
     private final Options options;
     private final Logger logger = Logger.getLogger(AbstractDataSource.class.getName());
 
     public SQLite(Options options, File databaseFile) throws SQLException {
+
         this.options = options;
         this.databaseFile = databaseFile;
         try {
             Class.forName("org.sqlite.JDBC");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (ClassNotFoundException e) { throw new RuntimeException(e); }
+
         this.createDatabaseFile();
         this.createTable();
-
 
     }
 
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:sqlite:" + this.databaseFile.getAbsolutePath());
-
     }
 
     private void createDatabaseFile() {
+
         try {
-            if (!this.databaseFile.exists()) {
+            if (!this.databaseFile.exists())
                 this.databaseFile.createNewFile();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+        } catch (IOException e) { throw new RuntimeException(e); }
     }
 
-    private String getJdbcUrl() {
-        return ("jdbc:sqlite:" + this.databaseFile.getAbsolutePath());
-    }
-
+    private String getJdbcUrl() { return ("jdbc:sqlite:" + this.databaseFile.getAbsolutePath()); }
 
     private void createTable() {
 

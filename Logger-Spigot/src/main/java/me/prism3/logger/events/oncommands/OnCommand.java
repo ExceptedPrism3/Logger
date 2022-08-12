@@ -57,7 +57,7 @@ public class OnCommand implements Listener {
             final String command = event.getMessage().replace("\\", "\\\\");
             final List<String> commandParts = Arrays.asList(event.getMessage().split("\\s+"));
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
 
             // Blacklisted Commands
             if (isBlacklisted) {
@@ -126,7 +126,7 @@ public class OnCommand implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerCommands(serverName, entityPlayer, worldName, command);
+                    Main.getInstance().getDatabase().insertPlayerCommands(serverName, entityPlayer, worldName, command, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }
@@ -136,7 +136,7 @@ public class OnCommand implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerCommands(serverName, entityPlayer, worldName, command);
+                    Main.getInstance().getSqLite().insertPlayerCommands(serverName, entityPlayer, worldName, command, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

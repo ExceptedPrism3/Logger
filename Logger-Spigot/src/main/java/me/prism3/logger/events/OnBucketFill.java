@@ -44,7 +44,7 @@ public class OnBucketFill implements Listener {
             final int y = event.getBlockClicked().getY();
             final int z = event.getBlockClicked().getZ();
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
@@ -105,7 +105,7 @@ public class OnBucketFill implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertBucketFill(Data.serverName, entityPlayer, bucket, coordinates);
+                    Main.getInstance().getDatabase().insertBucketFill(Data.serverName, entityPlayer, bucket, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -115,7 +115,7 @@ public class OnBucketFill implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertBucketFill(Data.serverName, entityPlayer, bucket, coordinates);
+                    Main.getInstance().getSqLite().insertBucketFill(Data.serverName, entityPlayer, bucket, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

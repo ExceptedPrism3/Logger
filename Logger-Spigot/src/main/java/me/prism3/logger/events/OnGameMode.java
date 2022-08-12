@@ -43,7 +43,7 @@ public class OnGameMode implements Listener {
                 final World world = player.getWorld();
                 final String worldName = world.getName();
 
-                final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+                final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
 
                 // Log To Files
                 if (Data.isLogToFiles) {
@@ -103,7 +103,7 @@ public class OnGameMode implements Listener {
 
                     try {
 
-                        Main.getInstance().getDatabase().insertGameMode(Data.serverName, entityPlayer, gameMode, worldName);
+                        Main.getInstance().getDatabase().insertGameMode(Data.serverName, entityPlayer, gameMode, worldName, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
@@ -113,7 +113,7 @@ public class OnGameMode implements Listener {
 
                     try {
 
-                        Main.getInstance().getSqLite().insertGameMode(Data.serverName, entityPlayer, gameMode, worldName);
+                        Main.getInstance().getSqLite().insertGameMode(Data.serverName, entityPlayer, gameMode, worldName, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

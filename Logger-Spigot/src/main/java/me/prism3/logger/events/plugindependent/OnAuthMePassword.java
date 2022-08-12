@@ -37,7 +37,7 @@ public class OnAuthMePassword implements Listener {
             final UUID playerUUID = player.getUniqueId();
             final String worldName = player.getWorld().getName();
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
 
             // Log To Files
             if (Data.isLogToFiles) {
@@ -97,7 +97,7 @@ public class OnAuthMePassword implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertWrongPassword(Data.serverName, entityPlayer, worldName);
+                    Main.getInstance().getDatabase().insertWrongPassword(Data.serverName, entityPlayer, worldName, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception event) { event.printStackTrace(); }
             }
@@ -107,7 +107,7 @@ public class OnAuthMePassword implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertWrongPassword(Data.serverName, entityPlayer, worldName);
+                    Main.getInstance().getSqLite().insertWrongPassword(Data.serverName, entityPlayer, worldName, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

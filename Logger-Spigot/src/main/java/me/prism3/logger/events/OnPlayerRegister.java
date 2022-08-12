@@ -18,8 +18,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.UUID;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
-
 public class OnPlayerRegister {
 
     private final Main main = Main.getInstance();
@@ -42,7 +40,7 @@ public class OnPlayerRegister {
 
         final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
-        final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+        final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
 
         // Log To Files
         if (Data.isLogToFiles) {
@@ -62,12 +60,8 @@ public class OnPlayerRegister {
         }
 
         // Discord Integration
-        if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getMessages().get().getString("Discord.Player-Registration").isEmpty()){
-
-
+        if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getMessages().get().getString("Discord.Player-Registration").isEmpty())
             this.main.getDiscord().playerRegistration(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Registration")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())), false);
-
-        }
 
         // External
         if (Data.isExternal) {

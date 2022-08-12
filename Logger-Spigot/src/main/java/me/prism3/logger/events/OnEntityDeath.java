@@ -47,7 +47,7 @@ public class OnEntityDeath implements Listener {
             final int y = entity.getLocation().getBlockY();
             final int z = entity.getLocation().getBlockZ();
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
@@ -107,7 +107,7 @@ public class OnEntityDeath implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertEntityDeath(Data.serverName, entityPlayer, entityName, coordinates);
+                    Main.getInstance().getDatabase().insertEntityDeath(Data.serverName, entityPlayer, entityName, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -117,7 +117,7 @@ public class OnEntityDeath implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertEntityDeath(Data.serverName, entityPlayer, entityName, coordinates);
+                    Main.getInstance().getSqLite().insertEntityDeath(Data.serverName, entityPlayer, entityName, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

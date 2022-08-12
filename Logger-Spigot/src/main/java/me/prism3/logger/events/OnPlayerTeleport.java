@@ -52,7 +52,7 @@ public class OnPlayerTeleport implements Listener {
             final int oy = player.getLocation().getBlockY();
             final int oz = player.getLocation().getBlockZ();
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
             final Coordinates oldCoords = new Coordinates(ox, oy, oz, worldName);
             final Coordinates newCoords = new Coordinates(tx, ty, tz, worldName); //TODO Hdchi m9awda 3lih
 
@@ -114,7 +114,7 @@ public class OnPlayerTeleport implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerTeleport(Data.serverName, entityPlayer, oldCoords, newCoords);
+                    Main.getInstance().getDatabase().insertPlayerTeleport(Data.serverName, entityPlayer, oldCoords, newCoords, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -124,7 +124,7 @@ public class OnPlayerTeleport implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerTeleport(Data.serverName, entityPlayer, oldCoords, newCoords);
+                    Main.getInstance().getSqLite().insertPlayerTeleport(Data.serverName, entityPlayer, oldCoords, newCoords, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

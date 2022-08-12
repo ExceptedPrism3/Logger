@@ -45,7 +45,7 @@ public class OnBlockBreak implements Listener {
             final int z = event.getBlock().getLocation().getBlockZ();
             final Material blockType = event.getBlock().getType();
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
@@ -107,7 +107,7 @@ public class OnBlockBreak implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertBlockBreak(Data.serverName, entityPlayer, blockType.name(), coordinates);
+                    Main.getInstance().getDatabase().insertBlockBreak(Data.serverName, entityPlayer, blockType.name(), coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -117,7 +117,7 @@ public class OnBlockBreak implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertBlockBreak(Data.serverName, entityPlayer, blockType.name(), coordinates);
+                    Main.getInstance().getSqLite().insertBlockBreak(Data.serverName, entityPlayer, blockType.name(), coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

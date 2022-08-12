@@ -110,9 +110,9 @@ public class Main extends JavaPlugin {
 
         new Stop().run();
 
-        //if (isSqlite && this.sqLite.isConnected()) this.sqLite.disconnect();
+//        if (isSqlite && this.sqLite.isConnected()) this.sqLite.disconnect();
 
-        if (isRegistration && this.sqLiteReg.isConnected()) this.sqLiteReg.disconnect();
+//        if (isRegistration && this.sqLiteReg.isConnected()) this.sqLiteReg.disconnect();
 
         this.discord.disconnect();
 

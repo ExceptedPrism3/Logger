@@ -52,7 +52,7 @@ public class OnBook implements Listener {
             final List<String> pageContent = Collections.singletonList(bookMeta.getPages().toString().replace("\\", "\\\\"));
             String signature = bookMeta.getAuthor();
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
 
             if (!event.isSigning()) signature = "no one";
 
@@ -113,7 +113,7 @@ public class OnBook implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertBookEditing(Data.serverName, entityPlayer, worldName, pageCount, pageContent, signature);
+                    Main.getInstance().getDatabase().insertBookEditing(Data.serverName, entityPlayer, worldName, pageCount, pageContent, signature, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -123,7 +123,7 @@ public class OnBook implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertBookEditing(Data.serverName, entityPlayer, worldName, pageCount, pageContent, signature);
+                    Main.getInstance().getSqLite().insertBookEditing(Data.serverName, entityPlayer, worldName, pageCount, pageContent, signature, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

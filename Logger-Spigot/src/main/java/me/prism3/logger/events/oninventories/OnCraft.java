@@ -45,7 +45,7 @@ public class OnCraft implements Listener {
             final int y = player.getLocation().getBlockY();
             final int z = player.getLocation().getBlockZ();
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
@@ -106,7 +106,7 @@ public class OnCraft implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerCraft(Data.serverName, entityPlayer, item, amount, coordinates);
+                    Main.getInstance().getDatabase().insertPlayerCraft(Data.serverName, entityPlayer, item, amount, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -116,7 +116,7 @@ public class OnCraft implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerCraft(Data.serverName, entityPlayer, item, amount, coordinates);
+                    Main.getInstance().getSqLite().insertPlayerCraft(Data.serverName, entityPlayer, item, amount, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

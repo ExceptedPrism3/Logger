@@ -4,6 +4,7 @@ package com.carpour.loggercore.database.data;
 import java.util.Properties;
 
 public final class DatabaseCredentials {
+
     public String getDbType() {
         return dbType;
     }
@@ -49,9 +50,10 @@ public final class DatabaseCredentials {
     private final String dbName;
     private final int dbPort;
     private final boolean isEnabled;
-    public Properties getPropertiesForHib()
-    {
-        Properties properties = new Properties();
+
+    public Properties getPropertiesForHib() {
+
+        final Properties properties = new Properties();
 
         properties.setProperty("hibernate.connection.url", this.getJdbcUrl());
         properties.setProperty("hibernate.connection.username",  this.getDbUsername());
@@ -71,5 +73,4 @@ public final class DatabaseCredentials {
                 + ":" + this.getDbPort()
                 + "/" + this.getDbName());
     }
-
 }

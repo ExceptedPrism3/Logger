@@ -37,7 +37,7 @@ public class OnCommandWhitelist implements Listener {
         final String command = event.getMessage().replace("\\", "\\\\");
         final List<String> commandParts = Arrays.asList(event.getMessage().split("\\s+"));
         
-        final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+        final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
 
         for (String m : Data.commandsToLog) {
 
@@ -101,7 +101,7 @@ public class OnCommandWhitelist implements Listener {
 
                     try {
 
-                        Main.getInstance().getDatabase().insertPlayerCommands(Data.serverName, entityPlayer, worldName, command);
+                        Main.getInstance().getDatabase().insertPlayerCommands(Data.serverName, entityPlayer, worldName, command, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception exception) { exception.printStackTrace(); }
                 }
@@ -111,7 +111,7 @@ public class OnCommandWhitelist implements Listener {
 
                     try {
 
-                        Main.getInstance().getSqLite().insertPlayerCommands(Data.serverName, entityPlayer, worldName, command);
+                        Main.getInstance().getSqLite().insertPlayerCommands(Data.serverName, entityPlayer, worldName, command, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception exception) { exception.printStackTrace(); }
                 }

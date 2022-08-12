@@ -43,8 +43,8 @@ public class OnPrimedTNT implements Listener {
             final int y = event.getLocation().getBlockY();
             final int z = event.getLocation().getBlockZ();
 
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
 
             // File Logging
             if (isLogToFiles) {
@@ -98,86 +98,13 @@ public class OnPrimedTNT implements Listener {
                     }
                 }
             }
-/*
-            // Log To Files
-            if (isLogToFiles) {
 
-                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Primed-TNT-Staff")).isEmpty()) {
-
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Primed-TNT-Staff")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()), false);
-
-                    }
-
-                    try {
-
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Primed-TNT-Staff")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()) + "\n");
-                        out.close();
-
-                    } catch (IOException e) {
-
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-
-                    }
-
-                    if (isExternal  ) {
-
-                        Main.getInstance().getDatabase().insertPrimedTnt(serverName, new EntityPlayer(), dsa);
-
-                    }
-
-                    if (isSqlite ) {
-
-                        Main.getInstance().getSqLite().insertPrimedTNT(serverName, player, x, y, z, true);
-
-                    }
-
-                    return;
-
-                }
-
-                try {
-
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPrimedTNTFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Primed-TNT")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()) + "\n");
-                    out.close();
-
-                } catch (IOException e) {
-
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
-                }
-            }
-
-            // Discord Integration
-            if (!player.hasPermission(loggerExemptDiscord)) {
-
-                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Primed-TNT-Staff")).isEmpty()) {
-
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Primed-TNT-Staff")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()), false);
-
-                    }
-                } else {
-
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Primed-TNT")).isEmpty()) {
-
-                        this.main.getDiscord().primedTNT(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Primed-TNT")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()), false);
-                    }
-                }
-            }
-*/
             // External
             if (isExternal) {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPrimedTnt(serverName, entityPlayer, coordinates);
+                    Main.getInstance().getDatabase().insertPrimedTnt(serverName, entityPlayer, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -187,7 +114,7 @@ public class OnPrimedTNT implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPrimedTnt(serverName, entityPlayer, coordinates);
+                    Main.getInstance().getSqLite().insertPrimedTnt(serverName, entityPlayer, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

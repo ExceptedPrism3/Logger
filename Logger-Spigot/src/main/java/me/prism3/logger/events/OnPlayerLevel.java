@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.loggerStaffLog;
 
@@ -29,13 +30,15 @@ public class OnPlayerLevel implements Listener {
         if (this.main.getConfig().getBoolean("Log-Player.Level")) {
 
             final Player player = event.getPlayer();
-            final EntityPlayer ePlayer = new EntityPlayer(player.getName(), player.getUniqueId().toString(), player.hasPermission(loggerStaffLog));
 
             if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
+            final UUID playerUUID = player.getUniqueId();
             final String playerName = player.getName();
             final int logAbove = Data.abovePlayerLevel;
             final double playerLevel = event.getNewLevel();
+
+            final EntityPlayer ePlayer = new EntityPlayer(player.getName(), playerUUID.toString());
 
             if (playerLevel == logAbove) {
 
@@ -97,7 +100,7 @@ public class OnPlayerLevel implements Listener {
 
                     try {
 
-                        Main.getInstance().getDatabase().insertLevelChange(Data.serverName, ePlayer);
+                        Main.getInstance().getDatabase().insertLevelChange(Data.serverName, ePlayer, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
@@ -107,7 +110,7 @@ public class OnPlayerLevel implements Listener {
 
                     try {
 
-                        Main.getInstance().getSqLite().insertLevelChange(Data.serverName, ePlayer);
+                        Main.getInstance().getSqLite().insertLevelChange(Data.serverName, ePlayer, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

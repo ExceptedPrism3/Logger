@@ -43,7 +43,7 @@ public class OnPlayerLeave implements Listener {
             final int y = player.getLocation().getBlockY();
             final int z = player.getLocation().getBlockZ();
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
@@ -104,7 +104,7 @@ public class OnPlayerLeave implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerLeave(Data.serverName, entityPlayer, coordinates);
+                    Main.getInstance().getDatabase().insertPlayerLeave(Data.serverName, entityPlayer, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -114,7 +114,7 @@ public class OnPlayerLeave implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerLeave(Data.serverName, entityPlayer, coordinates);
+                    Main.getInstance().getSqLite().insertPlayerLeave(Data.serverName, entityPlayer, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

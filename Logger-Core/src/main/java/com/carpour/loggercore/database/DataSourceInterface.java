@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface DataSourceInterface {
 
-
     void insertPlayerChat(String serverName, EntityPlayer player, String worldName, String msg, boolean isStaff);
 
     void insertPlayerCommands(String serverName, EntityPlayer player, String worldName, String command, boolean isStaff);
@@ -47,12 +46,14 @@ public interface DataSourceInterface {
 
     void insertServerStop(String serverName);
 
-    void insertItemDrop(String serverName, EntityPlayer player, String item, int amount, Coordinates coords, List<String> enchantment, String changedName, boolean isStaff);
+    void insertItemDrop(String serverName, EntityPlayer player, String item, int amount, Coordinates coords,
+                        List<String> enchantment, String changedName, boolean isStaff);
 
     void insertEnchant(String serverName, EntityPlayer player, List<String> enchantment, int enchantmentLevel,
                        String item, int cost, Coordinates coordinates, boolean isStaff);
 
-    void insertBookEditing(String serverName, EntityPlayer player, String worldName, int pages, List<String> content, String signedBy, boolean isStaff);
+    void insertBookEditing(String serverName, EntityPlayer player, String worldName, int pages, List<String> content,
+                           String signedBy, boolean isStaff);
 
     void insertAfk(String serverName, EntityPlayer player, Coordinates coords, boolean isStaff);
 

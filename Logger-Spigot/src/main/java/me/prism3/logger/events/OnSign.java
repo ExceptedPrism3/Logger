@@ -54,7 +54,7 @@ public class OnSign implements Listener {
             final int y = player.getLocation().getBlockY();
             final int z = player.getLocation().getBlockZ();
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
@@ -115,7 +115,7 @@ public class OnSign implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerSignText(Data.serverName, entityPlayer, coordinates, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]");
+                    Main.getInstance().getDatabase().insertPlayerSignText(Data.serverName, entityPlayer, coordinates, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -125,7 +125,7 @@ public class OnSign implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerSignText(Data.serverName, entityPlayer, coordinates, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]");
+                    Main.getInstance().getSqLite().insertPlayerSignText(Data.serverName, entityPlayer, coordinates, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

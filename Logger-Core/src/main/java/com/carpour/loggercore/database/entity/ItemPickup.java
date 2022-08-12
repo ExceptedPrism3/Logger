@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "item_pickup")
 public class ItemPickup {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -19,7 +20,6 @@ public class ItemPickup {
 
     @Column(name = "world", length = 100)
     private String world;
-
 
     @Column(name = "item", length = 250)
     private String item;
@@ -42,6 +42,7 @@ public class ItemPickup {
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "entity_player_id", nullable = false)
     private EntityPlayer entityPlayer;
+
     @Column(name = "is_staff")
     private Boolean isStaff;
 

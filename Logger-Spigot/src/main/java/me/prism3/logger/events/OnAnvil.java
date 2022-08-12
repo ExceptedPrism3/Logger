@@ -22,6 +22,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.loggerStaffLog;
 
@@ -42,13 +43,15 @@ private final Main main = Main.getInstance();
         if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Anvil")) {
 
             final Player player = (Player) event.getWhoClicked();
-            final EntityPlayer ePlayer = new EntityPlayer(player.getName(), player.getUniqueId().toString(), player.hasPermission(loggerStaffLog));
+
 
             if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
+            final UUID playerUUID = player.getUniqueId();
             final String playerName = player.getName();
             final Inventory inv = event.getInventory();
 
+            final EntityPlayer ePlayer = new EntityPlayer(player.getName(), playerUUID.toString());
             if (inv instanceof AnvilInventory) {
 
                 final InventoryView view = event.getView();
@@ -125,7 +128,7 @@ private final Main main = Main.getInstance();
 
                                 try {
 
-                                    Main.getInstance().getDatabase().insertAnvil(Data.serverName, ePlayer, displayName);
+                                    Main.getInstance().getDatabase().insertAnvil(Data.serverName, ePlayer, displayName, player.hasPermission(loggerStaffLog));
 
                                 } catch (Exception e) { e.printStackTrace(); }
                             }
@@ -135,7 +138,7 @@ private final Main main = Main.getInstance();
 
                                 try {
 
-                                    Main.getInstance().getSqLite().insertAnvil(Data.serverName, ePlayer, displayName);
+                                    Main.getInstance().getSqLite().insertAnvil(Data.serverName, ePlayer, displayName, player.hasPermission(loggerStaffLog));
 
                                 } catch (Exception e) { e.printStackTrace(); }
                             }

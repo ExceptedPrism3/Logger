@@ -78,7 +78,7 @@ public class OnChestInteraction implements Listener {
 
             final String[] items = Arrays.stream(event.getInventory().getContents()).filter(Objects::nonNull).map(stack -> MessageFormat.format("{0} x {1}", stack.getType(), stack.getAmount())).toArray(String[]::new);
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
@@ -139,7 +139,7 @@ public class OnChestInteraction implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertChestInteraction(Data.serverName, entityPlayer, coordinates, items);
+                    Main.getInstance().getDatabase().insertChestInteraction(Data.serverName, entityPlayer, coordinates, items, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -149,7 +149,7 @@ public class OnChestInteraction implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertChestInteraction(Data.serverName, entityPlayer, coordinates, items);
+                    Main.getInstance().getSqLite().insertChestInteraction(Data.serverName, entityPlayer, coordinates, items, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

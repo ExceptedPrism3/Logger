@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class AbstractDataSource implements DataSourceInterface {
+
     protected static final List<String> tablesNames = Stream.of("player_chat", "player_commands", "player_sign_text",
             "player_death", "player_teleport", "player_join", "player_leave", "block_place", "block_break",
             "player_kick", "player_level", "Bucket_fill", "bucket_empty", "anvil", "item_drop", "enchanting",
@@ -24,20 +25,12 @@ public abstract class AbstractDataSource implements DataSourceInterface {
     protected final Logger logger = Logger.getLogger(AbstractDataSource.class.getName());
     protected final Options options;
 
-    protected AbstractDataSource(DatabaseCredentials databaseCredentials, Options options,
-                                 String className) throws SQLException {
+    protected AbstractDataSource(DatabaseCredentials databaseCredentials, Options options, String className) throws SQLException {
         this.className = className;
         this.databaseCredentials = databaseCredentials;
         this.options = options;
-
-
-
     }
 
-
-
     protected abstract String getJdbcUrl();
-
-
 
 }

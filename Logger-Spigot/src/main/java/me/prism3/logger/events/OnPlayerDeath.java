@@ -90,7 +90,7 @@ public class OnPlayerDeath implements Listener {
 
             }
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
@@ -151,7 +151,7 @@ public class OnPlayerDeath implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerDeath(Data.serverName, entityPlayer, playerLevel, cause, killer, coordinates);
+                    Main.getInstance().getDatabase().insertPlayerDeath(Data.serverName, entityPlayer, playerLevel, cause, killer, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -161,7 +161,7 @@ public class OnPlayerDeath implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerDeath(Data.serverName, entityPlayer, playerLevel, cause, killer, coordinates);
+                    Main.getInstance().getSqLite().insertPlayerDeath(Data.serverName, entityPlayer, playerLevel, cause, killer, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

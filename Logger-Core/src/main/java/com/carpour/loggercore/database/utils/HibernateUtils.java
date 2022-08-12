@@ -9,15 +9,20 @@ import javax.persistence.EntityManager;
 import java.util.Properties;
 
 public class HibernateUtils {
-    private static ThreadLocal<Session> threadLocal = new ThreadLocal<Session>();
+
+    private HibernateUtils() {}
+
+    private static final ThreadLocal<Session> threadLocal = new ThreadLocal<>();
     private static Properties databaseCredentials;
 
     private static SessionFactory sessionFactory = null;
 
     private static EntityManager em;
+
     public static void initializeHibernate(DatabaseCredentials databaseCredentials) {
 
-        Configuration a = new Configuration().setProperties(databaseCredentials.getPropertiesForHib());
+        final Configuration a = new Configuration().setProperties(databaseCredentials.getPropertiesForHib());
+
         try {
             a.addPackage("com.carpour.loggercore.database.entity");
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Anvil"));
@@ -58,25 +63,26 @@ public class HibernateUtils {
             sessionFactory = a.buildSessionFactory();
 
 
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (ClassNotFoundException e) { throw new RuntimeException(e); }
     }
 
     public static Session getSession() {
-        Session session = null;
+
+        final Session session;
+
         if (threadLocal.get() == null) {
             // Create Session object
             session = sessionFactory.openSession();
             threadLocal.set(session);
-        } else {
+        } else
             session = threadLocal.get();
-        }
         return session;
     }
 
     public static void closeSession() {
-        Session session = null;
+
+        final Session session;
+
         if (threadLocal.get() != null) {
             session = threadLocal.get();
             session.close();
