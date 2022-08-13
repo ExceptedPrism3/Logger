@@ -5,6 +5,7 @@ import com.carpour.loggercore.database.data.DatabaseCredentials;
 import com.carpour.loggercore.database.entity.*;
 import com.carpour.loggercore.database.utils.HibernateUtils;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.net.InetSocketAddress;
 import java.time.Instant;
@@ -20,11 +21,9 @@ public final class Database implements DataSourceInterface {
     public void insertPlayerChat(String serverName, EntityPlayer player, String worldName, String msg, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
+        Transaction tx = session.beginTransaction();
 
-        session.beginTransaction();
-
-        final EntityPlayer loggerPlayer = HibernateUtils.getSession()
-                .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
+        final EntityPlayer loggerPlayer = session.createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
                 .setParameter("playerName", player.getPlayerName())
                 .setHint("org.hibernate.cacheable", true)
                 .getResultStream()
@@ -40,7 +39,7 @@ public final class Database implements DataSourceInterface {
         p.setEntityPlayer(loggerPlayer);
         p.isStaff(isStaff);
         session.persist(p);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -48,8 +47,7 @@ public final class Database implements DataSourceInterface {
     public void insertPlayerCommands(String serverName, EntityPlayer player, String worldName, String command, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -68,7 +66,7 @@ public final class Database implements DataSourceInterface {
         p.isStaff(isStaff);
 
         session.persist(p);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -76,8 +74,7 @@ public final class Database implements DataSourceInterface {
     public void insertPlayerSignText(String serverName, EntityPlayer player, Coordinates coords, String lines, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -97,7 +94,7 @@ public final class Database implements DataSourceInterface {
         p.isStaff(isStaff);
 
         session.persist(p);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -106,8 +103,7 @@ public final class Database implements DataSourceInterface {
                                   Coordinates coordinates, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -131,7 +127,7 @@ public final class Database implements DataSourceInterface {
         p.setByWho(who);
 
         session.persist(p);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -139,8 +135,7 @@ public final class Database implements DataSourceInterface {
     public void insertPlayerTeleport(String serverName, EntityPlayer player, Coordinates oldCoords, Coordinates newCoords, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -164,7 +159,7 @@ public final class Database implements DataSourceInterface {
         p.isStaff(isStaff);
 
         session.persist(p);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -172,8 +167,7 @@ public final class Database implements DataSourceInterface {
     public void insertPlayerJoin(String serverName, EntityPlayer player, Coordinates coords, InetSocketAddress ip, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -196,7 +190,7 @@ public final class Database implements DataSourceInterface {
         p.isStaff(isStaff);
 
         session.persist(p);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -204,8 +198,7 @@ public final class Database implements DataSourceInterface {
     public void insertPlayerLeave(String serverName, EntityPlayer player, Coordinates coords, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -228,7 +221,7 @@ public final class Database implements DataSourceInterface {
         p.isStaff(isStaff);
 
         session.persist(p);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -236,8 +229,7 @@ public final class Database implements DataSourceInterface {
     public void insertBlockPlace(String serverName, EntityPlayer player, String block, Coordinates coords, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -259,7 +251,7 @@ public final class Database implements DataSourceInterface {
         p.setAsBlockPlace();
 
         session.persist(p);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -267,8 +259,7 @@ public final class Database implements DataSourceInterface {
     public void insertBlockBreak(String serverName, EntityPlayer player, String blockName, Coordinates coords, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -291,7 +282,7 @@ public final class Database implements DataSourceInterface {
         p.setAsBlockBreak();
 
         session.persist(p);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -299,8 +290,7 @@ public final class Database implements DataSourceInterface {
     public void insertTps(String serverName, double tpss) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final Tp p = new Tp();
 
@@ -310,7 +300,7 @@ public final class Database implements DataSourceInterface {
         p.setTps((int) tpss);
 
         session.persist(p);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -318,8 +308,7 @@ public final class Database implements DataSourceInterface {
     public void insertRam(String serverName, long tm, long um, long fm) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final Ram p = new Ram();
 
@@ -331,7 +320,7 @@ public final class Database implements DataSourceInterface {
         p.setFreeMemory((int) fm);
 
         session.persist(p);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -339,8 +328,7 @@ public final class Database implements DataSourceInterface {
     public void insertPlayerKick(String serverName, EntityPlayer player, Coordinates coords, String reason, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -363,7 +351,7 @@ public final class Database implements DataSourceInterface {
         p.isStaff(isStaff);
 
         session.persist(p);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -371,8 +359,7 @@ public final class Database implements DataSourceInterface {
     public void insertPortalCreate(String serverName, String worldName, String by) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final PortalCreation p = new PortalCreation();
 
@@ -382,7 +369,7 @@ public final class Database implements DataSourceInterface {
         p.setCausedBy(by);
 
         session.persist(p);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -390,8 +377,7 @@ public final class Database implements DataSourceInterface {
     public void insertLevelChange(String serverName, EntityPlayer player, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -409,7 +395,7 @@ public final class Database implements DataSourceInterface {
         p.isStaff(isStaff);
 
         session.persist(p);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -417,8 +403,7 @@ public final class Database implements DataSourceInterface {
     public void insertBucketFill(String serverName, EntityPlayer player, String bucket, Coordinates coords, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -441,7 +426,7 @@ public final class Database implements DataSourceInterface {
         b.isStaff(isStaff);
 
         session.persist(b);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -449,8 +434,7 @@ public final class Database implements DataSourceInterface {
     public void insertBucketEmpty(String serverName, EntityPlayer player, String bucket, Coordinates coords, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -473,7 +457,7 @@ public final class Database implements DataSourceInterface {
         b.isStaff(isStaff);
 
         session.persist(b);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -481,8 +465,7 @@ public final class Database implements DataSourceInterface {
     public void insertAnvil(String serverName, EntityPlayer player, String newName, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -500,7 +483,7 @@ public final class Database implements DataSourceInterface {
         b.setNewName(newName);
 
         session.persist(b);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -508,15 +491,14 @@ public final class Database implements DataSourceInterface {
     public void insertServerStart(String serverName) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final ServerStart s = new ServerStart();
         s.setDate(Instant.now());
         s.setServerName(serverName);
 
         session.persist(s);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -524,14 +506,13 @@ public final class Database implements DataSourceInterface {
     public void insertServerStop(String serverName) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final ServerStop s = new ServerStop();
         s.setDate(Instant.now());
         s.setServerName(serverName);
         session.persist(s);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -540,8 +521,7 @@ public final class Database implements DataSourceInterface {
                                List<String> enchantment, String changedName, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -566,7 +546,7 @@ public final class Database implements DataSourceInterface {
         b.isStaff(isStaff);
 
         session.persist(b);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -575,8 +555,7 @@ public final class Database implements DataSourceInterface {
                               String item, int cost, Coordinates coordinates, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -601,7 +580,7 @@ public final class Database implements DataSourceInterface {
         e.isStaff(isStaff);
 
         session.persist(e);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -610,8 +589,7 @@ public final class Database implements DataSourceInterface {
                                   List<String> content, String signedBy, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -631,7 +609,7 @@ public final class Database implements DataSourceInterface {
         b.isStaff(isStaff);
 
         session.persist(b);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -652,8 +630,7 @@ public final class Database implements DataSourceInterface {
                                  Coordinates coords, String changedName, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -677,7 +654,7 @@ public final class Database implements DataSourceInterface {
         b.isStaff(isStaff);
 
         session.persist(b);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -685,8 +662,7 @@ public final class Database implements DataSourceInterface {
     public void insertFurnace(String serverName, EntityPlayer player, String item, int amount, Coordinates coords, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -709,7 +685,7 @@ public final class Database implements DataSourceInterface {
         b.isStaff(isStaff);
 
         session.persist(b);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -717,8 +693,7 @@ public final class Database implements DataSourceInterface {
     public void insertRCON(String serverName, String ip, String command) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final Rcon b = new Rcon();
         b.setDate(Instant.now());
@@ -726,7 +701,7 @@ public final class Database implements DataSourceInterface {
         b.setIp(Long.getLong(ip));
 
         session.persist(b);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -734,8 +709,7 @@ public final class Database implements DataSourceInterface {
     public void insertGameMode(String serverName, EntityPlayer player, String gameMode, String worldName, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -754,7 +728,7 @@ public final class Database implements DataSourceInterface {
         b.isStaff(isStaff);
 
         session.persist(b);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -762,8 +736,7 @@ public final class Database implements DataSourceInterface {
     public void insertPlayerCraft(String serverName, EntityPlayer player, String item, int amount, Coordinates coords, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -786,7 +759,7 @@ public final class Database implements DataSourceInterface {
         b.isStaff(isStaff);
 
         session.persist(b);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -800,8 +773,7 @@ public final class Database implements DataSourceInterface {
     public void insertPlayerRegistration(String serverName, EntityPlayer player, String joinDate) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -811,7 +783,7 @@ public final class Database implements DataSourceInterface {
                 .orElse(player);
 
         session.persist(loggerPlayer);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -819,8 +791,7 @@ public final class Database implements DataSourceInterface {
     public void insertPrimedTnt(String serverName, EntityPlayer player, Coordinates coords, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -841,7 +812,7 @@ public final class Database implements DataSourceInterface {
         b.isStaff(isStaff);
 
         session.persist(b);
-        session.getTransaction().commit();
+        tx.commit();
     }
 
     @Override
@@ -861,18 +832,11 @@ public final class Database implements DataSourceInterface {
     @Override
     public void insertCommandBlock(String serverName, String msg) {
 
-        final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
-
         final CommandBlock b = new CommandBlock();
-
-        b.setDate(Instant.now());
         b.setServerName(serverName);
         b.setCommand(msg);
 
-        session.persist(b);
-        session.getTransaction().commit();
+        this.save(b);
 
     }
 
@@ -886,8 +850,7 @@ public final class Database implements DataSourceInterface {
     public void insertChestInteraction(String serverName, EntityPlayer player, Coordinates coords, String[] items, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -908,7 +871,7 @@ public final class Database implements DataSourceInterface {
         b.isStaff(isStaff);
         b.setItems(String.join(",", items));
         session.persist(b);
-        session.getTransaction().commit();
+        tx.commit();
 
     }
 
@@ -916,8 +879,7 @@ public final class Database implements DataSourceInterface {
     public void insertEntityDeath(String serverName, EntityPlayer player, String mob, Coordinates coords, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
-
-        session.beginTransaction();
+        Transaction tx = session.beginTransaction();
 
         final EntityPlayer loggerPlayer = session
                 .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
@@ -926,20 +888,10 @@ public final class Database implements DataSourceInterface {
                 .findFirst()
                 .orElse(player);
 
-        final EntityDeath b = new EntityDeath();
-
-        b.setDate(Instant.now());
-        b.setServerName(serverName);
-        b.setWorld(coords.getWorldName());
-        b.setX(coords.getX());
-        b.setY(coords.getY());
-        b.setZ(coords.getZ());
-        b.setMob(mob);
-        b.setEntityPlayer(loggerPlayer);
-        b.isStaff(isStaff);
+        final EntityDeath b = new EntityDeath(serverName,  coords,  mob, loggerPlayer, isStaff);
 
         session.persist(b);
-        session.getTransaction().commit();
+        tx.commit();
     }
 
     public void emptyTable() {
@@ -950,16 +902,19 @@ public final class Database implements DataSourceInterface {
     @Override
     public void insertConsoleCommand(String serverName, String msg) {
 
-        final Session session = HibernateUtils.getSession();
+        final ConsoleCommand p = new ConsoleCommand(serverName, msg);
 
-        session.beginTransaction();
-
-        final ConsoleCommand p = new ConsoleCommand();
-        p.setDate(Instant.now());
-        p.setServerName(serverName);
-        p.setCommand(msg);
-        session.persist(p);
-        session.getTransaction().commit();
+        this.save(p);
 
     }
+    public void save(Object obj) {
+        Session session = null;
+        Transaction transaction = null;
+        session = HibernateUtils.getSession();
+        transaction = session.beginTransaction();
+        session.save(obj);
+        transaction.commit();
+
+    }
+
 }

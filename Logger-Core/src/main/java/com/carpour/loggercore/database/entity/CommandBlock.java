@@ -1,5 +1,7 @@
 package com.carpour.loggercore.database.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.time.Instant;
 
@@ -15,6 +17,7 @@ public class CommandBlock {
     private String serverName;
 
     @Column(name = "date", nullable = false)
+    @CreationTimestamp
     private Instant date;
 
     @Column(name = "command", length = 256)

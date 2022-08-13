@@ -59,7 +59,14 @@ public final class DatabaseCredentials {
         properties.setProperty("hibernate.connection.username",  this.getDbUsername());
         properties.setProperty("hibernate.connection.password", this.getDbPassword());
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
-        properties.setProperty("show_sql", "true");
+        properties.setProperty("hibernate.show_sql", "true");
+        properties.setProperty("hibernate.connection.CharSet", "utf8");
+
+        properties.setProperty("hibernate.connection.characterEncoding", "utf8");
+
+        properties.setProperty("hibernate.connection.useUnicode", "true");
+
+        properties.setProperty("hibernate.generate_statistics", "true");
         properties.setProperty("hibernate.connection.provider_class","org.hibernate.hikaricp.internal.HikariCPConnectionProvider");
 
         //properties.setProperty("hibernate.connection.autocommit", "true");

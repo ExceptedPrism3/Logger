@@ -1,11 +1,22 @@
 package com.carpour.loggercore.database.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
 @Table(name = "console_commands")
 public class ConsoleCommand {
+
+    public ConsoleCommand() {
+    }
+
+    public ConsoleCommand(String serverName, String command)
+    {
+        this.serverName = serverName;
+        this.command = command;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -15,6 +26,7 @@ public class ConsoleCommand {
     private String serverName;
 
     @Column(name = "date", nullable = false)
+    @CreationTimestamp
     private Instant date;
 
     @Column(name = "command", length = 256)

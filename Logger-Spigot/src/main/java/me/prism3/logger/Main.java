@@ -3,6 +3,7 @@ package me.prism3.logger;
 import com.carpour.loggercore.database.DataSourceInterface;
 import com.carpour.loggercore.database.data.Options;
 import com.carpour.loggercore.database.datasource.Database;
+import com.carpour.loggercore.database.utils.HibernateUtils;
 import de.jeff_media.updatechecker.UpdateChecker;
 import me.prism3.logger.api.*;
 import me.prism3.logger.commands.CommandManager;
@@ -113,7 +114,8 @@ public class Main extends JavaPlugin {
 //        if (isSqlite && this.sqLite.isConnected()) this.sqLite.disconnect();
 
 //        if (isRegistration && this.sqLiteReg.isConnected()) this.sqLiteReg.disconnect();
-
+        HibernateUtils.closeSession();
+        HibernateUtils.closeSessionFactory();
         this.discord.disconnect();
 
         this.getLogger().info("Plugin Disabled!");

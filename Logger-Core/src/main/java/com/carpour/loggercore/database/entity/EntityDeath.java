@@ -1,11 +1,27 @@
 package com.carpour.loggercore.database.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
 @Table(name = "entity_death")
 public class EntityDeath {
+    public EntityDeath() {
+    }
+
+    public EntityDeath(String serverName, Coordinates coords, String mob, EntityPlayer entityPlayer, Boolean isStaff) {
+        this.serverName = serverName;
+        this.world = coords.getWorldName();
+        this.mob = mob;
+        this.x = coords.getX();
+        this.y = coords.getY();
+        this.z = coords.getZ();
+        this.entityPlayer = entityPlayer;
+        this.isStaff = isStaff;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -15,6 +31,7 @@ public class EntityDeath {
     private String serverName;
 
     @Column(name = "date", nullable = false)
+    @CreationTimestamp
     private Instant date;
 
     @Column(name = "world", length = 100)
