@@ -45,7 +45,7 @@ public class OnCommandBlock implements Listener {
                 }
 
                 // Discord
-                if (this.main.getMessages().get().getString("Discord.Server-Side.Command-Block").isEmpty())
+                if (!this.main.getMessages().get().getString("Discord.Server-Side.Command-Block").isEmpty())
                     this.main.getDiscord().commandBlock(this.main.getMessages().get().getString("Discord.Server-Side.Command-Block").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command), false);
 
                 // External

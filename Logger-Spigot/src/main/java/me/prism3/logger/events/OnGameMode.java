@@ -83,14 +83,14 @@ public class OnGameMode implements Listener {
 
                     if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                        if (this.main.getMessages().get().getString("Discord.Game-Mode-Staff").isEmpty()) {
+                        if (!this.main.getMessages().get().getString("Discord.Game-Mode-Staff").isEmpty()) {
 
                             this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Game-Mode-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%game-mode%", gameMode), false);
 
                         }
                     } else {
 
-                        if (this.main.getMessages().get().getString("Discord.Game-Mode").isEmpty()) {
+                        if (!this.main.getMessages().get().getString("Discord.Game-Mode").isEmpty()) {
 
                             this.main.getDiscord().gameMode(player, this.main.getMessages().get().getString("Discord.Game-Mode").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%game-mode%", gameMode), false);
                         }

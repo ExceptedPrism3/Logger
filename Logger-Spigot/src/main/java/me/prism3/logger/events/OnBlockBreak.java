@@ -86,7 +86,7 @@ public class OnBlockBreak implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (this.main.getMessages().get().getString("Discord.Block-Break-Staff").isEmpty()) {
+                    if (!this.main.getMessages().get().getString("Discord.Block-Break-Staff").isEmpty()) {
 
                         this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Block-Break-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%block%", String.valueOf(blockType)), false);
 
@@ -94,7 +94,7 @@ public class OnBlockBreak implements Listener {
 
                 } else {
 
-                    if (this.main.getMessages().get().getString("Discord.Block-Break").isEmpty()) {
+                    if (!this.main.getMessages().get().getString("Discord.Block-Break").isEmpty()) {
 
                         this.main.getDiscord().blockBreak(player, this.main.getMessages().get().getString("Discord.Block-Break").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%block%", String.valueOf(blockType)), false);
                     }

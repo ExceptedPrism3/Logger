@@ -43,7 +43,7 @@ public class PortalCreation implements Listener {
             }
 
             // Discord
-            if (this.main.getMessages().get().getString("Discord.Server-Side.Portal-Creation").isEmpty())
+            if (!this.main.getMessages().get().getString("Discord.Server-Side.Portal-Creation").isEmpty())
                 this.main.getDiscord().portalCreation(this.main.getMessages().get().getString("Discord.Server-Side.Portal-Creation").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%material%", String.valueOf(reason)), false);
 
             // External

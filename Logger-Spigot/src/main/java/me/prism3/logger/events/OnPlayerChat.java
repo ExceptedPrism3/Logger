@@ -80,14 +80,14 @@ public class OnPlayerChat implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (this.main.getMessages().get().getString("Discord.Player-Chat-Staff").isEmpty()) {
+                    if (!this.main.getMessages().get().getString("Discord.Player-Chat-Staff").isEmpty()) {
 
                         this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Player-Chat-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%message%", msg), false);
 
                     }
                 } else {
 
-                    if (this.main.getMessages().get().getString("Discord.Player-Chat").isEmpty()) {
+                    if (!this.main.getMessages().get().getString("Discord.Player-Chat").isEmpty()) {
 
                         this.main.getDiscord().playerChat(player, this.main.getMessages().get().getString("Discord.Player-Chat").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%message%", msg), false);
                     }

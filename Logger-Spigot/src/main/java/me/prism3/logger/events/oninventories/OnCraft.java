@@ -86,14 +86,14 @@ public class OnCraft implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (this.main.getMessages().get().getString("Discord.Player-Craft-Staff").isEmpty()) {
+                    if (!this.main.getMessages().get().getString("Discord.Player-Craft-Staff").isEmpty()) {
 
                         this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Player-Craft-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
 
                     }
                 } else {
 
-                    if (this.main.getMessages().get().getString("Discord.Player-Craft").isEmpty()) {
+                    if (!this.main.getMessages().get().getString("Discord.Player-Craft").isEmpty()) {
 
                         this.main.getDiscord().playerCraft(player, this.main.getMessages().get().getString("Discord.Player-Craft").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
                     }

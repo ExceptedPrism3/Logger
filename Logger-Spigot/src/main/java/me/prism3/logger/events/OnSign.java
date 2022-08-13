@@ -95,14 +95,14 @@ public class OnSign implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (this.main.getMessages().get().getString("Discord.Player-Sign-Text-Staff").isEmpty()) {
+                    if (!this.main.getMessages().get().getString("Discord.Player-Sign-Text-Staff").isEmpty()) {
 
                         this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Player-Sign-Text-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%line1%", lines.get(0).replace("\\", "\\\\")).replace("%line2%", lines.get(1).replace("\\", "\\\\")).replace("%line3%", lines.get(2).replace("\\", "\\\\")).replace("%line4%", lines.get(3).replace("\\", "\\\\")), false);
 
                     }
                 } else {
 
-                    if (this.main.getMessages().get().getString("Discord.Player-Sign-Text").isEmpty()) {
+                    if (!this.main.getMessages().get().getString("Discord.Player-Sign-Text").isEmpty()) {
 
                         this.main.getDiscord().playerSignText(player, this.main.getMessages().get().getString("Discord.Player-Sign-Text-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%line1%", lines.get(0).replace("\\", "\\\\")).replace("%line2%", lines.get(1).replace("\\", "\\\\")).replace("%line3%", lines.get(2).replace("\\", "\\\\")).replace("%line4%", lines.get(3).replace("\\", "\\\\")), false);
                     }

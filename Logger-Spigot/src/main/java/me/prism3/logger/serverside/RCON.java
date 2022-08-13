@@ -43,7 +43,7 @@ public class RCON implements Listener {
             }
 
             // Discord
-            if (this.main.getMessages().get().getString("Discord.Server-Side.RCON").isEmpty())
+            if (!this.main.getMessages().get().getString("Discord.Server-Side.RCON").isEmpty())
                 this.main.getDiscord().rCon(this.main.getMessages().get().getString("Discord.Server-Side.RCON").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%IP%", ip).replace("%command%", command))), false);
 
             // External

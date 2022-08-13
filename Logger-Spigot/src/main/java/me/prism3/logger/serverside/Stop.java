@@ -35,7 +35,7 @@ public class Stop {
             }
 
             // Discord
-            if (this.main.getMessages().get().getString("Discord.Server-Side.Stop").isEmpty())
+            if (!this.main.getMessages().get().getString("Discord.Server-Side.Stop").isEmpty())
                 this.main.getDiscord().serverStop(this.main.getMessages().get().getString("Discord.Server-Side.Stop").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())), false);
 
             // External

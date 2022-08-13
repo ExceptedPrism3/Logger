@@ -78,23 +78,19 @@ public class OnLiteBanEvents implements Listener, Runnable {
                 // Discord Integration
                 if (player == null) { // This is essential when performed by the console
 
-                    if (main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
+                    if (!main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
                         main.getDiscord().advancedBan(main.getMessages().get().getString("Discord.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
 
                 } else if (!player.hasPermission(Data.loggerExemptDiscord)) {
 
-                    if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                        if (main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
-
+                    if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog))
+                        if (!main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
                             main.getDiscord().staffChat(player, main.getMessages().get().getString("Discord.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
 
-                    } else {
-                        if (main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
-
+                    else
+                        if (!main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
                             main.getDiscord().advancedBan(main.getMessages().get().getString("Discord.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
 
-                    }
                 }
 
                 // External

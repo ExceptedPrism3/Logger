@@ -94,14 +94,14 @@ public class OnPlayerTeleport implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (this.main.getMessages().get().getString("Discord.Player-Teleport-Staff").isEmpty()) {
+                    if (!this.main.getMessages().get().getString("Discord.Player-Teleport-Staff").isEmpty()) {
 
                         this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Player-Teleport-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%oldX%", String.valueOf(ox)).replace("%oldY%", String.valueOf(oy)).replace("%oldZ%", String.valueOf(oz)).replace("%newX%", String.valueOf(tx)).replace("%newY%", String.valueOf(ty)).replace("%newZ%", String.valueOf(tz)), false);
 
                     }
                 } else {
 
-                    if (this.main.getMessages().get().getString("Discord.Player-Teleport").isEmpty()) {
+                    if (!this.main.getMessages().get().getString("Discord.Player-Teleport").isEmpty()) {
 
                         this.main.getDiscord().playerTeleport(player, this.main.getMessages().get().getString("Discord.Player-Teleport").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%oldX%", String.valueOf(ox)).replace("%oldY%", String.valueOf(oy)).replace("%oldZ%", String.valueOf(oz)).replace("%newX%", String.valueOf(tx)).replace("%newY%", String.valueOf(ty)).replace("%newZ%", String.valueOf(tz)), false);
                     }

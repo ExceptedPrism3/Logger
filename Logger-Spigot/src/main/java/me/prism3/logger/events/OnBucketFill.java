@@ -85,14 +85,14 @@ public class OnBucketFill implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                    if (this.main.getMessages().get().getString("Discord.Bucket-Fill-Staff").isEmpty()) {
+                    if (!this.main.getMessages().get().getString("Discord.Bucket-Fill-Staff").isEmpty()) {
 
                         this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Bucket-Fill-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket), false);
 
                     }
                 } else {
 
-                    if (this.main.getMessages().get().getString("Discord.Bucket-Fill").isEmpty()) {
+                    if (!this.main.getMessages().get().getString("Discord.Bucket-Fill").isEmpty()) {
 
                         this.main.getDiscord().bucketFill(player, this.main.getMessages().get().getString("Discord.Bucket-Fill").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket), false);
                     }

@@ -84,14 +84,14 @@ public class OnPrimedTNT implements Listener {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (this.main.getMessages().get().getString("Discord.Primed-TNT-Staff").isEmpty()) {
+                    if (!this.main.getMessages().get().getString("Discord.Primed-TNT-Staff").isEmpty()) {
 
                         this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Primed-TNT-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()), false);
 
                     }
                 } else {
 
-                    if (this.main.getMessages().get().getString("Discord.Primed-TNT").isEmpty()) {
+                    if (!this.main.getMessages().get().getString("Discord.Primed-TNT").isEmpty()) {
 
                         this.main.getDiscord().primedTNT(player, this.main.getMessages().get().getString("Discord.Primed-TNT").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()), false);
                     }

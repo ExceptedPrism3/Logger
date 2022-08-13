@@ -71,7 +71,7 @@ public class OnAdvancedBan implements Listener {
             // Discord Integration
             if (player == null) { // This is essential when performed by the console
 
-                if (this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").isEmpty()) {
+                if (!this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").isEmpty()) {
 
                     this.main.getDiscord().advancedBan(this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type), false);
                 }
@@ -79,13 +79,13 @@ public class OnAdvancedBan implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                    if (this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").isEmpty()) {
+                    if (!this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").isEmpty()) {
 
                         this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type), false);
 
                     }
                 } else {
-                    if (this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").isEmpty()) {
+                    if (!this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").isEmpty()) {
 
                         this.main.getDiscord().advancedBan(this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type), false);
                     }

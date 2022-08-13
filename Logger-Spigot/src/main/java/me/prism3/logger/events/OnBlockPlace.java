@@ -86,14 +86,14 @@ public class OnBlockPlace implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (this.main.getMessages().get().getString("Discord.Block-Place-Staff").isEmpty()) {
+                    if (!this.main.getMessages().get().getString("Discord.Block-Place-Staff").isEmpty()) {
 
                         this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Block-Place-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%block%", String.valueOf(blockType)), false);
 
                     }
                 } else {
 
-                    if (this.main.getMessages().get().getString("Discord.Block-Place").isEmpty()) {
+                    if (!this.main.getMessages().get().getString("Discord.Block-Place").isEmpty()) {
 
                         this.main.getDiscord().blockPlace(player, this.main.getMessages().get().getString("Discord.Block-Place").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%block%", String.valueOf(blockType)), false);
                     }

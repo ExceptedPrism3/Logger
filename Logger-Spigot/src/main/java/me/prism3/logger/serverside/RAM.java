@@ -44,7 +44,7 @@ public class RAM implements Runnable {
                 }
 
                 // Discord
-                if (this.main.getMessages().get().getString("Discord.Server-Side.RAM").isEmpty())
+                if (!this.main.getMessages().get().getString("Discord.Server-Side.RAM").isEmpty())
                     this.main.getDiscord().ram(this.main.getMessages().get().getString("Discord.Server-Side.RAM").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)), false);
 
                 // External

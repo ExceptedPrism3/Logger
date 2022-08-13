@@ -80,14 +80,14 @@ public class OnPlayerLevel implements Listener {
 
                     if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                        if (this.main.getMessages().get().getString("Discord.Player-Level-Staff").isEmpty()) {
+                        if (!this.main.getMessages().get().getString("Discord.Player-Level-Staff").isEmpty()) {
 
                             this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Player-Level-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
 
                         }
                     } else {
 
-                        if (this.main.getMessages().get().getString("Discord.Player-Level").isEmpty()) {
+                        if (!this.main.getMessages().get().getString("Discord.Player-Level").isEmpty()) {
 
                             this.main.getDiscord().playerLevel(player, this.main.getMessages().get().getString("Discord.Player-Level").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
                         }

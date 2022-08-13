@@ -35,7 +35,7 @@ public class Start {
             }
 
             // Discord
-            if (this.main.getMessages().get().getString("Discord.Server-Side.Start").isEmpty())
+            if (!this.main.getMessages().get().getString("Discord.Server-Side.Start").isEmpty())
                 this.main.getDiscord().serverStart(this.main.getMessages().get().getString("Discord.Server-Side.Start").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())), false);
 
             // External

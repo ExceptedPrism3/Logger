@@ -108,14 +108,14 @@ private final Main main = Main.getInstance();
 
                                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                                    if (this.main.getMessages().get().getString("Discord.Anvil-Staff").isEmpty()) {
+                                    if (!this.main.getMessages().get().getString("Discord.Anvil-Staff").isEmpty()) {
 
                                         this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Anvil-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%renamed%", displayName), false);
 
                                     }
                                 } else {
 
-                                    if (this.main.getMessages().get().getString("Discord.Anvil").isEmpty()) {
+                                    if (!this.main.getMessages().get().getString("Discord.Anvil").isEmpty()) {
 
                                         this.main.getDiscord().anvil(player, this.main.getMessages().get().getString("Discord.Anvil").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%renamed%", displayName), false);
                                     }
