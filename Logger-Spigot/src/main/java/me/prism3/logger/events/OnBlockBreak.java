@@ -18,7 +18,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.loggerStaffLog;
@@ -56,7 +55,7 @@ public class OnBlockBreak implements Listener {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Block-Break-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%block%", String.valueOf(blockType)) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Block-Break-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%block%", String.valueOf(blockType)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -70,7 +69,7 @@ public class OnBlockBreak implements Listener {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBlockBreakLogFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Block-Break")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%block%", String.valueOf(blockType)) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Block-Break").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%block%", String.valueOf(blockType)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -87,17 +86,17 @@ public class OnBlockBreak implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Block-Break-Staff")).isEmpty()) {
+                    if (this.main.getMessages().get().getString("Discord.Block-Break-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Block-Break-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%block%", String.valueOf(blockType)), false);
+                        this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Block-Break-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%block%", String.valueOf(blockType)), false);
 
                     }
 
                 } else {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Block-Break")).isEmpty()) {
+                    if (this.main.getMessages().get().getString("Discord.Block-Break").isEmpty()) {
 
-                        this.main.getDiscord().blockBreak(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Block-Break")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%block%", String.valueOf(blockType)), false);
+                        this.main.getDiscord().blockBreak(player, this.main.getMessages().get().getString("Discord.Block-Break").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%block%", String.valueOf(blockType)), false);
                     }
                 }
             }

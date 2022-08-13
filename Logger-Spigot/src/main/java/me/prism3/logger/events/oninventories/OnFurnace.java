@@ -17,7 +17,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.loggerStaffLog;
@@ -55,7 +54,7 @@ public class OnFurnace implements Listener {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Furnace-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%amount%", String.valueOf(amount)).replace("%item%", String.valueOf(item)) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Furnace-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%amount%", String.valueOf(amount)).replace("%item%", String.valueOf(item)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -69,7 +68,7 @@ public class OnFurnace implements Listener {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getFurnaceFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Furnace")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%amount%", String.valueOf(amount)).replace("%item%", String.valueOf(item)) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Furnace").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%amount%", String.valueOf(amount)).replace("%item%", String.valueOf(item)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -86,17 +85,17 @@ public class OnFurnace implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Furnace-Staff")).isEmpty()) {
+                    if (this.main.getMessages().get().getString("Discord.Furnace-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Furnace-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%amount%", String.valueOf(amount)).replace("%item%", String.valueOf(item)), false);
+                        this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Furnace-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%amount%", String.valueOf(amount)).replace("%item%", String.valueOf(item)), false);
 
                     }
 
                 } else {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Furnace")).isEmpty()) {
+                    if (this.main.getMessages().get().getString("Discord.Furnace").isEmpty()) {
 
-                        this.main.getDiscord().furnace(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Furnace")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%amount%", String.valueOf(amount)).replace("%item%", String.valueOf(item)), false);
+                        this.main.getDiscord().furnace(player, this.main.getMessages().get().getString("Discord.Furnace").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%amount%", String.valueOf(amount)).replace("%item%", String.valueOf(item)), false);
                     }
                 }
             }

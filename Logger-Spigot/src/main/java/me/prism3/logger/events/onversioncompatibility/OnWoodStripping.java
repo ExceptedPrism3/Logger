@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.loggerStaffLog;
@@ -100,7 +99,7 @@ public class OnWoodStripping implements Listener {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Version-Exceptions.Wood-Stripping-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%player%", playerName) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Version-Exceptions.Wood-Stripping-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%player%", playerName) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -114,7 +113,7 @@ public class OnWoodStripping implements Listener {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getWoodStrippingFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Version-Exceptions.Wood-Stripping")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%player%", playerName) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Version-Exceptions.Wood-Stripping").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%player%", playerName) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -131,16 +130,16 @@ public class OnWoodStripping implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping-Staff")).isEmpty()) {
+                    if (this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
+                        this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
 
                     }
                 } else {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping")).isEmpty()) {
+                    if (this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping").isEmpty()) {
 
-                        this.main.getDiscord().woodStripping(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
+                        this.main.getDiscord().woodStripping(player, this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
                     }
                 }
             }

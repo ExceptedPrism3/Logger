@@ -71,7 +71,7 @@ public class OnEnchant implements Listener {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Enchanting-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%level%", String.valueOf(cost)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%enchantment%", String.valueOf(enchs)).replace("%enchlevel%", String.valueOf(enchantmentLevel)) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Enchanting-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%level%", String.valueOf(cost)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%enchantment%", String.valueOf(enchs)).replace("%enchlevel%", String.valueOf(enchantmentLevel)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -85,7 +85,7 @@ public class OnEnchant implements Listener {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getEnchantFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Enchanting")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%item%", item).replace("%enchantment%", String.valueOf(enchs)).replace("%level%", String.valueOf(cost)).replace("%enchlevel%", String.valueOf(enchantmentLevel)) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Enchanting").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%item%", item).replace("%enchantment%", String.valueOf(enchs)).replace("%level%", String.valueOf(cost)).replace("%enchlevel%", String.valueOf(enchantmentLevel)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -102,16 +102,16 @@ public class OnEnchant implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Enchanting-Staff")).isEmpty()) {
+                    if (this.main.getMessages().get().getString("Discord.Enchanting-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Enchanting-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%level%", String.valueOf(cost)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%item%", item).replace("%enchantment%", String.valueOf(enchs)).replace("%enchlevel%", String.valueOf(enchantmentLevel)), false);
+                        this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Enchanting-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%level%", String.valueOf(cost)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%item%", item).replace("%enchantment%", String.valueOf(enchs)).replace("%enchlevel%", String.valueOf(enchantmentLevel)), false);
 
                     }
                 } else {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Enchanting")).isEmpty()) {
+                    if (this.main.getMessages().get().getString("Discord.Enchanting").isEmpty()) {
 
-                        this.main.getDiscord().enchanting(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Enchanting")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%level%", String.valueOf(cost)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%item%", item).replace("%enchantment%", String.valueOf(enchs)).replace("%enchlevel%", String.valueOf(enchantmentLevel)), false);
+                        this.main.getDiscord().enchanting(player, this.main.getMessages().get().getString("Discord.Enchanting").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%level%", String.valueOf(cost)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%item%", item).replace("%enchantment%", String.valueOf(enchs)).replace("%enchlevel%", String.valueOf(enchantmentLevel)), false);
                     }
                 }
             }

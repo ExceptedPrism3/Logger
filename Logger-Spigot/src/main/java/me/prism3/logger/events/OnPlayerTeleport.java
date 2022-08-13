@@ -19,7 +19,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.loggerStaffLog;
@@ -45,7 +44,7 @@ public class OnPlayerTeleport implements Listener {
             final String worldName = world.getName();
             final String playerName = player.getName();
             final UUID playerUUID = player.getUniqueId();
-            final int tx = Objects.requireNonNull(event.getTo()).getBlockX();
+            final int tx = event.getTo().getBlockX();
             final int ty = event.getTo().getBlockY();
             final int tz = event.getTo().getBlockZ();
             final int ox = player.getLocation().getBlockX();
@@ -54,7 +53,7 @@ public class OnPlayerTeleport implements Listener {
 
             final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
             final Coordinates oldCoords = new Coordinates(ox, oy, oz, worldName);
-            final Coordinates newCoords = new Coordinates(tx, ty, tz, worldName); //TODO Hdchi m9awda 3lih
+            final Coordinates newCoords = new Coordinates(tx, ty, tz, worldName);
 
             // Log To Files
             if (Data.isLogToFiles) {
@@ -64,7 +63,7 @@ public class OnPlayerTeleport implements Listener {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Teleport-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%oldX%", String.valueOf(ox)).replace("%oldY%", String.valueOf(oy)).replace("%oldZ%", String.valueOf(oz)).replace("%newX%", String.valueOf(tx)).replace("%newY%", String.valueOf(ty)).replace("%newZ%", String.valueOf(tz)) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Player-Teleport-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%oldX%", String.valueOf(ox)).replace("%oldY%", String.valueOf(oy)).replace("%oldZ%", String.valueOf(oz)).replace("%newX%", String.valueOf(tx)).replace("%newY%", String.valueOf(ty)).replace("%newZ%", String.valueOf(tz)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -78,7 +77,7 @@ public class OnPlayerTeleport implements Listener {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerTeleportLogFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Teleport")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%oldX%", String.valueOf(ox)).replace("%oldY%", String.valueOf(oy)).replace("%oldZ%", String.valueOf(oz)).replace("%newX%", String.valueOf(tx)).replace("%newY%", String.valueOf(ty)).replace("%newZ%", String.valueOf(tz)) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Player-Teleport").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%oldX%", String.valueOf(ox)).replace("%oldY%", String.valueOf(oy)).replace("%oldZ%", String.valueOf(oz)).replace("%newX%", String.valueOf(tx)).replace("%newY%", String.valueOf(ty)).replace("%newZ%", String.valueOf(tz)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -95,16 +94,16 @@ public class OnPlayerTeleport implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Teleport-Staff")).isEmpty()) {
+                    if (this.main.getMessages().get().getString("Discord.Player-Teleport-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Teleport-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%oldX%", String.valueOf(ox)).replace("%oldY%", String.valueOf(oy)).replace("%oldZ%", String.valueOf(oz)).replace("%newX%", String.valueOf(tx)).replace("%newY%", String.valueOf(ty)).replace("%newZ%", String.valueOf(tz)), false);
+                        this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Player-Teleport-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%oldX%", String.valueOf(ox)).replace("%oldY%", String.valueOf(oy)).replace("%oldZ%", String.valueOf(oz)).replace("%newX%", String.valueOf(tx)).replace("%newY%", String.valueOf(ty)).replace("%newZ%", String.valueOf(tz)), false);
 
                     }
                 } else {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Teleport")).isEmpty()) {
+                    if (this.main.getMessages().get().getString("Discord.Player-Teleport").isEmpty()) {
 
-                        this.main.getDiscord().playerTeleport(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Teleport")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%oldX%", String.valueOf(ox)).replace("%oldY%", String.valueOf(oy)).replace("%oldZ%", String.valueOf(oz)).replace("%newX%", String.valueOf(tx)).replace("%newY%", String.valueOf(ty)).replace("%newZ%", String.valueOf(tz)), false);
+                        this.main.getDiscord().playerTeleport(player, this.main.getMessages().get().getString("Discord.Player-Teleport").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%oldX%", String.valueOf(ox)).replace("%oldY%", String.valueOf(oy)).replace("%oldZ%", String.valueOf(oz)).replace("%newX%", String.valueOf(tx)).replace("%newY%", String.valueOf(ty)).replace("%newZ%", String.valueOf(tz)), false);
                     }
                 }
             }

@@ -14,7 +14,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 
 
 public class OnLiteBanEvents implements Listener, Runnable {
@@ -50,7 +49,7 @@ public class OnLiteBanEvents implements Listener, Runnable {
                             try {
 
                                 final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                                out.write(Objects.requireNonNull(main.getMessages().get().getString("Files.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)) + "\n");
+                                out.write(main.getMessages().get().getString("Files.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)) + "\n");
                                 out.close();
 
                             } catch (IOException e) {
@@ -64,7 +63,7 @@ public class OnLiteBanEvents implements Listener, Runnable {
                         try {
 
                             final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLiteBansFile(), true));
-                            out.write(Objects.requireNonNull(main.getMessages().get().getString("Files.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)) + "\n");
+                            out.write(main.getMessages().get().getString("Files.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)) + "\n");
                             out.close();
 
                         } catch (IOException e) {
@@ -79,22 +78,21 @@ public class OnLiteBanEvents implements Listener, Runnable {
                 // Discord Integration
                 if (player == null) { // This is essential when performed by the console
 
-                    if (!Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).isEmpty())
-
-                        main.getDiscord().advancedBan(Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
+                    if (main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
+                        main.getDiscord().advancedBan(main.getMessages().get().getString("Discord.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
 
                 } else if (!player.hasPermission(Data.loggerExemptDiscord)) {
 
                     if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                        if (!Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).isEmpty())
+                        if (main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
 
-                            main.getDiscord().staffChat(player, Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
+                            main.getDiscord().staffChat(player, main.getMessages().get().getString("Discord.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
 
                     } else {
-                        if (!Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).isEmpty())
+                        if (main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
 
-                            main.getDiscord().advancedBan(Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
+                            main.getDiscord().advancedBan(main.getMessages().get().getString("Discord.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
 
                     }
                 }

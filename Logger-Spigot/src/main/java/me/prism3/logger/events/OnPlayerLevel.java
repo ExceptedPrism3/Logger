@@ -15,7 +15,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.loggerStaffLog;
@@ -50,7 +49,7 @@ public class OnPlayerLevel implements Listener {
                         try {
 
                             final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                            out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Level-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%level%", String.valueOf(logAbove)) + "\n");
+                            out.write(this.main.getMessages().get().getString("Files.Player-Level-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%level%", String.valueOf(logAbove)) + "\n");
                             out.close();
 
                         } catch (IOException e) {
@@ -64,7 +63,7 @@ public class OnPlayerLevel implements Listener {
                         try {
 
                             final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerLevelFile(), true));
-                            out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Level")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%level%", String.valueOf(logAbove)) + "\n");
+                            out.write(this.main.getMessages().get().getString("Files.Player-Level").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%level%", String.valueOf(logAbove)) + "\n");
                             out.close();
 
                         } catch (IOException e) {
@@ -81,16 +80,16 @@ public class OnPlayerLevel implements Listener {
 
                     if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                        if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Level-Staff")).isEmpty()) {
+                        if (this.main.getMessages().get().getString("Discord.Player-Level-Staff").isEmpty()) {
 
-                            this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Level-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
+                            this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Player-Level-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
 
                         }
                     } else {
 
-                        if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Level")).isEmpty()) {
+                        if (this.main.getMessages().get().getString("Discord.Player-Level").isEmpty()) {
 
-                            this.main.getDiscord().playerLevel(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Level")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
+                            this.main.getDiscord().playerLevel(player, this.main.getMessages().get().getString("Discord.Player-Level").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
                         }
                     }
                 }

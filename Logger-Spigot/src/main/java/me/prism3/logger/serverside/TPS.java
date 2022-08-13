@@ -8,7 +8,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 
 public class TPS implements Runnable {
 
@@ -38,13 +37,13 @@ public class TPS implements Runnable {
                     if (this.getTPS() <= Data.tpsMedium) {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.TPS-Medium")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Server-Side.TPS-Medium").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())) + "\n");
                         out.close();
 
                     } else if (this.getTPS() <= Data.tpsCritical) {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.TPS-Critical")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Server-Side.TPS-Critical").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())) + "\n");
                         out.close();
 
                     }
@@ -59,11 +58,11 @@ public class TPS implements Runnable {
                 // Discord
                 if (this.getTPS() <= Data.tpsMedium && this.main.getMessages().get().getString("Discord.Server-Side.TPS-Medium").isEmpty()) {
 
-                    this.main.getDiscord().tps(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.TPS-Medium")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())), false);
+                    this.main.getDiscord().tps(this.main.getMessages().get().getString("Discord.Server-Side.TPS-Medium").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())), false);
 
                 } else if (this.getTPS() <= Data.tpsCritical && this.main.getMessages().get().getString("Discord.Server-Side.TPS-Critical").isEmpty()) {
 
-                    this.main.getDiscord().tps(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.TPS-Critical")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())), false);
+                    this.main.getDiscord().tps(this.main.getMessages().get().getString("Discord.Server-Side.TPS-Critical").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())), false);
 
                 }
 

@@ -17,7 +17,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.loggerStaffLog;
@@ -39,7 +38,7 @@ public class OnBucketFill implements Listener {
             final UUID playerUUID = player.getUniqueId();
             final World world = event.getPlayer().getWorld();
             final String worldName = world.getName();
-            final String bucket = Objects.requireNonNull(event.getItemStack()).getType().name().replace("_", " ");
+            final String bucket = event.getItemStack().getType().name().replace("_", " ");
             final int x = event.getBlockClicked().getX();
             final int y = event.getBlockClicked().getY();
             final int z = event.getBlockClicked().getZ();
@@ -55,7 +54,7 @@ public class OnBucketFill implements Listener {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Bucket-Fill-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Bucket-Fill-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -69,7 +68,7 @@ public class OnBucketFill implements Listener {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBucketFillFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Bucket-Fill")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Bucket-Fill").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -86,16 +85,16 @@ public class OnBucketFill implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Bucket-Fill-Staff")).isEmpty()) {
+                    if (this.main.getMessages().get().getString("Discord.Bucket-Fill-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Bucket-Fill-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket), false);
+                        this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Bucket-Fill-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket), false);
 
                     }
                 } else {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Bucket-Fill")).isEmpty()) {
+                    if (this.main.getMessages().get().getString("Discord.Bucket-Fill").isEmpty()) {
 
-                        this.main.getDiscord().bucketFill(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Bucket-Fill")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket), false);
+                        this.main.getDiscord().bucketFill(player, this.main.getMessages().get().getString("Discord.Bucket-Fill").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket), false);
                     }
                 }
             }

@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.attribute.FileTime;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class FileHandler {
@@ -547,98 +546,98 @@ public class FileHandler {
         if (Data.fileDeletion <= 0 ) return;
 
         // Player Side
-        for (File chatLog : Objects.requireNonNull(chatLogFolder.listFiles()))
+        for (File chatLog : chatLogFolder.listFiles())
         {
 
             deleteFile(chatLog);
 
         }
 
-        for (File commandLog : Objects.requireNonNull(commandLogFolder.listFiles()))
+        for (File commandLog : commandLogFolder.listFiles())
         {
 
             deleteFile(commandLog);
 
         }
 
-        for (File signLog : Objects.requireNonNull(signLogFolder.listFiles()))
+        for (File signLog : signLogFolder.listFiles())
         {
 
             deleteFile(signLog);
 
         }
 
-        for (File playerJoinLog : Objects.requireNonNull(playerJoinLogFolder.listFiles()))
+        for (File playerJoinLog : playerJoinLogFolder.listFiles())
         {
 
             deleteFile(playerJoinLog);
 
         }
 
-        for (File playerLeaveLog : Objects.requireNonNull(playerLeaveLogFolder.listFiles()))
+        for (File playerLeaveLog : playerLeaveLogFolder.listFiles())
         {
 
             deleteFile(playerLeaveLog);
 
         }
 
-        for (File playerDeathLog : Objects.requireNonNull(playerDeathLogFolder.listFiles()))
+        for (File playerDeathLog : playerDeathLogFolder.listFiles())
         {
 
             deleteFile(playerDeathLog);
 
         }
 
-        for (File playerTeleportLog : Objects.requireNonNull(playerTeleportLogFolder.listFiles()))
+        for (File playerTeleportLog : playerTeleportLogFolder.listFiles())
         {
 
             deleteFile(playerTeleportLog);
 
         }
 
-        for (File blockPlaceLog : Objects.requireNonNull(blockPlaceLogFolder.listFiles()))
+        for (File blockPlaceLog : blockPlaceLogFolder.listFiles())
         {
 
             deleteFile(blockPlaceLog);
 
         }
 
-        for (File blockBreakLog : Objects.requireNonNull(blockBreakLogFolder.listFiles()))
+        for (File blockBreakLog : blockBreakLogFolder.listFiles())
         {
 
             deleteFile(blockBreakLog);
 
         }
 
-        for (File kickLog : Objects.requireNonNull(playerKickLogFolder.listFiles()))
+        for (File kickLog : playerKickLogFolder.listFiles())
         {
 
             deleteFile(kickLog);
 
         }
 
-        for (File playerLevelLog : Objects.requireNonNull(playerLevelFolder.listFiles()))
+        for (File playerLevelLog : playerLevelFolder.listFiles())
         {
 
             deleteFile(playerLevelLog);
 
         }
 
-        for (File bucketFill : Objects.requireNonNull(bucketFillFolder.listFiles()))
+        for (File bucketFill : bucketFillFolder.listFiles())
         {
 
             deleteFile(bucketFill);
 
         }
 
-        for (File bucketEmpty : Objects.requireNonNull(bucketEmptyFolder.listFiles()))
+        for (File bucketEmpty : bucketEmptyFolder.listFiles())
         {
 
             deleteFile(bucketEmpty);
 
         }
 
-        for (File anvil : Objects.requireNonNull(anvilFolder.listFiles()))
+        for (File anvil : anvilFolder.listFiles())
         {
 
             deleteFile(anvil);
@@ -647,77 +646,77 @@ public class FileHandler {
 
 
         if (main.getConfig().getBoolean("Staff.Enabled")) {
-            for (File Staff : Objects.requireNonNull(staffFolder.listFiles())) {
+            for (File Staff : staffFolder.listFiles()) {
 
                 deleteFile(Staff);
 
             }
         }
 
-        for (File itemDrop : Objects.requireNonNull(itemDropFolder.listFiles()))
+        for (File itemDrop : itemDropFolder.listFiles())
         {
 
             deleteFile(itemDrop);
 
         }
 
-        for (File enchanting : Objects.requireNonNull(enchantFolder.listFiles()))
+        for (File enchanting : enchantFolder.listFiles())
         {
 
             deleteFile(enchanting);
 
         }
 
-        for (File book : Objects.requireNonNull(bookEditingFolder.listFiles()))
+        for (File book : bookEditingFolder.listFiles())
         {
 
             deleteFile(book);
 
         }
 
-        for (File pickup : Objects.requireNonNull(itemPickupFolder.listFiles()))
+        for (File pickup : itemPickupFolder.listFiles())
         {
 
             deleteFile(pickup);
 
         }
 
-        for (File furnace : Objects.requireNonNull(furnaceFolder.listFiles()))
+        for (File furnace : furnaceFolder.listFiles())
         {
 
             deleteFile(furnace);
 
         }
 
-        for (File craft : Objects.requireNonNull(craftFolder.listFiles()))
+        for (File craft : craftFolder.listFiles())
         {
 
             deleteFile(craft);
 
         }
 
-        for (File register : Objects.requireNonNull(registrationFolder.listFiles()))
+        for (File register : registrationFolder.listFiles())
         {
 
             deleteFile(register);
 
         }
 
-        for (File primedTNT : Objects.requireNonNull(primedTNTFolder.listFiles()))
+        for (File primedTNT : primedTNTFolder.listFiles())
         {
 
             deleteFile(primedTNT);
 
         }
 
-        for (File chestInteraction : Objects.requireNonNull(chestInteractionFolder.listFiles()))
+        for (File chestInteraction : chestInteractionFolder.listFiles())
         {
 
             deleteFile(chestInteraction);
 
         }
 
-        for (File entityDeath : Objects.requireNonNull(entityDeathFolder.listFiles()))
+        for (File entityDeath : entityDeathFolder.listFiles())
         {
 
             deleteFile(entityDeath);
@@ -725,63 +724,63 @@ public class FileHandler {
         }
 
         // Server Side
-        for (File serverStart : Objects.requireNonNull(serverStartFolder.listFiles()))
+        for (File serverStart : serverStartFolder.listFiles())
         {
 
             deleteFile(serverStart);
 
         }
 
-        for (File serverStop : Objects.requireNonNull(serverStopFolder.listFiles()))
+        for (File serverStop : serverStopFolder.listFiles())
         {
 
             deleteFile(serverStop);
 
         }
 
-        for (File consoleLog : Objects.requireNonNull(consoleLogFolder.listFiles()))
+        for (File consoleLog : consoleLogFolder.listFiles())
         {
 
             deleteFile(consoleLog);
 
         }
 
-        for (File RAMLog : Objects.requireNonNull(ramFolder.listFiles()))
+        for (File RAMLog : ramFolder.listFiles())
         {
 
             deleteFile(RAMLog);
 
         }
 
-        for (File TPSLog : Objects.requireNonNull(tpsFolder.listFiles()))
+        for (File TPSLog : tpsFolder.listFiles())
         {
 
             deleteFile(TPSLog);
 
         }
 
-        for (File portalCreate : Objects.requireNonNull(portalCreateFolder.listFiles()))
+        for (File portalCreate : portalCreateFolder.listFiles())
         {
 
             deleteFile(portalCreate);
 
         }
 
-        for (File rcon : Objects.requireNonNull(rConFolder.listFiles()))
+        for (File rcon : rConFolder.listFiles())
         {
 
             deleteFile(rcon);
 
         }
 
-        for (File creative : Objects.requireNonNull(gameModeFolder.listFiles()))
+        for (File creative : gameModeFolder.listFiles())
         {
 
             deleteFile(creative);
 
         }
 
-        for (File commandBlock : Objects.requireNonNull(commandBlockFolder.listFiles()))
+        for (File commandBlock : commandBlockFolder.listFiles())
         {
 
             deleteFile(commandBlock);
@@ -790,7 +789,7 @@ public class FileHandler {
 
         // Extra Side
         if (EssentialsUtil.getEssentialsAPI() != null) {
-            for (File afk : Objects.requireNonNull(afkFolder.listFiles())) {
+            for (File afk : afkFolder.listFiles()) {
 
                 deleteFile(afk);
 
@@ -798,7 +797,7 @@ public class FileHandler {
         }
 
         if (AuthMeUtil.getAuthMeAPI() != null) {
-            for (File password : Objects.requireNonNull(wrongPasswordFolder.listFiles())) {
+            for (File password : wrongPasswordFolder.listFiles()) {
 
                 deleteFile(password);
 
@@ -806,7 +805,7 @@ public class FileHandler {
         }
 
         if (VaultUtil.getVaultAPI() && VaultUtil.getVault() != null) {
-            for (File vault : Objects.requireNonNull(vaultFolder.listFiles())) {
+            for (File vault : vaultFolder.listFiles()) {
 
                 deleteFile(vault);
 
@@ -814,7 +813,7 @@ public class FileHandler {
         }
 
         if (LiteBansUtil.getLiteBansAPI() != null) {
-            for (File liteBans : Objects.requireNonNull(liteBansFolder.listFiles())) {
+            for (File liteBans : liteBansFolder.listFiles()) {
 
                 deleteFile(liteBans);
 
@@ -822,7 +821,7 @@ public class FileHandler {
         }
 
         if (AdvancedBanUtil.getAdvancedBanAPI() != null) {
-            for (File advancedBan : Objects.requireNonNull(advancedBanFolder.listFiles())) {
+            for (File advancedBan : advancedBanFolder.listFiles()) {
 
                 deleteFile(advancedBan);
 
@@ -831,7 +830,7 @@ public class FileHandler {
 
         // Version Exception Part
         if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1)) {
-            for (File woodStripping : Objects.requireNonNull(woodStrippingFolder.listFiles())) {
+            for (File woodStripping : woodStrippingFolder.listFiles()) {
 
                 deleteFile(woodStripping);
 

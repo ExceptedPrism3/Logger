@@ -17,7 +17,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.loggerStaffLog;
@@ -39,7 +38,7 @@ public class OnCraft implements Listener {
             final UUID playerUUID = player.getUniqueId();
             final World world = player.getWorld();
             final String worldName = world.getName();
-            final String item = Objects.requireNonNull(event.getCurrentItem()).getType().name().replace("_", " ");
+            final String item = event.getCurrentItem().getType().name().replace("_", " ");
             final int amount = event.getCurrentItem().getAmount();
             final int x = player.getLocation().getBlockX();
             final int y = player.getLocation().getBlockY();
@@ -56,7 +55,7 @@ public class OnCraft implements Listener {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Craft-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Player-Craft-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -70,7 +69,7 @@ public class OnCraft implements Listener {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCraftFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Craft")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Player-Craft").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -87,16 +86,16 @@ public class OnCraft implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Craft-Staff")).isEmpty()) {
+                    if (this.main.getMessages().get().getString("Discord.Player-Craft-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Craft-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
+                        this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Player-Craft-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
 
                     }
                 } else {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Craft")).isEmpty()) {
+                    if (this.main.getMessages().get().getString("Discord.Player-Craft").isEmpty()) {
 
-                        this.main.getDiscord().playerCraft(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Craft")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
+                        this.main.getDiscord().playerCraft(player, this.main.getMessages().get().getString("Discord.Player-Craft").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
                     }
                 }
             }

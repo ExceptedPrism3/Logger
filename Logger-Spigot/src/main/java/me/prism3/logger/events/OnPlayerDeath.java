@@ -26,7 +26,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.isPlayerDeathBackup;
@@ -78,7 +77,7 @@ public class OnPlayerDeath implements Listener {
             final int y = player.getLocation().getBlockY();
             final int z = player.getLocation().getBlockZ();
             final int playerLevel = player.getLevel();
-            String cause = Objects.requireNonNull(player.getLastDamageCause()).getCause().name().replace("\\", "\\\\");
+            String cause = player.getLastDamageCause().getCause().name().replace("\\", "\\\\");
             String killer = "";
 
             if (player.getKiller() != null) {
@@ -101,7 +100,7 @@ public class OnPlayerDeath implements Listener {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Death-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Player-Death-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -115,7 +114,7 @@ public class OnPlayerDeath implements Listener {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerDeathLogFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Death")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Player-Death").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -132,16 +131,16 @@ public class OnPlayerDeath implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Death-Staff")).isEmpty()) {
+                    if (this.main.getMessages().get().getString("Discord.Player-Death-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Death-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
+                        this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Player-Death-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
 
                     }
                 } else {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Death")).isEmpty()) {
+                    if (this.main.getMessages().get().getString("Discord.Player-Death").isEmpty()) {
 
-                        this.main.getDiscord().playerDeath(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Death")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
+                        this.main.getDiscord().playerDeath(player, this.main.getMessages().get().getString("Discord.Player-Death").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
                     }
                 }
             }

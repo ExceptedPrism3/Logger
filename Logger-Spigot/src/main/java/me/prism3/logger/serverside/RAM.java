@@ -8,7 +8,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 
 public class RAM implements Runnable {
 
@@ -33,7 +32,7 @@ public class RAM implements Runnable {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRAMLogFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.RAM")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Server-Side.RAM").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -45,8 +44,8 @@ public class RAM implements Runnable {
                 }
 
                 // Discord
-                if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.RAM")).isEmpty())
-                    this.main.getDiscord().ram(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.RAM")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)), false);
+                if (this.main.getMessages().get().getString("Discord.Server-Side.RAM").isEmpty())
+                    this.main.getDiscord().ram(this.main.getMessages().get().getString("Discord.Server-Side.RAM").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)), false);
 
                 // External
                 if (Data.isExternal) {

@@ -6,7 +6,6 @@ import me.prism3.logger.Main;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
 
 public class Data {
 
@@ -76,7 +75,7 @@ public class Data {
 
     public void initializeDateFormatter() {
 
-        dateTimeFormatter = DateTimeFormatter.ofPattern(Objects.requireNonNull(this.main.getConfig().getString("Time-Formatter")));
+        dateTimeFormatter = DateTimeFormatter.ofPattern(this.main.getConfig().getString("Time-Formatter"));
 
     }
 

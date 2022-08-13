@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class Console implements Listener {
 
@@ -49,7 +48,7 @@ public class Console implements Listener {
                 try {
 
                     final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getConsoleLogFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.Console-Commands")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command) + "\n");
+                    out.write(this.main.getMessages().get().getString("Files.Server-Side.Console-Commands").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -61,8 +60,8 @@ public class Console implements Listener {
             }
 
             // Discord
-            if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Console-Commands")).isEmpty())
-                this.main.getDiscord().console(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Console-Commands")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command), false);
+            if (this.main.getMessages().get().getString("Discord.Server-Side.Console-Commands").isEmpty())
+                this.main.getDiscord().console(this.main.getMessages().get().getString("Discord.Server-Side.Console-Commands").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command), false);
 
             // External
             if (Data.isExternal) {

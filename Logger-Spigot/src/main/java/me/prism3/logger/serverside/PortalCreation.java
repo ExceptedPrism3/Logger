@@ -12,7 +12,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 
 public class PortalCreation implements Listener {
 
@@ -32,7 +31,7 @@ public class PortalCreation implements Listener {
                 try {
 
                     final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPortalCreateFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.Portal-Creation")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%material%", String.valueOf(reason)) + "\n");
+                    out.write(this.main.getMessages().get().getString("Files.Server-Side.Portal-Creation").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%material%", String.valueOf(reason)) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -44,8 +43,8 @@ public class PortalCreation implements Listener {
             }
 
             // Discord
-            if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Portal-Creation")).isEmpty())
-                this.main.getDiscord().portalCreation(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Portal-Creation")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%material%", String.valueOf(reason)), false);
+            if (this.main.getMessages().get().getString("Discord.Server-Side.Portal-Creation").isEmpty())
+                this.main.getDiscord().portalCreation(this.main.getMessages().get().getString("Discord.Server-Side.Portal-Creation").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%material%", String.valueOf(reason)), false);
 
             // External
             if (Data.isExternal) {

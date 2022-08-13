@@ -89,7 +89,7 @@ public class OnChestInteraction implements Listener {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Chest-Interaction-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%chest%", chestName).replace("%items%", Arrays.toString(items)) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Chest-Interaction-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%chest%", chestName).replace("%items%", Arrays.toString(items)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -103,7 +103,7 @@ public class OnChestInteraction implements Listener {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getChestInteractionFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Chest-Interaction")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%chest%", chestName).replace("%items%", Arrays.toString(items)) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Chest-Interaction").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%chest%", chestName).replace("%items%", Arrays.toString(items)) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -120,16 +120,16 @@ public class OnChestInteraction implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Chest-Interaction-Staff")).isEmpty()) {
+                    if (this.main.getMessages().get().getString("Discord.Chest-Interaction-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Chest-Interaction-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%chest%", chestName).replace("%items%", Arrays.toString(items)), false);
+                        this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Chest-Interaction-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%chest%", chestName).replace("%items%", Arrays.toString(items)), false);
 
                     }
                 } else {
 
-                    if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Chest-Interaction")).isEmpty()) {
+                    if (this.main.getMessages().get().getString("Discord.Chest-Interaction").isEmpty()) {
 
-                        this.main.getDiscord().chestInteraction(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Chest-Interaction")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%chest%", chestName).replace("%items%", Arrays.toString(items)), false);
+                        this.main.getDiscord().chestInteraction(player, this.main.getMessages().get().getString("Discord.Chest-Interaction").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%chest%", chestName).replace("%items%", Arrays.toString(items)), false);
                     }
                 }
             }

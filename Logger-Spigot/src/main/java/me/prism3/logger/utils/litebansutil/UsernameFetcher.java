@@ -21,11 +21,8 @@ public class UsernameFetcher {
 
             try (ResultSet rs = st.executeQuery()) {
 
-                if (rs.next()) {
-
+                if (rs.next())
                     name = rs.getString("name");
-
-                }
             }
 
         } catch (SQLException e) { e.printStackTrace(); }

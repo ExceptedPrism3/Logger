@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 import java.util.UUID;
 
 public class OnPlayerRegister {
@@ -48,7 +47,7 @@ public class OnPlayerRegister {
             try {
 
                 final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRegistrationFile(), true));
-                out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Registration")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())) + "\n");
+                out.write(this.main.getMessages().get().getString("Files.Player-Registration").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())) + "\n");
                 out.close();
 
             } catch (IOException e) {
@@ -61,7 +60,7 @@ public class OnPlayerRegister {
 
         // Discord Integration
         if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getMessages().get().getString("Discord.Player-Registration").isEmpty())
-            this.main.getDiscord().playerRegistration(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Registration")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())), false);
+            this.main.getDiscord().playerRegistration(player, this.main.getMessages().get().getString("Discord.Player-Registration").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())), false);
 
         // External
         if (Data.isExternal) {

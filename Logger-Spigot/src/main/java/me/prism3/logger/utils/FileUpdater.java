@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 public class FileUpdater {
 
@@ -17,14 +16,14 @@ public class FileUpdater {
         final File configFile = new File(dataFolder + File.separator + "config.yml");
         final YamlConfiguration externalYamlConfig = YamlConfiguration.loadConfiguration(configFile);
 
-        final InputStreamReader defConfigStream = new InputStreamReader(Objects.requireNonNull(Main.getInstance().getResource("config.yml")), StandardCharsets.UTF_8);
+        final InputStreamReader defConfigStream = new InputStreamReader(Main.getInstance().getResource("config.yml"), StandardCharsets.UTF_8);
         final YamlConfiguration internalConfigFile = YamlConfiguration.loadConfiguration(defConfigStream);
 
         // Discord File
         final File discordFile = new File(dataFolder + File.separator + "discord.yml");
         final YamlConfiguration externalYamlDiscord = YamlConfiguration.loadConfiguration(discordFile);
 
-        final InputStreamReader defDiscordStream = new InputStreamReader(Objects.requireNonNull(Main.getInstance().getResource("discord.yml")), StandardCharsets.UTF_8);
+        final InputStreamReader defDiscordStream = new InputStreamReader(Main.getInstance().getResource("discord.yml"), StandardCharsets.UTF_8);
         final YamlConfiguration internalDiscordFile = YamlConfiguration.loadConfiguration(defDiscordStream);
 
         // Gets all the keys inside the internal file and iterates through all of it's key pairs

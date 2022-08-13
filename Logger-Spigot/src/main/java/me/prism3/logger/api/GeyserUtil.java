@@ -8,7 +8,6 @@ public class GeyserUtil {
     private GeyserUtil() {}
 
     public static Plugin getGeyserAPI() {
-
         return Bukkit.getPluginManager().getPlugin("geyser-spigot");
     }
 }

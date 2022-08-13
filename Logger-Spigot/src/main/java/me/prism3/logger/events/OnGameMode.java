@@ -17,7 +17,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.loggerStaffLog;
@@ -53,7 +52,7 @@ public class OnGameMode implements Listener {
                         try {
 
                             final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                            out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Game-Mode-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%game-mode%", gameMode) + "\n");
+                            out.write(this.main.getMessages().get().getString("Files.Game-Mode-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%game-mode%", gameMode) + "\n");
                             out.close();
 
                         } catch (IOException e) {
@@ -67,7 +66,7 @@ public class OnGameMode implements Listener {
                         try {
 
                             final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getGameModeFile(), true));
-                            out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Game-Mode")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%game-mode%", gameMode) + "\n");
+                            out.write(this.main.getMessages().get().getString("Files.Game-Mode").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%game-mode%", gameMode) + "\n");
                             out.close();
 
                         } catch (IOException e) {
@@ -84,16 +83,16 @@ public class OnGameMode implements Listener {
 
                     if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                        if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Game-Mode-Staff")).isEmpty()) {
+                        if (this.main.getMessages().get().getString("Discord.Game-Mode-Staff").isEmpty()) {
 
-                            this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Game-Mode-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%game-mode%", gameMode), false);
+                            this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Game-Mode-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%game-mode%", gameMode), false);
 
                         }
                     } else {
 
-                        if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Game-Mode")).isEmpty()) {
+                        if (this.main.getMessages().get().getString("Discord.Game-Mode").isEmpty()) {
 
-                            this.main.getDiscord().gameMode(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Game-Mode")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%game-mode%", gameMode), false);
+                            this.main.getDiscord().gameMode(player, this.main.getMessages().get().getString("Discord.Game-Mode").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%game-mode%", gameMode), false);
                         }
                     }
                 }

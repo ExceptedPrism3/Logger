@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.loggerStaffLog;
@@ -62,7 +61,7 @@ public class OnVault implements Listener, Runnable {
                                 try {
 
                                     final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Extras.Vault-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)) + "\n");
+                                    out.write(this.main.getMessages().get().getString("Files.Extras.Vault-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)) + "\n");
                                     out.close();
 
                                 } catch (IOException e) {
@@ -76,7 +75,7 @@ public class OnVault implements Listener, Runnable {
                                 try {
 
                                     final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getVaultFile(), true));
-                                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Extras.Vault")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)) + "\n");
+                                    out.write(this.main.getMessages().get().getString("Files.Extras.Vault").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)) + "\n");
                                     out.close();
 
                                 } catch (IOException e) {
@@ -93,17 +92,17 @@ public class OnVault implements Listener, Runnable {
 
                             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                                if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Extras.Vault-Staff")).isEmpty()) {
+                                if (this.main.getMessages().get().getString("Discord.Extras.Vault-Staff").isEmpty()) {
 
-                                    this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Extras.Vault-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)), false);
+                                    this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Extras.Vault-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)), false);
 
                                 }
 
                             } else {
 
-                                if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Extras.Vault")).isEmpty()) {
+                                if (this.main.getMessages().get().getString("Discord.Extras.Vault").isEmpty()) {
 
-                                    this.main.getDiscord().vault(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Extras.Vault")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)), false);
+                                    this.main.getDiscord().vault(player, this.main.getMessages().get().getString("Discord.Extras.Vault").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)), false);
                                 }
                             }
                         }

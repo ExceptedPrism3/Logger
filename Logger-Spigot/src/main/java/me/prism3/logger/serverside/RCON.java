@@ -12,7 +12,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 
 public class RCON implements Listener {
 
@@ -32,7 +31,7 @@ public class RCON implements Listener {
                 try {
 
                     final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRconFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.RCON")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%IP%", ip).replace("%command%", command)) + "\n");
+                    out.write(this.main.getMessages().get().getString("Files.Server-Side.RCON").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%IP%", ip).replace("%command%", command)) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -44,8 +43,8 @@ public class RCON implements Listener {
             }
 
             // Discord
-            if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.RCON")).isEmpty())
-                this.main.getDiscord().rCon(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.RCON")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%IP%", ip).replace("%command%", command)), false);
+            if (this.main.getMessages().get().getString("Discord.Server-Side.RCON").isEmpty())
+                this.main.getDiscord().rCon(this.main.getMessages().get().getString("Discord.Server-Side.RCON").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%IP%", ip).replace("%command%", command))), false);
 
             // External
             if (Data.isExternal) {

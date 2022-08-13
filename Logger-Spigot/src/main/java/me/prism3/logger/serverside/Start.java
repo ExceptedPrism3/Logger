@@ -8,7 +8,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 
 public class Start {
 
@@ -24,7 +23,7 @@ public class Start {
                 try {
 
                     final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStartFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.Start")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())) + "\n");
+                    out.write(this.main.getMessages().get().getString("Files.Server-Side.Start").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -36,8 +35,8 @@ public class Start {
             }
 
             // Discord
-            if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Start")).isEmpty())
-                this.main.getDiscord().serverStart(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Start")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())), false);
+            if (this.main.getMessages().get().getString("Discord.Server-Side.Start").isEmpty())
+                this.main.getDiscord().serverStart(this.main.getMessages().get().getString("Discord.Server-Side.Start").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())), false);
 
             // External
             if (Data.isExternal) {

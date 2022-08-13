@@ -5,7 +5,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.util.Objects;
 
 public class DiscordFile {
 
@@ -14,13 +13,10 @@ public class DiscordFile {
 
     public void setup() {
 
-        this.theDiscordFile = new File(Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("Logger")).getDataFolder(), "discord.yml");
+        this.theDiscordFile = new File(Bukkit.getServer().getPluginManager().getPlugin("Logger").getDataFolder(), "discord.yml");
 
-        if (!this.theDiscordFile.exists()) {
-
-            Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("Logger")).saveResource("discord.yml", false);
-
-        }
+        if (!this.theDiscordFile.exists())
+            Bukkit.getServer().getPluginManager().getPlugin("Logger").saveResource("discord.yml", false);
 
         this.file = YamlConfiguration.loadConfiguration(this.theDiscordFile);
 

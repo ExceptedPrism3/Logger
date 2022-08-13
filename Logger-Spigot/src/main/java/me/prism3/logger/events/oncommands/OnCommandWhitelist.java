@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.loggerStaffLog;
@@ -51,7 +50,7 @@ public class OnCommandWhitelist implements Listener {
                         try {
 
                             final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                            out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Commands-Whitelisted-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%command%", command) + "\n");
+                            out.write(this.main.getMessages().get().getString("Files.Player-Commands-Whitelisted-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%command%", command) + "\n");
                             out.close();
 
                         } catch (IOException e) {
@@ -65,7 +64,7 @@ public class OnCommandWhitelist implements Listener {
                         try {
 
                             final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true));
-                            out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Player-Commands-Whitelisted")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%command%", command) + "\n");
+                            out.write(this.main.getMessages().get().getString("Files.Player-Commands-Whitelisted").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%command%", command) + "\n");
                             out.close();
 
                         } catch (IOException e) {
@@ -82,16 +81,16 @@ public class OnCommandWhitelist implements Listener {
 
                     if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                        if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted-Staff")).isEmpty()) {
+                        if (this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted-Staff").isEmpty()) {
 
-                            this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Commands-Staff-Whitelisted")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
+                            this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Player-Commands-Staff-Whitelisted").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
 
                         }
                     } else {
 
-                        if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted")).isEmpty()) {
+                        if (this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted").isEmpty()) {
 
-                            this.main.getDiscord().playerCommand(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
+                            this.main.getDiscord().playerCommand(player, this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
                         }
                     }
                 }
