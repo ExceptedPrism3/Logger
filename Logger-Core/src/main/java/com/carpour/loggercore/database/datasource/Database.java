@@ -246,8 +246,7 @@ public final class Database implements DataSourceInterface {
                 .findFirst()
                 .orElse(player);
 
-        final BlockPlace p = new BlockPlace();
-
+        final BlockInteraction p = new BlockInteraction();
         p.setDate(Instant.now());
         p.setServerName(serverName);
         p.setWorld(coords.getWorldName());
@@ -257,6 +256,7 @@ public final class Database implements DataSourceInterface {
         p.setBlock(block);
         p.setEntityPlayer(loggerPlayer);
         p.isStaff(isStaff);
+        p.setAsBlockPlace();
 
         session.persist(p);
         session.getTransaction().commit();
@@ -277,7 +277,7 @@ public final class Database implements DataSourceInterface {
                 .findFirst()
                 .orElse(player);
 
-        final BlockBreak p = new BlockBreak();
+        final BlockInteraction p = new BlockInteraction();
 
         p.setDate(Instant.now());
         p.setServerName(serverName);
@@ -288,6 +288,7 @@ public final class Database implements DataSourceInterface {
         p.setBlock(blockName);
         p.setEntityPlayer(loggerPlayer);
         p.isStaff(isStaff);
+        p.setAsBlockBreak();
 
         session.persist(p);
         session.getTransaction().commit();

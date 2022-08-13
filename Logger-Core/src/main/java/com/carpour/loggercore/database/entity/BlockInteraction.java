@@ -4,8 +4,9 @@ import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "block_place")
-public class BlockPlace {
+@Table(name = "block_interaction")
+public class BlockInteraction {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -30,6 +31,9 @@ public class BlockPlace {
     private Integer z;
     @Column(name = "is_staff")
     private Boolean isStaff;
+
+    @Column(name="interaction_type")
+    private String interactionType;
 
     public EntityPlayer getEntityPlayer() {
         return entityPlayer;
@@ -111,4 +115,24 @@ public class BlockPlace {
         isStaff = staff;
     }
 
+    public String getInteractionType()
+    {
+        return this.interactionType;
+    }
+    public void setInteractionType(String interactionType)
+    {
+        this.interactionType = interactionType;
+    }
+    public void setAsWoodStripping()
+    {
+        this.interactionType = "WOOD.STRIPPING";
+    }
+    public void setAsBlockBreak()
+    {
+        this.interactionType = "BLOCK_BREAK";
+    }
+    public void setAsBlockPlace()
+    {
+        this.interactionType = "BLOCK_PLACE";
+    }
 }

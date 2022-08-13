@@ -26,8 +26,7 @@ public class HibernateUtils {
         try {
             a.addPackage("com.carpour.loggercore.database.entity");
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Anvil"));
-            a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.BlockBreak"));
-            a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.BlockPlace"));
+            a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.BlockInteraction"));
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.BookEditing"));
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.BucketEmpty"));
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.BucketFill"));
