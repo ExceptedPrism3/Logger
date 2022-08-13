@@ -36,7 +36,7 @@ public class BlockInteraction {
     private String interactionType;
 
     public EntityPlayer getEntityPlayer() {
-        return entityPlayer;
+        return this.entityPlayer;
     }
 
     public void setEntityPlayer(EntityPlayer entityPlayer) {
@@ -44,7 +44,7 @@ public class BlockInteraction {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -52,7 +52,7 @@ public class BlockInteraction {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
@@ -60,7 +60,7 @@ public class BlockInteraction {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -68,7 +68,7 @@ public class BlockInteraction {
     }
 
     public String getWorld() {
-        return world;
+        return this.world;
     }
 
     public void setWorld(String world) {
@@ -76,7 +76,7 @@ public class BlockInteraction {
     }
 
     public String getBlock() {
-        return block;
+        return this.block;
     }
 
     public void setBlock(String block) {
@@ -84,7 +84,7 @@ public class BlockInteraction {
     }
 
     public Integer getX() {
-        return x;
+        return this.x;
     }
 
     public void setX(Integer x) {
@@ -92,7 +92,7 @@ public class BlockInteraction {
     }
 
     public Integer getY() {
-        return y;
+        return this.y;
     }
 
     public void setY(Integer y) {
@@ -100,7 +100,7 @@ public class BlockInteraction {
     }
 
     public Integer getZ() {
-        return z;
+        return this.z;
     }
 
     public void setZ(Integer z) {
@@ -108,11 +108,11 @@ public class BlockInteraction {
     }
 
     public Boolean isStaff() {
-        return isStaff;
+        return this.isStaff;
     }
 
     public void isStaff(Boolean staff) {
-        isStaff = staff;
+        this.isStaff = staff;
     }
 
     public String getInteractionType()
