@@ -35,11 +35,8 @@ public class DiscordStatus {
 
         }
 
-        if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Random")) {
-
+        if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Random"))
             Collections.shuffle(this.activities);
-
-        }
 
         threadPool.scheduleWithFixedDelay(() -> {
 

@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "rcon")
 public class Rcon {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -23,7 +24,7 @@ public class Rcon {
     private String command;
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -31,7 +32,7 @@ public class Rcon {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
@@ -39,7 +40,7 @@ public class Rcon {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -47,7 +48,7 @@ public class Rcon {
     }
 
     public Long getIp() {
-        return ip;
+        return this.ip;
     }
 
     public void setIp(Long ip) {
@@ -55,11 +56,10 @@ public class Rcon {
     }
 
     public String getCommand() {
-        return command;
+        return this.command;
     }
 
     public void setCommand(String command) {
         this.command = command;
     }
-
 }

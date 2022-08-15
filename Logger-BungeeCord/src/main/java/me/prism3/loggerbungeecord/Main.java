@@ -3,8 +3,6 @@ package me.prism3.loggerbungeecord;
 import me.prism3.loggerbungeecord.api.LiteBansUtil;
 import me.prism3.loggerbungeecord.api.PartyAndFriendsUtil;
 import me.prism3.loggerbungeecord.commands.Reload;
-import me.prism3.loggerbungeecord.database.sqlite.SQLite;
-import me.prism3.loggerbungeecord.database.sqlite.SQLiteData;
 import me.prism3.loggerbungeecord.discord.Discord;
 import me.prism3.loggerbungeecord.discord.DiscordFile;
 import me.prism3.loggerbungeecord.events.OnChat;
@@ -35,10 +33,6 @@ public final class Main extends Plugin {
 
     private DiscordFile discordFile;
     private Discord discord;
-
-    private External external;
-
-    private SQLite sqLite;
 
     @Override
     public void onEnable() {
@@ -102,9 +96,9 @@ public final class Main extends Plugin {
 
         new Stop().run();
 
-        if (isExternal && this.external.isConnected()) this.external.disconnect();
+//        if (isExternal && this.external.isConnected()) this.external.disconnect();
 
-        if (isSqlite && this.sqLite.isConnected()) this.sqLite.disconnect();
+//        if (isSqlite && this.sqLite.isConnected()) this.sqLite.disconnect();
 
         this.discord.disconnect();
 
@@ -123,7 +117,7 @@ public final class Main extends Plugin {
     }
 
     private void databaseSetup() {
-
+//TODO DB Hna
     }
 
     private void loadPluginDepends() {
@@ -153,6 +147,4 @@ public final class Main extends Plugin {
     public DiscordFile getDiscordFile() { return this.discordFile; }
 
     public Discord getDiscord() { return this.discord; }
-
-    public SQLite getSqLite() { return this.sqLite; }
 }

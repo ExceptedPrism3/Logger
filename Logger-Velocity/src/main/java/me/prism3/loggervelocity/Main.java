@@ -64,7 +64,7 @@ public class Main{
     }
 
     @Subscribe
-    public void onEnable(ProxyInitializeEvent event) {
+    public void onEnable(final ProxyInitializeEvent event) {
 
         instance = this;
 
@@ -92,8 +92,8 @@ public class Main{
 
         server.getScheduler().buildTask(this, new RAM()).repeat(ramChecker, TimeUnit.SECONDS).delay(10, TimeUnit.SECONDS).schedule();
 
-        server.getCommandManager().register("loggerproxy", new Reload());
-        server.getCommandManager().register("loggerproxy", new DiscordCMD());
+        server.getCommandManager().register("loggerv", new Reload());
+        server.getCommandManager().register("loggerv", new DiscordCMD());
 
         this.dataBaseSetup();
 
@@ -132,7 +132,7 @@ public class Main{
     }
 
     private void dataBaseSetup() {
-
+//TODO DB Hna
 
     }
 
@@ -172,8 +172,5 @@ public class Main{
     {
         return this.sqLite;
     }
-
-
-
 
 }

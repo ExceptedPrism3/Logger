@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "chest_interaction")
 public class ChestInteraction {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -19,7 +20,6 @@ public class ChestInteraction {
 
     @Column(name = "world", length = 100)
     private String world;
-
 
     @Column(name = "x")
     private Integer x;
@@ -40,7 +40,7 @@ public class ChestInteraction {
     private Boolean isStaff;
 
     public EntityPlayer getEntityPlayer() {
-        return entityPlayer;
+        return this.entityPlayer;
     }
 
     public void setEntityPlayer(EntityPlayer entityPlayer) {
@@ -48,7 +48,7 @@ public class ChestInteraction {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -56,7 +56,7 @@ public class ChestInteraction {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
@@ -64,7 +64,7 @@ public class ChestInteraction {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -72,7 +72,7 @@ public class ChestInteraction {
     }
 
     public String getWorld() {
-        return world;
+        return this.world;
     }
 
     public void setWorld(String world) {
@@ -80,7 +80,7 @@ public class ChestInteraction {
     }
 
     public Integer getX() {
-        return x;
+        return this.x;
     }
 
     public void setX(Integer x) {
@@ -88,7 +88,7 @@ public class ChestInteraction {
     }
 
     public Integer getY() {
-        return y;
+        return this.y;
     }
 
     public void setY(Integer y) {
@@ -96,7 +96,7 @@ public class ChestInteraction {
     }
 
     public Integer getZ() {
-        return z;
+        return this.z;
     }
 
     public void setZ(Integer z) {
@@ -104,7 +104,7 @@ public class ChestInteraction {
     }
 
     public String getItems() {
-        return items;
+        return this.items;
     }
 
     public void setItems(String items) {
@@ -112,11 +112,11 @@ public class ChestInteraction {
     }
 
     public Boolean isStaff() {
-        return isStaff;
+        return this.isStaff;
     }
 
     public void isStaff(Boolean staff) {
-        isStaff = staff;
+        this.isStaff = staff;
     }
 
 }

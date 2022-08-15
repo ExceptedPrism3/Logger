@@ -8,7 +8,6 @@ public class LiteBansUtil {
     private LiteBansUtil() {}
 
     public static Plugin getLiteBansAPI() {
-
         return Main.getInstance().getProxy().getPluginManager().getPlugin("LiteBans");
     }
 }

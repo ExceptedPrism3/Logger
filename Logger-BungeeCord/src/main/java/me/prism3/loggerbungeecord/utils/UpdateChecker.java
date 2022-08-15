@@ -25,6 +25,7 @@ public class UpdateChecker {
 
                 final URL url = new URL(httpsUrl);
                 final HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+
                 if (con != null) {
 
                     try {
@@ -48,7 +49,6 @@ public class UpdateChecker {
                     } catch (IOException e) {
 
                         Main.getInstance().getLogger().warning("Could not check for Updates, if the issue persists contact the Authors!");
-
                         e.printStackTrace();
 
                     }
@@ -57,7 +57,6 @@ public class UpdateChecker {
             } catch (IOException e) {
 
                 Main.getInstance().getLogger().warning("Could not check for Updates, if the issue persists contact the Authors!");
-
                 e.printStackTrace();
 
             }

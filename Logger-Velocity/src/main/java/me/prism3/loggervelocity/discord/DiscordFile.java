@@ -24,7 +24,7 @@ public class DiscordFile {
 
             if (!this.file.exists()) {
 
-                if (!dataFolder.exists()) { dataFolder.mkdir(); }
+                if (!dataFolder.exists()) dataFolder.mkdir();
 
                 this.file.createNewFile();
 

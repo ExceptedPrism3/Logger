@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "registration")
 public class Registration {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -27,7 +28,7 @@ public class Registration {
     private String joinDate;
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -35,7 +36,7 @@ public class Registration {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
@@ -43,7 +44,7 @@ public class Registration {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -51,7 +52,7 @@ public class Registration {
     }
 
     public String getPlayerName() {
-        return playerName;
+        return this.playerName;
     }
 
     public void setPlayerName(String playerName) {
@@ -59,7 +60,7 @@ public class Registration {
     }
 
     public String getPlayerUuid() {
-        return playerUuid;
+        return this.playerUuid;
     }
 
     public void setPlayerUuid(String playerUuid) {
@@ -67,11 +68,10 @@ public class Registration {
     }
 
     public String getJoinDate() {
-        return joinDate;
+        return this.joinDate;
     }
 
     public void setJoinDate(String joinDate) {
         this.joinDate = joinDate;
     }
-
 }

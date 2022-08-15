@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "book_editing")
 public class BookEditing {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -19,7 +20,6 @@ public class BookEditing {
 
     @Column(name = "world", length = 100)
     private String world;
-
 
     @Column(name = "page_count")
     private Integer pageCount;
@@ -37,7 +37,7 @@ public class BookEditing {
     private Boolean isStaff;
 
     public EntityPlayer getEntityPlayer() {
-        return entityPlayer;
+        return this.entityPlayer;
     }
 
     public void setEntityPlayer(EntityPlayer entityPlayer) {
@@ -45,7 +45,7 @@ public class BookEditing {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -53,7 +53,7 @@ public class BookEditing {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
@@ -61,7 +61,7 @@ public class BookEditing {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -69,7 +69,7 @@ public class BookEditing {
     }
 
     public String getWorld() {
-        return world;
+        return this.world;
     }
 
     public void setWorld(String world) {
@@ -77,7 +77,7 @@ public class BookEditing {
     }
 
     public Integer getPageCount() {
-        return pageCount;
+        return this.pageCount;
     }
 
     public void setPageCount(Integer pageCount) {
@@ -85,7 +85,7 @@ public class BookEditing {
     }
 
     public String getPageContent() {
-        return pageContent;
+        return this.pageContent;
     }
 
     public void setPageContent(String pageContent) {
@@ -93,7 +93,7 @@ public class BookEditing {
     }
 
     public String getSignedBy() {
-        return signedBy;
+        return this.signedBy;
     }
 
     public void setSignedBy(String signedBy) {
@@ -101,10 +101,10 @@ public class BookEditing {
     }
 
     public Boolean isStaff() {
-        return isStaff;
+        return this.isStaff;
     }
 
     public void isStaff(Boolean staff) {
-        isStaff = staff;
+        this.isStaff = staff;
     }
 }

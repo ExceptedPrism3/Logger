@@ -10,7 +10,6 @@ public class LiteBansUtil {
     private LiteBansUtil() {}
 
     public static Optional<PluginContainer> getLiteBansAPI() {
-
         return Main.getServer().getPluginManager().getPlugin("LiteBans");
     }
 }

@@ -19,7 +19,7 @@ public class DiscordFile {
 
         try {
 
-            this.discord = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile());
+            this.discord = ConfigurationProvider.getProvider(YamlConfiguration.class).load(this.getFile());
 
         } catch (IOException e) { e.printStackTrace(); }
     }
@@ -47,7 +47,7 @@ public class DiscordFile {
 
         if (!Main.getInstance().getDataFolder().exists()) Main.getInstance().getDataFolder().mkdir();
 
-        final File file = getFile();
+        final File file = this.getFile();
 
         if (!file.exists()) {
 
@@ -55,9 +55,9 @@ public class DiscordFile {
 
                 file.createNewFile();
 
-                try (InputStream is = Main.getInstance().getResourceAsStream("discord - Bungee.yml")) {
+                try (final InputStream is = Main.getInstance().getResourceAsStream("discord - Bungee.yml")) {
 
-                    OutputStream os = new FileOutputStream(file);
+                    final OutputStream os = new FileOutputStream(file);
                     ByteStreams.copy(is, os);
                     os.close();
 

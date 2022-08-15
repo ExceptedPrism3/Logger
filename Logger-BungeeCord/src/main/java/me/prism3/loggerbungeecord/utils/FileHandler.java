@@ -123,11 +123,7 @@ public class FileHandler {
                 liteBansKickLogFile.createNewFile();
             }
 
-        } catch (IOException e) {
-
-            e.printStackTrace();
-
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     public static File getStaffLogFile() { return staffLogFile; }
@@ -164,21 +160,15 @@ public class FileHandler {
 
             creationTime = (FileTime) Files.getAttribute(file.toPath(), "creationTime");
 
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        }
+        } catch (IOException e) { e.printStackTrace(); }
 
         assert creationTime != null;
         final long offset = System.currentTimeMillis() - creationTime.toMillis();
         final long fileDeletionDays = main.getConfig().getInt("File-Deletion");
         final long maxAge = TimeUnit.DAYS.toMillis(fileDeletionDays);
 
-        if (offset > maxAge) {
-
+        if (offset > maxAge)
             file.delete();
-
-        }
     }
 
     public void deleteFiles() {

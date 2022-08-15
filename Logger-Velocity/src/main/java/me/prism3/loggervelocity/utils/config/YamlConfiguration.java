@@ -16,14 +16,14 @@ import java.util.Map;
 public class YamlConfiguration extends ConfigurationProvider {
 
     private final ThreadLocal<Yaml> yaml = ThreadLocal.withInitial(() -> {
-        Representer representer = new Representer()
+        final Representer representer = new Representer()
         {
             {
                 representers.put( Configuration.class, data -> represent( ( (Configuration) data ).self ));
             }
         };
 
-        DumperOptions options = new DumperOptions();
+        final DumperOptions options = new DumperOptions();
         options.setDefaultFlowStyle( DumperOptions.FlowStyle.BLOCK );
 
         return new Yaml( new Constructor(), representer, options );
@@ -33,9 +33,7 @@ public class YamlConfiguration extends ConfigurationProvider {
     public void save(Configuration config, File file) throws IOException
     {
         try ( Writer writer = new OutputStreamWriter( new FileOutputStream( file ), StandardCharsets.UTF_8 ) )
-        {
-            save( config, writer );
-        }
+        { this.save( config, writer ); }
     }
 
     @Override
@@ -45,18 +43,11 @@ public class YamlConfiguration extends ConfigurationProvider {
     }
 
     @Override
-    public Configuration load(File file) throws IOException
-    {
-        return load( file, null );
-    }
+    public Configuration load(File file) throws IOException { return load( file, null ); }
 
     @Override
-    public Configuration load(File file, Configuration defaults) throws IOException
-    {
-        try ( FileInputStream is = new FileInputStream( file ) )
-        {
-            return load( is, defaults );
-        }
+    public Configuration load(File file, Configuration defaults) throws IOException {
+        try ( FileInputStream is = new FileInputStream( file ) ) { return load( is, defaults ); }
     }
 
     @Override
@@ -67,49 +58,34 @@ public class YamlConfiguration extends ConfigurationProvider {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Configuration load(Reader reader, Configuration defaults)
-    {
+    public Configuration load(Reader reader, Configuration defaults) {
         Map<String, Object> map = yaml.get().loadAs( reader, LinkedHashMap.class );
         if ( map == null )
-        {
             map = new LinkedHashMap<>();
-        }
         return new Configuration( map, defaults );
     }
 
     @Override
-    public Configuration load(InputStream is)
-    {
-        return load( is, null );
-    }
+    public Configuration load(InputStream is) { return load( is, null ); }
 
     @Override
     @SuppressWarnings("unchecked")
-    public Configuration load(InputStream is, Configuration defaults)
-    {
+    public Configuration load(InputStream is, Configuration defaults) {
         Map<String, Object> map = yaml.get().loadAs( is, LinkedHashMap.class );
         if ( map == null )
-        {
             map = new LinkedHashMap<>();
-        }
         return new Configuration( map, defaults );
     }
 
     @Override
-    public Configuration load(String string)
-    {
-        return load( string, null );
-    }
+    public Configuration load(String string) { return load( string, null ); }
 
     @Override
     @SuppressWarnings("unchecked")
-    public Configuration load(String string, Configuration defaults)
-    {
+    public Configuration load(String string, Configuration defaults) {
         Map<String, Object> map = yaml.get().loadAs( string, LinkedHashMap.class );
         if ( map == null )
-        {
             map = new LinkedHashMap<>();
-        }
         return new Configuration( map, defaults );
     }
 }

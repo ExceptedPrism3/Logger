@@ -15,17 +15,13 @@ public class UsernameFetcher {
         String name = "";
         final String query = "SELECT name from {history} WHERE uuid=? ORDER BY date DESC LIMIT 1";
 
-        try (PreparedStatement st = Database.get().prepareStatement(query)) {
+        try (final PreparedStatement st = Database.get().prepareStatement(query)) {
 
             st.setString(1, uuid);
 
             try (ResultSet rs = st.executeQuery()) {
-
-                if (rs.next()) {
-
+                if (rs.next())
                     name = rs.getString("name");
-
-                }
             }
 
         } catch (SQLException e) { e.printStackTrace(); }

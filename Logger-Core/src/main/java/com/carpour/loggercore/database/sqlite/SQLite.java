@@ -36,9 +36,7 @@ public final class SQLite implements DataSourceInterface {
         this.databaseFile = databaseFile;
         try {
             Class.forName("org.sqlite.JDBC");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (ClassNotFoundException e) { throw new RuntimeException(e); }
 
         this.createDatabaseFile();
         this.createTable();
@@ -50,14 +48,11 @@ public final class SQLite implements DataSourceInterface {
     }
 
     private void createDatabaseFile() {
-
         try {
             if (!this.databaseFile.exists())
                 this.databaseFile.createNewFile();
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (IOException e) { throw new RuntimeException(e); }
     }
 
     private String getJdbcUrl() {
@@ -289,9 +284,7 @@ public final class SQLite implements DataSourceInterface {
                 tablesNames.add("wood_stripping");
             }
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
 
@@ -310,9 +303,7 @@ public final class SQLite implements DataSourceInterface {
 
             playerChat.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -330,9 +321,7 @@ public final class SQLite implements DataSourceInterface {
 
             playerCommands.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -353,9 +342,7 @@ public final class SQLite implements DataSourceInterface {
 
             playerSignText.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -378,9 +365,7 @@ public final class SQLite implements DataSourceInterface {
 
             playerDeath.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -404,9 +389,7 @@ public final class SQLite implements DataSourceInterface {
 
             playerTeleport.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -430,9 +413,7 @@ public final class SQLite implements DataSourceInterface {
 
             playerJoin.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -452,9 +433,7 @@ public final class SQLite implements DataSourceInterface {
 
             playerLeave.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -475,9 +454,7 @@ public final class SQLite implements DataSourceInterface {
 
             blockPlace.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -498,9 +475,7 @@ public final class SQLite implements DataSourceInterface {
 
             blockBreak.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -514,9 +489,7 @@ public final class SQLite implements DataSourceInterface {
 
             tps.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -533,9 +506,7 @@ public final class SQLite implements DataSourceInterface {
 
             ram.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -556,9 +527,7 @@ public final class SQLite implements DataSourceInterface {
 
             playerKick.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -574,9 +543,7 @@ public final class SQLite implements DataSourceInterface {
 
             portalCreation.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -596,9 +563,7 @@ public final class SQLite implements DataSourceInterface {
 
             playerLevel.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -619,9 +584,7 @@ public final class SQLite implements DataSourceInterface {
 
             bucketPlace.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -643,9 +606,7 @@ public final class SQLite implements DataSourceInterface {
 
             bucketPlace.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -666,9 +627,7 @@ public final class SQLite implements DataSourceInterface {
 
             anvil.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -681,9 +640,7 @@ public final class SQLite implements DataSourceInterface {
 
             serverStart.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -696,9 +653,7 @@ public final class SQLite implements DataSourceInterface {
 
             serverStop.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -723,9 +678,7 @@ public final class SQLite implements DataSourceInterface {
 
             itemDrop.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -751,9 +704,7 @@ public final class SQLite implements DataSourceInterface {
 
             enchanting.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -773,9 +724,7 @@ public final class SQLite implements DataSourceInterface {
 
             enchanting.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -795,9 +744,7 @@ public final class SQLite implements DataSourceInterface {
 
             afk.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -814,9 +761,7 @@ public final class SQLite implements DataSourceInterface {
 
             wrongPassword.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -839,9 +784,7 @@ public final class SQLite implements DataSourceInterface {
 
             itemPickup.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -863,9 +806,7 @@ public final class SQLite implements DataSourceInterface {
 
             furnace.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -881,9 +822,7 @@ public final class SQLite implements DataSourceInterface {
 
             rCon.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -901,9 +840,7 @@ public final class SQLite implements DataSourceInterface {
 
             gameMode.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -925,9 +862,7 @@ public final class SQLite implements DataSourceInterface {
 
             craft.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -945,9 +880,7 @@ public final class SQLite implements DataSourceInterface {
 
             vault.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -964,9 +897,7 @@ public final class SQLite implements DataSourceInterface {
 
             register.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -987,9 +918,7 @@ public final class SQLite implements DataSourceInterface {
 
             primedTNT.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -1009,9 +938,7 @@ public final class SQLite implements DataSourceInterface {
 
             liteBans.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -1030,9 +957,7 @@ public final class SQLite implements DataSourceInterface {
 
             advancedBan.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -1047,9 +972,7 @@ public final class SQLite implements DataSourceInterface {
 
             commandBlock.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -1071,9 +994,7 @@ public final class SQLite implements DataSourceInterface {
 
             woodStripping.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -1095,9 +1016,7 @@ public final class SQLite implements DataSourceInterface {
 
             chestInteraction.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -1119,9 +1038,7 @@ public final class SQLite implements DataSourceInterface {
 
             entityDeath.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
 
@@ -1137,10 +1054,6 @@ public final class SQLite implements DataSourceInterface {
 
             consoleCommands.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
-
-
 }

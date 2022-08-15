@@ -13,7 +13,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 
 public class OnLogin implements Listener {
 
@@ -38,12 +37,6 @@ public class OnLogin implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                    if (!this.main.getMessages().getString("Discord.Player-Login-Staff").isEmpty()) {
-
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().getString("Discord.Player-Login-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%IP%", String.valueOf(playerIP)), false);
-
-                    }
-
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
@@ -56,34 +49,20 @@ public class OnLogin implements Listener {
                         e.printStackTrace();
 
                     }
+                } else {
 
-                    if (Data.isExternal ) {
+                    try {
 
-                        Main.getInstance().getDatabase().insertPlayerLogin(Data.serverName, playerName, playerIP, true);
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLoginLogFile(), true));
+                        out.write(this.main.getMessages().getString("Files.Player-Login").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%IP%", String.valueOf(playerIP)) + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
 
                     }
-
-                    if (Data.isSqlite ) {
-
-                        Main.getInstance().getSqLite().insertPlayerLogin(Data.serverName, playerName, playerIP, true);
-
-                    }
-
-                    return;
-
-                }
-
-                try {
-
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLoginLogFile(), true));
-                    out.write(this.main.getMessages().getString("Files.Player-Login").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%IP%", String.valueOf(playerIP)) + "\n");
-                    out.close();
-
-                } catch (IOException e) {
-
-                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
                 }
             }
 
@@ -94,21 +73,21 @@ public class OnLogin implements Listener {
 
                     if (!this.main.getMessages().getString("Discord.Player-Login-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().getString("Discord.Player-Login-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%IP%", String.valueOf(playerIP)), false);
+                        this.main.getDiscord().staffChat(player, this.main.getMessages().getString("Discord.Player-Login-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%IP%", String.valueOf(playerIP)), false);
 
                     }
                 } else {
 
                     if (!this.main.getMessages().getString("Discord.Player-Login").isEmpty()) {
 
-                        this.main.getDiscord().playerLogin(player, Objects.requireNonNull(this.main.getMessages().getString("Discord.Player-Login")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%IP%", String.valueOf(playerIP)), false);
+                        this.main.getDiscord().playerLogin(player, this.main.getMessages().getString("Discord.Player-Login").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%IP%", String.valueOf(playerIP)), false);
 
                     }
                 }
             }
 
             // External
-            if (Data.isExternal ) {
+            if (Data.isExternal) {
 
                 try {
 
@@ -118,7 +97,7 @@ public class OnLogin implements Listener {
             }
 
             // SQLite
-            if (Data.isSqlite ) {
+            if (Data.isSqlite) {
 
                 try {
 

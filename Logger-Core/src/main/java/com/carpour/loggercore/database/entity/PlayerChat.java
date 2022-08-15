@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "player_chat")
 public class PlayerChat {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -20,7 +21,6 @@ public class PlayerChat {
     @Column(name = "world", length = 100)
     private String world;
 
-
     @Column(name = "message", length = 200)
     private String message;
 
@@ -31,7 +31,7 @@ public class PlayerChat {
     private Boolean isStaff;
 
     public EntityPlayer getEntityPlayer() {
-        return entityPlayer;
+        return this.entityPlayer;
     }
 
     public void setEntityPlayer(EntityPlayer entityPlayer) {
@@ -39,7 +39,7 @@ public class PlayerChat {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -47,7 +47,7 @@ public class PlayerChat {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
@@ -55,7 +55,7 @@ public class PlayerChat {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -63,7 +63,7 @@ public class PlayerChat {
     }
 
     public String getWorld() {
-        return world;
+        return this.world;
     }
 
     public void setWorld(String world) {
@@ -79,10 +79,10 @@ public class PlayerChat {
     }
 
     public Boolean isStaff() {
-        return isStaff;
+        return this.isStaff;
     }
 
     public void isStaff(Boolean staff) {
-        isStaff = staff;
+        this.isStaff = staff;
     }
 }

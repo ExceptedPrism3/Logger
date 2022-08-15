@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "item_drop")
 public class ItemDrop {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -19,7 +20,6 @@ public class ItemDrop {
 
     @Column(name = "world", length = 100)
     private String world;
-
 
     @Column(name = "item", length = 50)
     private String item;
@@ -49,7 +49,7 @@ public class ItemDrop {
     private Boolean isStaff;
 
     public EntityPlayer getEntityPlayer() {
-        return entityPlayer;
+        return this.entityPlayer;
     }
 
     public void setEntityPlayer(EntityPlayer entityPlayer) {
@@ -57,7 +57,7 @@ public class ItemDrop {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -65,7 +65,7 @@ public class ItemDrop {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
@@ -73,7 +73,7 @@ public class ItemDrop {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -81,7 +81,7 @@ public class ItemDrop {
     }
 
     public String getWorld() {
-        return world;
+        return this.world;
     }
 
     public void setWorld(String world) {
@@ -89,7 +89,7 @@ public class ItemDrop {
     }
 
     public String getItem() {
-        return item;
+        return this.item;
     }
 
     public void setItem(String item) {
@@ -97,7 +97,7 @@ public class ItemDrop {
     }
 
     public Integer getAmount() {
-        return amount;
+        return this.amount;
     }
 
     public void setAmount(Integer amount) {
@@ -105,7 +105,7 @@ public class ItemDrop {
     }
 
     public Integer getX() {
-        return x;
+        return this.x;
     }
 
     public void setX(Integer x) {
@@ -113,7 +113,7 @@ public class ItemDrop {
     }
 
     public Integer getY() {
-        return y;
+        return this.y;
     }
 
     public void setY(Integer y) {
@@ -121,7 +121,7 @@ public class ItemDrop {
     }
 
     public Integer getZ() {
-        return z;
+        return this.z;
     }
 
     public void setZ(Integer z) {
@@ -145,11 +145,10 @@ public class ItemDrop {
     }
 
     public Boolean isStaff() {
-        return isStaff;
+        return this.isStaff;
     }
 
     public void isStaff(Boolean staff) {
-        isStaff = staff;
+        this.isStaff = staff;
     }
-
 }

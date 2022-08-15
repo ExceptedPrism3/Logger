@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "ram")
 public class Ram {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -27,7 +28,7 @@ public class Ram {
     private Integer freeMemory;
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -35,7 +36,7 @@ public class Ram {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
@@ -43,7 +44,7 @@ public class Ram {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -51,7 +52,7 @@ public class Ram {
     }
 
     public Integer getTotalMemory() {
-        return totalMemory;
+        return this.totalMemory;
     }
 
     public void setTotalMemory(Integer totalMemory) {
@@ -59,7 +60,7 @@ public class Ram {
     }
 
     public Integer getUsedMemory() {
-        return usedMemory;
+        return this.usedMemory;
     }
 
     public void setUsedMemory(Integer usedMemory) {
@@ -67,11 +68,10 @@ public class Ram {
     }
 
     public Integer getFreeMemory() {
-        return freeMemory;
+        return this.freeMemory;
     }
 
     public void setFreeMemory(Integer freeMemory) {
         this.freeMemory = freeMemory;
     }
-
 }

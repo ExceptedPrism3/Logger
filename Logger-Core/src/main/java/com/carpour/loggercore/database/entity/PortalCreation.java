@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "portal_creation")
 public class PortalCreation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -24,7 +25,7 @@ public class PortalCreation {
     private String causedBy;
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -32,7 +33,7 @@ public class PortalCreation {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
@@ -40,7 +41,7 @@ public class PortalCreation {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -48,19 +49,16 @@ public class PortalCreation {
     }
 
     public String getWorld() {
-        return world;
+        return this.world;
     }
 
     public void setWorld(String world) {
         this.world = world;
     }
 
-    public String getCausedBy() {
-        return causedBy;
-    }
+    public String getCausedBy() { return this.causedBy; }
 
     public void setCausedBy(String causedBy) {
         this.causedBy = causedBy;
     }
-
 }

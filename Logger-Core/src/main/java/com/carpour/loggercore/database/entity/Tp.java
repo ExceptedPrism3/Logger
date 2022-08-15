@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "tps")
 public class Tp {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -21,7 +22,7 @@ public class Tp {
     private Integer tps;
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -29,7 +30,7 @@ public class Tp {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
@@ -37,7 +38,7 @@ public class Tp {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -45,7 +46,7 @@ public class Tp {
     }
 
     public Integer getTps() {
-        return tps;
+        return this.tps;
     }
 
     public void setTps(Integer tps) {

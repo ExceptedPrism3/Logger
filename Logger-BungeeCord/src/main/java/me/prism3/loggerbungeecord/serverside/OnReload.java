@@ -12,7 +12,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 
 import static me.prism3.loggerbungeecord.utils.Data.*;
 
@@ -41,12 +40,6 @@ public class OnReload implements Listener {
 
                     if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                        if (!this.main.getMessages().getString("Discord.Server-Reload-Player-Staff").isEmpty()) {
-
-                            this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().getString("Discord.Server-Reload-Player-Staff")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server), false);
-
-                        }
-
                         try {
 
                             final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
@@ -59,34 +52,20 @@ public class OnReload implements Listener {
                             e.printStackTrace();
 
                         }
+                    } else {
 
-                        if (isExternal ) {
+                        try {
 
-                            ExternalData.serverReload(serverName, playerName, true);
+                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getReloadLogFile(), true));
+                            out.write(this.main.getMessages().getString("Files.Server-Reload-Player").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", playerName) + "\n");
+                            out.close();
+
+                        } catch (IOException e) {
+
+                            Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                            e.printStackTrace();
 
                         }
-
-                        if (isSqlite ) {
-
-                            Main.getInstance().getSqLite().insertServerReload(serverName, playerName, true);
-
-                        }
-
-                        return;
-
-                    }
-
-                    try {
-
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getReloadLogFile(), true));
-                        out.write(this.main.getMessages().getString("Files.Server-Reload-Player").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", playerName) + "\n");
-                        out.close();
-
-                    } catch (IOException e) {
-
-                        Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-
                     }
                 }
 
@@ -97,14 +76,14 @@ public class OnReload implements Listener {
 
                         if (!this.main.getMessages().getString("Discord.Server-Reload-Player-Staff").isEmpty()) {
 
-                            this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().getString("Discord.Server-Reload-Player-Staff")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server), false);
+                            this.main.getDiscord().staffChat(player, this.main.getMessages().getString("Discord.Server-Reload-Player-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server), false);
 
                         }
                     } else {
 
                         if (!this.main.getMessages().getString("Discord.Server-Reload-Player").isEmpty()) {
 
-                            this.main.getDiscord().serverReload(playerName, Objects.requireNonNull(this.main.getMessages().getString("Discord.Server-Reload-Player")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server), false);
+                            this.main.getDiscord().serverReload(playerName, this.main.getMessages().getString("Discord.Server-Reload-Player").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server), false);
 
                         }
                     }
@@ -147,11 +126,8 @@ public class OnReload implements Listener {
                 }
 
                 // Discord
-                if (!this.main.getMessages().getString("Discord.Server-Side.Restart-Console").isEmpty()) {
-
-                    this.main.getDiscord().serverReload(null, Objects.requireNonNull(this.main.getMessages().getString("Discord.Server-Side.Restart-Console")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())), false);
-
-                }
+                if (!this.main.getMessages().getString("Discord.Server-Side.Restart-Console").isEmpty())
+                    this.main.getDiscord().serverReload(null, this.main.getMessages().getString("Discord.Server-Side.Restart-Console").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())), false);
 
                 // External
                 if (isExternal ) {

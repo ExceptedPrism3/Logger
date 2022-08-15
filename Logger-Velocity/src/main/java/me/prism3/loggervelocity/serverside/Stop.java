@@ -36,14 +36,11 @@ public class Stop {
             }
 
             // Discord
-            if (!main.getMessages().getString("Discord.Server-Side.Stop").isEmpty()) {
-
+            if (!main.getMessages().getString("Discord.Server-Side.Stop").isEmpty())
                 main.getDiscord().serverStop(main.getMessages().getString("Discord.Server-Side.Stop").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())), false);
 
-            }
-
             // External
-            if (isExternal ) {
+            if (isExternal) {
 
                 try {
 
@@ -53,7 +50,7 @@ public class Stop {
             }
 
             // SQLite
-            if (isSqlite ) {
+            if (isSqlite) {
 
                 try {
 

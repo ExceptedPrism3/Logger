@@ -45,14 +45,11 @@ public class RAM implements Runnable {
                 }
 
                 // Discord
-                if (!main.getMessages().getString("Discord.Server-Side.RAM").isEmpty()) {
-
+                if (!main.getMessages().getString("Discord.Server-Side.RAM").isEmpty())
                     main.getDiscord().ram(main.getMessages().getString("Discord.Server-Side.RAM").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)), false);
 
-                }
-
                 // External
-                if (isExternal ) {
+                if (isExternal) {
 
                     try {
 
@@ -62,7 +59,7 @@ public class RAM implements Runnable {
                 }
 
                 // SQLite
-                if (isSqlite ) {
+                if (isSqlite) {
 
                     try {
 

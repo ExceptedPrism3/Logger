@@ -153,7 +153,7 @@ public class FileHandler {
 
     private void deleteFile(File file) {
 
-        if (fileDeletion <= 0 ) { return; }
+        if (fileDeletion <= 0 ) return;
 
         FileTime creationTime = null;
 

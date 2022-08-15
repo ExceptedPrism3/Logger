@@ -3,6 +3,7 @@ package com.carpour.loggercore.database.data;
 import java.util.Map;
 
 public class Options {
+
     private boolean isAuthMeEnabled;
     private boolean isEssentialsEnabled;
     private boolean isVaultEnabled;
@@ -14,7 +15,7 @@ public class Options {
     private Map<String, Object> enabledLogs;
 
     public Map<String, Object> getEnabledLogs() {
-        return enabledLogs;
+        return this.enabledLogs;
     }
 
     public void setEnabledLogs(Map<String, Object> enabledLogs) {
@@ -22,55 +23,55 @@ public class Options {
     }
 
     public boolean isAuthMeEnabled() {
-        return isAuthMeEnabled;
+        return this.isAuthMeEnabled;
     }
 
     public void setAuthMeEnabled(boolean authMeEnabled) {
-        isAuthMeEnabled = authMeEnabled;
+        this.isAuthMeEnabled = authMeEnabled;
     }
 
     public boolean isEssentialsEnabled() {
-        return isEssentialsEnabled;
+        return this.isEssentialsEnabled;
     }
 
     public void setEssentialsEnabled(boolean essentialsEnabled) {
-        isEssentialsEnabled = essentialsEnabled;
+        this.isEssentialsEnabled = essentialsEnabled;
     }
 
     public boolean isVaultEnabled() {
-        return isVaultEnabled;
+        return this.isVaultEnabled;
     }
 
     public void setVaultEnabled(boolean vaultEnabled) {
-        isVaultEnabled = vaultEnabled;
+        this.isVaultEnabled = vaultEnabled;
     }
 
     public boolean isLiteBansEnabled() {
-        return isLiteBansEnabled;
+        return this.isLiteBansEnabled;
     }
 
     public void setLiteBansEnabled(boolean liteBansEnabled) {
-        isLiteBansEnabled = liteBansEnabled;
+        this.isLiteBansEnabled = liteBansEnabled;
     }
 
     public boolean isAdvancedBanEnabled() {
-        return isAdvancedBanEnabled;
+        return this.isAdvancedBanEnabled;
     }
 
     public void setAdvancedBanEnabled(boolean advancedBanEnabled) {
-        isAdvancedBanEnabled = advancedBanEnabled;
+        this.isAdvancedBanEnabled = advancedBanEnabled;
     }
 
     public boolean isViaVersion() {
-        return isViaVersion;
+        return this.isViaVersion;
     }
 
     public void setViaVersion(boolean viaVersion) {
-        isViaVersion = viaVersion;
+        this.isViaVersion = viaVersion;
     }
 
     public int getDataDelete() {
-        return dataDelete;
+        return this.dataDelete;
     }
 
     public void setDataDelete(int dataDelete) {
@@ -78,11 +79,11 @@ public class Options {
     }
 
     public boolean isPlayerIPEnabled() {
-        return isPlayerIPEnabled;
+        return this.isPlayerIPEnabled;
     }
 
     public void setPlayerIPEnabled(boolean playerIPEnabled) {
-        isPlayerIPEnabled = playerIPEnabled;
+        this.isPlayerIPEnabled = playerIPEnabled;
     }
 
     public Boolean getBooleanValue(String key) {

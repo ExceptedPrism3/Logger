@@ -16,7 +16,7 @@ public class DiscordStatus {
     private final JDA jda = new Discord().getJda();
 
     private int currentIndex = 0;
-    private final List<List<String>> activities = (List<List<String>>) main.getDiscordFile().get().get("ActivityCycling.Activities");
+    private final List<List<String>> activities = (List<List<String>>) this.main.getDiscordFile().get().get("ActivityCycling.Activities");
 
     private static final ScheduledExecutorService threadPool = Executors.newSingleThreadScheduledExecutor();
 
@@ -35,11 +35,8 @@ public class DiscordStatus {
 
         }
 
-        if (main.getDiscordFile().get().getBoolean("ActivityCycling.Random")) {
-
+        if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Random"))
             Collections.shuffle(this.activities);
-
-        }
 
         threadPool.scheduleWithFixedDelay(() -> {
 
@@ -49,7 +46,7 @@ public class DiscordStatus {
 
             this.currentIndex = (this.currentIndex + 1) % this.activities.size();
 
-        }, 0, main.getDiscordFile().get().getInt("ActivityCycling.Time"), TimeUnit.SECONDS);
+        }, 0, this.main.getDiscordFile().get().getInt("ActivityCycling.Time"), TimeUnit.SECONDS);
     }
 
     public static ScheduledExecutorService getThreadPool() { return threadPool; }

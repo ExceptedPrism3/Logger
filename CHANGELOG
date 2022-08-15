@@ -194,10 +194,12 @@ Fixes
     [!] Reload command not reloading from the config
     [!] Commands not working in console
     [!] LiteBans table not auto deleting on Velocity instance
+    [!] Commands not working from console
 
 Changes
     [*] Remade permissions which will log OP and NOT OP players until they're permitted with the exempt permission
     [*] Inventory Restore Menu Title names to eliminate conflicts between other plugins
     [*] Minor messages changes
     [*] Minor Velocity & Bungee Code improvements
+    [*] Changed BungeeCord commands to /loggerb and Velocity to /loggerv
 

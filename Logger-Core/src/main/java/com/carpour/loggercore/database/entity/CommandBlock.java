@@ -8,6 +8,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "command_block")
 public class CommandBlock {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -24,7 +25,7 @@ public class CommandBlock {
     private String command;
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -32,7 +33,7 @@ public class CommandBlock {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
@@ -40,7 +41,7 @@ public class CommandBlock {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -48,11 +49,10 @@ public class CommandBlock {
     }
 
     public String getCommand() {
-        return command;
+        return this.command;
     }
 
     public void setCommand(String command) {
         this.command = command;
     }
-
 }

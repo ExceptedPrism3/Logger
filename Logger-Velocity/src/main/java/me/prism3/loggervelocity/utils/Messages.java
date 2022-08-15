@@ -18,17 +18,17 @@ public class Messages {
 
     public Messages() {
 
-        this.file = new File(dataFolder, "/messages - Velocity.yml");
+        this.file = new File(dataFolder,  File.separator + "messages - Velocity.yml");
 
         try {
 
             if (!this.file.exists()) {
 
-                if (!dataFolder.exists()) { dataFolder.mkdir(); }
+                if (!dataFolder.exists()) dataFolder.mkdir();
 
                 this.file.createNewFile();
 
-                try (final InputStream is = ConfigManager.class.getResourceAsStream("/messages - Velocity.yml");
+                try (final InputStream is = ConfigManager.class.getResourceAsStream(File.separator + "messages - Velocity.yml");
                      final OutputStream os = new FileOutputStream(this.file)) {
                     assert is != null;
                     ByteStreams.copy(is, os);
@@ -39,11 +39,11 @@ public class Messages {
         catch (IOException e) { e.printStackTrace(); }
     }
 
-    public void reload() { load(); }
+    public void reload() { this.load(); }
 
     private void load() {
 
-        this.file = new File(dataFolder, "/messages - Velocity.yml");
+        this.file = new File(dataFolder, File.separator + "messages - Velocity.yml");
 
         try {
 
@@ -53,9 +53,7 @@ public class Messages {
         catch (IOException e) { e.printStackTrace(); }
     }
 
-    public File getFile() {
-        return this.file;
-    }
+    public File getFile() { return this.file; }
 
     public String getString(final String path) {
 

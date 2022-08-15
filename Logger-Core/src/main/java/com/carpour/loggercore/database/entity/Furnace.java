@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "furnace")
 public class Furnace {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -19,7 +20,6 @@ public class Furnace {
 
     @Column(name = "world", length = 100)
     private String world;
-
 
     @Column(name = "item", length = 250)
     private String item;
@@ -43,7 +43,7 @@ public class Furnace {
     private Boolean isStaff;
 
     public EntityPlayer getEntityPlayer() {
-        return entityPlayer;
+        return this.entityPlayer;
     }
 
     public void setEntityPlayer(EntityPlayer entityPlayer) {
@@ -51,7 +51,7 @@ public class Furnace {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -59,7 +59,7 @@ public class Furnace {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
@@ -67,7 +67,7 @@ public class Furnace {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -75,7 +75,7 @@ public class Furnace {
     }
 
     public String getWorld() {
-        return world;
+        return this.world;
     }
 
     public void setWorld(String world) {
@@ -83,7 +83,7 @@ public class Furnace {
     }
 
     public String getItem() {
-        return item;
+        return this.item;
     }
 
     public void setItem(String item) {
@@ -91,7 +91,7 @@ public class Furnace {
     }
 
     public Integer getAmount() {
-        return amount;
+        return this.amount;
     }
 
     public void setAmount(Integer amount) {
@@ -99,7 +99,7 @@ public class Furnace {
     }
 
     public Integer getX() {
-        return x;
+        return this.x;
     }
 
     public void setX(Integer x) {
@@ -107,7 +107,7 @@ public class Furnace {
     }
 
     public Integer getY() {
-        return y;
+        return this.y;
     }
 
     public void setY(Integer y) {
@@ -115,7 +115,7 @@ public class Furnace {
     }
 
     public Integer getZ() {
-        return z;
+        return this.z;
     }
 
     public void setZ(Integer z) {
@@ -123,11 +123,10 @@ public class Furnace {
     }
 
     public Boolean isStaff() {
-        return isStaff;
+        return this.isStaff;
     }
 
     public void isStaff(Boolean staff) {
-        isStaff = staff;
+        this.isStaff = staff;
     }
-
 }

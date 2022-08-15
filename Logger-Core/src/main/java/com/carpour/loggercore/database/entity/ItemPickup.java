@@ -47,7 +47,7 @@ public class ItemPickup {
     private Boolean isStaff;
 
     public EntityPlayer getEntityPlayer() {
-        return entityPlayer;
+        return this.entityPlayer;
     }
 
     public void setEntityPlayer(EntityPlayer entityPlayer) {
@@ -55,7 +55,7 @@ public class ItemPickup {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -63,7 +63,7 @@ public class ItemPickup {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
@@ -71,7 +71,7 @@ public class ItemPickup {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -79,7 +79,7 @@ public class ItemPickup {
     }
 
     public String getWorld() {
-        return world;
+        return this.world;
     }
 
     public void setWorld(String world) {
@@ -87,7 +87,7 @@ public class ItemPickup {
     }
 
     public String getItem() {
-        return item;
+        return this.item;
     }
 
     public void setItem(String item) {
@@ -95,7 +95,7 @@ public class ItemPickup {
     }
 
     public Integer getAmount() {
-        return amount;
+        return this.amount;
     }
 
     public void setAmount(Integer amount) {
@@ -103,7 +103,7 @@ public class ItemPickup {
     }
 
     public Integer getX() {
-        return x;
+        return this.x;
     }
 
     public void setX(Integer x) {
@@ -111,7 +111,7 @@ public class ItemPickup {
     }
 
     public Integer getY() {
-        return y;
+        return this.y;
     }
 
     public void setY(Integer y) {
@@ -119,7 +119,7 @@ public class ItemPickup {
     }
 
     public Integer getZ() {
-        return z;
+        return this.z;
     }
 
     public void setZ(Integer z) {
@@ -135,10 +135,10 @@ public class ItemPickup {
     }
 
     public Boolean isStaff() {
-        return isStaff;
+        return this.isStaff;
     }
 
     public void isStaff(Boolean staff) {
-        isStaff = staff;
+        this.isStaff = staff;
     }
 }

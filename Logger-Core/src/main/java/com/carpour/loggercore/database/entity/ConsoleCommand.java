@@ -21,8 +21,7 @@ public class ConsoleCommand {
     @Column(name = "command", length = 256)
     private String command;
 
-    public ConsoleCommand() {
-    }
+    private ConsoleCommand() {} //TODO 3di private constructor hna?
 
     public ConsoleCommand(String serverName, String command) {
         this.serverName = serverName;
@@ -30,7 +29,7 @@ public class ConsoleCommand {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -38,7 +37,7 @@ public class ConsoleCommand {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
@@ -46,7 +45,7 @@ public class ConsoleCommand {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -54,7 +53,7 @@ public class ConsoleCommand {
     }
 
     public String getCommand() {
-        return command;
+        return this.command;
     }
 
     public void setCommand(String command) {

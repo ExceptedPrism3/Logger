@@ -35,14 +35,11 @@ public class Start {
             }
 
             // Discord
-            if (!this.main.getMessages().getString("Discord.Server-Side.Start").isEmpty()) {
-
+            if (!this.main.getMessages().getString("Discord.Server-Side.Start").isEmpty())
                 this.main.getDiscord().serverStart(this.main.getMessages().getString("Discord.Server-Side.Start").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())), false);
 
-            }
-
             // External
-            if (Data.isExternal ) {
+            if (Data.isExternal) {
 
                 try {
 
@@ -52,7 +49,7 @@ public class Start {
             }
 
             // SQLite
-            if (Data.isSqlite ) {
+            if (Data.isSqlite) {
 
                 try {
 
@@ -61,11 +58,8 @@ public class Start {
                 } catch (Exception e) { e.printStackTrace(); }
             }
         }
-        if (Data.isWhitelisted && Data.isBlacklisted) {
-
+        if (Data.isWhitelisted && Data.isBlacklisted)
             this.main.getLogger().warning("Enabling both Whitelist and Blacklist isn't supported. " +
                     "Disable one of them to continue logging Player Commands.");
-
-        }
     }
 }

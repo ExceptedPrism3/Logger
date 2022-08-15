@@ -3,7 +3,6 @@ package com.carpour.loggercore.database;
 import com.carpour.loggercore.database.data.DatabaseCredentials;
 import com.carpour.loggercore.database.data.Options;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -19,13 +18,12 @@ public abstract class AbstractDataSource implements DataSourceInterface {
             "server_stop", "console_commands", "ram", "tps", "portal_creation", "rcon", "primed_tnt", "command_block",
             "chest_interaction", "entity_death", "logger_playertime").collect(Collectors.toCollection(ArrayList::new));
 
-
     protected final DatabaseCredentials databaseCredentials;
     protected final Logger logger = Logger.getLogger(AbstractDataSource.class.getName());
     protected final Options options;
     private final String className;
 
-    protected AbstractDataSource(DatabaseCredentials databaseCredentials, Options options, String className) throws SQLException {
+    protected AbstractDataSource(DatabaseCredentials databaseCredentials, Options options, String className) {
         this.className = className;
         this.databaseCredentials = databaseCredentials;
         this.options = options;

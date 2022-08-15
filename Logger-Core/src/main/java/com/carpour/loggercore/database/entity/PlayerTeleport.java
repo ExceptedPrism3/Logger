@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "player_teleport")
 public class PlayerTeleport {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -18,7 +19,6 @@ public class PlayerTeleport {
 
     @Column(name = "world", length = 100)
     private String world;
-
 
     @Column(name = "from_x")
     private Integer fromX;
@@ -45,7 +45,7 @@ public class PlayerTeleport {
     private EntityPlayer entityPlayer;
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -53,7 +53,7 @@ public class PlayerTeleport {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
@@ -61,7 +61,7 @@ public class PlayerTeleport {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -69,7 +69,7 @@ public class PlayerTeleport {
     }
 
     public String getWorld() {
-        return world;
+        return this.world;
     }
 
     public void setWorld(String world) {
@@ -77,7 +77,7 @@ public class PlayerTeleport {
     }
 
     public Integer getFromX() {
-        return fromX;
+        return this.fromX;
     }
 
     public void setFromX(Integer fromX) {
@@ -85,7 +85,7 @@ public class PlayerTeleport {
     }
 
     public Integer getFromY() {
-        return fromY;
+        return this.fromY;
     }
 
     public void setFromY(Integer fromY) {
@@ -93,7 +93,7 @@ public class PlayerTeleport {
     }
 
     public Integer getFromZ() {
-        return fromZ;
+        return this.fromZ;
     }
 
     public void setFromZ(Integer fromZ) {
@@ -101,7 +101,7 @@ public class PlayerTeleport {
     }
 
     public Integer getToX() {
-        return toX;
+        return this.toX;
     }
 
     public void setToX(Integer toX) {
@@ -109,7 +109,7 @@ public class PlayerTeleport {
     }
 
     public Integer getToY() {
-        return toY;
+        return this.toY;
     }
 
     public void setToY(Integer toY) {
@@ -117,7 +117,7 @@ public class PlayerTeleport {
     }
 
     public Integer getToZ() {
-        return toZ;
+        return this.toZ;
     }
 
     public void setToZ(Integer toZ) {
@@ -125,7 +125,7 @@ public class PlayerTeleport {
     }
 
     public EntityPlayer getEntityPlayer() {
-        return entityPlayer;
+        return this.entityPlayer;
     }
 
     public void setEntityPlayer(EntityPlayer entityPlayer) {
@@ -133,10 +133,10 @@ public class PlayerTeleport {
     }
 
     public Boolean isStaff() {
-        return isStaff;
+        return this.isStaff;
     }
 
     public void isStaff(Boolean staff) {
-        isStaff = staff;
+        this.isStaff = staff;
     }
 }

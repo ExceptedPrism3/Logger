@@ -8,7 +8,6 @@ public class PartyAndFriendsUtil {
     private PartyAndFriendsUtil() {}
 
     public static Plugin getPartyAndFriendsAPI() {
-
         return Main.getInstance().getProxy().getPluginManager().getPlugin("PartyAndFriends");
     }
 }

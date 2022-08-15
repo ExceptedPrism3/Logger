@@ -8,6 +8,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "entity_death")
 public class EntityDeath {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -33,8 +34,7 @@ public class EntityDeath {
     @Column(name = "is_staff")
     private Boolean isStaff;
 
-    public EntityDeath() {
-    }
+    private EntityDeath() {} //TODO private cons
 
     public EntityDeath(String serverName, Coordinates coords, String mob, EntityPlayer entityPlayer, Boolean isStaff) {
         this.serverName = serverName;
@@ -48,7 +48,7 @@ public class EntityDeath {
     }
 
     public EntityPlayer getEntityPlayer() {
-        return entityPlayer;
+        return this.entityPlayer;
     }
 
     public void setEntityPlayer(EntityPlayer entityPlayer) {
@@ -56,7 +56,7 @@ public class EntityDeath {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -64,7 +64,7 @@ public class EntityDeath {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
@@ -72,7 +72,7 @@ public class EntityDeath {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -80,7 +80,7 @@ public class EntityDeath {
     }
 
     public String getWorld() {
-        return world;
+        return this.world;
     }
 
     public void setWorld(String world) {
@@ -96,7 +96,7 @@ public class EntityDeath {
     }
 
     public Integer getX() {
-        return x;
+        return this.x;
     }
 
     public void setX(Integer x) {
@@ -104,7 +104,7 @@ public class EntityDeath {
     }
 
     public Integer getY() {
-        return y;
+        return this.y;
     }
 
     public void setY(Integer y) {
@@ -112,7 +112,7 @@ public class EntityDeath {
     }
 
     public Integer getZ() {
-        return z;
+        return this.z;
     }
 
     public void setZ(Integer z) {
@@ -120,11 +120,10 @@ public class EntityDeath {
     }
 
     public Boolean isStaff() {
-        return isStaff;
+        return this.isStaff;
     }
 
     public void isStaff(Boolean staff) {
-        isStaff = staff;
+        this.isStaff = staff;
     }
-
 }

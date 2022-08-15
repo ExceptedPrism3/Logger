@@ -16,8 +16,7 @@ public abstract class ConfigurationProvider {
         }
     }
 
-    public static ConfigurationProvider getProvider(Class<? extends ConfigurationProvider> provider)
-    {
+    public static ConfigurationProvider getProvider(Class<? extends ConfigurationProvider> provider) {
         return providers.get( provider );
     }
 

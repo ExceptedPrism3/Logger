@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class OnCommand implements Listener {
 
@@ -36,14 +35,9 @@ public class OnCommand implements Listener {
 
             if (Data.isWhitelisted && Data.isBlacklisted) return;
 
-            if (Data.isBlacklisted) {
-
-                for (String m : Data.commandsToBlock) {
-
+            if (Data.isBlacklisted)
+                for (String m : Data.commandsToBlock)
                     if (commandParts.get(0).equalsIgnoreCase(m)) return;
-
-                }
-            }
 
             // Whitelist Commands
             if (this.main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")) {
@@ -58,12 +52,6 @@ public class OnCommand implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                    if (!this.main.getMessages().getString("Discord.Player-Commands-Staff").isEmpty()) {
-
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().getString("Discord.Player-Commands-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
-
-                    }
-
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
@@ -76,35 +64,20 @@ public class OnCommand implements Listener {
                         e.printStackTrace();
 
                     }
+                } else {
 
-                    if (Data.isExternal ) {
+                    try {
 
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true));
+                        out.write(this.main.getMessages().getString("Files.Player-Commands").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", player.getName()).replace("%command%", command) + "\n");
+                        out.close();
 
-                        Main.getInstance().getDatabase().insertPlayerCommands(Data.serverName, playerName, command, true);
+                    } catch (IOException e) {
+
+                        Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
 
                     }
-
-                    if (Data.isSqlite ) {
-
-                        Main.getInstance().getSqLite().insertPlayerCommands(Data.serverName, playerName, command, true);
-
-                    }
-
-                    return;
-
-                }
-
-                try {
-
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true));
-                    out.write(this.main.getMessages().getString("Files.Player-Commands").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", player.getName()).replace("%command%", command) + "\n");
-                    out.close();
-
-                } catch (IOException e) {
-
-                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
                 }
             }
 
@@ -115,21 +88,21 @@ public class OnCommand implements Listener {
 
                     if (!this.main.getMessages().getString("Discord.Player-Commands-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().getString("Discord.Player-Commands-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
+                        this.main.getDiscord().staffChat(player, this.main.getMessages().getString("Discord.Player-Commands-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
 
                     }
                 } else {
 
                     if (!this.main.getMessages().getString("Discord.Player-Commands").isEmpty()) {
 
-                        this.main.getDiscord().playerCommands(player, Objects.requireNonNull(this.main.getMessages().getString("Discord.Player-Commands")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
+                        this.main.getDiscord().playerCommands(player, this.main.getMessages().getString("Discord.Player-Commands").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
 
                     }
                 }
             }
 
             // External
-            if (Data.isExternal ) {
+            if (Data.isExternal) {
 
                 try {
 
@@ -139,7 +112,7 @@ public class OnCommand implements Listener {
             }
 
             // SQLite
-            if (Data.isSqlite ) {
+            if (Data.isSqlite) {
 
                 try {
 

@@ -41,13 +41,11 @@ public class Console {
             }
 
             // Discord
-            if (!main.getMessages().getString("Discord.Server-Side.Console-Commands").isEmpty()) {
-
+            if (!main.getMessages().getString("Discord.Server-Side.Console-Commands").isEmpty())
                 main.getDiscord().console(main.getMessages().getString("Discord.Server-Side.Console-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command), false);
-            }
 
             // External
-            if (isExternal ) {
+            if (isExternal) {
 
                 try {
 
@@ -57,7 +55,7 @@ public class Console {
             }
 
             // SQLite
-            if (isSqlite ) {
+            if (isSqlite) {
 
                 try {
 

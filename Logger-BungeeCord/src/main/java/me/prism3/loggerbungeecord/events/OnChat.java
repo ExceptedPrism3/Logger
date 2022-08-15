@@ -12,7 +12,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 
 public class OnChat implements Listener {
 
@@ -35,12 +34,6 @@ public class OnChat implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                    if (!this.main.getMessages().getString("Discord.Player-Chat-Staff").isEmpty()) {
-
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().getString("Discord.Player-Chat-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%msg%", message), false);
-
-                    }
-
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
@@ -53,34 +46,20 @@ public class OnChat implements Listener {
                         e.printStackTrace();
 
                     }
+                } else {
 
-                    if (Data.isExternal) {
+                    try {
 
-                        Main.getInstance().getDatabase().insertPlayerChat(Data.serverName, player.getName(), message, true);
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getChatLogFile(), true));
+                        out.write(this.main.getMessages().getString("Files.Player-Chat").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", player.getName()).replace("%msg%", message) + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
 
                     }
-
-                    if (Data.isSqlite ) {
-
-                        Main.getInstance().getSqLite().insertPlayerChat(Data.serverName, player.getName(), message, true);
-
-                    }
-
-                    return;
-
-                }
-
-                try {
-
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getChatLogFile(), true));
-                    out.write(this.main.getMessages().getString("Files.Player-Chat").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", player.getName()).replace("%msg%", message) + "\n");
-                    out.close();
-
-                } catch (IOException e) {
-
-                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
                 }
             }
 
@@ -91,20 +70,20 @@ public class OnChat implements Listener {
 
                     if (!this.main.getMessages().getString("Discord.Player-Chat-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().getString("Discord.Player-Chat-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%msg%", message), false);
+                        this.main.getDiscord().staffChat(player, this.main.getMessages().getString("Discord.Player-Chat-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%msg%", message), false);
 
                     }
                 } else {
 
                     if (!this.main.getMessages().getString("Discord.Player-Chat").isEmpty()) {
 
-                        this.main.getDiscord().playerChat(player, Objects.requireNonNull(this.main.getMessages().getString("Discord.Player-Chat")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%msg%", message), false);
+                        this.main.getDiscord().playerChat(player, this.main.getMessages().getString("Discord.Player-Chat").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%msg%", message), false);
                     }
                 }
             }
 
             // External
-            if (Data.isExternal ) {
+            if (Data.isExternal) {
 
                 try {
 
@@ -114,7 +93,7 @@ public class OnChat implements Listener {
             }
 
             // SQLite
-            if (Data.isSqlite ) {
+            if (Data.isSqlite) {
 
                 try {
 

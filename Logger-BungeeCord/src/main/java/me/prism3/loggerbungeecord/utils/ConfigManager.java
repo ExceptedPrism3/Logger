@@ -21,17 +21,13 @@ public class ConfigManager {
 
         try {
 
-            this.config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile());
+            this.config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(this.getFile());
 
-        } catch (IOException e) {
-
-            e.printStackTrace();
-
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     public String getString(String key) {
-        String str = config.getString(key);
+        String str = this.config.getString(key);
         str = ChatColor.translateAlternateColorCodes('&', str);
         return str;
     }
@@ -58,7 +54,7 @@ public class ConfigManager {
 
         if (!Main.getInstance().getDataFolder().exists()) Main.getInstance().getDataFolder().mkdir();
 
-        final File file = getFile();
+        final File file = this.getFile();
 
         if (!file.exists()) {
 
@@ -66,18 +62,14 @@ public class ConfigManager {
 
                 file.createNewFile();
 
-                try (InputStream is = Main.getInstance().getResourceAsStream("config - Bungee.yml")) {
+                try (final InputStream is = Main.getInstance().getResourceAsStream("config - Bungee.yml")) {
 
-                    OutputStream os = new FileOutputStream(file);
+                    final OutputStream os = new FileOutputStream(file);
                     ByteStreams.copy(is, os);
                     os.close();
 
                 }
-            } catch (IOException e) {
-
-                e.printStackTrace();
-
-            }
+            } catch (IOException e) { e.printStackTrace(); }
         }
     }
 }

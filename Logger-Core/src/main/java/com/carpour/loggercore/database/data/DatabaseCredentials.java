@@ -1,6 +1,5 @@
 package com.carpour.loggercore.database.data;
 
-
 import java.util.Properties;
 
 public final class DatabaseCredentials {
@@ -24,31 +23,31 @@ public final class DatabaseCredentials {
     }
 
     public String getDbType() {
-        return dbType;
+        return this.dbType;
     }
 
     public String getDbHost() {
-        return dbHost;
+        return this.dbHost;
     }
 
     public String getDbUsername() {
-        return dbUsername;
+        return this.dbUsername;
     }
 
     public String getDbPassword() {
-        return dbPassword;
+        return this.dbPassword;
     }
 
     public String getDbName() {
-        return dbName;
+        return this.dbName;
     }
 
     public int getDbPort() {
-        return dbPort;
+        return this.dbPort;
     }
 
     public boolean isEnabled() {
-        return isEnabled;
+        return this.isEnabled;
     }
 
     public Properties getPropertiesForHib() {

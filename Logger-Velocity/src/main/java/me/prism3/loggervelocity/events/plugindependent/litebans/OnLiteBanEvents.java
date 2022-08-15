@@ -1,6 +1,5 @@
 package me.prism3.loggervelocity.events.plugindependent.litebans;
 
-import com.mysql.cj.Messages;
 import litebans.api.Entry;
 import litebans.api.Events;
 import me.prism3.loggervelocity.Main;
@@ -85,7 +84,7 @@ public class OnLiteBanEvents implements Runnable {
                         try {
 
                             final BufferedWriter out = new BufferedWriter(new FileWriter(fileLog, true));
-                            out.write(Messages.getString("Files.Extra.LiteBans").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()) + "\n");
+                            out.write(main.getMessages().getString("Files.Extra.LiteBans").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()) + "\n");
                             out.close();
 
                         } catch (IOException e) {
@@ -97,14 +96,11 @@ public class OnLiteBanEvents implements Runnable {
                     }
 
                     // Discord
-                    if (!Messages.getString("Discord.Extra.LiteBans").isEmpty()) {
-
-                        main.getDiscord().liteBans(Objects.requireNonNull(Messages.getString("Discord.Extra.LiteBans")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()), false);
-
-                    }
+                    if (!main.getMessages().getString("Discord.Extra.LiteBans").isEmpty())
+                        main.getDiscord().liteBans(Objects.requireNonNull(main.getMessages().getString("Discord.Extra.LiteBans")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()), false);
 
                     // External
-                    if (isExternal ) {
+                    if (isExternal) {
 
                         try {
 
@@ -114,7 +110,7 @@ public class OnLiteBanEvents implements Runnable {
                     }
 
                     // SQLite
-                    if (isSqlite ) {
+                    if (isSqlite) {
 
                         try {
 

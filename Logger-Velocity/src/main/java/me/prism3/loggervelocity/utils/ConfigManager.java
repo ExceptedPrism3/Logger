@@ -26,11 +26,11 @@ public class ConfigManager {
 
             if (!this.file.exists()) {
 
-                if (!this.dataFolder.exists()) { this.dataFolder.mkdir(); }
+                if (!this.dataFolder.exists()) this.dataFolder.mkdir();
 
                 this.file.createNewFile();
 
-                try (final InputStream is = ConfigManager.class.getResourceAsStream("/config - Velocity.yml");
+                try (final InputStream is = ConfigManager.class.getResourceAsStream(File.separator + "config - Velocity.yml");
                      final OutputStream os = new FileOutputStream(this.file)) {
                     assert is != null;
                     ByteStreams.copy(is, os);
@@ -41,9 +41,7 @@ public class ConfigManager {
         catch (IOException e) { e.printStackTrace(); }
     }
 
-    public File getFile() {
-        return this.file;
-    }
+    public File getFile() { return this.file; }
 
     public int getInt(final String path) {
 
@@ -63,14 +61,10 @@ public class ConfigManager {
         } return 0;
     }
 
-    public Object get(final String path) {
-        return this.configuration.get(path);
-    }
+    public Object get(final String path) { return this.configuration.get(path); }
 
     public boolean getBoolean(final String path) {
-
         return this.configuration.get(path) != null && this.configuration.getBoolean(path);
-
     }
 
     public String getString(final String path) {
@@ -96,14 +90,13 @@ public class ConfigManager {
         } return Collections.singletonList("String List at path: " + path + " not found!");
     }
 
-    public void reload() { load(); }
+    public void reload() { this.load(); }
 
     private void load() {
 
         this.file = new File(this.dataFolder, "config - Velocity.yml");
 
         try {
-
             this.configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(this.file);
         }
 

@@ -69,65 +69,36 @@ public class Discord {
 
             try {
 
-                if (this.isValid(staffChannelID, "Staff.Enabled")) {
-
+                if (this.isValid(staffChannelID, "Staff.Enabled"))
                     this.staffChannel = this.jda.getTextChannelById(staffChannelID);
 
-                }
-
-                if (this.isValid(playerChatChannelID, "Log-Player.Chat")) {
-
+                if (this.isValid(playerChatChannelID, "Log-Player.Chat"))
                     this.playerChatChannel = this.jda.getTextChannelById(playerChatChannelID);
 
-                }
-
-                if (this.isValid(playerCommandsChannelID, "Log-Player.Commands")) {
-
+                if (this.isValid(playerCommandsChannelID, "Log-Player.Commands"))
                     this.playerCommandsChannel = this.jda.getTextChannelById(playerCommandsChannelID);
 
-                }
-
-                if (this.isValid(playerLoginChannelID, "Log-Player.Login")) {
-
+                if (this.isValid(playerLoginChannelID, "Log-Player.Login"))
                     this.playerLoginChannel = this.jda.getTextChannelById(playerLoginChannelID);
 
-                }
-
-                if (this.isValid(playerLeaveChannelID, "Log-Player.Leave")) {
-
+                if (this.isValid(playerLeaveChannelID, "Log-Player.Leave"))
                     this.playerLeaveChannel = this.jda.getTextChannelById(playerLeaveChannelID);
 
-                }
-
-                if (this.isValid(serverReloadChannelID, "Log-Server.Reload")) {
-
+                if (this.isValid(serverReloadChannelID, "Log-Server.Reload"))
                     this.serverReloadChannel = this.jda.getTextChannelById(serverReloadChannelID);
 
-                }
-
-                if (this.isValid(serverStartChannelID, "Log-Server.Start")) {
-
+                if (this.isValid(serverStartChannelID, "Log-Server.Start"))
                     this.serverStartChannel = this.jda.getTextChannelById(serverStartChannelID);
 
-                }
-
-                if (this.isValid(serverStopChannelID, "Log-Server.Stop")) {
-
+                if (this.isValid(serverStopChannelID, "Log-Server.Stop"))
                     this.serverStopChannel = this.jda.getTextChannelById(serverStopChannelID);
 
-                }
-
-                if (this.isValid(ramChannelID, "Log-Server.RAM")) {
-
+                if (this.isValid(ramChannelID, "Log-Server.RAM"))
                     this.ramChannel = this.jda.getTextChannelById(ramChannelID);
 
-                }
-
-                if (this.isValid(liteBansChannelID, "Log-Extra.LiteBans")) {
-
+                if (this.isValid(liteBansChannelID, "Log-Extra.LiteBans"))
                     this.liteBansChannel = this.jda.getTextChannelById(liteBansChannelID);
 
-                }
             } catch (Exception e) {
 
                 this.main.getLogger().severe("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
@@ -226,6 +197,7 @@ public class Discord {
     }
 
     private void discordUtil(ProxiedPlayer player, String content, boolean contentInAuthorLine, TextChannel channel) {
+
         if (channel == null) return;
 
         final EmbedBuilder builder = new EmbedBuilder().setAuthor(contentInAuthorLine ? content : player.getName(),

@@ -43,31 +43,21 @@ public class CommandManager implements TabExecutor {
             return false;
         }
 
-        final Player player = (Player) sender;
-
-        if (args.length > 0) {
-
-            for (int i = 0; i < getSubCommands().size(); i++) {
-                if (args[0].equalsIgnoreCase(getSubCommands().get(i).getName())) {
+        if (args.length > 0)
+            for (int i = 0; i < this.getSubCommands().size(); i++)
+                if (args[0].equalsIgnoreCase(this.getSubCommands().get(i).getName()))
                     try {
-                        getSubCommands().get(i).perform(player, args);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        } else {
+                        this.getSubCommands().get(i).perform((Player) sender, args);
+                    } catch (IOException e) { e.printStackTrace(); }
 
-            if (player.hasPermission(loggerStaff)) {
-                player.sendMessage("--------------------------------------------");
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "Running Logger: &a&l" + Data.pluginVersion));
-                for (int i = 0; i < getSubCommands().size(); i++) {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&9&l" + getSubCommands().get(i).getSyntax() + " &8&l| &r" + getSubCommands().get(i).getDescription()));
-                }
-                player.sendMessage("--------------------------------------------");
-            }
-        }
-        return true;
+        else
+            if (sender.hasPermission(loggerStaff))
+                sender.sendMessage("--------------------------------------------");
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "Running Logger: &a&l" + Data.pluginVersion));
+                for (int i = 0; i < this.getSubCommands().size(); i++)
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&9&l" + this.getSubCommands().get(i).getSyntax() + " &8&l| &r" + this.getSubCommands().get(i).getDescription()));
+                sender.sendMessage("--------------------------------------------");
+                return true;
     }
 
     public List<SubCommand> getSubCommands() { return this.subCommands; }
@@ -80,21 +70,15 @@ public class CommandManager implements TabExecutor {
 
             final ArrayList<String> subCommandsArgs = new ArrayList<>();
 
-            for (int i = 0; i < getSubCommands().size(); i++) {
-                subCommandsArgs.add(getSubCommands().get(i).getName());
-            }
+            for (int i = 0; i < this.getSubCommands().size(); i++)
+                subCommandsArgs.add(this.getSubCommands().get(i).getName());
 
             return subCommandsArgs;
         } else if (args.length >= 2) {
 
-            for (int i = 0; i < getSubCommands().size(); i++) {
-
-                if (args[0].equalsIgnoreCase(getSubCommands().get(i).getName())) {
-
-                    return getSubCommands().get(i).getSubCommandsArgs((Player) sender, args);
-
-                }
-            }
+            for (int i = 0; i < this.getSubCommands().size(); i++)
+                if (args[0].equalsIgnoreCase(this.getSubCommands().get(i).getName()))
+                    return this.getSubCommands().get(i).getSubCommandsArgs((Player) sender, args);
         } return null;
     }
 }

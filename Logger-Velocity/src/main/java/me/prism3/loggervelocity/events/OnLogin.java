@@ -37,12 +37,6 @@ public class OnLogin {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!main.getMessages().getString("Discord.Player-Login-Staff").isEmpty()) {
-
-                        main.getDiscord().staffChat(player, main.getMessages().getString("Discord.Player-Login-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%IP%", String.valueOf(playerIP)), false);
-
-                    }
-
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
@@ -55,34 +49,20 @@ public class OnLogin {
                         e.printStackTrace();
 
                     }
+                } else {
 
-                    if (isExternal ) {
+                    try {
 
-                        Main.getInstance().getDatabase().insertPlayerLogin(serverName, playerName, playerIP, true);
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLoginLogFile(), true));
+                        out.write(main.getMessages().getString("Files.Player-Login").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%IP%", String.valueOf(playerIP)) + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        main.getLogger().error("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
 
                     }
-
-                    if (isSqlite ) {
-
-                        Main.getInstance().getSqLite().insertPlayerLogin(serverName, playerName, playerIP, true);
-
-                    }
-
-                    return;
-
-                }
-
-                try {
-
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLoginLogFile(), true));
-                    out.write(main.getMessages().getString("Files.Player-Login").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%IP%", String.valueOf(playerIP)) + "\n");
-                    out.close();
-
-                } catch (IOException e) {
-
-                    main.getLogger().error("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
                 }
             }
 
@@ -117,7 +97,7 @@ public class OnLogin {
             }
 
             // SQLite
-            if (isSqlite ) {
+            if (isSqlite) {
 
                 try {
 

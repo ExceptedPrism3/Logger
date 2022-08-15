@@ -39,12 +39,6 @@ public class OnLeave {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!main.getMessages().getString("Discord.Player-Leave-Staff").isEmpty()) {
-
-                        main.getDiscord().staffChat(player, main.getMessages().getString("Discord.Player-Leave-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server), false);
-
-                    }
-
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
@@ -57,33 +51,20 @@ public class OnLeave {
                         e.printStackTrace();
 
                     }
+                } else {
 
-                    if (isExternal ) {
+                    try {
 
-                        Main.getInstance().getDatabase().insertPlayerLeave(serverName, playerName, true);
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLeaveLogFile(), true));
+                        out.write(main.getMessages().getString("Files.Player-Leave").replace("%server%", server).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName) + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        main.getLogger().error("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
 
                     }
-
-                    if (isSqlite ) {
-
-                        Main.getInstance().getSqLite().insertPlayerLeave(serverName, playerName, true);
-
-                    }
-
-                    return;
-                }
-
-                try {
-
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLeaveLogFile(), true));
-                    out.write(main.getMessages().getString("Files.Player-Leave").replace("%server%", server).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName) + "\n");
-                    out.close();
-
-                } catch (IOException e) {
-
-                    main.getLogger().error("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
                 }
             }
 
@@ -108,7 +89,7 @@ public class OnLeave {
             }
 
             // External
-            if (isExternal ) {
+            if (isExternal) {
 
                 try {
                     final EntityPlayer ePlayer = new EntityPlayer();
@@ -119,7 +100,7 @@ public class OnLeave {
             }
 
             // SQLite
-            if (isSqlite ) {
+            if (isSqlite) {
 
                 try {
 

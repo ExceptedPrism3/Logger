@@ -13,6 +13,7 @@ import java.time.Instant;
 })
 
 public class EntityPlayer implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -25,13 +26,11 @@ public class EntityPlayer implements Serializable {
     @Column(name = "created_at")
     private Instant createdAt;
 
-    public EntityPlayer() {
-    }
+    private EntityPlayer() {}
 
     public EntityPlayer(String playerName, String playerUniqueID) {
         this.playerName = playerName;
         this.playerUniqueID = playerUniqueID;
-
     }
 
     public Instant getCreatedAt() {
@@ -55,18 +54,15 @@ public class EntityPlayer implements Serializable {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-
     @PostPersist
     public void postPersist() {
         this.createdAt = Instant.now();
     }
-
-
 }

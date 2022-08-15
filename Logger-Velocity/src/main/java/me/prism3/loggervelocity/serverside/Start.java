@@ -36,14 +36,11 @@ public class Start {
             }
 
             // Discord
-            if (!main.getMessages().getString("Discord.Server-Side.Start").isEmpty()) {
-
+            if (!main.getMessages().getString("Discord.Server-Side.Start").isEmpty())
                 main.getDiscord().serverStart(main.getMessages().getString("Discord.Server-Side.Start").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())), false);
 
-            }
-
             // External
-            if (isExternal ) {
+            if (isExternal) {
 
                 try {
 
@@ -53,7 +50,7 @@ public class Start {
             }
 
             // SQLite
-            if (isSqlite ) {
+            if (isSqlite) {
 
                 try {
 

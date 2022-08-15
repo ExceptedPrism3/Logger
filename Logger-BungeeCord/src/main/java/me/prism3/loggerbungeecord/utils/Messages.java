@@ -19,13 +19,9 @@ public class Messages {
 
         try {
 
-            this.messagesFile = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile());
+            this.messagesFile = ConfigurationProvider.getProvider(YamlConfiguration.class).load(this.getFile());
 
-        } catch (IOException e) {
-
-            e.printStackTrace();
-
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     public String getString(String key) {
@@ -45,7 +41,7 @@ public class Messages {
 
         if (!Main.getInstance().getDataFolder().exists()) Main.getInstance().getDataFolder().mkdir();
 
-        final File file = getFile();
+        final File file = this.getFile();
 
         if (!file.exists()) {
 
@@ -60,11 +56,7 @@ public class Messages {
                     os.close();
 
                 }
-            } catch (IOException e) {
-
-                e.printStackTrace();
-
-            }
+            } catch (IOException e) { e.printStackTrace(); }
         }
     }
 }

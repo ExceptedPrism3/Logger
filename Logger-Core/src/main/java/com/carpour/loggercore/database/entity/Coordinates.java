@@ -15,7 +15,7 @@ public class Coordinates {
     }
 
     public int getX() {
-        return x;
+        return this.x;
     }
 
     public void setX(int x) {
@@ -23,7 +23,7 @@ public class Coordinates {
     }
 
     public int getY() {
-        return y;
+        return this.y;
     }
 
     public void setY(int y) {
@@ -31,7 +31,7 @@ public class Coordinates {
     }
 
     public int getZ() {
-        return z;
+        return this.z;
     }
 
     public void setZ(int z) {
@@ -39,7 +39,7 @@ public class Coordinates {
     }
 
     public String getWorldName() {
-        return worldName;
+        return this.worldName;
     }
 
     public void setWorldName(String worldName) {

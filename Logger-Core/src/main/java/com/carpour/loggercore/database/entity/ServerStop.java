@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "server_stop")
 public class ServerStop {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -18,7 +19,7 @@ public class ServerStop {
     private Instant date;
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -26,7 +27,7 @@ public class ServerStop {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
@@ -34,7 +35,7 @@ public class ServerStop {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {

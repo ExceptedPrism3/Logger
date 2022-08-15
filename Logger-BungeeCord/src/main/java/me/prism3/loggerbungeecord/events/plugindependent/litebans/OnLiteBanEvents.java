@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 
 import static me.prism3.loggerbungeecord.utils.Data.*;
 
@@ -97,11 +96,8 @@ public class OnLiteBanEvents implements Listener, Runnable {
                     }
 
                     // Discord Integration
-                    if (!main.getMessages().getString("Discord.Extra.LiteBans").isEmpty()) {
-
-                        main.getDiscord().liteBans(Objects.requireNonNull(main.getMessages().getString("Discord.Extra.LiteBans")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()), false);
-
-                    }
+                    if (!main.getMessages().getString("Discord.Extra.LiteBans").isEmpty())
+                        main.getDiscord().liteBans(main.getMessages().getString("Discord.Extra.LiteBans").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()), false);
 
                     // External
                     if (isExternal ) {
