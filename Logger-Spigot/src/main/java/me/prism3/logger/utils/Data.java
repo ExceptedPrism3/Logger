@@ -5,6 +5,7 @@ import com.carpour.loggercore.database.data.Options;
 import me.prism3.logger.Main;
 
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 
 public class Data {
@@ -70,7 +71,7 @@ public class Data {
     public static String loggerSpyBypass;
     public static String loggerSpy;
     public static String loggerReload;
-    public static Options options;
+    public static Options options = new Options();
     public static DatabaseCredentials databaseCredentials;
 
     public void initializeDateFormatter() {
@@ -102,6 +103,19 @@ public class Data {
                 this.main.getConfig().getInt("Database.Port"),
                 true
         );
+    }
+
+    public void initializeOptions()
+    {
+        HashMap<String, Object> options = new HashMap<>(30);
+
+        options.putAll(main.getConfig().getConfigurationSection("Log-Player").getValues(true));
+        options.putAll(main.getConfig().getConfigurationSection("Log-Server").getValues(true));
+        options.putAll(main.getConfig().getConfigurationSection("Log-Extras").getValues(true));
+        System.out.println(options);
+        Data.options.setEnabledLogs(options);
+
+
     }
 
     public void initializeListOfStrings() {

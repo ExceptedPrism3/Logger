@@ -9,28 +9,25 @@ import java.time.Instant;
 @Table(name = "console_commands")
 public class ConsoleCommand {
 
-    public ConsoleCommand() {
-    }
-
-    public ConsoleCommand(String serverName, String command)
-    {
-        this.serverName = serverName;
-        this.command = command;
-    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
     @Column(name = "server_name", length = 30)
     private String serverName;
-
     @Column(name = "date", nullable = false)
     @CreationTimestamp
     private Instant date;
-
     @Column(name = "command", length = 256)
     private String command;
+
+    public ConsoleCommand() {
+    }
+
+    public ConsoleCommand(String serverName, String command) {
+        this.serverName = serverName;
+        this.command = command;
+    }
 
     public Long getId() {
         return id;

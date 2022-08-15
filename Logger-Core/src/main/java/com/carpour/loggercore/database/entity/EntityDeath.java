@@ -8,6 +8,31 @@ import java.time.Instant;
 @Entity
 @Table(name = "entity_death")
 public class EntityDeath {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+    @Column(name = "server_name", length = 30)
+    private String serverName;
+    @Column(name = "date", nullable = false)
+    @CreationTimestamp
+    private Instant date;
+    @Column(name = "world", length = 100)
+    private String world;
+    @Column(name = "mob", length = 50)
+    private String mob;
+    @Column(name = "x")
+    private Integer x;
+    @Column(name = "y")
+    private Integer y;
+    @Column(name = "z")
+    private Integer z;
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "entity_player_id", nullable = false)
+    private EntityPlayer entityPlayer;
+    @Column(name = "is_staff")
+    private Boolean isStaff;
+
     public EntityDeath() {
     }
 
@@ -21,40 +46,6 @@ public class EntityDeath {
         this.entityPlayer = entityPlayer;
         this.isStaff = isStaff;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
-
-    @Column(name = "server_name", length = 30)
-    private String serverName;
-
-    @Column(name = "date", nullable = false)
-    @CreationTimestamp
-    private Instant date;
-
-    @Column(name = "world", length = 100)
-    private String world;
-
-
-    @Column(name = "mob", length = 50)
-    private String mob;
-
-    @Column(name = "x")
-    private Integer x;
-
-    @Column(name = "y")
-    private Integer y;
-
-    @Column(name = "z")
-    private Integer z;
-
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "entity_player_id", nullable = false)
-    private EntityPlayer entityPlayer;
-    @Column(name = "is_staff")
-    private Boolean isStaff;
 
     public EntityPlayer getEntityPlayer() {
         return entityPlayer;

@@ -21,9 +21,9 @@ public abstract class AbstractDataSource implements DataSourceInterface {
 
 
     protected final DatabaseCredentials databaseCredentials;
-    private final String className;
     protected final Logger logger = Logger.getLogger(AbstractDataSource.class.getName());
     protected final Options options;
+    private final String className;
 
     protected AbstractDataSource(DatabaseCredentials databaseCredentials, Options options, String className) throws SQLException {
         this.className = className;

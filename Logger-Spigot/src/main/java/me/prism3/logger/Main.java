@@ -1,7 +1,6 @@
 package me.prism3.logger;
 
 import com.carpour.loggercore.database.DataSourceInterface;
-import com.carpour.loggercore.database.data.Options;
 import com.carpour.loggercore.database.datasource.Database;
 import com.carpour.loggercore.database.utils.HibernateUtils;
 import de.jeff_media.updatechecker.UpdateChecker;
@@ -35,8 +34,6 @@ public class Main extends JavaPlugin {
     private Messages messages;
 
     private DataSourceInterface database;
-
-    private Options options;
 
     private DataSourceInterface sqLite;
     private SQLiteRegistration sqLiteReg;
@@ -79,6 +76,7 @@ public class Main extends JavaPlugin {
         this.eventsInitializer();
 
         this.commandsInitializer();
+
 
         new ASCIIArt().art();
 
@@ -132,6 +130,7 @@ public class Main extends JavaPlugin {
         data.initializeBooleans();
         data.initializePermissionStrings();
         data.initializeDatabaseCredentials();
+        data.initializeOptions();
 
     }
 
@@ -187,7 +186,7 @@ public class Main extends JavaPlugin {
     private void databaseSetup() {
 
         try {
-            this.database = new Database(databaseCredentials);
+            this.database = new Database(databaseCredentials, Data.options);
             this.sqLite = null;
 
         } catch (Exception e) { this.getLogger().severe(e.getMessage()); }
@@ -195,7 +194,6 @@ public class Main extends JavaPlugin {
 
     private void loadPluginDepends() {
 
-        this.options = new Options();
 
         if (EssentialsUtil.getEssentialsAPI() != null) {
 
@@ -203,7 +201,7 @@ public class Main extends JavaPlugin {
 
             this.getLogger().info("Essentials Plugin Detected!");
 
-            this.options.setEssentialsEnabled(true);
+            Data.options.setEssentialsEnabled(true);
 
         }
 
@@ -213,7 +211,7 @@ public class Main extends JavaPlugin {
 
             this.getLogger().info("AuthMe Plugin Detected!");
 
-            this.options.setAuthMeEnabled(true);
+            Data.options.setAuthMeEnabled(true);
 
         }
 
@@ -227,7 +225,7 @@ public class Main extends JavaPlugin {
             }
 
             this.getLogger().info("Vault Plugin Detected!");
-            this.options.setVaultEnabled(true);
+            Data.options.setVaultEnabled(true);
         }
 
         if (LiteBansUtil.getLiteBansAPI() != null) {
@@ -236,7 +234,7 @@ public class Main extends JavaPlugin {
 
             this.getLogger().info("LiteBans Plugin Detected!");
 
-            this.options.setLiteBansEnabled(true);
+            Data.options.setLiteBansEnabled(true);
         }
 
         if (AdvancedBanUtil.getAdvancedBanAPI() != null) {
@@ -245,7 +243,7 @@ public class Main extends JavaPlugin {
 
             this.getLogger().info("AdvancedBan Plugin Detected!");
 
-            this.options.setAdvancedBanEnabled(true);
+            Data.options.setAdvancedBanEnabled(true);
         }
 
         if (PlaceHolderAPIUtil.getPlaceHolderAPI() != null) {
@@ -265,10 +263,10 @@ public class Main extends JavaPlugin {
 
             this.getLogger().info("ViaVersion Plugin Detected!");
 
-            this.options.setViaVersion(true);
+            Data.options.setViaVersion(true);
         }
-        this.options.setDataDelete(this.getConfig().getInt("Database.Data-Deletion"));
-        this.options.setPlayerIPEnabled(this.getConfig().getBoolean("Player-Join.Player-IP"));
+        Data.options.setDataDelete(this.getConfig().getInt("Database.Data-Deletion"));
+        Data.options.setPlayerIPEnabled(this.getConfig().getBoolean("Player-Join.Player-IP"));
     }
 
     private boolean langChecker() {

@@ -2,6 +2,7 @@ package com.carpour.loggercore.database.datasource;
 
 import com.carpour.loggercore.database.DataSourceInterface;
 import com.carpour.loggercore.database.data.DatabaseCredentials;
+import com.carpour.loggercore.database.data.Options;
 import com.carpour.loggercore.database.entity.*;
 import com.carpour.loggercore.database.utils.HibernateUtils;
 import org.hibernate.Session;
@@ -13,8 +14,8 @@ import java.util.List;
 
 public final class Database implements DataSourceInterface {
 
-    public Database(DatabaseCredentials databaseCredentials) {
-        HibernateUtils.initializeHibernate(databaseCredentials);
+    public Database(DatabaseCredentials databaseCredentials, Options options) {
+        HibernateUtils.initializeHibernate(databaseCredentials, options);
     }
 
     @Override
@@ -888,7 +889,7 @@ public final class Database implements DataSourceInterface {
                 .findFirst()
                 .orElse(player);
 
-        final EntityDeath b = new EntityDeath(serverName,  coords,  mob, loggerPlayer, isStaff);
+        final EntityDeath b = new EntityDeath(serverName, coords, mob, loggerPlayer, isStaff);
 
         session.persist(b);
         tx.commit();
@@ -907,6 +908,7 @@ public final class Database implements DataSourceInterface {
         this.save(p);
 
     }
+
     public void save(Object obj) {
         Session session = null;
         Transaction transaction = null;

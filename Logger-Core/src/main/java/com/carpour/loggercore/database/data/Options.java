@@ -1,5 +1,7 @@
 package com.carpour.loggercore.database.data;
 
+import java.util.Map;
+
 public class Options {
     private boolean isAuthMeEnabled;
     private boolean isEssentialsEnabled;
@@ -9,6 +11,15 @@ public class Options {
     private boolean isViaVersion;
     private int dataDelete;
     private boolean isPlayerIPEnabled;
+    private Map<String, Object> enabledLogs;
+
+    public Map<String, Object> getEnabledLogs() {
+        return enabledLogs;
+    }
+
+    public void setEnabledLogs(Map<String, Object> enabledLogs) {
+        this.enabledLogs = enabledLogs;
+    }
 
     public boolean isAuthMeEnabled() {
         return isAuthMeEnabled;
@@ -72,5 +83,9 @@ public class Options {
 
     public void setPlayerIPEnabled(boolean playerIPEnabled) {
         isPlayerIPEnabled = playerIPEnabled;
+    }
+
+    public Boolean getBooleanValue(String key) {
+        return ((Boolean) this.enabledLogs.get(key));
     }
 }

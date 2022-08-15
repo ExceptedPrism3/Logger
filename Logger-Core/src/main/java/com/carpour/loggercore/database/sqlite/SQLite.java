@@ -36,7 +36,9 @@ public final class SQLite implements DataSourceInterface {
         this.databaseFile = databaseFile;
         try {
             Class.forName("org.sqlite.JDBC");
-        } catch (ClassNotFoundException e) { throw new RuntimeException(e); }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
         this.createDatabaseFile();
         this.createTable();
@@ -53,10 +55,14 @@ public final class SQLite implements DataSourceInterface {
             if (!this.databaseFile.exists())
                 this.databaseFile.createNewFile();
 
-        } catch (IOException e) { throw new RuntimeException(e); }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private String getJdbcUrl() { return ("jdbc:sqlite:" + this.databaseFile.getAbsolutePath()); }
+    private String getJdbcUrl() {
+        return ("jdbc:sqlite:" + this.databaseFile.getAbsolutePath());
+    }
 
     private void createTable() {
 

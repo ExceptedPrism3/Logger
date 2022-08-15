@@ -32,7 +32,7 @@ public class BlockInteraction {
     @Column(name = "is_staff")
     private Boolean isStaff;
 
-    @Column(name="interaction_type")
+    @Column(name = "interaction_type")
     private String interactionType;
 
     public EntityPlayer getEntityPlayer() {
@@ -115,24 +115,23 @@ public class BlockInteraction {
         this.isStaff = staff;
     }
 
-    public String getInteractionType()
-    {
+    public String getInteractionType() {
         return this.interactionType;
     }
-    public void setInteractionType(String interactionType)
-    {
+
+    public void setInteractionType(String interactionType) {
         this.interactionType = interactionType;
     }
-    public void setAsWoodStripping()
-    {
+
+    public void setAsWoodStripping() {
         this.interactionType = "WOOD.STRIPPING";
     }
-    public void setAsBlockBreak()
-    {
+
+    public void setAsBlockBreak() {
         this.interactionType = "BLOCK_BREAK";
     }
-    public void setAsBlockPlace()
-    {
+
+    public void setAsBlockPlace() {
         this.interactionType = "BLOCK_PLACE";
     }
 }

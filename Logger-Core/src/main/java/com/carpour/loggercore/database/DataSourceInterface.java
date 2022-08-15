@@ -22,7 +22,7 @@ public interface DataSourceInterface {
 
     void insertPlayerLeave(String serverName, EntityPlayer player, Coordinates coords, boolean isStaff);
 
-    void insertBlockPlace(String serverName, EntityPlayer player, String block, Coordinates coords , boolean isStaff);
+    void insertBlockPlace(String serverName, EntityPlayer player, String block, Coordinates coords, boolean isStaff);
 
     void insertBlockBreak(String serverName, EntityPlayer player, String blockName, Coordinates coords, boolean isStaff);
 
