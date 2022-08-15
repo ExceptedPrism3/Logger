@@ -94,7 +94,7 @@ public class OnVault implements Listener, Runnable {
 
                                 if (!this.main.getMessages().get().getString("Discord.Extras.Vault-Staff").isEmpty()) {
 
-                                    this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Extras.Vault-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)), false);
+                                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Vault-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)), false);
 
                                 }
 
@@ -102,7 +102,7 @@ public class OnVault implements Listener, Runnable {
 
                                 if (!this.main.getMessages().get().getString("Discord.Extras.Vault").isEmpty()) {
 
-                                    this.main.getDiscord().vault(player, this.main.getMessages().get().getString("Discord.Extras.Vault").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)), false);
+                                    this.main.getDiscord().vault(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Vault").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)), false);
                                 }
                             }
                         }

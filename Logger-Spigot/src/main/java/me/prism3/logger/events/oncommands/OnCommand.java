@@ -108,14 +108,14 @@ public class OnCommand implements Listener {
 
                     if (!this.main.getMessages().get().getString("Discord.Player-Commands-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
+                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
 
                     }
                 } else {
 
                     if (!this.main.getMessages().get().getString("Discord.Player-Commands").isEmpty()) {
 
-                        this.main.getDiscord().playerCommand(player, this.main.getMessages().get().getString("Discord.Player-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
+                        this.main.getDiscord().playerCommand(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
                     }
                 }
             }

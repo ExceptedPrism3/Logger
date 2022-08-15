@@ -95,14 +95,14 @@ public class OnBook implements Listener {
 
                     if (!this.main.getMessages().get().getString("Discord.Book-Editing-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Book-Editing-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%page%", String.valueOf(pageCount)).replace("%content%", String.valueOf(pageContent)).replace("%sign%", String.valueOf(signature)), false);
+                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Book-Editing-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%page%", String.valueOf(pageCount)).replace("%content%", String.valueOf(pageContent)).replace("%sign%", String.valueOf(signature)), false);
 
                     }
                 } else {
 
                     if (!this.main.getMessages().get().getString("Discord.Book-Editing").isEmpty()) {
 
-                        this.main.getDiscord().bookEditing(player, this.main.getMessages().get().getString("Discord.Book-Editing").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%page%", String.valueOf(pageCount)).replace("%content%", String.valueOf(pageContent)).replace("%sign%", String.valueOf(signature)), false);
+                        this.main.getDiscord().bookEditing(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Book-Editing").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%page%", String.valueOf(pageCount)).replace("%content%", String.valueOf(pageContent)).replace("%sign%", String.valueOf(signature)), false);
                     }
                 }
             }

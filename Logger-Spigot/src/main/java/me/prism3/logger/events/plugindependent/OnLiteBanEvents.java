@@ -14,6 +14,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 
 public class OnLiteBanEvents implements Listener, Runnable {
@@ -30,6 +31,7 @@ public class OnLiteBanEvents implements Listener, Runnable {
 
                 if (main.getConfig().getBoolean("Log-Extras.LiteBans")) {
 
+                    final UUID executorUUID = UUID.fromString(entry.getExecutorUUID());
                     final String entryType = entry.getType().toUpperCase();
                     final String executorName = entry.getExecutorName();
                     final String duration = entry.getDurationString();
@@ -85,7 +87,7 @@ public class OnLiteBanEvents implements Listener, Runnable {
 
                     if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog))
                         if (!main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
-                            main.getDiscord().staffChat(player, main.getMessages().get().getString("Discord.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
+                            main.getDiscord().staffChat(executorName, executorUUID, main.getMessages().get().getString("Discord.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
 
                     else
                         if (!main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())

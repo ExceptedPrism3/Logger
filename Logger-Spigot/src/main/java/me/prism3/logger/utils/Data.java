@@ -7,6 +7,7 @@ import me.prism3.logger.Main;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Data {
 
@@ -105,16 +106,16 @@ public class Data {
         );
     }
 
-    public void initializeOptions()
-    {
-        HashMap<String, Object> options = new HashMap<>(30);
+    public void initializeOptions() {
 
-        options.putAll(main.getConfig().getConfigurationSection("Log-Player").getValues(true));
-        options.putAll(main.getConfig().getConfigurationSection("Log-Server").getValues(true));
-        options.putAll(main.getConfig().getConfigurationSection("Log-Extras").getValues(true));
-        System.out.println(options);
-        Data.options.setEnabledLogs(options);
+        final Map<String, Object> optionS = new HashMap<>(30);
 
+        optionS.putAll(main.getConfig().getConfigurationSection("Log-Player").getValues(false));
+        optionS.putAll(main.getConfig().getConfigurationSection("Log-Server").getValues(false));
+        optionS.putAll(main.getConfig().getConfigurationSection("Log-Extras").getValues(false));
+//        options.putAll(main.getConfig().getConfigurationSection("Log-Version-Exceptions").getValues(false));
+        System.out.println(optionS);
+        Data.options.setEnabledLogs(optionS);
 
     }
 

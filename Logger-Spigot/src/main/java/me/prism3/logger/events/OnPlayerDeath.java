@@ -133,14 +133,14 @@ public class OnPlayerDeath implements Listener {
 
                     if (!this.main.getMessages().get().getString("Discord.Player-Death-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Player-Death-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
+                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Death-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
 
                     }
                 } else {
 
                     if (!this.main.getMessages().get().getString("Discord.Player-Death").isEmpty()) {
 
-                        this.main.getDiscord().playerDeath(player, this.main.getMessages().get().getString("Discord.Player-Death").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
+                        this.main.getDiscord().playerDeath(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Death").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
                     }
                 }
             }

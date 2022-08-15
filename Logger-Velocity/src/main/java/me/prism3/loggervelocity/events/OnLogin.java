@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 import static me.prism3.loggervelocity.utils.Data.*;
 
@@ -28,6 +29,7 @@ public class OnLogin {
             if (player.hasPermission(loggerExempt)) return;
 
             final String playerName = player.getUsername();
+            final UUID playerUUID = player.getUniqueId();
             InetSocketAddress playerIP = player.getRemoteAddress();
 
             if (!isPlayerIP) playerIP = null;
@@ -73,14 +75,14 @@ public class OnLogin {
 
                     if (!main.getMessages().getString("Discord.Player-Login-Staff").isEmpty()) {
 
-                        main.getDiscord().staffChat(player, main.getMessages().getString("Discord.Player-Login-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%IP%", String.valueOf(playerIP)), false);
+                        main.getDiscord().staffChat(playerName, playerUUID, main.getMessages().getString("Discord.Player-Login-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%IP%", String.valueOf(playerIP)), false);
 
                     }
                 } else {
 
                     if (!main.getMessages().getString("Discord.Player-Login").isEmpty()) {
 
-                        main.getDiscord().playerLogin(player, main.getMessages().getString("Discord.Player-Login").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%IP%", String.valueOf(playerIP)), false);
+                        main.getDiscord().playerLogin(playerName, playerUUID, main.getMessages().getString("Discord.Player-Login").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%IP%", String.valueOf(playerIP)), false);
 
                     }
                 }

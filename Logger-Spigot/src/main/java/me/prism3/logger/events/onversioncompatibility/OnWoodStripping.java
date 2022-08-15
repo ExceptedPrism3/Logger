@@ -132,14 +132,14 @@ public class OnWoodStripping implements Listener {
 
                     if (!this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
+                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
 
                     }
                 } else {
 
                     if (!this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping").isEmpty()) {
 
-                        this.main.getDiscord().woodStripping(player, this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
+                        this.main.getDiscord().woodStripping(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
                     }
                 }
             }

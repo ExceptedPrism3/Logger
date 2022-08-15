@@ -12,6 +12,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 public class OnChat implements Listener {
 
@@ -26,6 +27,8 @@ public class OnChat implements Listener {
 
             if (player.hasPermission(Data.loggerExempt)) return;
 
+            final String playerName = player.getName();
+            final UUID playerUUID = player.getUniqueId();
             final String server = player.getServer().getInfo().getName();
             final String message = event.getMessage().replace("\\", "\\\\");
 
@@ -70,14 +73,14 @@ public class OnChat implements Listener {
 
                     if (!this.main.getMessages().getString("Discord.Player-Chat-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, this.main.getMessages().getString("Discord.Player-Chat-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%msg%", message), false);
+                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().getString("Discord.Player-Chat-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%msg%", message), false);
 
                     }
                 } else {
 
                     if (!this.main.getMessages().getString("Discord.Player-Chat").isEmpty()) {
 
-                        this.main.getDiscord().playerChat(player, this.main.getMessages().getString("Discord.Player-Chat").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%msg%", message), false);
+                        this.main.getDiscord().playerChat(playerName, playerUUID, this.main.getMessages().getString("Discord.Player-Chat").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%msg%", message), false);
                     }
                 }
             }

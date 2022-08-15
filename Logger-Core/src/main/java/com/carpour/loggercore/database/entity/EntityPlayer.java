@@ -34,11 +34,11 @@ public class EntityPlayer implements Serializable {
     }
 
     public Instant getCreatedAt() {
-        return createdAt;
+        return this.createdAt;
     }
 
     public String getPlayerName() {
-        return playerName;
+        return this.playerName;
     }
 
     public void setPlayerName(String playerName) {
@@ -46,7 +46,7 @@ public class EntityPlayer implements Serializable {
     }
 
     public String getPlayerUniqueID() {
-        return playerUniqueID;
+        return this.playerUniqueID;
     }
 
     public void setPlayerUniqueID(String playerUniqueID) {

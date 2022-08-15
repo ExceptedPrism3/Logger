@@ -5,7 +5,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+
+import java.util.UUID;
 
 public class Discord {
 
@@ -115,30 +116,30 @@ public class Discord {
 
     }
 
-    public void staffChat(ProxiedPlayer player, String content, boolean contentInAuthorLine) {
+    public void staffChat(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-        this.discordUtil(player, content, contentInAuthorLine, this.staffChannel);
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.staffChannel);
 
     }
 
-    public void playerChat(ProxiedPlayer player, String content, boolean contentInAuthorLine) {
+    public void playerChat(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-        this.discordUtil(player, content, contentInAuthorLine, this.playerChatChannel);
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerChatChannel);
     }
 
-    public void playerCommands(ProxiedPlayer player, String content, boolean contentInAuthorLine) {
+    public void playerCommands(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-        this.discordUtil(player, content, contentInAuthorLine, this.playerCommandsChannel);
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerCommandsChannel);
     }
 
-    public void playerLogin(ProxiedPlayer player, String content, boolean contentInAuthorLine) {
+    public void playerLogin(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-        this.discordUtil(player, content, contentInAuthorLine, this.playerLoginChannel);
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerLoginChannel);
     }
 
-    public void playerLeave(ProxiedPlayer player, String content, boolean contentInAuthorLine) {
+    public void playerLeave(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
 
-        this.discordUtil(player, content, contentInAuthorLine, this.playerLeaveChannel);
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerLeaveChannel);
     }
 
     public void serverReload(String player, String content, boolean contentInAuthorLine) {
@@ -196,12 +197,12 @@ public class Discord {
         this.liteBansChannel.sendMessage(builder.build()).queue();
     }
 
-    private void discordUtil(ProxiedPlayer player, String content, boolean contentInAuthorLine, TextChannel channel) {
+    private void discordUtil(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine, TextChannel channel) {
 
         if (channel == null) return;
 
-        final EmbedBuilder builder = new EmbedBuilder().setAuthor(contentInAuthorLine ? content : player.getName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor(contentInAuthorLine ? content : playerName,
+                null, "https://crafatar.com/avatars/" + playerUUID + "?overlay=1");
 
         if (!contentInAuthorLine) builder.setDescription(content);
 

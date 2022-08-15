@@ -79,14 +79,14 @@ public class OnAuthMePassword implements Listener {
 
                     if (!this.main.getMessages().get().getString("Discord.Extras.Wrong-Password-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Extras.Wrong-Password-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName), false);
+                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Wrong-Password-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName), false);
 
                     }
                 } else {
 
                     if (!this.main.getMessages().get().getString("Discord.Extras.Wrong-Password").isEmpty()) {
 
-                        this.main.getDiscord().wrongPassword(player, this.main.getMessages().get().getString("Discord.Extras.Wrong-Password").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName), false);
+                        this.main.getDiscord().wrongPassword(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Wrong-Password").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName), false);
                     }
                 }
             }

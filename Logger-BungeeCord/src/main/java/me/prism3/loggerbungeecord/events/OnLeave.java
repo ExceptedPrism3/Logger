@@ -12,6 +12,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 public class OnLeave implements Listener {
 
@@ -27,6 +28,7 @@ public class OnLeave implements Listener {
             if (player.hasPermission(Data.loggerExempt)) return;
 
             final String playerName = player.getName();
+            final UUID playerUUID = player.getUniqueId();
 
             // This resolves an error showing up if the targeted server is offline whist connecting
             if (player.getServer() == null) return;
@@ -76,14 +78,14 @@ public class OnLeave implements Listener {
 
                     if (!this.main.getMessages().getString("Discord.Player-Leave-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, this.main.getMessages().getString("Discord.Player-Leave-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", playerServerName), false);
+                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().getString("Discord.Player-Leave-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", playerServerName), false);
 
                     }
                 } else {
 
                     if (!this.main.getMessages().getString("Discord.Player-Leave").isEmpty()) {
 
-                        this.main.getDiscord().playerLeave(player, this.main.getMessages().getString("Discord.Player-Leave").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", playerServerName), false);
+                        this.main.getDiscord().playerLeave(playerName, playerUUID, this.main.getMessages().getString("Discord.Player-Leave").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", playerServerName), false);
 
                     }
                 }

@@ -83,7 +83,7 @@ public class OnCommandWhitelist implements Listener {
 
                         if (!this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted-Staff").isEmpty()) {
 
-                            this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Player-Commands-Staff-Whitelisted").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
+                            this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Commands-Staff-Whitelisted").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
 
                         }
                     } else {

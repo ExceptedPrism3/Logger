@@ -29,15 +29,10 @@ public class Console implements Listener {
         final List<String> commandParts = Arrays.asList(event.getCommand().split("\\s+"));
 
         // Blacklisted Commands
-
-            if(Data.isConsoleCommands &&
-                    Data.consoleCommandsToBlock.stream().anyMatch(commandParts.get(0)::equalsIgnoreCase))
-            {
-                event.setCancelled(true);
-                return;
-            }
-
-
+        if(Data.isConsoleCommands && Data.consoleCommandsToBlock.stream().anyMatch(commandParts.get(0)::equalsIgnoreCase)) {
+            event.setCancelled(true);
+            return;
+        }
 
         if (this.main.getConfig().getBoolean("Log-Server.Console-Commands")) {
 

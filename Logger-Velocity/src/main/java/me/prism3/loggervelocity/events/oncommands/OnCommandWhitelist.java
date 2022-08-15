@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static me.prism3.loggervelocity.utils.Data.*;
 
@@ -24,6 +25,7 @@ public class OnCommandWhitelist {
 
         final Player player = (Player) event.getCommandSource();
         final String playerName = player.getUsername();
+        final UUID playerUUID = player.getUniqueId();
         final String command = event.getCommand().replace("\\", "\\\\");
         final String server = player.getCurrentServer().get().getServerInfo().getName();
         final List<String> commandParts = Arrays.asList(command.split("\\s+"));
@@ -73,14 +75,14 @@ public class OnCommandWhitelist {
 
                         if (!main.getMessages().getString("Discord.Player-Commands-Staff").isEmpty()) {
 
-                            main.getDiscord().staffChat(player, main.getMessages().getString("Discord.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
+                            main.getDiscord().staffChat(playerName, playerUUID, main.getMessages().getString("Discord.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
 
                         }
                     } else {
 
                         if (!main.getMessages().getString("Discord.Player-Commands").isEmpty()) {
 
-                            main.getDiscord().playerCommands(player, main.getMessages().getString("Discord.Player-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
+                            main.getDiscord().playerCommands(playerName, playerUUID, main.getMessages().getString("Discord.Player-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
 
                         }
                     }

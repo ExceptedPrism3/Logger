@@ -10,6 +10,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 import static me.prism3.loggervelocity.utils.Data.*;
 
@@ -27,6 +28,7 @@ public class OnChat{
             if (player.hasPermission(loggerExempt)) return;
 
             final String playerName = player.getUsername();
+            final UUID playerUUID = player.getUniqueId();
             final String server = player.getCurrentServer().get().getServerInfo().getName();
             final String message = event.getMessage().replace("\\", "\\\\");
 
@@ -71,14 +73,14 @@ public class OnChat{
 
                     if (!main.getMessages().getString("Discord.Player-Chat-Staff").isEmpty()) {
 
-                        main.getDiscord().staffChat(player, main.getMessages().getString("Discord.Player-Chat-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%msg%", message), false);
+                        main.getDiscord().staffChat(playerName, playerUUID, main.getMessages().getString("Discord.Player-Chat-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%msg%", message), false);
 
                     }
                 } else {
 
                     if (!main.getMessages().getString("Discord.Player-Chat").isEmpty()) {
 
-                        main.getDiscord().playerChat(player, main.getMessages().getString("Discord.Player-Chat").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%msg%", message), false);
+                        main.getDiscord().playerChat(playerName, playerUUID, main.getMessages().getString("Discord.Player-Chat").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%msg%", message), false);
 
                     }
                 }

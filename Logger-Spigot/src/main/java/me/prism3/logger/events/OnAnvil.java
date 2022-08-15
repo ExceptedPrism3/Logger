@@ -51,6 +51,7 @@ private final Main main = Main.getInstance();
             final Inventory inv = event.getInventory();
 
             final EntityPlayer ePlayer = new EntityPlayer(player.getName(), playerUUID.toString());
+
             if (inv instanceof AnvilInventory) {
 
                 final InventoryView view = event.getView();
@@ -110,14 +111,14 @@ private final Main main = Main.getInstance();
 
                                     if (!this.main.getMessages().get().getString("Discord.Anvil-Staff").isEmpty()) {
 
-                                        this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Anvil-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%renamed%", displayName), false);
+                                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Anvil-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%renamed%", displayName), false);
 
                                     }
                                 } else {
 
                                     if (!this.main.getMessages().get().getString("Discord.Anvil").isEmpty()) {
 
-                                        this.main.getDiscord().anvil(player, this.main.getMessages().get().getString("Discord.Anvil").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%renamed%", displayName), false);
+                                        this.main.getDiscord().anvil(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Anvil").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%renamed%", displayName), false);
                                     }
                                 }
                             }

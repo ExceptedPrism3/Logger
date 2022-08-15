@@ -122,14 +122,14 @@ public class OnChestInteraction implements Listener {
 
                     if (!this.main.getMessages().get().getString("Discord.Chest-Interaction-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Chest-Interaction-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%chest%", chestName).replace("%items%", Arrays.toString(items)), false);
+                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Chest-Interaction-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%chest%", chestName).replace("%items%", Arrays.toString(items)), false);
 
                     }
                 } else {
 
                     if (!this.main.getMessages().get().getString("Discord.Chest-Interaction").isEmpty()) {
 
-                        this.main.getDiscord().chestInteraction(player, this.main.getMessages().get().getString("Discord.Chest-Interaction").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%chest%", chestName).replace("%items%", Arrays.toString(items)), false);
+                        this.main.getDiscord().chestInteraction(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Chest-Interaction").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%chest%", chestName).replace("%items%", Arrays.toString(items)), false);
                     }
                 }
             }

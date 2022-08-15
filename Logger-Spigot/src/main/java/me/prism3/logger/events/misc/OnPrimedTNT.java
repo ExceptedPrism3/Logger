@@ -86,14 +86,14 @@ public class OnPrimedTNT implements Listener {
 
                     if (!this.main.getMessages().get().getString("Discord.Primed-TNT-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Primed-TNT-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()), false);
+                        this.main.getDiscord().staffChat(playerName, playerUUIDName, playerUUID, this.main.getMessages().get().getString("Discord.Primed-TNT-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()), false);
 
                     }
                 } else {
 
                     if (!this.main.getMessages().get().getString("Discord.Primed-TNT").isEmpty()) {
 
-                        this.main.getDiscord().primedTNT(player, this.main.getMessages().get().getString("Discord.Primed-TNT").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()), false);
+                        this.main.getDiscord().primedTNT(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Primed-TNT").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()), false);
                     }
                 }
             }

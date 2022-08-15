@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class OnCommand implements Listener {
 
@@ -29,6 +30,7 @@ public class OnCommand implements Listener {
             if (player.hasPermission(Data.loggerExempt)) return;
 
             final String playerName = player.getName();
+            final UUID playerUUID = player.getUniqueId();
             final String server = player.getServer().getInfo().getName();
             final String command = event.getMessage().replace("\\", "\\\\");
             final List<String> commandParts = Arrays.asList(command.split("\\s+"));
@@ -43,7 +45,6 @@ public class OnCommand implements Listener {
             if (this.main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")) {
 
                 new OnCommandWhitelist().onWhitelistedCommand(event);
-
                 return;
             }
 
@@ -88,14 +89,14 @@ public class OnCommand implements Listener {
 
                     if (!this.main.getMessages().getString("Discord.Player-Commands-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, this.main.getMessages().getString("Discord.Player-Commands-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
+                        this.main.getDiscord().staffChat(playerName, playerUUIDName, playerUUID, this.main.getMessages().getString("Discord.Player-Commands-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
 
                     }
                 } else {
 
                     if (!this.main.getMessages().getString("Discord.Player-Commands").isEmpty()) {
 
-                        this.main.getDiscord().playerCommands(player, this.main.getMessages().getString("Discord.Player-Commands").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
+                        this.main.getDiscord().playerCommands(playerName, playerUUID, this.main.getMessages().getString("Discord.Player-Commands").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
 
                     }
                 }

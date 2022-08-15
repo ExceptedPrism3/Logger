@@ -60,7 +60,7 @@ public class OnPlayerRegister {
 
         // Discord Integration
         if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getMessages().get().getString("Discord.Player-Registration").isEmpty())
-            this.main.getDiscord().playerRegistration(player, this.main.getMessages().get().getString("Discord.Player-Registration").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())), false);
+            this.main.getDiscord().playerRegistration(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Registration").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())), false);
 
         // External
         if (Data.isExternal) {

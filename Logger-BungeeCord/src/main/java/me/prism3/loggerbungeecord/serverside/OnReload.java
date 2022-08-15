@@ -12,6 +12,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 import static me.prism3.loggerbungeecord.utils.Data.*;
 
@@ -33,6 +34,7 @@ public class OnReload implements Listener {
                 if (player.hasPermission(loggerExempt)) return;
 
                 final String playerName = player.getName();
+                final UUID playerUUID = player.getUniqueId();
                 final String server = player.getServer().getInfo().getName();
 
                 // Log To Files
@@ -76,7 +78,7 @@ public class OnReload implements Listener {
 
                         if (!this.main.getMessages().getString("Discord.Server-Reload-Player-Staff").isEmpty()) {
 
-                            this.main.getDiscord().staffChat(player, this.main.getMessages().getString("Discord.Server-Reload-Player-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server), false);
+                            this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().getString("Discord.Server-Reload-Player-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server), false);
 
                         }
                     } else {

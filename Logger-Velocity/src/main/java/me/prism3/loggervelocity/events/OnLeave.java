@@ -11,6 +11,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 import static me.prism3.loggervelocity.utils.Data.*;
 
@@ -28,6 +29,7 @@ public class OnLeave {
             if (player.hasPermission(loggerExempt)) return;
 
             final String playerName = player.getUsername();
+            final UUID playerUUID = player.getUniqueId();
 
             // This resolves an error showing up if the targeted server is offline whist connecting
             if (!player.getCurrentServer().isPresent()) return;
@@ -75,14 +77,14 @@ public class OnLeave {
 
                     if (!main.getMessages().getString("Discord.Player-Leave-Staff").isEmpty()) {
 
-                        main.getDiscord().staffChat(player, main.getMessages().getString("Discord.Player-Leave-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server), false);
+                        main.getDiscord().staffChat(playerName, playerUUID, main.getMessages().getString("Discord.Player-Leave-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server), false);
 
                     }
                 } else {
 
                     if (!main.getMessages().getString("Discord.Player-Leave").isEmpty()) {
 
-                        main.getDiscord().playerLeave(player, main.getMessages().getString("Discord.Player-Leave").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server), false);
+                        main.getDiscord().playerLeave(playerName, playerUUID, main.getMessages().getString("Discord.Player-Leave").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server), false);
 
                     }
                 }
@@ -92,8 +94,7 @@ public class OnLeave {
             if (isExternal) {
 
                 try {
-                    final EntityPlayer ePlayer = new EntityPlayer();
-                    ePlayer.setPlayerName(playerName);
+
                     Main.getInstance().getDatabase().insertPlayerLeave(serverName, playerName, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }

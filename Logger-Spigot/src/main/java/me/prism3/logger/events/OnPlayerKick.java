@@ -85,14 +85,14 @@ public class OnPlayerKick implements Listener {
 
                     if (!this.main.getMessages().get().getString("Discord.Player-Kick-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, this.main.getMessages().get().getString("Discord.Player-Kick-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%reason%", reason), false);
+                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Kick-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%reason%", reason), false);
 
                     }
                 } else {
 
                     if (!this.main.getMessages().get().getString("Discord.Player-Kick").isEmpty()) {
 
-                        this.main.getDiscord().playerKick(player, this.main.getMessages().get().getString("Discord.Player-Kick").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%reason%", reason), false);
+                        this.main.getDiscord().playerKick(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Kick").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%reason%", reason), false);
                     }
                 }
             }
