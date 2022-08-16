@@ -19,50 +19,47 @@ public class Console {
 
         final Main main = Main.getInstance();
 
-        if (main.getConfig().getBoolean("Log-Server.Console-Commands")) {
+        final String command = event.getCommand().replace("\\", "\\\\");
 
-            final String command = event.getCommand().replace("\\", "\\\\");
+        // Log To Files
+        if (isLogToFiles) {
 
-            // Log To Files
-            if (isLogToFiles) {
+            try {
 
-                try {
+                final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getConsoleCommandLogFile(), true));
+                out.write(main.getMessages().getString("Files.Server-Side.Console-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command) + "\n");
+                out.close();
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getConsoleCommandLogFile(), true));
-                    out.write(main.getMessages().getString("Files.Server-Side.Console-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command) + "\n");
-                    out.close();
+            } catch (IOException e) {
 
-                } catch (IOException e) {
+                main.getLogger().error("An error occurred while logging into the appropriate file.");
+                e.printStackTrace();
 
-                    main.getLogger().error("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
-                }
             }
+        }
 
-            // Discord
-            if (!main.getMessages().getString("Discord.Server-Side.Console-Commands").isEmpty())
-                main.getDiscord().console(main.getMessages().getString("Discord.Server-Side.Console-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command), false);
+        // Discord
+        if (!main.getMessages().getString("Discord.Server-Side.Console-Commands").isEmpty())
+            main.getDiscord().console(main.getMessages().getString("Discord.Server-Side.Console-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command), false);
 
-            // External
-            if (isExternal) {
+        // External
+        if (isExternal) {
 
-                try {
+            try {
 
-                    Main.getInstance().getDatabase().insertConsoleCommand(serverName, command);
+                Main.getInstance().getDatabase().insertConsoleCommand(serverName, command);
 
-                } catch (Exception e) { e.printStackTrace(); }
-            }
+            } catch (Exception e) { e.printStackTrace(); }
+        }
 
-            // SQLite
-            if (isSqlite) {
+        // SQLite
+        if (isSqlite) {
 
-                try {
+            try {
 
-                    Main.getInstance().getSqLite().insertConsoleCommand(serverName, command);
+                Main.getInstance().getSqLite().insertConsoleCommand(serverName, command);
 
-                } catch (Exception e) { e.printStackTrace(); }
-            }
+            } catch (Exception e) { e.printStackTrace(); }
         }
     }
 }

@@ -1,10 +1,21 @@
 package me.prism3.loggerbungeecord.utils;
 
 import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.api.LiteBansUtil;
+import me.prism3.loggerbungeecord.api.PartyAndFriendsUtil;
+import me.prism3.loggerbungeecord.events.OnChat;
+import me.prism3.loggerbungeecord.events.OnLeave;
+import me.prism3.loggerbungeecord.events.OnLogin;
+import me.prism3.loggerbungeecord.events.oncommands.OnCommand;
+import me.prism3.loggerbungeecord.events.plugindependent.litebans.OnLiteBanEvents;
+import me.prism3.loggerbungeecord.events.plugindependent.litebans.OnPartyAndFriends;
+import me.prism3.loggerbungeecord.serverside.OnReload;
+import me.prism3.loggerbungeecord.serverside.RAM;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class Data {
 
@@ -131,5 +142,45 @@ public class Data {
         loggerExemptDiscord = "loggerproxy.exempt.discord";
         loggerStaffLog = "loggerproxy.staff.log";
 
+    }
+
+    public void eventInitializer() {
+
+        if (this.main.getConfig().getBoolean("Log-Player.Chat"))
+            this.main.getProxy().getPluginManager().registerListener(this.main, new OnChat());
+
+        if (this.main.getConfig().getBoolean("Log-Player.Commands"))
+            this.main.getProxy().getPluginManager().registerListener(this.main, new OnCommand());
+
+        if (this.main.getConfig().getBoolean("Log-Player.Login"))
+            this.main.getProxy().getPluginManager().registerListener(this.main, new OnLogin());
+
+        if (this.main.getConfig().getBoolean("Log-Player.Leave"))
+            this.main.getProxy().getPluginManager().registerListener(this.main, new OnLeave());
+
+        if (this.main.getConfig().getBoolean("Log-Server.Reload"))
+            this.main.getProxy().getPluginManager().registerListener(this.main, new OnReload());
+
+        if (this.main.getConfig().getBoolean("Log-Server.RAM"))
+            this.main.getProxy().getScheduler().schedule(this.main, new RAM(), 200L, ramChecker / 20, TimeUnit.SECONDS);
+
+        this.dependentEventInitializer();
+    }
+
+    private void dependentEventInitializer() {
+
+        if (LiteBansUtil.getLiteBansAPI() != null && this.main.getConfig().getBoolean("Log-Extras.LiteBans")) {
+
+            this.main.getProxy().getScheduler().schedule(this.main, new OnLiteBanEvents(), 5L, 0, TimeUnit.SECONDS);
+            this.main.getLogger().info("LiteBans Plugin Detected!");
+
+        }
+
+        if (PartyAndFriendsUtil.getPartyAndFriendsAPI() != null && this.main.getConfig().getBoolean("Log-Extras.PAF")) {
+
+            this.main.getProxy().getPluginManager().registerListener(this.main, new OnPartyAndFriends());
+            this.main.getLogger().info("PartyAndFriends Plugin Detected!");
+
+        }
     }
 }

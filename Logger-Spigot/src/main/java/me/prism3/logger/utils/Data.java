@@ -3,11 +3,25 @@ package me.prism3.logger.utils;
 import com.carpour.loggercore.database.data.DatabaseCredentials;
 import com.carpour.loggercore.database.data.Options;
 import me.prism3.logger.Main;
+import me.prism3.logger.api.*;
+import me.prism3.logger.commands.subcommands.PlayerInventory;
+import me.prism3.logger.events.*;
+import me.prism3.logger.events.misc.OnPrimedTNT;
+import me.prism3.logger.events.oncommands.OnCommand;
+import me.prism3.logger.events.oninventories.OnChestInteraction;
+import me.prism3.logger.events.oninventories.OnCraft;
+import me.prism3.logger.events.oninventories.OnFurnace;
+import me.prism3.logger.events.onversioncompatibility.OnWoodStripping;
+import me.prism3.logger.events.plugindependent.*;
+import me.prism3.logger.serverside.*;
+import me.prism3.logger.utils.enums.NmsVersions;
 
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.bukkit.Bukkit.getServer;
 
 public class Data {
 
@@ -115,7 +129,7 @@ public class Data {
         optionS.putAll(main.getConfig().getConfigurationSection("Log-Extras").getValues(false));
 //        options.putAll(main.getConfig().getConfigurationSection("Log-Version-Exceptions").getValues(false));
         System.out.println(optionS);
-        Data.options.setEnabledLogs(optionS);
+        options.setEnabledLogs(optionS);
 
     }
 
@@ -176,5 +190,184 @@ public class Data {
         loggerSpy = "logger.spy";
         loggerReload = "logger.reload";
 
+    }
+
+    public void eventInitializer() {
+
+        if (this.main.getConfig().getBoolean("Log-Player.Chat"))
+            this.main.getServer().getPluginManager().registerEvents(new OnPlayerChat(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Commands"))
+            this.main.getServer().getPluginManager().registerEvents(new OnCommand(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Server.Console-Commands"))
+            this.main.getServer().getPluginManager().registerEvents(new Console(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Sign-Text"))
+            this.main.getServer().getPluginManager().registerEvents(new OnSign(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Join"))
+            this.main.getServer().getPluginManager().registerEvents(new OnPlayerJoin(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Leave"))
+            this.main.getServer().getPluginManager().registerEvents(new OnPlayerLeave(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Kick"))
+            this.main.getServer().getPluginManager().registerEvents(new OnPlayerKick(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Death")) {
+            this.main.getServer().getPluginManager().registerEvents(new OnPlayerDeath(), this.main);
+            this.main.getServer().getPluginManager().registerEvents(new PlayerInventory(), this.main);
+        }
+
+        if (this.main.getConfig().getBoolean("Log-Player.Teleport"))
+            this.main.getServer().getPluginManager().registerEvents(new OnPlayerTeleport(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Level"))
+            this.main.getServer().getPluginManager().registerEvents(new OnPlayerLevel(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Block-Place"))
+            this.main.getServer().getPluginManager().registerEvents(new OnBlockPlace(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Block-Break"))
+            this.main.getServer().getPluginManager().registerEvents(new OnBlockBreak(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Server.Portal-Creation"))
+            this.main.getServer().getPluginManager().registerEvents(new PortalCreation(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Bucket-Fill"))
+            this.main.getServer().getPluginManager().registerEvents(new OnBucketFill(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Bucket-Empty"))
+            this.main.getServer().getPluginManager().registerEvents(new OnBucketEmpty(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Anvil"))
+            this.main.getServer().getPluginManager().registerEvents(new OnAnvil(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Item-Pickup"))
+            this.main.getServer().getPluginManager().registerEvents(new OnItemPickup(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Item-Drop"))
+            this.main.getServer().getPluginManager().registerEvents(new OnItemDrop(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Enchanting"))
+            this.main.getServer().getPluginManager().registerEvents(new OnEnchant(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Book-Editing"))
+            this.main.getServer().getPluginManager().registerEvents(new OnBook(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Server.RCON"))
+            this.main.getServer().getPluginManager().registerEvents(new RCON(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Game-Mode"))
+            this.main.getServer().getPluginManager().registerEvents(new OnGameMode(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Primed-TNT"))
+            this.main.getServer().getPluginManager().registerEvents(new OnPrimedTNT(), this.main);
+
+//        if (this.main.getConfig().getBoolean("Log-Player.Chat"))
+//        this.main.getServer().getPluginManager().registerEvents(new OnSpawnEgg(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Server.Command-Block"))
+            this.main.getServer().getPluginManager().registerEvents(new OnCommandBlock(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Entity-Death"))
+            this.main.getServer().getPluginManager().registerEvents(new OnEntityDeath(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Furnace"))
+            this.main.getServer().getPluginManager().registerEvents(new OnFurnace(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Craft"))
+            this.main.getServer().getPluginManager().registerEvents(new OnCraft(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Chest-Interaction"))
+            this.main.getServer().getPluginManager().registerEvents(new OnChestInteraction(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Server.TPS"))
+            this.main.getServer().getScheduler().scheduleSyncRepeatingTask(this.main, new TPS(), 300L, ramTpsChecker);
+
+        if (this.main.getConfig().getBoolean("Log-Server.RAM"))
+            this.main.getServer().getScheduler().scheduleSyncRepeatingTask(this.main, new RAM(), 300L, ramTpsChecker);
+
+        // Version Exceptions
+        if (this.main.getVersion().isAtLeast(NmsVersions.v1_13_R1) && this.main.getConfig().getBoolean("Log-Version-Exceptions.Wood-Stripping"))
+                this.main.getServer().getPluginManager().registerEvents(new OnWoodStripping(), this.main);
+
+        this.dependentEventInitializer();
+
+    }
+
+    private void dependentEventInitializer() {
+
+        if (EssentialsUtil.getEssentialsAPI() != null && this.main.getConfig().getBoolean("Log-Extras.Essentials-AFK")) {
+
+            this.main.getServer().getPluginManager().registerEvents(new OnAFK(), this.main);
+
+            this.main.getLogger().info("Essentials Plugin Detected!");
+
+            options.setEssentialsEnabled(true);
+
+        }
+
+        if (AuthMeUtil.getAuthMeAPI() != null && this.main.getConfig().getBoolean("Log-Extras.AuthMe-Wrong-Password")) {
+
+            this.main.getServer().getPluginManager().registerEvents(new OnAuthMePassword(), this.main);
+
+            this.main.getLogger().info("AuthMe Plugin Detected!");
+
+            options.setAuthMeEnabled(true);
+
+        }
+
+        if (VaultUtil.getVaultAPI() && this.main.getConfig().getBoolean("Log-Extras.Vault")) {
+
+            if (VaultUtil.getVault() != null) {
+
+                final OnVault vault = new OnVault();
+                this.main.getServer().getPluginManager().registerEvents(vault, this.main);
+                this.main.getServer().getScheduler().scheduleSyncRepeatingTask(this.main, vault, 10L, vaultChecker);
+            }
+
+            this.main.getLogger().info("Vault Plugin Detected!");
+            options.setVaultEnabled(true);
+        }
+
+        if (LiteBansUtil.getLiteBansAPI() != null && this.main.getConfig().getBoolean("Log-Extras.LiteBans")) {
+
+            this.main.getServer().getScheduler().scheduleSyncDelayedTask(this.main, new OnLiteBanEvents(), 10L);
+
+            this.main.getLogger().info("LiteBans Plugin Detected!");
+
+            options.setLiteBansEnabled(true);
+        }
+
+        if (AdvancedBanUtil.getAdvancedBanAPI() != null && this.main.getConfig().getBoolean("Log-Extras.AdvancedBan")) {
+
+            this.main.getServer().getPluginManager().registerEvents(new OnAdvancedBan(), this.main);
+
+            this.main.getLogger().info("AdvancedBan Plugin Detected!");
+
+            options.setAdvancedBanEnabled(true);
+        }
+
+        if (PlaceHolderAPIUtil.getPlaceHolderAPI() != null) {
+
+            this.main.getLogger().info("PlaceHolderAPI Plugin Detected!");
+
+        }
+
+        if (GeyserUtil.getGeyserAPI() != null && FloodGateUtil.getFloodGateAPI()) {
+
+            this.main.getLogger().info("Geyser & FloodGate Plugins Detected!");
+            this.main.getLogger().warning("Geyser & FloodGate are not fully supported! If any errors occurs, contact the authors.");
+
+        }
+
+        if (ViaVersionUtil.getViaVersionAPI() != null && this.main.getConfig().getBoolean("Log-Extras.ViaVersion")) {
+
+            this.main.getLogger().info("ViaVersion Plugin Detected!");
+
+            options.setViaVersion(true);
+        }
     }
 }

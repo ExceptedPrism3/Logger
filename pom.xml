@@ -9,8 +9,10 @@
     <version>1.8.0.2</version>
     <modules>
         <module>Logger-Core</module>
+        <module>Logger-Shaded</module>
         <module>Logger-Spigot</module>
-
+        <module>Logger-BungeeCord</module>
+        <module>Logger-Velocity</module>
     </modules>
 
     <packaging>pom</packaging>

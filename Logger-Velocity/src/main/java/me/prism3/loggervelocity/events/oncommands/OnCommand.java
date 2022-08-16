@@ -128,7 +128,7 @@ public class OnCommand {
                     } catch (Exception e) { e.printStackTrace(); }
                 }
             }
-        } else {
+        } else if (main.getConfig().getBoolean("Log-Server.Console-Commands")) {
 
             new Console().onConsole(event);
 

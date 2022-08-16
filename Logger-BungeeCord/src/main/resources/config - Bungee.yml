@@ -47,8 +47,9 @@ Log-Server:
   Stop: true
   RAM: true
 
-Log-Extra:
+Log-Extras:
   LiteBans: true
+  PAF: true
 
 # Player-Commands features
 Player-Commands:

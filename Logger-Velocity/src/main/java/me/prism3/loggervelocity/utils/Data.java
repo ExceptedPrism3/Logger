@@ -1,10 +1,21 @@
 package me.prism3.loggervelocity.utils;
 
 import me.prism3.loggervelocity.Main;
+import me.prism3.loggervelocity.api.LiteBansUtil;
+import me.prism3.loggervelocity.commands.DiscordCMD;
+import me.prism3.loggervelocity.commands.Reload;
+import me.prism3.loggervelocity.events.OnChat;
+import me.prism3.loggervelocity.events.OnLeave;
+import me.prism3.loggervelocity.events.OnLogin;
+import me.prism3.loggervelocity.events.oncommands.OnCommand;
+import me.prism3.loggervelocity.events.plugindependent.litebans.OnLiteBanEvents;
+import me.prism3.loggervelocity.serverside.RAM;
+import me.prism3.loggervelocity.serverside.Start;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class Data {
 
@@ -133,5 +144,36 @@ public class Data {
         loggerExemptDiscord = "loggerproxy.exempt.discord";
         loggerStaffLog = "loggerproxy.staff.log";
 
+    }
+
+    public void eventInitializer() {
+
+        if (this.main.getConfig().getBoolean("Log-Player.Chat"))
+            Main.getServer().getEventManager().register(this, new OnChat());
+
+        if (this.main.getConfig().getBoolean("Log-Player.Commands"))
+            Main.getServer().getEventManager().register(this, new OnCommand());
+
+        if (this.main.getConfig().getBoolean("Log-Player.Login"))
+            Main.getServer().getEventManager().register(this, new OnLogin());
+
+        if (this.main.getConfig().getBoolean("Log-Player.Leave"))
+            Main.getServer().getEventManager().register(this, new OnLeave());
+
+        if (this.main.getConfig().getBoolean("Log-Server.RAM"))
+            Main.getServer().getScheduler().buildTask(this, new RAM()).repeat(ramChecker, TimeUnit.SECONDS).delay(10, TimeUnit.SECONDS).schedule();
+
+        this.dependentEventInitializer();
+    }
+
+    private void dependentEventInitializer() {
+
+        if (LiteBansUtil.getLiteBansAPI().isPresent() && this.main.getConfig().getBoolean("Log-Extras.LiteBans")) {
+
+            Main.getServer().getScheduler().buildTask(this, new OnLiteBanEvents()).delay(5, TimeUnit.SECONDS).schedule();
+
+            this.main.getLogger().info("LiteBans Plugin Detected!");
+
+        }
     }
 }

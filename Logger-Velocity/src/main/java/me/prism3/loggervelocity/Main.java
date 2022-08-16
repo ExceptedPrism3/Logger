@@ -8,17 +8,10 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
-import me.prism3.loggervelocity.api.LiteBansUtil;
 import me.prism3.loggervelocity.commands.DiscordCMD;
 import me.prism3.loggervelocity.commands.Reload;
 import me.prism3.loggervelocity.discord.Discord;
 import me.prism3.loggervelocity.discord.DiscordFile;
-import me.prism3.loggervelocity.events.OnChat;
-import me.prism3.loggervelocity.events.OnLeave;
-import me.prism3.loggervelocity.events.OnLogin;
-import me.prism3.loggervelocity.events.oncommands.OnCommand;
-import me.prism3.loggervelocity.events.plugindependent.litebans.OnLiteBanEvents;
-import me.prism3.loggervelocity.serverside.RAM;
 import me.prism3.loggervelocity.serverside.Start;
 import me.prism3.loggervelocity.serverside.Stop;
 import me.prism3.loggervelocity.utils.ConfigManager;
@@ -29,9 +22,6 @@ import org.bstats.velocity.Metrics;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
-import java.util.concurrent.TimeUnit;
-
-import static me.prism3.loggervelocity.utils.Data.ramChecker;
 
 @Plugin(id = "logger-velocity", name = "Logger", version = "1.7.5", authors = {"prism3 & thelooter & sidna"})
 public class Main{
@@ -85,19 +75,10 @@ public class Main{
         // bStats
         this.metricsFactory.make(this, 12036);
 
-        server.getEventManager().register(this, new OnChat());
-        server.getEventManager().register(this, new OnCommand());
-        server.getEventManager().register(this, new OnLogin());
-        server.getEventManager().register(this, new OnLeave());
-
-        server.getScheduler().buildTask(this, new RAM()).repeat(ramChecker, TimeUnit.SECONDS).delay(10, TimeUnit.SECONDS).schedule();
-
         server.getCommandManager().register("loggerv", new Reload());
         server.getCommandManager().register("loggerv", new DiscordCMD());
 
         this.dataBaseSetup();
-
-        this.loadPluginDependent();
 
         new Start().run();
 
@@ -128,23 +109,13 @@ public class Main{
         data.initializeLongs();
         data.initializeBoolean();
         data.initializePermissionStrings();
+        data.eventInitializer();
 
     }
 
     private void dataBaseSetup() {
 //TODO DB Hna
 
-    }
-
-    private void loadPluginDependent() {
-
-        if (LiteBansUtil.getLiteBansAPI().isPresent()) {
-
-            server.getScheduler().buildTask(this, new OnLiteBanEvents()).delay(5, TimeUnit.SECONDS).schedule();
-
-            this.logger.info("LiteBans Plugin Detected!");
-
-        }
     }
 
     public static Main getInstance() { return instance; }
@@ -172,5 +143,4 @@ public class Main{
     {
         return this.sqLite;
     }
-
 }

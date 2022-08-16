@@ -10,7 +10,9 @@ import java.nio.charset.StandardCharsets;
 
 public class FileUpdater {
 
-    public FileUpdater(final File dataFolder) {
+    public FileUpdater(final File dataFolder) { this.updater(dataFolder); }
+
+    private void updater(final File dataFolder) {
 
         // Config File
         final File configFile = new File(dataFolder + File.separator + "config.yml");

@@ -61,6 +61,7 @@ Log-Extras:
   Vault: true
   LiteBans: true
   AdvancedBan: true
+  ViaVersion: true
 Log-Version-Exceptions:
   Wood-Stripping: true
 Player-Commands:
