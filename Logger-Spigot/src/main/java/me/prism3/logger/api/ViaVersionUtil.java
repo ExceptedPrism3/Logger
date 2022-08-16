@@ -8,7 +8,6 @@ public class ViaVersionUtil {
     private ViaVersionUtil() {}
 
     public static Plugin getViaVersionAPI() {
-
         return Main.getInstance().getServer().getPluginManager().getPlugin("ViaVersion");
     }
 }

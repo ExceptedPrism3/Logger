@@ -19,13 +19,10 @@ public class UsernameFetcher {
 
             st.setString(1, uuid);
 
-            try (ResultSet rs = st.executeQuery()) {
+            try (final ResultSet rs = st.executeQuery()) {
 
-                if (rs.next()) {
-
+                if (rs.next())
                     name = rs.getString("name");
-
-                }
             }
 
         } catch (SQLException e) { e.printStackTrace(); }

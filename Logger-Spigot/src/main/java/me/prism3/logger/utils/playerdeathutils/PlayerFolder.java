@@ -85,25 +85,22 @@ public class PlayerFolder {
 
         if (backupCount(player) == 0) return new String[0];
 
-        File dir = new File(FileHandler.getPlayerDeathBackupLogFolder(), player.getName());
+        final File dir = new File(FileHandler.getPlayerDeathBackupLogFolder(), player.getName());
 
-        Collection<String> files = new ArrayList<>();
+        final Collection<String> files = new ArrayList<>();
 
-        File[] listFiles = dir.listFiles();
+        final File[] listFiles = dir.listFiles();
 
         assert listFiles != null;
 
-        for (File file : listFiles) {
+        for (File file : listFiles)
             files.add(file.getName().replace("\\.\\w+", ""));
-        }
 
         return files.toArray(new String[0]);
     }
 
     // Check if it's allowed to make a new backup file
-    public boolean isAllowed(Player player) {
-        return backupCount(player) < allowedBackups; // We did '<' since backCount method starts at 0
-    }
+    public boolean isAllowed(Player player) { return backupCount(player) < allowedBackups; } // We did '<' since backCount method starts at 0 }
 
     public File getPlayerFile() { return this.playerFile; }
 }

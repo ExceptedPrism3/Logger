@@ -14,7 +14,7 @@ public class Pastebin {
 
     /**
      *
-     * Special Thanks to Redmoogle#3761 for his help!
+     * Special Thanks to Redmoogle#3761 | https://github.com/redmoogle for his help!
      */
 
     private Pastebin() {}
@@ -69,9 +69,8 @@ public class Pastebin {
         String inputLine;
         final StringBuilder response = new StringBuilder();
 
-        while ((inputLine = in.readLine()) != null) {
+        while ((inputLine = in.readLine()) != null)
             response.append(inputLine);
-        }
 
         in.close();
         con.disconnect();
@@ -82,9 +81,8 @@ public class Pastebin {
 
         final StringJoiner joiner = new StringJoiner("&");
 
-        for (Map.Entry<String, String> entry : arguments.entrySet()) {
+        for (Map.Entry<String, String> entry : arguments.entrySet())
             joiner.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "=" + URLEncoder.encode(entry.getValue(), "UTF-8"));
-        }
 
         return joiner.toString();
     }

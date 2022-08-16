@@ -128,11 +128,8 @@ public class PlayerInventory implements Listener, SubCommand {
 
                 }
 
-                if (event.getCurrentItem().getType() == Material.ENDER_CHEST) {
-
+                if (event.getCurrentItem().getType() == Material.ENDER_CHEST)
                     this.stepTwo();
-
-                }
 
                 if (event.getCurrentItem().getType() == Material.EMERALD_BLOCK) {
 
@@ -214,11 +211,8 @@ public class PlayerInventory implements Listener, SubCommand {
 
         backupButton.setItemMeta(backupButtonMeta);
 
-        for (int i = 0; i < Objects.requireNonNull(invContent).length; i++) {
-
+        for (int i = 0; i < Objects.requireNonNull(invContent).length; i++)
             lastInv.setItem(i, invContent[i]);
-
-        }
 
         if (armorContent.length != 0) {
 
@@ -243,11 +237,8 @@ public class PlayerInventory implements Listener, SubCommand {
         final ItemStack[] invContent = InventoryToBase64.stacksFromBase64(f.getString("inventory"));
         final ItemStack[] armorContent = InventoryToBase64.stacksFromBase64(f.getString("armor"));
 
-        for (int i = 0; i < Objects.requireNonNull(invContent).length; i++) {
-
+        for (int i = 0; i < Objects.requireNonNull(invContent).length; i++)
             this.selectedPlayer.getInventory().setItem(i, invContent[i]);
-
-        }
 
         this.selectedPlayer.getInventory().setArmorContents(armorContent);
 

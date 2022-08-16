@@ -61,9 +61,8 @@ public class CommandManager implements TabExecutor {
             if (player.hasPermission(loggerStaff)) {
                 player.sendMessage("--------------------------------------------");
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', "Running Logger: &a&l" + Data.pluginVersion));
-                for (int i = 0; i < getSubCommands().size(); i++) {
+                for (int i = 0; i < getSubCommands().size(); i++)
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&9&l" + getSubCommands().get(i).getSyntax() + " &8&l| &r" + getSubCommands().get(i).getDescription()));
-                }
                 player.sendMessage("--------------------------------------------");
             }
         }
@@ -80,20 +79,16 @@ public class CommandManager implements TabExecutor {
 
             final ArrayList<String> subCommandsArgs = new ArrayList<>();
 
-            for (int i = 0; i < getSubCommands().size(); i++) {
+            for (int i = 0; i < getSubCommands().size(); i++)
                 subCommandsArgs.add(getSubCommands().get(i).getName());
-            }
 
             return subCommandsArgs;
         } else if (args.length >= 2) {
 
             for (int i = 0; i < getSubCommands().size(); i++) {
 
-                if (args[0].equalsIgnoreCase(getSubCommands().get(i).getName())) {
-
+                if (args[0].equalsIgnoreCase(getSubCommands().get(i).getName()))
                     return getSubCommands().get(i).getSubCommandsArgs((Player) sender, args);
-
-                }
             }
         } return null;
     }

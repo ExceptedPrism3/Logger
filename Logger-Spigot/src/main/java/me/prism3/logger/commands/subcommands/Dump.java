@@ -55,7 +55,7 @@ public class Dump implements SubCommand {
         final String discord = Files.asCharSource(new File(dataFolder + "/discord.yml"), StandardCharsets.UTF_8).read();
         final String messages = Files.asCharSource(new File(dataFolder + "/messages/" + selectedLang + ".yml"), StandardCharsets.UTF_8).read();
         final String latest = Files.asCharSource(new File("logs/latest.log"), StandardCharsets.UTF_8).read();
-        final  Pastebin.PasteRequest request = new Pastebin.PasteRequest(dotenv.get("PASTEBIN_API"), config + " \n\n\n\nDISCORD CONFIG\n\n\n\n " + discord + " \n\n\n\nMESSAGES PART\n\n\n\n " + messages + " \n\n\n\nLATEST LOG PART\n\n\n\n " + latest);
+        final Pastebin.PasteRequest request = new Pastebin.PasteRequest(dotenv.get("PASTEBIN_API"), config + " \n\n\n\nDISCORD CONFIG\n\n\n\n " + discord + " \n\n\n\nMESSAGES PART\n\n\n\n " + messages + " \n\n\n\nLATEST LOG PART\n\n\n\n " + latest);
         request.setPasteName("Logger MC Plugin");
         request.setPasteFormat("yaml");
         request.setPasteState(1);

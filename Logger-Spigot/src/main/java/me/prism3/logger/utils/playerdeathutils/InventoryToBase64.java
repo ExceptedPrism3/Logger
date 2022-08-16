@@ -14,6 +14,7 @@ public class InventoryToBase64 {
     private InventoryToBase64() {}
 
     public static String toBase64(ItemStack[] contents) {
+
         boolean convert = false;
 
         for (ItemStack item : contents) {
@@ -24,15 +25,16 @@ public class InventoryToBase64 {
         }
 
         if (convert) {
+
             try {
+
                 final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 final BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);
 
                 dataOutput.writeInt(contents.length);
 
-                for (ItemStack stack : contents) {
+                for (ItemStack stack : contents)
                     dataOutput.writeObject(stack);
-                }
 
                 dataOutput.close();
 
@@ -43,7 +45,6 @@ public class InventoryToBase64 {
                 throw new IllegalStateException("An error has occurred whilst saving the Player Inventory. Does the proper file exists? If the issue persists, contact the Authors!", e);
             }
         }
-
         return null;
     }
 
@@ -51,13 +52,11 @@ public class InventoryToBase64 {
 
         if (data == null) return new ItemStack[]{};
 
-        ByteArrayInputStream inputStream;
+        final ByteArrayInputStream inputStream;
 
         try {
             inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
-        } catch (IllegalArgumentException e) {
-            return new ItemStack[]{};
-        }
+        } catch (IllegalArgumentException e) { return new ItemStack[]{}; }
 
         BukkitObjectInputStream dataInput = null;
         ItemStack[] stacks = null;
@@ -65,9 +64,7 @@ public class InventoryToBase64 {
         try {
             dataInput = new BukkitObjectInputStream(inputStream);
             stacks = new ItemStack[dataInput.readInt()];
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+        } catch (IOException e1) { e1.printStackTrace(); }
 
         if (stacks == null) return new ItemStack[]{};
 
