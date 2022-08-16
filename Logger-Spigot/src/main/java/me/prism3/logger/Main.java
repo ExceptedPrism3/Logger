@@ -112,8 +112,7 @@ public class Main extends JavaPlugin {
 //        if (isSqlite && this.sqLite.isConnected()) this.sqLite.disconnect();
 
 //        if (isRegistration && this.sqLiteReg.isConnected()) this.sqLiteReg.disconnect();
-        HibernateUtils.closeSession();
-        HibernateUtils.closeSessionFactory();
+        this.disconnectDatabase();
         this.discord.disconnect();
 
         this.getLogger().info("Plugin Disabled!");
@@ -190,6 +189,11 @@ public class Main extends JavaPlugin {
             this.sqLite = null;
 
         } catch (Exception e) { this.getLogger().severe(e.getMessage()); }
+    }
+    private void disconnectDatabase()
+    {
+        HibernateUtils.closeSession();
+        HibernateUtils.closeSessionFactory();
     }
 
     private void loadPluginDepends() {

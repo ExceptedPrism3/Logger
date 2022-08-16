@@ -21,7 +21,7 @@ public class ConsoleCommand {
     @Column(name = "command", length = 256)
     private String command;
 
-    private ConsoleCommand() {} //TODO 3di private constructor hna?
+    public ConsoleCommand() {}
 
     public ConsoleCommand(String serverName, String command) {
         this.serverName = serverName;

@@ -54,7 +54,7 @@ public class OnItemPickup implements Listener {
             final int blockY = event.getItem().getLocation().getBlockY();
             final int blockZ = event.getItem().getLocation().getBlockZ();
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
+
             final Coordinates coordinates = new Coordinates(blockX, blockY, blockZ, worldName);
 
             // Log To Files
@@ -115,7 +115,7 @@ public class OnItemPickup implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertItemPickup(Data.serverName, entityPlayer, item.name(), amount, coordinates, itemName, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertItemPickup(Data.serverName, playerName, playerUUID.toString(), item.name(), amount, coordinates, itemName, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -125,7 +125,7 @@ public class OnItemPickup implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertItemPickup(Data.serverName, entityPlayer, item.name(), amount, coordinates, itemName, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertItemPickup(Data.serverName, playerName, playerUUID.toString(), item.name(), amount, coordinates, itemName, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

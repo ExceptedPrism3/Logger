@@ -61,7 +61,7 @@ public class OnPlayerJoin implements Listener {
 
             if (!Data.isPlayerIP) ip = null;
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
+
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
@@ -122,7 +122,7 @@ public class OnPlayerJoin implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerJoin(Data.serverName, entityPlayer, coordinates, ip, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerJoin(Data.serverName, playerName, playerUUID.toString(), coordinates, ip, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -132,7 +132,7 @@ public class OnPlayerJoin implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerJoin(Data.serverName, entityPlayer, coordinates, ip, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerJoin(Data.serverName, playerName, playerUUID.toString(), coordinates, ip, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

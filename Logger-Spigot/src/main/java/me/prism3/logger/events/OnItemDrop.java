@@ -63,7 +63,7 @@ public class OnItemDrop implements Listener {
 
             }
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
+
             final Coordinates coordinates = new Coordinates(blockX, blockY, blockZ, worldName);
 
             // Log To Files
@@ -124,7 +124,7 @@ public class OnItemDrop implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertItemDrop(Data.serverName, entityPlayer, item, amount, coordinates, enchs, itemName, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertItemDrop(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, enchs, itemName, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -134,7 +134,7 @@ public class OnItemDrop implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertItemDrop(Data.serverName, entityPlayer, item, amount, coordinates, enchs, itemName, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertItemDrop(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, enchs, itemName, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

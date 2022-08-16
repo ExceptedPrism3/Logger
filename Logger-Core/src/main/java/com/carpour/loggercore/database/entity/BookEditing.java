@@ -107,4 +107,10 @@ public class BookEditing {
     public void isStaff(Boolean staff) {
         this.isStaff = staff;
     }
+
+    @PrePersist
+    public void prePersist() {
+        this.date = Instant.now();
+    }
+
 }

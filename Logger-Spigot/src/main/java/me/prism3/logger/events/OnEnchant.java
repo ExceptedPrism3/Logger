@@ -60,7 +60,7 @@ public class OnEnchant implements Listener {
 
             }
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
+
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
@@ -121,7 +121,7 @@ public class OnEnchant implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertEnchant(Data.serverName, entityPlayer, enchs, enchantmentLevel, item, cost, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertEnchant(Data.serverName, playerName, playerUUID.toString(), enchs, enchantmentLevel, item, cost, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -131,7 +131,7 @@ public class OnEnchant implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertEnchant(Data.serverName, entityPlayer, enchs, enchantmentLevel, item, cost, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertEnchant(Data.serverName, playerName, playerUUID.toString(), enchs, enchantmentLevel, item, cost, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

@@ -1,7 +1,6 @@
 package me.prism3.logger.events;
 
 import com.carpour.loggercore.database.entity.Coordinates;
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -43,7 +42,7 @@ public class OnBucketFill implements Listener {
             final int y = event.getBlockClicked().getY();
             final int z = event.getBlockClicked().getZ();
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
+
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
@@ -104,7 +103,7 @@ public class OnBucketFill implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertBucketFill(Data.serverName, entityPlayer, bucket, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertBucketFill(Data.serverName, playerName, playerUUID.toString(), bucket, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -114,7 +113,7 @@ public class OnBucketFill implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertBucketFill(Data.serverName, entityPlayer, bucket, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertBucketFill(Data.serverName, playerName, playerUUID.toString(), bucket, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

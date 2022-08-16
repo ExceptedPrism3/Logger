@@ -34,9 +34,10 @@ public class EntityDeath {
     @Column(name = "is_staff")
     private Boolean isStaff;
 
-    private EntityDeath() {} //TODO private cons
+    public EntityDeath() {}
 
-    public EntityDeath(String serverName, Coordinates coords, String mob, EntityPlayer entityPlayer, Boolean isStaff) {
+    public EntityDeath(String serverName, Coordinates coords, String mob, EntityPlayer entityPlayer,
+                       Boolean isStaff) {
         this.serverName = serverName;
         this.world = coords.getWorldName();
         this.mob = mob;
@@ -126,4 +127,10 @@ public class EntityDeath {
     public void isStaff(Boolean staff) {
         this.isStaff = staff;
     }
+
+    @PrePersist
+    public void prePersist() {
+        this.date = Instant.now();
+    }
+
 }

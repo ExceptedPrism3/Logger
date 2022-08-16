@@ -7,16 +7,19 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class HibernateUtils {
 
     private static final ThreadLocal<Session> threadLocal = new ThreadLocal<>();
-    private static Properties databaseCredentials;
+    private static Properties hibernateProperties;
     private static SessionFactory sessionFactory = null;
 
     private HibernateUtils() {}
 
     public static void initializeHibernate(DatabaseCredentials databaseCredentials, Options options) {
+        Logger.getLogger("org.hibernate").setLevel(Level.ALL);
 
         final Configuration a = new Configuration().setProperties(databaseCredentials.getPropertiesForHib());
 
@@ -51,7 +54,7 @@ public class HibernateUtils {
                 a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PlayerLevel"));
 
             if (options.getBooleanValue("Block-Place")) //Break and place and woodstripping
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PlayerLevel"));
+                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.BlockInteraction"));
 
             if (options.getBooleanValue("Bucket-Fill"))
                 a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.BucketFill"));
@@ -82,7 +85,6 @@ public class HibernateUtils {
 
             if (options.getBooleanValue("Craft"))
                 a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Crafting"));
-            //TODO registration
 
             if (options.getBooleanValue("Primed-TNT"))
                 a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PrimedTnt"));
@@ -117,8 +119,12 @@ public class HibernateUtils {
             if (options.getBooleanValue("Command-Block"))
                 a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.CommandBlock"));
 
+            if (options.getBooleanValue("Registration"))
+                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Registration"));
+
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.EntityPlayer"));
-            a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Registration"));
+
+
 
             sessionFactory = a.buildSessionFactory();
 

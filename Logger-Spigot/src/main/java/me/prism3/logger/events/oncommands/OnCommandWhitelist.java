@@ -36,7 +36,7 @@ public class OnCommandWhitelist implements Listener {
         final String command = event.getMessage().replace("\\", "\\\\");
         final List<String> commandParts = Arrays.asList(event.getMessage().split("\\s+"));
         
-        final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
+
 
         for (String m : Data.commandsToLog) {
 
@@ -90,7 +90,7 @@ public class OnCommandWhitelist implements Listener {
 
                         if (!this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted").isEmpty()) {
 
-                            this.main.getDiscord().playerCommand(player, this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
+                            this.main.getDiscord().playerCommand(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
                         }
                     }
                 }
@@ -100,7 +100,7 @@ public class OnCommandWhitelist implements Listener {
 
                     try {
 
-                        Main.getInstance().getDatabase().insertPlayerCommands(Data.serverName, entityPlayer, worldName, command, player.hasPermission(loggerStaffLog));
+                        Main.getInstance().getDatabase().insertPlayerCommands(Data.serverName, playerName, playerUUID.toString(), worldName, command, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception exception) { exception.printStackTrace(); }
                 }
@@ -110,7 +110,7 @@ public class OnCommandWhitelist implements Listener {
 
                     try {
 
-                        Main.getInstance().getSqLite().insertPlayerCommands(Data.serverName, entityPlayer, worldName, command, player.hasPermission(loggerStaffLog));
+                        Main.getInstance().getSqLite().insertPlayerCommands(Data.serverName, playerName, playerUUID.toString(), worldName, command, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception exception) { exception.printStackTrace(); }
                 }

@@ -39,7 +39,7 @@ public class OnPlayerRegister {
 
         final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
-        final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
+
 
         // Log To Files
         if (Data.isLogToFiles) {
@@ -67,7 +67,7 @@ public class OnPlayerRegister {
 
             try {
 
-                Main.getInstance().getDatabase().insertPlayerRegistration(Data.serverName, entityPlayer, dateFormat.format(ZonedDateTime.now()));
+                Main.getInstance().getDatabase().insertPlayerRegistration(Data.serverName, playerName, playerUUID.toString(), dateFormat.format(ZonedDateTime.now()));
 
             } catch (Exception e) { e.printStackTrace(); }
         }
@@ -77,7 +77,7 @@ public class OnPlayerRegister {
 
             try {
 
-                Main.getInstance().getSqLite().insertPlayerRegistration(Data.serverName, entityPlayer, dateFormat.format(ZonedDateTime.now()));
+                Main.getInstance().getSqLite().insertPlayerRegistration(Data.serverName, playerName, playerUUID.toString(), dateFormat.format(ZonedDateTime.now()));
 
             } catch (Exception e) { e.printStackTrace(); }
         }

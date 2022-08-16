@@ -89,11 +89,11 @@ public class OnLogin {
             }
 
             // External
-            if (isExternal && main.getExternal().isConnected()) {
+            if (isExternal) {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerLogin(serverName, playerName, playerIP, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerLogin(serverName,playerName,playerUUID.toString(), playerIP, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -103,7 +103,7 @@ public class OnLogin {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerLogin(serverName, playerName, playerIP, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerLogin(serverName, playerName,playerUUID.toString(), playerIP, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

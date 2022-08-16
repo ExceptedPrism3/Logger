@@ -39,7 +39,7 @@ public class OnPlayerChat implements Listener {
             final UUID playerUUID = player.getUniqueId();
             final String msg = event.getMessage().replace("\\", "\\\\");
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
+
 
             // Log To Files
             if (Data.isLogToFiles) {
@@ -99,7 +99,7 @@ public class OnPlayerChat implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerChat(Data.serverName, entityPlayer, worldName, msg, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerChat(Data.serverName, playerName, playerUUID.toString(), worldName, msg, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -109,7 +109,7 @@ public class OnPlayerChat implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerChat(Data.serverName, entityPlayer, worldName, msg, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerChat(Data.serverName, playerName, playerUUID.toString(), worldName, msg, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

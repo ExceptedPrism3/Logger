@@ -55,4 +55,10 @@ public class CommandBlock {
     public void setCommand(String command) {
         this.command = command;
     }
+
+    @PrePersist
+    public void prePersist() {
+        this.date = Instant.now();
+    }
+
 }

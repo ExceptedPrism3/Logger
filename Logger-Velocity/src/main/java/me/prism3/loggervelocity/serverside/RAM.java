@@ -63,7 +63,7 @@ public class RAM implements Runnable {
 
                     try {
 
-                        Main.getInstance().getSqLite().insertRAM(serverName, maxMemory, usedMemory, freeMemory);
+                        Main.getInstance().getSqLite().insertRam(serverName, maxMemory, usedMemory, freeMemory);
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

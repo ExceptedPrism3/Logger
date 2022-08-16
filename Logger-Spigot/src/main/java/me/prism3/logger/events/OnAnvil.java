@@ -50,7 +50,7 @@ private final Main main = Main.getInstance();
             final String playerName = player.getName();
             final Inventory inv = event.getInventory();
 
-            final EntityPlayer ePlayer = new EntityPlayer(player.getName(), playerUUID.toString());
+
 
             if (inv instanceof AnvilInventory) {
 
@@ -128,7 +128,7 @@ private final Main main = Main.getInstance();
 
                                 try {
 
-                                    Main.getInstance().getDatabase().insertAnvil(Data.serverName, ePlayer, displayName, player.hasPermission(loggerStaffLog));
+                                    Main.getInstance().getDatabase().insertAnvil(Data.serverName, playerName, playerUUID.toString(), displayName, player.hasPermission(loggerStaffLog));
 
                                 } catch (Exception e) { e.printStackTrace(); }
                             }
@@ -138,7 +138,7 @@ private final Main main = Main.getInstance();
 
                                 try {
 
-                                    Main.getInstance().getSqLite().insertAnvil(Data.serverName, ePlayer, displayName, player.hasPermission(loggerStaffLog));
+                                    Main.getInstance().getSqLite().insertAnvil(Data.serverName, playerName, playerUUID.toString(), displayName, player.hasPermission(loggerStaffLog));
 
                                 } catch (Exception e) { e.printStackTrace(); }
                             }

@@ -89,7 +89,7 @@ public class OnCommand implements Listener {
 
                     if (!this.main.getMessages().getString("Discord.Player-Commands-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(playerName, playerUUIDName, playerUUID, this.main.getMessages().getString("Discord.Player-Commands-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
+                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().getString("Discord.Player-Commands-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
 
                     }
                 } else {
@@ -107,7 +107,7 @@ public class OnCommand implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerCommands(Data.serverName, playerName, command, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerCommands(Data.serverName, playerName, playerUUID.toString(),null, command, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -117,7 +117,7 @@ public class OnCommand implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerCommands(Data.serverName, playerName, command, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerCommands(Data.serverName, playerName, playerUUID.toString(),null, command, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

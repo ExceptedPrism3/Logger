@@ -119,4 +119,9 @@ public class ChestInteraction {
         this.isStaff = staff;
     }
 
+    @PrePersist
+    public void prePersist() {
+        this.date = Instant.now();
+    }
+
 }

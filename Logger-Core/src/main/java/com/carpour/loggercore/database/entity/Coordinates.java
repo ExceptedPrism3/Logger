@@ -7,6 +7,8 @@ public class Coordinates {
     private int z;
     private String worldName;
 
+    public Coordinates() {}
+
     public Coordinates(int x, int y, int z, String worldName) {
         this.x = x;
         this.y = y;
@@ -45,4 +47,5 @@ public class Coordinates {
     public void setWorldName(String worldName) {
         this.worldName = worldName;
     }
+
 }

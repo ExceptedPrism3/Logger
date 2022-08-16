@@ -43,7 +43,7 @@ public class OnBucketEmpty implements Listener {
             final int y = player.getLocation().getBlockY();
             final int z = player.getLocation().getBlockZ();
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
+
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
@@ -104,7 +104,7 @@ public class OnBucketEmpty implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertBucketEmpty(Data.serverName, entityPlayer, bucket, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertBucketEmpty(Data.serverName, playerName, playerUUID.toString(), bucket, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -114,7 +114,7 @@ public class OnBucketEmpty implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertBucketEmpty(Data.serverName, entityPlayer, bucket, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertBucketEmpty(Data.serverName, playerName, playerUUID.toString(), bucket, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

@@ -41,7 +41,7 @@ public class OnAFK implements Listener {
             final int z = player.getLocation().getBlockZ();
             final String worldName = player.getWorld().getName();
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
+
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
@@ -102,7 +102,7 @@ public class OnAFK implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertAfk(Data.serverName, entityPlayer, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertAfk(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception event) { event.printStackTrace(); }
             }
@@ -112,7 +112,7 @@ public class OnAFK implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertAfk(Data.serverName, entityPlayer, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertAfk(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

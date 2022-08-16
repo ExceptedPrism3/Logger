@@ -1,5 +1,6 @@
 package me.prism3.loggerbungeecord.events;
 
+import com.carpour.loggercore.database.entity.Coordinates;
 import me.prism3.loggerbungeecord.Main;
 import me.prism3.loggerbungeecord.utils.Data;
 import me.prism3.loggerbungeecord.utils.FileHandler;
@@ -96,7 +97,7 @@ public class OnLeave implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerLeave(Data.serverName, playerName, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerLeave(Data.serverName, playerName,playerUUID.toString(), new Coordinates(), player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -106,7 +107,7 @@ public class OnLeave implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerLeave(Data.serverName, playerName, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerLeave(Data.serverName, playerName,playerUUID.toString(),new Coordinates(), player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

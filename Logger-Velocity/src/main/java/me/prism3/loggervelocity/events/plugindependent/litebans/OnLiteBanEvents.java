@@ -104,7 +104,7 @@ public class OnLiteBanEvents implements Runnable {
 
                         try {
 
-                            Main.getInstance().getDatabase().insertLitebans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
+                            Main.getInstance().getDatabase().insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
 
                         } catch (Exception e) { e.printStackTrace(); }
                     }

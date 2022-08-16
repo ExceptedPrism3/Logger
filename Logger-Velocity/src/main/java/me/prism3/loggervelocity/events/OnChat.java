@@ -91,7 +91,7 @@ public class OnChat{
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerChat(serverName, playerName, message, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerChat(serverName, playerName, playerUUID.toString(), null, message, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -101,7 +101,7 @@ public class OnChat{
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerChat(serverName, playerName, message, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerChat(serverName, playerName, playerUUID.toString(), null, message, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

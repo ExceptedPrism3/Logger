@@ -93,7 +93,7 @@ public class OnCommandWhitelist {
 
                     try {
 
-                        Main.getInstance().getDatabase().insertPlayerCommands(serverName, playerName, command, player.hasPermission(loggerStaffLog));
+                        Main.getInstance().getDatabase().insertPlayerCommands(serverName, playerName, playerUUID.toString(),null, command, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
@@ -103,7 +103,7 @@ public class OnCommandWhitelist {
 
                     try {
 
-                        Main.getInstance().getSqLite().insertPlayerCommands(serverName, playerName, command, player.hasPermission(loggerStaffLog));
+                        Main.getInstance().getSqLite().insertPlayerCommands(serverName, playerName, playerUUID.toString(),null, command, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

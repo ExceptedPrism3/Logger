@@ -1,6 +1,5 @@
 package me.prism3.logger.events;
 
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -42,7 +41,7 @@ public class OnGameMode implements Listener {
                 final World world = player.getWorld();
                 final String worldName = world.getName();
 
-                final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
+
 
                 // Log To Files
                 if (Data.isLogToFiles) {
@@ -102,7 +101,7 @@ public class OnGameMode implements Listener {
 
                     try {
 
-                        Main.getInstance().getDatabase().insertGameMode(Data.serverName, entityPlayer, gameMode, worldName, player.hasPermission(loggerStaffLog));
+                        Main.getInstance().getDatabase().insertGameMode(Data.serverName, playerName, playerUUID.toString(), gameMode, worldName, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
@@ -112,7 +111,7 @@ public class OnGameMode implements Listener {
 
                     try {
 
-                        Main.getInstance().getSqLite().insertGameMode(Data.serverName, entityPlayer, gameMode, worldName, player.hasPermission(loggerStaffLog));
+                        Main.getInstance().getSqLite().insertGameMode(Data.serverName, playerName, playerUUID.toString(), gameMode, worldName, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

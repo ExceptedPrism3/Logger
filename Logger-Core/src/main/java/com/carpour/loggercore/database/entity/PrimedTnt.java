@@ -6,35 +6,32 @@ import java.time.Instant;
 @Entity
 @Table(name = "primed_tnt")
 public class PrimedTnt {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
     @Column(name = "server_name", length = 30)
     private String serverName;
-
     @Column(name = "date", nullable = false)
     private Instant date;
-
     @Column(name = "world", length = 100)
     private String world;
-
     @Column(name = "x")
     private Integer x;
-
     @Column(name = "y")
     private Integer y;
-
     @Column(name = "z")
     private Integer z;
-
     @Column(name = "is_staff")
     private Boolean isStaff;
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "entity_player_id", nullable = false)
     private EntityPlayer entityPlayer;
+
+    @PrePersist
+    public void prePersist() {
+        this.date = Instant.now();
+    }
 
     public Long getId() {
         return this.id;
@@ -107,4 +104,5 @@ public class PrimedTnt {
     public void isStaff(Boolean staff) {
         this.isStaff = staff;
     }
+
 }

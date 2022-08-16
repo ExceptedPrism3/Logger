@@ -96,7 +96,7 @@ public class OnReload implements Listener {
 
                     try {
 
-                        ExternalData.serverReload(serverName, playerName, player.hasPermission(loggerStaffLog));
+                        Main.getInstance().getDatabase().insertServerReload(serverName, playerName, player.hasPermission(loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
@@ -135,8 +135,8 @@ public class OnReload implements Listener {
                 if (isExternal ) {
 
                     try {
-
-                        ExternalData.serverReload(serverName, null, true);
+                        //TODO server reload
+                        Main.getInstance().getDatabase().insertServerReload(serverName, null, true);
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

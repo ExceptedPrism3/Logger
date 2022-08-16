@@ -49,7 +49,7 @@ public class Console {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertConsoleCommandeCommands(serverName, command);
+                    Main.getInstance().getDatabase().insertConsoleCommand(serverName, command);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -59,7 +59,7 @@ public class Console {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertConsoleCommands(serverName, command);
+                    Main.getInstance().getSqLite().insertConsoleCommand(serverName, command);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

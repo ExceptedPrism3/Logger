@@ -51,7 +51,7 @@ public class OnPlayerTeleport implements Listener {
             final int oy = player.getLocation().getBlockY();
             final int oz = player.getLocation().getBlockZ();
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
+
             final Coordinates oldCoords = new Coordinates(ox, oy, oz, worldName);
             final Coordinates newCoords = new Coordinates(tx, ty, tz, worldName);
 
@@ -113,7 +113,7 @@ public class OnPlayerTeleport implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerTeleport(Data.serverName, entityPlayer, oldCoords, newCoords, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerTeleport(Data.serverName, playerName, playerUUID.toString(), oldCoords, newCoords, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -123,7 +123,7 @@ public class OnPlayerTeleport implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerTeleport(Data.serverName, entityPlayer, oldCoords, newCoords, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerTeleport(Data.serverName, playerName, playerUUID.toString(), oldCoords, newCoords, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

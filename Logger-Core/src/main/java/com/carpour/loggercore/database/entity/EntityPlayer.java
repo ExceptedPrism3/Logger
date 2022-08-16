@@ -26,7 +26,7 @@ public class EntityPlayer implements Serializable {
     @Column(name = "created_at")
     private Instant createdAt;
 
-    private EntityPlayer() {}
+    public EntityPlayer() {}
 
     public EntityPlayer(String playerName, String playerUniqueID) {
         this.playerName = playerName;
@@ -61,8 +61,9 @@ public class EntityPlayer implements Serializable {
         this.id = id;
     }
 
-    @PostPersist
-    public void postPersist() {
+    @PrePersist
+    public void prePersist() {
         this.createdAt = Instant.now();
     }
+
 }

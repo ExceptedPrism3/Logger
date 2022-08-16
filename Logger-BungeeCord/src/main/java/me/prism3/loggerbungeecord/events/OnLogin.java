@@ -91,9 +91,9 @@ public class OnLogin implements Listener {
             // External
             if (Data.isExternal) {
 
-                try {
+                try {//TODO check
 
-                    Main.getInstance().getDatabase().insertPlayerLogin(Data.serverName, playerName, playerIP, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerLogin(Data.serverName, playerName, playerUUID.toString(), playerIP, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -103,7 +103,7 @@ public class OnLogin implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerLogin(Data.serverName, playerName, playerIP, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerLogin(Data.serverName, playerName, playerUUID.toString(), playerIP, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

@@ -6,26 +6,25 @@ import java.time.Instant;
 @Entity
 @Table(name = "registration")
 public class Registration {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
     @Column(name = "server_name", length = 30)
     private String serverName;
-
     @Column(name = "date", nullable = false)
     private Instant date;
-
     @Column(name = "player_name", length = 30)
     private String playerName;
-
     @Column(name = "player_uuid", length = 80)
     private String playerUuid;
-
     @Column(name = "join_date", length = 30)
     private String joinDate;
+
+    @PrePersist
+    public void prePersist() {
+        this.date = Instant.now();
+    }
 
     public Long getId() {
         return this.id;
@@ -74,4 +73,5 @@ public class Registration {
     public void setJoinDate(String joinDate) {
         this.joinDate = joinDate;
     }
+
 }

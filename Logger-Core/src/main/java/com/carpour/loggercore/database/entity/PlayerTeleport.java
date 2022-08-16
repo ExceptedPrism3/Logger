@@ -6,43 +6,38 @@ import java.time.Instant;
 @Entity
 @Table(name = "player_teleport")
 public class PlayerTeleport {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
     @Column(name = "server_name", length = 30)
     private String serverName;
-
     @Column(name = "date", nullable = false)
     private Instant date;
-
     @Column(name = "world", length = 100)
     private String world;
-
     @Column(name = "from_x")
     private Integer fromX;
-
     @Column(name = "from_y")
     private Integer fromY;
-
     @Column(name = "from_z")
     private Integer fromZ;
-
     @Column(name = "to_x")
     private Integer toX;
-
     @Column(name = "to_y")
     private Integer toY;
-
     @Column(name = "to_z")
     private Integer toZ;
-
     @Column(name = "is_staff")
     private Boolean isStaff;
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "entity_player_id", nullable = false)
     private EntityPlayer entityPlayer;
+
+    @PrePersist
+    public void prePersist() {
+        this.date = Instant.now();
+    }
 
     public Long getId() {
         return this.id;
@@ -139,4 +134,5 @@ public class PlayerTeleport {
     public void isStaff(Boolean staff) {
         this.isStaff = staff;
     }
+
 }

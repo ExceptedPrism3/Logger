@@ -6,26 +6,20 @@ import java.time.Instant;
 @Entity
 @Table(name = "player_sign_text")
 public class PlayerSignText {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
     @Column(name = "server_name", length = 30)
     private String serverName;
-
     @Column(name = "date", nullable = false)
     private Instant date;
-
     @Column(name = "world", length = 100)
     private String world;
-
     @Column(name = "x")
     private Integer x;
-
     @Column(name = "y")
     private Integer y;
-
     @Column(name = "z")
     private Integer z;
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
@@ -35,6 +29,11 @@ public class PlayerSignText {
     private String line;
     @Column(name = "is_staff")
     private Boolean isStaff;
+
+    @PrePersist
+    public void prePersist() {
+        this.date = Instant.now();
+    }
 
     public EntityPlayer getEntityPlayer() {
         return this.entityPlayer;
@@ -122,4 +121,5 @@ public class PlayerSignText {
     public void isStaff(Boolean staff) {
         this.isStaff = staff;
     }
+
 }

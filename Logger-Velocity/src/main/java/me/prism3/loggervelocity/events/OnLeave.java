@@ -1,6 +1,6 @@
 package me.prism3.loggervelocity.events;
 
-import com.carpour.loggercore.database.entity.EntityPlayer;
+import com.carpour.loggercore.database.entity.Coordinates;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.proxy.Player;
@@ -95,7 +95,7 @@ public class OnLeave {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerLeave(serverName, playerName, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerLeave(serverName, playerName,playerUUID.toString(), new Coordinates(), player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -105,7 +105,7 @@ public class OnLeave {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerLeave(serverName, playerName, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerLeave(serverName, playerName, playerUUID.toString(), new Coordinates(), player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

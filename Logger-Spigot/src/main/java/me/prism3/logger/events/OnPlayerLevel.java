@@ -37,7 +37,7 @@ public class OnPlayerLevel implements Listener {
             final int logAbove = Data.abovePlayerLevel;
             final double playerLevel = event.getNewLevel();
 
-            final EntityPlayer ePlayer = new EntityPlayer(player.getName(), playerUUID.toString());
+
 
             if (playerLevel == logAbove) {
 
@@ -99,7 +99,7 @@ public class OnPlayerLevel implements Listener {
 
                     try {
 
-                        Main.getInstance().getDatabase().insertLevelChange(Data.serverName, ePlayer, player.hasPermission(loggerStaffLog));
+                        Main.getInstance().getDatabase().insertLevelChange(Data.serverName, playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }
@@ -109,7 +109,7 @@ public class OnPlayerLevel implements Listener {
 
                     try {
 
-                        Main.getInstance().getSqLite().insertLevelChange(Data.serverName, ePlayer, player.hasPermission(loggerStaffLog));
+                        Main.getInstance().getSqLite().insertLevelChange(Data.serverName, playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
 
                     } catch (Exception e) { e.printStackTrace(); }
                 }

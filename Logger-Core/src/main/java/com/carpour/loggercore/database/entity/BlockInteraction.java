@@ -6,7 +6,6 @@ import java.time.Instant;
 @Entity
 @Table(name = "block_interaction")
 public class BlockInteraction {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -134,4 +133,10 @@ public class BlockInteraction {
     public void setAsBlockPlace() {
         this.interactionType = "BLOCK_PLACE";
     }
+
+    @PrePersist
+    public void prePersist() {
+        this.date = Instant.now();
+    }
+
 }

@@ -41,7 +41,7 @@ public class OnPlayerKick implements Listener {
             final int y = player.getLocation().getBlockY();
             final int z = player.getLocation().getBlockZ();
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
+
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
@@ -102,7 +102,7 @@ public class OnPlayerKick implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerKick(Data.serverName, entityPlayer, coordinates, reason, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertPlayerKick(Data.serverName, playerName, playerUUID.toString(), coordinates, reason, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -112,7 +112,7 @@ public class OnPlayerKick implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerKick(Data.serverName, entityPlayer, coordinates, reason, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerKick(Data.serverName, playerName, playerUUID.toString(), coordinates, reason, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

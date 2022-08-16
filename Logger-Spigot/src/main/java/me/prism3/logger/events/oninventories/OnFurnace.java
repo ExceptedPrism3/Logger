@@ -43,7 +43,7 @@ public class OnFurnace implements Listener {
             final Material item = event.getItemType();
             final int amount = event.getItemAmount();
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
+
             final Coordinates coordinates = new Coordinates(blockX, blockY, blockZ, worldName);
 
             //Log To Files Handling
@@ -105,7 +105,7 @@ public class OnFurnace implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertFurnace(Data.serverName, entityPlayer, item.toString(), amount, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertFurnace(Data.serverName, playerName, playerUUID.toString(), item.toString(), amount, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -115,7 +115,7 @@ public class OnFurnace implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertFurnace(Data.serverName, entityPlayer, item.toString(), amount, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertFurnace(Data.serverName, playerName, playerUUID.toString(), item.toString(), amount, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception exception) { exception.printStackTrace(); }
             }

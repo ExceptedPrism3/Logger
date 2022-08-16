@@ -43,7 +43,7 @@ public class OnVault implements Listener, Runnable {
                 final String playerName = player.getName();
                 final UUID playerUUID = player.getUniqueId();
 
-                final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
+
 
                 for (Map.Entry<UUID, Double> bal : this.players.entrySet()) {
 
@@ -112,7 +112,7 @@ public class OnVault implements Listener, Runnable {
 
                             try {
 
-                                Main.getInstance().getDatabase().insertVault(Data.serverName, entityPlayer, oldBalance, newBalance, player.hasPermission(loggerStaffLog));
+                                Main.getInstance().getDatabase().insertVault(Data.serverName, playerName, playerUUID.toString(), oldBalance, newBalance, player.hasPermission(loggerStaffLog));
 
                             } catch (Exception e) { e.printStackTrace(); }
                         }
@@ -122,7 +122,7 @@ public class OnVault implements Listener, Runnable {
 
                             try {
 
-                                Main.getInstance().getSqLite().insertVault(Data.serverName, entityPlayer, oldBalance, newBalance, player.hasPermission(loggerStaffLog));
+                                Main.getInstance().getSqLite().insertVault(Data.serverName, playerName, playerUUID.toString(), oldBalance, newBalance, player.hasPermission(loggerStaffLog));
 
                             } catch (Exception exception) { exception.printStackTrace(); }
                         }

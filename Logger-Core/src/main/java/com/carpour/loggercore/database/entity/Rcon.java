@@ -6,22 +6,23 @@ import java.time.Instant;
 @Entity
 @Table(name = "rcon")
 public class Rcon {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
     @Column(name = "server_name", length = 30)
     private String serverName;
-
     @Column(name = "date", nullable = false)
     private Instant date;
-
     @Column(name = "ip", columnDefinition = "INT UNSIGNED")
     private Long ip;
-
     @Column(name = "command", length = 50)
     private String command;
+
+    @PrePersist
+    public void prePersist() {
+        this.date = Instant.now();
+    }
 
     public Long getId() {
         return this.id;
@@ -62,4 +63,5 @@ public class Rcon {
     public void setCommand(String command) {
         this.command = command;
     }
+
 }

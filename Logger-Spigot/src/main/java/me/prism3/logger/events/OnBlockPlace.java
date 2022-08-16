@@ -44,7 +44,7 @@ public class OnBlockPlace implements Listener {
             final int z = event.getBlock().getLocation().getBlockZ();
             final Material blockType = event.getBlock().getType();
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
+
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
@@ -105,7 +105,7 @@ public class OnBlockPlace implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertBlockPlace(Data.serverName, entityPlayer, blockType.name(), coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertBlockPlace(Data.serverName, playerName, playerUUID.toString(), blockType.name(), coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -115,7 +115,7 @@ public class OnBlockPlace implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertBlockPlace(Data.serverName, entityPlayer, blockType.name(), coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertBlockPlace(Data.serverName, playerName, playerUUID.toString(), blockType.name(), coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

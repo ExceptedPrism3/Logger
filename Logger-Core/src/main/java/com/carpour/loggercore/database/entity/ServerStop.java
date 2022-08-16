@@ -6,17 +6,19 @@ import java.time.Instant;
 @Entity
 @Table(name = "server_stop")
 public class ServerStop {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
     @Column(name = "server_name", length = 30)
     private String serverName;
-
     @Column(name = "date", nullable = false)
     private Instant date;
+
+    @PrePersist
+    public void prePersist() {
+        this.date = Instant.now();
+    }
 
     public Long getId() {
         return this.id;

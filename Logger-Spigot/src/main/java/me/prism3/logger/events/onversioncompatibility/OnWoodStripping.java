@@ -88,7 +88,7 @@ public class OnWoodStripping implements Listener {
             final int z = event.getClickedBlock().getZ();
             final String logName = event.getClickedBlock().getType().name();
 
-            final EntityPlayer entityPlayer = new EntityPlayer(playerName, playerUUID.toString());
+
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
@@ -149,7 +149,7 @@ public class OnWoodStripping implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertWoodStripping(Data.serverName, entityPlayer, logName, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().insertWoodStripping(Data.serverName, playerName, playerUUID.toString(), logName, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -159,7 +159,7 @@ public class OnWoodStripping implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertWoodStripping(Data.serverName, entityPlayer, logName, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getSqLite().insertWoodStripping(Data.serverName, playerName, playerUUID.toString(), logName, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

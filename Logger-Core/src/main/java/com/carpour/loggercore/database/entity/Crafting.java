@@ -6,7 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "crafting")
 public class Crafting {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -20,7 +20,7 @@ public class Crafting {
 
     @Column(name = "world", length = 100)
     private String world;
-    
+
     @Column(name = "item", length = 50)
     private String item;
 
@@ -129,4 +129,10 @@ public class Crafting {
     public void isStaff(Boolean staff) {
         this.isStaff = staff;
     }
+
+    @PrePersist
+    public void prePersist() {
+        this.date = Instant.now();
+    }
+
 }

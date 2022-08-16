@@ -1,5 +1,6 @@
 package me.prism3.loggerbungeecord;
 
+import com.carpour.loggercore.database.DataSourceInterface;
 import me.prism3.loggerbungeecord.api.LiteBansUtil;
 import me.prism3.loggerbungeecord.api.PartyAndFriendsUtil;
 import me.prism3.loggerbungeecord.commands.Reload;
@@ -33,6 +34,9 @@ public final class Main extends Plugin {
 
     private DiscordFile discordFile;
     private Discord discord;
+
+    private DataSourceInterface database;
+    private DataSourceInterface sqLite;
 
     @Override
     public void onEnable() {
@@ -147,4 +151,8 @@ public final class Main extends Plugin {
     public DiscordFile getDiscordFile() { return this.discordFile; }
 
     public Discord getDiscord() { return this.discord; }
+
+    public DataSourceInterface getDatabase() { return this.database; }
+
+    public DataSourceInterface getSqLite() { return this.sqLite; }
 }
