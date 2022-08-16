@@ -1,6 +1,7 @@
 package com.carpour.loggercore.database;
 
 import com.carpour.loggercore.database.entity.Coordinates;
+import com.carpour.loggercore.database.entity.PlayerChat;
 
 import java.net.InetSocketAddress;
 import java.util.List;
@@ -82,14 +83,23 @@ public interface DataSourceInterface {
 
     void insertWoodStripping(String serverName, String playerName, String playerUUID, String logName, Coordinates coords, boolean isStaff);
 
-    void insertChestInteraction(String serverName, String playerName, String playerUUID, Coordinates coords, String[] items, boolean isStaff);
+    void insertChestInteraction(String serverName, String playerName, String playerUUID,
+                                Coordinates coords, String[] items, boolean isStaff);
 
-    void insertEntityDeath(String serverName, String playerName, String playerUUID, String mob, Coordinates coords, boolean isStaff);
+    void insertEntityDeath(String serverName, String playerName, String playerUUID, String mob,
+                           Coordinates coords, boolean isStaff);
 
     void insertConsoleCommand(String serverName, String msg);
 
     void insertServerReload(String serverName, String playerName, boolean isStaff);
 
-    void insertPlayerLogin(String serverName, String playerName, String toString, InetSocketAddress playerIP, boolean hasPermission);
+    void insertPlayerLogin(String serverName, String playerName, String toString,
+                           InetSocketAddress playerIP, boolean hasPermission);
+
     void disconnect();
+
+    List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset, int limit);
+
+    Long getPlayerChatCount(String playerName);
+
 }
