@@ -1,18 +1,18 @@
 package me.prism3.logger.commands.getting;
 
+import com.carpour.loggercore.database.entity.PlayerChat;
+import me.prism3.logger.Main;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.util.List;
 
 public class PlayerMessageSearch {
-//FIXME
-  private CommandSender sender;
-  private String searchedPlayer;
-  private Pager pager;
-  private String commandLabel;
+  //FIXME
+  private final CommandSender sender;
+  private final String searchedPlayer;
+  private final Pager pager;
+  private final String commandLabel;
 
   /**
    * @param searchedPlayer player name to search
@@ -32,60 +32,31 @@ public class PlayerMessageSearch {
    * Fetches results from database then sends results to the sender
    */
   public void fetchAndSendResults() {
-    String sql =
-            "SELECT message, id, date FROM player_chat WHERE player_name=? ORDER BY  DATE ASC, id DESC LIMIT 10 OFFSET ?";
-    try (Connection connection = null;
-         final PreparedStatement getStatement = connection.prepareStatement(sql)) {
-      getStatement.setString(1, this.searchedPlayer);
-      getStatement.setInt(2, this.pager.getCurrentOffset());
-      ResultSet rs = getStatement.executeQuery();
-      this.sendResults(rs);
 
-      if (pager.getCurrentOffset() > pager.getCount()) {
-        this.sender.sendMessage("No results found for that page!");
-        return;
-      }
-      this.sender.spigot()
-              .sendMessage(this.pager.preparePaging(this.commandLabel, this.searchedPlayer));
-    } catch (Exception e) {
-      e.printStackTrace();
+    this.sendResults(Main.getInstance().getDatabase()
+            .getPlayerChatByPlayerName(searchedPlayer, this.pager.getCurrentOffset(), 10));
+
+    if (pager.getCurrentOffset() > pager.getCount()) {
+      this.sender.sendMessage("No results found for that page!");
+      return;
     }
-  }
+    this.sender.spigot()
+            .sendMessage(this.pager.preparePaging(this.commandLabel, this.searchedPlayer));
 
-  /**
-   * @param playerName searched player name
-   * @return int
-   */
-  public static int getMessagesCount(String playerName) {
-    try (Connection connection = null;
-         final PreparedStatement getStatement = connection
-                 .prepareStatement("SELECT COUNT(*) as total FROM player_chat WHERE player_name = ?")) {
-      getStatement.setString(1, playerName);
-      ResultSet rs = getStatement.executeQuery();
-
-      rs.next();
-
-      return rs.getInt("total");
-    } catch (Exception e) {
-      e.printStackTrace();
-      return 0;
-    }
   }
 
   /**
    * Send results to sender
-   *
-   *
    */
-  private void sendResults(ResultSet rs) {
+  private void sendResults(List<PlayerChat> rs) {
     // TODO format datetime 
     try {
-      while (rs.next()) {
-        this.sender.sendMessage(ChatColor.RED + rs.getTimestamp("date").toString() + " "
-                + searchedPlayer + ": " + ChatColor.GREEN + rs.getString("Message"));
+      for (PlayerChat a : rs) {
+        this.sender.sendMessage(ChatColor.RED + a.getDate().toString() + " "
+                + searchedPlayer + ": " + ChatColor.GREEN + a.getMessage());
       }
-      rs.close();
-    } catch (Exception e) {
+    }
+    catch (Exception e) {
       e.printStackTrace();
     }
   }

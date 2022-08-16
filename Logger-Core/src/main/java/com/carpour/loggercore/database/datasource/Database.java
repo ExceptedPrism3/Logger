@@ -7,6 +7,7 @@ import com.carpour.loggercore.database.entity.*;
 import com.carpour.loggercore.database.utils.HibernateUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.net.InetSocketAddress;
 import java.time.Instant;
@@ -827,24 +828,55 @@ public final class Database implements DataSourceInterface {
 
 
     private void save(Object obj) {
-        final Session session;
-        final Transaction transaction;
-        session = HibernateUtils.getSession();
-        transaction = session.beginTransaction();
-        session.save(obj);
-        transaction.commit();
+        Transaction tx = null;
+        try {
+            final Session session;
+            session = HibernateUtils.getSession();
+            tx = session.beginTransaction();
+            session.save(obj);
+            tx.commit();
+        }
+        catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        }
+
     }
 
     public EntityPlayer fetchEntityPlayer(String playerName, String playerUUID) {
-        final EntityPlayer entityPlayer = HibernateUtils.getSession().load(EntityPlayer.class, playerName);
-        return entityPlayer != null ? entityPlayer : new EntityPlayer(playerName, playerUUID);
+        Session session = HibernateUtils.getSession();
+        final EntityPlayer entityPlayer = session.get(EntityPlayer.class, playerName);
+        return (entityPlayer != null ? entityPlayer : new EntityPlayer(playerName, playerUUID));
     }
 
     @Override
-    public void disconnect()
-    {
+    public void disconnect() {
         HibernateUtils.closeSession();
         HibernateUtils.closeSessionFactory();
+    }
+
+    @Override
+    public List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset,
+                                                      int limit) {
+        Query<PlayerChat> query = HibernateUtils.getSession().createQuery(
+                "select p from PlayerChat p where p.entityPlayer.playerName=:playerName",
+                PlayerChat.class);
+        query.setParameter("playerName", playerName);
+        query.setReadOnly(true);
+        query.setCacheable(true);
+        query.setFirstResult(offset);
+        query.setMaxResults(limit);
+        List<PlayerChat> results = query.list();
+        return results;
+    }
+
+    public Long getPlayerChatCount(String playerName) {
+        Query query = HibernateUtils.getSession().createQuery(
+                "select count(*) from PlayerChat p where p.entityPlayer.playerName=:playerName");
+        query.setParameter("playerName", playerName);
+        query.setCacheable(true);
+
+        return (Long) query.uniqueResult();
     }
 
 }

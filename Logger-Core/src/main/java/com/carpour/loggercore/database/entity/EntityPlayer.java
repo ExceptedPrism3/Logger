@@ -19,7 +19,7 @@ public class EntityPlayer implements Serializable {
 
 
     @Id
-    @Column(name = "player_name", length = 30)
+    @Column(name = "player_name")
     private String playerName;
     @Column(name = "player_unique_id")
     private String playerUniqueID;
