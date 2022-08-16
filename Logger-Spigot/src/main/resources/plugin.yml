@@ -18,6 +18,8 @@ commands:
     description: "Opens a menu with all online players and their available backups."
   logger toggle:
     description: "Toggle spy features ON/OFF."
+  loggerget:
+    description: "sqdq."
 permissions:
   logger.staff:
     description: "Allows the Player to execute Plugin Commands, spy on others actions, and view Plugin Updates."

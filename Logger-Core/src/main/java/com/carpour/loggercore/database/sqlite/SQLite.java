@@ -4,6 +4,7 @@ import com.carpour.loggercore.database.AbstractDataSource;
 import com.carpour.loggercore.database.DataSourceInterface;
 import com.carpour.loggercore.database.data.Options;
 import com.carpour.loggercore.database.entity.Coordinates;
+import com.carpour.loggercore.database.entity.PlayerChat;
 
 import java.io.File;
 import java.io.IOException;
@@ -1062,14 +1063,25 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertPlayerLogin(String serverName, String playerName, String toString, InetSocketAddress playerIP,
+    public void insertPlayerLogin(String serverName, String playerName, String toString,
+                                  InetSocketAddress playerIP,
                                   boolean hasPermission) {
 
     }
 
     @Override
-    public void disconnect()
-    {
+    public void disconnect() {
         //TODO implement this method
     }
+
+    @Override
+    public List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset, int limit) {
+        return null;
+    }
+
+    @Override
+    public Long getPlayerChatCount(String playerName) {
+        return 0L;
+    }
+
 }

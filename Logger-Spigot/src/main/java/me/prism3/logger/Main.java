@@ -6,6 +6,7 @@ import com.carpour.loggercore.database.utils.HibernateUtils;
 import de.jeff_media.updatechecker.UpdateChecker;
 import me.prism3.logger.api.*;
 import me.prism3.logger.commands.CommandManager;
+import me.prism3.logger.commands.getting.Chat;
 import me.prism3.logger.commands.subcommands.PlayerInventory;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteRegistration;
 import me.prism3.logger.discord.Discord;
@@ -178,7 +179,7 @@ public class Main extends JavaPlugin {
     private void commandsInitializer() {
 
         this.getCommand("logger").setExecutor(new CommandManager());
-//        this.getCommand("loggerget").setExecutor(new Chat());
+        this.getCommand("loggerget").setExecutor(new Chat());
 
     }
 

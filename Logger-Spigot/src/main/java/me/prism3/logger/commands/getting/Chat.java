@@ -1,5 +1,6 @@
 package me.prism3.logger.commands.getting;
 
+import me.prism3.logger.Main;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,14 +19,15 @@ public class Chat implements CommandExecutor {
           sender.sendMessage(ChatColor.RED + "Allowed page values are 1 - *!");
           return true;
         }
-        Pager pager = new Pager(PlayerMessageSearch.getMessagesCount(args[0]), 10, 5, currentPage);
-
+        Pager pager = new Pager(Main.getInstance().getDatabase().getPlayerChatCount(args[0]), 10, 5,
+                currentPage);
         PlayerMessageSearch playerMessageSearch =
-            new PlayerMessageSearch(args[0], sender, pager, label);
+                new PlayerMessageSearch(args[0], sender, pager, label);
         playerMessageSearch.fetchAndSendResults();
       } else if (args.length == 1) {
         int currentPage = 0;
-        Pager pager = new Pager(PlayerMessageSearch.getMessagesCount(args[0]), 10, 5, currentPage);
+        Pager pager = new Pager(Main.getInstance().getDatabase().getPlayerChatCount(args[0]), 10, 5,
+                currentPage);
 
         PlayerMessageSearch playerMessageSearch =
             new PlayerMessageSearch(args[0], sender, pager, label);

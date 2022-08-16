@@ -7,19 +7,18 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 @SuppressWarnings("deprecation")
 public class Pager {
-  private int count;
-  private int limit;
-  private int pageLimit;
-  private int currentPage;
+  private final Long count;
+  private final int limit;
+  private final int pageLimit;
+  private final int currentPage;
 
   /**
-   *
-   * @param count number of items
-   * @param limit rows per page
-   * @param pageLimit displayable number before skipping (page buttons)
+   * @param count       number of items
+   * @param limit       rows per page
+   * @param pageLimit   displayable number before skipping (page buttons)
    * @param currentPage current page (first index is 0)
    */
-  public Pager(int count, int limit, int pageLimit, int currentPage) {
+  public Pager(Long count, int limit, int pageLimit, int currentPage) {
     this.count = count;
     this.limit = limit;
     this.pageLimit = pageLimit;
@@ -149,10 +148,9 @@ public class Pager {
   }
 
   /**
-   * 
    * @return count
    */
-  public int getCount() {
+  public Long getCount() {
     return this.count;
   }
 
@@ -161,7 +159,7 @@ public class Pager {
    * @return number of pages
    */
   public int getNumberOfPages() {
-    return count / limit;
+    return (int) (count / limit);
   }
 
   /**
