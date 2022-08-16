@@ -10,9 +10,7 @@
     <modules>
         <module>Logger-Core</module>
         <module>Logger-Spigot</module>
-        <module>Logger-BungeeCord</module>
-        <module>Logger-Velocity</module>
-        <module>Logger-Shaded</module>
+
     </modules>
 
     <packaging>pom</packaging>

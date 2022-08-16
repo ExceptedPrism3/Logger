@@ -7,7 +7,6 @@ import com.carpour.loggercore.database.entity.*;
 import com.carpour.loggercore.database.utils.HibernateUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.annotations.QueryHints;
 
 import java.net.InetSocketAddress;
 import java.time.Instant;
@@ -837,14 +836,8 @@ public final class Database implements DataSourceInterface {
     }
 
     public EntityPlayer fetchEntityPlayer(String playerName, String playerUUID) {
-        return HibernateUtils.getSession()
-                .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
-                .setParameter("playerName", playerName)
-                .setHint(QueryHints.READ_ONLY, true)
-                .getResultStream()
-                .findFirst()
-                .orElse(new EntityPlayer(playerName, playerUUID));
-
+        final EntityPlayer entityPlayer = HibernateUtils.getSession().load(EntityPlayer.class, playerName);
+        return entityPlayer != null ? entityPlayer : new EntityPlayer(playerName, playerUUID);
     }
 
     @Override

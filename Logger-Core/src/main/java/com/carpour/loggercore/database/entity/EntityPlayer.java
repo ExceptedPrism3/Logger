@@ -1,5 +1,7 @@
 package com.carpour.loggercore.database.entity;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
@@ -11,13 +13,12 @@ import java.time.Instant;
 @NamedQueries({
         @NamedQuery(name = "EntityPlayer.findOneByName", query = "select e from EntityPlayer e where e.playerName = :playerName")
 })
-
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class EntityPlayer implements Serializable {
 
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
     @Column(name = "player_name", length = 30)
     private String playerName;
     @Column(name = "player_unique_id")
@@ -53,13 +54,6 @@ public class EntityPlayer implements Serializable {
         this.playerUniqueID = playerUniqueID;
     }
 
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     @PrePersist
     public void prePersist() {

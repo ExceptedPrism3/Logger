@@ -64,8 +64,17 @@ public final class DatabaseCredentials {
         properties.setProperty("hibernate.connection.useUnicode", "true");
         properties.setProperty("hibernate.generate_statistics", "true");
         properties.setProperty("hibernate.connection.provider_class", "org.hibernate.hikaricp.internal.HikariCPConnectionProvider");
-        properties.setProperty("hibernate.hikari.poolName", "[HikariCP-Logger-Core]");
+        properties.setProperty("hibernate.hikari.poolName", "HikariCP-Logger-Core");
         properties.setProperty("hibernate.hikari.maximumPoolSize", "50");
+
+        properties.setProperty("hibernate.cache.use_second_level_cache", "true");
+        properties.setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.internal.EhcacheRegionFactory");
+        properties.setProperty("hibernate.cache.provider_class", "net.sf.ehcache.hibernate.EhCacheProvider");
+
+
+        properties.setProperty("hibernate.cache.use_query_cache", "true");
+
+
 
         return properties;
     }
