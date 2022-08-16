@@ -5,10 +5,12 @@ import com.carpour.loggercore.database.datasource.Database;
 import com.carpour.loggercore.database.utils.HibernateUtils;
 import de.jeff_media.updatechecker.UpdateChecker;
 import me.prism3.logger.commands.CommandManager;
+import me.prism3.logger.commands.getting.Chat;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteRegistration;
 import me.prism3.logger.discord.Discord;
 import me.prism3.logger.discord.DiscordFile;
-import me.prism3.logger.serverside.*;
+import me.prism3.logger.serverside.Start;
+import me.prism3.logger.serverside.Stop;
 import me.prism3.logger.utils.*;
 import me.prism3.logger.utils.enums.NmsVersions;
 import org.bukkit.Bukkit;
@@ -122,7 +124,7 @@ public class Main extends JavaPlugin {
     private void commandsInitializer() {
 
         this.getCommand("logger").setExecutor(new CommandManager());
-//        this.getCommand("loggerget").setExecutor(new Chat());
+        this.getCommand("loggerget").setExecutor(new Chat());
 
     }
 

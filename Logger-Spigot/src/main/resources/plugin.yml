@@ -19,7 +19,7 @@ commands:
   logger toggle:
     description: "Toggle spy features ON/OFF."
   loggerget:
-    description: "sqdq."
+    description: "Get player messages"
 permissions:
   logger.staff:
     description: "Allows the Player to execute Plugin Commands, spy on others actions, and view Plugin Updates."
