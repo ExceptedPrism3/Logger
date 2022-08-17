@@ -27,7 +27,7 @@ public class OnBucketFill implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBucket(final PlayerBucketFillEvent event) {
 
-        if (!event.isCancelled() && (this.main.getConfig().getBoolean("Log-Player.Bucket-Fill"))) {
+        if (!event.isCancelled()) {
 
             final Player player = event.getPlayer();
 

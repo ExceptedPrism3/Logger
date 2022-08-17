@@ -1,7 +1,6 @@
 package me.prism3.logger.events.misc;
 
 import com.carpour.loggercore.database.entity.Coordinates;
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.FileHandler;
@@ -28,7 +27,7 @@ public class OnPrimedTNT implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onTntPrime(final EntityExplodeEvent event) {
 
-        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Primed-TNT") && event.getEntity() instanceof TNTPrimed) {
+        if (!event.isCancelled() && event.getEntity() instanceof TNTPrimed) {
 
             final Player player = (Player) ((TNTPrimed) event.getEntity()).getSource();
 
@@ -41,7 +40,6 @@ public class OnPrimedTNT implements Listener {
             final int x = event.getLocation().getBlockX();
             final int y = event.getLocation().getBlockY();
             final int z = event.getLocation().getBlockZ();
-
 
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 

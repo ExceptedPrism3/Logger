@@ -1,6 +1,5 @@
 package me.prism3.logger.events;
 
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -26,93 +25,89 @@ public class OnPlayerLevel implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLevelChange(final PlayerLevelChangeEvent event) {
 
-        if (this.main.getConfig().getBoolean("Log-Player.Level")) {
+        final Player player = event.getPlayer();
 
-            final Player player = event.getPlayer();
+        if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
-            if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
-
-            final UUID playerUUID = player.getUniqueId();
-            final String playerName = player.getName();
-            final int logAbove = Data.abovePlayerLevel;
-            final double playerLevel = event.getNewLevel();
+        final UUID playerUUID = player.getUniqueId();
+        final String playerName = player.getName();
+        final int logAbove = Data.abovePlayerLevel;
+        final double playerLevel = event.getNewLevel();
 
 
+        if (playerLevel == logAbove) {
 
-            if (playerLevel == logAbove) {
+            // Log To Files
+            if (Data.isLogToFiles) {
 
-                // Log To Files
-                if (Data.isLogToFiles) {
-
-                    if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                        try {
-
-                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                            out.write(this.main.getMessages().get().getString("Files.Player-Level-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%level%", String.valueOf(logAbove)) + "\n");
-                            out.close();
-
-                        } catch (IOException e) {
-
-                            this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                            e.printStackTrace();
-
-                        }
-                    } else {
-
-                        try {
-
-                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerLevelFile(), true));
-                            out.write(this.main.getMessages().get().getString("Files.Player-Level").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%level%", String.valueOf(logAbove)) + "\n");
-                            out.close();
-
-                        } catch (IOException e) {
-
-                            this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                            e.printStackTrace();
-
-                        }
-                    }
-                }
-
-                // Discord
-                if (!player.hasPermission(Data.loggerExemptDiscord)) {
-
-                    if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                        if (!this.main.getMessages().get().getString("Discord.Player-Level-Staff").isEmpty()) {
-
-                            this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Level-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
-
-                        }
-                    } else {
-
-                        if (!this.main.getMessages().get().getString("Discord.Player-Level").isEmpty()) {
-
-                            this.main.getDiscord().playerLevel(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Level").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
-                        }
-                    }
-                }
-
-                // External
-                if (Data.isExternal) {
+                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
                     try {
 
-                        Main.getInstance().getDatabase().insertLevelChange(Data.serverName, playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                        out.write(this.main.getMessages().get().getString("Files.Player-Level-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%level%", String.valueOf(logAbove)) + "\n");
+                        out.close();
 
-                    } catch (Exception e) { e.printStackTrace(); }
-                }
+                    } catch (IOException e) {
 
-                // SQLite
-                if (Data.isSqlite) {
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
+
+                    }
+                } else {
 
                     try {
 
-                        Main.getInstance().getSqLite().insertLevelChange(Data.serverName, playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerLevelFile(), true));
+                        out.write(this.main.getMessages().get().getString("Files.Player-Level").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%level%", String.valueOf(logAbove)) + "\n");
+                        out.close();
 
-                    } catch (Exception e) { e.printStackTrace(); }
+                    } catch (IOException e) {
+
+                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
+
+                    }
                 }
+            }
+
+            // Discord
+            if (!player.hasPermission(Data.loggerExemptDiscord)) {
+
+                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+
+                    if (!this.main.getMessages().get().getString("Discord.Player-Level-Staff").isEmpty()) {
+
+                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Level-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
+
+                    }
+                } else {
+
+                    if (!this.main.getMessages().get().getString("Discord.Player-Level").isEmpty()) {
+
+                        this.main.getDiscord().playerLevel(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Level").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
+                    }
+                }
+            }
+
+            // External
+            if (Data.isExternal) {
+
+                try {
+
+                    Main.getInstance().getDatabase().insertLevelChange(Data.serverName, playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+
+                } catch (Exception e) { e.printStackTrace(); }
+            }
+
+            // SQLite
+            if (Data.isSqlite) {
+
+                try {
+
+                    Main.getInstance().getSqLite().insertLevelChange(Data.serverName, playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+
+                } catch (Exception e) { e.printStackTrace(); }
             }
         }
     }

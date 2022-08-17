@@ -14,7 +14,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.UUID;
 
 public class OnAdvancedBan implements Listener {
 
@@ -23,95 +22,92 @@ public class OnAdvancedBan implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPunishment(final PunishmentEvent event) {
 
-        if (this.main.getConfig().getBoolean("Log-Extras.AdvancedBan")) {
+        final String type = event.getPunishment().getType().toString();
+        final String executor = event.getPunishment().getOperator();
 
-            final String type = event.getPunishment().getType().toString();
-            final String executor = event.getPunishment().getOperator();
+        final Player player = Bukkit.getPlayer(executor);
+        assert player != null;
 
-            final Player player = Bukkit.getPlayer(executor);
-            assert player != null;
+        final String executed_on = event.getPunishment().getName();
+        final String reason = event.getPunishment().getReason();
+        final long expirationDate = event.getPunishment().getEnd();
 
-            final String executed_on = event.getPunishment().getName();
-            final String reason = event.getPunishment().getReason();
-            final long expirationDate = event.getPunishment().getEnd();
+        // Log To Files
+        if (Data.isLogToFiles) {
 
-            // Log To Files
-            if (Data.isLogToFiles) {
+            if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+                try {
 
-                    try {
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                    out.write(this.main.getMessages().get().getString("Files.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type) + "\n");
+                    out.close();
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(this.main.getMessages().get().getString("Files.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type) + "\n");
-                        out.close();
+                } catch (IOException e) {
 
-                    } catch (IOException e) {
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
+                }
+            } else {
 
-                    }
-                } else {
+                try {
 
-                    try {
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAdvancedBanFile(), true));
+                    out.write(this.main.getMessages().get().getString("Files.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type) + "\n");
+                    out.close();
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAdvancedBanFile(), true));
-                        out.write(this.main.getMessages().get().getString("Files.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type) + "\n");
-                        out.close();
+                } catch (IOException e) {
 
-                    } catch (IOException e) {
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-
-                    }
                 }
             }
+        }
 
-            // Discord Integration
-            if (player == null) { // This is essential when performed by the console
+        // Discord Integration
+        if (player == null) { // This is essential when performed by the console
 
+            if (!this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").isEmpty()) {
+
+                this.main.getDiscord().advancedBan(this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type), false);
+            }
+        } else if (!player.hasPermission(Data.loggerExemptDiscord)) {
+
+            if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+
+                if (!this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").isEmpty()) {
+
+                    this.main.getDiscord().staffChat(player.getName(), player.getUniqueId(), this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type), false);
+
+                }
+            } else {
                 if (!this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").isEmpty()) {
 
                     this.main.getDiscord().advancedBan(this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type), false);
                 }
-            } else if (!player.hasPermission(Data.loggerExemptDiscord)) {
-
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                    if (!this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").isEmpty()) {
-
-                        this.main.getDiscord().staffChat(player.getName(), player.getUniqueId(), this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type), false);
-
-                    }
-                } else {
-                    if (!this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").isEmpty()) {
-
-                        this.main.getDiscord().advancedBan(this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type), false);
-                    }
-                }
             }
+        }
 
-            // External
-            if (Data.isExternal) {
+        // External
+        if (Data.isExternal) {
 
-                try {
+            try {
 
-                    Main.getInstance().getDatabase().insertAdvanceBanData(Data.serverName, type, executor, executed_on, reason, expirationDate);
+                Main.getInstance().getDatabase().insertAdvanceBanData(Data.serverName, type, executor, executed_on, reason, expirationDate);
 
-                } catch (Exception e) { e.printStackTrace(); }
-            }
+            } catch (Exception e) { e.printStackTrace(); }
+        }
 
-            // SQLite
-            if (Data.isSqlite) {
+        // SQLite
+        if (Data.isSqlite) {
 
-                try {
+            try {
 
-                    Main.getInstance().getSqLite().insertAdvanceBanData(Data.serverName, type, executor, executed_on, reason, expirationDate);
+                Main.getInstance().getSqLite().insertAdvanceBanData(Data.serverName, type, executor, executed_on, reason, expirationDate);
 
-                } catch (Exception e) { e.printStackTrace(); }
-            }
+            } catch (Exception e) { e.printStackTrace(); }
         }
     }
 }

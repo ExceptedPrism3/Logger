@@ -23,7 +23,7 @@ public class OnCommand implements Listener {
     @EventHandler
     public void onCmd(final ChatEvent event) {
 
-        if (event.isCommand() && !event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Commands")) {
+        if (event.isCommand() && !event.isCancelled()) {
 
             final ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 

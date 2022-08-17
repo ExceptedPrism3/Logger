@@ -20,7 +20,7 @@ public class PortalCreation implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPortalCreate(final PortalCreateEvent event) {
 
-        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Server.Portal-Creation")) {
+        if (!event.isCancelled()) {
 
             final String worldName = event.getWorld().getName();
             final PortalCreateEvent.CreateReason reason = event.getReason();

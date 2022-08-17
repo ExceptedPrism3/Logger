@@ -1,6 +1,5 @@
 package me.prism3.logger.events.plugindependent;
 
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.api.VaultUtil;
 import me.prism3.logger.utils.BedrockChecker;
@@ -34,98 +33,95 @@ public class OnVault implements Listener, Runnable {
     @Override
     public void run() {
 
-        if (this.main.getConfig().getBoolean("Log-Extras.Vault")) {
+        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 
-            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+            if (player.hasPermission(Data.loggerExempt) || Bukkit.getOnlinePlayers().isEmpty() || BedrockChecker.isBedrock(player.getUniqueId()))
+                return;
 
-                if (player.hasPermission(Data.loggerExempt) || Bukkit.getOnlinePlayers().isEmpty() || BedrockChecker.isBedrock(player.getUniqueId())) return;
-
-                final String playerName = player.getName();
-                final UUID playerUUID = player.getUniqueId();
-
+            final String playerName = player.getName();
+            final UUID playerUUID = player.getUniqueId();
 
 
-                for (Map.Entry<UUID, Double> bal : this.players.entrySet()) {
+            for (Map.Entry<UUID, Double> bal : this.players.entrySet()) {
 
-                    if (this.econ.getBalance(player.getPlayer()) != this.players.get(player.getUniqueId())) {
+                if (this.econ.getBalance(player.getPlayer()) != this.players.get(player.getUniqueId())) {
 
-                        double oldBalance = bal.getValue();
-                        this.players.put(player.getUniqueId(), this.econ.getBalance(player.getPlayer()));
-                        double newBalance = bal.getValue();
+                    double oldBalance = bal.getValue();
+                    this.players.put(player.getUniqueId(), this.econ.getBalance(player.getPlayer()));
+                    double newBalance = bal.getValue();
 
-                        // Log To Files
-                        if (Data.isLogToFiles) {
+                    // Log To Files
+                    if (Data.isLogToFiles) {
 
-                            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                                try {
-
-                                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                                    out.write(this.main.getMessages().get().getString("Files.Extras.Vault-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)) + "\n");
-                                    out.close();
-
-                                } catch (IOException e) {
-
-                                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                                    e.printStackTrace();
-
-                                }
-                            } else {
-
-                                try {
-
-                                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getVaultFile(), true));
-                                    out.write(this.main.getMessages().get().getString("Files.Extras.Vault").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)) + "\n");
-                                    out.close();
-
-                                } catch (IOException e) {
-
-                                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                                    e.printStackTrace();
-
-                                }
-                            }
-                        }
-
-                        // Discord Integration
-                        if (!player.hasPermission(Data.loggerExemptDiscord)) {
-
-                            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                                if (!this.main.getMessages().get().getString("Discord.Extras.Vault-Staff").isEmpty()) {
-
-                                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Vault-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)), false);
-
-                                }
-
-                            } else {
-
-                                if (!this.main.getMessages().get().getString("Discord.Extras.Vault").isEmpty()) {
-
-                                    this.main.getDiscord().vault(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Vault").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)), false);
-                                }
-                            }
-                        }
-
-                        // External
-                        if (Data.isExternal) {
+                        if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                             try {
 
-                                Main.getInstance().getDatabase().insertVault(Data.serverName, playerName, playerUUID.toString(), oldBalance, newBalance, player.hasPermission(loggerStaffLog));
+                                final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                                out.write(this.main.getMessages().get().getString("Files.Extras.Vault-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)) + "\n");
+                                out.close();
 
-                            } catch (Exception e) { e.printStackTrace(); }
-                        }
+                            } catch (IOException e) {
 
-                        // External
-                        if (Data.isSqlite) {
+                                this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                                e.printStackTrace();
+
+                            }
+                        } else {
 
                             try {
 
-                                Main.getInstance().getSqLite().insertVault(Data.serverName, playerName, playerUUID.toString(), oldBalance, newBalance, player.hasPermission(loggerStaffLog));
+                                final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getVaultFile(), true));
+                                out.write(this.main.getMessages().get().getString("Files.Extras.Vault").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)) + "\n");
+                                out.close();
 
-                            } catch (Exception exception) { exception.printStackTrace(); }
+                            } catch (IOException e) {
+
+                                this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                                e.printStackTrace();
+
+                            }
                         }
+                    }
+
+                    // Discord Integration
+                    if (!player.hasPermission(Data.loggerExemptDiscord)) {
+
+                        if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+
+                            if (!this.main.getMessages().get().getString("Discord.Extras.Vault-Staff").isEmpty()) {
+
+                                this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Vault-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)), false);
+
+                            }
+
+                        } else {
+
+                            if (!this.main.getMessages().get().getString("Discord.Extras.Vault").isEmpty()) {
+
+                                this.main.getDiscord().vault(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Vault").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)), false);
+                            }
+                        }
+                    }
+
+                    // External
+                    if (Data.isExternal) {
+
+                        try {
+
+                            Main.getInstance().getDatabase().insertVault(Data.serverName, playerName, playerUUID.toString(), oldBalance, newBalance, player.hasPermission(loggerStaffLog));
+
+                        } catch (Exception e) { e.printStackTrace(); }
+                    }
+
+                    // External
+                    if (Data.isSqlite) {
+
+                        try {
+
+                            Main.getInstance().getSqLite().insertVault(Data.serverName, playerName, playerUUID.toString(), oldBalance, newBalance, player.hasPermission(loggerStaffLog));
+
+                        } catch (Exception e) { e.printStackTrace(); }
                     }
                 }
             }

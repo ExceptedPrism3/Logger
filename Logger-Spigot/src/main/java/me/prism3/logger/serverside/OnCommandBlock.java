@@ -25,48 +25,45 @@ public class OnCommandBlock implements Listener {
 
             final String command = event.getCommand().replace("\\", "\\\\");
 
-            if (this.main.getConfig().getBoolean("Log-Server.Command-Block")) {
+            // Log To Files
+            if (Data.isLogToFiles) {
 
-                // Log To Files
-                if (Data.isLogToFiles) {
+                try {
 
-                    try {
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandBlockFile(), true));
+                    out.write(this.main.getMessages().get().getString("Files.Server-Side.Command-Block").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command) + "\n");
+                    out.close();
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandBlockFile(), true));
-                        out.write(this.main.getMessages().get().getString("Files.Server-Side.Command-Block").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command) + "\n");
-                        out.close();
+                } catch (IOException e) {
 
-                    } catch (IOException e) {
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-
-                    }
                 }
+            }
 
-                // Discord
-                if (!this.main.getMessages().get().getString("Discord.Server-Side.Command-Block").isEmpty())
-                    this.main.getDiscord().commandBlock(this.main.getMessages().get().getString("Discord.Server-Side.Command-Block").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command), false);
+            // Discord
+            if (!this.main.getMessages().get().getString("Discord.Server-Side.Command-Block").isEmpty())
+                this.main.getDiscord().commandBlock(this.main.getMessages().get().getString("Discord.Server-Side.Command-Block").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command), false);
 
-                // External
-                if (Data.isExternal) {
+            // External
+            if (Data.isExternal) {
 
-                    try {
+                try {
 
-                        Main.getInstance().getDatabase().insertCommandBlock(Data.serverName, command);
+                    Main.getInstance().getDatabase().insertCommandBlock(Data.serverName, command);
 
-                    } catch (Exception e) { e.printStackTrace(); }
-                }
+                } catch (Exception e) { e.printStackTrace(); }
+            }
 
-                // SQLite
-                if (Data.isSqlite) {
+            // SQLite
+            if (Data.isSqlite) {
 
-                    try {
+                try {
 
-                        Main.getInstance().getSqLite().insertCommandBlock(Data.serverName, command);
+                    Main.getInstance().getSqLite().insertCommandBlock(Data.serverName, command);
 
-                    } catch (Exception e) { e.printStackTrace(); }
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
         }
     }

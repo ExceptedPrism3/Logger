@@ -1,6 +1,5 @@
 package me.prism3.logger.events;
 
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.events.spy.OnBookSpy;
 import me.prism3.logger.utils.BedrockChecker;
@@ -37,7 +36,7 @@ public class OnBook implements Listener {
 
         }
 
-        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Book-Editing")) {
+        if (!event.isCancelled()) {
 
             final Player player = event.getPlayer();
 
@@ -50,8 +49,6 @@ public class OnBook implements Listener {
             final int pageCount = bookMeta.getPageCount();
             final List<String> pageContent = Collections.singletonList(bookMeta.getPages().toString().replace("\\", "\\\\"));
             String signature = bookMeta.getAuthor();
-
-
 
             if (!event.isSigning()) signature = "no one";
 

@@ -21,7 +21,7 @@ public class OnChat{
 
         final Main main = Main.getInstance();
 
-        if (main.getConfig().getBoolean("Log-Player.Chat") && event.getPlayer().getCurrentServer().isPresent()) {
+        if (event.getPlayer().getCurrentServer().isPresent()) {
 
             final Player player = event.getPlayer();
 

@@ -1,7 +1,6 @@
 package me.prism3.logger.events.plugindependent;
 
 import com.carpour.loggercore.database.entity.Coordinates;
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -27,8 +26,7 @@ public class OnAFK implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void afk(final AfkStatusChangeEvent e) {
 
-        if (!e.isCancelled() && this.main.getConfig().getBoolean("Log-Extras.Essentials-AFK")
-                && !e.getAffected().isAfk()) {
+        if (!e.isCancelled() && !e.getAffected().isAfk()) {
 
             final Player player = e.getAffected().getBase();
 
@@ -104,7 +102,7 @@ public class OnAFK implements Listener {
 
                     Main.getInstance().getDatabase().insertAfk(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception event) { event.printStackTrace(); }
+                } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -114,7 +112,7 @@ public class OnAFK implements Listener {
 
                     Main.getInstance().getSqLite().insertAfk(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception exception) { exception.printStackTrace(); }
+                } catch (Exception e) { e.printStackTrace(); }
             }
         }
     }

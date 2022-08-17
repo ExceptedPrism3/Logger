@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-
 public class OnLiteBanEvents implements Listener, Runnable {
 
     private final Main main = Main.getInstance();
@@ -29,38 +28,36 @@ public class OnLiteBanEvents implements Listener, Runnable {
             @Override
             public void entryAdded(Entry entry) {
 
-                if (main.getConfig().getBoolean("Log-Extras.LiteBans")) {
+                final UUID executorUUID = UUID.fromString(entry.getExecutorUUID());
+                final String entryType = entry.getType().toUpperCase();
+                final String executorName = entry.getExecutorName();
+                final String duration = entry.getDurationString();
+                final String onWho = UsernameFetcher.playerNameFetcher(entry.getUuid());
+                final String reason = entry.getReason();
+                final boolean isSilent = entry.isSilent();
 
-                    final UUID executorUUID = UUID.fromString(entry.getExecutorUUID());
-                    final String entryType = entry.getType().toUpperCase();
-                    final String executorName = entry.getExecutorName();
-                    final String duration = entry.getDurationString();
-                    final String onWho = UsernameFetcher.playerNameFetcher(entry.getUuid());
-                    final String reason = entry.getReason();
-                    final boolean isSilent = entry.isSilent();
+                assert executorName != null;
+                final Player player = Bukkit.getPlayer(executorName);
+                assert player != null;
 
-                    assert executorName != null;
-                    final Player player = Bukkit.getPlayer(executorName);
-                    assert player != null;
+                // Log To Files
+                if (Data.isLogToFiles) {
 
-                    // Log To Files
-                    if (Data.isLogToFiles) {
+                    if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                        if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+                        try {
 
-                            try {
+                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                            out.write(main.getMessages().get().getString("Files.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)) + "\n");
+                            out.close();
 
-                                final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                                out.write(main.getMessages().get().getString("Files.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)) + "\n");
-                                out.close();
+                        } catch (IOException e) {
 
-                            } catch (IOException e) {
+                            main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                            e.printStackTrace();
 
-                                main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                                e.printStackTrace();
-
-                            }
-                        } else {
+                        }
+                    } else {
 
                         try {
 
@@ -89,8 +86,7 @@ public class OnLiteBanEvents implements Listener, Runnable {
                         if (!main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
                             main.getDiscord().staffChat(executorName, executorUUID, main.getMessages().get().getString("Discord.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
 
-                    else
-                        if (!main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
+                        else if (!main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
                             main.getDiscord().advancedBan(main.getMessages().get().getString("Discord.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
 
                 }
@@ -115,7 +111,6 @@ public class OnLiteBanEvents implements Listener, Runnable {
                     } catch (Exception e) { e.printStackTrace(); }
                 }
             }
-        }
         });
     }
 }

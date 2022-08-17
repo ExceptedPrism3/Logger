@@ -31,7 +31,7 @@ public class OnCommand {
 
             final Player player = (Player) commandSource;
 
-            if (main.getConfig().getBoolean("Log-Player.Commands") && player.getCurrentServer().isPresent()) {
+            if (player.getCurrentServer().isPresent()) {
 
                 if (isWhitelisted && isBlacklisted) return;
 

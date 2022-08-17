@@ -1,7 +1,6 @@
 package me.prism3.logger.events;
 
 import com.carpour.loggercore.database.entity.Coordinates;
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import fr.xephi.authme.api.v3.AuthMeApi;
 import me.prism3.logger.Main;
 import me.prism3.logger.api.AuthMeUtil;
@@ -32,7 +31,7 @@ public class OnPlayerTeleport implements Listener {
 
         if (event.getPlayer().hasMetadata("NPC")) return; // Return if player is NPC. Could be Villager or NPC from Citizens etc...
 
-        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Teleport")) {
+        if (!event.isCancelled()) {
 
             final Player player = event.getPlayer();
 

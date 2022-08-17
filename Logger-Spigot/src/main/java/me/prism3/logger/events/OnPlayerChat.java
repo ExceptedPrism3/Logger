@@ -1,6 +1,5 @@
 package me.prism3.logger.events;
 
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -27,7 +26,7 @@ public class OnPlayerChat implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(final AsyncPlayerChatEvent event) {
 
-        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Chat")) {
+        if (!event.isCancelled()) {
 
             final Player player = event.getPlayer();
 
@@ -38,8 +37,6 @@ public class OnPlayerChat implements Listener {
             final String playerName = player.getName();
             final UUID playerUUID = player.getUniqueId();
             final String msg = event.getMessage().replace("\\", "\\\\");
-
-
 
             // Log To Files
             if (Data.isLogToFiles) {

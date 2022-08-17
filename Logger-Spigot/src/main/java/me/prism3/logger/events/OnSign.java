@@ -1,7 +1,6 @@
 package me.prism3.logger.events;
 
 import com.carpour.loggercore.database.entity.Coordinates;
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.events.spy.OnSignSpy;
 import me.prism3.logger.utils.BedrockChecker;
@@ -38,7 +37,7 @@ public class OnSign implements Listener {
 
         }
 
-        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Sign-Text")) {
+        if (!event.isCancelled()) {
 
             final Player player = event.getPlayer();
 

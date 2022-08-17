@@ -27,7 +27,7 @@ public class OnGameMode implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onGameMode(final PlayerGameModeChangeEvent event) {
 
-        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Game-Mode")) {
+        if (!event.isCancelled()) {
 
             final String gameMode = Data.gameModeConf;
             final Player player = event.getPlayer();
@@ -40,8 +40,6 @@ public class OnGameMode implements Listener {
                 final UUID playerUUID = player.getUniqueId();
                 final World world = player.getWorld();
                 final String worldName = world.getName();
-
-
 
                 // Log To Files
                 if (Data.isLogToFiles) {

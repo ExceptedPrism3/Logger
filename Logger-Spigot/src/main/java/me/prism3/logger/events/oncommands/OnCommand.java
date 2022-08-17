@@ -1,6 +1,5 @@
 package me.prism3.logger.events.oncommands;
 
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.events.spy.OnCommandSpy;
 import me.prism3.logger.utils.BedrockChecker;
@@ -43,7 +42,7 @@ public class OnCommand implements Listener {
             return;
         }
 
-        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Commands")) {
+        if (!event.isCancelled()) {
 
             final Player player = event.getPlayer();
 

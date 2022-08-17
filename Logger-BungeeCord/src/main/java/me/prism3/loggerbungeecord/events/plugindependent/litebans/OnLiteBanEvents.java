@@ -27,8 +27,6 @@ public class OnLiteBanEvents implements Listener, Runnable {
             @Override
             public void entryAdded(Entry entry) {
 
-                if (main.getConfig().getBoolean("Log-Extra.LiteBans")) {
-
                 final String entryType = entry.getType().toLowerCase();
                 final String executorName = entry.getExecutorName();
                 final String duration = entry.getDurationString();
@@ -39,85 +37,84 @@ public class OnLiteBanEvents implements Listener, Runnable {
 
                 File fileLog = null;
 
-                    switch (entryType) {
+                switch (entryType) {
 
-                        case "ban":
+                    case "ban":
 
-                            if (!isLiteBansIpBan) return;
-                            if (!isLiteBansTempIpBan) return;
-                            if (!isLiteBansBan) return;
-                            if (!isLiteBansTempBan) return;
+                        if (!isLiteBansIpBan) return;
+                        if (!isLiteBansTempIpBan) return;
+                        if (!isLiteBansBan) return;
+                        if (!isLiteBansTempBan) return;
 
-                            fileLog = FileHandler.getLiteBansBansLogFile();
+                        fileLog = FileHandler.getLiteBansBansLogFile();
 
-                            break;
+                        break;
 
-                        case "mute":
+                    case "mute":
 
-                            if (!isLiteBansMute) return;
-                            if (!isLiteBansTempMute) return;
+                        if (!isLiteBansMute) return;
+                        if (!isLiteBansTempMute) return;
 
-                            fileLog = FileHandler.getLiteBansMuteLogFile();
+                        fileLog = FileHandler.getLiteBansMuteLogFile();
 
-                            break;
+                        break;
 
-                        case "kick":
+                    case "kick":
 
-                            if (!isLiteBansKick) return;
+                        if (!isLiteBansKick) return;
 
-                            fileLog = FileHandler.getLiteBansKickLogFile();
+                        fileLog = FileHandler.getLiteBansKickLogFile();
 
-                            break;
+                        break;
 
-                        default:
-                            break;
+                    default:
+                        break;
+
+                }
+
+                assert executorName != null;
+
+                // Log To Files
+                if (isLogToFiles) {
+
+                    assert fileLog != null;
+
+                    try {
+
+                        final BufferedWriter out = new BufferedWriter(new FileWriter(fileLog, true));
+                        out.write(main.getMessages().getString("Files.Extra.LiteBans").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()) + "\n");
+                        out.close();
+
+                    } catch (IOException e) {
+
+                        Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                        e.printStackTrace();
 
                     }
+                }
 
-                    assert executorName != null;
+                // Discord Integration
+                if (!main.getMessages().getString("Discord.Extra.LiteBans").isEmpty())
+                    main.getDiscord().liteBans(main.getMessages().getString("Discord.Extra.LiteBans").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()), false);
 
-                    // Log To Files
-                    if (isLogToFiles) {
+                // External
+                if (isExternal) {
 
-                        assert fileLog != null;
+                    try {
 
-                        try {
+                        Main.getInstance().getDatabase().insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
 
-                            final BufferedWriter out = new BufferedWriter(new FileWriter(fileLog, true));
-                            out.write(main.getMessages().getString("Files.Extra.LiteBans").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()) + "\n");
-                            out.close();
+                    } catch (Exception e) { e.printStackTrace(); }
+                }
 
-                        } catch (IOException e) {
+                // SQLite
+                if (isSqlite) {
 
-                            Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
-                            e.printStackTrace();
+                    try {
 
-                        }
-                    }
+                        Main.getInstance().getSqLite().insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
 
-                    // Discord Integration
-                    if (!main.getMessages().getString("Discord.Extra.LiteBans").isEmpty())
-                        main.getDiscord().liteBans(main.getMessages().getString("Discord.Extra.LiteBans").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()), false);
-
-                    // External
-                    if (isExternal ) {
-
-                        try {
-
-                            Main.getInstance().getDatabase().insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
-
-                        } catch (Exception e) { e.printStackTrace(); }
-                    }
-
-                    // SQLite
-                    if (isSqlite ) {
-
-                        try {
-
-                            Main.getInstance().getSqLite().insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
-
-                        } catch (Exception e) { e.printStackTrace(); }
-                    }
+                    } catch (Exception e) { e.printStackTrace(); }
                 }
             }
         });
