@@ -77,7 +77,6 @@ public class OnChestInteraction implements Listener {
 
             final String[] items = Arrays.stream(event.getInventory().getContents()).filter(Objects::nonNull).map(stack -> MessageFormat.format("{0} x {1}", stack.getType(), stack.getAmount())).toArray(String[]::new);
 
-
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files

@@ -1,4 +1,4 @@
-package me.prism3.loggerbungeecord.events.plugindependent.litebans;
+package me.prism3.loggerbungeecord.events.plugindependent;
 
 import litebans.api.Entry;
 import litebans.api.Events;
@@ -15,7 +15,7 @@ import java.time.ZonedDateTime;
 
 import static me.prism3.loggerbungeecord.utils.Data.*;
 
-public class OnLiteBanEvents implements Listener, Runnable {
+public class OnLiteBan implements Listener, Runnable {
 
     private final Main main = Main.getInstance();
 

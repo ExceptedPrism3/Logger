@@ -96,6 +96,10 @@ public interface DataSourceInterface {
     void insertPlayerLogin(String serverName, String playerName, String toString,
                            InetSocketAddress playerIP, boolean hasPermission);
 
+    void insertItemFramePlace(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff);
+
+    void insertItemFrameBreak(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff);
+
     void disconnect();
 
     List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset, int limit);

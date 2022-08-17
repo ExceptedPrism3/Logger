@@ -1070,6 +1070,16 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
+    public void insertItemFramePlace(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+
+    }
+
+    @Override
+    public void insertItemFrameBreak(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+
+    }
+
+    @Override
     public void disconnect() {
         //TODO chof m3k
         try {

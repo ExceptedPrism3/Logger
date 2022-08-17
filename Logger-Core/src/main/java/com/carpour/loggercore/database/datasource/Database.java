@@ -14,6 +14,7 @@ import java.time.Instant;
 import java.util.List;
 
 public final class Database implements DataSourceInterface {
+
     private final Options options;
 
     public Database(DatabaseCredentials databaseCredentials, Options options) {
@@ -823,6 +824,16 @@ public final class Database implements DataSourceInterface {
     @Override
     public void insertPlayerLogin(String serverName, String playerName, String toString, InetSocketAddress playerIP,
                                   boolean hasPermission) {
+
+    }
+
+    @Override
+    public void insertItemFramePlace(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+        //TODO m3aak had joj
+    }
+
+    @Override
+    public void insertItemFrameBreak(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
 
     }
 

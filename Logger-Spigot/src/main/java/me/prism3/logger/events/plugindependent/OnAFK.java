@@ -24,11 +24,11 @@ public class OnAFK implements Listener {
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void afk(final AfkStatusChangeEvent e) {
+    public void afk(final AfkStatusChangeEvent event) {
 
-        if (!e.isCancelled() && !e.getAffected().isAfk()) {
+        if (!event.isCancelled() && !event.getAffected().isAfk()) {
 
-            final Player player = e.getAffected().getBase();
+            final Player player = event.getAffected().getBase();
 
             if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
@@ -53,10 +53,10 @@ public class OnAFK implements Listener {
                         out.write(this.main.getMessages().get().getString("Files.Extras.AFK-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
                         out.close();
 
-                    } catch (IOException event) {
+                    } catch (IOException e) {
 
                         this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        event.printStackTrace();
+                        e.printStackTrace();
 
                     }
                 } else {
@@ -67,10 +67,10 @@ public class OnAFK implements Listener {
                         out.write(this.main.getMessages().get().getString("Files.Extras.AFK").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
                         out.close();
 
-                    } catch (IOException event) {
+                    } catch (IOException e) {
 
                         this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        event.printStackTrace();
+                        e.printStackTrace();
 
                     }
                 }

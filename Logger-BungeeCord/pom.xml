@@ -88,6 +88,7 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <!-- PartyAndFriends Plugin Repo -->
         <repository>
             <id>simonsators Repo</id>
             <url>https://simonsator.de/repo</url>

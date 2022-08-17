@@ -40,6 +40,8 @@ public class Discord {
     private TextChannel primedTNTChannel;
     private TextChannel chestInteractionChannel;
     private TextChannel entityDeathChannel;
+    private TextChannel itemFramePlaceChannel;
+    private TextChannel itemFrameBreakChannel;
 
     private TextChannel serverStartChannel;
     private TextChannel serverStopChannel;
@@ -131,6 +133,10 @@ public class Discord {
 
             final String entityDeathChannelID = this.main.getDiscordFile().get().getString("Discord.Entity-Death.Channel-ID");
 
+            final String itemFramePlaceChannelID = this.main.getDiscordFile().get().getString("Discord.Item-Frame-Place.Channel-ID");
+
+            final String itemFrameBreakChannelID = this.main.getDiscordFile().get().getString("Discord.Item-Frame-Break.Channel-ID");
+
             // Server Side Part
             final String serverStartChannelID = this.main.getDiscordFile().get().getString("Discord.Server-Side.Start.Channel-ID");
 
@@ -166,248 +172,135 @@ public class Discord {
             try {
 
                 // Player Side Part
-                if (this.isValid(staffChannelID, "Staff.Enabled")) {
-
+                if (this.isValid(staffChannelID, "Staff.Enabled"))
                     this.staffChannel = this.jda.getTextChannelById(staffChannelID);
 
-                }
-
-                if (this.isValid(playerChatChannelID, "Log-Player.Chat")) {
-
+                if (this.isValid(playerChatChannelID, "Log-Player.Chat"))
                     this.playerChatChannel = this.jda.getTextChannelById(playerChatChannelID);
 
-                }
-
-                if (this.isValid(playerCommandsChannelID, "Log-Player.Commands")) {
-
+                if (this.isValid(playerCommandsChannelID, "Log-Player.Commands"))
                     this.playerCommandsChannel = this.jda.getTextChannelById(playerCommandsChannelID);
 
-                }
-
-                if (this.isValid(playerSignTextChannelID, "Log-Player.Sign-Text")) {
-
+                if (this.isValid(playerSignTextChannelID, "Log-Player.Sign-Text"))
                     this.playerSignTextChannel = this.jda.getTextChannelById(playerSignTextChannelID);
 
-                }
-
-                if (this.isValid(playerJoinChannelID, "Log-Player.Join")) {
-
+                if (this.isValid(playerJoinChannelID, "Log-Player.Join"))
                     this.playerJoinChannel = this.jda.getTextChannelById(playerJoinChannelID);
 
-                }
-
-                if (this.isValid(playerLeaveChannelID, "Log-Player.Leave")) {
-
+                if (this.isValid(playerLeaveChannelID, "Log-Player.Leave"))
                     this.playerLeaveChannel = this.jda.getTextChannelById(playerLeaveChannelID);
 
-                }
-
-                if (this.isValid(playerKickChannelID, "Log-Player.Kick")) {
-
+                if (this.isValid(playerKickChannelID, "Log-Player.Kick"))
                     this.playerKickChannel = this.jda.getTextChannelById(playerKickChannelID);
 
-                }
-
-                if (this.isValid(playerDeathChannelID, "Log-Player.Death")) {
-
+                if (this.isValid(playerDeathChannelID, "Log-Player.Death"))
                     this.playerDeathChannel = this.jda.getTextChannelById(playerDeathChannelID);
 
-                }
-
-                if (this.isValid(playerTeleportChannelID, "Log-Player.Teleport")) {
-
+                if (this.isValid(playerTeleportChannelID, "Log-Player.Teleport"))
                     this.playerTeleportChannel = this.jda.getTextChannelById(playerTeleportChannelID);
 
-                }
-
-                if (this.isValid(playerLevelChannelID, "Log-Player.Level")) {
-
+                if (this.isValid(playerLevelChannelID, "Log-Player.Level"))
                     this.playerLevelChannel = this.jda.getTextChannelById(playerLevelChannelID);
 
-                }
-
-                if (this.isValid(blockPlaceChannelID, "Log-Player.Block-Place")) {
-
+                if (this.isValid(blockPlaceChannelID, "Log-Player.Block-Place"))
                     this.blockPlaceChannel = this.jda.getTextChannelById(blockPlaceChannelID);
 
-                }
-
-                if (this.isValid(blockBreakChannelID, "Log-Player.Block-Break")) {
-
+                if (this.isValid(blockBreakChannelID, "Log-Player.Block-Break"))
                     this.blockBreakChannel = this.jda.getTextChannelById(blockBreakChannelID);
 
-                }
-
-                if (this.isValid(bucketFillChannelID, "Log-Player.Bucket-Fill\"")) {
-
+                if (this.isValid(bucketFillChannelID, "Log-Player.Bucket-Fill\""))
                     this.bucketFillChannel = this.jda.getTextChannelById(bucketFillChannelID);
 
-                }
-
-                if (this.isValid(bucketEmptyChannelID, "Log-Player.Bucket-Empty")) {
-
+                if (this.isValid(bucketEmptyChannelID, "Log-Player.Bucket-Empty"))
                     this.bucketEmptyChannel = this.jda.getTextChannelById(bucketEmptyChannelID);
 
-                }
-
-                if (this.isValid(anvilChannelID, "Log-Player.Anvil")) {
-
+                if (this.isValid(anvilChannelID, "Log-Player.Anvil"))
                     this.anvilChannel = this.jda.getTextChannelById(anvilChannelID);
 
-                }
-
-                if (this.isValid(itemDropChannelID, "Log-Player.Item-Drop")) {
-
+                if (this.isValid(itemDropChannelID, "Log-Player.Item-Drop"))
                     this.itemDropChannel = this.jda.getTextChannelById(itemDropChannelID);
 
-                }
-
-                if (this.isValid(enchantingChannelID, "Log-Player.Enchanting")) {
-
+                if (this.isValid(enchantingChannelID, "Log-Player.Enchanting"))
                     this.enchantingChannel = this.jda.getTextChannelById(enchantingChannelID);
 
-                }
-
-                if (this.isValid(bookEditingChannelID, "Log-Player.Book-Editing")) {
-
+                if (this.isValid(bookEditingChannelID, "Log-Player.Book-Editing"))
                     this.bookEditingChannel = this.jda.getTextChannelById(bookEditingChannelID);
 
-                }
-
-                if (this.isValid(itemPickupChannelID, "Log-Player.Item-Pickup")) {
-
+                if (this.isValid(itemPickupChannelID, "Log-Player.Item-Pickup"))
                     this.itemPickupChannel = this.jda.getTextChannelById(itemPickupChannelID);
 
-                }
-
-                if (this.isValid(furnaceChannelID, "Log-Player.Furnace")) {
-
+                if (this.isValid(furnaceChannelID, "Log-Player.Furnace"))
                     this.furnaceChannel = this.jda.getTextChannelById(furnaceChannelID);
 
-                }
-
-                if (this.isValid(gameModeChannelID, "Log-Player.Game-Mode")) {
-
+                if (this.isValid(gameModeChannelID, "Log-Player.Game-Mode"))
                     this.gameModeChannel = this.jda.getTextChannelById(gameModeChannelID);
 
-                }
-
-                if (this.isValid(craftChannelID, "Log-Player.Craft")) {
-
+                if (this.isValid(craftChannelID, "Log-Player.Craft"))
                     this.craftChannel = this.jda.getTextChannelById(craftChannelID);
 
-                }
-
-                if (this.isValid(registrationChannelID, "Log-Player.Registration")) {
-
+                if (this.isValid(registrationChannelID, "Log-Player.Registration"))
                     this.registrationChannel = this.jda.getTextChannelById(registrationChannelID);
 
-                }
-
-                if (this.isValid(primedTNTChannelID, "Log-Player.Primed-TNT")) {
-
+                if (this.isValid(primedTNTChannelID, "Log-Player.Primed-TNT"))
                     this.primedTNTChannel = this.jda.getTextChannelById(primedTNTChannelID);
 
-                }
-
-                if (this.isValid(chestInteractionChannelID, "Log-Player.Chest-Interaction")) {
-
+                if (this.isValid(chestInteractionChannelID, "Log-Player.Chest-Interaction"))
                     this.chestInteractionChannel = this.jda.getTextChannelById(chestInteractionChannelID);
 
-                }
-
-                if (this.isValid(entityDeathChannelID, "Log-Player.Entity-Death")) {
-
+                if (this.isValid(entityDeathChannelID, "Log-Player.Entity-Death"))
                     this.entityDeathChannel = this.jda.getTextChannelById(entityDeathChannelID);
 
-                }
+                if (this.isValid(itemFramePlaceChannelID, "Log-Player.Item-Frame-Place"))
+                    this.itemFramePlaceChannel = this.jda.getTextChannelById(itemFramePlaceChannelID);
+
+                if (this.isValid(itemFrameBreakChannelID, "Log-Player.Item-Frame-Break"))
+                    this.itemFrameBreakChannel = this.jda.getTextChannelById(itemFrameBreakChannelID);
 
                 // Server Side Part
-                if (this.isValid(serverStartChannelID, "Log-Server.Start")) {
-
+                if (this.isValid(serverStartChannelID, "Log-Server.Start"))
                     this.serverStartChannel = this.jda.getTextChannelById(serverStartChannelID);
 
-                }
-
-                if (this.isValid(serverStopChannelID, "Log-Server.Stop")) {
-
+                if (this.isValid(serverStopChannelID, "Log-Server.Stop"))
                     this.serverStopChannel = this.jda.getTextChannelById(serverStopChannelID);
 
-                }
-
-                if (this.isValid(consoleChannelID, "Log-Server.Console-Commands")) {
-
+                if (this.isValid(consoleChannelID, "Log-Server.Console-Commands"))
                     this.consoleChannel = this.jda.getTextChannelById(consoleChannelID);
 
-                }
-
-                if (this.isValid(ramChannelID, "Log-Server.RAM")) {
-
+                if (this.isValid(ramChannelID, "Log-Server.RAM"))
                     this.ramChannel = this.jda.getTextChannelById(ramChannelID);
 
-                }
-
-                if (this.isValid(tpsChannelID, "Log-Server.TPS")) {
-
+                if (this.isValid(tpsChannelID, "Log-Server.TPS"))
                     this.tpsChannel = this.jda.getTextChannelById(tpsChannelID);
 
-                }
-
-                if (this.isValid(portalCreationChannelID, "Log-Server.Portal-Creation")) {
-
+                if (this.isValid(portalCreationChannelID, "Log-Server.Portal-Creation"))
                     this.portalCreationChannel = this.jda.getTextChannelById(portalCreationChannelID);
 
-                }
-
-                if (this.isValid(rConChannelID, "Log-Server.RCON")) {
-
+                if (this.isValid(rConChannelID, "Log-Server.RCON"))
                     this.rConChannel = this.jda.getTextChannelById(rConChannelID);
 
-                }
-
-                if (this.isValid(commandBlockChannelID, "Log-Server.Command-Block")) {
-
+                if (this.isValid(commandBlockChannelID, "Log-Server.Command-Block"))
                     this.commandBlockChannel = this.jda.getTextChannelById(commandBlockChannelID);
 
-                }
-
                 // Extra Checkers Part
-                if (this.isValid(afkChannelID, "Log-Extras.Essentials-AFK")) {
-
+                if (this.isValid(afkChannelID, "Log-Extras.Essentials-AFK"))
                     this.afkChannel = this.jda.getTextChannelById(afkChannelID);
 
-                }
-
-                if (this.isValid(wrongPasswordChannelID, "Log-Extras.AuthMe-Wrong-Password")) {
-
+                if (this.isValid(wrongPasswordChannelID, "Log-Extras.AuthMe-Wrong-Password"))
                     this.wrongPasswordChannel = this.jda.getTextChannelById(wrongPasswordChannelID);
 
-                }
-
-                if (this.isValid(vaultChannelID, "Log-Extras.Vault")) {
-
+                if (this.isValid(vaultChannelID, "Log-Extras.Vault"))
                     this.vaultChannel = this.jda.getTextChannelById(vaultChannelID);
 
-                }
-
-                if (this.isValid(liteBansChannelID, "Log-Extras.LiteBans")) {
-
+                if (this.isValid(liteBansChannelID, "Log-Extras.LiteBans"))
                     this.liteBansChannel = this.jda.getTextChannelById(liteBansChannelID);
 
-                }
-
-                if (this.isValid(advancedBanChannelID, "Log-Extras.AdvancedBan")) {
-
+                if (this.isValid(advancedBanChannelID, "Log-Extras.AdvancedBan"))
                     this.advancedBanChannel = this.jda.getTextChannelById(advancedBanChannelID);
 
-                }
-
                 // Version Exception Part
-                if (this.isValid(woodStrippingChannelID, "Log-Version-Exceptions.Wood-Stripping")) {
-
+                if (this.isValid(woodStrippingChannelID, "Log-Version-Exceptions.Wood-Stripping"))
                     this.woodStrippingChannel = this.jda.getTextChannelById(woodStrippingChannelID);
 
-                }
             } catch (Exception e) {
 
                 this.main.getLogger().severe("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
@@ -425,18 +318,14 @@ public class Discord {
     }
 
     public void staffChat(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.staffChannel);
-
     }
 
     public void playerChat(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerChatChannel);
     }
 
     public void playerCommand(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerCommandsChannel);
     }
 
@@ -463,47 +352,38 @@ public class Discord {
     }
 
     public void playerSignText(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerSignTextChannel);
     }
 
     public void playerJoin(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerJoinChannel);
     }
 
     public void playerLeave(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerLeaveChannel);
     }
 
     public void playerKick(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerKickChannel);
     }
 
     public void playerDeath(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerDeathChannel);
     }
 
     public void playerTeleport(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerTeleportChannel);
     }
 
     public void playerLevel(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerLevelChannel);
     }
 
     public void blockPlace(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.blockPlaceChannel);
     }
 
     public void blockBreak(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.blockBreakChannel);
     }
 
@@ -519,17 +399,14 @@ public class Discord {
     }
 
     public void bucketFill(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.bucketFillChannel);
     }
 
     public void bucketEmpty(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.bucketEmptyChannel);
     }
 
     public void anvil(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.anvilChannel);
     }
 
@@ -589,67 +466,54 @@ public class Discord {
     }
 
     public void itemDrop(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.itemDropChannel);
     }
 
     public void enchanting(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.enchantingChannel);
     }
 
     public void bookEditing(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.bookEditingChannel);
     }
 
     public void afk(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.afkChannel);
     }
 
     public void wrongPassword(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.wrongPasswordChannel);
     }
 
     public void itemPickup(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.itemPickupChannel);
     }
 
     public void furnace(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.furnaceChannel);
     }
 
     public void gameMode(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.gameModeChannel);
     }
 
     public void playerCraft(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.craftChannel);
     }
 
     public void vault(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.vaultChannel);
     }
 
     public void playerRegistration(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.registrationChannel);
     }
 
     public void primedTNT(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.primedTNTChannel);
     }
 
     public void chestInteraction(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.chestInteractionChannel);
     }
 
@@ -676,13 +540,19 @@ public class Discord {
     }
 
     public void woodStripping(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.woodStrippingChannel);
     }
 
     public void entityDeath(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.entityDeathChannel);
+    }
+
+    public void itemFramePlace(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.itemFramePlaceChannel);
+    }
+
+    public void itemFrameBreak(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.itemFrameBreakChannel);
     }
 
     private void discordUtil(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine, TextChannel channel) {
@@ -711,7 +581,6 @@ public class Discord {
 
                 this.main.getLogger().severe("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
                         " If this Issue Persists, Contact the Authors!");
-
                 e.printStackTrace();
 
             }

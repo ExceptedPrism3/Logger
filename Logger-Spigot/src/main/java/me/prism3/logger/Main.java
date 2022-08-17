@@ -9,6 +9,8 @@ import me.prism3.logger.commands.getting.Chat;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteRegistration;
 import me.prism3.logger.discord.Discord;
 import me.prism3.logger.discord.DiscordFile;
+import me.prism3.logger.events.misc.ItemFrameBreak;
+import me.prism3.logger.events.misc.ItemFramePlace;
 import me.prism3.logger.serverside.Start;
 import me.prism3.logger.serverside.Stop;
 import me.prism3.logger.utils.*;

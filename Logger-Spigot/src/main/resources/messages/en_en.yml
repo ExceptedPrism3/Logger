@@ -59,6 +59,10 @@ Files:
   Chest-Interaction: "[%time%] [%world%] [%uuid%] The Player <%player%> has opened %chest% at X= %x%, Y= %y%, Z= %z% that contained %items%"
   Entity-Death-Staff: "[%time%] [%world%] [%uuid%] The Staff <%player%> has slain %mob% at X= %x%, Y= %y%, Z= %z%"
   Entity-Death: "[%time%] [%world%] [%uuid%] The Player <%player%> has slain %mob% at X= %x%, Y= %y%, Z= %z%"
+  Item-Frame-Place-Staff: "[%time%] [%world%] [%uuid%] The Staff <%player%> has placed an item frame at X= %x%, Y= %y%, Z= %z%"
+  Item-Frame-Place: "[%time%] [%world%] [%uuid%] The Player <%player%> has placed an item frame at X= %x%, Y= %y%, Z= %z%"
+  Item-Frame-Break-Staff: "[%time%] [%world%] [%uuid%] The Staff <%player%> has broke an item frame at X= %x%, Y= %y%, Z= %z%"
+  Item-Frame-Break: "[%time%] [%world%] [%uuid%] The Player <%player%> has broke an item frame at X= %x%, Y= %y%, Z= %z%"
   Server-Side:
     Start: "[%time%]"
     Stop: "[%time%]"
@@ -137,6 +141,10 @@ Discord:
   Chest-Interaction: "**[%time%]** **[%world%]** **[%uuid%]** has opened **%chest%** at X= **%x%**, Y= **%y%**, Z= **%z%** that contained **%items%**"
   Entity-Death-Staff: "**[%time%]** **[%world%]** **[%uuid%]** has slain **%mob%** at X= **%x%**, Y= **%y%**, Z= **%z%**"
   Entity-Death: "**[%time%]** **[%world%]** **[%uuid%]** has slain **%mob%** at X= **%x%**, Y= **%y%**, Z= **%z%**"
+  Item-Frame-Place-Staff: "**[%time%]** **[%world%]** **[%uuid%]** has placed an item frame at X= **%x%**, Y= **%y%**, Z= **%z%**"
+  Item-Frame-Place: "**[%time%]** **[%world%]** **[%uuid%]** has placed an item frame at X= **%x%**, Y= **%y%**, Z= **%z%**"
+  Item-Frame-Break-Staff: "**[%time%]** **[%world%]** **[%uuid%]** has broke an item frame at X= **%x%**, Y= **%y%**, Z= **%z%**"
+  Item-Frame-Break: "**[%time%]** **[%world%]** **[%uuid%]** has broke an item frame at X= **%x%**, Y= **%y%**, Z= **%z%**"
   Server-Side:
     Start: "**%time%**"
     Stop: "**%time%**"

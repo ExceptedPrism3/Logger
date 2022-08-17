@@ -185,6 +185,7 @@ Changes
 Additions
     [+] Plugin Prefix
     [+] Added 1.7 server versions enums
+    [+] Item Frame Place & Break Checkers
 
 Fixes
     [!] Plugin not starting up correctly

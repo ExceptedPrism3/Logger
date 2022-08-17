@@ -7,8 +7,9 @@ import me.prism3.loggerbungeecord.events.OnChat;
 import me.prism3.loggerbungeecord.events.OnLeave;
 import me.prism3.loggerbungeecord.events.OnLogin;
 import me.prism3.loggerbungeecord.events.oncommands.OnCommand;
-import me.prism3.loggerbungeecord.events.plugindependent.litebans.OnLiteBanEvents;
-import me.prism3.loggerbungeecord.events.plugindependent.litebans.OnPartyAndFriends;
+import me.prism3.loggerbungeecord.events.plugindependent.OnLiteBan;
+import me.prism3.loggerbungeecord.events.plugindependent.paf.OnFriendMessage;
+import me.prism3.loggerbungeecord.events.plugindependent.paf.OnPartyMessage;
 import me.prism3.loggerbungeecord.serverside.OnReload;
 import me.prism3.loggerbungeecord.serverside.RAM;
 
@@ -171,14 +172,15 @@ public class Data {
 
         if (LiteBansUtil.getLiteBansAPI() != null && this.main.getConfig().getBoolean("Log-Extras.LiteBans")) {
 
-            this.main.getProxy().getScheduler().schedule(this.main, new OnLiteBanEvents(), 5L, 0, TimeUnit.SECONDS);
+            this.main.getProxy().getScheduler().schedule(this.main, new OnLiteBan(), 5L, 0, TimeUnit.SECONDS);
             this.main.getLogger().info("LiteBans Plugin Detected!");
 
         }
 
         if (PartyAndFriendsUtil.getPartyAndFriendsAPI() != null && this.main.getConfig().getBoolean("Log-Extras.PAF")) {
 
-            this.main.getProxy().getPluginManager().registerListener(this.main, new OnPartyAndFriends());
+            this.main.getProxy().getPluginManager().registerListener(this.main, new OnFriendMessage());
+            this.main.getProxy().getPluginManager().registerListener(this.main, new OnPartyMessage());
             this.main.getLogger().info("PartyAndFriends Plugin Detected!");
 
         }
