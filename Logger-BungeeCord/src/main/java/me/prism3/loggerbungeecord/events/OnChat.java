@@ -21,7 +21,7 @@ public class OnChat implements Listener {
     @EventHandler
     public void onPlayerChat(final ChatEvent event) {
 
-        if (!event.isCommand() && !event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Chat")) {
+        if (!event.isCommand() && !event.isCancelled()) {
 
             final ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 

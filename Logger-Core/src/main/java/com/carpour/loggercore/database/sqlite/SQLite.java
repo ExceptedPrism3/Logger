@@ -1070,18 +1070,34 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
+    public void insertItemFramePlace(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+
+    }
+
+    @Override
+    public void insertItemFrameBreak(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+
+    }
+
+    @Override
     public void disconnect() {
-        //TODO implement this method
+        //TODO chof m3k
+        try {
+
+            this.getConnection().close();
+            this.logger.info("SQLite Database has been closed!");
+
+        } catch (final SQLException e) {
+
+            this.logger.severe("SQLite Database couldn't be closed safely, if the issue persists contact the Authors!");
+            e.printStackTrace();
+
+        }
     }
 
     @Override
-    public List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset, int limit) {
-        return null;
-    }
+    public List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset, int limit) { return null; }
 
     @Override
-    public Long getPlayerChatCount(String playerName) {
-        return 0L;
-    }
-
+    public Long getPlayerChatCount(String playerName) { return 0L; }
 }

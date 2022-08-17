@@ -1,7 +1,6 @@
 package me.prism3.logger.events.oninventories;
 
 import com.carpour.loggercore.database.entity.Coordinates;
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -35,7 +34,7 @@ public class OnChestInteraction implements Listener {
 
         if (event.getInventory().getLocation() == null) return;
 
-        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Chest-Interaction")) {
+        if (!event.isCancelled()) {
 
             final Player player = (Player) event.getPlayer();
 
@@ -77,7 +76,6 @@ public class OnChestInteraction implements Listener {
             final int z = event.getInventory().getLocation().getBlockZ();
 
             final String[] items = Arrays.stream(event.getInventory().getContents()).filter(Objects::nonNull).map(stack -> MessageFormat.format("{0} x {1}", stack.getType(), stack.getAmount())).toArray(String[]::new);
-
 
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 

@@ -1,7 +1,6 @@
 package me.prism3.logger.events;
 
 import com.carpour.loggercore.database.entity.Coordinates;
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -32,7 +31,7 @@ public class OnItemDrop implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDrop(final PlayerDropItemEvent event) {
 
-        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Item-Drop")) {
+        if (!event.isCancelled()) {
 
             final Player player = event.getPlayer();
 

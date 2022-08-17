@@ -1,21 +1,23 @@
-package me.prism3.loggervelocity.events.plugindependent.litebans;
+package me.prism3.loggerbungeecord.events.plugindependent;
 
 import litebans.api.Entry;
 import litebans.api.Events;
-import me.prism3.loggervelocity.Main;
-import me.prism3.loggervelocity.utils.FileHandler;
-import me.prism3.loggervelocity.utils.litebansutil.UsernameFetcher;
+import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.utils.FileHandler;
+import me.prism3.loggerbungeecord.utils.litebanutil.UsernameFetcher;
+import net.md_5.bungee.api.plugin.Listener;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 
-import static me.prism3.loggervelocity.utils.Data.*;
+import static me.prism3.loggerbungeecord.utils.Data.*;
 
-public class OnLiteBanEvents implements Runnable {
+public class OnLiteBan implements Listener, Runnable {
+
+    private final Main main = Main.getInstance();
 
     @Override
     public void run() {
@@ -24,8 +26,6 @@ public class OnLiteBanEvents implements Runnable {
 
             @Override
             public void entryAdded(Entry entry) {
-
-                final Main main = Main.getInstance();
 
                 final String entryType = entry.getType().toLowerCase();
                 final String executorName = entry.getExecutorName();
@@ -87,15 +87,15 @@ public class OnLiteBanEvents implements Runnable {
 
                     } catch (IOException e) {
 
-                        main.getLogger().error("An error occurred while logging into the appropriate file.");
+                        Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
                 }
 
-                // Discord
+                // Discord Integration
                 if (!main.getMessages().getString("Discord.Extra.LiteBans").isEmpty())
-                    main.getDiscord().liteBans(Objects.requireNonNull(main.getMessages().getString("Discord.Extra.LiteBans")).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()), false);
+                    main.getDiscord().liteBans(main.getMessages().getString("Discord.Extra.LiteBans").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()), false);
 
                 // External
                 if (isExternal) {

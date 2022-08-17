@@ -224,9 +224,8 @@
         <dependency>
             <groupId>com.viaversion</groupId>
             <artifactId>viaversion-api</artifactId>
-            <version>LATEST</version>
+            <version>4.4.1</version>
             <scope>provided</scope>
-
         </dependency>
         <!-- DotEnv -->
         <dependency>

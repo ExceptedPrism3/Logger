@@ -1,7 +1,6 @@
 package me.prism3.logger.events.oninventories;
 
 import com.carpour.loggercore.database.entity.Coordinates;
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -28,7 +27,7 @@ public class OnCraft implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCrafting(final CraftItemEvent event) {
 
-        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Craft")) {
+        if (!event.isCancelled()) {
 
             final Player player = (Player) event.getWhoClicked();
 

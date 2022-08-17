@@ -1,6 +1,5 @@
 package me.prism3.logger.events;
 
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -38,8 +37,6 @@ public class OnPlayerRegister {
         final LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(player.getFirstPlayed()), ZoneId.systemDefault());
 
         final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-
-
 
         // Log To Files
         if (Data.isLogToFiles) {

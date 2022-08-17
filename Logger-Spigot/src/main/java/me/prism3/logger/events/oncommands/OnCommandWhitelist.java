@@ -1,6 +1,5 @@
 package me.prism3.logger.events.oncommands;
 
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -35,8 +34,6 @@ public class OnCommandWhitelist implements Listener {
         final UUID playerUUID = player.getUniqueId();
         final String command = event.getMessage().replace("\\", "\\\\");
         final List<String> commandParts = Arrays.asList(event.getMessage().split("\\s+"));
-        
-
 
         for (String m : Data.commandsToLog) {
 

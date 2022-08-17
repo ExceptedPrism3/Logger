@@ -1,7 +1,6 @@
 package me.prism3.logger.events;
 
 import com.carpour.loggercore.database.entity.Coordinates;
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -37,105 +36,102 @@ public class OnPlayerJoin implements Listener {
 
         }*/
 
-        if (this.main.getConfig().getBoolean("Log-Player.Join")) {
+        final Player player = event.getPlayer();
 
-            final Player player = event.getPlayer();
+        if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
-            if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
+        final World world = player.getWorld();
+        final String worldName = world.getName();
+        final String playerName = player.getName();
+        final UUID playerUUID = player.getUniqueId();
+        InetSocketAddress ip = player.getAddress();
+        final int x = player.getLocation().getBlockX();
+        final int y = player.getLocation().getBlockY();
+        final int z = player.getLocation().getBlockZ();
 
-            final World world = player.getWorld();
-            final String worldName = world.getName();
-            final String playerName = player.getName();
-            final UUID playerUUID = player.getUniqueId();
-            InetSocketAddress ip = player.getAddress();
-            final int x = player.getLocation().getBlockX();
-            final int y = player.getLocation().getBlockY();
-            final int z = player.getLocation().getBlockZ();
+        if (Data.isCommandsToBlock && Data.isCommandsToLog && player.hasPermission(Data.loggerStaff)) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    "&bLogger &8&l| &cEnabling both Whitelist" +
+                            " and Blacklist isn't supported. Disable one of them" +
+                            " to continue logging Player Commands."));
+        }
 
-            if (Data.isCommandsToBlock && Data.isCommandsToLog && player.hasPermission(Data.loggerStaff)) {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        "&bLogger &8&l| &cEnabling both Whitelist" +
-                                " and Blacklist isn't supported. Disable one of them" +
-                                " to continue logging Player Commands."));
-            }
-
-            if (!Data.isPlayerIP) ip = null;
+        if (!Data.isPlayerIP) ip = null;
 
 
-            final Coordinates coordinates = new Coordinates(x, y, z, worldName);
+        final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
-            // Log To Files
-            if (Data.isLogToFiles) {
+        // Log To Files
+        if (Data.isLogToFiles) {
 
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                    try {
-
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(this.main.getMessages().get().getString("Files.Player-Join-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%IP%", String.valueOf(ip)) + "\n");
-                        out.close();
-
-                    } catch (IOException e) {
-
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-
-                    }
-                } else {
-
-                    try {
-
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerJoinLogFile(), true));
-                        out.write(this.main.getMessages().get().getString("Files.Player-Join").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%IP%", String.valueOf(ip)) + "\n");
-                        out.close();
-
-                    } catch (IOException e) {
-
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-
-                    }
-                }
-            }
-
-            // Discord
-            if (!player.hasPermission(Data.loggerExemptDiscord)) {
-
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                    if (!this.main.getMessages().get().getString("Discord.Player-Join-Staff").isEmpty()) {
-
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Join-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%IP%", String.valueOf(ip)), false);
-
-                    }
-                } else {
-
-                    if (!this.main.getMessages().get().getString("Discord.Player-Join").isEmpty()) {
-
-                        this.main.getDiscord().playerJoin(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Join").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%IP%", String.valueOf(ip)), false);
-                    }
-                }
-            }
-
-            // External
-            if (Data.isExternal) {
+            if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerJoin(Data.serverName, playerName, playerUUID.toString(), coordinates, ip, player.hasPermission(loggerStaffLog));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                    out.write(this.main.getMessages().get().getString("Files.Player-Join-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%IP%", String.valueOf(ip)) + "\n");
+                    out.close();
 
-                } catch (Exception e) { e.printStackTrace(); }
-            }
+                } catch (IOException e) {
 
-            // SQLite
-            if (Data.isSqlite) {
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
+
+                }
+            } else {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerJoin(Data.serverName, playerName, playerUUID.toString(), coordinates, ip, player.hasPermission(loggerStaffLog));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerJoinLogFile(), true));
+                    out.write(this.main.getMessages().get().getString("Files.Player-Join").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%IP%", String.valueOf(ip)) + "\n");
+                    out.close();
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (IOException e) {
+
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
+
+                }
             }
+        }
+
+        // Discord
+        if (!player.hasPermission(Data.loggerExemptDiscord)) {
+
+            if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+
+                if (!this.main.getMessages().get().getString("Discord.Player-Join-Staff").isEmpty()) {
+
+                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Join-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%IP%", String.valueOf(ip)), false);
+
+                }
+            } else {
+
+                if (!this.main.getMessages().get().getString("Discord.Player-Join").isEmpty()) {
+
+                    this.main.getDiscord().playerJoin(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Join").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%IP%", String.valueOf(ip)), false);
+                }
+            }
+        }
+
+        // External
+        if (Data.isExternal) {
+
+            try {
+
+                Main.getInstance().getDatabase().insertPlayerJoin(Data.serverName, playerName, playerUUID.toString(), coordinates, ip, player.hasPermission(loggerStaffLog));
+
+            } catch (Exception e) { e.printStackTrace(); }
+        }
+
+        // SQLite
+        if (Data.isSqlite) {
+
+            try {
+
+                Main.getInstance().getSqLite().insertPlayerJoin(Data.serverName, playerName, playerUUID.toString(), coordinates, ip, player.hasPermission(loggerStaffLog));
+
+            } catch (Exception e) { e.printStackTrace(); }
         }
     }
 }

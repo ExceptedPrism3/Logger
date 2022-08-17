@@ -1,6 +1,5 @@
 package me.prism3.logger.events.plugindependent;
 
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import fr.xephi.authme.events.FailedLoginEvent;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
@@ -24,92 +23,88 @@ public class OnAuthMePassword implements Listener {
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void password(final FailedLoginEvent e) {
+    public void password(final FailedLoginEvent event) {
 
-        if (this.main.getConfig().getBoolean("Log-Extras.AuthMe-Wrong-Password")) {
+        final Player player = event.getPlayer();
 
-            final Player player = e.getPlayer();
+        if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
-            if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
-
-            final String playerName = player.getName();
-            final UUID playerUUID = player.getUniqueId();
-            final String worldName = player.getWorld().getName();
+        final String playerName = player.getName();
+        final UUID playerUUID = player.getUniqueId();
+        final String worldName = player.getWorld().getName();
 
 
+        // Log To Files
+        if (Data.isLogToFiles) {
 
-            // Log To Files
-            if (Data.isLogToFiles) {
-
-                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                    try {
-
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(this.main.getMessages().get().getString("Files.Extras.Wrong-Password-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName) + "\n");
-                        out.close();
-
-                    } catch (IOException event) {
-
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        event.printStackTrace();
-
-                    }
-                } else {
-
-                    try {
-
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getWrongPasswordFile(), true));
-                        out.write(this.main.getMessages().get().getString("Files.Extras.Wrong-Password").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName) + "\n");
-                        out.close();
-
-                    } catch (IOException event) {
-
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        event.printStackTrace();
-
-                    }
-                }
-            }
-
-            // Discord
-            if (!player.hasPermission(Data.loggerExemptDiscord)) {
-
-                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                    if (!this.main.getMessages().get().getString("Discord.Extras.Wrong-Password-Staff").isEmpty()) {
-
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Wrong-Password-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName), false);
-
-                    }
-                } else {
-
-                    if (!this.main.getMessages().get().getString("Discord.Extras.Wrong-Password").isEmpty()) {
-
-                        this.main.getDiscord().wrongPassword(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Wrong-Password").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName), false);
-                    }
-                }
-            }
-
-            // External
-            if (Data.isExternal) {
+            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertWrongPassword(Data.serverName, playerName, playerUUID.toString(), worldName, player.hasPermission(loggerStaffLog));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                    out.write(this.main.getMessages().get().getString("Files.Extras.Wrong-Password-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName) + "\n");
+                    out.close();
 
-                } catch (Exception event) { event.printStackTrace(); }
-            }
+                } catch (IOException e) {
 
-            // SQLite
-            if (Data.isSqlite) {
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
+
+                }
+            } else {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertWrongPassword(Data.serverName, playerName, playerUUID.toString(), worldName, player.hasPermission(loggerStaffLog));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getWrongPasswordFile(), true));
+                    out.write(this.main.getMessages().get().getString("Files.Extras.Wrong-Password").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName) + "\n");
+                    out.close();
 
-                } catch (Exception exception) { exception.printStackTrace(); }
+                } catch (IOException e) {
+
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
+
+                }
             }
+        }
+
+        // Discord
+        if (!player.hasPermission(Data.loggerExemptDiscord)) {
+
+            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+
+                if (!this.main.getMessages().get().getString("Discord.Extras.Wrong-Password-Staff").isEmpty()) {
+
+                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Wrong-Password-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName), false);
+
+                }
+            } else {
+
+                if (!this.main.getMessages().get().getString("Discord.Extras.Wrong-Password").isEmpty()) {
+
+                    this.main.getDiscord().wrongPassword(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Wrong-Password").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName), false);
+                }
+            }
+        }
+
+        // External
+        if (Data.isExternal) {
+
+            try {
+
+                Main.getInstance().getDatabase().insertWrongPassword(Data.serverName, playerName, playerUUID.toString(), worldName, player.hasPermission(loggerStaffLog));
+
+            } catch (Exception e) { e.printStackTrace(); }
+        }
+
+        // SQLite
+        if (Data.isSqlite) {
+
+            try {
+
+                Main.getInstance().getSqLite().insertWrongPassword(Data.serverName, playerName, playerUUID.toString(), worldName, player.hasPermission(loggerStaffLog));
+
+            } catch (Exception e) { e.printStackTrace(); }
         }
     }
 }

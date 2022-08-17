@@ -1,6 +1,5 @@
 package me.prism3.logger.events;
 
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.events.spy.OnAnvilSpy;
 import me.prism3.logger.utils.BedrockChecker;
@@ -39,10 +38,9 @@ private final Main main = Main.getInstance();
 
         }
 
-        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Anvil")) {
+        if (!event.isCancelled()) {
 
             final Player player = (Player) event.getWhoClicked();
-
 
             if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 

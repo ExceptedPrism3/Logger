@@ -171,7 +171,6 @@ public class Data {
         if (LiteBansUtil.getLiteBansAPI().isPresent() && this.main.getConfig().getBoolean("Log-Extras.LiteBans")) {
 
             Main.getServer().getScheduler().buildTask(this, new OnLiteBanEvents()).delay(5, TimeUnit.SECONDS).schedule();
-
             this.main.getLogger().info("LiteBans Plugin Detected!");
 
         }

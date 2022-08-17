@@ -20,51 +20,48 @@ public class RCON implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onConnection(final RemoteServerCommandEvent event) {
 
-        if (this.main.getConfig().getBoolean("Log-Server.RCON")) {
+        final String ip = event.getSender().getServer().getIp();
+        final String command = event.getCommand();
 
-            final String ip = event.getSender().getServer().getIp();
-            final String command = event.getCommand();
+        // Log To Files
+        if (Data.isLogToFiles) {
 
-            // Log To Files
-            if (Data.isLogToFiles) {
+            try {
 
-                try {
+                final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRconFile(), true));
+                out.write(this.main.getMessages().get().getString("Files.Server-Side.RCON").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%IP%", ip).replace("%command%", command)) + "\n");
+                out.close();
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRconFile(), true));
-                    out.write(this.main.getMessages().get().getString("Files.Server-Side.RCON").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%IP%", ip).replace("%command%", command)) + "\n");
-                    out.close();
+            } catch (IOException e) {
 
-                } catch (IOException e) {
+                this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                e.printStackTrace();
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-
-                }
             }
+        }
 
-            // Discord
-            if (!this.main.getMessages().get().getString("Discord.Server-Side.RCON").isEmpty())
-                this.main.getDiscord().rCon(this.main.getMessages().get().getString("Discord.Server-Side.RCON").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%IP%", ip).replace("%command%", command))), false);
+        // Discord
+        if (!this.main.getMessages().get().getString("Discord.Server-Side.RCON").isEmpty())
+            this.main.getDiscord().rCon(this.main.getMessages().get().getString("Discord.Server-Side.RCON").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%IP%", ip).replace("%command%", command))), false);
 
-            // External
-            if (Data.isExternal) {
+        // External
+        if (Data.isExternal) {
 
-                try {
+            try {
 
-                    Main.getInstance().getDatabase().insertRCON(Data.serverName, ip, command);
+                Main.getInstance().getDatabase().insertRCON(Data.serverName, ip, command);
 
-                } catch (Exception e) { e.printStackTrace(); }
-            }
+            } catch (Exception e) { e.printStackTrace(); }
+        }
 
-            // SQLite
-            if (Data.isSqlite) {
+        // SQLite
+        if (Data.isSqlite) {
 
-                try {
+            try {
 
-                    Main.getInstance().getSqLite().insertRCON(Data.serverName, ip, command);
+                Main.getInstance().getSqLite().insertRCON(Data.serverName, ip, command);
 
-                } catch (Exception e) { e.printStackTrace(); }
-            }
+            } catch (Exception e) { e.printStackTrace(); }
         }
     }
 }

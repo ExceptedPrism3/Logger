@@ -1,7 +1,6 @@
 package me.prism3.logger.events;
 
 import com.carpour.loggercore.database.entity.Coordinates;
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -39,131 +38,128 @@ public class OnPlayerDeath implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDeath(final PlayerDeathEvent event) throws IOException, InvalidConfigurationException {
 
-        if (this.main.getConfig().getBoolean("Log-Player.Death")) {
+        final Player player = event.getEntity();
 
-            final Player player = event.getEntity();
+        if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
-            if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
+        // ******
+        // Player Inventory Backup Part
+        if (isPlayerDeathBackup && this.playerDeathBackup.isAllowed(player)) {
 
-            // ******
-            // Player Inventory Backup Part
-            if (isPlayerDeathBackup && this.playerDeathBackup.isAllowed(player)) {
+            this.playerDeathBackup.create(event.getEntity());
 
-                this.playerDeathBackup.create(event.getEntity());
+            final File f1 = playerDeathBackup.getPlayerFile(); // Gets the file location
+            final FileConfiguration f = YamlConfiguration.loadConfiguration(f1); // Loads the file with Yaml functions
+            f.load(f1); // Loads the file for use
 
-                final File f1 = playerDeathBackup.getPlayerFile(); // Gets the file location
-                final FileConfiguration f = YamlConfiguration.loadConfiguration(f1); // Loads the file with Yaml functions
-                f.load(f1); // Loads the file for use
+            final ItemStack[] invContent = Arrays.stream(event.getEntity().getInventory().getContents()) // Turn the contents array into a Stream.
+                    .map(i -> i == null ? new ItemStack(Material.AIR) : i) // Map replaces the element with something else, so here if the item is null, we replace it with air, and if it isn't null, we set it to itself.
+                    .toArray(ItemStack[]::new); // Turn it back into an array.
 
-                final ItemStack[] invContent = Arrays.stream(event.getEntity().getInventory().getContents()) // Turn the contents array into a Stream.
-                        .map(i -> i == null ? new ItemStack(Material.AIR) : i) // Map replaces the element with something else, so here if the item is null, we replace it with air, and if it isn't null, we set it to itself.
-                        .toArray(ItemStack[]::new); // Turn it back into an array.
+            final ItemStack[] armorContent = Arrays.stream(event.getEntity().getInventory().getArmorContents()) // Turn the contents array into a Stream.
+                    .map(i -> i == null ? new ItemStack(Material.AIR) : i) // Map replaces the element with something else, so here if the item is null, we replace it with air, and if it isn't null, we set it to itself.
+                    .toArray(ItemStack[]::new); // Turn it back into an array.
 
-                final ItemStack[] armorContent = Arrays.stream(event.getEntity().getInventory().getArmorContents()) // Turn the contents array into a Stream.
-                        .map(i -> i == null ? new ItemStack(Material.AIR) : i) // Map replaces the element with something else, so here if the item is null, we replace it with air, and if it isn't null, we set it to itself.
-                        .toArray(ItemStack[]::new); // Turn it back into an array.
+            f.set("inventory", InventoryToBase64.toBase64(invContent)); // Converts the Player's Inventory into base64
+            f.set("armor", InventoryToBase64.toBase64(armorContent)); // Converts the Player's Armor into base64
+            f.save(f1); // Save and Closes the file after editing
+        }
+        // ******
 
-                f.set("inventory", InventoryToBase64.toBase64(invContent)); // Converts the Player's Inventory into base64
-                f.set("armor", InventoryToBase64.toBase64(armorContent)); // Converts the Player's Armor into base64
-                f.save(f1); // Save and Closes the file after editing
-            }
-            // ******
+        final World world = player.getWorld();
+        final String worldName = world.getName();
+        final String playerName = player.getName();
+        final UUID playerUUID = player.getUniqueId();
+        final int x = player.getLocation().getBlockX();
+        final int y = player.getLocation().getBlockY();
+        final int z = player.getLocation().getBlockZ();
+        final int playerLevel = player.getLevel();
+        String cause = player.getLastDamageCause().getCause().name().replace("\\", "\\\\");
+        String killer = "";
 
-            final World world = player.getWorld();
-            final String worldName = world.getName();
-            final String playerName = player.getName();
-            final UUID playerUUID = player.getUniqueId();
-            final int x = player.getLocation().getBlockX();
-            final int y = player.getLocation().getBlockY();
-            final int z = player.getLocation().getBlockZ();
-            final int playerLevel = player.getLevel();
-            String cause = player.getLastDamageCause().getCause().name().replace("\\", "\\\\");
-            String killer = "";
+        if (player.getKiller() != null) {
 
-            if (player.getKiller() != null) {
+            if (player.getLastDamageCause().getEntity() instanceof Player)
+                cause = "Player";
 
-                if (player.getLastDamageCause().getEntity() instanceof Player)
-                    cause = "Player";
+            killer = player.getKiller().getName();
 
-                killer = player.getKiller().getName();
-
-            }
+        }
 
 
-            final Coordinates coordinates = new Coordinates(x, y, z, worldName);
+        final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
-            // Log To Files
-            if (Data.isLogToFiles) {
+        // Log To Files
+        if (Data.isLogToFiles) {
 
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                    try {
-
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(this.main.getMessages().get().getString("Files.Player-Death-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)) + "\n");
-                        out.close();
-
-                    } catch (IOException e) {
-
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-
-                    }
-                } else {
-
-                    try {
-
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerDeathLogFile(), true));
-                        out.write(this.main.getMessages().get().getString("Files.Player-Death").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)) + "\n");
-                        out.close();
-
-                    } catch (IOException e) {
-
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-
-                    }
-                }
-            }
-
-            // Discord
-            if (!player.hasPermission(Data.loggerExemptDiscord)) {
-
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                    if (!this.main.getMessages().get().getString("Discord.Player-Death-Staff").isEmpty()) {
-
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Death-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
-
-                    }
-                } else {
-
-                    if (!this.main.getMessages().get().getString("Discord.Player-Death").isEmpty()) {
-
-                        this.main.getDiscord().playerDeath(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Death").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
-                    }
-                }
-            }
-
-            // External
-            if (Data.isExternal) {
+            if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerDeath(Data.serverName, playerName, playerUUID.toString(), playerLevel, cause, killer, coordinates, player.hasPermission(loggerStaffLog));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                    out.write(this.main.getMessages().get().getString("Files.Player-Death-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)) + "\n");
+                    out.close();
 
-                } catch (Exception e) { e.printStackTrace(); }
-            }
+                } catch (IOException e) {
 
-            // SQLite
-            if (Data.isSqlite) {
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
+
+                }
+            } else {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerDeath(Data.serverName, playerName, playerUUID.toString(), playerLevel, cause, killer, coordinates, player.hasPermission(loggerStaffLog));
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerDeathLogFile(), true));
+                    out.write(this.main.getMessages().get().getString("Files.Player-Death").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)) + "\n");
+                    out.close();
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (IOException e) {
+
+                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
+
+                }
             }
+        }
+
+        // Discord
+        if (!player.hasPermission(Data.loggerExemptDiscord)) {
+
+            if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+
+                if (!this.main.getMessages().get().getString("Discord.Player-Death-Staff").isEmpty()) {
+
+                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Death-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
+
+                }
+            } else {
+
+                if (!this.main.getMessages().get().getString("Discord.Player-Death").isEmpty()) {
+
+                    this.main.getDiscord().playerDeath(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Death").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
+                }
+            }
+        }
+
+        // External
+        if (Data.isExternal) {
+
+            try {
+
+                Main.getInstance().getDatabase().insertPlayerDeath(Data.serverName, playerName, playerUUID.toString(), playerLevel, cause, killer, coordinates, player.hasPermission(loggerStaffLog));
+
+            } catch (Exception e) { e.printStackTrace(); }
+        }
+
+        // SQLite
+        if (Data.isSqlite) {
+
+            try {
+
+                Main.getInstance().getSqLite().insertPlayerDeath(Data.serverName, playerName, playerUUID.toString(), playerLevel, cause, killer, coordinates, player.hasPermission(loggerStaffLog));
+
+            } catch (Exception e) { e.printStackTrace(); }
         }
     }
 }

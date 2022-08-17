@@ -1,7 +1,6 @@
 package me.prism3.logger.events.plugindependent;
 
 import com.carpour.loggercore.database.entity.Coordinates;
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -25,12 +24,11 @@ public class OnAFK implements Listener {
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void afk(final AfkStatusChangeEvent e) {
+    public void afk(final AfkStatusChangeEvent event) {
 
-        if (!e.isCancelled() && this.main.getConfig().getBoolean("Log-Extras.Essentials-AFK")
-                && !e.getAffected().isAfk()) {
+        if (!event.isCancelled() && !event.getAffected().isAfk()) {
 
-            final Player player = e.getAffected().getBase();
+            final Player player = event.getAffected().getBase();
 
             if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
@@ -55,10 +53,10 @@ public class OnAFK implements Listener {
                         out.write(this.main.getMessages().get().getString("Files.Extras.AFK-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
                         out.close();
 
-                    } catch (IOException event) {
+                    } catch (IOException e) {
 
                         this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        event.printStackTrace();
+                        e.printStackTrace();
 
                     }
                 } else {
@@ -69,10 +67,10 @@ public class OnAFK implements Listener {
                         out.write(this.main.getMessages().get().getString("Files.Extras.AFK").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
                         out.close();
 
-                    } catch (IOException event) {
+                    } catch (IOException e) {
 
                         this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
-                        event.printStackTrace();
+                        e.printStackTrace();
 
                     }
                 }
@@ -104,7 +102,7 @@ public class OnAFK implements Listener {
 
                     Main.getInstance().getDatabase().insertAfk(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception event) { event.printStackTrace(); }
+                } catch (Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -114,7 +112,7 @@ public class OnAFK implements Listener {
 
                     Main.getInstance().getSqLite().insertAfk(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception exception) { exception.printStackTrace(); }
+                } catch (Exception e) { e.printStackTrace(); }
             }
         }
     }

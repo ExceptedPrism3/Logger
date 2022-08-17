@@ -1,7 +1,6 @@
 package me.prism3.logger.events;
 
 import com.carpour.loggercore.database.entity.Coordinates;
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -29,8 +28,7 @@ public class OnItemPickup implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemPick(final EntityPickupItemEvent event) {
 
-        if (event.getEntity() instanceof Player && !event.isCancelled()
-                && this.main.getConfig().getBoolean("Log-Player.Item-Pickup")) {
+        if (event.getEntity() instanceof Player && !event.isCancelled()) {
 
             final Player player = (Player) event.getEntity();
 

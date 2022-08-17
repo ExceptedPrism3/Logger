@@ -43,6 +43,8 @@ public class FileHandler {
     private static File primedTNTFolder;
     private static File chestInteractionFolder;
     private static File entityDeathFolder;
+    private static File itemFramePlaceFolder;
+    private static File itemFrameBreakFolder;
 
     // Server Side
     private static File serverStartFolder;
@@ -92,6 +94,8 @@ public class FileHandler {
     private static File primedTNTFile;
     private static File chestInteractionFile;
     private static File entityDeathFile;
+    private static File itemFramePlaceFile;
+    private static File itemFrameBreakFile;
 
     // Server Side
     private static File serverStartFile;
@@ -209,6 +213,12 @@ public class FileHandler {
         entityDeathFolder = new File(logsFolder, "Entity Death");
         entityDeathFile = new File(entityDeathFolder, filenameDateFormat.format(date) + ".log");
 
+        itemFramePlaceFolder = new File(logsFolder, "ItemFrame Place");
+        itemFramePlaceFile = new File(itemFramePlaceFolder, filenameDateFormat.format(date) + ".log");
+
+        itemFrameBreakFolder = new File(logsFolder, "ItemFrame Break");
+        itemFrameBreakFile = new File(itemFrameBreakFolder, filenameDateFormat.format(date) + ".log");
+
         // Server Side Part
         serverStartFolder = new File(logsFolder, "Server Start");
         serverStartFile = new File(serverStartFolder, filenameDateFormat.format(date) + ".log");
@@ -313,6 +323,10 @@ public class FileHandler {
 
             entityDeathFolder.mkdir();
 
+            itemFramePlaceFolder.mkdir();
+
+            itemFrameBreakFolder.mkdir();
+
             // Server Side Part
             serverStartFolder.mkdir();
 
@@ -398,6 +412,10 @@ public class FileHandler {
             chestInteractionFile.createNewFile();
 
             entityDeathFile.createNewFile();
+
+            itemFramePlaceFile.createNewFile();
+
+            itemFrameBreakFile.createNewFile();
 
             // Server Side
             serverStartFile.createNewFile();
@@ -487,6 +505,10 @@ public class FileHandler {
 
     public static File getEntityDeathFile() { return entityDeathFile; }
 
+    public static File getItemFramePlaceFile() { return itemFramePlaceFile; }
+
+    public static File getItemFrameBreakFile() { return itemFrameBreakFile; }
+
     // Server Side Part
     public static File getServerStartFile() { return serverStartFile; }
 
@@ -519,7 +541,7 @@ public class FileHandler {
     public static File getWoodStrippingFile() { return woodStrippingFile; }
 
 
-    public void deleteFile(File file) {
+    private void deleteFile(File file) {
 
         if (Data.fileDeletion <= 0 ) return;
 
@@ -529,10 +551,7 @@ public class FileHandler {
 
             creationTime = (FileTime) Files.getAttribute(file.toPath(), "creationTime");
 
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        }
+        } catch (IOException e) { e.printStackTrace(); }
 
         assert creationTime != null;
         final long offset = System.currentTimeMillis() - creationTime.toMillis();
@@ -546,295 +565,99 @@ public class FileHandler {
         if (Data.fileDeletion <= 0 ) return;
 
         // Player Side
-        for (File chatLog : chatLogFolder.listFiles())
-        {
+        for (File chatLog : chatLogFolder.listFiles()) { this.deleteFile(chatLog); }
 
-            deleteFile(chatLog);
+        for (File commandLog : commandLogFolder.listFiles()) { this.deleteFile(commandLog); }
 
-        }
+        for (File signLog : signLogFolder.listFiles()) { this.deleteFile(signLog); }
 
-        for (File commandLog : commandLogFolder.listFiles())
-        {
+        for (File playerJoinLog : playerJoinLogFolder.listFiles()) { this.deleteFile(playerJoinLog); }
 
-            deleteFile(commandLog);
+        for (File playerLeaveLog : playerLeaveLogFolder.listFiles()) { this.deleteFile(playerLeaveLog); }
 
-        }
+        for (File playerDeathLog : playerDeathLogFolder.listFiles()) { this.deleteFile(playerDeathLog); }
 
-        for (File signLog : signLogFolder.listFiles())
-        {
+        for (File playerTeleportLog : playerTeleportLogFolder.listFiles()) { this.deleteFile(playerTeleportLog); }
 
-            deleteFile(signLog);
+        for (File blockPlaceLog : blockPlaceLogFolder.listFiles()) { this.deleteFile(blockPlaceLog); }
 
-        }
+        for (File blockBreakLog : blockBreakLogFolder.listFiles()) { this.deleteFile(blockBreakLog); }
 
-        for (File playerJoinLog : playerJoinLogFolder.listFiles())
-        {
+        for (File kickLog : playerKickLogFolder.listFiles()) { this.deleteFile(kickLog); }
 
-            deleteFile(playerJoinLog);
+        for (File playerLevelLog : playerLevelFolder.listFiles()) { this.deleteFile(playerLevelLog); }
 
-        }
+        for (File bucketFill : bucketFillFolder.listFiles()) { this.deleteFile(bucketFill); }
 
-        for (File playerLeaveLog : playerLeaveLogFolder.listFiles())
-        {
+        for (File bucketEmpty : bucketEmptyFolder.listFiles()) { this.deleteFile(bucketEmpty); }
 
-            deleteFile(playerLeaveLog);
+        for (File anvil : anvilFolder.listFiles()) { this.deleteFile(anvil); }
 
-        }
 
-        for (File playerDeathLog : playerDeathLogFolder.listFiles())
-        {
+        if (main.getConfig().getBoolean("Staff.Enabled"))
+            for (File Staff : staffFolder.listFiles()) { this.deleteFile(Staff); }
 
-            deleteFile(playerDeathLog);
+        for (File itemDrop : itemDropFolder.listFiles()) { this.deleteFile(itemDrop); }
 
-        }
+        for (File enchanting : enchantFolder.listFiles()) { this.deleteFile(enchanting); }
 
-        for (File playerTeleportLog : playerTeleportLogFolder.listFiles())
-        {
+        for (File book : bookEditingFolder.listFiles()) { this.deleteFile(book); }
 
-            deleteFile(playerTeleportLog);
+        for (File pickup : itemPickupFolder.listFiles()) { this.deleteFile(pickup); }
 
-        }
+        for (File furnace : furnaceFolder.listFiles()) { this.deleteFile(furnace); }
 
-        for (File blockPlaceLog : blockPlaceLogFolder.listFiles())
-        {
+        for (File craft : craftFolder.listFiles()) { this.deleteFile(craft); }
 
-            deleteFile(blockPlaceLog);
+        for (File register : registrationFolder.listFiles()) { this.deleteFile(register); }
 
-        }
+        for (File primedTNT : primedTNTFolder.listFiles()) { this.deleteFile(primedTNT); }
 
-        for (File blockBreakLog : blockBreakLogFolder.listFiles())
-        {
+        for (File chestInteraction : chestInteractionFolder.listFiles()) { this.deleteFile(chestInteraction); }
 
-            deleteFile(blockBreakLog);
+        for (File entityDeath : entityDeathFolder.listFiles()) { this.deleteFile(entityDeath); }
 
-        }
+        for (File itemFramePlace : itemFramePlaceFolder.listFiles()) { this.deleteFile(itemFramePlace); }
 
-        for (File kickLog : playerKickLogFolder.listFiles())
-        {
-
-            deleteFile(kickLog);
-
-        }
-
-        for (File playerLevelLog : playerLevelFolder.listFiles())
-        {
-
-            deleteFile(playerLevelLog);
-
-        }
-
-        for (File bucketFill : bucketFillFolder.listFiles())
-        {
-
-            deleteFile(bucketFill);
-
-        }
-
-        for (File bucketEmpty : bucketEmptyFolder.listFiles())
-        {
-
-            deleteFile(bucketEmpty);
-
-        }
-
-        for (File anvil : anvilFolder.listFiles())
-        {
-
-            deleteFile(anvil);
-
-        }
-
-
-        if (main.getConfig().getBoolean("Staff.Enabled")) {
-            for (File Staff : staffFolder.listFiles()) {
-
-                deleteFile(Staff);
-
-            }
-        }
-
-        for (File itemDrop : itemDropFolder.listFiles())
-        {
-
-            deleteFile(itemDrop);
-
-        }
-
-        for (File enchanting : enchantFolder.listFiles())
-        {
-
-            deleteFile(enchanting);
-
-        }
-
-        for (File book : bookEditingFolder.listFiles())
-        {
-
-            deleteFile(book);
-
-        }
-
-        for (File pickup : itemPickupFolder.listFiles())
-        {
-
-            deleteFile(pickup);
-
-        }
-
-        for (File furnace : furnaceFolder.listFiles())
-        {
-
-            deleteFile(furnace);
-
-        }
-
-        for (File craft : craftFolder.listFiles())
-        {
-
-            deleteFile(craft);
-
-        }
-
-        for (File register : registrationFolder.listFiles())
-        {
-
-            deleteFile(register);
-
-        }
-
-        for (File primedTNT : primedTNTFolder.listFiles())
-        {
-
-            deleteFile(primedTNT);
-
-        }
-
-        for (File chestInteraction : chestInteractionFolder.listFiles())
-        {
-
-            deleteFile(chestInteraction);
-
-        }
-
-        for (File entityDeath : entityDeathFolder.listFiles())
-        {
-
-            deleteFile(entityDeath);
-
-        }
+        for (File itemFrameBreak : itemFrameBreakFolder.listFiles()) { this.deleteFile(itemFrameBreak); }
 
         // Server Side
-        for (File serverStart : serverStartFolder.listFiles())
-        {
+        for (File serverStart : serverStartFolder.listFiles()) { this.deleteFile(serverStart); }
 
-            deleteFile(serverStart);
+        for (File serverStop : serverStopFolder.listFiles()) { this.deleteFile(serverStop); }
 
-        }
+        for (File consoleLog : consoleLogFolder.listFiles()) { this.deleteFile(consoleLog); }
 
-        for (File serverStop : serverStopFolder.listFiles())
-        {
+        for (File RAMLog : ramFolder.listFiles()) { this.deleteFile(RAMLog); }
 
-            deleteFile(serverStop);
+        for (File TPSLog : tpsFolder.listFiles()) { this.deleteFile(TPSLog); }
 
-        }
+        for (File portalCreate : portalCreateFolder.listFiles()) { this.deleteFile(portalCreate); }
 
-        for (File consoleLog : consoleLogFolder.listFiles())
-        {
+        for (File rcon : rConFolder.listFiles()) { this.deleteFile(rcon); }
 
-            deleteFile(consoleLog);
+        for (File creative : gameModeFolder.listFiles()) { this.deleteFile(creative); }
 
-        }
-
-        for (File RAMLog : ramFolder.listFiles())
-        {
-
-            deleteFile(RAMLog);
-
-        }
-
-        for (File TPSLog : tpsFolder.listFiles())
-        {
-
-            deleteFile(TPSLog);
-
-        }
-
-        for (File portalCreate : portalCreateFolder.listFiles())
-        {
-
-            deleteFile(portalCreate);
-
-        }
-
-        for (File rcon : rConFolder.listFiles())
-        {
-
-            deleteFile(rcon);
-
-        }
-
-        for (File creative : gameModeFolder.listFiles())
-        {
-
-            deleteFile(creative);
-
-        }
-
-        for (File commandBlock : commandBlockFolder.listFiles())
-        {
-
-            deleteFile(commandBlock);
-
-        }
+        for (File commandBlock : commandBlockFolder.listFiles()) { this.deleteFile(commandBlock); }
 
         // Extra Side
-        if (EssentialsUtil.getEssentialsAPI() != null) {
-            for (File afk : afkFolder.listFiles()) {
+        if (EssentialsUtil.getEssentialsAPI() != null)
+            for (File afk : afkFolder.listFiles()) { this.deleteFile(afk); }
 
-                deleteFile(afk);
+        if (AuthMeUtil.getAuthMeAPI() != null)
+            for (File password : wrongPasswordFolder.listFiles()) { this.deleteFile(password); }
 
-            }
-        }
+        if (VaultUtil.getVaultAPI() && VaultUtil.getVault() != null)
+            for (File vault : vaultFolder.listFiles()) { this.deleteFile(vault); }
 
-        if (AuthMeUtil.getAuthMeAPI() != null) {
-            for (File password : wrongPasswordFolder.listFiles()) {
+        if (LiteBansUtil.getLiteBansAPI() != null)
+            for (File liteBans : liteBansFolder.listFiles()) { this.deleteFile(liteBans); }
 
-                deleteFile(password);
-
-            }
-        }
-
-        if (VaultUtil.getVaultAPI() && VaultUtil.getVault() != null) {
-            for (File vault : vaultFolder.listFiles()) {
-
-                deleteFile(vault);
-
-            }
-        }
-
-        if (LiteBansUtil.getLiteBansAPI() != null) {
-            for (File liteBans : liteBansFolder.listFiles()) {
-
-                deleteFile(liteBans);
-
-            }
-        }
-
-        if (AdvancedBanUtil.getAdvancedBanAPI() != null) {
-            for (File advancedBan : advancedBanFolder.listFiles()) {
-
-                deleteFile(advancedBan);
-
-            }
-        }
+        if (AdvancedBanUtil.getAdvancedBanAPI() != null)
+            for (File advancedBan : advancedBanFolder.listFiles()) { this.deleteFile(advancedBan); }
 
         // Version Exception Part
-        if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1)) {
-            for (File woodStripping : woodStrippingFolder.listFiles()) {
-
-                deleteFile(woodStripping);
-
-            }
-        }
+        if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1))
+            for (File woodStripping : woodStrippingFolder.listFiles()) { this.deleteFile(woodStripping); }
     }
 }

@@ -6,6 +6,8 @@ import me.prism3.logger.Main;
 import me.prism3.logger.api.*;
 import me.prism3.logger.commands.subcommands.PlayerInventory;
 import me.prism3.logger.events.*;
+import me.prism3.logger.events.misc.ItemFrameBreak;
+import me.prism3.logger.events.misc.ItemFramePlace;
 import me.prism3.logger.events.misc.OnPrimedTNT;
 import me.prism3.logger.events.oncommands.OnCommand;
 import me.prism3.logger.events.oninventories.OnChestInteraction;
@@ -20,8 +22,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.bukkit.Bukkit.getServer;
 
 public class Data {
 
@@ -200,9 +200,6 @@ public class Data {
         if (this.main.getConfig().getBoolean("Log-Player.Commands"))
             this.main.getServer().getPluginManager().registerEvents(new OnCommand(), this.main);
 
-        if (this.main.getConfig().getBoolean("Log-Server.Console-Commands"))
-            this.main.getServer().getPluginManager().registerEvents(new Console(), this.main);
-
         if (this.main.getConfig().getBoolean("Log-Player.Sign-Text"))
             this.main.getServer().getPluginManager().registerEvents(new OnSign(), this.main);
 
@@ -232,9 +229,6 @@ public class Data {
         if (this.main.getConfig().getBoolean("Log-Player.Block-Break"))
             this.main.getServer().getPluginManager().registerEvents(new OnBlockBreak(), this.main);
 
-        if (this.main.getConfig().getBoolean("Log-Server.Portal-Creation"))
-            this.main.getServer().getPluginManager().registerEvents(new PortalCreation(), this.main);
-
         if (this.main.getConfig().getBoolean("Log-Player.Bucket-Fill"))
             this.main.getServer().getPluginManager().registerEvents(new OnBucketFill(), this.main);
 
@@ -256,9 +250,6 @@ public class Data {
         if (this.main.getConfig().getBoolean("Log-Player.Book-Editing"))
             this.main.getServer().getPluginManager().registerEvents(new OnBook(), this.main);
 
-        if (this.main.getConfig().getBoolean("Log-Server.RCON"))
-            this.main.getServer().getPluginManager().registerEvents(new RCON(), this.main);
-
         if (this.main.getConfig().getBoolean("Log-Player.Game-Mode"))
             this.main.getServer().getPluginManager().registerEvents(new OnGameMode(), this.main);
 
@@ -267,9 +258,6 @@ public class Data {
 
 //        if (this.main.getConfig().getBoolean("Log-Player.Chat"))
 //        this.main.getServer().getPluginManager().registerEvents(new OnSpawnEgg(), this.main);
-
-        if (this.main.getConfig().getBoolean("Log-Server.Command-Block"))
-            this.main.getServer().getPluginManager().registerEvents(new OnCommandBlock(), this.main);
 
         if (this.main.getConfig().getBoolean("Log-Player.Entity-Death"))
             this.main.getServer().getPluginManager().registerEvents(new OnEntityDeath(), this.main);
@@ -283,11 +271,30 @@ public class Data {
         if (this.main.getConfig().getBoolean("Log-Player.Chest-Interaction"))
             this.main.getServer().getPluginManager().registerEvents(new OnChestInteraction(), this.main);
 
-        if (this.main.getConfig().getBoolean("Log-Server.TPS"))
-            this.main.getServer().getScheduler().scheduleSyncRepeatingTask(this.main, new TPS(), 300L, ramTpsChecker);
+        if (this.main.getConfig().getBoolean("Log-Player.Item-Frame-Place"))
+            this.main.getServer().getPluginManager().registerEvents(new ItemFramePlace(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.Item-Frame-Break"))
+            this.main.getServer().getPluginManager().registerEvents(new ItemFrameBreak(), this.main);
+
+        // Server Side
+        if (this.main.getConfig().getBoolean("Log-Server.Console-Commands"))
+            this.main.getServer().getPluginManager().registerEvents(new Console(), this.main);
 
         if (this.main.getConfig().getBoolean("Log-Server.RAM"))
             this.main.getServer().getScheduler().scheduleSyncRepeatingTask(this.main, new RAM(), 300L, ramTpsChecker);
+
+        if (this.main.getConfig().getBoolean("Log-Server.TPS"))
+            this.main.getServer().getScheduler().scheduleSyncRepeatingTask(this.main, new TPS(), 300L, ramTpsChecker);
+
+        if (this.main.getConfig().getBoolean("Log-Server.Portal-Creation"))
+            this.main.getServer().getPluginManager().registerEvents(new PortalCreation(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Server.RCON"))
+            this.main.getServer().getPluginManager().registerEvents(new RCON(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Server.Command-Block"))
+            this.main.getServer().getPluginManager().registerEvents(new OnCommandBlock(), this.main);
 
         // Version Exceptions
         if (this.main.getVersion().isAtLeast(NmsVersions.v1_13_R1) && this.main.getConfig().getBoolean("Log-Version-Exceptions.Wood-Stripping"))

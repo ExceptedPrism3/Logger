@@ -1,7 +1,6 @@
 package me.prism3.logger.events;
 
 import com.carpour.loggercore.database.entity.Coordinates;
-import com.carpour.loggercore.database.entity.EntityPlayer;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -27,7 +26,7 @@ public class OnPlayerKick implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onTabCompletion(final PlayerKickEvent event) {
 
-        if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Kick")) {
+        if (!event.isCancelled()) {
 
             final Player player = event.getPlayer();
 

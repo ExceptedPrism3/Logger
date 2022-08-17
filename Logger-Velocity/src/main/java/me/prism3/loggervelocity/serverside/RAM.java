@@ -14,59 +14,56 @@ public class RAM implements Runnable {
 
     final Main main = Main.getInstance();
 
-    public void run() {
+    public void run(){
 
-        if (main.getConfig().getBoolean("Log-Server.RAM")) {
+        if (ramPercent <= 0 || ramPercent >= 100) return;
 
-            if (ramPercent <= 0 || ramPercent >= 100) return;
+        final long maxMemory = Runtime.getRuntime().maxMemory() / 1048576L;
+        final long freeMemory = Runtime.getRuntime().freeMemory() / 1048576L;
+        final long usedMemory = maxMemory - freeMemory;
+        final double percentUsed = usedMemory * 100.0D / maxMemory;
 
-            final long maxMemory = Runtime.getRuntime().maxMemory() / 1048576L;
-            final long freeMemory = Runtime.getRuntime().freeMemory() / 1048576L;
-            final long usedMemory = maxMemory - freeMemory;
-            final double percentUsed = usedMemory * 100.0D / maxMemory;
+        if (ramPercent <= percentUsed) {
 
-            if (ramPercent <= percentUsed) {
+            // Log To Files
+            if (isLogToFiles) {
 
-                // Log To Files
-                if (isLogToFiles) {
+                try {
 
-                    try {
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRamLogFile(), true));
+                    out.write(main.getMessages().getString("Files.Server-Side.RAM").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)) + "\n");
+                    out.close();
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRamLogFile(), true));
-                        out.write(main.getMessages().getString("Files.Server-Side.RAM").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)) + "\n");
-                        out.close();
+                } catch (IOException e) {
 
-                    } catch (IOException e) {
+                    main.getLogger().error("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
 
-                        main.getLogger().error("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-
-                    }
                 }
+            }
 
-                // Discord
-                if (!main.getMessages().getString("Discord.Server-Side.RAM").isEmpty())
-                    main.getDiscord().ram(main.getMessages().getString("Discord.Server-Side.RAM").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)), false);
+            // Discord
+            if (!main.getMessages().getString("Discord.Server-Side.RAM").isEmpty())
+                main.getDiscord().ram(main.getMessages().getString("Discord.Server-Side.RAM").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)), false);
 
-                // External
-                if (isExternal) {
+            // External
+            if (isExternal) {
 
-                    try {
+                try {
 
-                        Main.getInstance().getDatabase().insertRam(serverName, maxMemory, usedMemory, freeMemory);
+                    Main.getInstance().getDatabase().insertRam(serverName, maxMemory, usedMemory, freeMemory);
 
-                    } catch (Exception e) { e.printStackTrace(); }
-                }
+                } catch (Exception e) { e.printStackTrace(); }
+            }
 
-                // SQLite
-                if (isSqlite) {
+            // SQLite
+            if (isSqlite) {
 
-                    try {
+                try {
 
-                        Main.getInstance().getSqLite().insertRam(serverName, maxMemory, usedMemory, freeMemory);
+                    Main.getInstance().getSqLite().insertRam(serverName, maxMemory, usedMemory, freeMemory);
 
-                    } catch (Exception e) { e.printStackTrace(); }
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
         }
     }
