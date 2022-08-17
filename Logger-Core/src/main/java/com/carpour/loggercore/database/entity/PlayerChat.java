@@ -9,7 +9,7 @@ import java.time.Instant;
 @Table(name = "player_chat")
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-public class PlayerChat {
+public class PlayerChat implements ActionInterface {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -93,6 +93,10 @@ public class PlayerChat {
     @PrePersist
     public void prePersist() {
         this.date = Instant.now();
+    }
+
+    public String getAction() {
+        return this.entityPlayer.getPlayerName() + " said " + this.getMessage();
     }
 
 }

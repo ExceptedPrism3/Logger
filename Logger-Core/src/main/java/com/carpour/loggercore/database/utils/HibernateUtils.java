@@ -133,15 +133,7 @@ public class HibernateUtils {
 
     public static Session getSession() {
 
-        final Session session;
-
-        if (threadLocal.get() == null) {
-            // Create Session object
-            session = sessionFactory.openSession();
-            threadLocal.set(session);
-        } else
-            session = threadLocal.get();
-        return session;
+return sessionFactory.getCurrentSession();
     }
 
     public static void closeSession() {

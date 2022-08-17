@@ -9,7 +9,7 @@ import java.time.Instant;
 @Table(name = "block_interaction")
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-public class BlockInteraction {
+public class BlockInteraction implements ActionInterface {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -36,7 +36,8 @@ public class BlockInteraction {
     private Boolean isStaff;
 
     @Column(name = "interaction_type")
-    private String interactionType;
+    @Enumerated(EnumType.STRING)
+    private InteractionType interactionType;
 
     public EntityPlayer getEntityPlayer() {
         return this.entityPlayer;
@@ -118,29 +119,22 @@ public class BlockInteraction {
         this.isStaff = staff;
     }
 
-    public String getInteractionType() {
+    public InteractionType getInteractionType() {
         return this.interactionType;
     }
 
-    public void setInteractionType(String interactionType) {
+    public void setInteractionType(InteractionType interactionType) {
         this.interactionType = interactionType;
     }
 
-    public void setAsWoodStripping() {
-        this.interactionType = "WOOD.STRIPPING";
-    }
-
-    public void setAsBlockBreak() {
-        this.interactionType = "BLOCK_BREAK";
-    }
-
-    public void setAsBlockPlace() {
-        this.interactionType = "BLOCK_PLACE";
-    }
 
     @PrePersist
     public void prePersist() {
         this.date = Instant.now();
+    }
+
+    public String getAction() {
+        return this.entityPlayer.getPlayerName() + " " + this.interactionType.rawInteraction() + " " + this.block.toLowerCase();
     }
 
 }

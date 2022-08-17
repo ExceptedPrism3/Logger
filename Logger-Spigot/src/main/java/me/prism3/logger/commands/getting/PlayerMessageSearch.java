@@ -1,8 +1,8 @@
 package me.prism3.logger.commands.getting;
 
+import com.carpour.loggercore.database.entity.ActionInterface;
 import com.carpour.loggercore.database.entity.PlayerChat;
 import me.prism3.logger.Main;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -51,10 +51,9 @@ public class PlayerMessageSearch {
   private void sendResults(List<PlayerChat> rs) {
     // TODO format datetime 
     try {
-      for (PlayerChat a : rs) {
-        this.sender.sendMessage(ChatColor.RED + a.getDate().toString() + " "
-                + searchedPlayer + ": " + ChatColor.GREEN + a.getMessage());
-      }
+        for (ActionInterface a : rs) {
+            this.sender.sendMessage(a.getAction() + "at " + a.getDate().toString());
+        }
     }
     catch (Exception e) {
       e.printStackTrace();

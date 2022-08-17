@@ -1,10 +1,14 @@
 package com.carpour.loggercore.database.entity;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
 @Table(name = "book_editing")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class BookEditing {
 
     @Id
