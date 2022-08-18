@@ -1,6 +1,6 @@
 package me.prism3.logger.events.misc;
 
-import com.carpour.loggercore.database.entity.Coordinates;
+import com.carpour.loggercore.database.data.Coordinates;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;

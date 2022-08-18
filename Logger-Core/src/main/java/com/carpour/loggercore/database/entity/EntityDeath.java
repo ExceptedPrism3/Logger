@@ -1,5 +1,6 @@
 package com.carpour.loggercore.database.entity;
 
+import com.carpour.loggercore.database.data.Coordinates;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CreationTimestamp;
 

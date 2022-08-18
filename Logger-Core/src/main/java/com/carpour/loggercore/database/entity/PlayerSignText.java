@@ -1,5 +1,7 @@
 package com.carpour.loggercore.database.entity;
 
+import com.carpour.loggercore.database.data.Coordinates;
+
 import javax.persistence.*;
 import java.time.Instant;
 

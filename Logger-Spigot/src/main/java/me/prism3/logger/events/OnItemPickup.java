@@ -1,6 +1,6 @@
 package me.prism3.logger.events;
 
-import com.carpour.loggercore.database.entity.Coordinates;
+import com.carpour.loggercore.database.data.Coordinates;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -62,8 +62,18 @@ public class OnItemPickup implements Listener {
 
                     try {
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(this.main.getMessages().get().getString("Files.Item-Pickup-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", String.valueOf(item)).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", String.valueOf(itemName)) + "\n");
+                        final BufferedWriter out = new BufferedWriter(
+                                new FileWriter(FileHandler.getStaffFile(), true));
+                        out.write(this.main.getMessages().get().getString("Files.Item-Pickup-Staff")
+                                .replace("%time%",
+                                        Data.dateTimeFormatter.format(ZonedDateTime.now()))
+                                .replace("%world%", worldName).replace("%player%", playerName)
+                                .replace("%item%", String.valueOf(item))
+                                .replace("%amount%", String.valueOf(amount))
+                                .replace("%x%", String.valueOf(blockX))
+                                .replace("%y%", String.valueOf(blockY))
+                                .replace("%z%", String.valueOf(blockZ)).replace("%renamed%",
+                                        itemName) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -76,8 +86,18 @@ public class OnItemPickup implements Listener {
 
                     try {
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getItemPickupFile(), true));
-                        out.write(this.main.getMessages().get().getString("Files.Item-Pickup").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", String.valueOf(item)).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", String.valueOf(itemName)) + "\n");
+                        final BufferedWriter out = new BufferedWriter(
+                                new FileWriter(FileHandler.getItemPickupFile(), true));
+                        out.write(this.main.getMessages().get().getString("Files.Item-Pickup")
+                                .replace("%time%",
+                                        Data.dateTimeFormatter.format(ZonedDateTime.now()))
+                                .replace("%world%", worldName).replace("%player%", playerName)
+                                .replace("%item%", String.valueOf(item))
+                                .replace("%amount%", String.valueOf(amount))
+                                .replace("%x%", String.valueOf(blockX))
+                                .replace("%y%", String.valueOf(blockY))
+                                .replace("%z%", String.valueOf(blockZ)).replace("%renamed%",
+                                        itemName) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -96,14 +116,34 @@ public class OnItemPickup implements Listener {
 
                     if (!this.main.getMessages().get().getString("Discord.Item-Pickup-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Item-Pickup-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", String.valueOf(item)).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", String.valueOf(itemName)), false);
+                        this.main.getDiscord().staffChat(playerName, playerUUID,
+                                this.main.getMessages().get().getString("Discord.Item-Pickup-Staff")
+                                        .replace("%time%",
+                                                Data.dateTimeFormatter.format(ZonedDateTime.now()))
+                                        .replace("%world%", worldName)
+                                        .replace("%item%", String.valueOf(item))
+                                        .replace("%amount%", String.valueOf(amount))
+                                        .replace("%x%", String.valueOf(blockX))
+                                        .replace("%y%", String.valueOf(blockY))
+                                        .replace("%z%", String.valueOf(blockZ)).replace("%renamed%",
+                                                itemName), false);
 
                     }
                 } else {
 
                     if (!this.main.getMessages().get().getString("Discord.Item-Pickup").isEmpty()) {
 
-                        this.main.getDiscord().itemPickup(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Item-Pickup").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", String.valueOf(item)).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", String.valueOf(itemName)), false);
+                        this.main.getDiscord().itemPickup(playerName, playerUUID,
+                                this.main.getMessages().get().getString("Discord.Item-Pickup")
+                                        .replace("%time%",
+                                                Data.dateTimeFormatter.format(ZonedDateTime.now()))
+                                        .replace("%world%", worldName)
+                                        .replace("%item%", String.valueOf(item))
+                                        .replace("%amount%", String.valueOf(amount))
+                                        .replace("%x%", String.valueOf(blockX))
+                                        .replace("%y%", String.valueOf(blockY))
+                                        .replace("%z%", String.valueOf(blockZ)).replace("%renamed%",
+                                                itemName), false);
                     }
                 }
             }

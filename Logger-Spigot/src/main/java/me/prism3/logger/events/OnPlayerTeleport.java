@@ -1,6 +1,6 @@
 package me.prism3.logger.events;
 
-import com.carpour.loggercore.database.entity.Coordinates;
+import com.carpour.loggercore.database.data.Coordinates;
 import fr.xephi.authme.api.v3.AuthMeApi;
 import me.prism3.logger.Main;
 import me.prism3.logger.api.AuthMeUtil;

@@ -1,6 +1,6 @@
 package me.prism3.loggerbungeecord.events;
 
-import com.carpour.loggercore.database.entity.Coordinates;
+import com.carpour.loggercore.database.data.Coordinates;
 import me.prism3.loggerbungeecord.Main;
 import me.prism3.loggerbungeecord.utils.Data;
 import me.prism3.loggerbungeecord.utils.FileHandler;

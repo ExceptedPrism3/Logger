@@ -1,11 +1,13 @@
 package com.carpour.loggercore.database.entity;
 
+import com.carpour.loggercore.database.entity.enums.PlayerConnectionType;
+
 import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "bucket_fill")
-public class BucketFill {
+@Table(name = "player_connection")
+public class PlayerConnection {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,24 +22,28 @@ public class BucketFill {
 
     @Column(name = "world", length = 100)
     private String world;
-
-    @Column(name = "bucket", length = 40)
-    private String bucket;
-
-    @Column(name = "x")
-    private Integer x;
-
-    @Column(name = "y")
-    private Integer y;
-
-    @Column(name = "z")
-    private Integer z;
-
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "entity_player_id", nullable = false)
     private EntityPlayer entityPlayer;
+    @Column(name = "x")
+    private Integer x;
+    @Column(name = "y")
+    private Integer y;
+    @Column(name = "z")
+    private Integer z;
+    @Column(name = "ip", columnDefinition = "INT UNSIGNED")
+    private Long ip;
     @Column(name = "is_staff")
     private Boolean isStaff;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "player_connection_type", nullable = false)
+    private PlayerConnectionType playerConnectionType;
+
+    public PlayerConnectionType getPlayerConnectionType() {return playerConnectionType;}
+
+    public void setPlayerConnectionType(
+            PlayerConnectionType playerConnectionType) {this.playerConnectionType = playerConnectionType;}
 
     public EntityPlayer getEntityPlayer() {
         return this.entityPlayer;
@@ -79,14 +85,6 @@ public class BucketFill {
         this.world = world;
     }
 
-    public String getBucket() {
-        return this.bucket;
-    }
-
-    public void setBucket(String bucket) {
-        this.bucket = bucket;
-    }
-
     public Integer getX() {
         return this.x;
     }
@@ -109,6 +107,14 @@ public class BucketFill {
 
     public void setZ(Integer z) {
         this.z = z;
+    }
+
+    public Long getIp() {
+        return this.ip;
+    }
+
+    public void setIp(Long ip) {
+        this.ip = ip;
     }
 
     public Boolean isStaff() {

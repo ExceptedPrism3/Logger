@@ -1,6 +1,7 @@
 package com.carpour.loggercore.database.entity;
 
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -8,6 +9,7 @@ import java.time.Instant;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Cacheable
+@Proxy(lazy = false)
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class AbstractAction implements ActionInterface {
     @Id

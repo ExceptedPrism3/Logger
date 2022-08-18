@@ -1,11 +1,13 @@
 package com.carpour.loggercore.database.entity;
 
+import com.carpour.loggercore.database.entity.enums.BucketActionType;
+
 import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "item_drop")
-public class ItemDrop {
+@Table(name = "bucket_action")
+public class BucketAction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,11 +23,8 @@ public class ItemDrop {
     @Column(name = "world", length = 100)
     private String world;
 
-    @Column(name = "item", length = 50)
-    private String item;
-
-    @Column(name = "amount")
-    private Integer amount;
+    @Column(name = "bucket", length = 40)
+    private String bucket;
 
     @Column(name = "x")
     private Integer x;
@@ -35,19 +34,20 @@ public class ItemDrop {
 
     @Column(name = "z")
     private Integer z;
-
-    @Column(name = "enchantment", length = 50)
-    private String enchantment;
-
-    @Column(name = "changed_name", length = 50)
-    private String changedName;
-
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "entity_player_id", nullable = false)
     private EntityPlayer entityPlayer;
-
     @Column(name = "is_staff")
     private Boolean isStaff;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "bucket_action_type", nullable = false)
+    private BucketActionType bucketActionType;
+
+    public BucketActionType getBucketActionType() {return bucketActionType;}
+
+    public void setBucketActionType(
+            BucketActionType bucketActionType) {this.bucketActionType = bucketActionType;}
 
     public EntityPlayer getEntityPlayer() {
         return this.entityPlayer;
@@ -89,20 +89,12 @@ public class ItemDrop {
         this.world = world;
     }
 
-    public String getItem() {
-        return this.item;
+    public String getBucket() {
+        return this.bucket;
     }
 
-    public void setItem(String item) {
-        this.item = item;
-    }
-
-    public Integer getAmount() {
-        return this.amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
+    public void setBucket(String bucket) {
+        this.bucket = bucket;
     }
 
     public Integer getX() {
@@ -127,22 +119,6 @@ public class ItemDrop {
 
     public void setZ(Integer z) {
         this.z = z;
-    }
-
-    public String getEnchantment() {
-        return enchantment;
-    }
-
-    public void setEnchantment(String enchantment) {
-        this.enchantment = enchantment;
-    }
-
-    public String getChangedName() {
-        return changedName;
-    }
-
-    public void setChangedName(String changedName) {
-        this.changedName = changedName;
     }
 
     public Boolean isStaff() {

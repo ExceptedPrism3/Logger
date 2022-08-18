@@ -3,7 +3,7 @@ package com.carpour.loggercore.database.sqlite;
 import com.carpour.loggercore.database.AbstractDataSource;
 import com.carpour.loggercore.database.DataSourceInterface;
 import com.carpour.loggercore.database.data.Options;
-import com.carpour.loggercore.database.entity.Coordinates;
+import com.carpour.loggercore.database.data.Coordinates;
 import com.carpour.loggercore.database.entity.PlayerChat;
 
 import java.io.File;

@@ -1,5 +1,6 @@
 package com.carpour.loggercore.database.entity;
 
+import com.carpour.loggercore.database.entity.enums.InteractionType;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;

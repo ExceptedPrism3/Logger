@@ -1,11 +1,13 @@
 package com.carpour.loggercore.database.entity;
 
+import com.carpour.loggercore.database.entity.enums.ItemActionType;
+
 import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "player_join")
-public class PlayerJoin {
+@Table(name = "item_action")
+public class ItemAction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,19 +22,43 @@ public class PlayerJoin {
 
     @Column(name = "world", length = 100)
     private String world;
+
+    @Column(name = "item", length = 50)
+    private String item;
+
+    @Column(name = "amount")
+    private Integer amount;
+
+    @Column(name = "x")
+    private Integer x;
+
+    @Column(name = "y")
+    private Integer y;
+
+    @Column(name = "z")
+    private Integer z;
+
+    @Column(name = "enchantment", length = 50)
+    private String enchantment;
+
+    @Column(name = "changed_name", length = 50)
+    private String changedName;
+
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "entity_player_id", nullable = false)
     private EntityPlayer entityPlayer;
-    @Column(name = "x")
-    private Integer x;
-    @Column(name = "y")
-    private Integer y;
-    @Column(name = "z")
-    private Integer z;
-    @Column(name = "ip", columnDefinition = "INT UNSIGNED")
-    private Long ip;
+
     @Column(name = "is_staff")
     private Boolean isStaff;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "item_action_type", nullable = false)
+    private ItemActionType itemActionType;
+
+    public ItemActionType getItemActionType() {return itemActionType;}
+
+    public void setItemActionType(
+            ItemActionType itemActionType) {this.itemActionType = itemActionType;}
 
     public EntityPlayer getEntityPlayer() {
         return this.entityPlayer;
@@ -74,6 +100,22 @@ public class PlayerJoin {
         this.world = world;
     }
 
+    public String getItem() {
+        return this.item;
+    }
+
+    public void setItem(String item) {
+        this.item = item;
+    }
+
+    public Integer getAmount() {
+        return this.amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
     public Integer getX() {
         return this.x;
     }
@@ -98,12 +140,20 @@ public class PlayerJoin {
         this.z = z;
     }
 
-    public Long getIp() {
-        return this.ip;
+    public String getEnchantment() {
+        return enchantment;
     }
 
-    public void setIp(Long ip) {
-        this.ip = ip;
+    public void setEnchantment(String enchantment) {
+        this.enchantment = enchantment;
+    }
+
+    public String getChangedName() {
+        return changedName;
+    }
+
+    public void setChangedName(String changedName) {
+        this.changedName = changedName;
     }
 
     public Boolean isStaff() {

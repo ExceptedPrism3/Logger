@@ -28,59 +28,83 @@ public class HibernateUtils {
 
             a.addPackage("com.carpour.loggercore.database.entity");
 
-            if (options.getBooleanValue("Chat"))
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PlayerChat"));
+            if (options.getBooleanValue("Chat")) {
+                a.addAnnotatedClass(
+                        Class.forName("com.carpour.loggercore.database.entity.PlayerChat"));
+            }
 
-            if (options.getBooleanValue("Commands"))
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PlayerCommand"));
+            if (options.getBooleanValue("Commands")) {
+                a.addAnnotatedClass(
+                        Class.forName("com.carpour.loggercore.database.entity.PlayerCommand"));
+            }
 
-            if (options.getBooleanValue("Sign-Text"))
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PlayerSignText"));
+            if (options.getBooleanValue("Sign-Text")) {
+                a.addAnnotatedClass(
+                        Class.forName("com.carpour.loggercore.database.entity.PlayerSignText"));
+            }
 
-            if (options.getBooleanValue("Join"))
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PlayerJoin"));
+            if (options.getBooleanValue("Join") || options.getBooleanValue("Leave")) {
+                a.addAnnotatedClass(Class.forName(
+                        "com.carpour.loggercore.database.entity.PlayerConnection"));
+            }
 
-            if (options.getBooleanValue("Leave"))
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PlayerLeave"));
+            if (options.getBooleanValue("Kick")) {
+                a.addAnnotatedClass(
+                        Class.forName("com.carpour.loggercore.database.entity.PlayerKick"));
+            }
 
-            if (options.getBooleanValue("Kick"))
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PlayerKick"));
+            if (options.getBooleanValue("Death")) {
+                a.addAnnotatedClass(
+                        Class.forName("com.carpour.loggercore.database.entity.PlayerDeath"));
+            }
 
-            if (options.getBooleanValue("Death"))
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PlayerDeath"));
+            if (options.getBooleanValue("Teleport")) {
+                a.addAnnotatedClass(
+                        Class.forName("com.carpour.loggercore.database.entity.PlayerTeleport"));
+            }
 
-            if (options.getBooleanValue("Teleport"))
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PlayerTeleport"));
+            if (options.getBooleanValue("Level")) {
+                a.addAnnotatedClass(
+                        Class.forName("com.carpour.loggercore.database.entity.PlayerLevel"));
+            }
 
-            if (options.getBooleanValue("Level"))
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.PlayerLevel"));
+            if (options.getBooleanValue("Block-Place") || options.getBooleanValue(
+                    "Block-Break")) //Break and place and woodstripping
+            {
+                a.addAnnotatedClass(
+                        Class.forName("com.carpour.loggercore.database.entity.BlockInteraction"));
+            }
 
-            if (options.getBooleanValue("Block-Place")) //Break and place and woodstripping
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.BlockInteraction"));
+            if (options.getBooleanValue("Bucket-Fill") || options.getBooleanValue("Bucket-Empty")) {
+                a.addAnnotatedClass(
+                        Class.forName("com.carpour.loggercore.database.entity.BucketAction"));
+            }
 
-            if (options.getBooleanValue("Bucket-Fill"))
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.BucketFill"));
 
-            if (options.getBooleanValue("Bucket-Empty"))
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.BucketEmpty"));
-
-            if (options.getBooleanValue("Anvil"))
+            if (options.getBooleanValue("Anvil")) {
                 a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Anvil"));
+            }
 
-            if (options.getBooleanValue("Item-Pickup"))
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.ItemPickup"));
+            if (options.getBooleanValue("Item-Pickup") || options.getBooleanValue("Item-Drop")) {
+                a.addAnnotatedClass(
+                        Class.forName("com.carpour.loggercore.database.entity.ItemAction"));
+            }
 
-            if (options.getBooleanValue("Item-Drop"))
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.ItemDrop"));
 
-            if (options.getBooleanValue("Enchanting"))
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Enchanting"));
+            if (options.getBooleanValue("Enchanting")) {
+                a.addAnnotatedClass(
+                        Class.forName("com.carpour.loggercore.database.entity.Enchanting"));
+            }
 
-            if (options.getBooleanValue("Book-Editing"))
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.BookEditing"));
+            if (options.getBooleanValue("Book-Editing")) {
+                a.addAnnotatedClass(
+                        Class.forName("com.carpour.loggercore.database.entity.BookEditing"));
+            }
 
-            if (options.getBooleanValue("Furnace"))
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Furnace"));
+            if (options.getBooleanValue("Furnace")) {
+                a.addAnnotatedClass(
+                        Class.forName("com.carpour.loggercore.database.entity.Furnace"));
+            }
 
             if (options.getBooleanValue("Game-Mode"))
                 a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.GameMode"));
@@ -126,15 +150,18 @@ public class HibernateUtils {
 
             a.addAnnotatedClass(
                     Class.forName("com.carpour.loggercore.database.entity.EntityPlayer"));
-            a.addAnnotatedClass(
-                    Class.forName("com.carpour.loggercore.database.entity.AbstractAction"));
 
             sessionFactory = a.buildSessionFactory();
 
-        } catch (ClassNotFoundException e) { throw new RuntimeException(e); }
+        }
+        catch (ClassNotFoundException e) {throw new RuntimeException(e);}
     }
 
-    public static Session getSession() { return sessionFactory.getCurrentSession(); }
+    public static Session getSession() {return sessionFactory.getCurrentSession();}
+
+    public static SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
 
     public static void closeSession() {
 

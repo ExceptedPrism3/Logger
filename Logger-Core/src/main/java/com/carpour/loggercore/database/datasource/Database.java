@@ -1,9 +1,14 @@
 package com.carpour.loggercore.database.datasource;
 
 import com.carpour.loggercore.database.DataSourceInterface;
+import com.carpour.loggercore.database.data.Coordinates;
 import com.carpour.loggercore.database.data.DatabaseCredentials;
 import com.carpour.loggercore.database.data.Options;
 import com.carpour.loggercore.database.entity.*;
+import com.carpour.loggercore.database.entity.enums.BucketActionType;
+import com.carpour.loggercore.database.entity.enums.InteractionType;
+import com.carpour.loggercore.database.entity.enums.ItemActionType;
+import com.carpour.loggercore.database.entity.enums.PlayerConnectionType;
 import com.carpour.loggercore.database.utils.HibernateUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -163,7 +168,7 @@ public final class Database implements DataSourceInterface {
         final Transaction tx = session.beginTransaction();
         final EntityPlayer loggerPlayer = this.fetchEntityPlayer(playerName, playerUUID);
 
-        final PlayerJoin p = new PlayerJoin();
+        final PlayerConnection p = new PlayerConnection();
 
         p.setDate(Instant.now());
         p.setServerName(serverName);
@@ -177,6 +182,7 @@ public final class Database implements DataSourceInterface {
         }
         p.setEntityPlayer(loggerPlayer);
         p.isStaff(isStaff);
+        p.setPlayerConnectionType(PlayerConnectionType.PLAYER_JOIN);
 
         session.persist(p);
         tx.commit();
@@ -192,7 +198,7 @@ public final class Database implements DataSourceInterface {
 
         final EntityPlayer loggerPlayer = this.fetchEntityPlayer(playerName, playerUUID);
 
-        final PlayerLeave p = new PlayerLeave();
+        final PlayerConnection p = new PlayerConnection();
 
         p.setDate(Instant.now());
         p.setServerName(serverName);
@@ -203,8 +209,7 @@ public final class Database implements DataSourceInterface {
         p.setZ(coords.getZ());
         p.setEntityPlayer(loggerPlayer);
         p.isStaff(isStaff);
-        p.isStaff(isStaff);
-
+        p.setPlayerConnectionType(PlayerConnectionType.PLAYER_LEAVE);
         session.persist(p);
         tx.commit();
 
@@ -377,7 +382,7 @@ public final class Database implements DataSourceInterface {
 
         final EntityPlayer loggerPlayer = this.fetchEntityPlayer(playerName, playerUUID);
 
-        final BucketFill b = new BucketFill();
+        final BucketAction b = new BucketAction();
 
         b.setDate(Instant.now());
         b.setServerName(serverName);
@@ -388,6 +393,7 @@ public final class Database implements DataSourceInterface {
         b.setBucket(bucket);
         b.setEntityPlayer(loggerPlayer);
         b.isStaff(isStaff);
+        b.setBucketActionType(BucketActionType.BUCKET_FILL);
 
         session.persist(b);
         tx.commit();
@@ -404,7 +410,7 @@ public final class Database implements DataSourceInterface {
 
         final EntityPlayer loggerPlayer = this.fetchEntityPlayer(playerName, playerUUID);
 
-        final BucketEmpty b = new BucketEmpty();
+        final BucketAction b = new BucketAction();
 
         b.setDate(Instant.now());
         b.setServerName(serverName);
@@ -415,6 +421,7 @@ public final class Database implements DataSourceInterface {
         b.setBucket(bucket);
         b.setEntityPlayer(loggerPlayer);
         b.isStaff(isStaff);
+        b.setBucketActionType(BucketActionType.BUCKET_EMPTY);
 
         session.persist(b);
         tx.commit();
@@ -485,7 +492,7 @@ public final class Database implements DataSourceInterface {
 
         final EntityPlayer loggerPlayer = this.fetchEntityPlayer(playerName, playerUUID);
 
-        final ItemDrop b = new ItemDrop();
+        final ItemAction b = new ItemAction();
 
         b.setDate(Instant.now());
         b.setServerName(serverName);
@@ -499,6 +506,7 @@ public final class Database implements DataSourceInterface {
         b.setAmount(amount);
         b.setEntityPlayer(loggerPlayer);
         b.isStaff(isStaff);
+        b.setItemActionType(ItemActionType.ITEM_DROP);
 
         session.persist(b);
         tx.commit();
@@ -588,7 +596,7 @@ public final class Database implements DataSourceInterface {
 
         final EntityPlayer loggerPlayer = this.fetchEntityPlayer(playerName, playerUUID);
 
-        final ItemPickup b = new ItemPickup();
+        final ItemAction b = new ItemAction();
 
         b.setDate(Instant.now());
         b.setServerName(serverName);
@@ -601,7 +609,7 @@ public final class Database implements DataSourceInterface {
         b.setAmount(amount);
         b.setEntityPlayer(loggerPlayer);
         b.isStaff(isStaff);
-
+        b.setItemActionType(ItemActionType.ITEM_PICKUP);
         session.persist(b);
         tx.commit();
 
@@ -889,7 +897,7 @@ public final class Database implements DataSourceInterface {
     public EntityPlayer fetchEntityPlayer(String playerName, String playerUUID) {
 
         final Session session = HibernateUtils.getSession();
-        final EntityPlayer entityPlayer = session.load(EntityPlayer.class, playerName);
+        final EntityPlayer entityPlayer = session.get(EntityPlayer.class, playerName);
 
         return entityPlayer != null ? entityPlayer : new EntityPlayer(playerName, playerUUID);
     }
@@ -924,7 +932,8 @@ public final class Database implements DataSourceInterface {
 
         final Session session = HibernateUtils.getSession();
         final Transaction tx = session.beginTransaction();
-        final Query query = session.createQuery("select count(*) from PlayerChat p where p.entityPlayer.playerName=:playerName");
+        final Query query = session.createQuery(
+                "select count(*) from AbstractAction a where a.entityPlayer.playerName=:playerName");
 
         query.setParameter("playerName", playerName);
         query.setCacheable(true);
@@ -944,6 +953,7 @@ public final class Database implements DataSourceInterface {
         Query<AbstractAction> query = session.createQuery(
                 "select b From AbstractAction b where b.entityPlayer.playerName=:playerName ORDER BY b.date ASC",
                 AbstractAction.class);
+        query.setHint("org.hibernate.cacheable", true);
         query.setParameter("playerName", playerName);
         query.setReadOnly(true);
         query.setCacheable(true);
@@ -952,7 +962,16 @@ public final class Database implements DataSourceInterface {
         List<AbstractAction> results = query.list();
 
         tx.commit();
-        System.out.println(results.toString());
+        System.out.println(
+                HibernateUtils.getSessionFactory().getStatistics().getSecondLevelCachePutCount());
+        System.out.println(
+                HibernateUtils.getSessionFactory().getStatistics().getSecondLevelCacheMissCount());
+        System.out.println(
+                HibernateUtils.getSessionFactory().getStatistics().getSecondLevelCacheHitCount());
+        System.out.println(
+                HibernateUtils.getSessionFactory().getStatistics().getQueryCachePutCount());
+
+
         return results;
     }
 

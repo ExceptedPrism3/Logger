@@ -1,6 +1,6 @@
 package com.carpour.loggercore.database;
 
-import com.carpour.loggercore.database.entity.Coordinates;
+import com.carpour.loggercore.database.data.Coordinates;
 import com.carpour.loggercore.database.entity.PlayerChat;
 
 import java.net.InetSocketAddress;

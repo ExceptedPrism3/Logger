@@ -1,4 +1,4 @@
-package com.carpour.loggercore.database.entity;
+package com.carpour.loggercore.database.entity.enums;
 
 public enum InteractionType {
 
