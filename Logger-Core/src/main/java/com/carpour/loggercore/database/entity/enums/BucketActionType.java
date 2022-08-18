@@ -2,8 +2,8 @@ package com.carpour.loggercore.database.entity.enums;
 
 public enum BucketActionType {
 
-    BUCKET_FILL("bucket_fill"),
-    BUCKET_EMPTY("bucket_empty");
+    BUCKET_FILL("filled"),
+    BUCKET_EMPTY("emptied");
 
     private final String action;
 

@@ -953,10 +953,10 @@ public final class Database implements DataSourceInterface {
         Query<AbstractAction> query = session.createQuery(
                 "select b From AbstractAction b where b.entityPlayer.playerName=:playerName ORDER BY b.date ASC",
                 AbstractAction.class);
-        query.setHint("org.hibernate.cacheable", true);
+        query.setHint("org.hibernate.cacheable", false);
         query.setParameter("playerName", playerName);
         query.setReadOnly(true);
-        query.setCacheable(true);
+        query.setCacheable(false);
         query.setFirstResult(offset);
         query.setMaxResults(limit);
         List<AbstractAction> results = query.list();

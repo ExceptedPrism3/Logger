@@ -2,26 +2,18 @@ package com.carpour.loggercore.database.entity;
 
 import com.carpour.loggercore.database.data.Coordinates;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
-import java.time.Instant;
+import javax.persistence.Cacheable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "entity_death")
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-public class EntityDeath {
+public class EntityDeath extends AbstractAction {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
-    @Column(name = "server_name", length = 30)
-    private String serverName;
-    @Column(name = "date", nullable = false)
-    @CreationTimestamp
-    private Instant date;
     @Column(name = "world", length = 100)
     private String world;
     @Column(name = "mob", length = 50)
@@ -32,9 +24,6 @@ public class EntityDeath {
     private Integer y;
     @Column(name = "z")
     private Integer z;
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "entity_player_id", nullable = false)
-    private EntityPlayer entityPlayer;
     @Column(name = "is_staff")
     private Boolean isStaff;
 
@@ -50,38 +39,6 @@ public class EntityDeath {
         this.z = coords.getZ();
         this.entityPlayer = entityPlayer;
         this.isStaff = isStaff;
-    }
-
-    public EntityPlayer getEntityPlayer() {
-        return this.entityPlayer;
-    }
-
-    public void setEntityPlayer(EntityPlayer entityPlayer) {
-        this.entityPlayer = entityPlayer;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getServerName() {
-        return this.serverName;
-    }
-
-    public void setServerName(String serverName) {
-        this.serverName = serverName;
-    }
-
-    public Instant getDate() {
-        return this.date;
-    }
-
-    public void setDate(Instant date) {
-        this.date = date;
     }
 
     public String getWorld() {
@@ -132,8 +89,9 @@ public class EntityDeath {
         this.isStaff = staff;
     }
 
-    @PrePersist
-    public void prePersist() {
-        this.date = Instant.now();
+    @Override
+    public String getAction() {
+        return this.entityPlayer.getPlayerName() + " killed " + this.mob;
     }
+
 }

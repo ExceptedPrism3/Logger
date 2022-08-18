@@ -1,8 +1,8 @@
 package com.carpour.loggercore.database.entity.enums;
 
 public enum PlayerConnectionType {
-    PLAYER_JOIN("player_join"),
-    PLAYER_LEAVE("player_leave");
+    PLAYER_JOIN("joined"),
+    PLAYER_LEAVE("left");
 
     private final String action;
 
