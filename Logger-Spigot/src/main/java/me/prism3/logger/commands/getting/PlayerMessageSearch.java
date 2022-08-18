@@ -1,7 +1,6 @@
 package me.prism3.logger.commands.getting;
 
-import com.carpour.loggercore.database.entity.ActionInterface;
-import com.carpour.loggercore.database.entity.PlayerChat;
+import com.carpour.loggercore.database.entity.AbstractAction;
 import me.prism3.logger.Main;
 import org.bukkit.command.CommandSender;
 
@@ -33,8 +32,8 @@ public class PlayerMessageSearch {
    */
   public void fetchAndSendResults() {
 
-    this.sendResults(Main.getInstance().getDatabase()
-            .getPlayerChatByPlayerName(searchedPlayer, this.pager.getCurrentOffset(), 10));
+    this.sendResults((List<AbstractAction>) Main.getInstance().getDatabase()
+            .getSaladeMarocaine(searchedPlayer, this.pager.getCurrentOffset(), 10));
 
     if (pager.getCurrentOffset() > pager.getCount()) {
       this.sender.sendMessage("No results found for that page!");
@@ -48,12 +47,18 @@ public class PlayerMessageSearch {
   /**
    * Send results to sender
    */
-  private void sendResults(List<PlayerChat> rs) {
+  private void sendResults(List<AbstractAction> rs) {
     // TODO format datetime 
     try {
-        for (ActionInterface a : rs) {
-            this.sender.sendMessage(a.getAction() + "at " + a.getDate().toString());
+      for (AbstractAction a : rs) {
+
+
+        if (a instanceof AbstractAction) {
+
+          this.sender.sendMessage(a.getAction() + "at " + a.getDate().toString());
         }
+
+      }
     }
     catch (Exception e) {
       e.printStackTrace();

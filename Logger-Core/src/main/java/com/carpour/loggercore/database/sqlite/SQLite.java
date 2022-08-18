@@ -1091,8 +1091,15 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset, int limit) { return Collections.emptyList(); }
+    public List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset,
+                                                      int limit) {return Collections.emptyList();}
 
     @Override
-    public Long getPlayerChatCount(String playerName) { return 0L; }
+    public Long getPlayerChatCount(String playerName) {return 0L;}
+
+    @Override
+    public List<?> getSaladeMarocaine(String playerName, int offset, int limit) {
+        return null;
+    }
+
 }

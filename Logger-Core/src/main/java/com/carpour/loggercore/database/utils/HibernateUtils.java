@@ -124,7 +124,10 @@ public class HibernateUtils {
             if (options.getBooleanValue("Registration"))
                 a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Registration"));
 
-            a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.EntityPlayer"));
+            a.addAnnotatedClass(
+                    Class.forName("com.carpour.loggercore.database.entity.EntityPlayer"));
+            a.addAnnotatedClass(
+                    Class.forName("com.carpour.loggercore.database.entity.AbstractAction"));
 
             sessionFactory = a.buildSessionFactory();
 

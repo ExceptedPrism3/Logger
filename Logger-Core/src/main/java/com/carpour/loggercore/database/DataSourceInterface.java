@@ -98,13 +98,19 @@ public interface DataSourceInterface {
 
     void insertItemFramePlace(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff);
 
-    void insertItemFrameBreak(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff);
+    void insertItemFrameBreak(String serverName, String playerName, String playerUUID,
+                              Coordinates coords, boolean isStaff);
 
-    void insertServerSwitch(String serverName, String playerUUID, String playerName, String from, String destination, boolean isStaff);
+    void insertServerSwitch(String serverName, String playerUUID, String playerName, String from,
+                            String destination, boolean isStaff);
 
     void disconnect();
 
     List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset, int limit);
 
     Long getPlayerChatCount(String playerName);
+
+    List<?> getSaladeMarocaine(String playerName, int offset,
+                               int limit);
+
 }
