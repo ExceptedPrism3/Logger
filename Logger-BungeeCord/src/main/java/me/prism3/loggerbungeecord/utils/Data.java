@@ -6,6 +6,7 @@ import me.prism3.loggerbungeecord.api.PartyAndFriendsUtil;
 import me.prism3.loggerbungeecord.events.OnChat;
 import me.prism3.loggerbungeecord.events.OnLeave;
 import me.prism3.loggerbungeecord.events.OnLogin;
+import me.prism3.loggerbungeecord.events.OnServerSwitch;
 import me.prism3.loggerbungeecord.events.oncommands.OnCommand;
 import me.prism3.loggerbungeecord.events.plugindependent.OnLiteBan;
 import me.prism3.loggerbungeecord.events.plugindependent.paf.OnFriendMessage;
@@ -159,11 +160,15 @@ public class Data {
         if (this.main.getConfig().getBoolean("Log-Player.Leave"))
             this.main.getProxy().getPluginManager().registerListener(this.main, new OnLeave());
 
+        // Server Side
         if (this.main.getConfig().getBoolean("Log-Server.Reload"))
             this.main.getProxy().getPluginManager().registerListener(this.main, new OnReload());
 
         if (this.main.getConfig().getBoolean("Log-Server.RAM"))
             this.main.getProxy().getScheduler().schedule(this.main, new RAM(), 200L, ramChecker / 20, TimeUnit.SECONDS);
+
+        if (this.main.getConfig().getBoolean("Log-Server.Server-Switch"))
+            this.main.getProxy().getPluginManager().registerListener(this.main, new OnServerSwitch());
 
         this.dependentEventInitializer();
     }

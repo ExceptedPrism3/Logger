@@ -24,6 +24,7 @@ public class Discord {
     private TextChannel serverStartChannel;
     private TextChannel serverStopChannel;
     private TextChannel ramChannel;
+    private TextChannel serverSwitchChannel;
 
     private TextChannel liteBansChannel;
 
@@ -39,7 +40,7 @@ public class Discord {
 
                 if (this.main.getDiscordFile().getBoolean("ActivityCycling.Enabled")) new DiscordStatus();
 
-            } catch (Exception e) {
+            } catch (final Exception e) {
 
                 Main.getInstance().getLogger().severe("An error has occurred whilst connecting to the Bot." +
                         " Is the Bot Key Valid?");
@@ -65,8 +66,9 @@ public class Discord {
 
             final String ramChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.RAM.Channel-ID");
 
-            final String liteBansChannelID = this.main.getDiscordFile().getString("Discord.Extra.LiteBans.Channel-ID");
+            final String serverSwitchChannelID = this.main.getDiscordFile().getString("Discord.Switch-Server.Channel-ID");
 
+            final String liteBansChannelID = this.main.getDiscordFile().getString("Discord.Extra.LiteBans.Channel-ID");
 
             try {
 
@@ -97,6 +99,9 @@ public class Discord {
                 if (this.isValid(ramChannelID, "Log-Server.RAM"))
                     this.ramChannel = this.jda.getTextChannelById(ramChannelID);
 
+                if (this.isValid(serverSwitchChannelID, "Log-Player.Server-Switch"))
+                    this.serverSwitchChannel = this.jda.getTextChannelById(serverSwitchChannelID);
+
                 if (this.isValid(liteBansChannelID, "Log-Extra.LiteBans"))
                     this.liteBansChannel = this.jda.getTextChannelById(liteBansChannelID);
 
@@ -117,28 +122,22 @@ public class Discord {
     }
 
     public void staffChat(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.staffChannel);
-
     }
 
     public void playerChat(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerChatChannel);
     }
 
     public void playerCommands(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerCommandsChannel);
     }
 
     public void playerLogin(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerLoginChannel);
     }
 
     public void playerLeave(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerLeaveChannel);
     }
 
@@ -195,6 +194,10 @@ public class Discord {
         if (!contentInAuthorLine) builder.setDescription(content);
 
         this.liteBansChannel.sendMessage(builder.build()).queue();
+    }
+
+    public void serverSwitch(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.serverSwitchChannel);
     }
 
     private void discordUtil(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine, TextChannel channel) {

@@ -26,6 +26,7 @@ public class FileHandler {
     private static File serverStopLogFolder;
     private static File ramLogFolder;
     private static File liteBansLogFolder;
+    private static File serverSwitchLogFolder;
 
     private static File staffLogFile;
     private static File chatLogFile;
@@ -39,6 +40,7 @@ public class FileHandler {
     private static File liteBansBansLogFile;
     private static File liteBansMuteLogFile;
     private static File liteBansKickLogFile;
+    private static File serverSwitchLogFile;
 
     public FileHandler(File dataFolder) {
 
@@ -77,6 +79,9 @@ public class FileHandler {
         ramLogFolder = new File(logsFolder, "RAM");
         ramLogFile = new File(ramLogFolder, filenameDateFormat.format(date) + ".log");
 
+        serverSwitchLogFolder = new File(logsFolder, "Server Switch");
+        serverSwitchLogFile = new File(serverSwitchLogFolder, filenameDateFormat.format(date) + ".log");
+
         liteBansLogFolder = new File(logsFolder, "LiteBans");
 
         final File liteBansBansLogFolder = new File(liteBansLogFolder, "Bans");
@@ -99,6 +104,7 @@ public class FileHandler {
             serverStartLogFolder.mkdir();
             serverStopLogFolder.mkdir();
             ramLogFolder.mkdir();
+            serverSwitchLogFolder.mkdir();
             if (LiteBansUtil.getLiteBansAPI() != null) {
 
                 liteBansLogFolder.mkdir();
@@ -116,6 +122,7 @@ public class FileHandler {
             serverStartLogFile.createNewFile();
             serverStopLogFile.createNewFile();
             ramLogFile.createNewFile();
+            serverSwitchLogFile.createNewFile();
             if (LiteBansUtil.getLiteBansAPI() != null) {
 
                 liteBansBansLogFile.createNewFile();
@@ -144,15 +151,17 @@ public class FileHandler {
 
     public static File getRamLogFile() { return ramLogFile; }
 
+    public static File getServerSwitchLogFile() { return serverSwitchLogFile; }
+
     public static File getLiteBansBansLogFile() { return liteBansBansLogFile; }
 
     public static File getLiteBansMuteLogFile() { return liteBansMuteLogFile; }
 
     public static File getLiteBansKickLogFile() { return liteBansKickLogFile; }
 
-    public void deleteFile(File file) {
+    private void deleteFile(File file) {
 
-        if (Data.fileDeletion <= 0 ) { return; }
+        if (Data.fileDeletion <= 0 ) return;
 
         FileTime creationTime = null;
 
@@ -167,87 +176,43 @@ public class FileHandler {
         final long fileDeletionDays = main.getConfig().getInt("File-Deletion");
         final long maxAge = TimeUnit.DAYS.toMillis(fileDeletionDays);
 
-        if (offset > maxAge)
-            file.delete();
+        if (offset > maxAge) file.delete();
     }
 
     public void deleteFiles() {
 
         if (Data.fileDeletion<= 0 ) { return; }
 
-        if (Data.isStaffEnabled) {
+        if (Data.isStaffEnabled)
+            for (File staffLog : staffLogFolder.listFiles())
+                this.deleteFile(staffLog);
 
-            for (File staffLog : Objects.requireNonNull(staffLogFolder.listFiles())) {
+        for (File chatLog : chatLogFolder.listFiles())
+            this.deleteFile(chatLog);
 
-                deleteFile(staffLog);
+        for (File commandsLog : commandLogFolder.listFiles())
+            this.deleteFile(commandsLog);
 
-            }
-        }
+        for (File loginLog : loginLogFolder.listFiles())
+            this.deleteFile(loginLog);
 
-        for (File chatLog : Objects.requireNonNull(chatLogFolder.listFiles()))
-        {
+        for (File leaveLog : leaveLogFolder.listFiles())
+            this.deleteFile(leaveLog);
 
-            deleteFile(chatLog);
+        for (File reloadLog : reloadLogFolder.listFiles())
+            this.deleteFile(reloadLog);
 
-        }
+        for (File serverStartLog : serverStartLogFolder.listFiles())
+            this.deleteFile(serverStartLog);
 
-        for (File commandsLog : Objects.requireNonNull(commandLogFolder.listFiles()))
-        {
+        for (File serverStopLog : serverStopLogFolder.listFiles())
+            this.deleteFile(serverStopLog);
 
-            deleteFile(commandsLog);
+        for (File RAMLog : ramLogFolder.listFiles())
+            this.deleteFile(RAMLog);
 
-        }
-
-        for (File loginLog : Objects.requireNonNull(loginLogFolder.listFiles()))
-        {
-
-            deleteFile(loginLog);
-
-        }
-
-        for (File leaveLog : Objects.requireNonNull(leaveLogFolder.listFiles()))
-        {
-
-            deleteFile(leaveLog);
-
-        }
-
-        for (File reloadLog : Objects.requireNonNull(reloadLogFolder.listFiles()))
-        {
-
-            deleteFile(reloadLog);
-
-        }
-
-        for (File serverStartLog : Objects.requireNonNull(serverStartLogFolder.listFiles()))
-        {
-
-            deleteFile(serverStartLog);
-
-        }
-
-        for (File serverStopLog : Objects.requireNonNull(serverStopLogFolder.listFiles()))
-        {
-
-            deleteFile(serverStopLog);
-
-        }
-
-        for (File RAMLog : Objects.requireNonNull(ramLogFolder.listFiles()))
-        {
-
-            deleteFile(RAMLog);
-
-        }
-
-        if (LiteBansUtil.getLiteBansAPI() != null) {
-
-            for (File liteBansLog : Objects.requireNonNull(liteBansLogFolder.listFiles()))
-            {
-
-                deleteFile(liteBansLog);
-
-            }
-        }
+        if (LiteBansUtil.getLiteBansAPI() != null)
+            for (File liteBansLog : liteBansLogFolder.listFiles())
+                this.deleteFile(liteBansLog);
     }
 }

@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "registration")
 public class Registration {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -73,5 +74,4 @@ public class Registration {
     public void setJoinDate(String joinDate) {
         this.joinDate = joinDate;
     }
-
 }

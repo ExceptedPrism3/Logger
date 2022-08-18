@@ -123,5 +123,4 @@ public class PlayerKick {
     public void prePersist() {
         this.date = Instant.now();
     }
-
 }

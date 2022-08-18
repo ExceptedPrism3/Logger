@@ -135,5 +135,4 @@ public class EntityDeath {
     public void prePersist() {
         this.date = Instant.now();
     }
-
 }

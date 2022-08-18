@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "primed_tnt")
 public class PrimedTnt {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -104,5 +105,4 @@ public class PrimedTnt {
     public void isStaff(Boolean staff) {
         this.isStaff = staff;
     }
-
 }

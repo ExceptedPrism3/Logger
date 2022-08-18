@@ -19,11 +19,13 @@ public class HibernateUtils {
     private HibernateUtils() {}
 
     public static void initializeHibernate(DatabaseCredentials databaseCredentials, Options options) {
+
         Logger.getLogger("org.hibernate").setLevel(Level.ALL);
 
         final Configuration a = new Configuration().setProperties(databaseCredentials.getPropertiesForHib());
 
         try {
+
             a.addPackage("com.carpour.loggercore.database.entity");
 
             if (options.getBooleanValue("Chat"))
@@ -124,17 +126,12 @@ public class HibernateUtils {
 
             a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.EntityPlayer"));
 
-
-
             sessionFactory = a.buildSessionFactory();
 
         } catch (ClassNotFoundException e) { throw new RuntimeException(e); }
     }
 
-    public static Session getSession() {
-
-return sessionFactory.getCurrentSession();
-    }
+    public static Session getSession() { return sessionFactory.getCurrentSession(); }
 
     public static void closeSession() {
 

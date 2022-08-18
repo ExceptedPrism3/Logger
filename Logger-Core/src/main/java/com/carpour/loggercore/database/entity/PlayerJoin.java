@@ -118,5 +118,4 @@ public class PlayerJoin {
     public void prePersist() {
         this.date = Instant.now();
     }
-
 }

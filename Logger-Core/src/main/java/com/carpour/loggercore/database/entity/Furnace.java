@@ -43,6 +43,7 @@ public class Furnace {
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "entity_player_id", nullable = false)
     private EntityPlayer entityPlayer;
+
     @Column(name = "is_staff")
     private Boolean isStaff;
 
@@ -138,5 +139,4 @@ public class Furnace {
     public void prePersist() {
         this.date = Instant.now();
     }
-
 }

@@ -122,5 +122,4 @@ public class BucketEmpty {
     public void prePersist() {
         this.date = Instant.now();
     }
-
 }

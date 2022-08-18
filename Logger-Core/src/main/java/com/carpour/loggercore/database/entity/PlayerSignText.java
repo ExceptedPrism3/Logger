@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "player_sign_text")
 public class PlayerSignText {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -121,5 +122,4 @@ public class PlayerSignText {
     public void isStaff(Boolean staff) {
         this.isStaff = staff;
     }
-
 }

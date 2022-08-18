@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "player_leave")
 public class PlayerLeave {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -104,5 +105,4 @@ public class PlayerLeave {
     public void isStaff(Boolean staff) {
         this.isStaff = staff;
     }
-
 }

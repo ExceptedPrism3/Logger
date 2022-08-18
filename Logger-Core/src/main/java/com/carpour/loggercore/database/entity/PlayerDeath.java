@@ -144,5 +144,4 @@ public class PlayerDeath {
     public void prePersist() {
         this.date = Instant.now();
     }
-
 }

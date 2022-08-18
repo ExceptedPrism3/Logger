@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "portal_creation")
 public class PortalCreation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -61,5 +62,4 @@ public class PortalCreation {
     public void setCausedBy(String causedBy) {
         this.causedBy = causedBy;
     }
-
 }

@@ -160,5 +160,4 @@ public class Enchanting {
     public void prePersist() {
         this.date = Instant.now();
     }
-
 }

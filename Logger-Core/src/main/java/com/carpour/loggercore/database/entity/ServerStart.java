@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "server_start")
 public class ServerStart {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -43,5 +44,4 @@ public class ServerStart {
     public void setDate(Instant date) {
         this.date = date;
     }
-
 }

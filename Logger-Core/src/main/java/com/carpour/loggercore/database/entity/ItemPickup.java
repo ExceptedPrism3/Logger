@@ -146,5 +146,4 @@ public class ItemPickup {
     public void prePersist() {
         this.date = Instant.now();
     }
-
 }

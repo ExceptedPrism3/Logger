@@ -59,5 +59,4 @@ public class ConsoleCommand {
     public void setCommand(String command) {
         this.command = command;
     }
-
 }

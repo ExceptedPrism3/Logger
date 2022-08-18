@@ -27,7 +27,6 @@ public final class Database implements DataSourceInterface {
                                  String worldName, String msg,
                                  boolean isStaff) {
 
-
         final PlayerChat p = new PlayerChat();
 
         p.setDate(Instant.now());
@@ -45,7 +44,6 @@ public final class Database implements DataSourceInterface {
                                      String worldName, String command,
                                      boolean isStaff) {
 
-
         final PlayerCommand p = new PlayerCommand();
 
         p.setDate(Instant.now());
@@ -57,7 +55,6 @@ public final class Database implements DataSourceInterface {
 
         this.save(p);
 
-
     }
 
     @Override
@@ -67,7 +64,6 @@ public final class Database implements DataSourceInterface {
 
         final Session session = HibernateUtils.getSession();
         final Transaction tx = session.beginTransaction();
-
 
         final PlayerSignText p = new PlayerSignText();
 
@@ -88,9 +84,7 @@ public final class Database implements DataSourceInterface {
     public void insertPlayerDeath(
             String serverName, String playerName, String playerUUID, int level, String cause,
             String who,
-            Coordinates coordinates, boolean isStaff
-    ) {
-
+            Coordinates coordinates, boolean isStaff) {
 
         final PlayerDeath p = new PlayerDeath();
 
@@ -108,14 +102,12 @@ public final class Database implements DataSourceInterface {
 
         this.save(p);
 
-
     }
 
     @Override
     public void insertPlayerTeleport(String serverName, String playerName, String playerUUID,
                                      Coordinates oldCoords,
                                      Coordinates newCoords, boolean isStaff) {
-
 
         final PlayerTeleport p = new PlayerTeleport();
 
@@ -133,14 +125,12 @@ public final class Database implements DataSourceInterface {
 
         this.save(p);
 
-
     }
 
     @Override
     public void insertPlayerJoin(String serverName, String playerName, String playerUUID,
                                  Coordinates coords,
                                  InetSocketAddress ip, boolean isStaff) {
-
 
         final PlayerJoin p = new PlayerJoin();
 
@@ -159,13 +149,11 @@ public final class Database implements DataSourceInterface {
 
         this.save(p);
 
-
     }
 
     @Override
     public void insertPlayerLeave(String serverName, String playerName, String playerUUID,
                                   Coordinates coords, boolean isStaff) {
-
 
         final PlayerLeave p = new PlayerLeave();
 
@@ -182,14 +170,12 @@ public final class Database implements DataSourceInterface {
 
         this.save(p);
 
-
     }
 
     @Override
     public void insertBlockPlace(String serverName, String playerName, String playerUUID,
                                  String block, Coordinates coords,
                                  boolean isStaff) {
-
 
         final BlockInteraction p = new BlockInteraction();
 
@@ -206,14 +192,12 @@ public final class Database implements DataSourceInterface {
 
         this.save(p);
 
-
     }
 
     @Override
     public void insertBlockBreak(String serverName, String playerName, String playerUUID,
                                  String blockName, Coordinates coords,
                                  boolean isStaff) {
-
 
         final BlockInteraction p = new BlockInteraction();
 
@@ -230,7 +214,6 @@ public final class Database implements DataSourceInterface {
 
         this.save(p);
 
-
     }
 
     @Override
@@ -242,9 +225,7 @@ public final class Database implements DataSourceInterface {
         p.setServerName(serverName);
         p.setTps((int) tpss);
 
-
         this.save(p);
-
 
     }
 
@@ -261,14 +242,12 @@ public final class Database implements DataSourceInterface {
 
         this.save(p);
 
-
     }
 
     @Override
     public void insertPlayerKick(String serverName, String playerName, String playerUUID,
                                  Coordinates coords, String reason,
                                  boolean isStaff) {
-
 
         final PlayerKick p = new PlayerKick();
 
@@ -284,7 +263,6 @@ public final class Database implements DataSourceInterface {
 
         this.save(p);
 
-
     }
 
     @Override
@@ -299,13 +277,11 @@ public final class Database implements DataSourceInterface {
 
         this.save(p);
 
-
     }
 
     @Override
     public void insertLevelChange(String serverName, String playerName, String playerUUID,
                                   boolean isStaff) {
-
 
         final PlayerLevel p = new PlayerLevel();
 
@@ -316,14 +292,12 @@ public final class Database implements DataSourceInterface {
 
         this.save(p);
 
-
     }
 
     @Override
     public void insertBucketFill(String serverName, String playerName, String playerUUID,
                                  String bucket, Coordinates coords,
                                  boolean isStaff) {
-
 
         final BucketFill b = new BucketFill();
 
@@ -339,14 +313,12 @@ public final class Database implements DataSourceInterface {
 
         this.save(b);
 
-
     }
 
     @Override
     public void insertBucketEmpty(String serverName, String playerName, String playerUUID,
                                   String bucket, Coordinates coords,
                                   boolean isStaff) {
-
 
         final BucketEmpty b = new BucketEmpty();
 
@@ -362,13 +334,11 @@ public final class Database implements DataSourceInterface {
 
         this.save(b);
 
-
     }
 
     @Override
     public void insertAnvil(String serverName, String playerName, String playerUUID, String newName,
                             boolean isStaff) {
-
 
         final Anvil b = new Anvil();
 
@@ -377,8 +347,8 @@ public final class Database implements DataSourceInterface {
         b.setEntityPlayer(this.fetchEntityPlayer(playerName, playerUUID));
         b.isStaff(isStaff);
         b.setNewName(newName);
-        this.save(b);
 
+        this.save(b);
 
     }
 
@@ -390,7 +360,6 @@ public final class Database implements DataSourceInterface {
         s.setServerName(serverName);
 
         this.save(s);
-
 
     }
 
@@ -413,9 +382,7 @@ public final class Database implements DataSourceInterface {
     public void insertItemDrop(
             String serverName, String playerName, String playerUUID, String item, int amount,
             Coordinates coords,
-            List<String> enchantment, String changedName, boolean isStaff
-    ) {
-
+            List<String> enchantment, String changedName, boolean isStaff) {
 
         final ItemDrop b = new ItemDrop();
 
@@ -434,16 +401,13 @@ public final class Database implements DataSourceInterface {
 
         this.save(b);
 
-
     }
 
     @Override
     public void insertEnchant(
             String serverName, String playerName, String playerUUID, List<String> enchantment,
             int enchantmentLevel,
-            String item, int cost, Coordinates coordinates, boolean isStaff
-    ) {
-
+            String item, int cost, Coordinates coordinates, boolean isStaff) {
 
         final Enchanting e = new Enchanting();
 
@@ -462,15 +426,12 @@ public final class Database implements DataSourceInterface {
 
         this.save(e);
 
-
     }
 
     @Override
     public void insertBookEditing(
             String serverName, String playerName, String playerUUID, String worldName, int pages,
-            List<String> content, String signedBy, boolean isStaff
-    ) {
-
+            List<String> content, String signedBy, boolean isStaff) {
 
         final BookEditing b = new BookEditing();
         b.setDate(Instant.now());
@@ -483,7 +444,6 @@ public final class Database implements DataSourceInterface {
         b.isStaff(isStaff);
 
         this.save(b);
-
 
     }
 
@@ -504,9 +464,7 @@ public final class Database implements DataSourceInterface {
     @Override
     public void insertItemPickup(
             String serverName, String playerName, String playerUUID, String item, int amount,
-            Coordinates coords, String changedName, boolean isStaff
-    ) {
-
+            Coordinates coords, String changedName, boolean isStaff) {
 
         final ItemPickup b = new ItemPickup();
 
@@ -524,14 +482,12 @@ public final class Database implements DataSourceInterface {
 
         this.save(b);
 
-
     }
 
     @Override
     public void insertFurnace(String serverName, String playerName, String playerUUID, String item,
                               int amount,
                               Coordinates coords, boolean isStaff) {
-
 
         final Furnace b = new Furnace();
 
@@ -547,7 +503,6 @@ public final class Database implements DataSourceInterface {
         b.isStaff(isStaff);
 
         this.save(b);
-
 
     }
 
@@ -568,7 +523,6 @@ public final class Database implements DataSourceInterface {
                                String gameMode, String worldName,
                                boolean isStaff) {
 
-
         final GameMode b = new GameMode();
 
         b.setDate(Instant.now());
@@ -580,14 +534,12 @@ public final class Database implements DataSourceInterface {
 
         this.save(b);
 
-
     }
 
     @Override
     public void insertPlayerCraft(String serverName, String playerName, String playerUUID,
                                   String item, int amount,
                                   Coordinates coords, boolean isStaff) {
-
 
         final Crafting b = new Crafting();
 
@@ -618,7 +570,6 @@ public final class Database implements DataSourceInterface {
     public void insertPlayerRegistration(String serverName, String playerName, String playerUUID,
                                          String joinDate) {
 
-
         this.save(this.fetchEntityPlayer(playerName, playerUUID));
 
     }
@@ -626,7 +577,6 @@ public final class Database implements DataSourceInterface {
     @Override
     public void insertPrimedTnt(String serverName, String playerName, String playerUUID,
                                 Coordinates coords, boolean isStaff) {
-
 
         final PrimedTnt b = new PrimedTnt();
 
@@ -645,18 +595,14 @@ public final class Database implements DataSourceInterface {
     @Override
     public void insertLiteBans(
             String serverName, String executor, String command, String onWho, String duration,
-            String reason, boolean isSilent
-    ) {
-
+            String reason, boolean isSilent) {
 
     }
 
     @Override
     public void insertAdvanceBanData(
             String serverName, String type, String executor, String executedOn,
-            String reason, long expirationDate
-    ) {
-
+            String reason, long expirationDate) {
 
     }
 
@@ -664,6 +610,7 @@ public final class Database implements DataSourceInterface {
     public void insertCommandBlock(String serverName, String msg) {
 
         final CommandBlock b = new CommandBlock();
+
         b.setServerName(serverName);
         b.setCommand(msg);
 
@@ -676,14 +623,12 @@ public final class Database implements DataSourceInterface {
                                     String logName, Coordinates coords,
                                     boolean isStaff) {
 
-
     }
 
     @Override
     public void insertChestInteraction(String serverName, String playerName, String playerUUID,
                                        Coordinates coords,
                                        String[] items, boolean isStaff) {
-
 
         final ChestInteraction b = new ChestInteraction();
 
@@ -706,11 +651,11 @@ public final class Database implements DataSourceInterface {
                                   String mob, Coordinates coords,
                                   boolean isStaff) {
 
-
         final EntityDeath b = new EntityDeath(serverName, coords, mob,
                 this.fetchEntityPlayer(playerName, playerUUID), isStaff);
 
         this.save(b);
+
     }
 
     public void emptyTable() {
@@ -749,6 +694,11 @@ public final class Database implements DataSourceInterface {
 
     }
 
+    @Override
+    public void insertServerSwitch(String serverName, String playerUUID, String playerName, String from, String destination, boolean isStaff) {
+
+    }
+
 
     private void save(Object obj) {
         Transaction tx = null;
@@ -763,13 +713,21 @@ public final class Database implements DataSourceInterface {
             if (tx != null) tx.rollback();
             throw e;
         }
-
     }
 
     public EntityPlayer fetchEntityPlayer(String playerName, String playerUUID) {
-        Session session = HibernateUtils.getSession();
-        final EntityPlayer entityPlayer = session.get(EntityPlayer.class, playerName);
-        return (entityPlayer != null ? entityPlayer : new EntityPlayer(playerName, playerUUID));
+
+        final Session session = HibernateUtils.getSession();
+        final Transaction tx = session.beginTransaction();
+        final EntityPlayer entityPlayer = session
+                .createNamedQuery("EntityPlayer.findOneByName", EntityPlayer.class)
+                .setReadOnly(true)
+                .setCacheable(true).stream().findFirst()
+                .orElse(new EntityPlayer(playerName, playerUUID));
+
+        tx.commit();
+
+        return entityPlayer;
     }
 
     @Override
@@ -792,24 +750,25 @@ public final class Database implements DataSourceInterface {
         query.setFirstResult(offset);
         query.setMaxResults(limit);
         List<PlayerChat> results = query.list();
+
         tx.commit();
+
         return results;
     }
 
     public Long getPlayerChatCount(String playerName) {
 
-        Session session = HibernateUtils.getSession();
-        Transaction tx = session.beginTransaction();
-        Query query = session.createQuery(
-                "select count(*) from PlayerChat p where p.entityPlayer.playerName=:playerName");
+        final Session session = HibernateUtils.getSession();
+        final Transaction tx = session.beginTransaction();
+        final Query query = session.createQuery("select count(*) from PlayerChat p where p.entityPlayer.playerName=:playerName");
+
         query.setParameter("playerName", playerName);
         query.setCacheable(true);
-        Long count = (Long) query.uniqueResult();
+        final Long count = (Long) query.uniqueResult();
+
         tx.commit();
 
         return count;
 
-
     }
-
 }

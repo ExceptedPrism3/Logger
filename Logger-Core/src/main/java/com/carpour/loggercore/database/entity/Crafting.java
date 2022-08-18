@@ -138,5 +138,4 @@ public class Crafting {
     public void prePersist() {
         this.date = Instant.now();
     }
-
 }

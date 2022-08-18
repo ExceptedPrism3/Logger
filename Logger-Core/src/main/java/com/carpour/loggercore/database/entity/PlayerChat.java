@@ -98,5 +98,4 @@ public class PlayerChat implements ActionInterface {
     public String getAction() {
         return this.entityPlayer.getPlayerName() + " said " + this.getMessage();
     }
-
 }

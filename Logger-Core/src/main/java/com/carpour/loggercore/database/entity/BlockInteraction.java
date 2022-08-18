@@ -10,6 +10,7 @@ import java.time.Instant;
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class BlockInteraction implements ActionInterface {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -127,7 +128,6 @@ public class BlockInteraction implements ActionInterface {
         this.interactionType = interactionType;
     }
 
-
     @PrePersist
     public void prePersist() {
         this.date = Instant.now();
@@ -136,5 +136,4 @@ public class BlockInteraction implements ActionInterface {
     public String getAction() {
         return this.entityPlayer.getPlayerName() + " " + this.interactionType.rawInteraction() + " " + this.block.toLowerCase();
     }
-
 }

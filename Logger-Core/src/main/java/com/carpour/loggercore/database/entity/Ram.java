@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "ram")
 public class Ram {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -73,5 +74,4 @@ public class Ram {
     public void setFreeMemory(Integer freeMemory) {
         this.freeMemory = freeMemory;
     }
-
 }

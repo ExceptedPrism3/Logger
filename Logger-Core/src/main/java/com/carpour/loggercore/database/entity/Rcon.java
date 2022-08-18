@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "rcon")
 public class Rcon {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -63,5 +64,4 @@ public class Rcon {
     public void setCommand(String command) {
         this.command = command;
     }
-
 }

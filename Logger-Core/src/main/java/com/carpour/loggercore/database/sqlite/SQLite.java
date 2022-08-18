@@ -12,6 +12,7 @@ import java.net.InetSocketAddress;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -1080,23 +1081,17 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void disconnect() {
-        //TODO chof m3k
-        try {
+    public void insertServerSwitch(String serverName, String playerUUID, String playerName, String from, String destination, boolean isStaff) {
 
-            this.getConnection().close();
-            this.logger.info("SQLite Database has been closed!");
-
-        } catch (final SQLException e) {
-
-            this.logger.severe("SQLite Database couldn't be closed safely, if the issue persists contact the Authors!");
-            e.printStackTrace();
-
-        }
     }
 
     @Override
-    public List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset, int limit) { return null; }
+    public void disconnect() {
+        //TODO chof m3k
+    }
+
+    @Override
+    public List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset, int limit) { return Collections.emptyList(); }
 
     @Override
     public Long getPlayerChatCount(String playerName) { return 0L; }

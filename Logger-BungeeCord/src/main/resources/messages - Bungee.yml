@@ -8,16 +8,18 @@ General:
   Invalid-Syntax: "&cInvalid Syntax."
 # Files Instance
 Files:
-  Player-Chat-Staff: "[%time%] [%server%] The Staff <%player%> has said => %msg%"
-  Player-Chat: "[%time%] [%server%] The Player <%player%> has said => %msg%"
-  Player-Commands-Staff: "[%time%] [%server%] The Staff <%player%> has executed => %command%"
-  Player-Commands: "[%time%] [%server%] The Player <%player%> has executed => %command%"
-  Player-Login-Staff: "[%time%] The Staff <%player%> has joined with the current IP -> %IP%"
-  Player-Login: "[%time%] The Player <%player%> has joined with the current IP -> %IP%"
-  Player-Leave-Staff: "[%time%] [%server%] The Staff <%player%> has left the server"
-  Player-Leave: "[%time%] [%server%] The Player <%player%> has left the server"
-  Server-Reload-Player-Staff: "[%time%] [%server%] The Staff <%player%> has reloaded the server"
-  Server-Reload-Player: "[%time%] [%server%] The Player <%player%> has reloaded the server"
+  Player-Chat-Staff: "[%time%] [%server%] [%uuid%] The Staff <%player%> has said => %msg%"
+  Player-Chat: "[%time%] [%server%] [%uuid%] The Player <%player%> has said => %msg%"
+  Player-Commands-Staff: "[%time%] [%server%] [%uuid%] The Staff <%player%> has executed => %command%"
+  Player-Commands: "[%time%] [%server%] [%uuid%] The Player <%player%> has executed => %command%"
+  Player-Login-Staff: "[%time%] [%server%] [%uuid%] The Staff <%player%> has joined with the current IP -> %IP%"
+  Player-Login: "[%time%] [%server%] [%uuid%] The Player <%player%> has joined with the current IP -> %IP%"
+  Player-Leave-Staff: "[%time%] [%server%] [%uuid%] The Staff <%player%> has left the server"
+  Player-Leave: "[%time%] [%server%] [%uuid%] The Player <%player%> has left the server"
+  Server-Reload-Player-Staff: "[%time%] [%server%] [%uuid%] The Staff <%player%> has reloaded the server"
+  Server-Reload-Player: "[%time%] [%server%] [%uuid%] The Player <%player%> has reloaded the server"
+  Server-Switch-Staff: "[%time%] [%uuid%] The Staff <%player%> has switched server from %from% to %destination%"
+  Server-Switch: "[%time%] [%uuid%] The Player <%player%> has switched server from %from% to %destination%"
 # Server Side Part
   Server-Side:
     Reload-Console: "[%time%] The server has been reloaded"
@@ -26,20 +28,22 @@ Files:
     RAM: "[%time%] The Server has exceeded the set amount of percentage of RAM Usage! Total Memory: %max% | Used Memory: %used% | Free Memory: %free%"
 # Extra Side Part
   Extra:
-    LiteBans: "[%time%] The command '%command%' has been executed on %on% by %executor% for '%duration%' for the reason %reason% | %silent%"
+    LiteBans: "[%time%] [%uuid%] The command '%command%' has been executed on %on% by %executor% for '%duration%' for the reason %reason% | %silent%"
 # Discord Instance
 # Emojis can be found here https://emojipedia.org/ or elsewhere. Emojis may not work on >1.12 Servers.
 Discord:
-  Player-Chat-Staff: "**[%time%]** **[%server%]** **%msg%**"
-  Player-Chat: "**[%time%]** **[%server%]** **%msg%**"
-  Player-Commands-Staff: "**[%time%]** **[%server%]** **%command%**"
-  Player-Commands: "**[%time%]** **[%server%]** **%command%**"
-  Player-Login-Staff: "**[%time%]** ||**%IP%**||"
-  Player-Login: "**[%time%]** ||**%IP%**||"
-  Player-Leave-Staff: "**[%time%]** **[%server%]** Left the server"
-  Player-Leave: "**[%time%]** **[%server%]** Left the server"
-  Server-Reload-Player-Staff: "**[%time%]** **[%server%]** Has reloaded the server"
-  Server-Reload-Player: "**[%time%]** **[%server%]** Has reloaded the server"
+  Player-Chat-Staff: "**[%time%]** **[%server%]** **[%uuid%]** **%msg%**"
+  Player-Chat: "**[%time%]** **[%server%]** **[%uuid%]** **%msg%**"
+  Player-Commands-Staff: "**[%time%]** **[%server%]** **[%uuid%]** **%command%**"
+  Player-Commands: "**[%time%]** **[%server%]** **[%uuid%]** **%command%**"
+  Player-Login-Staff: "**[%time%]** **[%server%]** **[%uuid%]** ||**%IP%**||"
+  Player-Login: "**[%time%]** **[%server%]** **[%uuid%]** ||**%IP%**||"
+  Player-Leave-Staff: "**[%time%]** **[%server%]** **[%uuid%]** Left the server"
+  Player-Leave: "**[%time%]** **[%server%]** **[%uuid%]** Left the server"
+  Server-Reload-Player-Staff: "**[%time%]** **[%server%]** **[%uuid%]** Has reloaded the server"
+  Server-Reload-Player: "**[%time%]** **[%server%]** **[%uuid%]** Has reloaded the server"
+  Server-Switch-Staff: "**[%time%]** **[%uuid%]** has switched server from **%from%** to **%destination%**"
+  Server-Switch: "**[%time%]** **[%uuid%]** has switched server from **%from%** to **%destination%**"
 # Server Side Part
   Server-Side:
     Restart-Console: "**[%time%]** The server has been reloaded"
@@ -48,4 +52,4 @@ Discord:
     RAM: "**[%time%]** The Server has exceeded the set amount of percentage of RAM Usage! Total Memory: **%max%** `|` Used Memory: **%used%** `|` Free Memory: **%free%**"
 # Extra Side Part
   Extra:
-    LiteBans: "**[%time%]** The command **%command%** has been executed on **%on%** by **%executor%** for **%duration%** for the reason **%reason%** | **%silent%**"
+    LiteBans: "**[%time%]** **[%uuid%]** The command **%command%** has been executed on **%on%** by **%executor%** for **%duration%** for the reason **%reason%** | **%silent%**"

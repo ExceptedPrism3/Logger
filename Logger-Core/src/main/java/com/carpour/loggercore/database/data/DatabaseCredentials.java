@@ -62,7 +62,7 @@ public final class DatabaseCredentials {
         properties.setProperty("hibernate.connection.CharSet", "utf8");
         properties.setProperty("hibernate.connection.characterEncoding", "utf8");
         properties.setProperty("hibernate.connection.useUnicode", "true");
-        properties.setProperty("hibernate.generate_statistics", "true");
+        properties.setProperty("hibernate.generate_statistics", "false");
         properties.setProperty("hibernate.connection.provider_class",
                 "org.hibernate.hikaricp.internal.HikariCPConnectionProvider");
         properties.setProperty("hibernate.hikari.poolName", "HikariCP-Logger-Core");
@@ -75,9 +75,7 @@ public final class DatabaseCredentials {
                 "net.sf.ehcache.hibernate.EhCacheProvider");
         properties.setProperty("hibernate.current_session_context_class", "thread");
 
-
         properties.setProperty("hibernate.cache.use_query_cache", "true");
-
 
         return properties;
     }

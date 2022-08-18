@@ -100,7 +100,7 @@ public class OnChat implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerChat(Data.serverName, playerName, playerUUID.toString(), null,message, player.hasPermission(Data.loggerStaffLog));
+                    Main.getInstance().getSqLite().insertPlayerChat(Data.serverName, playerName, playerUUID.toString(), null, message, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

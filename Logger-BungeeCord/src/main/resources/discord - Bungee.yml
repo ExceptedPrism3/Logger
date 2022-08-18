@@ -15,6 +15,8 @@ Discord:
     Channel-ID: 'LINK_HERE'
   Player-Leave:
     Channel-ID: 'LINK_HERE'
+  Server-Switch:
+      Channel-ID: 'LINK_HERE'
 # Server Side
   Server-Side:
     Restart:

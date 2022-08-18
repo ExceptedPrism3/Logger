@@ -6,6 +6,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "player_level")
 public class PlayerLevel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -64,5 +65,4 @@ public class PlayerLevel {
     public void isStaff(Boolean staff) {
         this.isStaff = staff;
     }
-
 }
