@@ -2,15 +2,12 @@ package me.prism3.logger;
 
 import com.carpour.loggercore.database.DataSourceInterface;
 import com.carpour.loggercore.database.datasource.Database;
-import com.carpour.loggercore.database.utils.HibernateUtils;
 import de.jeff_media.updatechecker.UpdateChecker;
 import me.prism3.logger.commands.CommandManager;
 import me.prism3.logger.commands.getting.Chat;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteRegistration;
 import me.prism3.logger.discord.Discord;
 import me.prism3.logger.discord.DiscordFile;
-import me.prism3.logger.events.misc.ItemFrameBreak;
-import me.prism3.logger.events.misc.ItemFramePlace;
 import me.prism3.logger.serverside.Start;
 import me.prism3.logger.serverside.Stop;
 import me.prism3.logger.utils.*;
@@ -139,8 +136,7 @@ public class Main extends JavaPlugin {
         } catch (Exception e) { this.getLogger().severe(e.getMessage()); }
     }
     private void disconnectDatabase() {
-        HibernateUtils.closeSession();
-        HibernateUtils.closeSessionFactory();
+        this.database.disconnect();
     }
 
     private void loadPluginDepends() {//TODO 7ta tgad m3k had joj m3rftch ach ndir lihom

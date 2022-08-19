@@ -26,10 +26,10 @@ public class PlayerConnection extends AbstractAction {
     @Column(name = "player_connection_type", nullable = false)
     private PlayerConnectionType playerConnectionType;
 
-    public PlayerConnectionType getPlayerConnectionType() {return playerConnectionType;}
+    public PlayerConnectionType getPlayerConnectionType() { return playerConnectionType; }
 
     public void setPlayerConnectionType(
-            PlayerConnectionType playerConnectionType) {this.playerConnectionType = playerConnectionType;}
+            PlayerConnectionType playerConnectionType) { this.playerConnectionType = playerConnectionType; }
 
 
     public String getWorld() {

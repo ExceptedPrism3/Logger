@@ -10,6 +10,7 @@ import com.carpour.loggercore.database.entity.enums.InteractionType;
 import com.carpour.loggercore.database.entity.enums.ItemActionType;
 import com.carpour.loggercore.database.entity.enums.PlayerConnectionType;
 import com.carpour.loggercore.database.utils.HibernateUtils;
+import com.carpour.loggercore.database.utils.Queue;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -45,7 +46,7 @@ public final class Database implements DataSourceInterface {
         p.setWorld(worldName);
         p.setEntityPlayer(loggerPlayer);
         p.isStaff(isStaff);
-        session.persist(p);
+        session.merge(p);
         tx.commit();
 
     }
@@ -69,7 +70,7 @@ public final class Database implements DataSourceInterface {
         p.setEntityPlayer(loggerPlayer);
         p.isStaff(isStaff);
 
-        session.persist(p);
+        session.merge(p);
         tx.commit();
 
     }
@@ -94,7 +95,7 @@ public final class Database implements DataSourceInterface {
         p.setEntityPlayer(loggerPlayer);
         p.isStaff(isStaff);
 
-        session.persist(p);
+        session.merge(p);
         tx.commit();
 
     }
@@ -124,7 +125,7 @@ public final class Database implements DataSourceInterface {
         p.setCause(cause);
         p.setByWho(who);
 
-        session.persist(p);
+        session.merge(p);
         tx.commit();
 
     }
@@ -153,7 +154,7 @@ public final class Database implements DataSourceInterface {
         p.setEntityPlayer(loggerPlayer);
         p.isStaff(isStaff);
 
-        session.persist(p);
+        session.merge(p);
         tx.commit();
 
     }
@@ -176,14 +177,14 @@ public final class Database implements DataSourceInterface {
         p.setZ(coords.getZ());
         p.setWorld(coords.getWorldName());
         //TODO
-        if (this.options.isPlayerIPEnabled()) {
+        if(this.options.isPlayerIPEnabled()) {
             p.setIp(4L);
         }
         p.setEntityPlayer(loggerPlayer);
         p.isStaff(isStaff);
         p.setPlayerConnectionType(PlayerConnectionType.PLAYER_JOIN);
 
-        session.persist(p);
+        session.merge(p);
         tx.commit();
 
     }
@@ -209,7 +210,7 @@ public final class Database implements DataSourceInterface {
         p.setEntityPlayer(loggerPlayer);
         p.isStaff(isStaff);
         p.setPlayerConnectionType(PlayerConnectionType.PLAYER_LEAVE);
-        session.persist(p);
+        session.merge(p);
         tx.commit();
 
     }
@@ -219,11 +220,6 @@ public final class Database implements DataSourceInterface {
                                  String block, Coordinates coords,
                                  boolean isStaff) {
 
-        final Session session = HibernateUtils.getSession();
-        final Transaction tx = session.beginTransaction();
-
-        final EntityPlayer loggerPlayer = this.fetchEntityPlayer(playerName, playerUUID);
-
         final BlockInteraction p = new BlockInteraction();
         p.setDate(Instant.now());
         p.setServerName(serverName);
@@ -232,12 +228,10 @@ public final class Database implements DataSourceInterface {
         p.setY(coords.getY());
         p.setZ(coords.getZ());
         p.setBlock(block);
-        p.setEntityPlayer(loggerPlayer);
+        p.setEntityPlayer(this.fetchEntityPlayer(playerName, playerUUID));
         p.isStaff(isStaff);
-        p.setInteractionType(InteractionType.BLOCK_BREAK);
-
-        session.persist(p);
-        tx.commit();
+        p.setInteractionType(InteractionType.BLOCK_PLACE);
+        Queue.addItemToQueue(p);
 
     }
 
@@ -246,13 +240,10 @@ public final class Database implements DataSourceInterface {
                                  String blockName, Coordinates coords,
                                  boolean isStaff) {
 
-        final Session session = HibernateUtils.getSession();
-        final Transaction tx = session.beginTransaction();
+        System.out.println("called !!!");
 
-        final EntityPlayer loggerPlayer = this.fetchEntityPlayer(playerName, playerUUID);
 
         final BlockInteraction p = new BlockInteraction();
-
         p.setDate(Instant.now());
         p.setServerName(serverName);
         p.setWorld(coords.getWorldName());
@@ -260,12 +251,10 @@ public final class Database implements DataSourceInterface {
         p.setY(coords.getY());
         p.setZ(coords.getZ());
         p.setBlock(blockName);
-        p.setEntityPlayer(loggerPlayer);
+        p.setEntityPlayer(this.fetchEntityPlayer(playerName, playerUUID));
         p.isStaff(isStaff);
         p.setInteractionType(InteractionType.BLOCK_BREAK);
-
-        session.persist(p);
-        tx.commit();
+        Queue.addItemToQueue(p);
 
     }
 
@@ -281,7 +270,7 @@ public final class Database implements DataSourceInterface {
         p.setServerName(serverName);
         p.setTps((int) tpss);
 
-        session.persist(p);
+        session.merge(p);
         tx.commit();
 
     }
@@ -300,7 +289,7 @@ public final class Database implements DataSourceInterface {
         p.setUsedMemory((int) um);
         p.setFreeMemory((int) fm);
 
-        session.persist(p);
+        session.merge(p);
         tx.commit();
 
     }
@@ -327,7 +316,7 @@ public final class Database implements DataSourceInterface {
         p.setEntityPlayer(loggerPlayer);
         p.isStaff(isStaff);
 
-        session.persist(p);
+        session.merge(p);
         tx.commit();
 
     }
@@ -345,7 +334,7 @@ public final class Database implements DataSourceInterface {
         p.setWorld(worldName);
         p.setCausedBy(by);
 
-        session.persist(p);
+        session.merge(p);
         tx.commit();
 
     }
@@ -366,7 +355,7 @@ public final class Database implements DataSourceInterface {
         p.setEntityPlayer(loggerPlayer);
         p.isStaff(isStaff);
 
-        session.persist(p);
+        session.merge(p);
         tx.commit();
 
     }
@@ -394,7 +383,7 @@ public final class Database implements DataSourceInterface {
         b.isStaff(isStaff);
         b.setBucketActionType(BucketActionType.BUCKET_FILL);
 
-        session.persist(b);
+        session.merge(b);
         tx.commit();
 
     }
@@ -422,7 +411,7 @@ public final class Database implements DataSourceInterface {
         b.isStaff(isStaff);
         b.setBucketActionType(BucketActionType.BUCKET_EMPTY);
 
-        session.persist(b);
+        session.merge(b);
         tx.commit();
 
     }
@@ -444,7 +433,7 @@ public final class Database implements DataSourceInterface {
         b.isStaff(isStaff);
         b.setNewName(newName);
 
-        session.persist(b);
+        session.merge(b);
         tx.commit();
 
     }
@@ -459,7 +448,7 @@ public final class Database implements DataSourceInterface {
         s.setDate(Instant.now());
         s.setServerName(serverName);
 
-        session.persist(s);
+        session.merge(s);
         tx.commit();
 
     }
@@ -474,7 +463,7 @@ public final class Database implements DataSourceInterface {
         s.setDate(Instant.now());
         s.setServerName(serverName);
 
-        session.persist(s);
+        session.merge(s);
         tx.commit();
 
     }
@@ -506,7 +495,7 @@ public final class Database implements DataSourceInterface {
         b.isStaff(isStaff);
         b.setItemActionType(ItemActionType.ITEM_DROP);
 
-        session.persist(b);
+        session.merge(b);
         tx.commit();
 
     }
@@ -537,7 +526,7 @@ public final class Database implements DataSourceInterface {
         e.setEntityPlayer(loggerPlayer);
         e.isStaff(isStaff);
 
-        session.persist(e);
+        session.merge(e);
         tx.commit();
 
     }
@@ -562,7 +551,7 @@ public final class Database implements DataSourceInterface {
         b.setEntityPlayer(loggerPlayer);
         b.isStaff(isStaff);
 
-        session.persist(b);
+        session.merge(b);
         tx.commit();
 
     }
@@ -605,7 +594,7 @@ public final class Database implements DataSourceInterface {
         b.setEntityPlayer(loggerPlayer);
         b.isStaff(isStaff);
         b.setItemActionType(ItemActionType.ITEM_PICKUP);
-        session.persist(b);
+        session.merge(b);
         tx.commit();
 
     }
@@ -633,7 +622,7 @@ public final class Database implements DataSourceInterface {
         b.setEntityPlayer(loggerPlayer);
         b.isStaff(isStaff);
 
-        session.persist(b);
+        session.merge(b);
         tx.commit();
 
     }
@@ -649,7 +638,7 @@ public final class Database implements DataSourceInterface {
         b.setServerName(serverName);
         b.setIp(Long.getLong(ip));
 
-        session.persist(b);
+        session.merge(b);
         tx.commit();
 
     }
@@ -673,7 +662,7 @@ public final class Database implements DataSourceInterface {
         b.setEntityPlayer(loggerPlayer);
         b.isStaff(isStaff);
 
-        session.persist(b);
+        session.merge(b);
         tx.commit();
 
     }
@@ -701,7 +690,7 @@ public final class Database implements DataSourceInterface {
         b.setEntityPlayer(loggerPlayer);
         b.isStaff(isStaff);
 
-        session.persist(b);
+        session.merge(b);
         tx.commit();
 
     }
@@ -723,7 +712,7 @@ public final class Database implements DataSourceInterface {
 
         final EntityPlayer loggerPlayer = this.fetchEntityPlayer(playerName, playerUUID);
 
-        session.persist(loggerPlayer);
+        session.merge(loggerPlayer);
         tx.commit();
 
     }
@@ -748,7 +737,7 @@ public final class Database implements DataSourceInterface {
         b.setEntityPlayer(loggerPlayer);
         b.isStaff(isStaff);
 
-        session.persist(b);
+        session.merge(b);
         tx.commit();
     }
 
@@ -807,7 +796,7 @@ public final class Database implements DataSourceInterface {
         b.isStaff(isStaff);
         b.setItems(String.join(",", items));
 
-        session.persist(b);
+        session.merge(b);
         tx.commit();
 
     }
@@ -824,13 +813,8 @@ public final class Database implements DataSourceInterface {
 
         final EntityDeath b = new EntityDeath(serverName, coords, mob, loggerPlayer, isStaff);
 
-        session.persist(b);
+        session.merge(b);
         tx.commit();
-    }
-
-    public void emptyTable() {
-
-
     }
 
     @Override
@@ -855,67 +839,87 @@ public final class Database implements DataSourceInterface {
     }
 
     @Override
-    public void insertItemFramePlace(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
-        //TODO m3aak had joj
+    public void insertItemFramePlace(String serverName, String playerName, String playerUUID,
+                                     Coordinates coords, boolean isStaff) {
+        final BlockInteraction p = new BlockInteraction();
+        p.setDate(Instant.now());
+        p.setServerName(serverName);
+        p.setWorld(coords.getWorldName());
+        p.setX(coords.getX());
+        p.setY(coords.getY());
+        p.setZ(coords.getZ());
+        //TODO
+        p.setBlock(null);
+        p.setEntityPlayer(this.fetchEntityPlayer(playerName, playerUUID));
+        p.isStaff(isStaff);
+        p.setInteractionType(InteractionType.BLOCK_PLACE);
+        Queue.addItemToQueue(p);
     }
 
     @Override
-    public void insertItemFrameBreak(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+    public void insertItemFrameBreak(String serverName, String playerName, String playerUUID,
+                                     Coordinates coords, boolean isStaff) {
+        final BlockInteraction p = new BlockInteraction();
+        p.setDate(Instant.now());
+        p.setServerName(serverName);
+        p.setWorld(coords.getWorldName());
+        p.setX(coords.getX());
+        p.setY(coords.getY());
+        p.setZ(coords.getZ());
+        //TODO
+        p.setBlock(null);
+        p.setEntityPlayer(this.fetchEntityPlayer(playerName, playerUUID));
+        p.isStaff(isStaff);
+        p.setInteractionType(InteractionType.BLOCK_BREAK);
+        Queue.addItemToQueue(p);
+    }
+
+    @Override
+    public void insertServerSwitch(String serverName, String playerUUID, String playerName,
+                                   String from, String destination, boolean isStaff) {
 
     }
 
     @Override
-    public void insertServerSwitch(String serverName, String playerUUID, String playerName, String from, String destination, boolean isStaff) {
+    public void insertPAFFriendMessage(String serverName, String playerUUID, String playerName,
+                                       String message, String receiver, boolean isStaff) {
 
     }
 
     @Override
-    public void insertPAFFriendMessage(String serverName, String playerUUID, String playerName, String message, String receiver, boolean isStaff) {
+    public void insertPAFPartyMessage(String serverName, String playerUUID, String playerName,
+                                      String message, String leader, List<String> partyMembers,
+                                      boolean isStaff) {
 
     }
 
     @Override
-    public void insertPAFPartyMessage(String serverName, String playerUUID, String playerName, String message, String leader, List<String> partyMembers, boolean isStaff) {
-
+    public void insertArmorStandPlace(String serverName, String playerName, String playerUUID,
+                                      Coordinates coords, boolean isStaff) {
+        final BlockInteraction p = new BlockInteraction();
+        p.setDate(Instant.now());
+        p.setServerName(serverName);
+        p.setWorld(coords.getWorldName());
+        p.setX(coords.getX());
+        p.setY(coords.getY());
+        p.setZ(coords.getZ());
+        //TODO
+        p.setBlock("armor stand?");
+        p.setEntityPlayer(this.fetchEntityPlayer(playerName, playerUUID));
+        p.isStaff(isStaff);
+        p.setInteractionType(InteractionType.BLOCK_PLACE);
+        Queue.addItemToQueue(p);
     }
 
     @Override
-    public void insertArmorStandPlace(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+    public void insertArmorStandBreak(String serverName, String playerName, String playerUUID,
+                                      Coordinates coords, boolean isStaff) {
 
-    }
-
-    @Override
-    public void insertArmorStandBreak(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
-
-    }
-
-
-    private void save(Object obj) {
-        Transaction tx = null;
-        try {
-            final Session session;
-            session = HibernateUtils.getSession();
-            tx = session.beginTransaction();
-            session.save(obj);
-            tx.commit();
-        }
-        catch (Exception e) {
-            if (tx != null) tx.rollback();
-            throw e;
-        }
-    }
-
-    public EntityPlayer fetchEntityPlayer(String playerName, String playerUUID) {
-
-        final Session session = HibernateUtils.getSession();
-        final EntityPlayer entityPlayer = session.get(EntityPlayer.class, playerName);
-
-        return entityPlayer != null ? entityPlayer : new EntityPlayer(playerName, playerUUID);
     }
 
     @Override
     public void disconnect() {
-        HibernateUtils.closeSession();
+        Queue.flushItems();
         HibernateUtils.closeSessionFactory();
     }
 
@@ -987,6 +991,30 @@ public final class Database implements DataSourceInterface {
                 HibernateUtils.getSessionFactory().getStatistics().getQueryCachePutCount());
 
         return results;
+    }
+
+    public void emptyTable() {
+
+
+    }
+
+    private void save(Object obj) {
+        Transaction tx = null;
+        try {
+            final Session session;
+            session = HibernateUtils.getSession();
+            tx = session.beginTransaction();
+            session.save(obj);
+            tx.commit();
+        }
+        catch (Exception e) {
+            if(tx != null) tx.rollback();
+            throw e;
+        }
+    }
+
+    public EntityPlayer fetchEntityPlayer(String playerName, String playerUUID) {
+        return new EntityPlayer(playerName, playerUUID);
     }
 
 }

@@ -2,8 +2,8 @@ package com.carpour.loggercore.database.sqlite;
 
 import com.carpour.loggercore.database.AbstractDataSource;
 import com.carpour.loggercore.database.DataSourceInterface;
-import com.carpour.loggercore.database.data.Options;
 import com.carpour.loggercore.database.data.Coordinates;
+import com.carpour.loggercore.database.data.Options;
 import com.carpour.loggercore.database.entity.PlayerChat;
 
 import java.io.File;
@@ -20,12 +20,18 @@ import java.util.stream.Stream;
 
 public final class SQLite implements DataSourceInterface {
 
-    private static final List<String> tablesNames = Stream.of("player_chat", "player_commands", "player_sign_text",
-            "player_death", "player_teleport", "player_join", "player_leave", "block_place", "block_break",
-            "player_kick", "player_level", "Bucket_fill", "bucket_empty", "anvil", "item_drop", "enchanting",
-            "book_editing", "item_pickup", "furnace", "game_mode", "crafting", "registration", "server_start",
-            "server_stop", "console_commands", "ram", "tps", "portal_creation", "rcon", "primed_tnt", "command_block",
-            "chest_interaction", "entity_death", "logger_playertime").collect(Collectors.toCollection(ArrayList::new));
+    private static final List<String> tablesNames = Stream
+            .of("player_chat", "player_commands", "player_sign_text",
+                    "player_death", "player_teleport", "player_join", "player_leave", "block_place",
+                    "block_break",
+                    "player_kick", "player_level", "Bucket_fill", "bucket_empty", "anvil",
+                    "item_drop", "enchanting",
+                    "book_editing", "item_pickup", "furnace", "game_mode", "crafting",
+                    "registration", "server_start",
+                    "server_stop", "console_commands", "ram", "tps", "portal_creation", "rcon",
+                    "primed_tnt", "command_block",
+                    "chest_interaction", "entity_death", "logger_playertime")
+            .collect(Collectors.toCollection(ArrayList::new));
 
     private final File databaseFile;
     private final Options options;
@@ -37,7 +43,8 @@ public final class SQLite implements DataSourceInterface {
         this.databaseFile = databaseFile;
         try {
             Class.forName("org.sqlite.JDBC");
-        } catch (ClassNotFoundException e) { throw new RuntimeException(e); }
+        }
+        catch (ClassNotFoundException e) { throw new RuntimeException(e); }
 
         this.createDatabaseFile();
         this.createTable();
@@ -50,10 +57,10 @@ public final class SQLite implements DataSourceInterface {
 
     private void createDatabaseFile() {
         try {
-            if (!this.databaseFile.exists())
-                this.databaseFile.createNewFile();
+            if(!this.databaseFile.exists()) { this.databaseFile.createNewFile(); }
 
-        } catch (IOException e) { throw new RuntimeException(e); }
+        }
+        catch (IOException e) { throw new RuntimeException(e); }
     }
 
     private String getJdbcUrl() {
@@ -229,34 +236,37 @@ public final class SQLite implements DataSourceInterface {
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, command VARCHAR(256))");
 
             // Extras Side Part
-            if (this.options.isEssentialsEnabled()) {
+            if(this.options.isEssentialsEnabled()) {
 
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS afk(id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
-                        " player_name TEXT, x INT, y INT, z INT, is_staff BOOLEAN)");
+                statement.executeUpdate(
+                        "CREATE TABLE IF NOT EXISTS afk(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                                " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
+                                " player_name TEXT, x INT, y INT, z INT, is_staff BOOLEAN)");
 
                 tablesNames.add("afk");
             }
 
-            if (this.options.isAuthMeEnabled()) {
+            if(this.options.isAuthMeEnabled()) {
 
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS wrong_password(id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
-                        "player_name TEXT, is_staff BOOLEAN)");
+                statement.executeUpdate(
+                        "CREATE TABLE IF NOT EXISTS wrong_password(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                                " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
+                                "player_name TEXT, is_staff BOOLEAN)");
 
                 tablesNames.add("wrong_password");
             }
 
-            if (this.options.isVaultEnabled()) {
+            if(this.options.isVaultEnabled()) {
 
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS vault(id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
-                        "player_name TEXT, old_balance DOUBLE, new_balance DOUBLE, is_staff BOOLEAN)");
+                statement.executeUpdate(
+                        "CREATE TABLE IF NOT EXISTS vault(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                                " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
+                                "player_name TEXT, old_balance DOUBLE, new_balance DOUBLE, is_staff BOOLEAN)");
 
                 tablesNames.add("vault");
             }
 
-            if (this.options.isLiteBansEnabled()) {
+            if(this.options.isLiteBansEnabled()) {
 
                 statement.executeUpdate("CREATE TABLE IF NOT EXISTS litebans "
                         + "(server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP," +
@@ -266,35 +276,40 @@ public final class SQLite implements DataSourceInterface {
                 tablesNames.add("litebans");
             }
 
-            if (this.options.isAdvancedBanEnabled()) {
+            if(this.options.isAdvancedBanEnabled()) {
 
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS advanced_ban (server_name TEXT," +
-                        " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, type TEXT,executor TEXT," +
-                        " executed_on TEXT, reason TEXT, expiration_date TEXT)");
+                statement.executeUpdate(
+                        "CREATE TABLE IF NOT EXISTS advanced_ban (server_name TEXT," +
+                                " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, type TEXT,executor TEXT," +
+                                " executed_on TEXT, reason TEXT, expiration_date TEXT)");
 
                 tablesNames.add("advanced_ban");
             }
 
             // Version Exceptions Part
-            if (this.options.isViaVersion()) {
+            if(this.options.isViaVersion()) {
 
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS wood_stripping (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, " +
-                        "uuid TEXT, player_name TEXT, log_name TEXT, x INT, y INT, z INT, is_staff BOOLEAN)");
+                statement.executeUpdate(
+                        "CREATE TABLE IF NOT EXISTS wood_stripping (id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                                " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, " +
+                                "uuid TEXT, player_name TEXT, log_name TEXT, x INT, y INT, z INT, is_staff BOOLEAN)");
 
                 tablesNames.add("wood_stripping");
             }
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
 
     @Override
-    public void insertPlayerChat(String serverName, String playerName, String playerUUID, String worldName, String msg, boolean isStaff) {
+    public void insertPlayerChat(String serverName, String playerName, String playerUUID,
+                                 String worldName, String msg, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement playerChat = connection.prepareStatement("INSERT INTO player_chat" +
-                     " (server_name, world, player_name, message, is_staff) VALUES(?,?,?,?,?)")) {
+             final PreparedStatement playerChat = connection.prepareStatement(
+                     "INSERT INTO player_chat" +
+                             " (server_name, world, player_name, message, is_staff) VALUES(?,?,?,?,?)")) {
 
             playerChat.setString(1, serverName);
             playerChat.setString(2, worldName);
@@ -304,15 +319,18 @@ public final class SQLite implements DataSourceInterface {
 
             playerChat.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertPlayerCommands(String serverName, String playerName, String playerUUID, String worldName, String command, boolean isStaff) {
+    public void insertPlayerCommands(String serverName, String playerName, String playerUUID,
+                                     String worldName, String command, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement playerCommands = connection.prepareStatement("INSERT INTO player_commands" +
-                     " (server_name, world, player_name, command, is_staff) VALUES(?,?,?,?,?)")) {
+             final PreparedStatement playerCommands = connection.prepareStatement(
+                     "INSERT INTO player_commands" +
+                             " (server_name, world, player_name, command, is_staff) VALUES(?,?,?,?,?)")) {
 
             playerCommands.setString(1, serverName);
             playerCommands.setString(2, worldName);
@@ -322,15 +340,18 @@ public final class SQLite implements DataSourceInterface {
 
             playerCommands.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertPlayerSignText(String serverName, String playerName, String playerUUID, Coordinates coords, String lines, boolean isStaff) {
+    public void insertPlayerSignText(String serverName, String playerName, String playerUUID,
+                                     Coordinates coords, String lines, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement playerSignText = connection.prepareStatement("INSERT INTO player_sign_text" +
-                     " (server_name, world, x, y, z, player_name, line, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
+             final PreparedStatement playerSignText = connection.prepareStatement(
+                     "INSERT INTO player_sign_text" +
+                             " (server_name, world, x, y, z, player_name, line, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
 
             playerSignText.setString(1, serverName);
             playerSignText.setString(2, coords.getWorldName());
@@ -343,15 +364,19 @@ public final class SQLite implements DataSourceInterface {
 
             playerSignText.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertPlayerDeath(String serverName, String playerName, String playerUUID, int level, String cause, String who, Coordinates coordinates, boolean isStaff) {
+    public void insertPlayerDeath(String serverName, String playerName, String playerUUID,
+                                  int level, String cause, String who, Coordinates coordinates,
+                                  boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement playerDeath = connection.prepareStatement("INSERT INTO player_death" +
-                     " (server_name, world, player_name, player_level, x, y, z, cause, by_who, is_staff) VALUES(?,?,?,?,?,?,?,?,?,?)")) {
+             final PreparedStatement playerDeath = connection.prepareStatement(
+                     "INSERT INTO player_death" +
+                             " (server_name, world, player_name, player_level, x, y, z, cause, by_who, is_staff) VALUES(?,?,?,?,?,?,?,?,?,?)")) {
 
             playerDeath.setString(1, serverName);
             playerDeath.setString(2, coordinates.getWorldName());
@@ -366,16 +391,20 @@ public final class SQLite implements DataSourceInterface {
 
             playerDeath.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertPlayerTeleport(String serverName, String playerName, String playerUUID, Coordinates oldCoords, Coordinates newCoords, boolean isStaff) {
+    public void insertPlayerTeleport(String serverName, String playerName, String playerUUID,
+                                     Coordinates oldCoords, Coordinates newCoords,
+                                     boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement playerTeleport = connection.prepareStatement("INSERT INTO player_teleport" +
-                     " (server_name, world, player_name, from_x, from_y, from_z, to_x, to_y, to_z, is_staff)" +
-                     " VALUES(?,?,?,?,?,?,?,?,?,?)")) {
+             final PreparedStatement playerTeleport = connection.prepareStatement(
+                     "INSERT INTO player_teleport" +
+                             " (server_name, world, player_name, from_x, from_y, from_z, to_x, to_y, to_z, is_staff)" +
+                             " VALUES(?,?,?,?,?,?,?,?,?,?)")) {
 
             playerTeleport.setString(1, serverName);
             playerTeleport.setString(2, oldCoords.getWorldName());
@@ -390,15 +419,18 @@ public final class SQLite implements DataSourceInterface {
 
             playerTeleport.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertPlayerJoin(String serverName, String playerName, String playerUUID, Coordinates coords, InetSocketAddress ip, boolean isStaff) {
+    public void insertPlayerJoin(String serverName, String playerName, String playerUUID,
+                                 Coordinates coords, InetSocketAddress ip, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement playerJoin = connection.prepareStatement("INSERT INTO player_join" +
-                     " (server_name, world, player_name, x, y, z, ip, is_staff) VALUES(?,?,?,?,?,?,INET_ATON(?),?)")) {
+             final PreparedStatement playerJoin = connection.prepareStatement(
+                     "INSERT INTO player_join" +
+                             " (server_name, world, player_name, x, y, z, ip, is_staff) VALUES(?,?,?,?,?,?,INET_ATON(?),?)")) {
 
             playerJoin.setString(1, serverName);
             playerJoin.setString(2, coords.getWorldName());
@@ -406,23 +438,25 @@ public final class SQLite implements DataSourceInterface {
             playerJoin.setInt(4, coords.getX());
             playerJoin.setInt(5, coords.getY());
             playerJoin.setInt(6, coords.getZ());
-            if (this.options.isPlayerIPEnabled())
+            if(this.options.isPlayerIPEnabled()) {
                 playerJoin.setString(7, ip.getHostString());
-            else
-                playerJoin.setString(7, null);
+            } else { playerJoin.setString(7, null); }
             playerJoin.setBoolean(8, isStaff);
 
             playerJoin.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertPlayerLeave(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+    public void insertPlayerLeave(String serverName, String playerName, String playerUUID,
+                                  Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement playerLeave = connection.prepareStatement("INSERT INTO player_leave" +
-                     " (server_name, world, player_name, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?)")) {
+             final PreparedStatement playerLeave = connection.prepareStatement(
+                     "INSERT INTO player_leave" +
+                             " (server_name, world, player_name, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?)")) {
 
             playerLeave.setString(1, serverName);
             playerLeave.setString(2, coords.getWorldName());
@@ -434,15 +468,18 @@ public final class SQLite implements DataSourceInterface {
 
             playerLeave.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertBlockPlace(String serverName, String playerName, String playerUUID, String block, Coordinates coords, boolean isStaff) {
+    public void insertBlockPlace(String serverName, String playerName, String playerUUID,
+                                 String block, Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement blockPlace = connection.prepareStatement("INSERT INTO block_place" +
-                     " (server_name, world, player_name, block, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
+             final PreparedStatement blockPlace = connection.prepareStatement(
+                     "INSERT INTO block_place" +
+                             " (server_name, world, player_name, block, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
 
             blockPlace.setString(1, serverName);
             blockPlace.setString(2, coords.getWorldName());
@@ -455,15 +492,18 @@ public final class SQLite implements DataSourceInterface {
 
             blockPlace.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertBlockBreak(String serverName, String playerName, String playerUUID, String blockName, Coordinates coords, boolean isStaff) {
+    public void insertBlockBreak(String serverName, String playerName, String playerUUID,
+                                 String blockName, Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement blockBreak = connection.prepareStatement("INSERT INTO block_break" +
-                     " (server_name, world, player_name, block, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
+             final PreparedStatement blockBreak = connection.prepareStatement(
+                     "INSERT INTO block_break" +
+                             " (server_name, world, player_name, block, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
 
             blockBreak.setString(1, serverName);
             blockBreak.setString(2, coords.getWorldName());
@@ -476,21 +516,24 @@ public final class SQLite implements DataSourceInterface {
 
             blockBreak.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
     public void insertTps(String serverName, double tpss) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement tps = connection.prepareStatement("INSERT INTO tps (server_name, tps) VALUES(?,?)")) {
+             final PreparedStatement tps = connection.prepareStatement(
+                     "INSERT INTO tps (server_name, tps) VALUES(?,?)")) {
 
             tps.setString(1, serverName);
             tps.setDouble(2, tpss);
 
             tps.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -507,15 +550,18 @@ public final class SQLite implements DataSourceInterface {
 
             ram.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertPlayerKick(String serverName, String playerName, String playerUUID, Coordinates coords, String reason, boolean isStaff) {
+    public void insertPlayerKick(String serverName, String playerName, String playerUUID,
+                                 Coordinates coords, String reason, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement playerKick = connection.prepareStatement("INSERT INTO player_kick" +
-                     " (server_name, world, player_name, x, y, z, reason, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
+             final PreparedStatement playerKick = connection.prepareStatement(
+                     "INSERT INTO player_kick" +
+                             " (server_name, world, player_name, x, y, z, reason, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
 
             playerKick.setString(1, serverName);
             playerKick.setString(2, coords.getWorldName());
@@ -528,15 +574,17 @@ public final class SQLite implements DataSourceInterface {
 
             playerKick.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
     public void insertPortalCreate(String serverName, String worldName, String by) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement portalCreation = connection.prepareStatement("INSERT INTO portal_creation" +
-                     " (server_name, world, caused_by) VALUES(?,?,?)")) {
+             final PreparedStatement portalCreation = connection.prepareStatement(
+                     "INSERT INTO portal_creation" +
+                             " (server_name, world, caused_by) VALUES(?,?,?)")) {
 
             portalCreation.setString(1, serverName);
             portalCreation.setString(2, worldName);
@@ -544,35 +592,24 @@ public final class SQLite implements DataSourceInterface {
 
             portalCreation.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertLevelChange(String serverName, String playerName, String playerUUID, boolean isStaff) {
+    public void insertLevelChange(String serverName, String playerName, String playerUUID,
+                                  boolean isStaff) {
 
-    }
-
-    public void insertLevelChange(String serverName, String playerName, boolean isStaff) {
-
-        try (final Connection connection = this.getConnection();
-             final PreparedStatement playerLevel = connection.prepareStatement("INSERT INTO player_level" +
-                     " (server_name, player_name, is_staff) VALUES(?,?,?)")) {
-
-            playerLevel.setString(1, serverName);
-            playerLevel.setString(2, playerName);
-            playerLevel.setBoolean(3, isStaff);
-
-            playerLevel.executeUpdate();
-
-        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertBucketFill(String serverName, String playerName, String playerUUID, String bucket, Coordinates coords, boolean isStaff) {
+    public void insertBucketFill(String serverName, String playerName, String playerUUID,
+                                 String bucket, Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement bucketPlace = connection.prepareStatement("INSERT INTO bucket_fill" +
-                     " (server_name, world, player_name, bucket, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
+             final PreparedStatement bucketPlace = connection.prepareStatement(
+                     "INSERT INTO bucket_fill" +
+                             " (server_name, world, player_name, bucket, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
 
             bucketPlace.setString(1, serverName);
             bucketPlace.setString(2, coords.getWorldName());
@@ -585,15 +622,18 @@ public final class SQLite implements DataSourceInterface {
 
             bucketPlace.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertBucketEmpty(String serverName, String playerName, String playerUUID, String bucket, Coordinates coords, boolean isStaff) {
+    public void insertBucketEmpty(String serverName, String playerName, String playerUUID,
+                                  String bucket, Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement bucketPlace = connection.prepareStatement("INSERT INTO bucket_empty" +
-                     " (server_name, world, player_name, bucket, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
+             final PreparedStatement bucketPlace = connection.prepareStatement(
+                     "INSERT INTO bucket_empty" +
+                             " (server_name, world, player_name, bucket, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
 
 
             bucketPlace.setString(1, serverName);
@@ -607,63 +647,56 @@ public final class SQLite implements DataSourceInterface {
 
             bucketPlace.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertAnvil(String serverName, String playerName, String playerUUID, String newName, boolean isStaff) {
+    public void insertAnvil(String serverName, String playerName, String playerUUID, String newName,
+                            boolean isStaff) {
 
-    }
-
-    public void insertAnvil(String serverName, String playerName, String newName, boolean isStaff) {
-
-        try (final Connection connection = this.getConnection();
-             final PreparedStatement anvil = connection.prepareStatement("INSERT INTO anvil" +
-                     " (server_name, player_name, new_name, is_staff) VALUES(?,?,?,?)")) {
-
-            anvil.setString(1, serverName);
-            anvil.setString(2, playerName);
-            anvil.setString(3, newName);
-            anvil.setBoolean(4, isStaff);
-
-            anvil.executeUpdate();
-
-        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
     public void insertServerStart(String serverName) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement serverStart = connection.prepareStatement("INSERT INTO server_start (server_name) VALUES(?)")) {
+             final PreparedStatement serverStart = connection.prepareStatement(
+                     "INSERT INTO server_start (server_name) VALUES(?)")) {
 
             serverStart.setString(1, serverName);
 
             serverStart.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
     public void insertServerStop(String serverName) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement serverStop = connection.prepareStatement("INSERT INTO server_stop (server_name) VALUES(?)")) {
+             final PreparedStatement serverStop = connection.prepareStatement(
+                     "INSERT INTO server_stop (server_name) VALUES(?)")) {
 
             serverStop.setString(1, serverName);
 
             serverStop.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertItemDrop(String serverName, String playerName, String playerUUID, String item, int amount, Coordinates coords, List<String> enchantment, String changedName, boolean isStaff) {
+    public void insertItemDrop(String serverName, String playerName, String playerUUID, String item,
+                               int amount, Coordinates coords, List<String> enchantment,
+                               String changedName, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement itemDrop = connection.prepareStatement("INSERT INTO item_drop" +
-                     " (server_name, world, player_name, item, amount, x, y, z, enchantment, changed_name, is_staff)" +
-                     " VALUES(?,?,?,?,?,?,?,?,?,?,?)")) {
+             final PreparedStatement itemDrop = connection.prepareStatement(
+                     "INSERT INTO item_drop" +
+                             " (server_name, world, player_name, item, amount, x, y, z, enchantment, changed_name, is_staff)" +
+                             " VALUES(?,?,?,?,?,?,?,?,?,?,?)")) {
 
             itemDrop.setString(1, serverName);
             itemDrop.setString(2, coords.getWorldName());
@@ -679,17 +712,20 @@ public final class SQLite implements DataSourceInterface {
 
             itemDrop.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertEnchant(String serverName, String playerName, String playerUUID, List<String> enchantment, int enchantmentLevel,
+    public void insertEnchant(String serverName, String playerName, String playerUUID,
+                              List<String> enchantment, int enchantmentLevel,
                               String item, int cost, Coordinates coordinates, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement enchanting = connection.prepareStatement("INSERT INTO enchanting" +
-                     " (server_name, world, player_name, x, y, z, enchantment, enchantment_level, item, cost, is_staff)" +
-                     " VALUES(?,?,?,?,?,?,?,?,?,?,?)")) {
+             final PreparedStatement enchanting = connection.prepareStatement(
+                     "INSERT INTO enchanting" +
+                             " (server_name, world, player_name, x, y, z, enchantment, enchantment_level, item, cost, is_staff)" +
+                             " VALUES(?,?,?,?,?,?,?,?,?,?,?)")) {
 
             enchanting.setString(1, serverName);
             enchanting.setString(2, coordinates.getWorldName());
@@ -705,15 +741,19 @@ public final class SQLite implements DataSourceInterface {
 
             enchanting.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertBookEditing(String serverName, String playerName, String playerUUID, String worldName, int pages, List<String> content, String signedBy, boolean isStaff) {
+    public void insertBookEditing(String serverName, String playerName, String playerUUID,
+                                  String worldName, int pages, List<String> content,
+                                  String signedBy, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement enchanting = connection.prepareStatement("INSERT INTO book_editing" +
-                     " (server_name, world, player_name, page_count, page_content, signed_by, is_staff) VALUES(?,?,?,?,?,?,?)")) {
+             final PreparedStatement enchanting = connection.prepareStatement(
+                     "INSERT INTO book_editing" +
+                             " (server_name, world, player_name, page_count, page_content, signed_by, is_staff) VALUES(?,?,?,?,?,?,?)")) {
 
             enchanting.setString(1, serverName);
             enchanting.setString(2, worldName);
@@ -725,11 +765,13 @@ public final class SQLite implements DataSourceInterface {
 
             enchanting.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertAfk(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+    public void insertAfk(String serverName, String playerName, String playerUUID,
+                          Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement afk = connection.prepareStatement("INSERT INTO afk" +
@@ -745,15 +787,18 @@ public final class SQLite implements DataSourceInterface {
 
             afk.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertWrongPassword(String serverName, String playerName, String playerUUID, String worldName, boolean isStaff) {
+    public void insertWrongPassword(String serverName, String playerName, String playerUUID,
+                                    String worldName, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement wrongPassword = connection.prepareStatement("INSERT INTO wrong_password" +
-                     " (server_name, world, player_name, is_staff) VALUES(?,?,?,?)")) {
+             final PreparedStatement wrongPassword = connection.prepareStatement(
+                     "INSERT INTO wrong_password" +
+                             " (server_name, world, player_name, is_staff) VALUES(?,?,?,?)")) {
 
             wrongPassword.setString(1, serverName);
             wrongPassword.setString(2, worldName);
@@ -762,15 +807,19 @@ public final class SQLite implements DataSourceInterface {
 
             wrongPassword.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertItemPickup(String serverName, String playerName, String playerUUID, String item, int amount, Coordinates coords, String changedName, boolean isStaff) {
+    public void insertItemPickup(String serverName, String playerName, String playerUUID,
+                                 String item, int amount, Coordinates coords, String changedName,
+                                 boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement itemPickup = connection.prepareStatement("INSERT INTO item_pickup" +
-                     " (server_name, world, player_name, item, amount, x, y, z, changed_name, is_staff) VALUES(?,?,?,?,?,?,?,?,?,?)")) {
+             final PreparedStatement itemPickup = connection.prepareStatement(
+                     "INSERT INTO item_pickup" +
+                             " (server_name, world, player_name, item, amount, x, y, z, changed_name, is_staff) VALUES(?,?,?,?,?,?,?,?,?,?)")) {
 
             itemPickup.setString(1, serverName);
             itemPickup.setString(2, coords.getWorldName());
@@ -785,11 +834,13 @@ public final class SQLite implements DataSourceInterface {
 
             itemPickup.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertFurnace(String serverName, String playerName, String playerUUID, String item, int amount, Coordinates coords, boolean isStaff) {
+    public void insertFurnace(String serverName, String playerName, String playerUUID, String item,
+                              int amount, Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement furnace = connection.prepareStatement("INSERT INTO furnace" +
@@ -807,7 +858,8 @@ public final class SQLite implements DataSourceInterface {
 
             furnace.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -823,15 +875,18 @@ public final class SQLite implements DataSourceInterface {
 
             rCon.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertGameMode(String serverName, String playerName, String playerUUID, String theGameMode, String worldName, boolean isStaff) {
+    public void insertGameMode(String serverName, String playerName, String playerUUID,
+                               String theGameMode, String worldName, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement gameMode = connection.prepareStatement("INSERT INTO game_mode" +
-                     " (server_name, world, player_name, game_mode, is_staff) VALUES(?,?,?,?,?)")) {
+             final PreparedStatement gameMode = connection.prepareStatement(
+                     "INSERT INTO game_mode" +
+                             " (server_name, world, player_name, game_mode, is_staff) VALUES(?,?,?,?,?)")) {
 
             gameMode.setString(1, serverName);
             gameMode.setString(2, worldName);
@@ -841,11 +896,14 @@ public final class SQLite implements DataSourceInterface {
 
             gameMode.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertPlayerCraft(String serverName, String playerName, String playerUUID, String item, int amount, Coordinates coordinates, boolean isStaff) {
+    public void insertPlayerCraft(String serverName, String playerName, String playerUUID,
+                                  String item, int amount, Coordinates coordinates,
+                                  boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement craft = connection.prepareStatement("INSERT INTO crafting" +
@@ -863,11 +921,13 @@ public final class SQLite implements DataSourceInterface {
 
             craft.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertVault(String serverName, String playerName, String playerUUID, double oldBal, double newBal, boolean isStaff) {
+    public void insertVault(String serverName, String playerName, String playerUUID, double oldBal,
+                            double newBal, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement vault = connection.prepareStatement("INSERT INTO vault" +
@@ -881,15 +941,18 @@ public final class SQLite implements DataSourceInterface {
 
             vault.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertPlayerRegistration(String serverName, String playerName, String playerUUID, String joinDate) {
+    public void insertPlayerRegistration(String serverName, String playerName, String playerUUID,
+                                         String joinDate) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement register = connection.prepareStatement("INSERT INTO registration" +
-                     " (server_name, player_name, player_uuid, join_date) VALUES(?,?,?,?)")) {
+             final PreparedStatement register = connection.prepareStatement(
+                     "INSERT INTO registration" +
+                             " (server_name, player_name, player_uuid, join_date) VALUES(?,?,?,?)")) {
 
             register.setString(1, serverName);
             register.setString(2, playerName);
@@ -898,15 +961,18 @@ public final class SQLite implements DataSourceInterface {
 
             register.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertPrimedTnt(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+    public void insertPrimedTnt(String serverName, String playerName, String playerUUID,
+                                Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement primedTNT = connection.prepareStatement("INSERT INTO primed_tnt" +
-                     " (server_name, world, player_uuid, player_name, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
+             final PreparedStatement primedTNT = connection.prepareStatement(
+                     "INSERT INTO primed_tnt" +
+                             " (server_name, world, player_uuid, player_name, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
 
             primedTNT.setString(1, serverName);
             primedTNT.setString(2, coords.getWorldName());
@@ -919,11 +985,13 @@ public final class SQLite implements DataSourceInterface {
 
             primedTNT.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertLiteBans(String serverName, String executor, String command, String onWho, String duration, String reason, boolean isSilent) {
+    public void insertLiteBans(String serverName, String executor, String command, String onWho,
+                               String duration, String reason, boolean isSilent) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement liteBans = connection.prepareStatement("INSERT INTO litebans" +
@@ -939,15 +1007,18 @@ public final class SQLite implements DataSourceInterface {
 
             liteBans.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertAdvanceBanData(String serverName, String type, String executor, String executedOn, String reason, long expirationDate) {
+    public void insertAdvanceBanData(String serverName, String type, String executor,
+                                     String executedOn, String reason, long expirationDate) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement advancedBan = connection.prepareStatement("INSERT INTO advanced_ban" +
-                     " (server_name, type, executor, executed_on, reason, expiration_date) VALUES(?,?,?,?,?,?)")) {
+             final PreparedStatement advancedBan = connection.prepareStatement(
+                     "INSERT INTO advanced_ban" +
+                             " (server_name, type, executor, executed_on, reason, expiration_date) VALUES(?,?,?,?,?,?)")) {
 
             advancedBan.setString(1, serverName);
             advancedBan.setString(2, type);
@@ -958,30 +1029,35 @@ public final class SQLite implements DataSourceInterface {
 
             advancedBan.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
     public void insertCommandBlock(String serverName, String msg) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement commandBlock = connection.prepareStatement("INSERT INTO command_block" +
-                     " (server_name, command) VALUES(?,?)")) {
+             final PreparedStatement commandBlock = connection.prepareStatement(
+                     "INSERT INTO command_block" +
+                             " (server_name, command) VALUES(?,?)")) {
 
             commandBlock.setString(1, serverName);
             commandBlock.setString(2, msg);
 
             commandBlock.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertWoodStripping(String serverName, String playerName, String playerUUID, String logName, Coordinates coords, boolean isStaff) {
+    public void insertWoodStripping(String serverName, String playerName, String playerUUID,
+                                    String logName, Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement woodStripping = connection.prepareStatement("INSERT INTO wood_stripping" +
-                     " (server_name, world, uuid, player_name, log_name, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?,?)")) {
+             final PreparedStatement woodStripping = connection.prepareStatement(
+                     "INSERT INTO wood_stripping" +
+                             " (server_name, world, uuid, player_name, log_name, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?,?)")) {
 
             woodStripping.setString(1, serverName);
             woodStripping.setString(2, coords.getWorldName());
@@ -995,15 +1071,18 @@ public final class SQLite implements DataSourceInterface {
 
             woodStripping.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertChestInteraction(String serverName, String playerName, String playerUUID, Coordinates coords, String[] items, boolean isStaff) {
+    public void insertChestInteraction(String serverName, String playerName, String playerUUID,
+                                       Coordinates coords, String[] items, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement chestInteraction = connection.prepareStatement("INSERT INTO chest_interaction" +
-                     " (server_name, world, player_uuid, player_name, x, y, z, items, is_staff) VALUES(?,?,?,?,?,?,?,?,?)")) {
+             final PreparedStatement chestInteraction = connection.prepareStatement(
+                     "INSERT INTO chest_interaction" +
+                             " (server_name, world, player_uuid, player_name, x, y, z, items, is_staff) VALUES(?,?,?,?,?,?,?,?,?)")) {
 
             chestInteraction.setString(1, serverName);
             chestInteraction.setString(2, coords.getWorldName());
@@ -1017,15 +1096,18 @@ public final class SQLite implements DataSourceInterface {
 
             chestInteraction.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
-    public void insertEntityDeath(String serverName, String playerName, String playerUUID, String mob, Coordinates coords, boolean isStaff) {
+    public void insertEntityDeath(String serverName, String playerName, String playerUUID,
+                                  String mob, Coordinates coords, boolean isStaff) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement entityDeath = connection.prepareStatement("INSERT INTO entity_death" +
-                     " (server_name, world, player_uuid, player_name, mob, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?,?)")) {
+             final PreparedStatement entityDeath = connection.prepareStatement(
+                     "INSERT INTO entity_death" +
+                             " (server_name, world, player_uuid, player_name, mob, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?,?)")) {
 
             entityDeath.setString(1, serverName);
             entityDeath.setString(2, coords.getWorldName());
@@ -1039,23 +1121,25 @@ public final class SQLite implements DataSourceInterface {
 
             entityDeath.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
-
 
     @Override
     public void insertConsoleCommand(String serverName, String msg) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement consoleCommands = connection.prepareStatement("INSERT INTO console_commands" +
-                     " (server_name, command) VALUES(?,?)")) {
+             final PreparedStatement consoleCommands = connection.prepareStatement(
+                     "INSERT INTO console_commands" +
+                             " (server_name, command) VALUES(?,?)")) {
 
             consoleCommands.setString(1, serverName);
             consoleCommands.setString(2, msg);
 
             consoleCommands.executeUpdate();
 
-        } catch (final SQLException e) { e.printStackTrace(); }
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -1071,37 +1155,45 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertItemFramePlace(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+    public void insertItemFramePlace(String serverName, String playerName, String playerUUID,
+                                     Coordinates coords, boolean isStaff) {
 
     }
 
     @Override
-    public void insertItemFrameBreak(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+    public void insertItemFrameBreak(String serverName, String playerName, String playerUUID,
+                                     Coordinates coords, boolean isStaff) {
 
     }
 
     @Override
-    public void insertServerSwitch(String serverName, String playerUUID, String playerName, String from, String destination, boolean isStaff) {
+    public void insertServerSwitch(String serverName, String playerUUID, String playerName,
+                                   String from, String destination, boolean isStaff) {
 
     }
 
     @Override
-    public void insertPAFFriendMessage(String serverName, String playerUUID, String playerName, String message, String receiver, boolean isStaff) {
+    public void insertPAFFriendMessage(String serverName, String playerUUID, String playerName,
+                                       String message, String receiver, boolean isStaff) {
 
     }
 
     @Override
-    public void insertPAFPartyMessage(String serverName, String playerUUID, String playerName, String message, String leader, List<String> partyMembers, boolean isStaff) {
+    public void insertPAFPartyMessage(String serverName, String playerUUID, String playerName,
+                                      String message, String leader, List<String> partyMembers,
+                                      boolean isStaff) {
 
     }
 
     @Override
-    public void insertArmorStandPlace(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+    public void insertArmorStandPlace(String serverName, String playerName, String playerUUID,
+                                      Coordinates coords, boolean isStaff) {
 
     }
 
     @Override
-    public void insertArmorStandBreak(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+    public void insertArmorStandBreak(String serverName, String playerName, String playerUUID,
+                                      Coordinates coords, boolean isStaff) {
 
     }
 
@@ -1112,14 +1204,48 @@ public final class SQLite implements DataSourceInterface {
 
     @Override
     public List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset,
-                                                      int limit) {return Collections.emptyList();}
+                                                      int limit) { return Collections.emptyList(); }
 
     @Override
-    public Long getPlayerChatCount(String playerName) {return 0L;}
+    public Long getPlayerChatCount(String playerName) { return 0L; }
 
     @Override
     public List<?> getSaladeMarocaine(String playerName, int offset, int limit) {
         return Collections.emptyList();
+    }
+
+    public void insertLevelChange(String serverName, String playerName, boolean isStaff) {
+
+        try (final Connection connection = this.getConnection();
+             final PreparedStatement playerLevel = connection.prepareStatement(
+                     "INSERT INTO player_level" +
+                             " (server_name, player_name, is_staff) VALUES(?,?,?)")) {
+
+            playerLevel.setString(1, serverName);
+            playerLevel.setString(2, playerName);
+            playerLevel.setBoolean(3, isStaff);
+
+            playerLevel.executeUpdate();
+
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
+    }
+
+    public void insertAnvil(String serverName, String playerName, String newName, boolean isStaff) {
+
+        try (final Connection connection = this.getConnection();
+             final PreparedStatement anvil = connection.prepareStatement("INSERT INTO anvil" +
+                     " (server_name, player_name, new_name, is_staff) VALUES(?,?,?,?)")) {
+
+            anvil.setString(1, serverName);
+            anvil.setString(2, playerName);
+            anvil.setString(3, newName);
+            anvil.setBoolean(4, isStaff);
+
+            anvil.executeUpdate();
+
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
 }

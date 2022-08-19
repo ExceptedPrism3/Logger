@@ -27,7 +27,7 @@ public class EntityDeath extends AbstractAction {
     @Column(name = "is_staff")
     private Boolean isStaff;
 
-    public EntityDeath() {}
+    public EntityDeath() { }
 
     public EntityDeath(String serverName, Coordinates coords, String mob, EntityPlayer entityPlayer,
                        Boolean isStaff) {

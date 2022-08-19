@@ -2,7 +2,10 @@ package com.carpour.loggercore.database.entity;
 
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.*;
+import javax.persistence.Cacheable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.Instant;
 
 @Entity
@@ -19,11 +22,6 @@ public class PlayerChat extends AbstractAction {
 
     @Column(name = "is_staff")
     private Boolean isStaff;
-
-
-    public void setDate(Instant date) {
-        this.date = date;
-    }
 
     public String getWorld() {
         return this.world;
@@ -53,4 +51,9 @@ public class PlayerChat extends AbstractAction {
     public String getAction() {
         return this.entityPlayer.getPlayerName() + " said " + this.getMessage();
     }
+
+    public void setDate(Instant date) {
+        this.date = date;
+    }
+
 }

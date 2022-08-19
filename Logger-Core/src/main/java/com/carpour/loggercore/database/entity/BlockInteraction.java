@@ -30,7 +30,6 @@ public class BlockInteraction extends AbstractAction {
     private InteractionType interactionType;
 
 
-
     public String getWorld() {
         return this.world;
     }

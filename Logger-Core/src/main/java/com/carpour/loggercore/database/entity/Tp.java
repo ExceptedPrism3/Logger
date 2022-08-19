@@ -54,4 +54,5 @@ public class Tp {
     public void setTps(Integer tps) {
         this.tps = tps;
     }
+
 }

@@ -64,4 +64,5 @@ public class Rcon {
     public void setCommand(String command) {
         this.command = command;
     }
+
 }

@@ -60,4 +60,5 @@ public class CommandBlock {
     public void prePersist() {
         this.date = Instant.now();
     }
+
 }

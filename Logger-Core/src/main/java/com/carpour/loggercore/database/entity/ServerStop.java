@@ -44,4 +44,5 @@ public class ServerStop {
     public void setDate(Instant date) {
         this.date = date;
     }
+
 }

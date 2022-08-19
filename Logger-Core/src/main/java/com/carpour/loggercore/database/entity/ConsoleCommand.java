@@ -21,7 +21,7 @@ public class ConsoleCommand {
     @Column(name = "command", length = 256)
     private String command;
 
-    public ConsoleCommand() {}
+    public ConsoleCommand() { }
 
     public ConsoleCommand(String serverName, String command) {
         this.serverName = serverName;
@@ -59,4 +59,5 @@ public class ConsoleCommand {
     public void setCommand(String command) {
         this.command = command;
     }
+
 }

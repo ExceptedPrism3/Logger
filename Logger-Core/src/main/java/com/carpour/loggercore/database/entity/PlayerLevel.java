@@ -65,4 +65,5 @@ public class PlayerLevel {
     public void isStaff(Boolean staff) {
         this.isStaff = staff;
     }
+
 }

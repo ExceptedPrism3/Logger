@@ -105,4 +105,5 @@ public class PrimedTnt {
     public void isStaff(Boolean staff) {
         this.isStaff = staff;
     }
+
 }

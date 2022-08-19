@@ -95,4 +95,5 @@ public class GameMode {
     public void prePersist() {
         this.date = Instant.now();
     }
+
 }

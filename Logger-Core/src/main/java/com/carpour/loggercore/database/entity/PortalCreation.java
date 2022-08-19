@@ -57,9 +57,10 @@ public class PortalCreation {
         this.world = world;
     }
 
-    public String getCausedBy() {return this.causedBy;}
+    public String getCausedBy() { return this.causedBy; }
 
     public void setCausedBy(String causedBy) {
         this.causedBy = causedBy;
     }
+
 }

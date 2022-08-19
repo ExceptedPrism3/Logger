@@ -74,4 +74,5 @@ public class Ram {
     public void setFreeMemory(Integer freeMemory) {
         this.freeMemory = freeMemory;
     }
+
 }

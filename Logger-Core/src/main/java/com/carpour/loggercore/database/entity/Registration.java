@@ -74,4 +74,5 @@ public class Registration {
     public void setJoinDate(String joinDate) {
         this.joinDate = joinDate;
     }
+
 }

@@ -17,7 +17,7 @@ public class AbstractAction implements ActionInterface {
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "id", nullable = false)
     protected Long id;
-    @ManyToOne(cascade = CascadeType.PERSIST, optional = false, targetEntity = EntityPlayer.class)
+    @ManyToOne(cascade = CascadeType.MERGE, optional = false, targetEntity = EntityPlayer.class)
     @JoinColumn(name = "entity_player_id", nullable = false, updatable = false)
     protected EntityPlayer entityPlayer;
     @Column(name = "server_name", length = 30)
@@ -62,9 +62,5 @@ public class AbstractAction implements ActionInterface {
         this.date = date;
     }
 
-    @PrePersist
-    public void prePersist() {
-        this.date = Instant.now();
-    }
 }
 

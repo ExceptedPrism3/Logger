@@ -55,10 +55,10 @@ public class ItemAction {
     @Column(name = "item_action_type", nullable = false)
     private ItemActionType itemActionType;
 
-    public ItemActionType getItemActionType() {return itemActionType;}
+    public ItemActionType getItemActionType() { return itemActionType; }
 
     public void setItemActionType(
-            ItemActionType itemActionType) {this.itemActionType = itemActionType;}
+            ItemActionType itemActionType) { this.itemActionType = itemActionType; }
 
     public EntityPlayer getEntityPlayer() {
         return this.entityPlayer;
@@ -168,4 +168,5 @@ public class ItemAction {
     public void prePersist() {
         this.date = Instant.now();
     }
+
 }

@@ -139,4 +139,5 @@ public class Furnace {
     public void prePersist() {
         this.date = Instant.now();
     }
+
 }

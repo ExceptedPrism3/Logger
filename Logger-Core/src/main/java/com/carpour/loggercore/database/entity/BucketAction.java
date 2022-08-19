@@ -31,10 +31,10 @@ public class BucketAction extends AbstractAction {
     @Column(name = "bucket_action_type", nullable = false)
     private BucketActionType bucketActionType;
 
-    public BucketActionType getBucketActionType() {return bucketActionType;}
+    public BucketActionType getBucketActionType() { return bucketActionType; }
 
     public void setBucketActionType(
-            BucketActionType bucketActionType) {this.bucketActionType = bucketActionType;}
+            BucketActionType bucketActionType) { this.bucketActionType = bucketActionType; }
 
 
     public String getWorld() {

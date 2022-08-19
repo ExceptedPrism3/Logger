@@ -42,6 +42,11 @@ public class Crafting extends AbstractAction {
         this.entityPlayer = entityPlayer;
     }
 
+    @Override
+    public String getAction() {
+        return this.entityPlayer.getPlayerName() + " crafted " + this.item.toLowerCase() + " x " + this.amount;
+    }
+
     public String getWorld() {
         return this.world;
     }
@@ -96,11 +101,6 @@ public class Crafting extends AbstractAction {
 
     public void isStaff(Boolean staff) {
         this.isStaff = staff;
-    }
-
-    @Override
-    public String getAction() {
-        return this.entityPlayer.getPlayerName() + " crafted " + this.item.toLowerCase() + " x " + this.amount;
     }
 
 }

@@ -94,4 +94,5 @@ public class PlayerCommand {
     public void prePersist() {
         this.date = Instant.now();
     }
+
 }

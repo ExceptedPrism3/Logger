@@ -12,9 +12,9 @@ import java.time.Instant;
 })
 @NamedQueries({
         @NamedQuery(name = "EntityPlayer.findOneByName", query = "select e from EntityPlayer e where e.playerName = :playerName")
-        })
+})
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class EntityPlayer implements Serializable {
 
     @Id
@@ -26,7 +26,7 @@ public class EntityPlayer implements Serializable {
     @Column(name = "created_at")
     private Instant createdAt;
 
-    public EntityPlayer() {}
+    public EntityPlayer() { }
 
     public EntityPlayer(String playerName, String playerUniqueID) {
         this.playerName = playerName;
@@ -45,4 +45,5 @@ public class EntityPlayer implements Serializable {
 
     @PrePersist
     public void prePersist() { this.createdAt = Instant.now(); }
+
 }

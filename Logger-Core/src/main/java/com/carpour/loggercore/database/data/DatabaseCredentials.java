@@ -12,7 +12,8 @@ public final class DatabaseCredentials {
     private final int dbPort;
     private final boolean isEnabled;
 
-    public DatabaseCredentials(String dbType, String dbHost, String dbUsername, String dbPassword, String dbName, int dbPort, boolean isEnabled) {
+    public DatabaseCredentials(String dbType, String dbHost, String dbUsername, String dbPassword,
+                               String dbName, int dbPort, boolean isEnabled) {
         this.dbType = dbType;
         this.dbHost = dbHost;
         this.dbUsername = dbUsername;
@@ -62,21 +63,21 @@ public final class DatabaseCredentials {
         properties.setProperty("hibernate.connection.CharSet", "utf8");
         properties.setProperty("hibernate.connection.characterEncoding", "utf8");
         properties.setProperty("hibernate.connection.useUnicode", "true");
-        properties.setProperty("hibernate.generate_statistics", "true");
+        properties.setProperty("hibernate.generate_statistics", "false");
         properties.setProperty("hibernate.connection.provider_class",
                 "org.hibernate.hikaricp.internal.HikariCPConnectionProvider");
         properties.setProperty("hibernate.hikari.poolName", "HikariCP-Logger-Core");
         properties.setProperty("hibernate.hikari.maximumPoolSize", "50");
-
+        properties.setProperty("hibernate.jdbc.batch_size", "100");
+/*        properties.setProperty("hibernate.cache.ehcache.missing_cache_strategy", "create");
         properties.setProperty("hibernate.cache.use_second_level_cache", "true");
         properties.setProperty("hibernate.cache.region.factory_class",
                 "org.hibernate.cache.ehcache.internal.EhcacheRegionFactory");
         properties.setProperty("hibernate.cache.provider_class",
-                "net.sf.ehcache.hibernate.EhCacheProvider");
+                "net.sf.ehcache.hibernate.EhCacheProvider");*/
         properties.setProperty("hibernate.current_session_context_class", "thread");
         properties.setProperty("hibernate.format_sql", "true");
-
-        properties.setProperty("hibernate.cache.use_query_cache", "true");
+//        properties.setProperty("hibernate.cache.use_query_cache", "true");
 
         return properties;
     }
@@ -87,4 +88,5 @@ public final class DatabaseCredentials {
                 + ":" + this.getDbPort()
                 + "/" + this.getDbName());
     }
+
 }

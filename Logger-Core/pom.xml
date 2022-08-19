@@ -113,10 +113,5 @@
             <artifactId>hibernate-hikaricp</artifactId>
             <version>5.6.10.Final</version>
         </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-ehcache</artifactId>
-            <version>5.6.10.Final</version>
-        </dependency>
     </dependencies>
 </project>

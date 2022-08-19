@@ -124,4 +124,5 @@ public class PlayerSignText {
     public void isStaff(Boolean staff) {
         this.isStaff = staff;
     }
+
 }

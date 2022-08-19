@@ -135,4 +135,5 @@ public class PlayerTeleport {
     public void isStaff(Boolean staff) {
         this.isStaff = staff;
     }
+
 }
