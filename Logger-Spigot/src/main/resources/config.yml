@@ -48,6 +48,8 @@ Log-Player:
   Entity-Death: true
   Item-Frame-Place: true
   Item-Frame-Break: true
+  ArmorStand-Place: true
+  ArmorStand-Break: true
 Log-Server:
   Start: true
   Stop: true

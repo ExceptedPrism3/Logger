@@ -103,8 +103,7 @@ public final class Database implements DataSourceInterface {
     public void insertPlayerDeath(
             String serverName, String playerName, String playerUUID, int level, String cause,
             String who,
-            Coordinates coordinates, boolean isStaff
-    ) {
+            Coordinates coordinates, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
         final Transaction tx = session.beginTransaction();
@@ -484,8 +483,7 @@ public final class Database implements DataSourceInterface {
     public void insertItemDrop(
             String serverName, String playerName, String playerUUID, String item, int amount,
             Coordinates coords,
-            List<String> enchantment, String changedName, boolean isStaff
-    ) {
+            List<String> enchantment, String changedName, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
         final Transaction tx = session.beginTransaction();
@@ -517,8 +515,7 @@ public final class Database implements DataSourceInterface {
     public void insertEnchant(
             String serverName, String playerName, String playerUUID, List<String> enchantment,
             int enchantmentLevel,
-            String item, int cost, Coordinates coordinates, boolean isStaff
-    ) {
+            String item, int cost, Coordinates coordinates, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
         final Transaction tx = session.beginTransaction();
@@ -548,8 +545,7 @@ public final class Database implements DataSourceInterface {
     @Override
     public void insertBookEditing(
             String serverName, String playerName, String playerUUID, String worldName, int pages,
-            List<String> content, String signedBy, boolean isStaff
-    ) {
+            List<String> content, String signedBy, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
         final Transaction tx = session.beginTransaction();
@@ -588,8 +584,7 @@ public final class Database implements DataSourceInterface {
     @Override
     public void insertItemPickup(
             String serverName, String playerName, String playerUUID, String item, int amount,
-            Coordinates coords, String changedName, boolean isStaff
-    ) {
+            Coordinates coords, String changedName, boolean isStaff) {
 
         final Session session = HibernateUtils.getSession();
         final Transaction tx = session.beginTransaction();
@@ -760,18 +755,14 @@ public final class Database implements DataSourceInterface {
     @Override
     public void insertLiteBans(
             String serverName, String executor, String command, String onWho, String duration,
-            String reason, boolean isSilent
-    ) {
-
+            String reason, boolean isSilent) {
 
     }
 
     @Override
     public void insertAdvanceBanData(
             String serverName, String type, String executor, String executedOn,
-            String reason, long expirationDate
-    ) {
-
+            String reason, long expirationDate) {
 
     }
 
@@ -878,6 +869,26 @@ public final class Database implements DataSourceInterface {
 
     }
 
+    @Override
+    public void insertPAFFriendMessage(String serverName, String playerUUID, String playerName, String message, String receiver, boolean isStaff) {
+
+    }
+
+    @Override
+    public void insertPAFPartyMessage(String serverName, String playerUUID, String playerName, String message, String leader, List<String> partyMembers, boolean isStaff) {
+
+    }
+
+    @Override
+    public void insertArmorStandPlace(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+
+    }
+
+    @Override
+    public void insertArmorStandBreak(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+
+    }
+
 
     private void save(Object obj) {
         Transaction tx = null;
@@ -911,17 +922,19 @@ public final class Database implements DataSourceInterface {
     @Override
     public List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset,
                                                       int limit) {
-        Session session = HibernateUtils.getSession();
-        Transaction tx = session.beginTransaction();
-        Query<PlayerChat> query = session.createQuery(
+
+        final Session session = HibernateUtils.getSession();
+        final Transaction tx = session.beginTransaction();
+        final Query<PlayerChat> query = session.createQuery(
                 "select p from PlayerChat p where p.entityPlayer.playerName=:playerName",
                 PlayerChat.class);
+
         query.setParameter("playerName", playerName);
         query.setReadOnly(true);
         query.setCacheable(true);
         query.setFirstResult(offset);
         query.setMaxResults(limit);
-        List<PlayerChat> results = query.list();
+        final List<PlayerChat> results = query.list();
 
         tx.commit();
 
@@ -948,18 +961,20 @@ public final class Database implements DataSourceInterface {
     @Override
     public List<AbstractAction> getSaladeMarocaine(String playerName, int offset,
                                                    int limit) {
-        Session session = HibernateUtils.getSession();
-        Transaction tx = session.beginTransaction();
-        Query<AbstractAction> query = session.createQuery(
+        //TODO had salad n9saha bit of salt
+        final Session session = HibernateUtils.getSession();
+        final Transaction tx = session.beginTransaction();
+        final Query<AbstractAction> query = session.createQuery(
                 "select b From AbstractAction b where b.entityPlayer.playerName=:playerName ORDER BY b.date ASC",
                 AbstractAction.class);
+
         query.setHint("org.hibernate.cacheable", false);
         query.setParameter("playerName", playerName);
         query.setReadOnly(true);
         query.setCacheable(false);
         query.setFirstResult(offset);
         query.setMaxResults(limit);
-        List<AbstractAction> results = query.list();
+        final List<AbstractAction> results = query.list();
 
         tx.commit();
         System.out.println(
@@ -970,7 +985,6 @@ public final class Database implements DataSourceInterface {
                 HibernateUtils.getSessionFactory().getStatistics().getSecondLevelCacheHitCount());
         System.out.println(
                 HibernateUtils.getSessionFactory().getStatistics().getQueryCachePutCount());
-
 
         return results;
     }

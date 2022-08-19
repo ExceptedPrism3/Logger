@@ -2,6 +2,7 @@ package me.prism3.loggerbungeecord.utils;
 
 import me.prism3.loggerbungeecord.Main;
 import me.prism3.loggerbungeecord.api.LiteBansUtil;
+import me.prism3.loggerbungeecord.api.PartyAndFriendsUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,8 +10,9 @@ import java.nio.file.Files;
 import java.nio.file.attribute.FileTime;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
+import static me.prism3.loggerbungeecord.utils.Data.fileDeletion;
 
 public class FileHandler {
 
@@ -21,26 +23,35 @@ public class FileHandler {
     private static File commandLogFolder;
     private static File loginLogFolder;
     private static File leaveLogFolder;
+    private static File serverSwitchLogFolder;
+
     private static File reloadLogFolder;
     private static File serverStartLogFolder;
     private static File serverStopLogFolder;
     private static File ramLogFolder;
+
     private static File liteBansLogFolder;
-    private static File serverSwitchLogFolder;
+    private static File pafFriendMessageLogFolder;
+    private static File pafPartyMessageLogFolder;
+
 
     private static File staffLogFile;
     private static File chatLogFile;
     private static File commandLogFile;
     private static File loginLogFile;
     private static File leaveLogFile;
+    private static File serverSwitchLogFile;
+
     private static File reloadLogFile;
     private static File serverStartLogFile;
     private static File serverStopLogFile;
     private static File ramLogFile;
+
     private static File liteBansBansLogFile;
     private static File liteBansMuteLogFile;
     private static File liteBansKickLogFile;
-    private static File serverSwitchLogFile;
+    private static File pafFriendMessageLogFile;
+    private static File pafPartyMessageLogFile;
 
     public FileHandler(File dataFolder) {
 
@@ -93,6 +104,12 @@ public class FileHandler {
         final File liteBansKickLogFolder = new File(liteBansLogFolder, "Kick");
         liteBansKickLogFile = new File(liteBansKickLogFolder, filenameDateFormat.format(date) + ".log");
 
+        final File pafFriendMessageLogFolder = new File(logsFolder, "PAF Friend Message");
+        pafFriendMessageLogFile = new File(pafFriendMessageLogFolder, filenameDateFormat.format(date) + ".log");
+
+        final File pafPartyMessageLogFolder = new File(logsFolder, "PAF Party Message");
+        pafPartyMessageLogFile = new File(pafPartyMessageLogFolder, filenameDateFormat.format(date) + ".log");
+
         try {
 
             if (Data.isStaffEnabled) staffLogFolder.mkdir();
@@ -106,11 +123,14 @@ public class FileHandler {
             ramLogFolder.mkdir();
             serverSwitchLogFolder.mkdir();
             if (LiteBansUtil.getLiteBansAPI() != null) {
-
                 liteBansLogFolder.mkdir();
                 liteBansBansLogFolder.mkdir();
                 liteBansMuteLogFolder.mkdir();
                 liteBansKickLogFolder.mkdir();
+            }
+            if (PartyAndFriendsUtil.getPartyAndFriendsAPI() != null) {
+                pafFriendMessageLogFolder.mkdir();
+                pafPartyMessageLogFolder.mkdir();
             }
 
             if (Data.isStaffEnabled) staffLogFile.createNewFile();
@@ -124,13 +144,16 @@ public class FileHandler {
             ramLogFile.createNewFile();
             serverSwitchLogFile.createNewFile();
             if (LiteBansUtil.getLiteBansAPI() != null) {
-
                 liteBansBansLogFile.createNewFile();
                 liteBansMuteLogFile.createNewFile();
                 liteBansKickLogFile.createNewFile();
             }
+            if (PartyAndFriendsUtil.getPartyAndFriendsAPI() != null) {
+                pafFriendMessageLogFile.createNewFile();
+                pafPartyMessageLogFile.createNewFile();
+            }
 
-        } catch (IOException e) { e.printStackTrace(); }
+        } catch (final IOException e) { e.printStackTrace(); }
     }
 
     public static File getStaffLogFile() { return staffLogFile; }
@@ -159,9 +182,13 @@ public class FileHandler {
 
     public static File getLiteBansKickLogFile() { return liteBansKickLogFile; }
 
+    public static File getPafFriendMessageLogFile() { return pafFriendMessageLogFile; }
+
+    public static File getPafPartyMessageLogFile() { return pafPartyMessageLogFile; }
+
     private void deleteFile(File file) {
 
-        if (Data.fileDeletion <= 0 ) return;
+        if (fileDeletion <= 0 ) return;
 
         FileTime creationTime = null;
 
@@ -173,7 +200,7 @@ public class FileHandler {
 
         assert creationTime != null;
         final long offset = System.currentTimeMillis() - creationTime.toMillis();
-        final long fileDeletionDays = main.getConfig().getInt("File-Deletion");
+        final long fileDeletionDays = fileDeletion;
         final long maxAge = TimeUnit.DAYS.toMillis(fileDeletionDays);
 
         if (offset > maxAge) file.delete();
@@ -181,7 +208,7 @@ public class FileHandler {
 
     public void deleteFiles() {
 
-        if (Data.fileDeletion<= 0 ) { return; }
+        if (fileDeletion<= 0 ) { return; }
 
         if (Data.isStaffEnabled)
             for (File staffLog : staffLogFolder.listFiles())
@@ -208,11 +235,22 @@ public class FileHandler {
         for (File serverStopLog : serverStopLogFolder.listFiles())
             this.deleteFile(serverStopLog);
 
-        for (File RAMLog : ramLogFolder.listFiles())
-            this.deleteFile(RAMLog);
+        for (File ramLog : ramLogFolder.listFiles())
+            this.deleteFile(ramLog);
+
+        for (File serverSwitchLog : serverSwitchLogFolder.listFiles())
+            this.deleteFile(serverSwitchLog);
 
         if (LiteBansUtil.getLiteBansAPI() != null)
             for (File liteBansLog : liteBansLogFolder.listFiles())
                 this.deleteFile(liteBansLog);
+
+        if (PartyAndFriendsUtil.getPartyAndFriendsAPI() != null) {
+            for (File pafFriendMessage : pafFriendMessageLogFolder.listFiles())
+                this.deleteFile(pafFriendMessage);
+
+            for (File pafPartyMessage : pafPartyMessageLogFolder.listFiles())
+                this.deleteFile(pafPartyMessage);
+        }
     }
 }

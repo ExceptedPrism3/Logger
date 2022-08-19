@@ -104,13 +104,24 @@ public interface DataSourceInterface {
     void insertServerSwitch(String serverName, String playerUUID, String playerName, String from,
                             String destination, boolean isStaff);
 
+    void insertPAFFriendMessage(String serverName, String playerUUID, String playerName, String message,
+                            String receiver, boolean isStaff);
+
+    void insertPAFPartyMessage(String serverName, String playerUUID, String playerName, String message,
+                            String leader, List<String> partyMembers, boolean isStaff);
+
+    void insertArmorStandPlace(String serverName, String playerName, String playerUUID,
+                              Coordinates coords, boolean isStaff);
+
+    void insertArmorStandBreak(String serverName, String playerName, String playerUUID,
+                              Coordinates coords, boolean isStaff);
+
     void disconnect();
 
     List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset, int limit);
 
     Long getPlayerChatCount(String playerName);
 
-    List<?> getSaladeMarocaine(String playerName, int offset,
-                               int limit);
+    List<?> getSaladeMarocaine(String playerName, int offset, int limit);
 
 }

@@ -18,6 +18,11 @@ import static me.prism3.loggerbungeecord.utils.Data.loggerExempt;
 
 public class OnServerSwitch implements Listener {
 
+    /**
+     *
+     * Thanks to Jurian#5137 for his contribution!
+     */
+
     private final Main main = Main.getInstance();
 
     @EventHandler
@@ -32,18 +37,8 @@ public class OnServerSwitch implements Listener {
 
         final UUID playerUUID = player.getUniqueId();
         final String playerName = player.getName();
-        final String from = player.getServer().getInfo().getName();
+        final String from = event.getFrom().getName();
         final String destination = player.getServer().getInfo().getName();
-
-        // We need to use a timer to get the new server, otherwise it will return the previous server!
-//        Timer timer = new Timer();
-//        timer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-
-
-
-                // I only did discord for now
 
         if (Data.isLogToFiles) {
 
@@ -116,7 +111,6 @@ public class OnServerSwitch implements Listener {
 
             } catch (Exception e) { e.printStackTrace(); }
         }
-//        }, 0, 500); // 0,5s
     }
 }
 

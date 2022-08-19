@@ -63,6 +63,10 @@ Files:
   Item-Frame-Place: "[%time%] [%world%] [%uuid%] The Player <%player%> has placed an item frame at X= %x%, Y= %y%, Z= %z%"
   Item-Frame-Break-Staff: "[%time%] [%world%] [%uuid%] The Staff <%player%> has broke an item frame at X= %x%, Y= %y%, Z= %z%"
   Item-Frame-Break: "[%time%] [%world%] [%uuid%] The Player <%player%> has broke an item frame at X= %x%, Y= %y%, Z= %z%"
+  ArmorStand-Place-Staff: "[%time%] [%world%] [%uuid%] The Staff <%player%> has placed an armor stand at X= %x%, Y= %y%, Z= %z%"
+  ArmorStand-Place: "[%time%] [%world%] [%uuid%] The Player <%player%> has placed an armor stand at X= %x%, Y= %y%, Z= %z%"
+  ArmorStand-Break-Staff: "[%time%] [%world%] [%uuid%] The Staff <%player%> has broke an armor stand at X= %x%, Y= %y%, Z= %z%"
+  ArmorStand-Break: "[%time%] [%world%] [%uuid%] The Player <%player%> has broke an armor stand at X= %x%, Y= %y%, Z= %z%"
   Server-Side:
     Start: "[%time%]"
     Stop: "[%time%]"

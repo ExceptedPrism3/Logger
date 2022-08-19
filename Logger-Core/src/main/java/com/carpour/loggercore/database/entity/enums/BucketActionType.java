@@ -7,8 +7,8 @@ public enum BucketActionType {
 
     private final String action;
 
-    BucketActionType(String action) {this.action = action;}
+    BucketActionType(String action) { this.action = action; }
 
-    public String rawAction() {return this.action;}
+    public String rawAction() { return this.action; }
 
 }

@@ -1,6 +1,6 @@
 # Messages for Logger Plugin [ Proxy Version ]
 # Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
-# Config 1.8
+# Config 1.8.1
 # Plugin Messages
 General:
   No-Permission: "&cYou do not have permission to run this command."
@@ -27,8 +27,10 @@ Files:
     Stop: "[%time%] The server has stopped"
     RAM: "[%time%] The Server has exceeded the set amount of percentage of RAM Usage! Total Memory: %max% | Used Memory: %used% | Free Memory: %free%"
 # Extra Side Part
-  Extra:
+  Extras:
     LiteBans: "[%time%] [%uuid%] The command '%command%' has been executed on %on% by %executor% for '%duration%' for the reason %reason% | %silent%"
+    PAF-Friend-Message-Staff: "[%time%] [%server%] [%uuid%] The Staff <%player%> has sent a message %msg% to %receiver%"
+    PAF-Friend-Message: "[%time%] [%server%] [%uuid%] The Player <%player%> has sent a message %msg% to %receiver%"
 # Discord Instance
 # Emojis can be found here https://emojipedia.org/ or elsewhere. Emojis may not work on >1.12 Servers.
 Discord:
@@ -51,5 +53,7 @@ Discord:
     Stop: "**[%time%]**"
     RAM: "**[%time%]** The Server has exceeded the set amount of percentage of RAM Usage! Total Memory: **%max%** `|` Used Memory: **%used%** `|` Free Memory: **%free%**"
 # Extra Side Part
-  Extra:
+  Extras:
     LiteBans: "**[%time%]** **[%uuid%]** The command **%command%** has been executed on **%on%** by **%executor%** for **%duration%** for the reason **%reason%** | **%silent%**"
+    PAF-Friend-Message-Staff: "**[%time%]** **[%server%]** **[%uuid%]** has sent a message **%msg%** to **%receiver%**"
+    PAF-Friend-Message: "**[%time%]** **[%server%]** **[%uuid%]** has sent a message **%msg%** to **%receiver%**"

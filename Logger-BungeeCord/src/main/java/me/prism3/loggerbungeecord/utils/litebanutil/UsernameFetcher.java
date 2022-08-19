@@ -24,7 +24,7 @@ public class UsernameFetcher {
                     name = rs.getString("name");
             }
 
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) { e.printStackTrace(); }
 
         return name;
     }

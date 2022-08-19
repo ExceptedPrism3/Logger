@@ -61,6 +61,10 @@ Discord:
     Channel-ID: 'LINK_HERE'
   Item-Frame-Break:
     Channel-ID: 'LINK_HERE'
+  ArmorStand-Place:
+    Channel-ID: 'LINK_HERE'
+  ArmorStand-Break:
+    Channel-ID: 'LINK_HERE'
   # Server Side Checkers
   Server-Side:
     Start:

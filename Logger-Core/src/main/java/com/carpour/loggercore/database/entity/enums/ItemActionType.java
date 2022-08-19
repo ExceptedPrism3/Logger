@@ -7,8 +7,8 @@ public enum ItemActionType {
 
     private final String action;
 
-    ItemActionType(String action) {this.action = action;}
+    ItemActionType(String action) { this.action = action; }
 
-    public String rawInteraction() {return this.action;}
+    public String rawInteraction() { return this.action; }
 
 }

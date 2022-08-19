@@ -8,8 +8,8 @@ public enum InteractionType {
 
     private final String interaction;
 
-    InteractionType(String interaction) {this.interaction = interaction;}
+    InteractionType(String interaction) { this.interaction = interaction; }
 
-    public String rawInteraction() {return this.interaction;}
+    public String rawInteraction() { return this.interaction; }
 
 }

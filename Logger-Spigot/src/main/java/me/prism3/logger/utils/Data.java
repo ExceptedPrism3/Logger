@@ -6,9 +6,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.api.*;
 import me.prism3.logger.commands.subcommands.PlayerInventory;
 import me.prism3.logger.events.*;
-import me.prism3.logger.events.misc.ItemFrameBreak;
-import me.prism3.logger.events.misc.ItemFramePlace;
-import me.prism3.logger.events.misc.OnPrimedTNT;
+import me.prism3.logger.events.misc.*;
 import me.prism3.logger.events.oncommands.OnCommand;
 import me.prism3.logger.events.oninventories.OnChestInteraction;
 import me.prism3.logger.events.oninventories.OnCraft;
@@ -276,6 +274,12 @@ public class Data {
 
         if (this.main.getConfig().getBoolean("Log-Player.Item-Frame-Break"))
             this.main.getServer().getPluginManager().registerEvents(new ItemFrameBreak(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.ArmorStand-Place"))
+            this.main.getServer().getPluginManager().registerEvents(new ArmorStandPlace(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Player.ArmorStand-Break"))
+            this.main.getServer().getPluginManager().registerEvents(new ArmorStandBreak(), this.main);
 
         // Server Side
         if (this.main.getConfig().getBoolean("Log-Server.Console-Commands"))

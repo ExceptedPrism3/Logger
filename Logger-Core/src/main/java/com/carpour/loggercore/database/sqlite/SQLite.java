@@ -1086,6 +1086,26 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
+    public void insertPAFFriendMessage(String serverName, String playerUUID, String playerName, String message, String receiver, boolean isStaff) {
+
+    }
+
+    @Override
+    public void insertPAFPartyMessage(String serverName, String playerUUID, String playerName, String message, String leader, List<String> partyMembers, boolean isStaff) {
+
+    }
+
+    @Override
+    public void insertArmorStandPlace(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+
+    }
+
+    @Override
+    public void insertArmorStandBreak(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+
+    }
+
+    @Override
     public void disconnect() {
         //TODO chof m3k
     }
@@ -1099,7 +1119,7 @@ public final class SQLite implements DataSourceInterface {
 
     @Override
     public List<?> getSaladeMarocaine(String playerName, int offset, int limit) {
-        return null;
+        return Collections.emptyList();
     }
 
 }

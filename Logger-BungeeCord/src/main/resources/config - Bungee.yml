@@ -14,7 +14,7 @@
 # Discord: Prism3#9371 | ID: 403667971089760257
 # Discord Server: https://discord.gg/MfR5mcpVfX
 #
-# Config.1.8
+# Config.1.8.1
 
 
 # Server Name
@@ -78,7 +78,7 @@ RAM:
   Percent: 50
 
 # LiteBans Features to Log
-# It does not log revoked actions!
+# Revoked actions are not logged!
 # example: unban <player>
 LiteBans:
   IP-Ban: true
@@ -88,6 +88,11 @@ LiteBans:
   Mute: true
   Temp-Mute: true
   Kick: true
+
+# PartyAndFriends Features to Log
+PAF:
+  Friend-Message: true
+  Party-Message: true
 
 # External Database Feature
 # Available Types are MySQL and MariaDB

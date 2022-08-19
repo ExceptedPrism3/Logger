@@ -19,14 +19,16 @@ public class Discord {
     private TextChannel playerCommandsChannel;
     private TextChannel playerLoginChannel;
     private TextChannel playerLeaveChannel;
+    private TextChannel serverSwitchChannel;
 
     private TextChannel serverReloadChannel;
     private TextChannel serverStartChannel;
     private TextChannel serverStopChannel;
     private TextChannel ramChannel;
-    private TextChannel serverSwitchChannel;
 
     private TextChannel liteBansChannel;
+    private TextChannel pafFriendMessageChannel;
+    private TextChannel pafPartyMessageChannel;
 
     public void run() {
 
@@ -66,9 +68,13 @@ public class Discord {
 
             final String ramChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.RAM.Channel-ID");
 
-            final String serverSwitchChannelID = this.main.getDiscordFile().getString("Discord.Switch-Server.Channel-ID");
+            final String serverSwitchChannelID = this.main.getDiscordFile().getString("Discord.Server-Switch.Channel-ID");
 
-            final String liteBansChannelID = this.main.getDiscordFile().getString("Discord.Extra.LiteBans.Channel-ID");
+            final String liteBansChannelID = this.main.getDiscordFile().getString("Discord.Extras.LiteBans.Channel-ID");
+
+            final String pafFriendMessageChannelID = this.main.getDiscordFile().getString("Discord.Extras.PAF-Friend-Message.Channel-ID");
+
+            final String pafPartyMessageChannelID = this.main.getDiscordFile().getString("Discord.Extras.PAF-Party-Message.Channel-ID");
 
             try {
 
@@ -102,10 +108,16 @@ public class Discord {
                 if (this.isValid(serverSwitchChannelID, "Log-Player.Server-Switch"))
                     this.serverSwitchChannel = this.jda.getTextChannelById(serverSwitchChannelID);
 
-                if (this.isValid(liteBansChannelID, "Log-Extra.LiteBans"))
+                if (this.isValid(liteBansChannelID, "Log-Extras.LiteBans"))
                     this.liteBansChannel = this.jda.getTextChannelById(liteBansChannelID);
 
-            } catch (Exception e) {
+                if (this.isValid(pafFriendMessageChannelID, "Log-Extras.PAF") && this.main.getConfig().getBoolean("PAF.Friend-Message"))
+                    this.pafFriendMessageChannel = this.jda.getTextChannelById(pafFriendMessageChannelID);
+
+                if (this.isValid(pafPartyMessageChannelID, "Log-Extras.PAF") && this.main.getConfig().getBoolean("PAF.Party-Message"))
+                    this.pafPartyMessageChannel = this.jda.getTextChannelById(pafPartyMessageChannelID);
+
+            } catch (final Exception e) {
 
                 this.main.getLogger().severe("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
 
@@ -198,6 +210,14 @@ public class Discord {
 
     public void serverSwitch(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.serverSwitchChannel);
+    }
+
+    public void pafFriendMessage(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.pafFriendMessageChannel);
+    }
+
+    public void pafPartyMessage(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.pafPartyMessageChannel);
     }
 
     private void discordUtil(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine, TextChannel channel) {

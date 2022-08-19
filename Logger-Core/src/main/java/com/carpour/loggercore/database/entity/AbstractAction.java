@@ -12,6 +12,7 @@ import java.time.Instant;
 @Proxy(lazy = false)
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class AbstractAction implements ActionInterface {
+
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "id", nullable = false)
@@ -25,7 +26,7 @@ public class AbstractAction implements ActionInterface {
     protected Instant date;
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -33,7 +34,7 @@ public class AbstractAction implements ActionInterface {
     }
 
     public EntityPlayer getEntityPlayer() {
-        return entityPlayer;
+        return this.entityPlayer;
     }
 
     public void setEntityPlayer(EntityPlayer entityPlayer) {
@@ -41,13 +42,12 @@ public class AbstractAction implements ActionInterface {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
         this.serverName = serverName;
     }
-
 
     @Override
     public String getAction() {
@@ -55,7 +55,7 @@ public class AbstractAction implements ActionInterface {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -66,7 +66,5 @@ public class AbstractAction implements ActionInterface {
     public void prePersist() {
         this.date = Instant.now();
     }
-
-
 }
 

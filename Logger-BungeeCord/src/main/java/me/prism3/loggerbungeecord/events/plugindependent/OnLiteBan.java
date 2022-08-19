@@ -82,7 +82,7 @@ public class OnLiteBan implements Listener, Runnable {
                     try {
 
                         final BufferedWriter out = new BufferedWriter(new FileWriter(fileLog, true));
-                        out.write(main.getMessages().getString("Files.Extra.LiteBans").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()) + "\n");
+                        out.write(main.getMessages().getString("Files.Extras.LiteBans").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()) + "\n");
                         out.close();
 
                     } catch (IOException e) {
@@ -94,8 +94,8 @@ public class OnLiteBan implements Listener, Runnable {
                 }
 
                 // Discord Integration
-                if (!main.getMessages().getString("Discord.Extra.LiteBans").isEmpty())
-                    main.getDiscord().liteBans(main.getMessages().getString("Discord.Extra.LiteBans").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()), false);
+                if (!main.getMessages().getString("Discord.Extras.LiteBans").isEmpty())
+                    main.getDiscord().liteBans(main.getMessages().getString("Discord.Extras.LiteBans").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()), false);
 
                 // External
                 if (isExternal) {

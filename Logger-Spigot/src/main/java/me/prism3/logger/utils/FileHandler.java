@@ -45,6 +45,8 @@ public class FileHandler {
     private static File entityDeathFolder;
     private static File itemFramePlaceFolder;
     private static File itemFrameBreakFolder;
+    private static File armorStandPlaceFolder;
+    private static File armorStandBreakFolder;
 
     // Server Side
     private static File serverStartFolder;
@@ -96,6 +98,8 @@ public class FileHandler {
     private static File entityDeathFile;
     private static File itemFramePlaceFile;
     private static File itemFrameBreakFile;
+    private static File armorStandPlaceFile;
+    private static File armorStandBreakFile;
 
     // Server Side
     private static File serverStartFile;
@@ -219,6 +223,12 @@ public class FileHandler {
         itemFrameBreakFolder = new File(logsFolder, "ItemFrame Break");
         itemFrameBreakFile = new File(itemFrameBreakFolder, filenameDateFormat.format(date) + ".log");
 
+        armorStandPlaceFolder = new File(logsFolder, "ArmorStand Place");
+        armorStandPlaceFile = new File(armorStandPlaceFolder, filenameDateFormat.format(date) + ".log");
+
+        armorStandBreakFolder = new File(logsFolder, "ArmorStand Break");
+        armorStandBreakFile = new File(armorStandBreakFolder, filenameDateFormat.format(date) + ".log");
+
         // Server Side Part
         serverStartFolder = new File(logsFolder, "Server Start");
         serverStartFile = new File(serverStartFolder, filenameDateFormat.format(date) + ".log");
@@ -327,6 +337,10 @@ public class FileHandler {
 
             itemFrameBreakFolder.mkdir();
 
+            armorStandPlaceFolder.mkdir();
+
+            armorStandBreakFolder.mkdir();
+
             // Server Side Part
             serverStartFolder.mkdir();
 
@@ -416,6 +430,10 @@ public class FileHandler {
             itemFramePlaceFile.createNewFile();
 
             itemFrameBreakFile.createNewFile();
+
+            armorStandPlaceFile.createNewFile();
+
+            armorStandBreakFile.createNewFile();
 
             // Server Side
             serverStartFile.createNewFile();
@@ -508,6 +526,10 @@ public class FileHandler {
     public static File getItemFramePlaceFile() { return itemFramePlaceFile; }
 
     public static File getItemFrameBreakFile() { return itemFrameBreakFile; }
+
+    public static File getArmorStandPlaceFile() { return armorStandPlaceFile; }
+
+    public static File getArmorStandBreakFile() { return armorStandBreakFile; }
 
     // Server Side Part
     public static File getServerStartFile() { return serverStartFile; }
@@ -620,6 +642,10 @@ public class FileHandler {
         for (File itemFramePlace : itemFramePlaceFolder.listFiles()) { this.deleteFile(itemFramePlace); }
 
         for (File itemFrameBreak : itemFrameBreakFolder.listFiles()) { this.deleteFile(itemFrameBreak); }
+
+        for (File armorStandPlace : armorStandPlaceFolder.listFiles()) { this.deleteFile(armorStandPlace); }
+
+        for (File armorStandBreak : armorStandBreakFolder.listFiles()) { this.deleteFile(armorStandBreak); }
 
         // Server Side
         for (File serverStart : serverStartFolder.listFiles()) { this.deleteFile(serverStart); }

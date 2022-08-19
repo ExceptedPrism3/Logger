@@ -45,6 +45,4 @@ public class EntityPlayer implements Serializable {
 
     @PrePersist
     public void prePersist() { this.createdAt = Instant.now(); }
-
-
 }

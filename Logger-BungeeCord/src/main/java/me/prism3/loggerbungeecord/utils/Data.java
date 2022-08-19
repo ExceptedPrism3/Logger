@@ -160,15 +160,15 @@ public class Data {
         if (this.main.getConfig().getBoolean("Log-Player.Leave"))
             this.main.getProxy().getPluginManager().registerListener(this.main, new OnLeave());
 
+        if (this.main.getConfig().getBoolean("Log-Player.Server-Switch"))
+            this.main.getProxy().getPluginManager().registerListener(this.main, new OnServerSwitch());
+
         // Server Side
         if (this.main.getConfig().getBoolean("Log-Server.Reload"))
             this.main.getProxy().getPluginManager().registerListener(this.main, new OnReload());
 
         if (this.main.getConfig().getBoolean("Log-Server.RAM"))
             this.main.getProxy().getScheduler().schedule(this.main, new RAM(), 200L, ramChecker / 20, TimeUnit.SECONDS);
-
-        if (this.main.getConfig().getBoolean("Log-Server.Server-Switch"))
-            this.main.getProxy().getPluginManager().registerListener(this.main, new OnServerSwitch());
 
         this.dependentEventInitializer();
     }
@@ -184,8 +184,12 @@ public class Data {
 
         if (PartyAndFriendsUtil.getPartyAndFriendsAPI() != null && this.main.getConfig().getBoolean("Log-Extras.PAF")) {
 
-            this.main.getProxy().getPluginManager().registerListener(this.main, new OnFriendMessage());
-            this.main.getProxy().getPluginManager().registerListener(this.main, new OnPartyMessage());
+            if (this.main.getConfig().getBoolean("PAF.Friend-Message"))
+                this.main.getProxy().getPluginManager().registerListener(this.main, new OnFriendMessage());
+
+            if (this.main.getConfig().getBoolean("PAF.Party-Message"))
+                this.main.getProxy().getPluginManager().registerListener(this.main, new OnPartyMessage());
+
             this.main.getLogger().info("PartyAndFriends Plugin Detected!");
 
         }

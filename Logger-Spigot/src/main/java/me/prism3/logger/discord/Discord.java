@@ -42,6 +42,8 @@ public class Discord {
     private TextChannel entityDeathChannel;
     private TextChannel itemFramePlaceChannel;
     private TextChannel itemFrameBreakChannel;
+    private TextChannel armorStandPlaceChannel;
+    private TextChannel armorStandBreakChannel;
 
     private TextChannel serverStartChannel;
     private TextChannel serverStopChannel;
@@ -137,6 +139,10 @@ public class Discord {
 
             final String itemFrameBreakChannelID = this.main.getDiscordFile().get().getString("Discord.Item-Frame-Break.Channel-ID");
 
+            final String armorStandPlaceChannelID = this.main.getDiscordFile().get().getString("Discord.ArmorStand-Place.Channel-ID");
+
+            final String armorStandBreakChannelID = this.main.getDiscordFile().get().getString("Discord.ArmorStand-Break.Channel-ID");
+
             // Server Side Part
             final String serverStartChannelID = this.main.getDiscordFile().get().getString("Discord.Server-Side.Start.Channel-ID");
 
@@ -167,7 +173,6 @@ public class Discord {
 
             // Version Exception
             final String woodStrippingChannelID = this.main.getDiscordFile().get().getString("Discord.Version-Exceptions.Wood-Stripping.Channel-ID");
-
 
             try {
 
@@ -255,6 +260,12 @@ public class Discord {
 
                 if (this.isValid(itemFrameBreakChannelID, "Log-Player.Item-Frame-Break"))
                     this.itemFrameBreakChannel = this.jda.getTextChannelById(itemFrameBreakChannelID);
+
+                if (this.isValid(armorStandPlaceChannelID, "Log-Player.ArmorStand-Place"))
+                    this.armorStandPlaceChannel = this.jda.getTextChannelById(armorStandPlaceChannelID);
+
+                if (this.isValid(armorStandBreakChannelID, "Log-Player.ArmorStand-Break"))
+                    this.armorStandBreakChannel = this.jda.getTextChannelById(armorStandBreakChannelID);
 
                 // Server Side Part
                 if (this.isValid(serverStartChannelID, "Log-Server.Start"))
@@ -553,6 +564,14 @@ public class Discord {
 
     public void itemFrameBreak(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.itemFrameBreakChannel);
+    }
+
+    public void armorStandPlace(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.armorStandPlaceChannel);
+    }
+
+    public void armorStandBreak(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.armorStandBreakChannel);
     }
 
     private void discordUtil(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine, TextChannel channel) {
