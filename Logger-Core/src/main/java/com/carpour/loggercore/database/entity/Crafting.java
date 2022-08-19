@@ -34,13 +34,6 @@ public class Crafting extends AbstractAction {
     @Column(name = "is_staff")
     private Boolean isStaff;
 
-    public EntityPlayer getEntityPlayer() {
-        return this.entityPlayer;
-    }
-
-    public void setEntityPlayer(EntityPlayer entityPlayer) {
-        this.entityPlayer = entityPlayer;
-    }
 
     @Override
     public String getAction() {
@@ -102,5 +95,4 @@ public class Crafting extends AbstractAction {
     public void isStaff(Boolean staff) {
         this.isStaff = staff;
     }
-
 }

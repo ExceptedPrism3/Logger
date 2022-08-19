@@ -61,6 +61,5 @@ public class AbstractAction implements ActionInterface {
     public void setDate(Instant date) {
         this.date = date;
     }
-
 }
 

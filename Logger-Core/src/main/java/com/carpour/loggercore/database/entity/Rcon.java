@@ -20,6 +20,7 @@ public class Rcon {
     @Column(name = "command", length = 50)
     private String command;
 
+
     @PrePersist
     public void prePersist() {
         this.date = Instant.now();
@@ -64,5 +65,4 @@ public class Rcon {
     public void setCommand(String command) {
         this.command = command;
     }
-
 }

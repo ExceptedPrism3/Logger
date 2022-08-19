@@ -9,7 +9,6 @@ import java.time.Instant;
 @Table(name = "bucket_action")
 public class BucketAction extends AbstractAction {
 
-
     @Column(name = "world", length = 100)
     private String world;
 
@@ -33,8 +32,7 @@ public class BucketAction extends AbstractAction {
 
     public BucketActionType getBucketActionType() { return bucketActionType; }
 
-    public void setBucketActionType(
-            BucketActionType bucketActionType) { this.bucketActionType = bucketActionType; }
+    public void setBucketActionType(BucketActionType bucketActionType) { this.bucketActionType = bucketActionType; }
 
 
     public String getWorld() {
@@ -94,5 +92,4 @@ public class BucketAction extends AbstractAction {
     public String getAction() {
         return this.entityPlayer.getPlayerName() + " " + this.bucketActionType.rawAction() + " " + this.bucket;
     }
-
 }

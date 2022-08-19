@@ -22,6 +22,7 @@ public class Registration {
     @Column(name = "join_date", length = 30)
     private String joinDate;
 
+
     @PrePersist
     public void prePersist() {
         this.date = Instant.now();
@@ -74,5 +75,4 @@ public class Registration {
     public void setJoinDate(String joinDate) {
         this.joinDate = joinDate;
     }
-
 }

@@ -39,7 +39,7 @@ public class ArmorStandBreak implements Listener {
             final int y = event.getRightClicked().getLocation().getBlockY();
             final int z = event.getRightClicked().getLocation().getBlockZ();
 
-            final Coordinates coordinates = new Coordinates(x, y, z, worldName);
+            /*final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
             if (Data.isLogToFiles) {
@@ -112,7 +112,7 @@ public class ArmorStandBreak implements Listener {
                     Main.getInstance().getSqLite().insertArmorStandBreak(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (Exception e) { e.printStackTrace(); }
-            }
+            }*/
 
     }
 }

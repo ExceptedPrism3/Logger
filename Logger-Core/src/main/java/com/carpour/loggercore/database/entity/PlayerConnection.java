@@ -85,5 +85,4 @@ public class PlayerConnection extends AbstractAction {
         return this.entityPlayer.getPlayerName() + " " + this.getPlayerConnectionType()
                 .rawAction() + " at " + this.getDate().toString();
     }
-
 }

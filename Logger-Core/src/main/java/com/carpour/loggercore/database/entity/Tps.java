@@ -5,7 +5,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "tps")
-public class Tp {
+public class Tps {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,5 +54,4 @@ public class Tp {
     public void setTps(Integer tps) {
         this.tps = tps;
     }
-
 }

@@ -44,5 +44,4 @@ public class ServerStart {
     public void setDate(Instant date) {
         this.date = date;
     }
-
 }

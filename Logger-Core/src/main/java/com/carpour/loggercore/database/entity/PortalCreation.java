@@ -62,5 +62,4 @@ public class PortalCreation {
     public void setCausedBy(String causedBy) {
         this.causedBy = causedBy;
     }
-
 }

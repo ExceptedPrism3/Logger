@@ -150,7 +150,7 @@ public class HibernateUtils {
             }
 
             if(options.getBooleanValue("TPS")) {
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Tp"));
+                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Tps"));
             }
 
             if(options.getBooleanValue("Portal-Creation")) {

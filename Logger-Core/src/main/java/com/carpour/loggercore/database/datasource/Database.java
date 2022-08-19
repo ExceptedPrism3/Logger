@@ -22,6 +22,7 @@ import java.util.List;
 public final class Database implements DataSourceInterface {
 
     private final Options options;
+    private final Queue queue = new Queue();
 
     public Database(DatabaseCredentials databaseCredentials, Options options) {
         this.options = options;
@@ -231,7 +232,7 @@ public final class Database implements DataSourceInterface {
         p.setEntityPlayer(this.fetchEntityPlayer(playerName, playerUUID));
         p.isStaff(isStaff);
         p.setInteractionType(InteractionType.BLOCK_PLACE);
-        Queue.addItemToQueue(p);
+        this.queue.addItemToQueue(p);
 
     }
 
@@ -254,7 +255,7 @@ public final class Database implements DataSourceInterface {
         p.setEntityPlayer(this.fetchEntityPlayer(playerName, playerUUID));
         p.isStaff(isStaff);
         p.setInteractionType(InteractionType.BLOCK_BREAK);
-        Queue.addItemToQueue(p);
+        this.queue.addItemToQueue(p);
 
     }
 
@@ -264,7 +265,7 @@ public final class Database implements DataSourceInterface {
         final Session session = HibernateUtils.getSession();
         final Transaction tx = session.beginTransaction();
 
-        final Tp p = new Tp();
+        final Tps p = new Tps();
 
         p.setDate(Instant.now());
         p.setServerName(serverName);
@@ -853,7 +854,7 @@ public final class Database implements DataSourceInterface {
         p.setEntityPlayer(this.fetchEntityPlayer(playerName, playerUUID));
         p.isStaff(isStaff);
         p.setInteractionType(InteractionType.BLOCK_PLACE);
-        Queue.addItemToQueue(p);
+        this.queue.addItemToQueue(p);
     }
 
     @Override
@@ -871,7 +872,7 @@ public final class Database implements DataSourceInterface {
         p.setEntityPlayer(this.fetchEntityPlayer(playerName, playerUUID));
         p.isStaff(isStaff);
         p.setInteractionType(InteractionType.BLOCK_BREAK);
-        Queue.addItemToQueue(p);
+        this.queue.addItemToQueue(p);
     }
 
     @Override
@@ -908,7 +909,7 @@ public final class Database implements DataSourceInterface {
         p.setEntityPlayer(this.fetchEntityPlayer(playerName, playerUUID));
         p.isStaff(isStaff);
         p.setInteractionType(InteractionType.BLOCK_PLACE);
-        Queue.addItemToQueue(p);
+        this.queue.addItemToQueue(p);
     }
 
     @Override
@@ -919,7 +920,7 @@ public final class Database implements DataSourceInterface {
 
     @Override
     public void disconnect() {
-        Queue.flushItems();
+        this.queue.flushItems();
         HibernateUtils.closeSessionFactory();
     }
 

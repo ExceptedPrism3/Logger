@@ -27,10 +27,9 @@ public class EntityDeath extends AbstractAction {
     @Column(name = "is_staff")
     private Boolean isStaff;
 
-    public EntityDeath() { }
+    public EntityDeath() {}
 
-    public EntityDeath(String serverName, Coordinates coords, String mob, EntityPlayer entityPlayer,
-                       Boolean isStaff) {
+    public EntityDeath(String serverName, Coordinates coords, String mob, EntityPlayer entityPlayer, Boolean isStaff) {
         this.serverName = serverName;
         this.world = coords.getWorldName();
         this.mob = mob;
@@ -93,5 +92,4 @@ public class EntityDeath extends AbstractAction {
     public String getAction() {
         return this.entityPlayer.getPlayerName() + " killed " + this.mob;
     }
-
 }

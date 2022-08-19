@@ -11,7 +11,6 @@ import javax.persistence.*;
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class BlockInteraction extends AbstractAction {
 
-
     @Column(name = "world", length = 100)
     private String world;
     @Column(name = "block", length = 40)
@@ -90,5 +89,4 @@ public class BlockInteraction extends AbstractAction {
     public String getAction() {
         return this.entityPlayer.getPlayerName() + " " + this.interactionType.rawInteraction() + " " + this.block.toLowerCase();
     }
-
 }
