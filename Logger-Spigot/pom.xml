@@ -143,9 +143,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.spigotmc</groupId>
+            <!--<groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.19-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>-->
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.19.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- Discord JDA -->

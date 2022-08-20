@@ -5,7 +5,6 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -35,8 +34,7 @@ public class OnCraft implements Listener {
 
             final String playerName = player.getName();
             final UUID playerUUID = player.getUniqueId();
-            final World world = player.getWorld();
-            final String worldName = world.getName();
+            final String worldName = player.getWorld().getName();
             final String item = event.getCurrentItem().getType().name().replace("_", " ");
             final int amount = event.getCurrentItem().getAmount();
             final int x = player.getLocation().getBlockX();

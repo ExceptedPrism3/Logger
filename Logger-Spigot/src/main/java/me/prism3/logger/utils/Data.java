@@ -281,6 +281,11 @@ public class Data {
         if (this.main.getConfig().getBoolean("Log-Player.ArmorStand-Break"))
             this.main.getServer().getPluginManager().registerEvents(new ArmorStandBreak(), this.main);
 
+//        if (this.main.getConfig().getBoolean("Log-Player.Lever-Interaction"))
+        this.main.getServer().getPluginManager().registerEvents(new LeverInteraction(), this.main);
+
+        this.main.getServer().getPluginManager().registerEvents(new OnArmorStandEndCrystalBreak(), this.main);
+
         // Server Side
         if (this.main.getConfig().getBoolean("Log-Server.Console-Commands"))
             this.main.getServer().getPluginManager().registerEvents(new Console(), this.main);
