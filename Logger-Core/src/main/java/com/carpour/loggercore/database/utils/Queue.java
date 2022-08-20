@@ -16,7 +16,7 @@ public class Queue {
     public void addItemToQueue(Object item) {
         queuedItems.add(item);
         System.out.println("added " + queuedItems.size());
-        if(queuedItems.size() >= batchSize) {
+        if (queuedItems.size() >= batchSize) {
             Deque<Object> copiedItems = queuedItems;
             queuedItems = new ArrayDeque<>(20);
             new QueueThread(copiedItems).run();
@@ -40,7 +40,7 @@ public class Queue {
             }
         }
         finally {
-            if(tx != null)
+            if (tx != null)
                 tx.commit();
         }
         long stopTime = System.nanoTime();

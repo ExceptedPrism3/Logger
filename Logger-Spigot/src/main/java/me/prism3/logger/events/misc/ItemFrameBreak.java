@@ -28,7 +28,7 @@ public class ItemFrameBreak implements Listener {
     public void onItemFrameBreak(final HangingBreakByEntityEvent event) {
 
         // Return if not a player
-        if(!(event.getRemover() instanceof Player)) return;
+        if (!(event.getRemover() instanceof Player)) return;
 
         if (event.getEntity() instanceof ItemFrame) {
 

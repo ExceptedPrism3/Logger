@@ -184,8 +184,13 @@ Changes
 
 Additions
     [+] Plugin Prefix
-    [+] Added 1.7 server versions enums
+    [+] 1.7 server versions enums
     [+] Item Frame Place & Break Checkers
+    [+] ArmorStand Place & Break Checkers
+    [+] EndCrystal Place & Break Checkers
+    [+] 1.19.2 Support
+    [+] Server Switch Checker on BungeeCord Instance
+    [+] PartyAndFriend Plugin Support on BungeeCord Instance
 
 Fixes
     [!] Plugin not starting up correctly

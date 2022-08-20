@@ -14,7 +14,7 @@ public class RAM implements Runnable {
 
     final Main main = Main.getInstance();
 
-    public void run(){
+    public void run() {
 
         if (ramPercent <= 0 || ramPercent >= 100) return;
 

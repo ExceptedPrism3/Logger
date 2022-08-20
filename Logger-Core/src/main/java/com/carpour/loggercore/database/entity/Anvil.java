@@ -3,7 +3,6 @@ package com.carpour.loggercore.database.entity;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import java.time.Instant;
 
 @Entity
 @Table(name = "anvil")
@@ -35,5 +34,5 @@ public class Anvil extends AbstractAction {
     }
 
     @Override
-    public String getAction() {return this.entityPlayer.getPlayerName() + " anvil"; }
+    public String getAction() { return this.entityPlayer.getPlayerName() + " anvil"; }
 }

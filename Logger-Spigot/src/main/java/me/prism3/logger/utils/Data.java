@@ -255,7 +255,7 @@ public class Data {
             this.main.getServer().getPluginManager().registerEvents(new OnPrimedTNT(), this.main);
 
 //        if (this.main.getConfig().getBoolean("Log-Player.Chat"))
-//        this.main.getServer().getPluginManager().registerEvents(new OnSpawnEgg(), this.main);
+        this.main.getServer().getPluginManager().registerEvents(new OnSpawnEgg(), this.main);
 
         if (this.main.getConfig().getBoolean("Log-Player.Entity-Death"))
             this.main.getServer().getPluginManager().registerEvents(new OnEntityDeath(), this.main);
@@ -279,7 +279,7 @@ public class Data {
             this.main.getServer().getPluginManager().registerEvents(new ArmorStandPlace(), this.main);
 
         if (this.main.getConfig().getBoolean("Log-Player.ArmorStand-Break"))
-            this.main.getServer().getPluginManager().registerEvents(new ArmorStandBreak(), this.main);
+//            this.main.getServer().getPluginManager().registerEvents(new ArmorStandBreak(), this.main);
 
 //        if (this.main.getConfig().getBoolean("Log-Player.Lever-Interaction"))
         this.main.getServer().getPluginManager().registerEvents(new LeverInteraction(), this.main);

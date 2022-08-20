@@ -57,7 +57,7 @@ public final class SQLite implements DataSourceInterface {
 
     private void createDatabaseFile() {
         try {
-            if(!this.databaseFile.exists()) { this.databaseFile.createNewFile(); }
+            if (!this.databaseFile.exists()) { this.databaseFile.createNewFile(); }
 
         }
         catch (IOException e) { throw new RuntimeException(e); }
@@ -236,7 +236,7 @@ public final class SQLite implements DataSourceInterface {
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, command VARCHAR(256))");
 
             // Extras Side Part
-            if(this.options.isEssentialsEnabled()) {
+            if (this.options.isEssentialsEnabled()) {
 
                 statement.executeUpdate(
                         "CREATE TABLE IF NOT EXISTS afk(id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -246,7 +246,7 @@ public final class SQLite implements DataSourceInterface {
                 tablesNames.add("afk");
             }
 
-            if(this.options.isAuthMeEnabled()) {
+            if (this.options.isAuthMeEnabled()) {
 
                 statement.executeUpdate(
                         "CREATE TABLE IF NOT EXISTS wrong_password(id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -256,7 +256,7 @@ public final class SQLite implements DataSourceInterface {
                 tablesNames.add("wrong_password");
             }
 
-            if(this.options.isVaultEnabled()) {
+            if (this.options.isVaultEnabled()) {
 
                 statement.executeUpdate(
                         "CREATE TABLE IF NOT EXISTS vault(id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -266,7 +266,7 @@ public final class SQLite implements DataSourceInterface {
                 tablesNames.add("vault");
             }
 
-            if(this.options.isLiteBansEnabled()) {
+            if (this.options.isLiteBansEnabled()) {
 
                 statement.executeUpdate("CREATE TABLE IF NOT EXISTS litebans "
                         + "(server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP," +
@@ -276,7 +276,7 @@ public final class SQLite implements DataSourceInterface {
                 tablesNames.add("litebans");
             }
 
-            if(this.options.isAdvancedBanEnabled()) {
+            if (this.options.isAdvancedBanEnabled()) {
 
                 statement.executeUpdate(
                         "CREATE TABLE IF NOT EXISTS advanced_ban (server_name TEXT," +
@@ -287,7 +287,7 @@ public final class SQLite implements DataSourceInterface {
             }
 
             // Version Exceptions Part
-            if(this.options.isViaVersion()) {
+            if (this.options.isViaVersion()) {
 
                 statement.executeUpdate(
                         "CREATE TABLE IF NOT EXISTS wood_stripping (id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -438,7 +438,7 @@ public final class SQLite implements DataSourceInterface {
             playerJoin.setInt(4, coords.getX());
             playerJoin.setInt(5, coords.getY());
             playerJoin.setInt(6, coords.getZ());
-            if(this.options.isPlayerIPEnabled()) {
+            if (this.options.isPlayerIPEnabled()) {
                 playerJoin.setString(7, ip.getHostString());
             } else { playerJoin.setString(7, null); }
             playerJoin.setBoolean(8, isStaff);

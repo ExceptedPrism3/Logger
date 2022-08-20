@@ -6,6 +6,7 @@ import org.hibernate.Transaction;
 import java.util.Deque;
 
 public class QueueThread implements Runnable {
+
     private final Deque<Object> a;
 
     public QueueThread(Deque<Object> a) {
@@ -26,10 +27,8 @@ public class QueueThread implements Runnable {
                 session.merge(this.a.pollFirst());
             }
 
-        }
-        finally {
-            if(tx != null) { tx.commit(); }
-        }
+        } finally { if (tx != null) tx.commit(); }
+
         long stopTime = System.nanoTime();
         System.out.println(stopTime - startTime + " Thread");
         return true;

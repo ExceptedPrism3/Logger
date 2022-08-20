@@ -178,7 +178,7 @@ public final class Database implements DataSourceInterface {
         p.setZ(coords.getZ());
         p.setWorld(coords.getWorldName());
         //TODO
-        if(this.options.isPlayerIPEnabled()) {
+        if (this.options.isPlayerIPEnabled()) {
             p.setIp(4L);
         }
         p.setEntityPlayer(loggerPlayer);
@@ -1000,22 +1000,18 @@ public final class Database implements DataSourceInterface {
     }
 
     private void save(Object obj) {
+
         Transaction tx = null;
+
         try {
             final Session session;
             session = HibernateUtils.getSession();
             tx = session.beginTransaction();
             session.save(obj);
-            tx.commit();
-        }
-        catch (Exception e) {
-            if(tx != null) tx.rollback();
-            throw e;
-        }
+        } finally { if (tx != null) tx.commit(); }
     }
 
     public EntityPlayer fetchEntityPlayer(String playerName, String playerUUID) {
         return new EntityPlayer(playerName, playerUUID);
     }
-
 }

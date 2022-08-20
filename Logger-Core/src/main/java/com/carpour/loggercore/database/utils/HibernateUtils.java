@@ -30,145 +30,145 @@ public class HibernateUtils {
 
             a.addPackage("com.carpour.loggercore.database.entity");
 
-            if(options.getBooleanValue("Chat")) {
+            if (options.getBooleanValue("Chat")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.PlayerChat"));
             }
 
-            if(options.getBooleanValue("Commands")) {
+            if (options.getBooleanValue("Commands")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.PlayerCommand"));
             }
 
-            if(options.getBooleanValue("Sign-Text")) {
+            if (options.getBooleanValue("Sign-Text")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.PlayerSignText"));
             }
 
-            if(options.getBooleanValue("Join") || options.getBooleanValue("Leave")) {
+            if (options.getBooleanValue("Join") || options.getBooleanValue("Leave")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.PlayerConnection"));
             }
 
-            if(options.getBooleanValue("Kick")) {
+            if (options.getBooleanValue("Kick")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.PlayerKick"));
             }
 
-            if(options.getBooleanValue("Death")) {
+            if (options.getBooleanValue("Death")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.PlayerDeath"));
             }
 
-            if(options.getBooleanValue("Teleport")) {
+            if (options.getBooleanValue("Teleport")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.PlayerTeleport"));
             }
 
-            if(options.getBooleanValue("Level")) {
+            if (options.getBooleanValue("Level")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.PlayerLevel"));
             }
 
-            if(options.getBooleanValue("Block-Place") || options.getBooleanValue(
+            if (options.getBooleanValue("Block-Place") || options.getBooleanValue(
                     "Block-Break")) //Break and place and woodstripping
             {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.BlockInteraction"));
             }
 
-            if(options.getBooleanValue("Bucket-Fill") || options.getBooleanValue("cket-Empty")) {
+            if (options.getBooleanValue("Bucket-Fill") || options.getBooleanValue("cket-Empty")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.BucketAction"));
             }
 
-            if(options.getBooleanValue("Anvil")) {
+            if (options.getBooleanValue("Anvil")) {
                 a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Anvil"));
             }
 
-            if(options.getBooleanValue("Item-Pickup") || options.getBooleanValue("Item-Drop")) {
+            if (options.getBooleanValue("Item-Pickup") || options.getBooleanValue("Item-Drop")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.ItemAction"));
             }
 
-            if(options.getBooleanValue("Enchanting")) {
+            if (options.getBooleanValue("Enchanting")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.Enchanting"));
             }
 
-            if(options.getBooleanValue("Book-Editing")) {
+            if (options.getBooleanValue("Book-Editing")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.BookEditing"));
             }
 
-            if(options.getBooleanValue("Furnace")) {
+            if (options.getBooleanValue("Furnace")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.Furnace"));
             }
 
-            if(options.getBooleanValue("Game-Mode")) {
+            if (options.getBooleanValue("Game-Mode")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.GameMode"));
             }
 
-            if(options.getBooleanValue("Craft")) {
+            if (options.getBooleanValue("Craft")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.Crafting"));
             }
 
-            if(options.getBooleanValue("Primed-TNT")) {
+            if (options.getBooleanValue("Primed-TNT")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.PrimedTnt"));
             }
 
-            if(options.getBooleanValue("Chest-Interaction")) {
+            if (options.getBooleanValue("Chest-Interaction")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.ChestInteraction"));
             }
 
-            if(options.getBooleanValue("Entity-Death")) {
+            if (options.getBooleanValue("Entity-Death")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.EntityDeath"));
             }
 
-            if(options.getBooleanValue("Start")) {
+            if (options.getBooleanValue("Start")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.ServerStart"));
             }
 
-            if(options.getBooleanValue("Stop")) {
+            if (options.getBooleanValue("Stop")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.ServerStop"));
             }
 
-            if(options.getBooleanValue("Console-Commands")) {
+            if (options.getBooleanValue("Console-Commands")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.ConsoleCommand"));
             }
 
-            if(options.getBooleanValue("RAM")) {
+            if (options.getBooleanValue("RAM")) {
                 a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Ram"));
             }
 
-            if(options.getBooleanValue("TPS")) {
+            if (options.getBooleanValue("TPS")) {
                 a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Tps"));
             }
 
-            if(options.getBooleanValue("Portal-Creation")) {
+            if (options.getBooleanValue("Portal-Creation")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.PortalCreation"));
             }
 
-            if(options.getBooleanValue("RCON")) {
+            if (options.getBooleanValue("RCON")) {
                 a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Rcon"));
             }
 
-            if(options.getBooleanValue("Command-Block")) {
+            if (options.getBooleanValue("Command-Block")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.CommandBlock"));
             }
 
-            if(options.getBooleanValue("Registration")) {
+            if (options.getBooleanValue("Registration")) {
                 a.addAnnotatedClass(
                         Class.forName("com.carpour.loggercore.database.entity.Registration"));
             }
@@ -186,7 +186,7 @@ public class HibernateUtils {
 
         final Session session;
 
-        if(threadLocal.get() == null) {
+        if (threadLocal.get() == null) {
             // Create Session object
             session = sessionFactory.openSession();
             threadLocal.set(session);
@@ -198,7 +198,7 @@ public class HibernateUtils {
 
         final Session session;
 
-        if(threadLocal.get() != null) {
+        if (threadLocal.get() != null) {
             session = threadLocal.get();
             session.close();
             threadLocal.remove();
