@@ -6,20 +6,24 @@ import org.hibernate.Transaction;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-public class Queue implements Runnable {
+public class Queue {
 
-    public Queue() {}
+    public Queue() { }
 
-    public final Deque<Object> queuedItems = new ArrayDeque<>(20);
+    public Deque<Object> queuedItems = new ArrayDeque<>(20);
     public int batchSize = 15;
 
     public void addItemToQueue(Object item) {
         queuedItems.add(item);
         System.out.println("added " + queuedItems.size());
-        if(queuedItems.size() >= batchSize) { flushItems(); }
+        if(queuedItems.size() >= batchSize) {
+            Deque<Object> copiedItems = queuedItems;
+            queuedItems = new ArrayDeque<>(20);
+            new QueueThread(copiedItems).run();
+        }
     }
 
-    public boolean flushItems() {
+    public boolean flushCurrentQueue() {
 
         long startTime = System.nanoTime();
         final Session session;
@@ -31,10 +35,9 @@ public class Queue implements Runnable {
             int count = 0;
             while (count <= batchSize && !queuedItems.isEmpty()) {
 
-                session.merge(queuedItems.pollFirst());
+                session.merge(this.queuedItems.pollFirst());
                 count++;
             }
-            session.flush();
         }
         finally {
             if(tx != null)
@@ -43,10 +46,5 @@ public class Queue implements Runnable {
         long stopTime = System.nanoTime();
         System.out.println(stopTime - startTime);
         return true;
-    }
-
-    @Override
-    public void run() {
-
     }
 }

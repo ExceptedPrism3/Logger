@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 public class HibernateUtils {
 
+    private static final ThreadLocal<Session> threadLocal = new ThreadLocal<Session>();
     private static Properties hibernateProperties;
     private static SessionFactory sessionFactory = null;
 
@@ -181,13 +182,31 @@ public class HibernateUtils {
         catch (ClassNotFoundException e) { throw new RuntimeException(e); }
     }
 
-    public static Session getSession() { return sessionFactory.getCurrentSession(); }
+    public static Session getSession() {
 
-    public static SessionFactory getSessionFactory() { return sessionFactory; }
+        final Session session;
+
+        if(threadLocal.get() == null) {
+            // Create Session object
+            session = sessionFactory.openSession();
+            threadLocal.set(session);
+        } else { session = threadLocal.get(); }
+        return session;
+    }
 
     public static void closeSession() {
 
+        final Session session;
+
+        if(threadLocal.get() != null) {
+            session = threadLocal.get();
+            session.close();
+            threadLocal.remove();
+        }
     }
+
+    public static SessionFactory getSessionFactory() { return sessionFactory; }
+
 
     public static void closeSessionFactory() { sessionFactory.close(); }
 

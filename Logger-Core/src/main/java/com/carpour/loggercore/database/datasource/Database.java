@@ -920,7 +920,7 @@ public final class Database implements DataSourceInterface {
 
     @Override
     public void disconnect() {
-        this.queue.flushItems();
+        this.queue.flushCurrentQueue();
         HibernateUtils.closeSessionFactory();
     }
 

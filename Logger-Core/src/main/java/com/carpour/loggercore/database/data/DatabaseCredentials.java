@@ -75,8 +75,8 @@ public final class DatabaseCredentials {
                 "org.hibernate.cache.ehcache.internal.EhcacheRegionFactory");
         properties.setProperty("hibernate.cache.provider_class",
                 "net.sf.ehcache.hibernate.EhCacheProvider");*/
-        properties.setProperty("hibernate.current_session_context_class", "thread");
-        properties.setProperty("hibernate.format_sql", "true");
+//        properties.setProperty("hibernate.current_session_context_class", "thread");
+        properties.setProperty("hibernate.format_sql", "false");
 //        properties.setProperty("hibernate.cache.use_query_cache", "true");
 
         return properties;
