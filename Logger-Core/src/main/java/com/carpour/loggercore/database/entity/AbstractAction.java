@@ -6,15 +6,14 @@ import org.hibernate.annotations.Proxy;
 import javax.persistence.*;
 import java.time.Instant;
 
-@Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@MappedSuperclass
 @Cacheable
 @Proxy(lazy = false)
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class AbstractAction implements ActionInterface {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     protected Long id;
     @ManyToOne(cascade = CascadeType.MERGE, optional = false, targetEntity = EntityPlayer.class)

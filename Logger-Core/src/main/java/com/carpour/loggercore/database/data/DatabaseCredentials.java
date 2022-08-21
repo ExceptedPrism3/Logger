@@ -79,6 +79,9 @@ public final class DatabaseCredentials {
         properties.setProperty("hibernate.format_sql", "false");
 //        properties.setProperty("hibernate.cache.use_query_cache", "true");
 
+        properties.setProperty("hibernate.order_inserts", "true");
+        properties.setProperty("hibernate.order_updates", "true");
+
         return properties;
     }
 

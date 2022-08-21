@@ -10,15 +10,15 @@ public class Queue {
 
     public Queue() { }
 
-    public Deque<Object> queuedItems = new ArrayDeque<>(20);
-    public int batchSize = 15;
+    public Deque<Object> queuedItems = new ArrayDeque<>(50);
+    public int batchSize = 50;
 
     public void addItemToQueue(Object item) {
         queuedItems.add(item);
         System.out.println("added " + queuedItems.size());
-        if (queuedItems.size() >= batchSize) {
+        if(queuedItems.size() >= batchSize) {
             Deque<Object> copiedItems = queuedItems;
-            queuedItems = new ArrayDeque<>(20);
+            queuedItems = new ArrayDeque<>(50);
             new QueueThread(copiedItems).run();
         }
     }
