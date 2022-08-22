@@ -1,14 +1,12 @@
 package com.carpour.loggercore.database.entity;
 
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.time.Instant;
 
 @MappedSuperclass
 @Cacheable
-@Proxy(lazy = false)
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class AbstractAction implements ActionInterface {
 

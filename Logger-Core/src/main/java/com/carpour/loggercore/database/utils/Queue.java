@@ -8,10 +8,15 @@ import java.util.Deque;
 
 public class Queue {
 
-    public Queue() { }
+    private int batchSize;
 
     public Deque<Object> queuedItems = new ArrayDeque<>(50);
-    public int batchSize = 50;
+
+    public Queue() { }
+
+    public void setBatchSize(int batchSize) {
+        this.batchSize = batchSize;
+    }
 
     public void addItemToQueue(Object item) {
         queuedItems.add(item);
@@ -19,7 +24,9 @@ public class Queue {
         if(queuedItems.size() >= batchSize) {
             Deque<Object> copiedItems = queuedItems;
             queuedItems = new ArrayDeque<>(50);
-            new QueueThread(copiedItems).run();
+            QueueThread b = new QueueThread(copiedItems);
+            Thread a = new Thread(b);
+            a.start();
         }
     }
 
@@ -28,7 +35,7 @@ public class Queue {
         long startTime = System.nanoTime();
         final Session session;
         Transaction tx = null;
-
+        //TODO handle queue in case of an exception
         try {
             session = HibernateUtils.getSession();
             tx = session.beginTransaction();

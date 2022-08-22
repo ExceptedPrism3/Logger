@@ -69,6 +69,11 @@ public final class DatabaseCredentials {
         properties.setProperty("hibernate.hikari.poolName", "HikariCP-Logger-Core");
         properties.setProperty("hibernate.hikari.maximumPoolSize", "50");
         properties.setProperty("hibernate.jdbc.batch_size", "100");
+        if(this.dbType.equalsIgnoreCase("mysql")) {
+            properties.setProperty("hibernate.dialect",
+                    "com.carpour.loggercore.database.utils.LocalMySQLDialect");
+
+        }
 /*        properties.setProperty("hibernate.cache.ehcache.missing_cache_strategy", "create");
         properties.setProperty("hibernate.cache.use_second_level_cache", "true");
         properties.setProperty("hibernate.cache.region.factory_class",
