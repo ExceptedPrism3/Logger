@@ -2,15 +2,15 @@ package me.prism3.loggercore.database.datasource;
 
 import me.prism3.loggercore.database.DataSourceInterface;
 import me.prism3.loggercore.database.data.Coordinates;
-import me.prism3.loggercore.database.data.DatabaseCredentials;
 import me.prism3.loggercore.database.data.Options;
-import me.prism3.loggercore.database.entity.*;
+import me.prism3.loggercore.database.data.Settings;
 import me.prism3.loggercore.database.entity.enums.BucketActionType;
 import me.prism3.loggercore.database.entity.enums.InteractionType;
 import me.prism3.loggercore.database.entity.enums.ItemActionType;
 import me.prism3.loggercore.database.entity.enums.PlayerConnectionType;
 import me.prism3.loggercore.database.utils.HibernateUtils;
 import me.prism3.loggercore.database.utils.Queue;
+import me.prism3.loggercore.database.entity.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -25,7 +25,7 @@ public final class Database implements DataSourceInterface {
     private final Options options;
     private final Queue queue = new Queue();
 
-    public Database(DatabaseCredentials databaseCredentials, Options options) {
+    public Database(Settings databaseCredentials, Options options) {
         this.options = options;
         this.queue.setBatchSize(
                 (Integer) this.options.getEnabledLogs().getOrDefault("database.batchsize", 50));

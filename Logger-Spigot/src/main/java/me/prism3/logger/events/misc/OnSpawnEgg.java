@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SpawnEggMeta;
 import org.bukkit.material.SpawnEgg;
 
 import java.util.ArrayList;
@@ -28,9 +29,7 @@ public class OnSpawnEgg implements Listener {
 
         if (!event.isCancelled() && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.hasItem()) {
 
-            if (this.main.getVersion().isAtLeast(NmsVersions.v1_8_R1)) {
-
-                if (event.getItem().getType().name().contains("MONSTER_EGG")) {
+            if (this.main.getVersion().isAtLeast(NmsVersions.v1_8_R1) && event.getItem().getType().name().contains("MONSTER_EGG")) {
 
                     final Player player = event.getPlayer();
 
@@ -39,43 +38,22 @@ public class OnSpawnEgg implements Listener {
                     final String worldName = player.getWorld().getName();
                     final UUID playerUUID = player.getUniqueId();
                     final String playerName = player.getName();
-                    final EntityType entityType = EntityType.fromId(event.getItem().getDurability());
-
+                    final SpawnEggMeta mob = (SpawnEggMeta) event.getItem().getItemMeta();
+                    final EntityType mobName = mob.getSpawnedType();
                     final int x = event.getClickedBlock().getLocation().getBlockX();
                     final int y = event.getClickedBlock().getLocation().getBlockY();
                     final int z = event.getClickedBlock().getLocation().getBlockZ();
 
-//                    System.out.println(worldName + " " + playerUUID + " " + playerName + " " + entityType.name() + " " + x + " " + y + " " + z);
+                    System.out.println(worldName + " " + playerUUID + " " + playerName + " " + mobName + " " + x + " " + y + " " + z);
 
-                }
+            } else if (this.main.getVersion().isAtLeast(NmsVersions.v1_13_R1) && event.getItem().getType().name().contains("SPAWN_EGG")) {
 
-            } else if (this.main.getVersion().isAtLeast(NmsVersions.v1_13_R1)) {
+                final UMaterial u = UMaterial.matchSpawnEgg(event.getItem());
 
-                if (event.getItem().getType().name().contains("SPAWN_EGG")) {
+                String entityType = u.name().replace("_SPAWN_EGG", "");
 
-                    final UMaterial u = UMaterial.matchSpawnEgg(event.getItem());
+                System.out.println(entityType);
 
-                    final String entityType = u.name().replace("_SPAWN_EGG", "");
-
-                    System.out.println("2");
-
-//                    ServerLogEvent logEvent = new ServerLogEvent(
-//                            methods.getConfigFile().getString("spawn-egg")
-//                                    .replace("[time]: ", "")
-//                                    .replace("[player]", e.getPlayer().getName())
-//                                    .replace("[entity]", entityType)
-//                                    .replace("[x]", "" + e.getClickedBlock().getLocation().getBlockX())
-//                                    .replace("[y]", "" + e.getClickedBlock().getLocation().getBlockY())
-//                                    .replace("[z]", "" + e.getClickedBlock().getLocation().getBlockZ()),
-//                            methods.getTime(),
-//                            methods.getDate(),
-//                            "plugins/ServerLog/Players/Spawn Mob Egg/",
-//                            "PlayerInteractEvent");
-//                    Bukkit.getPluginManager().callEvent(logEvent);
-//
-//                    methods.appendString("/Players/Spawn Mob Egg/", methods.getConfigFile().getString("spawn-egg").replace("[player]", e.getPlayer().getName()).replace("[entity]", entityType).replace("[x]", "" + e.getClickedBlock().getX()).replace("[y]", "" + e.getClickedBlock().getY()).replace("[z]", "" + e.getClickedBlock().getZ()));
-//                    methods.appendString("/Compiled Log/", methods.getConfigFile().getString("spawn-egg").replace("[player]", e.getPlayer().getName()).replace("[entity]", entityType).replace("[x]", "" + e.getClickedBlock().getX()).replace("[y]", "" + e.getClickedBlock().getY()).replace("[z]", "" + e.getClickedBlock().getZ()));
-                }
             } else {
 
                 if (event.getItem().getType().name().contains("MONSTER_EGG")) {
@@ -86,24 +64,7 @@ public class OnSpawnEgg implements Listener {
 
                         final String entityType = u.name().replace("_SPAWN_EGG", "");
 
-                        System.out.println("3");
-
-//                            ServerLogEvent logEvent = new ServerLogEvent(
-//                                    methods.getConfigFile().getString("spawn-egg")
-//                                            .replace("[time]: ", "")
-//                                            .replace("[player]", e.getPlayer().getName())
-//                                            .replace("[entity]", entityType)
-//                                            .replace("[x]", "" + e.getClickedBlock().getLocation().getBlockX())
-//                                            .replace("[y]", "" + e.getClickedBlock().getLocation().getBlockY())
-//                                            .replace("[z]", "" + e.getClickedBlock().getLocation().getBlockZ()),
-//                                    methods.getTime(),
-//                                    methods.getDate(),
-//                                    "plugins/ServerLog/Players/Spawn Mob Egg/",
-//                                    "PlayerInteractEvent");
-//                            Bukkit.getPluginManager().callEvent(logEvent);
-//
-//                            methods.appendString("/Players/Spawn Mob Egg/", methods.getConfigFile().getString("spawn-egg").replace("[player]", e.getPlayer().getName()).replace("[entity]", entityType).replace("[x]", "" + e.getClickedBlock().getX()).replace("[y]", "" + e.getClickedBlock().getY()).replace("[z]", "" + e.getClickedBlock().getZ()));
-//                            methods.appendString("/Compiled Log/", methods.getConfigFile().getString("spawn-egg").replace("[player]", e.getPlayer().getName()).replace("[entity]", entityType).replace("[x]", "" + e.getClickedBlock().getX()).replace("[y]", "" + e.getClickedBlock().getY()).replace("[z]", "" + e.getClickedBlock().getZ()));
+                        System.out.println("3 " + entityType);
                     }
                 }
             }

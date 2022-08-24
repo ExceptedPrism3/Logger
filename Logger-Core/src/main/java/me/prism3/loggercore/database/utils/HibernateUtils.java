@@ -1,7 +1,7 @@
 package me.prism3.loggercore.database.utils;
 
-import me.prism3.loggercore.database.data.DatabaseCredentials;
 import me.prism3.loggercore.database.data.Options;
+import me.prism3.loggercore.database.data.Settings;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -18,7 +18,7 @@ public class HibernateUtils {
 
     private HibernateUtils() { }
 
-    public static void initializeHibernate(DatabaseCredentials databaseCredentials,
+    public static void initializeHibernate(Settings databaseCredentials,
                                            Options options) {
 
         Logger.getLogger("org.hibernate").setLevel(Level.ALL);

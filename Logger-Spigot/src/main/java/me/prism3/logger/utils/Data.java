@@ -1,6 +1,5 @@
 package me.prism3.logger.utils;
 
-import me.prism3.loggercore.database.data.DatabaseCredentials;
 import me.prism3.loggercore.database.data.Options;
 import me.prism3.logger.Main;
 import me.prism3.logger.api.*;
@@ -15,6 +14,7 @@ import me.prism3.logger.events.onversioncompatibility.OnWoodStripping;
 import me.prism3.logger.events.plugindependent.*;
 import me.prism3.logger.serverside.*;
 import me.prism3.logger.utils.enums.NmsVersions;
+import me.prism3.loggercore.database.data.Settings;
 
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -85,7 +85,7 @@ public class Data {
     public static String loggerSpy;
     public static String loggerReload;
     public static Options options = new Options();
-    public static DatabaseCredentials databaseCredentials;
+    public static Settings databaseCredentials;
 
     public void initializeDateFormatter() {
 
@@ -107,7 +107,7 @@ public class Data {
     }
 
     public void initializeDatabaseCredentials() {
-        Data.databaseCredentials = new DatabaseCredentials(
+        Data.databaseCredentials = new Settings(
                 this.main.getConfig().getString("Database.Type"),
                 this.main.getConfig().getString("Database.Host"),
                 this.main.getConfig().getString("Database.Username"),

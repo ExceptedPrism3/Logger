@@ -2,7 +2,7 @@ package me.prism3.loggercore.database.data;
 
 import java.util.Properties;
 
-public final class DatabaseCredentials {
+public final class Settings {
 
     private final String dbType;
     private final String dbHost;
@@ -12,8 +12,8 @@ public final class DatabaseCredentials {
     private final int dbPort;
     private final boolean isEnabled;
 
-    public DatabaseCredentials(String dbType, String dbHost, String dbUsername, String dbPassword,
-                               String dbName, int dbPort, boolean isEnabled) {
+    public Settings(String dbType, String dbHost, String dbUsername, String dbPassword,
+                    String dbName, int dbPort, boolean isEnabled) {
         this.dbType = dbType;
         this.dbHost = dbHost;
         this.dbUsername = dbUsername;
@@ -96,5 +96,4 @@ public final class DatabaseCredentials {
                 + ":" + this.getDbPort()
                 + "/" + this.getDbName());
     }
-
 }

@@ -1,7 +1,7 @@
 package me.prism3.loggercore.database;
 
-import me.prism3.loggercore.database.data.DatabaseCredentials;
 import me.prism3.loggercore.database.data.Options;
+import me.prism3.loggercore.database.data.Settings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +24,12 @@ public abstract class AbstractDataSource implements DataSourceInterface {
                     "chest_interaction", "entity_death", "logger_playertime")
             .collect(Collectors.toCollection(ArrayList::new));
 
-    protected final DatabaseCredentials databaseCredentials;
+    protected final Settings databaseCredentials;
     protected final Logger logger = Logger.getLogger(AbstractDataSource.class.getName());
     protected final Options options;
     private final String className;
 
-    protected AbstractDataSource(DatabaseCredentials databaseCredentials, Options options,
+    protected AbstractDataSource(Settings databaseCredentials, Options options,
                                  String className) {
         this.className = className;
         this.databaseCredentials = databaseCredentials;
