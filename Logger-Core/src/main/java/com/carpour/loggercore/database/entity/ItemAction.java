@@ -1,6 +1,6 @@
-package com.carpour.loggercore.database.entity;
+package me.prism3.loggercore.database.entity;
 
-import com.carpour.loggercore.database.entity.enums.ItemActionType;
+import me.prism3.loggercore.database.entity.enums.ItemActionType;
 
 import javax.persistence.*;
 

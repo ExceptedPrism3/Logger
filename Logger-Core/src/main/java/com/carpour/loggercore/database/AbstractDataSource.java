@@ -1,7 +1,7 @@
-package com.carpour.loggercore.database;
+package me.prism3.loggercore.database;
 
-import com.carpour.loggercore.database.data.DatabaseCredentials;
-import com.carpour.loggercore.database.data.Options;
+import me.prism3.loggercore.database.data.DatabaseCredentials;
+import me.prism3.loggercore.database.data.Options;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.carpour.loggercore.database.data;
+package me.prism3.loggercore.database.data;
 
 import java.util.Properties;
 
@@ -71,7 +71,7 @@ public final class DatabaseCredentials {
         properties.setProperty("hibernate.jdbc.batch_size", "100");
         if(this.dbType.equalsIgnoreCase("mysql")) {
             properties.setProperty("hibernate.dialect",
-                    "com.carpour.loggercore.database.utils.LocalMySQLDialect");
+                    "me.prism3.loggercore.database.utils.LocalMySQLDialect");
 
         }
 /*        properties.setProperty("hibernate.cache.ehcache.missing_cache_strategy", "create");

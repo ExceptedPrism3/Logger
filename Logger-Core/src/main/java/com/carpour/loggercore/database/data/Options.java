@@ -1,4 +1,4 @@
-package com.carpour.loggercore.database.data;
+package me.prism3.loggercore.database.data;
 
 import java.util.Map;
 

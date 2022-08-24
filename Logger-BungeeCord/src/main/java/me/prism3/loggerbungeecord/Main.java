@@ -1,6 +1,6 @@
 package me.prism3.loggerbungeecord;
 
-import com.carpour.loggercore.database.DataSourceInterface;
+import me.prism3.loggercore.database.DataSourceInterface;
 import me.prism3.loggerbungeecord.commands.Reload;
 import me.prism3.loggerbungeecord.discord.Discord;
 import me.prism3.loggerbungeecord.discord.DiscordFile;

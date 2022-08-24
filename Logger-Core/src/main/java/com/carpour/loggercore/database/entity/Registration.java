@@ -1,4 +1,4 @@
-package com.carpour.loggercore.database.entity;
+package me.prism3.loggercore.database.entity;
 
 import javax.persistence.*;
 import java.time.Instant;

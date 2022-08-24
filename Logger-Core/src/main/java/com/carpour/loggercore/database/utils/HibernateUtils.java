@@ -1,7 +1,7 @@
-package com.carpour.loggercore.database.utils;
+package me.prism3.loggercore.database.utils;
 
-import com.carpour.loggercore.database.data.DatabaseCredentials;
-import com.carpour.loggercore.database.data.Options;
+import me.prism3.loggercore.database.data.DatabaseCredentials;
+import me.prism3.loggercore.database.data.Options;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -28,153 +28,153 @@ public class HibernateUtils {
 
         try {
 
-            a.addPackage("com.carpour.loggercore.database.entity");
+            a.addPackage("me.prism3.loggercore.database.entity");
 
             if (options.getBooleanValue("Chat")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.PlayerChat"));
+                        Class.forName("me.prism3.loggercore.database.entity.PlayerChat"));
             }
 
             if (options.getBooleanValue("Commands")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.PlayerCommand"));
+                        Class.forName("me.prism3.loggercore.database.entity.PlayerCommand"));
             }
 
             if (options.getBooleanValue("Sign-Text")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.PlayerSignText"));
+                        Class.forName("me.prism3.loggercore.database.entity.PlayerSignText"));
             }
 
             if (options.getBooleanValue("Join") || options.getBooleanValue("Leave")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.PlayerConnection"));
+                        Class.forName("me.prism3.loggercore.database.entity.PlayerConnection"));
             }
 
             if (options.getBooleanValue("Kick")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.PlayerKick"));
+                        Class.forName("me.prism3.loggercore.database.entity.PlayerKick"));
             }
 
             if (options.getBooleanValue("Death")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.PlayerDeath"));
+                        Class.forName("me.prism3.loggercore.database.entity.PlayerDeath"));
             }
 
             if (options.getBooleanValue("Teleport")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.PlayerTeleport"));
+                        Class.forName("me.prism3.loggercore.database.entity.PlayerTeleport"));
             }
 
             if (options.getBooleanValue("Level")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.PlayerLevel"));
+                        Class.forName("me.prism3.loggercore.database.entity.PlayerLevel"));
             }
 
             if (options.getBooleanValue("Block-Place") || options.getBooleanValue(
                     "Block-Break")) //Break and place and woodstripping
             {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.BlockInteraction"));
+                        Class.forName("me.prism3.loggercore.database.entity.BlockInteraction"));
             }
 
             if (options.getBooleanValue("Bucket-Fill") || options.getBooleanValue("cket-Empty")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.BucketAction"));
+                        Class.forName("me.prism3.loggercore.database.entity.BucketAction"));
             }
 
             if (options.getBooleanValue("Anvil")) {
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Anvil"));
+                a.addAnnotatedClass(Class.forName("me.prism3.loggercore.database.entity.Anvil"));
             }
 
             if (options.getBooleanValue("Item-Pickup") || options.getBooleanValue("Item-Drop")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.ItemAction"));
+                        Class.forName("me.prism3.loggercore.database.entity.ItemAction"));
             }
 
             if (options.getBooleanValue("Enchanting")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.Enchanting"));
+                        Class.forName("me.prism3.loggercore.database.entity.Enchanting"));
             }
 
             if (options.getBooleanValue("Book-Editing")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.BookEditing"));
+                        Class.forName("me.prism3.loggercore.database.entity.BookEditing"));
             }
 
             if (options.getBooleanValue("Furnace")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.Furnace"));
+                        Class.forName("me.prism3.loggercore.database.entity.Furnace"));
             }
 
             if (options.getBooleanValue("Game-Mode")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.GameMode"));
+                        Class.forName("me.prism3.loggercore.database.entity.GameMode"));
             }
 
             if (options.getBooleanValue("Craft")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.Crafting"));
+                        Class.forName("me.prism3.loggercore.database.entity.Crafting"));
             }
 
             if (options.getBooleanValue("Primed-TNT")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.PrimedTnt"));
+                        Class.forName("me.prism3.loggercore.database.entity.PrimedTnt"));
             }
 
             if (options.getBooleanValue("Chest-Interaction")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.ChestInteraction"));
+                        Class.forName("me.prism3.loggercore.database.entity.ChestInteraction"));
             }
 
             if (options.getBooleanValue("Entity-Death")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.EntityDeath"));
+                        Class.forName("me.prism3.loggercore.database.entity.EntityDeath"));
             }
 
             if (options.getBooleanValue("Start")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.ServerStart"));
+                        Class.forName("me.prism3.loggercore.database.entity.ServerStart"));
             }
 
             if (options.getBooleanValue("Stop")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.ServerStop"));
+                        Class.forName("me.prism3.loggercore.database.entity.ServerStop"));
             }
 
             if (options.getBooleanValue("Console-Commands")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.ConsoleCommand"));
+                        Class.forName("me.prism3.loggercore.database.entity.ConsoleCommand"));
             }
 
             if (options.getBooleanValue("RAM")) {
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Ram"));
+                a.addAnnotatedClass(Class.forName("me.prism3.loggercore.database.entity.Ram"));
             }
 
             if (options.getBooleanValue("TPS")) {
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Tps"));
+                a.addAnnotatedClass(Class.forName("me.prism3.loggercore.database.entity.Tps"));
             }
 
             if (options.getBooleanValue("Portal-Creation")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.PortalCreation"));
+                        Class.forName("me.prism3.loggercore.database.entity.PortalCreation"));
             }
 
             if (options.getBooleanValue("RCON")) {
-                a.addAnnotatedClass(Class.forName("com.carpour.loggercore.database.entity.Rcon"));
+                a.addAnnotatedClass(Class.forName("me.prism3.loggercore.database.entity.Rcon"));
             }
 
             if (options.getBooleanValue("Command-Block")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.CommandBlock"));
+                        Class.forName("me.prism3.loggercore.database.entity.CommandBlock"));
             }
 
             if (options.getBooleanValue("Registration")) {
                 a.addAnnotatedClass(
-                        Class.forName("com.carpour.loggercore.database.entity.Registration"));
+                        Class.forName("me.prism3.loggercore.database.entity.Registration"));
             }
 
             a.addAnnotatedClass(
-                    Class.forName("com.carpour.loggercore.database.entity.EntityPlayer"));
+                    Class.forName("me.prism3.loggercore.database.entity.EntityPlayer"));
 
             sessionFactory = a.buildSessionFactory();
 

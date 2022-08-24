@@ -1,7 +1,7 @@
-package com.carpour.loggercore.database;
+package me.prism3.loggercore.database;
 
-import com.carpour.loggercore.database.data.Coordinates;
-import com.carpour.loggercore.database.entity.PlayerChat;
+import me.prism3.loggercore.database.data.Coordinates;
+import me.prism3.loggercore.database.entity.PlayerChat;
 
 import java.net.InetSocketAddress;
 import java.util.List;

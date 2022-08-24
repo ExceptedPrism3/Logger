@@ -1,6 +1,6 @@
-package com.carpour.loggercore.database.entity;
+package me.prism3.loggercore.database.entity;
 
-import com.carpour.loggercore.database.data.Coordinates;
+import me.prism3.loggercore.database.data.Coordinates;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.Cacheable;

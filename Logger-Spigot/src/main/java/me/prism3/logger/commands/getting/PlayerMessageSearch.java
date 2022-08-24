@@ -1,6 +1,6 @@
 package me.prism3.logger.commands.getting;
 
-import com.carpour.loggercore.database.entity.AbstractAction;
+import me.prism3.loggercore.database.entity.AbstractAction;
 import me.prism3.logger.Main;
 import org.bukkit.command.CommandSender;
 

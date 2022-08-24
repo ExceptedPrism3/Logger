@@ -1,10 +1,10 @@
-package com.carpour.loggercore.database.sqlite;
+package me.prism3.loggercore.database.sqlite;
 
-import com.carpour.loggercore.database.AbstractDataSource;
-import com.carpour.loggercore.database.DataSourceInterface;
-import com.carpour.loggercore.database.data.Coordinates;
-import com.carpour.loggercore.database.data.Options;
-import com.carpour.loggercore.database.entity.PlayerChat;
+import me.prism3.loggercore.database.AbstractDataSource;
+import me.prism3.loggercore.database.DataSourceInterface;
+import me.prism3.loggercore.database.data.Coordinates;
+import me.prism3.loggercore.database.data.Options;
+import me.prism3.loggercore.database.entity.PlayerChat;
 
 import java.io.File;
 import java.io.IOException;

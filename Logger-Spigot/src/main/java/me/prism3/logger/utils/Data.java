@@ -1,7 +1,7 @@
 package me.prism3.logger.utils;
 
-import com.carpour.loggercore.database.data.DatabaseCredentials;
-import com.carpour.loggercore.database.data.Options;
+import me.prism3.loggercore.database.data.DatabaseCredentials;
+import me.prism3.loggercore.database.data.Options;
 import me.prism3.logger.Main;
 import me.prism3.logger.api.*;
 import me.prism3.logger.commands.subcommands.PlayerInventory;

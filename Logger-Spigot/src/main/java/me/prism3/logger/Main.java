@@ -1,7 +1,7 @@
 package me.prism3.logger;
 
-import com.carpour.loggercore.database.DataSourceInterface;
-import com.carpour.loggercore.database.datasource.Database;
+import me.prism3.loggercore.database.DataSourceInterface;
+import me.prism3.loggercore.database.datasource.Database;
 import de.jeff_media.updatechecker.UpdateChecker;
 import me.prism3.logger.commands.CommandManager;
 import me.prism3.logger.commands.getting.Chat;

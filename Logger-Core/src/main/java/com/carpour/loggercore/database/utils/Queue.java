@@ -1,4 +1,4 @@
-package com.carpour.loggercore.database.utils;
+package me.prism3.loggercore.database.utils;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;

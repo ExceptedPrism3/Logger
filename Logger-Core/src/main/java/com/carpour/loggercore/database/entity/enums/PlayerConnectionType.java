@@ -1,4 +1,4 @@
-package com.carpour.loggercore.database.entity.enums;
+package me.prism3.loggercore.database.entity.enums;
 
 public enum PlayerConnectionType {
 

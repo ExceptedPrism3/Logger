@@ -6,7 +6,7 @@
     <version>1.8.0.2</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.carpour.loggercore</groupId>
+  <groupId>me.prism3.loggercore</groupId>
   <artifactId>Logger-Core</artifactId>
   <name>Logger-Core</name>
   <version>1.8.0.2</version>

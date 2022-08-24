@@ -198,7 +198,7 @@
             <version>3.0.5</version>
         </dependency>
         <dependency>
-            <groupId>com.carpour.loggercore</groupId>
+            <groupId>me.prism3.loggercore</groupId>
             <artifactId>Logger-Core</artifactId>
             <version>1.8.0.2</version>
         </dependency>

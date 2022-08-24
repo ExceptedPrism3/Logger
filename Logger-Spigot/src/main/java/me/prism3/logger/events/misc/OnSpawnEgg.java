@@ -10,7 +10,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.SpawnEgg;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.loggerExempt;
@@ -24,33 +28,36 @@ public class OnSpawnEgg implements Listener {
 
         if (!event.isCancelled() && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.hasItem()) {
 
-            if (this.main.getVersion().isAtLeast(NmsVersions.v1_8_R1) && event.getItem().getType().name().contains("MONSTER_EGG")) {
+            if (this.main.getVersion().isAtLeast(NmsVersions.v1_8_R1)) {
 
-                final Player player = event.getPlayer();
+                if (event.getItem().getType().name().contains("MONSTER_EGG")) {
 
-                if (player.hasPermission(loggerExempt)) return;
+                    final Player player = event.getPlayer();
 
-                final String worldName = player.getWorld().getName();
-                final UUID playerUUID = player.getUniqueId();
-                final String playerName = player.getName();
-                final EntityType entityType = EntityType.fromId(event.getItem().getDurability());
-//                final String entityName = entityType.name();
+                    if (player.hasPermission(loggerExempt)) return;
 
-                System.out.println(event.);
+                    final String worldName = player.getWorld().getName();
+                    final UUID playerUUID = player.getUniqueId();
+                    final String playerName = player.getName();
+                    final EntityType entityType = EntityType.fromId(event.getItem().getDurability());
 
-                final int x = event.getClickedBlock().getLocation().getBlockX();
-                final int y = event.getClickedBlock().getLocation().getBlockY();
-                final int z = event.getClickedBlock().getLocation().getBlockZ();
+                    final int x = event.getClickedBlock().getLocation().getBlockX();
+                    final int y = event.getClickedBlock().getLocation().getBlockY();
+                    final int z = event.getClickedBlock().getLocation().getBlockZ();
 
-                System.out.println(worldName + " " + playerUUID + " " + playerName + " " + entityType + " " + x + " " + y + " " + z);
+//                    System.out.println(worldName + " " + playerUUID + " " + playerName + " " + entityType.name() + " " + x + " " + y + " " + z);
 
-            } else if (this.main.getVersion().isAtLeast(NmsVersions.v1_13_R1) && event.getItem().getType().name().contains("SPAWN_EGG")) {
+                }
 
-                final UMaterial u = UMaterial.matchSpawnEgg(event.getItem());
+            } else if (this.main.getVersion().isAtLeast(NmsVersions.v1_13_R1)) {
 
-                final String entityType = u.name().replace("_SPAWN_EGG", "");
+                if (event.getItem().getType().name().contains("SPAWN_EGG")) {
 
-                System.out.println("2");
+                    final UMaterial u = UMaterial.matchSpawnEgg(event.getItem());
+
+                    final String entityType = u.name().replace("_SPAWN_EGG", "");
+
+                    System.out.println("2");
 
 //                    ServerLogEvent logEvent = new ServerLogEvent(
 //                            methods.getConfigFile().getString("spawn-egg")
@@ -68,7 +75,7 @@ public class OnSpawnEgg implements Listener {
 //
 //                    methods.appendString("/Players/Spawn Mob Egg/", methods.getConfigFile().getString("spawn-egg").replace("[player]", e.getPlayer().getName()).replace("[entity]", entityType).replace("[x]", "" + e.getClickedBlock().getX()).replace("[y]", "" + e.getClickedBlock().getY()).replace("[z]", "" + e.getClickedBlock().getZ()));
 //                    methods.appendString("/Compiled Log/", methods.getConfigFile().getString("spawn-egg").replace("[player]", e.getPlayer().getName()).replace("[entity]", entityType).replace("[x]", "" + e.getClickedBlock().getX()).replace("[y]", "" + e.getClickedBlock().getY()).replace("[z]", "" + e.getClickedBlock().getZ()));
-
+                }
             } else {
 
                 if (event.getItem().getType().name().contains("MONSTER_EGG")) {
