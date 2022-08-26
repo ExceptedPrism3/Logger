@@ -69,7 +69,7 @@ public final class Settings {
         properties.setProperty("hibernate.hikari.poolName", "HikariCP-Logger-Core");
         properties.setProperty("hibernate.hikari.maximumPoolSize", "50");
         properties.setProperty("hibernate.jdbc.batch_size", "100");
-        if(this.dbType.equalsIgnoreCase("mysql")) {
+        if (this.dbType.equalsIgnoreCase("mysql")) {
             properties.setProperty("hibernate.dialect",
                     "me.prism3.loggercore.database.utils.LocalMySQLDialect");
 

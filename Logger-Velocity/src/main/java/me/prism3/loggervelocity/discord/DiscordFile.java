@@ -28,7 +28,7 @@ public class DiscordFile {
 
                 this.file.createNewFile();
 
-                try (final InputStream is = ConfigManager.class.getResourceAsStream("/discord - Velocity.yml");
+                try (final InputStream is = ConfigManager.class.getResourceAsStream(File.separator + "discord - Velocity.yml");
                      final OutputStream os = new FileOutputStream(this.file)) {
                     assert is != null;
                     ByteStreams.copy(is, os);

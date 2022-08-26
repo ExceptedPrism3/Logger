@@ -1,5 +1,6 @@
 package me.prism3.logger;
 
+import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
 import me.prism3.loggercore.database.DataSourceInterface;
 import me.prism3.loggercore.database.datasource.Database;
 import de.jeff_media.updatechecker.UpdateChecker;
@@ -95,9 +96,8 @@ public class Main extends JavaPlugin {
 
         new Stop().run();
 
-//        if (isSqlite && this.sqLite.isConnected()) this.sqLite.disconnect();
+        if (isRegistration && this.sqLiteReg.isConnected()) this.sqLiteReg.disconnect();
 
-//        if (isRegistration && this.sqLiteReg.isConnected()) this.sqLiteReg.disconnect();
         this.disconnectDatabase();
         this.discord.disconnect();
 
@@ -132,6 +132,14 @@ public class Main extends JavaPlugin {
         try {
             this.database = new Database(databaseCredentials, Data.options);
             this.sqLite = null;
+
+            if (isRegistration) {
+
+                this.sqLiteReg = new SQLiteRegistration();
+                this.sqLiteReg.connect();
+                final SQLiteDataRegistration sqLiteDataRegistration = new SQLiteDataRegistration();
+                if (this.sqLiteReg.isConnected()) sqLiteDataRegistration.createTable();
+            }
 
         } catch (Exception e) { this.getLogger().severe(e.getMessage()); }
     }

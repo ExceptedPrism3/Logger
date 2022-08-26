@@ -1606,7 +1606,7 @@ public enum UMaterial implements Versionable {
     }
 
     public Material getMaterial() {
-        if(material == null)
+        if (material == null)
             material = setupMaterial();
         return material;
     }
@@ -1633,7 +1633,7 @@ public enum UMaterial implements Versionable {
 
         ItemStack item = material != null ? EIGHT || NINE || TEN || ELEVEN || TWELVE ? new ItemStack(material, 1, data) : new ItemStack(material) : null;
 
-        if(item != null && attributes != null) {
+        if (item != null && attributes != null) {
 
             for(String attribute : attributes.split(";")) {
 
@@ -1695,13 +1695,13 @@ public enum UMaterial implements Versionable {
 
         name = name.toUpperCase();
         final String targetUMaterial = name + data;
-        if(CACHED_UMATERIALS.containsKey(targetUMaterial))
+        if (CACHED_UMATERIALS.containsKey(targetUMaterial))
             return CACHED_UMATERIALS.get(targetUMaterial);
 
         for(UMaterial umaterial : values()) {
-            if(umaterial.getData() == data) {
+            if (umaterial.getData() == data) {
                 for(String umaterialName : umaterial.names) {
-                    if(name.equals(umaterialName)) {
+                    if (name.equals(umaterialName)) {
                         CACHED_UMATERIALS.put(targetUMaterial, umaterial);
                         return umaterial;
                     }
@@ -1712,13 +1712,13 @@ public enum UMaterial implements Versionable {
     }
 
     public static UMaterial matchSpawnEgg(ItemStack egg) {
-        if(egg != null) {
+        if (egg != null) {
 
-            if(EIGHT) {
+            if (EIGHT) {
 
                 return match("MONSTER_EGG", egg.getData().getData());
 
-            } else if(NINE || TEN || ELEVEN || TWELVE) {
+            } else if (NINE || TEN || ELEVEN || TWELVE) {
 
                 final String id = egg.hasItemMeta() ? egg.getItemMeta().toString().split("id=")[1].split("}")[0].toUpperCase() : "PIG";
                 return match(id + "_SPAWN_EGG");
@@ -1729,10 +1729,10 @@ public enum UMaterial implements Versionable {
     }
 
     public static UMaterial matchEnchantedBook(ItemStack book) {
-        if(book != null && book.getItemMeta() instanceof EnchantmentStorageMeta) {
+        if (book != null && book.getItemMeta() instanceof EnchantmentStorageMeta) {
             final EnchantmentStorageMeta meta = (EnchantmentStorageMeta) book.getItemMeta();
             final Map<Enchantment, Integer> enchants = meta.getStoredEnchants();
-            if(enchants.size() == 1) {
+            if (enchants.size() == 1) {
                 final Enchantment enchant = (Enchantment) enchants.keySet().toArray()[0];
                 final int level = enchants.get(enchant);
                 final String name = toVanillaEnchantName(enchant);
@@ -1770,15 +1770,15 @@ public enum UMaterial implements Versionable {
     }
 
     public static UMaterial matchPotion(ItemStack potion) {
-        if(potion != null && potion.getItemMeta() instanceof PotionMeta) {
+        if (potion != null && potion.getItemMeta() instanceof PotionMeta) {
             final PotionMeta meta = (PotionMeta) potion.getItemMeta();
             final List<PotionEffect> customEffects = meta.getCustomEffects();
-            if(customEffects.size() == 0) {
+            if (customEffects.size() == 0) {
                 final String base;
                 final PotionEffectType potionEffect;
                 final int level, max;
                 final boolean isExtended;
-                if(EIGHT) {
+                if (EIGHT) {
                     final Potion realPotion = Potion.fromItemStack(potion);
                     base = realPotion.isSplash() ? "SPLASH_POTION_" : "POTION_";
                     final Collection<PotionEffect> effects = realPotion.getEffects();
@@ -1797,7 +1797,7 @@ public enum UMaterial implements Versionable {
                     isExtended = type.isExtendable() && potionData.isExtended();
                 }
                 final String type = toVanillaPotionEffectName(potionEffect);
-                if(type != null) {
+                if (type != null) {
                     final String materialName = base + type + (max != 1 && level <= max ? "_" + level : "") + (isExtended ? "_EXTENDED" : "");
                     return valueOf(materialName);
                 } else {
@@ -1809,7 +1809,7 @@ public enum UMaterial implements Versionable {
     }
 
     private static String toVanillaPotionEffectName(PotionEffectType effect) {
-        if(effect != null) {
+        if (effect != null) {
             final String name = effect.getName();
             switch (name) {
                 case "SPEED": return "SWIFTNESS";
@@ -1839,19 +1839,19 @@ public enum UMaterial implements Versionable {
             final byte targetData = name.contains(":") ? Byte.parseByte(materialValues[1]) : 0;
             name = materialValues[0];
             final String targetUMaterial = name + targetData;
-            if(CACHED_UMATERIALS.containsKey(targetUMaterial)) {
+            if (CACHED_UMATERIALS.containsKey(targetUMaterial)) {
                 return CACHED_UMATERIALS.get(targetUMaterial);
             }
             for(UMaterial umaterial : values()) {
-                if(name.equals(umaterial.name())) {
+                if (name.equals(umaterial.name())) {
                     CACHED_UMATERIALS.put(name, umaterial);
                     return umaterial;
                 }
                 final byte data = umaterial.getData();
-                if(data == targetData) {
+                if (data == targetData) {
                     final String[] names = umaterial.names;
                     for(String umaterialName : names) {
-                        if(name.equals(umaterialName)) {
+                        if (name.equals(umaterialName)) {
                             CACHED_UMATERIALS.put(umaterialName, umaterial);
                             return umaterial;
                         }
@@ -1886,7 +1886,7 @@ class UPotion implements Versionable {
                 ? PotionType.WATER : PotionType.valueOf(type);
         this.type = potionType;
         final String potionBaseName = base.name();
-        if(EIGHT) {
+        if (EIGHT) {
             potion = potionType.equals(PotionType.WATER) ? new Potion(potionType).toItemStack(1) : new Potion(potionType, upgraded ? 2 : 1, potionBaseName.equals("SPLASH")).toItemStack(1);
             potiondata = potion.getItemMeta();
         } else {
@@ -1894,12 +1894,12 @@ class UPotion implements Versionable {
             final boolean isNotArrow = !is.getType().equals(Material.ARROW);
             PotionMeta pm = null;
             org.bukkit.potion.PotionData pd = null;
-            if(isNotArrow) {
+            if (isNotArrow) {
                 pm = (PotionMeta) is.getItemMeta();
                 pd = new org.bukkit.potion.PotionData(potionType, potionType.isExtendable() && extended, potionType.isUpgradeable() && upgraded);
             }
             potiondata = pd;
-            if(isNotArrow) {
+            if (isNotArrow) {
                 pm.setBasePotionData(pd);
                 is.setItemMeta(pm);
             }

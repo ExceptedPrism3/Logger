@@ -1,5 +1,6 @@
 package me.prism3.logger.events;
 
+import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
 import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
@@ -29,12 +30,12 @@ public class OnPlayerJoin implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(final PlayerJoinEvent event) {
 
-/*        if (Data.isRegistration && !SQLiteDataRegistration.playerExists(event.getPlayer())) {
+        if (Data.isRegistration && !SQLiteDataRegistration.playerExists(event.getPlayer())) {
 
             SQLiteDataRegistration.insertRegistration(event.getPlayer());
             new OnPlayerRegister();
 
-        }*/
+        }
 
         final Player player = event.getPlayer();
 

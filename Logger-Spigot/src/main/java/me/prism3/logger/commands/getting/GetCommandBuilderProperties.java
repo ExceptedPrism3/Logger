@@ -1,13 +1,13 @@
 package me.prism3.logger.commands.getting;
 
-public class Zabor2 {
+public class GetCommandBuilderProperties {
 
     private String condition = "";
     private String tableName;
 
-    public Zabor2(String tableName) { this.tableName = tableName; }
+    public GetCommandBuilderProperties(String tableName) { this.tableName = tableName; }
 
-    public Zabor2(String tableName, String condition) {
+    public GetCommandBuilderProperties(String tableName, String condition) {
         this.tableName = tableName;
         this.condition = condition;
     }

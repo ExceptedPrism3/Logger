@@ -21,7 +21,7 @@ public class Queue {
     public void addItemToQueue(Object item) {
         queuedItems.add(item);
         System.out.println("added " + queuedItems.size());
-        if(queuedItems.size() >= batchSize) {
+        if (queuedItems.size() >= batchSize) {
             Deque<Object> copiedItems = queuedItems;
             queuedItems = new ArrayDeque<>(50);
             QueueThread b = new QueueThread(copiedItems);
