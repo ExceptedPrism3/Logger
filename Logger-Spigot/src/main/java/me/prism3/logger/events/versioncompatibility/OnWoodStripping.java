@@ -1,4 +1,4 @@
-package me.prism3.logger.events.onversioncompatibility;
+package me.prism3.logger.events.versioncompatibility;
 
 import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.logger.Main;

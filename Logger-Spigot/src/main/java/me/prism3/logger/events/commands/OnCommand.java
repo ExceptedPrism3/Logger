@@ -1,4 +1,4 @@
-package me.prism3.logger.events.oncommands;
+package me.prism3.logger.events.commands;
 
 import me.prism3.logger.Main;
 import me.prism3.logger.events.spy.OnCommandSpy;

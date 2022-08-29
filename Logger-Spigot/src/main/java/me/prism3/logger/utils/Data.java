@@ -6,11 +6,11 @@ import me.prism3.logger.api.*;
 import me.prism3.logger.commands.subcommands.PlayerInventory;
 import me.prism3.logger.events.*;
 import me.prism3.logger.events.misc.*;
-import me.prism3.logger.events.oncommands.OnCommand;
-import me.prism3.logger.events.oninventories.OnChestInteraction;
-import me.prism3.logger.events.oninventories.OnCraft;
-import me.prism3.logger.events.oninventories.OnFurnace;
-import me.prism3.logger.events.onversioncompatibility.OnWoodStripping;
+import me.prism3.logger.events.commands.OnCommand;
+import me.prism3.logger.events.inventories.OnChestInteraction;
+import me.prism3.logger.events.inventories.OnCraft;
+import me.prism3.logger.events.inventories.OnFurnace;
+import me.prism3.logger.events.versioncompatibility.OnWoodStripping;
 import me.prism3.logger.events.plugindependent.*;
 import me.prism3.logger.serverside.*;
 import me.prism3.logger.utils.enums.NmsVersions;
@@ -53,6 +53,8 @@ public class Data {
     public static int ramPercent;
     public static int tpsMedium;
     public static int tpsCritical;
+    public static int playerCountNumber;
+    public static int playerCountChecker;
 
     public static int sqliteDataDel;
     public static int allowedBackups;
@@ -151,6 +153,8 @@ public class Data {
         tpsCritical = this.main.getConfig().getInt("TPS.Value-Critical");
         sqliteDataDel = this.main.getConfig().getInt("SQLite.Data-Deletion");
         allowedBackups = this.main.getConfig().getInt("Player-Death-Backup.Max-Backup");
+        playerCountNumber = this.main.getConfig().getInt("Player-Count.Number");
+        playerCountChecker = this.main.getConfig().getInt("Player-Count.Checker");
 
     }
 
@@ -304,6 +308,9 @@ public class Data {
 
         if (this.main.getConfig().getBoolean("Log-Server.Command-Block"))
             this.main.getServer().getPluginManager().registerEvents(new OnCommandBlock(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Server.Player-Count"))
+            this.main.getServer().getScheduler().scheduleSyncRepeatingTask(this.main, new PlayerCount(), 300L, playerCountChecker);
 
         // Version Exceptions
         if (this.main.getVersion().isAtLeast(NmsVersions.v1_13_R1) && this.main.getConfig().getBoolean("Log-Version-Exceptions.Wood-Stripping"))

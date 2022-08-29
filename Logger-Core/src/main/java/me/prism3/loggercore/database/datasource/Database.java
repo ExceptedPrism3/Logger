@@ -37,6 +37,8 @@ public final class Database implements DataSourceInterface {
 
         final PlayerChat p = new PlayerChat();
 
+        System.out.println("1");
+
         p.setDate(Instant.now());
         p.setServerName(serverName);
         p.setMessage(msg);
