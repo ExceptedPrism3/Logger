@@ -40,16 +40,17 @@ public class Discord {
 
                 this.jda = JDABuilder.createDefault(botToken).build().awaitReady();
 
-                if (this.main.getDiscordFile().getBoolean("ActivityCycling.Enabled")) new DiscordStatus();
+                if (this.main.getDiscordFile().getBoolean("ActivityCycling.Enabled")) new DiscordStatus(this.jda);
 
             } catch (final Exception e) {
 
-                Main.getInstance().getLogger().severe("An error has occurred whilst connecting to the Bot." +
+                this.main.getLogger().severe("An error has occurred whilst connecting to the Bot." +
                         " Is the Bot Key Valid?");
                 return;
 
             }
 
+            // Player Side Part
             final String staffChannelID = this.main.getDiscordFile().getString("Discord.Staff.Channel-ID");
 
             final String playerChatChannelID = this.main.getDiscordFile().getString("Discord.Player-Chat.Channel-ID");
@@ -240,16 +241,15 @@ public class Discord {
                 this.jda.shutdown();
                 this.jda = null;
                 if (this.main.getDiscordFile().getBoolean("ActivityCycling.Enabled")) DiscordStatus.getThreadPool().shutdown();
-                Main.getInstance().getLogger().info("Discord Bot Bridge has been closed!");
+                this.main.getLogger().info("Discord Bot Bridge has been closed!");
 
-            } catch (Exception e) {
+            } catch (final Exception e) {
 
-                Main.getInstance().getLogger().severe("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
+                this.main.getLogger().severe("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
                         " If this Issue Persists, Contact the Authors!");
                 e.printStackTrace();
 
             }
         }
     }
-    public JDA getJda() { return this.jda; }
 }
