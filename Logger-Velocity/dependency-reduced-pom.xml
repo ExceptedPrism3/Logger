@@ -81,7 +81,19 @@
           <relocations>
             <relocation>
               <pattern>org.bstats</pattern>
-              <shadedPattern>me.prism3</shadedPattern>
+              <shadedPattern>me.prism3.org.bstats</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>com.zaxxer</pattern>
+              <shadedPattern>me.prism3.com.zaxxer</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>org.mariadb</pattern>
+              <shadedPattern>me.prism3.org.mariadb</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>com.mysql</pattern>
+              <shadedPattern>me.prism3.com.mysql</shadedPattern>
             </relocation>
           </relocations>
         </configuration>

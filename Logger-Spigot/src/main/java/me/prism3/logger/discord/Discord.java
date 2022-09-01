@@ -67,7 +67,7 @@ public class Discord {
 
                 this.jda = JDABuilder.createDefault(botToken).build().awaitReady();
 
-                if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Enabled")) new DiscordStatus();
+                if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Enabled")) new DiscordStatus(this.jda);
 
             } catch (Exception e) {
 

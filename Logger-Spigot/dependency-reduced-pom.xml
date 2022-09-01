@@ -54,6 +54,26 @@
               <pattern>de.jeff_media.updatechecker</pattern>
               <shadedPattern>me.prism3.updatechecker</shadedPattern>
             </relocation>
+            <relocation>
+              <pattern>com.zaxxer</pattern>
+              <shadedPattern>me.prism3.com.zaxxer</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>org.slf4j</pattern>
+              <shadedPattern>me.prism3.org.slf4j</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>org.mariadb</pattern>
+              <shadedPattern>me.prism3.org.mariadb</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>com.mysql</pattern>
+              <shadedPattern>me.prism3.com.mysql</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>io.github.cdimascio</pattern>
+              <shadedPattern>me.prism3.io.github.cdimascio</shadedPattern>
+            </relocation>
           </relocations>
         </configuration>
       </plugin>
@@ -140,7 +160,7 @@
     <dependency>
       <groupId>org.geysermc</groupId>
       <artifactId>connector</artifactId>
-      <version>1.2.1-SNAPSHOT</version>
+      <version>1.4.3-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
