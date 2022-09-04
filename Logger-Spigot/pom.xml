@@ -215,11 +215,6 @@
             <version>2.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.viaversion</groupId>
-            <artifactId>viaversion-api</artifactId>
-            <version>LATEST</version>
-        </dependency>
         <!-- DataBases -->
         <dependency>
             <groupId>mysql</groupId>

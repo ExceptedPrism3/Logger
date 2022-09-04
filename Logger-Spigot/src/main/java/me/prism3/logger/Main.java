@@ -274,11 +274,6 @@ public class Main extends JavaPlugin {
             this.getLogger().info("Geyser & FloodGate Plugins Detected!");
             this.getLogger().warning("Geyser & FloodGate are not fully supported! If any errors occurs, contact the authors.");
         }
-
-        if (ViaVersionUtil.getViaVersionAPI() != null) {
-
-            this.getLogger().info("ViaVersion Plugin Detected!");
-        }
     }
 
     private boolean langChecker() {
