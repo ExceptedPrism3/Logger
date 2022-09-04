@@ -59,6 +59,7 @@ Log-Server:
   Portal-Creation: true
   RCON: true
   Command-Block: true
+  Player-Count: true
 Log-Extras:
   Essentials-AFK: true
   AuthMe-Wrong-Password: true
@@ -102,6 +103,9 @@ RAM:
 TPS:
   Value-Medium: 16
   Value-Critical: 7
+Player-Count:
+  Number: 50
+  Checker: 6000
 Spy-Features:
   Commands-Spy:
     Enable: false

@@ -36,9 +36,9 @@ public class Discord {
             try {
 
                 this.jda = JDABuilder.createDefault(botToken).build().awaitReady();
-                if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Enabled")) new DiscordStatus();
+                if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Enabled")) new DiscordStatus(this.jda);
 
-            } catch (Exception e) {
+            } catch (final Exception e) {
 
                 this.main.getLogger().error("An error has occurred whilst connecting to the Bot." +
                         " Is the Bot Key Valid?");
@@ -98,7 +98,7 @@ public class Discord {
                 if (this.isValid(liteBansChannelID, "Log-Extra.LiteBans"))
                     this.liteBansChannel = this.jda.getTextChannelById(liteBansChannelID);
 
-            } catch (Exception e) {
+            } catch (final Exception e) {
 
                 this.main.getLogger().error("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
 
@@ -115,28 +115,22 @@ public class Discord {
     }
 
     public void staffChat(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.staffChannel);
-
     }
 
     public void playerChat(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerChatChannel);
     }
 
     public void playerCommands(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerCommandsChannel);
     }
 
     public void playerLogin(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerLoginChannel);
     }
 
     public void playerLeave(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerLeaveChannel);
     }
 
@@ -218,7 +212,7 @@ public class Discord {
                 if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Enabled")) DiscordStatus.getThreadPool().shutdown();
                 this.main.getLogger().info("Discord Bot Bridge has been closed!");
 
-            } catch (Exception e) {
+            } catch (final Exception e) {
 
                 this.main.getLogger().error("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
                         " If this Issue Persists, Contact the Authors!");
@@ -227,5 +221,4 @@ public class Discord {
             }
         }
     }
-    public JDA getJda() { return this.jda; }
 }

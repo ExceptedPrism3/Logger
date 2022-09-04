@@ -1,4 +1,4 @@
-package me.prism3.logger.events.oninventories;
+package me.prism3.logger.events.inventories;
 
 import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.logger.Main;

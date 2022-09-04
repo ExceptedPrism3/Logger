@@ -13,14 +13,16 @@ import java.util.concurrent.TimeUnit;
 public class DiscordStatus {
 
     private final Main main = Main.getInstance();
-    private final JDA jda = new Discord().getJda();
+    private final JDA jda;
 
     private int currentIndex = 0;
     private final List<List<String>> activities = (List<List<String>>) this.main.getDiscordFile().get().get("ActivityCycling.Activities");
 
     private static final ScheduledExecutorService threadPool = Executors.newSingleThreadScheduledExecutor();
 
-    public DiscordStatus() {
+    public DiscordStatus(JDA jda) {
+
+        this.jda = jda;
 
         try {
 
@@ -28,9 +30,9 @@ public class DiscordStatus {
             this.activities.forEach((list -> Activity.ActivityType.valueOf(list.
                     get(0).replace("playing", "streaming").toUpperCase())));
 
-        } catch (Exception exception) {
+        } catch (final Exception exception) {
 
-            Main.getInstance().getLogger().error("Discord Status Activity is invalid. It has been disabled.");
+            this.main.getLogger().error("Discord Status Activity is invalid. It has been disabled.");
             return;
 
         }

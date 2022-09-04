@@ -72,9 +72,9 @@ public class Discord {
 
                 this.jda = JDABuilder.createDefault(botToken).build().awaitReady();
 
-                if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Enabled")) new DiscordStatus();
+                if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Enabled")) new DiscordStatus(this.jda);
 
-            } catch (Exception e) {
+            } catch (final Exception e) {
 
                 this.main.getLogger().severe("An error has occurred whilst connecting to the Bot." +
                         " Is the Bot Key Valid?");
@@ -596,7 +596,7 @@ public class Discord {
                 if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Enabled")) DiscordStatus.getThreadPool().shutdown();
                 this.main.getLogger().info("Discord Bot Bridge has been closed!");
 
-            } catch (Exception e) {
+            } catch (final Exception e) {
 
                 this.main.getLogger().severe("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
                         " If this Issue Persists, Contact the Authors!");
@@ -605,6 +605,4 @@ public class Discord {
             }
         }
     }
-
-    public JDA getJda() { return this.jda; }
 }

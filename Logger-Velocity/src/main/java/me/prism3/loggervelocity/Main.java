@@ -46,11 +46,9 @@ public class Main{
 
     @Inject
     public Main(ProxyServer server, Logger logger, Metrics.Factory metricsFactory) {
-
         Main.server = server;
         this.logger = logger;
         this.metricsFactory = metricsFactory;
-
     }
 
     @Subscribe
