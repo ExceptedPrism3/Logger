@@ -31,7 +31,7 @@ public class Queue {
     }
 
     public boolean flushCurrentQueue() {
-
+        //TODO scheduler for queue
         long startTime = System.nanoTime();
         final Session session;
         Transaction tx = null;

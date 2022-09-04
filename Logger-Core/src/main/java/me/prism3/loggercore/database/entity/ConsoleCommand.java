@@ -7,7 +7,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "console_commands")
-public class ConsoleCommand {
+public class ConsoleCommand implements ActionInterface {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +42,11 @@ public class ConsoleCommand {
 
     public void setServerName(String serverName) {
         this.serverName = serverName;
+    }
+
+    @Override
+    public String getAction() {
+        return "Console ran "+this.command;
     }
 
     public Instant getDate() {

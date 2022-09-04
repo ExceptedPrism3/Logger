@@ -6,6 +6,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "player_commands")
+@NamedQueries({
+        @NamedQuery(name = "playercommand.findAllByName", query = "select e from PlayerCommand e where e.entityPlayer.playerName = :playerName")
+})
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class PlayerCommand extends AbstractAction {

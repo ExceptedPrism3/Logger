@@ -2,13 +2,13 @@ package me.prism3.loggercore.database.entity;
 
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "player_chat")
+@NamedQueries({
+        @NamedQuery(name = "playerchat.findAllByName", query = "select e from PlayerChat e where e.entityPlayer.playerName = :playerName")
+})
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class PlayerChat extends AbstractAction {

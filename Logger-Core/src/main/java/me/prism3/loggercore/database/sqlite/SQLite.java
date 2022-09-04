@@ -35,7 +35,7 @@ public final class SQLite implements DataSourceInterface {
 
     private final File databaseFile;
     private final Options options;
-    private final Logger logger = Logger.getLogger(AbstractDataSource.class.getName());
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     public SQLite(Options options, File databaseFile) throws SQLException {
 
@@ -1185,17 +1185,9 @@ public final class SQLite implements DataSourceInterface {
 
     }
 
-    @Override
-    public void insertArmorStandPlace(String serverName, String playerName, String playerUUID,
-                                      Coordinates coords, boolean isStaff) {
 
-    }
 
-    @Override
-    public void insertArmorStandBreak(String serverName, String playerName, String playerUUID,
-                                      Coordinates coords, boolean isStaff) {
 
-    }
 
     @Override
     public void disconnect() {
@@ -1207,12 +1199,8 @@ public final class SQLite implements DataSourceInterface {
                                                       int limit) { return Collections.emptyList(); }
 
     @Override
-    public Long getPlayerChatCount(String playerName) { return 0L; }
+    public Long countByTable(String action) { return 0L; }
 
-    @Override
-    public List<?> getSaladeMarocaine(String playerName, int offset, int limit) {
-        return Collections.emptyList();
-    }
 
     public void insertLevelChange(String serverName, String playerName, boolean isStaff) {
 

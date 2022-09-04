@@ -6,7 +6,7 @@ import me.prism3.loggercore.database.entity.PlayerChat;
 import java.net.InetSocketAddress;
 import java.util.List;
 
-public interface DataSourceInterface {
+public interface DataSourceInterface extends DataInterface {
 
     void insertPlayerChat(String serverName, String playerName, String playerUUID, String worldName,
                           String msg, boolean isStaff);
@@ -142,18 +142,10 @@ public interface DataSourceInterface {
                                String message,
                                String leader, List<String> partyMembers, boolean isStaff);
 
-    void insertArmorStandPlace(String serverName, String playerName, String playerUUID,
-                               Coordinates coords, boolean isStaff);
-
-    void insertArmorStandBreak(String serverName, String playerName, String playerUUID,
-                               Coordinates coords, boolean isStaff);
-
     void disconnect();
 
     List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset, int limit);
 
-    Long getPlayerChatCount(String playerName);
-
-    List<?> getSaladeMarocaine(String playerName, int offset, int limit);
+    Long countByTable(String action);
 
 }
