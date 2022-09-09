@@ -4,7 +4,12 @@ import me.prism3.loggercore.database.AbstractDataSource;
 import me.prism3.loggercore.database.DataSourceInterface;
 import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.loggercore.database.data.Options;
+import me.prism3.loggercore.database.entity.BlockInteraction;
 import me.prism3.loggercore.database.entity.PlayerChat;
+import me.prism3.loggercore.database.entity.enums.BucketActionType;
+import me.prism3.loggercore.database.entity.enums.InteractionType;
+import me.prism3.loggercore.database.entity.enums.ItemActionType;
+import me.prism3.loggercore.database.entity.enums.PlayerConnectionType;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,31 +27,29 @@ public final class SQLite implements DataSourceInterface {
 
     private static final List<String> tablesNames = Stream
             .of("player_chat", "player_commands", "player_sign_text",
-                    "player_death", "player_teleport", "player_join", "player_leave", "block_place",
-                    "block_break",
-                    "player_kick", "player_level", "Bucket_fill", "bucket_empty", "anvil",
-                    "item_drop", "enchanting",
+                    "player_death", "player_teleport", "player_connection", "block_interaction",
+                    "player_kick", "player_level", "bucket_action", "anvil",
+                    "item_action", "enchanting",
                     "book_editing", "item_pickup", "furnace", "game_mode", "crafting",
                     "registration", "server_start",
                     "server_stop", "console_commands", "ram", "tps", "portal_creation", "rcon",
                     "primed_tnt", "command_block",
-                    "chest_interaction", "entity_death", "logger_playertime")
+                    "chest_interaction", "entity_death")
             .collect(Collectors.toCollection(ArrayList::new));
-
+    private Connection connection;
     private final File databaseFile;
-    private final Options options;
+
     private final Logger logger = Logger.getLogger(this.getClass().getName());
-
-    public SQLite(Options options, File databaseFile) throws SQLException {
-
+    private final Options options;
+    public SQLite(Options options, File dataFolder) throws SQLException {
         this.options = options;
-        this.databaseFile = databaseFile;
+        this.databaseFile = new File(dataFolder, "data.db");
         try {
             Class.forName("org.sqlite.JDBC");
         }
         catch (ClassNotFoundException e) { throw new RuntimeException(e); }
 
-        this.createDatabaseFile();
+
         this.createTable();
 
     }
@@ -55,13 +58,6 @@ public final class SQLite implements DataSourceInterface {
         return DriverManager.getConnection("jdbc:sqlite:" + this.databaseFile.getAbsolutePath());
     }
 
-    private void createDatabaseFile() {
-        try {
-            if (!this.databaseFile.exists()) { this.databaseFile.createNewFile(); }
-
-        }
-        catch (IOException e) { throw new RuntimeException(e); }
-    }
 
     private String getJdbcUrl() {
         return ("jdbc:sqlite:" + this.databaseFile.getAbsolutePath());
@@ -100,25 +96,18 @@ public final class SQLite implements DataSourceInterface {
                     "player_name TEXT, from_x INT, from_y INT, from_z INT, to_x INT," +
                     " to_y INT, to_z INT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_join"
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_connection"
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
-                    "player_name TEXT, x INT, y INT, z INT, ip INT, is_staff BOOLEAN)");
+            "player_name TEXT, x INT, y INT, z INT, ip INT, is_staff BOOLEAN, player_connection_type VARCHAR(20) NOT NULL)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_leave"
-                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
-                    "player_name TEXT, x INT, y INT, z INT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS block_place"
-                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
-                    "player_name TEXT, block VARCHAR(40), x INT, y INT, z INT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS block_break "
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS block_interaction"
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
-                    "player_name TEXT, block VARCHAR(40), x INT, y INT, z INT, is_staff BOOLEAN)");
+                    "player_name TEXT, block VARCHAR(40), x INT, y INT, z INT, is_staff BOOLEAN, interaction_type VARCHAR(30) NOT NULL)");
+
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_kick "
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
@@ -130,26 +119,21 @@ public final class SQLite implements DataSourceInterface {
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP," +
                     "player_name TEXT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS bucket_fill"
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS bucket_action"
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
-                    "player_name TEXT, bucket VARCHAR(40), x INT, y INT, z INT, is_staff BOOLEAN)");
-
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS bucket_empty"
-                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
-                    "player_name TEXT, bucket VARCHAR(40), x INT, y INT, z INT, is_staff BOOLEAN)");
+                    "player_name TEXT, bucket VARCHAR(40), x INT, y INT, z INT, is_staff BOOLEAN, bucket_action VARCHAR(40) NOT NULL)");
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS anvil"
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, player_name TEXT," +
                     " new_name TEXT, is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS item_drop"
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS item_action"
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, player_name TEXT," +
                     " item TEXT, amount INT, x INT, y INT, z INT, enchantment TEXT," +
-                    " changed_name TEXT, is_staff BOOLEAN)");
+                    " changed_name TEXT, is_staff BOOLEAN, item_action_type VARCHAR(40) NOT NULL)");
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS enchanting"
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
@@ -162,10 +146,6 @@ public final class SQLite implements DataSourceInterface {
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, player_name TEXT," +
                     " page_count INT, page_content VARCHAR(250), signed_by VARCHAR(25), is_staff BOOLEAN)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS item_pickup"
-                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, player_name TEXT," +
-                    " item VARCHAR(250), amount INT, x INT, y INT, z INT,  changed_name VARCHAR(250), is_staff BOOLEAN)");
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS furnace"
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
@@ -429,7 +409,7 @@ public final class SQLite implements DataSourceInterface {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement playerJoin = connection.prepareStatement(
-                     "INSERT INTO player_join" +
+                     "INSERT INTO player_connection" +
                              " (server_name, world, player_name, x, y, z, ip, is_staff) VALUES(?,?,?,?,?,?,INET_ATON(?),?)")) {
 
             playerJoin.setString(1, serverName);
@@ -455,8 +435,8 @@ public final class SQLite implements DataSourceInterface {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement playerLeave = connection.prepareStatement(
-                     "INSERT INTO player_leave" +
-                             " (server_name, world, player_name, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?)")) {
+                     "INSERT INTO player_connection" +
+                             " (server_name, world, player_name, x, y, z, is_staff, player_connection_type) VALUES(?,?,?,?,?,?,?,?)")) {
 
             playerLeave.setString(1, serverName);
             playerLeave.setString(2, coords.getWorldName());
@@ -465,6 +445,7 @@ public final class SQLite implements DataSourceInterface {
             playerLeave.setInt(5, coords.getY());
             playerLeave.setInt(6, coords.getZ());
             playerLeave.setBoolean(7, isStaff);
+            playerLeave.setString(8, PlayerConnectionType.PLAYER_LEAVE.name());
 
             playerLeave.executeUpdate();
 
@@ -478,8 +459,8 @@ public final class SQLite implements DataSourceInterface {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement blockPlace = connection.prepareStatement(
-                     "INSERT INTO block_place" +
-                             " (server_name, world, player_name, block, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
+                     "INSERT INTO block_interaction" +
+                             " (server_name, world, player_name, block, x, y, z, is_staff, interaction_type) VALUES(?,?,?,?,?,?,?,?,?)")) {
 
             blockPlace.setString(1, serverName);
             blockPlace.setString(2, coords.getWorldName());
@@ -489,6 +470,7 @@ public final class SQLite implements DataSourceInterface {
             blockPlace.setInt(6, coords.getY());
             blockPlace.setInt(7, coords.getZ());
             blockPlace.setBoolean(8, isStaff);
+            blockPlace.setString(9, InteractionType.BLOCK_PLACE.name());
 
             blockPlace.executeUpdate();
 
@@ -502,8 +484,8 @@ public final class SQLite implements DataSourceInterface {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement blockBreak = connection.prepareStatement(
-                     "INSERT INTO block_break" +
-                             " (server_name, world, player_name, block, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
+                     "INSERT INTO block_interaction" +
+                             " (server_name, world, player_name, block, x, y, z, is_staff, interaction_type) VALUES(?,?,?,?,?,?,?,?,?)")) {
 
             blockBreak.setString(1, serverName);
             blockBreak.setString(2, coords.getWorldName());
@@ -513,6 +495,7 @@ public final class SQLite implements DataSourceInterface {
             blockBreak.setInt(6, coords.getY());
             blockBreak.setInt(7, coords.getZ());
             blockBreak.setBoolean(8, isStaff);
+            blockBreak.setString(9, InteractionType.BLOCK_BREAK.name());
 
             blockBreak.executeUpdate();
 
@@ -608,8 +591,8 @@ public final class SQLite implements DataSourceInterface {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement bucketPlace = connection.prepareStatement(
-                     "INSERT INTO bucket_fill" +
-                             " (server_name, world, player_name, bucket, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
+                     "INSERT INTO bucket_action" +
+                             " (server_name, world, player_name, bucket, x, y, z, is_staff, bucket_action) VALUES(?,?,?,?,?,?,?,?,?)")) {
 
             bucketPlace.setString(1, serverName);
             bucketPlace.setString(2, coords.getWorldName());
@@ -619,6 +602,8 @@ public final class SQLite implements DataSourceInterface {
             bucketPlace.setInt(6, coords.getY());
             bucketPlace.setInt(7, coords.getZ());
             bucketPlace.setBoolean(8, isStaff);
+            bucketPlace.setString(9, BucketActionType.BUCKET_FILL.name());
+
 
             bucketPlace.executeUpdate();
 
@@ -632,8 +617,8 @@ public final class SQLite implements DataSourceInterface {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement bucketPlace = connection.prepareStatement(
-                     "INSERT INTO bucket_empty" +
-                             " (server_name, world, player_name, bucket, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)")) {
+                     "INSERT INTO bucket_action" +
+                             " (server_name, world, player_name, bucket, x, y, z, is_staff, bucket_action) VALUES(?,?,?,?,?,?,?,?,?)")) {
 
 
             bucketPlace.setString(1, serverName);
@@ -644,6 +629,7 @@ public final class SQLite implements DataSourceInterface {
             bucketPlace.setInt(6, coords.getY());
             bucketPlace.setInt(7, coords.getZ());
             bucketPlace.setBoolean(8, isStaff);
+            bucketPlace.setString(9, BucketActionType.BUCKET_EMPTY.name());
 
             bucketPlace.executeUpdate();
 
@@ -694,9 +680,9 @@ public final class SQLite implements DataSourceInterface {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement itemDrop = connection.prepareStatement(
-                     "INSERT INTO item_drop" +
-                             " (server_name, world, player_name, item, amount, x, y, z, enchantment, changed_name, is_staff)" +
-                             " VALUES(?,?,?,?,?,?,?,?,?,?,?)")) {
+                     "INSERT INTO item_action" +
+                             " (server_name, world, player_name, item, amount, x, y, z, enchantment, changed_name, is_staff, item_action)" +
+                             " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)")) {
 
             itemDrop.setString(1, serverName);
             itemDrop.setString(2, coords.getWorldName());
@@ -709,6 +695,7 @@ public final class SQLite implements DataSourceInterface {
             itemDrop.setString(9, enchantment.toString());
             itemDrop.setString(10, changedName);
             itemDrop.setBoolean(11, isStaff);
+            itemDrop.setString(12, ItemActionType.ITEM_DROP.name());
 
             itemDrop.executeUpdate();
 
@@ -818,8 +805,8 @@ public final class SQLite implements DataSourceInterface {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement itemPickup = connection.prepareStatement(
-                     "INSERT INTO item_pickup" +
-                             " (server_name, world, player_name, item, amount, x, y, z, changed_name, is_staff) VALUES(?,?,?,?,?,?,?,?,?,?)")) {
+                     "INSERT INTO item_action" +
+                             " (server_name, world, player_name, item, amount, x, y, z, changed_name, is_staff, item_action) VALUES(?,?,?,?,?,?,?,?,?,?,?)")) {
 
             itemPickup.setString(1, serverName);
             itemPickup.setString(2, coords.getWorldName());
@@ -831,6 +818,7 @@ public final class SQLite implements DataSourceInterface {
             itemPickup.setInt(8, coords.getZ());
             itemPickup.setString(9, changedName);
             itemPickup.setBoolean(10, isStaff);
+            itemPickup.setString(11, ItemActionType.ITEM_PICKUP.name());
 
             itemPickup.executeUpdate();
 

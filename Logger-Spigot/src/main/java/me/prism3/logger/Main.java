@@ -13,6 +13,7 @@ import me.prism3.logger.serverside.Start;
 import me.prism3.logger.serverside.Stop;
 import me.prism3.logger.utils.*;
 import me.prism3.logger.utils.enums.NmsVersions;
+import me.prism3.loggercore.database.sqlite.SQLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -131,7 +132,7 @@ public class Main extends JavaPlugin {
 
         try {
             this.database = new Database(databaseCredentials, Data.options);
-            this.sqLite = null;
+            this.sqLite = new SQLite(Data.options, this.getDataFolder());
 
             if (isRegistration) {
 
