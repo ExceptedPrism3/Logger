@@ -1,11 +1,12 @@
 package me.prism3.logger.events.versioncompatibility;
 
-import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import me.prism3.logger.utils.enums.NmsVersions;
+import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -95,29 +96,25 @@ public class OnWoodStripping implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    try {
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                         out.write(this.main.getMessages().get().getString("Files.Version-Exceptions.Wood-Stripping-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%player%", playerName) + "\n");
-                        out.close();
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
                 } else {
 
-                    try {
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getWoodStrippingFile(), true))) {
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getWoodStrippingFile(), true));
                         out.write(this.main.getMessages().get().getString("Files.Version-Exceptions.Wood-Stripping").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%player%", playerName) + "\n");
-                        out.close();
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
@@ -150,7 +147,7 @@ public class OnWoodStripping implements Listener {
 
                     Main.getInstance().getDatabase().insertWoodStripping(Data.serverName, playerName, playerUUID.toString(), logName, coordinates, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -160,7 +157,7 @@ public class OnWoodStripping implements Listener {
 
                     Main.getInstance().getSqLite().insertWoodStripping(Data.serverName, playerName, playerUUID.toString(), logName, coordinates, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
         }
     }

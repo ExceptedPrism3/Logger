@@ -1,10 +1,11 @@
 package me.prism3.logger.events.plugindependent;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.api.VaultUtil;
+import me.prism3.logger.hooks.VaultUtil;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -55,29 +56,25 @@ public class OnVault implements Listener, Runnable {
 
                         if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                            try {
+                            try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
 
-                                final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                                 out.write(this.main.getMessages().get().getString("Files.Extras.Vault-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)) + "\n");
-                                out.close();
 
-                            } catch (IOException e) {
+                            } catch (final IOException e) {
 
-                                this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                                Log.warning("An error occurred while logging into the appropriate file.");
                                 e.printStackTrace();
 
                             }
                         } else {
 
-                            try {
+                            try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getVaultFile(), true))) {
 
-                                final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getVaultFile(), true));
                                 out.write(this.main.getMessages().get().getString("Files.Extras.Vault").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)) + "\n");
-                                out.close();
 
-                            } catch (IOException e) {
+                            } catch (final IOException e) {
 
-                                this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                                Log.warning("An error occurred while logging into the appropriate file.");
                                 e.printStackTrace();
 
                             }
@@ -111,7 +108,7 @@ public class OnVault implements Listener, Runnable {
 
                             Main.getInstance().getDatabase().insertVault(Data.serverName, playerName, playerUUID.toString(), oldBalance, newBalance, player.hasPermission(loggerStaffLog));
 
-                        } catch (Exception e) { e.printStackTrace(); }
+                        } catch (final Exception e) { e.printStackTrace(); }
                     }
 
                     // External
@@ -121,7 +118,7 @@ public class OnVault implements Listener, Runnable {
 
                             Main.getInstance().getSqLite().insertVault(Data.serverName, playerName, playerUUID.toString(), oldBalance, newBalance, player.hasPermission(loggerStaffLog));
 
-                        } catch (Exception e) { e.printStackTrace(); }
+                        } catch (final Exception e) { e.printStackTrace(); }
                     }
                 }
             }
@@ -130,15 +127,11 @@ public class OnVault implements Listener, Runnable {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onJoin(final PlayerJoinEvent event) {
-
         this.players.put(event.getPlayer().getUniqueId(), this.econ.getBalance(event.getPlayer()));
-
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onLeave(final PlayerQuitEvent event) {
-
         this.players.remove(event.getPlayer().getUniqueId());
-
     }
 }

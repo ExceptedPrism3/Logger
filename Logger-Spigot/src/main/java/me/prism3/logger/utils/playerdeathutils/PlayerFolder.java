@@ -41,7 +41,7 @@ public class PlayerFolder {
 
             this.fileInput(this.playerFile, player);
 
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (final Exception e) { e.printStackTrace(); }
     }
 
     // Grabs the file from the above method and writes into it
@@ -75,7 +75,7 @@ public class PlayerFolder {
             try (Stream<Path> files = Files.list(Paths.get(String.valueOf(backupFolder)))) {
                 long count = files.count();
                 backupCount = (int) count;
-            } catch (Exception ignored) {}
+            } catch (final Exception ignored) {}
         }
         return backupCount;
     }
@@ -85,17 +85,16 @@ public class PlayerFolder {
 
         if (backupCount(player) == 0) return new String[0];
 
-        File dir = new File(FileHandler.getPlayerDeathBackupLogFolder(), player.getName());
+        final File dir = new File(FileHandler.getPlayerDeathBackupLogFolder(), player.getName());
 
-        Collection<String> files = new ArrayList<>();
+        final Collection<String> files = new ArrayList<>();
 
-        File[] listFiles = dir.listFiles();
+        final File[] listFiles = dir.listFiles();
 
         assert listFiles != null;
 
-        for (File file : listFiles) {
+        for (File file : listFiles)
             files.add(file.getName().replace("\\.\\w+", ""));
-        }
 
         return files.toArray(new String[0]);
     }

@@ -8,7 +8,7 @@ import net.kyori.adventure.text.Component;
 
 import static me.prism3.loggervelocity.utils.Data.*;
 
-public class DiscordCMD implements SimpleCommand{
+public class Discord implements SimpleCommand{
 
     private final Main main = Main.getInstance();
 

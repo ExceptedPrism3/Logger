@@ -21,7 +21,7 @@ public class DiscordFile {
 
             this.discord = ConfigurationProvider.getProvider(YamlConfiguration.class).load(this.getFile());
 
-        } catch (IOException e) { e.printStackTrace(); }
+        } catch (final IOException e) { e.printStackTrace(); }
     }
 
     public boolean getBoolean(String key) {
@@ -62,7 +62,7 @@ public class DiscordFile {
                     os.close();
 
                 }
-            } catch (IOException e) { e.printStackTrace(); }
+            } catch (final IOException e) { e.printStackTrace(); }
         }
     }
 }

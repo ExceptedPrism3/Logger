@@ -1,4 +1,4 @@
-package me.prism3.logger.api;
+package me.prism3.logger.hooks;
 
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;

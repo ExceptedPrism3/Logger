@@ -1,6 +1,9 @@
 package me.prism3.logger.events.misc;
 
-import org.bukkit.entity.*;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EnderCrystal;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -13,7 +16,7 @@ import static me.prism3.logger.utils.Data.loggerExempt;
 public class OnArmorStandEndCrystalBreak implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+    public void onEntityDamageByEntity(final EntityDamageByEntityEvent event) {
 
         final Entity damager = event.getDamager();
 

@@ -5,6 +5,7 @@ import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import me.prism3.loggerbungeecord.Main;
 import me.prism3.loggerbungeecord.utils.Data;
 import me.prism3.loggerbungeecord.utils.FileHandler;
+import me.prism3.loggerbungeecord.utils.Log;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -44,29 +45,25 @@ public class OnPartyMessage implements Listener {
 
                 if (Data.isStaffEnabled && sender.hasPermission(Data.loggerStaffLog)) {
 
-                    try {
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true))) {
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
                         out.write(this.main.getMessages().getString("Files.Extras.PAF-Party-Message-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", serverName).replace("%player%", sender.getName()).replace("%msg%", message).replace("%leader%", partyLeader).replace("%uuid%", senderUUID.toString()).replaceAll("%members%", String.valueOf(partyMembers)) + "\n");
-                        out.close();
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                        Log.severe("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
                 } else {
 
-                    try {
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPafPartyMessageLogFile(), true))) {
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPafPartyMessageLogFile(), true));
                         out.write(this.main.getMessages().getString("Files.Extras.PAF-Party-Message").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", serverName).replace("%player%", sender.getName()).replace("%msg%", message).replace("%leader%", partyLeader).replace("%uuid%", senderUUID.toString()).replaceAll("%members%", String.valueOf(partyMembers)) + "\n");
-                        out.close();
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                        Log.severe("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
@@ -99,7 +96,7 @@ public class OnPartyMessage implements Listener {
 
                     Main.getInstance().getDatabase().insertPAFPartyMessage(Data.serverName, senderUUID.toString(), senderName, message, partyLeader, Collections.singletonList(partyMembers.toString()), sender.hasPermission(Data.loggerStaffLog));
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -109,7 +106,7 @@ public class OnPartyMessage implements Listener {
 
                     Main.getInstance().getSqLite().insertPAFPartyMessage(Data.serverName, senderUUID.toString(), senderName, message, partyLeader, Collections.singletonList(partyMembers.toString()), sender.hasPermission(Data.loggerStaffLog));
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
         }
     }

@@ -3,6 +3,7 @@ package me.prism3.loggerbungeecord.serverside;
 import me.prism3.loggerbungeecord.Main;
 import me.prism3.loggerbungeecord.utils.Data;
 import me.prism3.loggerbungeecord.utils.FileHandler;
+import me.prism3.loggerbungeecord.utils.Log;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -20,15 +21,13 @@ public class Start {
             // Log To Files
             if (Data.isLogToFiles) {
 
-                try {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStartLogFile(), true))) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStartLogFile(), true));
                     out.write(this.main.getMessages().getString("Files.Server-Side.Start").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                    Log.severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -45,7 +44,7 @@ public class Start {
 
                     Main.getInstance().getDatabase().insertServerStart(Data.serverName);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -55,7 +54,7 @@ public class Start {
 
                     Main.getInstance().getSqLite().insertServerStart(Data.serverName);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
         }
         if (Data.isWhitelisted && Data.isBlacklisted)

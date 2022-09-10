@@ -1,10 +1,11 @@
 package me.prism3.logger.events;
 
-import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
+import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,7 +26,7 @@ public class OnEntityDeath implements Listener {
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onMobDeath(EntityDeathEvent event) {
+    public void onMobDeath(final EntityDeathEvent event) {
 
         if (event.getEntity().getKiller() == null || !(event.getEntity().getKiller() instanceof Player)) return;
 
@@ -51,28 +52,24 @@ public class OnEntityDeath implements Listener {
 
             if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                try {
-
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
+                   
                     out.write(this.main.getMessages().get().getString("Files.Entity-Death-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
                 }
             } else {
 
-                try {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getEntityDeathFile(), true))) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getEntityDeathFile(), true));
                     out.write(this.main.getMessages().get().getString("Files.Entity-Death").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -105,7 +102,7 @@ public class OnEntityDeath implements Listener {
 
                 Main.getInstance().getDatabase().insertEntityDeath(Data.serverName, playerName, playerUUID.toString(), entityName, coordinates, player.hasPermission(loggerStaffLog));
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
 
         // SQLite
@@ -115,7 +112,7 @@ public class OnEntityDeath implements Listener {
 
                 Main.getInstance().getSqLite().insertEntityDeath(Data.serverName, playerName, playerUUID.toString(), entityName, coordinates, player.hasPermission(loggerStaffLog));
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

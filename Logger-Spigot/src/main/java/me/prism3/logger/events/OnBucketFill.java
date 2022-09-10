@@ -1,10 +1,11 @@
 package me.prism3.logger.events;
 
-import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
+import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -50,29 +51,25 @@ public class OnBucketFill implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                    try {
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                         out.write(this.main.getMessages().get().getString("Files.Bucket-Fill-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket) + "\n");
-                        out.close();
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
                 } else {
 
-                    try {
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBucketFillFile(), true))) {
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getBucketFillFile(), true));
                         out.write(this.main.getMessages().get().getString("Files.Bucket-Fill").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%bucket%", bucket) + "\n");
-                        out.close();
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
@@ -105,7 +102,7 @@ public class OnBucketFill implements Listener {
 
                     Main.getInstance().getDatabase().insertBucketFill(Data.serverName, playerName, playerUUID.toString(), bucket, coordinates, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -115,7 +112,7 @@ public class OnBucketFill implements Listener {
 
                     Main.getInstance().getSqLite().insertBucketFill(Data.serverName, playerName, playerUUID.toString(), bucket, coordinates, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
         }
     }

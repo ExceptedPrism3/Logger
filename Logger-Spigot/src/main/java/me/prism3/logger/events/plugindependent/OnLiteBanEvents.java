@@ -5,7 +5,8 @@ import litebans.api.Events;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.litebansutil.UsernameFetcher;
+import me.prism3.logger.utils.Log;
+import me.prism3.logger.utils.liteban.UsernameFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -45,29 +46,25 @@ public class OnLiteBanEvents implements Listener, Runnable {
 
                     if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                        try {
+                        try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
 
-                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                             out.write(main.getMessages().get().getString("Files.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)) + "\n");
-                            out.close();
 
-                        } catch (IOException e) {
+                        } catch (final IOException e) {
 
-                            main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                            Log.warning("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
 
                         }
                     } else {
 
-                        try {
+                        try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLiteBansFile(), true))) {
 
-                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLiteBansFile(), true));
                             out.write(main.getMessages().get().getString("Files.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)) + "\n");
-                            out.close();
 
-                        } catch (IOException e) {
+                        } catch (final IOException e) {
 
-                            main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                            Log.warning("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
 
                         }
@@ -98,7 +95,7 @@ public class OnLiteBanEvents implements Listener, Runnable {
 
                         Main.getInstance().getDatabase().insertLiteBans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
 
-                    } catch (Exception e) { e.printStackTrace(); }
+                    } catch (final Exception e) { e.printStackTrace(); }
                 }
 
                 // SQLite
@@ -108,7 +105,7 @@ public class OnLiteBanEvents implements Listener, Runnable {
 
                         Main.getInstance().getSqLite().insertLiteBans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
 
-                    } catch (Exception e) { e.printStackTrace(); }
+                    } catch (final Exception e) { e.printStackTrace(); }
                 }
             }
         });

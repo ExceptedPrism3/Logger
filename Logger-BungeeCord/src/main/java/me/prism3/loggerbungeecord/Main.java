@@ -31,6 +31,8 @@ public final class Main extends Plugin {
 
         instance = this;
 
+        Log.setup(this.getLogger());
+
         this.cm = new ConfigManager();
         this.cm.init();
 
@@ -51,7 +53,7 @@ public final class Main extends Plugin {
         this.databaseSetup();
 
         if (isLogToFiles && isSqlite)
-            this.getLogger().warning("File and SQLite logging are both enabled, this might impact your Server's Performance!");
+            Log.warning("File and SQLite logging are both enabled, this might impact your Server's Performance!");
 
         this.getProxy().getPluginManager().registerCommand(this, new Reload());
 
@@ -63,9 +65,9 @@ public final class Main extends Plugin {
         // Update Checker
         if (isUpdateChecker) new UpdateChecker().checkUpdates();
 
-        this.getLogger().info(ChatColor.GOLD + "Thanks to everyone's contributions that helped made this project possible!");
+        Log.info(ChatColor.GOLD + "Thanks to everyone's contributions that helped made this project possible!");
 
-        this.getLogger().info("has been Enabled!");
+        Log.info("has been Enabled!");
 
         new Start().run();
     }
@@ -81,7 +83,7 @@ public final class Main extends Plugin {
 
         this.discord.disconnect();
 
-        this.getLogger().info("has been Disabled!");
+        Log.info("has been Disabled!");
     }
 
     public void initializer(Data data) {

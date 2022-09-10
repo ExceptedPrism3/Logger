@@ -1,9 +1,10 @@
 package me.prism3.logger.events.misc;
 
-import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
+import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -50,29 +51,25 @@ public class ItemFrameBreak implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    try {
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                         out.write(this.main.getMessages().get().getString("Files.Item-Frame-Break-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%uuid%", playerUUID.toString()).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-                        out.close();
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
                 } else {
 
-                    try {
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getItemFrameBreakFile(), true))) {
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getItemFrameBreakFile(), true));
                         out.write(this.main.getMessages().get().getString("Files.Item-Frame-Break").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%uuid%", playerUUID.toString()).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-                        out.close();
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
@@ -105,7 +102,7 @@ public class ItemFrameBreak implements Listener {
 
                     Main.getInstance().getDatabase().insertItemFrameBreak(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -115,7 +112,7 @@ public class ItemFrameBreak implements Listener {
 
                     Main.getInstance().getSqLite().insertItemFrameBreak(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
         }
     }

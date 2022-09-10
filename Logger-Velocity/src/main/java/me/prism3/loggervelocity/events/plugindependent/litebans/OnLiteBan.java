@@ -4,7 +4,8 @@ import litebans.api.Entry;
 import litebans.api.Events;
 import me.prism3.loggervelocity.Main;
 import me.prism3.loggervelocity.utils.FileHandler;
-import me.prism3.loggervelocity.utils.litebansutil.UsernameFetcher;
+import me.prism3.loggervelocity.utils.Log;
+import me.prism3.loggervelocity.utils.liteban.UsernameFetcher;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,7 +16,7 @@ import java.util.Objects;
 
 import static me.prism3.loggervelocity.utils.Data.*;
 
-public class OnLiteBanEvents implements Runnable {
+public class OnLiteBan implements Runnable {
 
     @Override
     public void run() {
@@ -79,15 +80,13 @@ public class OnLiteBanEvents implements Runnable {
 
                     assert fileLog != null;
 
-                    try {
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(fileLog, true))) {
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(fileLog, true));
                         out.write(main.getMessages().getString("Files.Extra.LiteBans").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()) + "\n");
-                        out.close();
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        main.getLogger().error("An error occurred while logging into the appropriate file.");
+                        Log.error("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
@@ -104,7 +103,7 @@ public class OnLiteBanEvents implements Runnable {
 
                         Main.getInstance().getDatabase().insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
 
-                    } catch (Exception e) { e.printStackTrace(); }
+                    } catch (final Exception e) { e.printStackTrace(); }
                 }
 
                 // SQLite
@@ -114,7 +113,7 @@ public class OnLiteBanEvents implements Runnable {
 
                         Main.getInstance().getSqLite().insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
 
-                    } catch (Exception e) { e.printStackTrace(); }
+                    } catch (final Exception e) { e.printStackTrace(); }
                 }
             }
         });

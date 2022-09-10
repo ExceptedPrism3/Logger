@@ -6,8 +6,8 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
-
 public class Pager {
+
     private final Long count;
     private final int limit;
     private final int pageLimit;
@@ -27,13 +27,17 @@ public class Pager {
     }
 
     public TextComponent preparePaging(String commandLabel, Arguments arguments) {
-        TextComponent textComponent = new TextComponent();
+
+        final TextComponent textComponent = new TextComponent();
+
         if (hasPreviousPage()) {
+
             textComponent.addExtra(Pager.buildTextComponent("◄", "Previous page", arguments.forPreviousPage()));
         }
-        if (this.hasNextPage()) {
-            textComponent.addExtra(Pager.buildTextComponent("►", "Next page", arguments.forNextPage()));
 
+        if (this.hasNextPage()) {
+
+            textComponent.addExtra(Pager.buildTextComponent("►", "Next page", arguments.forNextPage()));
         }
 
         return textComponent;
@@ -44,16 +48,19 @@ public class Pager {
     }
 
     public static TextComponent buildTextComponent(String display, String displayHover, String command) {
-        TextComponent textComponent = new TextComponent();
+
+        final TextComponent textComponent = new TextComponent();
+
         textComponent.setText(display);
-        ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.RUN_COMMAND, command);
-        HoverEvent hoverEvent =
-                new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(displayHover).create());
+
+        final ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.RUN_COMMAND, command);
+        final HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(displayHover).create());
+
         textComponent.setClickEvent(clickEvent);
         textComponent.setHoverEvent(hoverEvent);
+
         return textComponent;
     }
-
 
     public int getPrevPage() {
         return Math.max((this.currentPage - 1), 0);
@@ -63,12 +70,7 @@ public class Pager {
         return this.getNumberOfPages() == this.currentPage;
     }
 
-    public int getNextPage() {
-
-
-
-        return Math.min(this.getNumberOfPages(), this.currentPage + 1);
-    }
+    public int getNextPage() { return Math.min(this.getNumberOfPages(), this.currentPage + 1); }
 
     /**
      * @return first page
@@ -88,9 +90,8 @@ public class Pager {
      * @return number of pages
      */
     public int getNumberOfPages() {
-        return ( int ) Math.ceil(( double ) count / ( double ) limit);
+        return (int) Math.ceil((double) count / (double) limit);
     }
-
 
     /**
      * @return count
@@ -98,7 +99,6 @@ public class Pager {
     public Long getCount() {
         return this.count;
     }
-
 
     /**
      * @return true if it has a next page
@@ -113,5 +113,4 @@ public class Pager {
     public boolean hasPreviousPage() {
         return this.currentPage > 1 ;
     }
-
 }

@@ -2,6 +2,7 @@ package me.prism3.loggervelocity.serverside;
 
 import me.prism3.loggervelocity.Main;
 import me.prism3.loggervelocity.utils.FileHandler;
+import me.prism3.loggervelocity.utils.Log;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -21,15 +22,13 @@ public class Stop {
             // Log to Files
             if (isLogToFiles) {
 
-                try {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStopLogFile(), true))) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStopLogFile(), true));
                     out.write(main.getMessages().getString("Files.Server-Side.Stop").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    main.getLogger().error("An error occurred while logging into the appropriate file.");
+                    Log.error("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -46,7 +45,7 @@ public class Stop {
 
                     Main.getInstance().getDatabase().insertServerStop(serverName);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -56,7 +55,7 @@ public class Stop {
 
                     Main.getInstance().getSqLite().insertServerStop(serverName);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
         }
     }

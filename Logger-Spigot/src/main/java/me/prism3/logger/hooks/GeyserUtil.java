@@ -1,4 +1,4 @@
-package me.prism3.logger.api;
+package me.prism3.logger.hooks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;

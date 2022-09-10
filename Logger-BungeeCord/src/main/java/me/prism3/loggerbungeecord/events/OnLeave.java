@@ -1,5 +1,6 @@
 package me.prism3.loggerbungeecord.events;
 
+import me.prism3.loggerbungeecord.utils.Log;
 import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.loggerbungeecord.Main;
 import me.prism3.loggerbungeecord.utils.Data;
@@ -41,29 +42,25 @@ public class OnLeave implements Listener {
 
             if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                try {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true))) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
                     out.write(this.main.getMessages().getString("Files.Player-Leave-Staff").replace("%server%", playerServerName).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                    Log.severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             } else {
 
-                try {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLeaveLogFile(), true))) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLeaveLogFile(), true));
                     out.write(this.main.getMessages().getString("Files.Player-Leave").replace("%server%", playerServerName).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                    Log.severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -97,7 +94,7 @@ public class OnLeave implements Listener {
 
                 Main.getInstance().getDatabase().insertPlayerLeave(Data.serverName, playerName, playerUUID.toString(), new Coordinates(), player.hasPermission(Data.loggerStaffLog));
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
 
         // SQLite
@@ -107,7 +104,7 @@ public class OnLeave implements Listener {
 
                 Main.getInstance().getSqLite().insertPlayerLeave(Data.serverName, playerName, playerUUID.toString(), new Coordinates(), player.hasPermission(Data.loggerStaffLog));
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

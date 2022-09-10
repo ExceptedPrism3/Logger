@@ -1,19 +1,19 @@
 package me.prism3.logger.utils;
 
-import me.prism3.loggercore.database.data.Options;
 import me.prism3.logger.Main;
-import me.prism3.logger.api.*;
 import me.prism3.logger.commands.subcommands.PlayerInventory;
 import me.prism3.logger.events.*;
-import me.prism3.logger.events.misc.*;
 import me.prism3.logger.events.commands.OnCommand;
 import me.prism3.logger.events.inventories.OnChestInteraction;
 import me.prism3.logger.events.inventories.OnCraft;
 import me.prism3.logger.events.inventories.OnFurnace;
-import me.prism3.logger.events.versioncompatibility.OnWoodStripping;
+import me.prism3.logger.events.misc.*;
 import me.prism3.logger.events.plugindependent.*;
+import me.prism3.logger.events.versioncompatibility.OnWoodStripping;
+import me.prism3.logger.hooks.*;
 import me.prism3.logger.serverside.*;
 import me.prism3.logger.utils.enums.NmsVersions;
+import me.prism3.loggercore.database.data.Options;
 import me.prism3.loggercore.database.data.Settings;
 
 import java.time.format.DateTimeFormatter;
@@ -29,7 +29,6 @@ public class Data {
     public static DateTimeFormatter dateTimeFormatter;
 
     // String
-    public static String configVersion;
     public static String pluginVersion;
     public static String serverName;
     public static String gameModeConf;
@@ -55,6 +54,7 @@ public class Data {
     public static int tpsCritical;
     public static int playerCountNumber;
     public static int playerCountChecker;
+    public static int configVersion;
 
     public static int sqliteDataDel;
     public static int allowedBackups;
@@ -97,7 +97,6 @@ public class Data {
 
     public void initializeStrings() {
 
-        configVersion = this.main.getConfig().getString("Config");
         serverName = this.main.getConfig().getString("Server-Name");
         gameModeConf = this.main.getConfig().getString("Game-Mode");
         langPath = "messages";
@@ -145,16 +144,17 @@ public class Data {
 
         pluginVersion = this.main.getDescription().getVersion();
         resource_ID = 94236;
-        ramTpsChecker = this.main.getConfig().getInt("RAM-TPS-Checker");
-        vaultChecker = this.main.getConfig().getInt("Vault-Checker");
-        abovePlayerLevel = this.main.getConfig().getInt("Player-Level.Log-Above");
-        ramPercent = this.main.getConfig().getInt("RAM.Percent");
-        tpsMedium = this.main.getConfig().getInt("TPS.Value-Medium");
-        tpsCritical = this.main.getConfig().getInt("TPS.Value-Critical");
+        ramTpsChecker = this.main.getConfig().getInt("Checkers.RAM-TPS");
+        vaultChecker = this.main.getConfig().getInt("Checkers.Vault");
+        abovePlayerLevel = this.main.getConfig().getInt("Player-Level");
+        ramPercent = this.main.getConfig().getInt("RAM");
+        tpsMedium = this.main.getConfig().getInt("TPS.Medium");
+        tpsCritical = this.main.getConfig().getInt("TPS.Critical");
         sqliteDataDel = this.main.getConfig().getInt("SQLite.Data-Deletion");
         allowedBackups = this.main.getConfig().getInt("Player-Death-Backup.Max-Backup");
-        playerCountNumber = this.main.getConfig().getInt("Player-Count.Number");
-        playerCountChecker = this.main.getConfig().getInt("Player-Count.Checker");
+        playerCountNumber = this.main.getConfig().getInt("Player-Count");
+        playerCountChecker = this.main.getConfig().getInt("Checkers.Player-Count");
+        configVersion = this.main.getConfig().getInt("Config-Version");
 
     }
 
@@ -307,7 +307,7 @@ public class Data {
             this.main.getServer().getPluginManager().registerEvents(new RCON(), this.main);
 
         if (this.main.getConfig().getBoolean("Log-Server.Command-Block"))
-            this.main.getServer().getPluginManager().registerEvents(new OnCommandBlock(), this.main);
+            this.main.getServer().getPluginManager().registerEvents(new CommandBlock(), this.main);
 
         if (this.main.getConfig().getBoolean("Log-Server.Player-Count"))
             this.main.getServer().getScheduler().scheduleSyncRepeatingTask(this.main, new PlayerCount(), 300L, playerCountChecker);
@@ -326,7 +326,7 @@ public class Data {
 
             this.main.getServer().getPluginManager().registerEvents(new OnAFK(), this.main);
 
-            this.main.getLogger().info("Essentials Plugin Detected!");
+            Log.info("Essentials Plugin Detected!");
 
             options.setEssentialsEnabled(true);
 
@@ -336,7 +336,7 @@ public class Data {
 
             this.main.getServer().getPluginManager().registerEvents(new OnAuthMePassword(), this.main);
 
-            this.main.getLogger().info("AuthMe Plugin Detected!");
+            Log.info("AuthMe Plugin Detected!");
 
             options.setAuthMeEnabled(true);
 
@@ -351,7 +351,7 @@ public class Data {
                 this.main.getServer().getScheduler().scheduleSyncRepeatingTask(this.main, vault, 10L, vaultChecker);
             }
 
-            this.main.getLogger().info("Vault Plugin Detected!");
+            Log.info("Vault Plugin Detected!");
             options.setVaultEnabled(true);
         }
 
@@ -359,7 +359,7 @@ public class Data {
 
             this.main.getServer().getScheduler().scheduleSyncDelayedTask(this.main, new OnLiteBanEvents(), 10L);
 
-            this.main.getLogger().info("LiteBans Plugin Detected!");
+            Log.info("LiteBans Plugin Detected!");
 
             options.setLiteBansEnabled(true);
         }
@@ -368,27 +368,27 @@ public class Data {
 
             this.main.getServer().getPluginManager().registerEvents(new OnAdvancedBan(), this.main);
 
-            this.main.getLogger().info("AdvancedBan Plugin Detected!");
+            Log.info("AdvancedBan Plugin Detected!");
 
             options.setAdvancedBanEnabled(true);
         }
 
         if (PlaceHolderAPIUtil.getPlaceHolderAPI() != null) {
 
-            this.main.getLogger().info("PlaceHolderAPI Plugin Detected!");
+            Log.info("PlaceHolderAPI Plugin Detected!");
 
         }
 
         if (GeyserUtil.getGeyserAPI() != null && FloodGateUtil.getFloodGateAPI()) {
 
-            this.main.getLogger().info("Geyser & FloodGate Plugins Detected!");
-            this.main.getLogger().warning("Geyser & FloodGate are not fully supported! If any errors occurs, contact the authors.");
+            Log.info("Geyser & FloodGate Plugins Detected!");
+            Log.warning("Geyser & FloodGate are not fully supported! If any errors occurs, contact the authors.");
 
         }
 
         if (ViaVersionUtil.getViaVersionAPI() != null && this.main.getConfig().getBoolean("Log-Extras.ViaVersion")) {
 
-            this.main.getLogger().info("ViaVersion Plugin Detected!");
+            Log.info("ViaVersion Plugin Detected!");
 
             options.setViaVersion(true);
         }

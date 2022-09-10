@@ -4,6 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.events.spy.OnCommandSpy;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,15 +30,11 @@ public class OnCommand implements Listener {
     public void onPlayerCmd(final PlayerCommandPreprocessEvent event) {
 
         // Commands Spy
-        if (this.main.getConfig().getBoolean("Spy-Features.Commands-Spy.Enable")) {
-
+        if (this.main.getConfig().getBoolean("Spy-Features.Commands-Spy.Enable"))
             new OnCommandSpy().onCmdSpy(event);
-
-        }
 
         // Whitelist Commands
         if (isWhitelisted) {
-
             new OnCommandWhitelist().onWhitelistedCommand(event);
             return;
         }
@@ -55,45 +52,34 @@ public class OnCommand implements Listener {
             final String command = event.getMessage().replace("\\", "\\\\");
             final List<String> commandParts = Arrays.asList(event.getMessage().split("\\s+"));
 
-
-
             // Blacklisted Commands
-            if (isBlacklisted) {
-
-                for (String m : commandsToBlock) {
-
+            if (isBlacklisted)
+                for (String m : commandsToBlock)
                     if (commandParts.get(0).equalsIgnoreCase(m)) return;
-
-                }
-            }
 
             if (isLogToFiles) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    try {
-
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
+                        
                         out.write(this.main.getMessages().get().getString("Files.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%command%", command) + "\n");
-                        out.close();
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
                 } else {
 
-                    try {
-
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true));
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true))) {
+                        
                         out.write(this.main.getMessages().get().getString("Files.Player-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%command%", command) + "\n");
-                        out.close();
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
@@ -126,7 +112,7 @@ public class OnCommand implements Listener {
 
                     Main.getInstance().getDatabase().insertPlayerCommands(serverName, playerName, playerUUID.toString(), worldName, command, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception exception) { exception.printStackTrace(); }
+                } catch (final Exception exception) { exception.printStackTrace(); }
             }
 
             // SQLite
@@ -136,7 +122,7 @@ public class OnCommand implements Listener {
 
                     Main.getInstance().getSqLite().insertPlayerCommands(serverName, playerName, playerUUID.toString(), worldName, command, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception exception) { exception.printStackTrace(); }
+                } catch (final Exception exception) { exception.printStackTrace(); }
             }
         }
     }

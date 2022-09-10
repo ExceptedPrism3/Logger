@@ -1,7 +1,7 @@
 package me.prism3.logger.utils;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.api.*;
+import me.prism3.logger.hooks.*;
 import me.prism3.logger.utils.enums.NmsVersions;
 
 import java.io.File;
@@ -466,7 +466,7 @@ public class FileHandler {
             // Version Exception Part
             if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFile.createNewFile();
 
-        } catch (IOException e) { e.printStackTrace(); }
+        } catch (final IOException e) { e.printStackTrace(); }
     }
 
     public static File getChatLogFile() { return chatLogFile; }
@@ -573,7 +573,7 @@ public class FileHandler {
 
             creationTime = (FileTime) Files.getAttribute(file.toPath(), "creationTime");
 
-        } catch (IOException e) { e.printStackTrace(); }
+        } catch (final IOException e) { e.printStackTrace(); }
 
         assert creationTime != null;
         final long offset = System.currentTimeMillis() - creationTime.toMillis();

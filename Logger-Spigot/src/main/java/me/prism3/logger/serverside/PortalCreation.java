@@ -3,6 +3,7 @@ package me.prism3.logger.serverside;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -28,15 +29,13 @@ public class PortalCreation implements Listener {
             // Log To Files
             if (Data.isLogToFiles) {
 
-                try {
-
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPortalCreateFile(), true));
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPortalCreateFile(), true))) {
+                    
                     out.write(this.main.getMessages().get().getString("Files.Server-Side.Portal-Creation").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%material%", String.valueOf(reason)) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -53,7 +52,7 @@ public class PortalCreation implements Listener {
 
                     this.main.getDatabase().insertPortalCreate(Data.serverName, worldName, reason.toString());
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -63,7 +62,7 @@ public class PortalCreation implements Listener {
 
                     Main.getInstance().getSqLite().insertPortalCreate(Data.serverName, worldName, reason.toString());
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
         }
     }

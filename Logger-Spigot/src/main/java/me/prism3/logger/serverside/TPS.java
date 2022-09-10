@@ -3,6 +3,7 @@ package me.prism3.logger.serverside;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -30,25 +31,21 @@ public class TPS implements Runnable {
         // Log To Files
         if (Data.isLogToFiles) {
 
-            try {
+            try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true))) {
 
                 if (this.getTPS() <= Data.tpsMedium) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
                     out.write(this.main.getMessages().get().getString("Files.Server-Side.TPS-Medium").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())) + "\n");
-                    out.close();
 
                 } else if (this.getTPS() <= Data.tpsCritical) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getTPSLogFile(), true));
                     out.write(this.main.getMessages().get().getString("Files.Server-Side.TPS-Critical").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())) + "\n");
-                    out.close();
 
                 }
 
-            } catch (IOException e) {
+            } catch (final IOException e) {
 
-                this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                Log.warning("An error occurred while logging into the appropriate file.");
                 e.printStackTrace();
 
             }
@@ -71,7 +68,7 @@ public class TPS implements Runnable {
                     else if (this.getTPS() <= Data.tpsCritical)
                         Main.getInstance().getDatabase().insertTps(Data.serverName, this.getTPS());
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -85,7 +82,7 @@ public class TPS implements Runnable {
                     else if (this.getTPS() <= Data.tpsCritical)
                         Main.getInstance().getSqLite().insertTps(Data.serverName, this.getTPS());
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
         }
     }

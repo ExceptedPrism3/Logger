@@ -1,8 +1,8 @@
 package me.prism3.loggerbungeecord.utils;
 
 import me.prism3.loggerbungeecord.Main;
-import me.prism3.loggerbungeecord.api.LiteBansUtil;
-import me.prism3.loggerbungeecord.api.PartyAndFriendsUtil;
+import me.prism3.loggerbungeecord.hooks.LiteBanUtil;
+import me.prism3.loggerbungeecord.hooks.PartyAndFriendsUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,8 +15,6 @@ import java.util.concurrent.TimeUnit;
 import static me.prism3.loggerbungeecord.utils.Data.fileDeletion;
 
 public class FileHandler {
-
-    private final Main main = Main.getInstance();
 
     private static File staffLogFolder;
     private static File chatLogFolder;
@@ -122,7 +120,7 @@ public class FileHandler {
             serverStopLogFolder.mkdir();
             ramLogFolder.mkdir();
             serverSwitchLogFolder.mkdir();
-            if (LiteBansUtil.getLiteBansAPI() != null) {
+            if (LiteBanUtil.getLiteBansAPI() != null) {
                 liteBansLogFolder.mkdir();
                 liteBansBansLogFolder.mkdir();
                 liteBansMuteLogFolder.mkdir();
@@ -143,7 +141,7 @@ public class FileHandler {
             serverStopLogFile.createNewFile();
             ramLogFile.createNewFile();
             serverSwitchLogFile.createNewFile();
-            if (LiteBansUtil.getLiteBansAPI() != null) {
+            if (LiteBanUtil.getLiteBansAPI() != null) {
                 liteBansBansLogFile.createNewFile();
                 liteBansMuteLogFile.createNewFile();
                 liteBansKickLogFile.createNewFile();
@@ -196,7 +194,7 @@ public class FileHandler {
 
             creationTime = (FileTime) Files.getAttribute(file.toPath(), "creationTime");
 
-        } catch (IOException e) { e.printStackTrace(); }
+        } catch (final IOException e) { e.printStackTrace(); }
 
         assert creationTime != null;
         final long offset = System.currentTimeMillis() - creationTime.toMillis();
@@ -241,7 +239,7 @@ public class FileHandler {
         for (File serverSwitchLog : serverSwitchLogFolder.listFiles())
             this.deleteFile(serverSwitchLog);
 
-        if (LiteBansUtil.getLiteBansAPI() != null)
+        if (LiteBanUtil.getLiteBansAPI() != null)
             for (File liteBansLog : liteBansLogFolder.listFiles())
                 this.deleteFile(liteBansLog);
 

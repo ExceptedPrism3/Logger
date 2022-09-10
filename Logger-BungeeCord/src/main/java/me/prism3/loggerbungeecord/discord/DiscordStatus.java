@@ -1,6 +1,7 @@
 package me.prism3.loggerbungeecord.discord;
 
 import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.utils.Log;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 
@@ -32,7 +33,7 @@ public class DiscordStatus {
 
         } catch (final Exception exception) {
 
-            this.main.getLogger().severe("Discord Status Activity is invalid. It has been disabled.");
+            Log.severe("Discord Status Activity is invalid. It has been disabled.");
             return;
 
         }

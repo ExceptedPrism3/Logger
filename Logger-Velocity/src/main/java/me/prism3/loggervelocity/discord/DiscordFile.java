@@ -44,9 +44,7 @@ public class DiscordFile {
     public Configuration get() { return this.configuration; }
 
     public boolean getBoolean(final String path) {
-
         return this.configuration.get(path) != null && this.configuration.getBoolean(path);
-
     }
 
     public String getString(final String path) {

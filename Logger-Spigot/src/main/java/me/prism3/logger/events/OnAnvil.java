@@ -5,6 +5,7 @@ import me.prism3.logger.events.spy.OnAnvilSpy;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -33,9 +34,7 @@ private final Main main = Main.getInstance();
 
         // Anvil Spy
         if (this.main.getConfig().getBoolean("Spy-Features.Anvil-Spy.Enable")) {
-
             new OnAnvilSpy().onAnvilSpy(event);
-
         }
 
         if (!event.isCancelled()) {
@@ -47,8 +46,6 @@ private final Main main = Main.getInstance();
             final UUID playerUUID = player.getUniqueId();
             final String playerName = player.getName();
             final Inventory inv = event.getInventory();
-
-
 
             if (inv instanceof AnvilInventory) {
 
@@ -73,29 +70,25 @@ private final Main main = Main.getInstance();
 
                                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                                    try {
+                                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
 
-                                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                                         out.write(this.main.getMessages().get().getString("Files.Anvil-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%renamed%", displayName) + "\n");
-                                        out.close();
 
-                                    } catch (IOException e) {
+                                    } catch (final IOException e) {
 
-                                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                                        Log.warning("An error occurred while logging into the appropriate file.");
                                         e.printStackTrace();
 
                                     }
                                 } else {
 
-                                    try {
+                                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAnvilFile(), true))) {
 
-                                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAnvilFile(), true));
                                         out.write(this.main.getMessages().get().getString("Files.Anvil").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%renamed%", displayName) + "\n");
-                                        out.close();
 
-                                    } catch (IOException e) {
+                                    } catch (final IOException e) {
 
-                                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                                        Log.warning("An error occurred while logging into the appropriate file.");
                                         e.printStackTrace();
 
                                     }
@@ -128,7 +121,7 @@ private final Main main = Main.getInstance();
 
                                     Main.getInstance().getDatabase().insertAnvil(Data.serverName, playerName, playerUUID.toString(), displayName, player.hasPermission(loggerStaffLog));
 
-                                } catch (Exception e) { e.printStackTrace(); }
+                                } catch (final Exception e) { e.printStackTrace(); }
                             }
 
                             // SQLite
@@ -138,7 +131,7 @@ private final Main main = Main.getInstance();
 
                                     Main.getInstance().getSqLite().insertAnvil(Data.serverName, playerName, playerUUID.toString(), displayName, player.hasPermission(loggerStaffLog));
 
-                                } catch (Exception e) { e.printStackTrace(); }
+                                } catch (final Exception e) { e.printStackTrace(); }
                             }
                         }
                     }

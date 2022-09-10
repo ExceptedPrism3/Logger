@@ -1,11 +1,8 @@
 package me.prism3.logger;
 
-import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
-import me.prism3.loggercore.database.DataSourceInterface;
-import me.prism3.loggercore.database.datasource.Database;
-import de.jeff_media.updatechecker.UpdateChecker;
 import me.prism3.logger.commands.CommandManager;
 import me.prism3.logger.commands.getting.Chat;
+import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteRegistration;
 import me.prism3.logger.discord.Discord;
 import me.prism3.logger.discord.DiscordFile;
@@ -13,7 +10,12 @@ import me.prism3.logger.serverside.Start;
 import me.prism3.logger.serverside.Stop;
 import me.prism3.logger.utils.*;
 import me.prism3.logger.utils.enums.NmsVersions;
-import me.prism3.loggercore.database.sqlite.SQLite;
+import me.prism3.logger.utils.manager.ConfigManager;
+import me.prism3.logger.utils.updater.BukkitUpdater;
+import me.prism3.logger.utils.updater.SpigotUpdater;
+import me.prism3.logger.utils.updater.Updater;
+import me.prism3.loggercore.database.DataSourceInterface;
+import me.prism3.loggercore.database.datasource.Database;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -41,7 +43,9 @@ public class Main extends JavaPlugin {
 
         instance = this;
 
-        this.saveDefaultConfig();
+        Log.setup(this.getLogger());
+
+        new ConfigManager(this);
 
         this.initializer(new Data());
 
@@ -57,7 +61,7 @@ public class Main extends JavaPlugin {
         this.discord.run();
 
         if (isLogToFiles && isSqlite)
-            this.getLogger().warning("File and SQLite logging are both enabled, this might impact your Server's Performance!");
+            Log.warning("File and SQLite logging are both enabled, this might impact your Server's Performance!");
 
         final FileHandler fileHandler = new FileHandler(this.getDataFolder());
         fileHandler.deleteFiles();
@@ -73,19 +77,9 @@ public class Main extends JavaPlugin {
         // bStats
         new Metrics(this, 12036);
 
-        // Update Checker
-        if (Data.isUpdateChecker) {
+        Log.info(ChatColor.GOLD + "Thanks to everyone's contributions that helped made this project possible!");
 
-            UpdateChecker.init(this, Data.resource_ID)
-                    .checkEveryXHours(2)
-                    .setChangelogLink(Data.resource_ID)
-                    .setNotifyByPermissionOnJoin(Data.loggerUpdate)
-                    .checkNow();
-        }
-
-        this.getLogger().info(ChatColor.GOLD + "Thanks to everyone's contributions that helped made this project possible!");
-
-        this.getLogger().info("Plugin Enabled!");
+        Log.info("Plugin Enabled!");
 
         new Start().run();
     }
@@ -102,8 +96,43 @@ public class Main extends JavaPlugin {
         this.disconnectDatabase();
         this.discord.disconnect();
 
-        this.getLogger().info("Plugin Disabled!");
+        Log.info("Plugin Disabled!");
 
+    }
+
+    public void updateChecker() {
+
+        Log.info("Checking for updates...");
+
+        Updater updater = new BukkitUpdater(this, 669177, Updater.UpdateType.VERSION_CHECK).check();
+
+        if (updater.getResult() != Updater.UpdateResult.UPDATE_AVAILABLE) {
+            updater = new SpigotUpdater(this, 94236, Updater.UpdateType.VERSION_CHECK).check();
+        }
+
+        if (updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE) {
+
+//            Messages.setNewVersion(updater.getLatestName());
+//            System.out.println(" §aUpdate available: §c" + Messages.getNewVersion() + " §aCurrent version: §c"
+//                    + Messages.getCurrentversion());
+
+//            Messages.queueAdminMsg(updateMsg);
+//            Bukkit.broadcast(updateMsg, "pvpmanager.admin");
+
+            if (this.getConfig().getBoolean("Updater.Checker")) {
+
+                if (updater.downloadFile()) {
+
+                    System.out.println("§aUpdate downloaded, it will be applied automatically on the next server restart");
+                    System.out.println("§aUpdate downloaded to your update folder, it will be applied automatically on the next server restart");
+                    return;
+                }
+                Log.info("Could not download latest update. Please update manually from one of the links below.");
+            }
+
+            System.out.println("§aFollow the link to download: §8" + updater.getUpdateLink());
+
+        } else { Log.info("No update found"); }
     }
 
     public void initializer(Data data) {
@@ -132,7 +161,7 @@ public class Main extends JavaPlugin {
 
         try {
             this.database = new Database(databaseCredentials, Data.options);
-            this.sqLite = new SQLite(Data.options, this.getDataFolder());
+            this.sqLite = null;
 
             if (isRegistration) {
 
@@ -142,7 +171,7 @@ public class Main extends JavaPlugin {
                 if (this.sqLiteReg.isConnected()) sqLiteDataRegistration.createTable();
             }
 
-        } catch (Exception e) { this.getLogger().severe(e.getMessage()); }
+        } catch (final Exception e) { Log.severe(e.getMessage()); }
     }
     private void disconnectDatabase() {
         this.database.disconnect();

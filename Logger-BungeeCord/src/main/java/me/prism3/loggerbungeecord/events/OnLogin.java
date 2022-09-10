@@ -3,6 +3,7 @@ package me.prism3.loggerbungeecord.events;
 import me.prism3.loggerbungeecord.Main;
 import me.prism3.loggerbungeecord.utils.Data;
 import me.prism3.loggerbungeecord.utils.FileHandler;
+import me.prism3.loggerbungeecord.utils.Log;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -29,7 +30,6 @@ public class OnLogin implements Listener {
         final String playerName = player.getName();
         final UUID playerUUID = player.getUniqueId();
         InetSocketAddress playerIP = (InetSocketAddress) event.getPlayer().getSocketAddress();
-
         if (!Data.isPlayerIP) playerIP = null;
 
         // Log To Files
@@ -37,29 +37,25 @@ public class OnLogin implements Listener {
 
             if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                try {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true))) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
                     out.write(this.main.getMessages().getString("Files.Player-Login-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%IP%", String.valueOf(playerIP)) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                    Log.severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             } else {
 
-                try {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLoginLogFile(), true))) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLoginLogFile(), true));
                     out.write(this.main.getMessages().getString("Files.Player-Login").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%IP%", String.valueOf(playerIP)) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                    Log.severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -93,7 +89,7 @@ public class OnLogin implements Listener {
 
                 Main.getInstance().getDatabase().insertPlayerLogin(Data.serverName, playerName, playerUUID.toString(), playerIP, player.hasPermission(Data.loggerStaffLog));
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
 
         // SQLite
@@ -103,7 +99,7 @@ public class OnLogin implements Listener {
 
                 Main.getInstance().getSqLite().insertPlayerLogin(Data.serverName, playerName, playerUUID.toString(), playerIP, player.hasPermission(Data.loggerStaffLog));
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

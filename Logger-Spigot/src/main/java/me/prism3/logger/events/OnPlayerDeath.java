@@ -1,12 +1,13 @@
 package me.prism3.logger.events;
 
-import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import me.prism3.logger.utils.playerdeathutils.InventoryToBase64;
 import me.prism3.logger.utils.playerdeathutils.PlayerFolder;
+import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -48,7 +49,7 @@ public class OnPlayerDeath implements Listener {
 
             this.playerDeathBackup.create(event.getEntity());
 
-            final File f1 = playerDeathBackup.getPlayerFile(); // Gets the file location
+            final File f1 = this.playerDeathBackup.getPlayerFile(); // Gets the file location
             final FileConfiguration f = YamlConfiguration.loadConfiguration(f1); // Loads the file with Yaml functions
             f.load(f1); // Loads the file for use
 
@@ -94,29 +95,25 @@ public class OnPlayerDeath implements Listener {
 
             if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                try {
-
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
+                   
                     out.write(this.main.getMessages().get().getString("Files.Player-Death-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             } else {
 
-                try {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerDeathLogFile(), true))) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerDeathLogFile(), true));
                     out.write(this.main.getMessages().get().getString("Files.Player-Death").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -149,7 +146,7 @@ public class OnPlayerDeath implements Listener {
 
                 Main.getInstance().getDatabase().insertPlayerDeath(Data.serverName, playerName, playerUUID.toString(), playerLevel, cause, killer, coordinates, player.hasPermission(loggerStaffLog));
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
 
         // SQLite
@@ -159,7 +156,7 @@ public class OnPlayerDeath implements Listener {
 
                 Main.getInstance().getSqLite().insertPlayerDeath(Data.serverName, playerName, playerUUID.toString(), playerLevel, cause, killer, coordinates, player.hasPermission(loggerStaffLog));
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

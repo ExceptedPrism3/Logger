@@ -64,5 +64,5 @@ public class Dump implements SubCommand {
         player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                 pluginPrefix + request.postPaste() + "\n&cDo not share this link at all!"));
 
-    }
+    } //TODO try catch
 }

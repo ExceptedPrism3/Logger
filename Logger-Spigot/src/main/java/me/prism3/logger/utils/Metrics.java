@@ -105,7 +105,7 @@ public class Metrics {
             return onlinePlayersMethod.getReturnType().equals(Collection.class)
                     ? ((Collection<?>) onlinePlayersMethod.invoke(Bukkit.getServer())).size()
                     : ((Player[]) onlinePlayersMethod.invoke(Bukkit.getServer())).length;
-        } catch (Exception e) { return Bukkit.getOnlinePlayers().size(); }
+        } catch (final Exception e) { return Bukkit.getOnlinePlayers().size(); }
     }
 
     public static class MetricsBase {
@@ -245,7 +245,7 @@ public class Metrics {
                         try {
                             // Send the data
                             sendData(data);
-                        } catch (Exception e) {
+                        } catch (final Exception e) {
                             // Something went wrong! :(
                             if (logErrors) {
                                 errorLogger.accept("Could not submit bStats metrics data", e);

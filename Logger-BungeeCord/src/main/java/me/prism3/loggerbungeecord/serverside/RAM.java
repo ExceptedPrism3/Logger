@@ -2,6 +2,7 @@ package me.prism3.loggerbungeecord.serverside;
 
 import me.prism3.loggerbungeecord.Main;
 import me.prism3.loggerbungeecord.utils.FileHandler;
+import me.prism3.loggerbungeecord.utils.Log;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -28,15 +29,13 @@ public class RAM implements Runnable {
             // Log To Files Handling
             if (isLogToFiles) {
 
-                try {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRamLogFile(), true))) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRamLogFile(), true));
                     out.write(this.main.getMessages().getString("Files.Server-Side.RAM").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                    Log.severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -53,7 +52,7 @@ public class RAM implements Runnable {
 
                     Main.getInstance().getDatabase().insertRam(serverName, maxMemory, usedMemory, freeMemory);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -63,7 +62,7 @@ public class RAM implements Runnable {
 
                     Main.getInstance().getSqLite().insertRam(serverName, maxMemory, usedMemory, freeMemory);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
         }
     }

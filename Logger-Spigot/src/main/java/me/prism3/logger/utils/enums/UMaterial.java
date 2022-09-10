@@ -3,7 +3,6 @@ package me.prism3.logger.utils.enums;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -1834,7 +1833,7 @@ public enum UMaterial implements Versionable {
             final UMaterial material = valueOf(name);
             CACHED_UMATERIALS.putIfAbsent(name, material);
             return material;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             final String[] materialValues = name.split(":");
             final byte targetData = name.contains(":") ? Byte.parseByte(materialValues[1]) : 0;
             name = materialValues[0];

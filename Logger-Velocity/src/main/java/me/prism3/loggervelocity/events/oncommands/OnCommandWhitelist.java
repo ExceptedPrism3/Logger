@@ -5,6 +5,7 @@ import com.velocitypowered.api.event.command.CommandExecuteEvent;
 import com.velocitypowered.api.proxy.Player;
 import me.prism3.loggervelocity.Main;
 import me.prism3.loggervelocity.utils.FileHandler;
+import me.prism3.loggervelocity.utils.Log;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -39,29 +40,25 @@ public class OnCommandWhitelist {
 
                     if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                        try {
+                        try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true))) {
 
-                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
                             out.write(main.getMessages().getString("Files.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", playerName).replace("%command%", command) + "\n");
-                            out.close();
 
-                        } catch (IOException e) {
+                        } catch (final IOException e) {
 
-                            main.getLogger().error("An error occurred while logging into the appropriate file.");
+                            Log.error("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
 
                         }
                     } else {
 
-                        try {
+                        try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerCommandLogFile(), true))) {
 
-                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerCommandLogFile(), true));
                             out.write(main.getMessages().getString("Files.Player-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", playerName).replace("%command%", command) + "\n");
-                            out.close();
 
-                        } catch (IOException e) {
+                        } catch (final IOException e) {
 
-                            main.getLogger().error("An error occurred while logging into the appropriate file.");
+                            Log.error("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
 
                         }
@@ -95,7 +92,7 @@ public class OnCommandWhitelist {
 
                         Main.getInstance().getDatabase().insertPlayerCommands(serverName, playerName, playerUUID.toString(),null, command, player.hasPermission(loggerStaffLog));
 
-                    } catch (Exception e) { e.printStackTrace(); }
+                    } catch (final Exception e) { e.printStackTrace(); }
                 }
 
                 // SQLite
@@ -105,7 +102,7 @@ public class OnCommandWhitelist {
 
                         Main.getInstance().getSqLite().insertPlayerCommands(serverName, playerName, playerUUID.toString(),null, command, player.hasPermission(loggerStaffLog));
 
-                    } catch (Exception e) { e.printStackTrace(); }
+                    } catch (final Exception e) { e.printStackTrace(); }
                 }
             }
         }

@@ -3,6 +3,7 @@ package me.prism3.loggerbungeecord.events.oncommands;
 import me.prism3.loggerbungeecord.Main;
 import me.prism3.loggerbungeecord.utils.Data;
 import me.prism3.loggerbungeecord.utils.FileHandler;
+import me.prism3.loggerbungeecord.utils.Log;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -39,29 +40,25 @@ public class OnCommandWhitelist implements Listener {
 
                     if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                        try {
+                        try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true))) {
 
-                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
                             out.write(this.main.getMessages().getString("Files.Player-Commands-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", player.getName()).replace("%command%", command) + "\n");
-                            out.close();
 
-                        } catch (IOException e) {
+                        } catch (final IOException e) {
 
-                            Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                            Log.severe("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
 
                         }
                     } else {
 
-                        try {
+                        try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true))) {
 
-                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true));
                             out.write(this.main.getMessages().getString("Files.Player-Commands").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", player.getName()).replace("%command%", command) + "\n");
-                            out.close();
 
-                        } catch (IOException e) {
+                        } catch (final IOException e) {
 
-                            Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                            Log.severe("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
 
                         }
@@ -95,7 +92,7 @@ public class OnCommandWhitelist implements Listener {
 
                         Main.getInstance().getDatabase().insertPlayerCommands(Data.serverName, playerName ,playerUUID.toString(), null, command, player.hasPermission(Data.loggerStaffLog));
 
-                    } catch (Exception e) { e.printStackTrace(); }
+                    } catch (final Exception e) { e.printStackTrace(); }
                 }
 
                 // SQLite
@@ -105,7 +102,7 @@ public class OnCommandWhitelist implements Listener {
 
                         Main.getInstance().getSqLite().insertPlayerCommands(Data.serverName, playerName, playerUUID.toString(), null, command, player.hasPermission(Data.loggerStaffLog));
 
-                    } catch (Exception e) { e.printStackTrace(); }
+                    } catch (final Exception e) { e.printStackTrace(); }
                 }
             }
         }

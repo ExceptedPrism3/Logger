@@ -1,10 +1,11 @@
 package me.prism3.logger.events.inventories;
 
-import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
+import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,29 +49,25 @@ public class OnFurnace implements Listener {
 
             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                try {
-
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
+                   
                     out.write(this.main.getMessages().get().getString("Files.Furnace-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%amount%", String.valueOf(amount)).replace("%item%", String.valueOf(item)) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             } else {
 
-                try {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getFurnaceFile(), true))) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getFurnaceFile(), true));
                     out.write(this.main.getMessages().get().getString("Files.Furnace").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%amount%", String.valueOf(amount)).replace("%item%", String.valueOf(item)) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -104,7 +101,7 @@ public class OnFurnace implements Listener {
 
                 Main.getInstance().getDatabase().insertFurnace(Data.serverName, playerName, playerUUID.toString(), item.toString(), amount, coordinates, player.hasPermission(loggerStaffLog));
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
 
         // SQLite
@@ -114,7 +111,7 @@ public class OnFurnace implements Listener {
 
                 Main.getInstance().getSqLite().insertFurnace(Data.serverName, playerName, playerUUID.toString(), item.toString(), amount, coordinates, player.hasPermission(loggerStaffLog));
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

@@ -27,7 +27,6 @@ public class ToggleSpy implements SubCommand {
 
             player.sendMessage(this.getSyntax());
             return;
-
         }
 
         if (args.length <= 3 && args[1].equalsIgnoreCase("spy")) {
@@ -46,6 +45,7 @@ public class ToggleSpy implements SubCommand {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix
                             + "Commands Spy Toggled."));
                     break;
+
                 case "book":
                     isToggled = main.getConfig().getBoolean("Spy-Features.Book-Spy.Enable");
                     isToggled = !isToggled;
@@ -54,6 +54,7 @@ public class ToggleSpy implements SubCommand {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix
                             + "Book Spy Toggled."));
                     break;
+
                 case "sign":
                     isToggled = main.getConfig().getBoolean("Spy-Features.Sign-Spy.Enable");
                     isToggled = !isToggled;
@@ -62,6 +63,7 @@ public class ToggleSpy implements SubCommand {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix
                             + "Sign Spy Toggled."));
                     break;
+
                 case "anvil":
                     isToggled = main.getConfig().getBoolean("Spy-Features.Anvil-Spy.Enable");
                     isToggled = !isToggled;
@@ -70,6 +72,7 @@ public class ToggleSpy implements SubCommand {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix
                             + "Anvil Spy Toggled."));
                     break;
+
                 default:
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                             pluginPrefix + "&cInvalid option, correct options are [Commands | Book | Sign | Anvil]"));

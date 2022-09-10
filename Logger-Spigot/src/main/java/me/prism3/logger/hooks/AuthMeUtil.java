@@ -1,4 +1,4 @@
-package me.prism3.logger.api;
+package me.prism3.logger.hooks;
 
 import fr.xephi.authme.AuthMe;
 import org.bukkit.Bukkit;

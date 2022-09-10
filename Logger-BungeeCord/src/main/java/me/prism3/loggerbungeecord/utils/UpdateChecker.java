@@ -38,25 +38,25 @@ public class UpdateChecker {
 
                             if (!input.trim().equalsIgnoreCase(VERSION.trim())) {
 
-                                Main.getInstance().getLogger().info(ChatColor.GOLD + "A new version is available for download " + ChatColor.GREEN + VERSION);
-                                Main.getInstance().getLogger().info(ChatColor.GOLD + "Download Link: " + ChatColor.GREEN + DOWNLOAD_URL);
+                                Log.info(ChatColor.GOLD + "A new version is available for download " + ChatColor.GREEN + VERSION);
+                                Log.info(ChatColor.GOLD + "Download Link: " + ChatColor.GREEN + DOWNLOAD_URL);
 
                             }
                         }
 
                         br.close();
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        Main.getInstance().getLogger().warning("Could not check for Updates, if the issue persists contact the Authors!");
+                        Log.warning("Could not check for Updates, if the issue persists contact the Authors!");
                         e.printStackTrace();
 
                     }
                 }
 
-            } catch (IOException e) {
+            } catch (final IOException e) {
 
-                Main.getInstance().getLogger().warning("Could not check for Updates, if the issue persists contact the Authors!");
+                Log.warning("Could not check for Updates, if the issue persists contact the Authors!");
                 e.printStackTrace();
 
             }

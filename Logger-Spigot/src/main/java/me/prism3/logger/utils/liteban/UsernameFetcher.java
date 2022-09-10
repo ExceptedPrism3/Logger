@@ -1,4 +1,4 @@
-package me.prism3.loggervelocity.utils.litebansutil;
+package me.prism3.logger.utils.liteban;
 
 import litebans.api.Database;
 
@@ -25,6 +25,7 @@ public class UsernameFetcher {
             }
 
         } catch (SQLException e) { e.printStackTrace(); }
+
         return name;
     }
 }

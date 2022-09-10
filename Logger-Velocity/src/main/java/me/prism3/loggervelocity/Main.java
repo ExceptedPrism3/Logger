@@ -8,23 +8,19 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
-import me.prism3.loggervelocity.commands.DiscordCMD;
+import me.prism3.loggervelocity.commands.Discord;
 import me.prism3.loggervelocity.commands.Reload;
-import me.prism3.loggervelocity.discord.Discord;
 import me.prism3.loggervelocity.discord.DiscordFile;
 import me.prism3.loggervelocity.serverside.Start;
 import me.prism3.loggervelocity.serverside.Stop;
-import me.prism3.loggervelocity.utils.ConfigManager;
-import me.prism3.loggervelocity.utils.Data;
-import me.prism3.loggervelocity.utils.FileHandler;
-import me.prism3.loggervelocity.utils.Messages;
+import me.prism3.loggervelocity.utils.*;
 import org.bstats.velocity.Metrics;
-import org.slf4j.Logger;
 
 import java.nio.file.Path;
+import java.util.logging.Logger;
 
 @Plugin(id = "logger-velocity", name = "Logger", version = "1.7.5", authors = {"prism3 & thelooter & sidna"})
-public class Main{
+public class Main {
 
     private static ProxyServer server;
     private final Logger logger;
@@ -35,7 +31,7 @@ public class Main{
 
     private Messages messages;
 
-    private Discord discord;
+    private me.prism3.loggervelocity.discord.Discord discord;
     private DiscordFile discordFile;
 
     private DataSourceInterface database;
@@ -56,13 +52,15 @@ public class Main{
 
         instance = this;
 
+        Log.setup(this.logger);
+
         this.config = new ConfigManager();
 
         this.messages = new Messages();
 
         this.discordFile = new DiscordFile();
 
-        this.discord = new Discord();
+        this.discord = new me.prism3.loggervelocity.discord.Discord();
         this.discord.run();
 
         this.initializer(new Data());
@@ -74,7 +72,7 @@ public class Main{
         this.metricsFactory.make(this, 12036);
 
         server.getCommandManager().register("loggerv", new Reload());
-        server.getCommandManager().register("loggerv", new DiscordCMD());
+        server.getCommandManager().register("loggerv", new Discord());
 
         this.dataBaseSetup();
 
@@ -84,7 +82,7 @@ public class Main{
 
         this.logger.info("Thanks to everyone's contributions that helped made this project possible!");
 
-        this.logger.info("Plugin has been enabled");
+        Log.info("Plugin has been enabled");
 
     }
 
@@ -95,7 +93,7 @@ public class Main{
 
         this.discord.disconnect();
 
-        this.logger.info("Plugin has been disabled");
+        Log.info("Plugin has been disabled");
     }
 
     private void initializer(Data data) {
@@ -120,15 +118,13 @@ public class Main{
 
     public static ProxyServer getServer() { return server; }
 
-    public Logger getLogger() { return this.logger; }
-
     public Path getFolder() { return this.folder; }
 
     public ConfigManager getConfig() { return this.config; }
 
     public DiscordFile getDiscordFile() { return this.discordFile; }
 
-    public Discord getDiscord() { return this.discord; }
+    public me.prism3.loggervelocity.discord.Discord getDiscord() { return this.discord; }
 
     public Messages getMessages() { return this.messages; }
 

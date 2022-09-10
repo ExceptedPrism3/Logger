@@ -5,6 +5,7 @@ import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.proxy.Player;
 import me.prism3.loggervelocity.Main;
 import me.prism3.loggervelocity.utils.FileHandler;
+import me.prism3.loggervelocity.utils.Log;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -14,7 +15,7 @@ import java.util.UUID;
 
 import static me.prism3.loggervelocity.utils.Data.*;
 
-public class OnChat{
+public class OnChat {
 
     @Subscribe
     public void onChat(final PlayerChatEvent event) {
@@ -37,29 +38,25 @@ public class OnChat{
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    try {
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true))) {
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
                         out.write(main.getMessages().getString("Files.Player-Chat-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", playerName).replace("%msg%", message) + "\n");
-                        out.close();
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        main.getLogger().error("An error occurred while logging into the appropriate file.");
+                        Log.error("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
                 } else {
 
-                    try {
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getChatLogFile(), true))) {
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getChatLogFile(), true));
                         out.write(main.getMessages().getString("Files.Player-Chat").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", playerName).replace("%msg%", message) + "\n");
-                        out.close();
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        main.getLogger().error("An error occurred while logging into the appropriate file.");
+                        Log.error("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
@@ -93,7 +90,7 @@ public class OnChat{
 
                     Main.getInstance().getDatabase().insertPlayerChat(serverName, playerName, playerUUID.toString(), null, message, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -103,7 +100,7 @@ public class OnChat{
 
                     Main.getInstance().getSqLite().insertPlayerChat(serverName, playerName, playerUUID.toString(), null, message, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
         }
     }

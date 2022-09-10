@@ -24,7 +24,7 @@ public final class Configuration {
 
             if (entry.getValue() instanceof Map) {
 
-                this.self.put(key, new Configuration((Map) entry.getValue(), (defaults == null) ? null : defaults.getSection(key)));
+                this.self.put(key, new Configuration((Map<?, ?>) entry.getValue(), (defaults == null) ? null : defaults.getSection(key)));
 
             } else { this.self.put(key, entry.getValue()); }
         }

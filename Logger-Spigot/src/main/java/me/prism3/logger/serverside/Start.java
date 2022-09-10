@@ -3,6 +3,7 @@ package me.prism3.logger.serverside;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -20,15 +21,13 @@ public class Start {
             // Log To Files
             if (Data.isLogToFiles) {
 
-                try {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStartFile(), true))) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStartFile(), true));
                     out.write(this.main.getMessages().get().getString("Files.Server-Side.Start").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -45,7 +44,7 @@ public class Start {
 
                     Main.getInstance().getDatabase().insertServerStart(Data.serverName);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -55,15 +54,12 @@ public class Start {
 
                     Main.getInstance().getSqLite().insertServerStart(Data.serverName);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
         }
 
-        if (Data.isWhitelisted && Data.isBlacklisted) {
-
-            this.main.getLogger().warning("Enabling both Whitelist and Blacklist isn't supported. " +
+        if (Data.isWhitelisted && Data.isBlacklisted)
+            Log.warning("Enabling both Whitelist and Blacklist isn't supported. " +
                     "Disable one of them to continue logging Player Commands.");
-
-        }
     }
 }

@@ -23,7 +23,7 @@ public class ConfigManager {
 
             this.config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(this.getFile());
 
-        } catch (IOException e) { e.printStackTrace(); }
+        } catch (final IOException e) { e.printStackTrace(); }
     }
 
     public String getString(String key) {
@@ -69,7 +69,7 @@ public class ConfigManager {
                     os.close();
 
                 }
-            } catch (IOException e) { e.printStackTrace(); }
+            } catch (final IOException e) { e.printStackTrace(); }
         }
     }
 }

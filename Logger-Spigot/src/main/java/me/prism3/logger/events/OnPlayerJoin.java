@@ -1,11 +1,12 @@
 package me.prism3.logger.events;
 
-import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
-import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.logger.Main;
+import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
+import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -46,9 +47,14 @@ public class OnPlayerJoin implements Listener {
         final String playerName = player.getName();
         final UUID playerUUID = player.getUniqueId();
         InetSocketAddress ip = player.getAddress();
+        if (!Data.isPlayerIP) ip = null;
         final int x = player.getLocation().getBlockX();
         final int y = player.getLocation().getBlockY();
         final int z = player.getLocation().getBlockZ();
+
+
+        final Coordinates coordinates = new Coordinates(x, y, z, worldName);
+
 
         if (Data.isCommandsToBlock && Data.isCommandsToLog && player.hasPermission(Data.loggerStaff)) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
@@ -57,39 +63,30 @@ public class OnPlayerJoin implements Listener {
                             " to continue logging Player Commands."));
         }
 
-        if (!Data.isPlayerIP) ip = null;
-
-
-        final Coordinates coordinates = new Coordinates(x, y, z, worldName);
-
         // Log To Files
         if (Data.isLogToFiles) {
 
             if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                try {
-
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
+                   
                     out.write(this.main.getMessages().get().getString("Files.Player-Join-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%IP%", String.valueOf(ip)) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             } else {
 
-                try {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerJoinLogFile(), true))) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerJoinLogFile(), true));
                     out.write(this.main.getMessages().get().getString("Files.Player-Join").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%IP%", String.valueOf(ip)) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -122,7 +119,7 @@ public class OnPlayerJoin implements Listener {
 
                 Main.getInstance().getDatabase().insertPlayerJoin(Data.serverName, playerName, playerUUID.toString(), coordinates, ip, player.hasPermission(loggerStaffLog));
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
 
         // SQLite
@@ -132,7 +129,7 @@ public class OnPlayerJoin implements Listener {
 
                 Main.getInstance().getSqLite().insertPlayerJoin(Data.serverName, playerName, playerUUID.toString(), coordinates, ip, player.hasPermission(loggerStaffLog));
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

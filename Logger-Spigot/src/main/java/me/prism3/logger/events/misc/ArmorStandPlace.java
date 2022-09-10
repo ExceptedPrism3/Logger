@@ -12,7 +12,7 @@ public class ArmorStandPlace implements Listener {
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onArmorStandPlace(CreatureSpawnEvent event) {
+    public void onArmorStandPlace(final CreatureSpawnEvent event) {
 
         if (event.getEntity().getType().equals(EntityType.ARMOR_STAND)) {
 

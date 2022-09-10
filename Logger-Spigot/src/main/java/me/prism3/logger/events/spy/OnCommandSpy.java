@@ -31,7 +31,7 @@ public class OnCommandSpy implements Listener {
                     players.sendMessage(ChatColor.translateAlternateColorCodes('&',
                             this.main.getConfig().getString("Spy-Features.Commands-Spy.Message")).
                                     replace("%player%", player.getName()).
-                                    replace("%cmd%", event.getMessage().replace("\\", "\\\\")));
+                                        replace("%cmd%", event.getMessage().replace("\\", "\\\\")));
 
                 }
             }

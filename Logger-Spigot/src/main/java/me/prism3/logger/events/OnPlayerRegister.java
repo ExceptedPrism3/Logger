@@ -3,6 +3,7 @@ package me.prism3.logger.events;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -21,12 +22,8 @@ public class OnPlayerRegister {
     private final Main main = Main.getInstance();
 
     public OnPlayerRegister() {
-
-        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-
+        for (Player player : Bukkit.getServer().getOnlinePlayers())
             this.onRegister(player);
-
-        }
     }
 
     private void onRegister(Player player) {
@@ -41,15 +38,13 @@ public class OnPlayerRegister {
         // Log To Files
         if (Data.isLogToFiles) {
 
-            try {
+            try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRegistrationFile(), true))) {
 
-                final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRegistrationFile(), true));
                 out.write(this.main.getMessages().get().getString("Files.Player-Registration").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())) + "\n");
-                out.close();
 
-            } catch (IOException e) {
+            } catch (final IOException e) {
 
-                this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                Log.warning("An error occurred while logging into the appropriate file.");
                 e.printStackTrace();
 
             }
@@ -66,7 +61,7 @@ public class OnPlayerRegister {
 
                 Main.getInstance().getDatabase().insertPlayerRegistration(Data.serverName, playerName, playerUUID.toString(), dateFormat.format(ZonedDateTime.now()));
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
 
         // SQLite
@@ -76,7 +71,7 @@ public class OnPlayerRegister {
 
                 Main.getInstance().getSqLite().insertPlayerRegistration(Data.serverName, playerName, playerUUID.toString(), dateFormat.format(ZonedDateTime.now()));
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

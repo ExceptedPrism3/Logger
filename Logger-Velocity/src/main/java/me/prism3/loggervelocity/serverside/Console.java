@@ -4,6 +4,7 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.command.CommandExecuteEvent;
 import me.prism3.loggervelocity.Main;
 import me.prism3.loggervelocity.utils.FileHandler;
+import me.prism3.loggervelocity.utils.Log;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -24,15 +25,13 @@ public class Console {
         // Log To Files
         if (isLogToFiles) {
 
-            try {
+            try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getConsoleCommandLogFile(), true))) {
 
-                final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getConsoleCommandLogFile(), true));
                 out.write(main.getMessages().getString("Files.Server-Side.Console-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command) + "\n");
-                out.close();
 
-            } catch (IOException e) {
+            } catch (final IOException e) {
 
-                main.getLogger().error("An error occurred while logging into the appropriate file.");
+                Log.error("An error occurred while logging into the appropriate file.");
                 e.printStackTrace();
 
             }
@@ -49,7 +48,7 @@ public class Console {
 
                 Main.getInstance().getDatabase().insertConsoleCommand(serverName, command);
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
 
         // SQLite
@@ -59,7 +58,7 @@ public class Console {
 
                 Main.getInstance().getSqLite().insertConsoleCommand(serverName, command);
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

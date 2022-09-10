@@ -3,6 +3,7 @@ package me.prism3.loggerbungeecord.events;
 import me.prism3.loggerbungeecord.Main;
 import me.prism3.loggerbungeecord.utils.Data;
 import me.prism3.loggerbungeecord.utils.FileHandler;
+import me.prism3.loggerbungeecord.utils.Log;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -28,7 +29,7 @@ public class OnServerSwitch implements Listener {
     @EventHandler
     public void onServerSwitch(final ServerSwitchEvent event) {
 
-        // If the player just joined, and DIDN'T switched from server.
+        // If the player just joined, and DIDN'T switch from server.
         if (event.getFrom() == null) return;
 
         final ProxiedPlayer player = event.getPlayer();
@@ -44,29 +45,25 @@ public class OnServerSwitch implements Listener {
 
             if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                try {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true))) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
                     out.write(this.main.getMessages().getString("Files.Server-Switch-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%from%", from).replace("%destination%", destination) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                    Log.severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             } else {
 
-                try {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerSwitchLogFile(), true))) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerSwitchLogFile(), true));
                     out.write(this.main.getMessages().getString("Files.Server-Switch").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%from%", from).replace("%destination%", destination) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                    Log.severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -99,7 +96,7 @@ public class OnServerSwitch implements Listener {
 
                 Main.getInstance().getDatabase().insertServerSwitch(Data.serverName, playerUUID.toString(), playerName, from, destination, player.hasPermission(Data.loggerStaffLog));
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
 
         // SQLite
@@ -109,7 +106,7 @@ public class OnServerSwitch implements Listener {
 
                 Main.getInstance().getSqLite().insertServerSwitch(Data.serverName, playerUUID.toString(), playerName, from, destination, player.hasPermission(Data.loggerStaffLog));
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

@@ -24,8 +24,8 @@ public class Messages {
         // Check if the selected Language is Valid | Exists
         if (!this.langFiles.contains(selectedLang.toLowerCase())) {
 
-            this.main.getLogger().severe("Unknown selected language file: '" + selectedLang + "'");
-            this.main.getLogger().severe("Disabling....");
+            Log.severe("Unknown selected language file: '" + selectedLang + "'");
+            Log.severe("Disabling....");
             this.isValid = false;
             return;
 
@@ -52,7 +52,36 @@ public class Messages {
 
     }
 
+    /*private void checkChanges() {
+
+        final Properties original = new Properties();
+
+        try {
+
+            original.load(this.main.getResource(selectedLang));
+
+            final Enumeration<Object> originalKeys = original.keys();
+            while (originalKeys.hasMoreElements()) {
+                final String a = (String) originalKeys.nextElement();
+                if (!LANG.containsKey(a)) {
+                    Log.info("Added missing '" + a + "' key to messages file.");
+                    addMessage(a + " = " + new String(original.getProperty(a).getBytes("ISO-8859-1"), "UTF-8"));
+                    LANG.setProperty(a, original.getProperty(a));
+                }
+            }
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+    }*/
+
+    /*private void addMessage(final String a) {
+        try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(messagesFile, true), "UTF-8"))) {
+            pw.println(a);
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+    }*/
+
     public boolean getIsValid() { return this.isValid; }
 
-    public List<String> getLangFiles() { return this.langFiles; }
 }

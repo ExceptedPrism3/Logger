@@ -1,16 +1,13 @@
 package me.prism3.loggervelocity.utils;
 
 import me.prism3.loggervelocity.Main;
-import me.prism3.loggervelocity.api.LiteBansUtil;
-import me.prism3.loggervelocity.commands.DiscordCMD;
-import me.prism3.loggervelocity.commands.Reload;
+import me.prism3.loggervelocity.hooks.LiteBanUtil;
 import me.prism3.loggervelocity.events.OnChat;
 import me.prism3.loggervelocity.events.OnLeave;
 import me.prism3.loggervelocity.events.OnLogin;
 import me.prism3.loggervelocity.events.oncommands.OnCommand;
-import me.prism3.loggervelocity.events.plugindependent.litebans.OnLiteBanEvents;
+import me.prism3.loggervelocity.events.plugindependent.litebans.OnLiteBan;
 import me.prism3.loggervelocity.serverside.RAM;
-import me.prism3.loggervelocity.serverside.Start;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -168,10 +165,10 @@ public class Data {
 
     private void dependentEventInitializer() {
 
-        if (LiteBansUtil.getLiteBansAPI().isPresent() && this.main.getConfig().getBoolean("Log-Extras.LiteBans")) {
+        if (LiteBanUtil.getLiteBansAPI().isPresent() && this.main.getConfig().getBoolean("Log-Extras.LiteBans")) {
 
-            Main.getServer().getScheduler().buildTask(this, new OnLiteBanEvents()).delay(5, TimeUnit.SECONDS).schedule();
-            this.main.getLogger().info("LiteBans Plugin Detected!");
+            Main.getServer().getScheduler().buildTask(this, new OnLiteBan()).delay(5, TimeUnit.SECONDS).schedule();
+            Log.info("LiteBans Plugin Detected!");
 
         }
     }

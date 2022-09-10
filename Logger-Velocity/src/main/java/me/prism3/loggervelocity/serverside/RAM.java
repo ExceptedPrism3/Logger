@@ -2,6 +2,7 @@ package me.prism3.loggervelocity.serverside;
 
 import me.prism3.loggervelocity.Main;
 import me.prism3.loggervelocity.utils.FileHandler;
+import me.prism3.loggervelocity.utils.Log;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -28,15 +29,13 @@ public class RAM implements Runnable {
             // Log To Files
             if (isLogToFiles) {
 
-                try {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRamLogFile(), true))) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRamLogFile(), true));
                     out.write(main.getMessages().getString("Files.Server-Side.RAM").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    main.getLogger().error("An error occurred while logging into the appropriate file.");
+                    Log.error("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -53,7 +52,7 @@ public class RAM implements Runnable {
 
                     Main.getInstance().getDatabase().insertRam(serverName, maxMemory, usedMemory, freeMemory);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -63,7 +62,7 @@ public class RAM implements Runnable {
 
                     Main.getInstance().getSqLite().insertRam(serverName, maxMemory, usedMemory, freeMemory);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
         }
     }

@@ -3,6 +3,7 @@ package me.prism3.logger.serverside;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,15 +38,13 @@ public class Console implements Listener {
         // Log To Files
         if (Data.isLogToFiles) {
 
-            try {
+            try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getConsoleLogFile(), true))) {
 
-                final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getConsoleLogFile(), true));
                 out.write(this.main.getMessages().get().getString("Files.Server-Side.Console-Commands").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command) + "\n");
-                out.close();
 
-            } catch (IOException e) {
+            } catch (final IOException e) {
 
-                this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                Log.warning("An error occurred while logging into the appropriate file.");
                 e.printStackTrace();
 
             }
@@ -62,7 +61,7 @@ public class Console implements Listener {
 
                 Main.getInstance().getDatabase().insertConsoleCommand(Data.serverName, command);
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
 
         // SQLite
@@ -72,7 +71,7 @@ public class Console implements Listener {
 
                 Main.getInstance().getSqLite().insertConsoleCommand(Data.serverName, command);
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

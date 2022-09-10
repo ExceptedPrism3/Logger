@@ -48,7 +48,7 @@ public class Metrics {
         this.plugin = plugin;
         try {
             loadConfig();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // Failed to load configuration
             plugin.getLogger().log(Level.WARNING, "Failed to load bStats config!", e);
             metricsBase = null;
@@ -279,7 +279,7 @@ public class Metrics {
                         try {
                             // Send the data
                             sendData(data);
-                        } catch (Exception e) {
+                        } catch (final Exception e) {
                             // Something went wrong! :(
                             if (logErrors) {
                                 errorLogger.accept("Could not submit bStats metrics data", e);

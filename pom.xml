@@ -6,7 +6,7 @@
 
     <groupId>me.prism3</groupId>
     <artifactId>Logger</artifactId>
-    <version>1.8.0.2</version>
+    <version>1.8.1</version>
     <modules>
         <module>Logger-Core</module>
         <module>Logger-Shaded</module>

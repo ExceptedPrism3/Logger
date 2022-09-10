@@ -1,4 +1,4 @@
-package me.prism3.logger.utils.litebansutil;
+package me.prism3.loggerbungeecord.utils.liteban;
 
 import litebans.api.Database;
 
@@ -20,12 +20,11 @@ public class UsernameFetcher {
             st.setString(1, uuid);
 
             try (ResultSet rs = st.executeQuery()) {
-
                 if (rs.next())
                     name = rs.getString("name");
             }
 
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (final SQLException e) { e.printStackTrace(); }
 
         return name;
     }

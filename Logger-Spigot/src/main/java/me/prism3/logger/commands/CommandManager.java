@@ -29,7 +29,6 @@ public class CommandManager implements TabExecutor {
         this.subCommands.add(new ToggleSpy());
         this.subCommands.add(new Discord());
         this.subCommands.add(new Dump());
-
     }
 
     @Override
@@ -38,26 +37,34 @@ public class CommandManager implements TabExecutor {
         final Main main = Main.getInstance();
 
         if (!sender.hasPermission(loggerStaff)) {
+
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', main.getMessages().get()
                     .getString("General.No-Permission").replace("%prefix%", pluginPrefix)));
+
             return false;
         }
 
-        if (args.length > 0)
-            for (int i = 0; i < this.getSubCommands().size(); i++)
-                if (args[0].equalsIgnoreCase(this.getSubCommands().get(i).getName()))
+        if (args.length > 0) {
+            for (int i = 0; i < this.getSubCommands().size(); i++) {
+                if (args[0].equalsIgnoreCase(this.getSubCommands().get(i).getName())) {
                     try {
                         this.getSubCommands().get(i).perform((Player) sender, args);
-                    } catch (IOException e) { e.printStackTrace(); }
-
-        else
-            if (sender.hasPermission(loggerStaff))
+                    } catch (final IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        else {
+            if (sender.hasPermission(loggerStaff)) {
                 sender.sendMessage("--------------------------------------------");
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "Running Logger: &a&l" + Data.pluginVersion));
                 for (int i = 0; i < this.getSubCommands().size(); i++)
                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&9&l" + this.getSubCommands().get(i).getSyntax() + " &8&l| &r" + this.getSubCommands().get(i).getDescription()));
                 sender.sendMessage("--------------------------------------------");
-                return true;
+            }
+        }
+        return true;
     }
 
     public List<SubCommand> getSubCommands() { return this.subCommands; }

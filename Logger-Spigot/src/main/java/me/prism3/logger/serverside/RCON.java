@@ -3,6 +3,7 @@ package me.prism3.logger.serverside;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -26,15 +27,13 @@ public class RCON implements Listener {
         // Log To Files
         if (Data.isLogToFiles) {
 
-            try {
-
-                final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRconFile(), true));
+            try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRconFile(), true))) {
+                
                 out.write(this.main.getMessages().get().getString("Files.Server-Side.RCON").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%IP%", ip).replace("%command%", command)) + "\n");
-                out.close();
 
-            } catch (IOException e) {
+            } catch (final IOException e) {
 
-                this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                Log.warning("An error occurred while logging into the appropriate file.");
                 e.printStackTrace();
 
             }
@@ -51,7 +50,7 @@ public class RCON implements Listener {
 
                 Main.getInstance().getDatabase().insertRCON(Data.serverName, ip, command);
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
 
         // SQLite
@@ -61,7 +60,7 @@ public class RCON implements Listener {
 
                 Main.getInstance().getSqLite().insertRCON(Data.serverName, ip, command);
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

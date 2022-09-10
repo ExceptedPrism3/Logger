@@ -1,4 +1,4 @@
-package me.prism3.logger.api;
+package me.prism3.logger.hooks;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;

@@ -1,6 +1,6 @@
 package me.prism3.loggervelocity.utils;
 
-import me.prism3.loggervelocity.api.LiteBansUtil;
+import me.prism3.loggervelocity.hooks.LiteBanUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -99,7 +99,7 @@ public class FileHandler {
             serverStartLogFolder.mkdir();
             serverStopLogFolder.mkdir();
             ramLogFolder.mkdir();
-            if (LiteBansUtil.getLiteBansAPI().isPresent()) {
+            if (LiteBanUtil.getLiteBansAPI().isPresent()) {
 
                 liteBansLogFolder.mkdir();
                 liteBansBansLogFolder.mkdir();
@@ -116,14 +116,14 @@ public class FileHandler {
             serverStartLogFile.createNewFile();
             serverStopLogFile.createNewFile();
             ramLogFile.createNewFile();
-            if (LiteBansUtil.getLiteBansAPI().isPresent()) {
+            if (LiteBanUtil.getLiteBansAPI().isPresent()) {
 
                 liteBansBansLogFile.createNewFile();
                 liteBansMuteLogFile.createNewFile();
                 liteBansKickLogFile.createNewFile();
             }
 
-        } catch (IOException e) { e.printStackTrace(); }
+        } catch (final IOException e) { e.printStackTrace(); }
     }
 
     public static File getStaffLogFile() { return staffLogFile; }
@@ -161,7 +161,7 @@ public class FileHandler {
 
             creationTime = (FileTime) Files.getAttribute(file.toPath(), "creationTime");
 
-        } catch (IOException e) { e.printStackTrace(); }
+        } catch (final IOException e) { e.printStackTrace(); }
 
         assert creationTime != null;
         final long offset = System.currentTimeMillis() - creationTime.toMillis();
@@ -241,7 +241,7 @@ public class FileHandler {
 
         }
 
-        if (LiteBansUtil.getLiteBansAPI().isPresent()) {
+        if (LiteBanUtil.getLiteBansAPI().isPresent()) {
 
             for (File liteBansLog : Objects.requireNonNull(liteBansLogFolder.listFiles()))
             {

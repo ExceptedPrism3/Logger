@@ -1,11 +1,12 @@
 package me.prism3.logger.events;
 
-import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import me.prism3.logger.utils.enums.FriendlyEnchants;
+import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -56,11 +57,8 @@ public class OnItemDrop implements Listener {
             final int blockZ = event.getItemDrop().getLocation().getBlockZ();
             final List<String> enchs = new ArrayList<>();
 
-            for (Enchantment ench : event.getItemDrop().getItemStack().getEnchantments().keySet()) {
-
+            for (Enchantment ench : event.getItemDrop().getItemStack().getEnchantments().keySet())
                 enchs.add(FriendlyEnchants.getFriendlyEnchantment(ench).getFriendlyName());
-
-            }
 
 
             final Coordinates coordinates = new Coordinates(blockX, blockY, blockZ, worldName);
@@ -70,49 +68,25 @@ public class OnItemDrop implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                    try {
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
 
-                        final BufferedWriter out = new BufferedWriter(
-                                new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(this.main.getMessages().get().getString("Files.Item-Drop-Staff")
-                                .replace("%time%",
-                                        Data.dateTimeFormatter.format(ZonedDateTime.now()))
-                                .replace("%world%", worldName).replace("%player%", playerName)
-                                .replace("%item%", item).replace("%amount%", String.valueOf(amount))
-                                .replace("%x%", String.valueOf(blockX))
-                                .replace("%y%", String.valueOf(blockY))
-                                .replace("%z%", String.valueOf(blockZ)).replace("%renamed%",
-                                        itemName)
-                                .replace("%enchantment%", String.valueOf(enchs)) + "\n");
-                        out.close();
+                        out.write(this.main.getMessages().get().getString("Files.Item-Drop-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName).replace("%enchantment%", String.valueOf(enchs)) + "\n");
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
                 } else {
 
-                    try {
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getItemDropFile(), true))) {
 
-                        final BufferedWriter out = new BufferedWriter(
-                                new FileWriter(FileHandler.getItemDropFile(), true));
-                        out.write(this.main.getMessages().get().getString("Files.Item-Drop")
-                                .replace("%time%",
-                                        Data.dateTimeFormatter.format(ZonedDateTime.now()))
-                                .replace("%world%", worldName).replace("%player%", playerName)
-                                .replace("%item%", item).replace("%amount%", String.valueOf(amount))
-                                .replace("%x%", String.valueOf(blockX))
-                                .replace("%y%", String.valueOf(blockY))
-                                .replace("%z%", String.valueOf(blockZ)).replace("%renamed%",
-                                        itemName)
-                                .replace("%enchantment%", String.valueOf(enchs)) + "\n");
-                        out.close();
+                        out.write(this.main.getMessages().get().getString("Files.Item-Drop").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName).replace("%enchantment%", String.valueOf(enchs)) + "\n");
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
@@ -126,34 +100,14 @@ public class OnItemDrop implements Listener {
 
                     if (!this.main.getMessages().get().getString("Discord.Item-Drop-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(playerName, playerUUID,
-                                this.main.getMessages().get().getString("Discord.Item-Drop-Staff")
-                                        .replace("%time%",
-                                                Data.dateTimeFormatter.format(ZonedDateTime.now()))
-                                        .replace("%world%", worldName).replace("%item%", item)
-                                        .replace("%amount%", String.valueOf(amount))
-                                        .replace("%x%", String.valueOf(blockX))
-                                        .replace("%y%", String.valueOf(blockY))
-                                        .replace("%z%", String.valueOf(blockZ)).replace("%renamed%",
-                                                itemName).replace("%enchantment%", String.valueOf(enchs)),
-                                false);
+                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Item-Drop-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName).replace("%enchantment%", String.valueOf(enchs)), false);
 
                     }
                 } else {
 
                     if (!this.main.getMessages().get().getString("Discord.Item-Drop").isEmpty()) {
 
-                        this.main.getDiscord().itemDrop(playerName, playerUUID,
-                                this.main.getMessages().get().getString("Discord.Item-Drop")
-                                        .replace("%time%",
-                                                Data.dateTimeFormatter.format(ZonedDateTime.now()))
-                                        .replace("%world%", worldName).replace("%item%", item)
-                                        .replace("%amount%", String.valueOf(amount))
-                                        .replace("%x%", String.valueOf(blockX))
-                                        .replace("%y%", String.valueOf(blockY))
-                                        .replace("%z%", String.valueOf(blockZ)).replace("%renamed%",
-                                                itemName).replace("%enchantment%", String.valueOf(enchs)),
-                                false);
+                        this.main.getDiscord().itemDrop(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Item-Drop").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName).replace("%enchantment%", String.valueOf(enchs)), false);
                     }
                 }
             }
@@ -165,7 +119,7 @@ public class OnItemDrop implements Listener {
 
                     Main.getInstance().getDatabase().insertItemDrop(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, enchs, itemName, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -175,7 +129,7 @@ public class OnItemDrop implements Listener {
 
                     Main.getInstance().getSqLite().insertItemDrop(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, enchs, itemName, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
         }
     }

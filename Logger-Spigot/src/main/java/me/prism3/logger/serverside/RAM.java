@@ -3,6 +3,7 @@ package me.prism3.logger.serverside;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -27,15 +28,13 @@ public class RAM implements Runnable {
             // Log To Files
             if (Data.isLogToFiles) {
 
-                try {
-
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRAMLogFile(), true));
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRAMLogFile(), true))) {
+                    
                     out.write(this.main.getMessages().get().getString("Files.Server-Side.RAM").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -52,7 +51,7 @@ public class RAM implements Runnable {
 
                     Main.getInstance().getDatabase().insertRam(Data.serverName, maxMemory, usedMemory, freeMemory);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -62,7 +61,7 @@ public class RAM implements Runnable {
 
                     Main.getInstance().getSqLite().insertRam(Data.serverName, maxMemory, usedMemory, freeMemory);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
         }
     }

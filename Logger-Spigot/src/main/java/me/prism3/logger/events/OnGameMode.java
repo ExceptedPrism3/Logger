@@ -4,6 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -46,15 +47,13 @@ public class OnGameMode implements Listener {
 
                     if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                        try {
+                        try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
 
-                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
                             out.write(this.main.getMessages().get().getString("Files.Game-Mode-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%game-mode%", gameMode) + "\n");
-                            out.close();
 
-                        } catch (IOException e) {
+                        } catch (final IOException e) {
 
-                            this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                            Log.warning("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
 
                         }
@@ -66,9 +65,9 @@ public class OnGameMode implements Listener {
                             out.write(this.main.getMessages().get().getString("Files.Game-Mode").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%game-mode%", gameMode) + "\n");
                             out.close();
 
-                        } catch (IOException e) {
+                        } catch (final IOException e) {
 
-                            this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                            Log.warning("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
 
                         }
@@ -101,7 +100,7 @@ public class OnGameMode implements Listener {
 
                         Main.getInstance().getDatabase().insertGameMode(Data.serverName, playerName, playerUUID.toString(), gameMode, worldName, player.hasPermission(loggerStaffLog));
 
-                    } catch (Exception e) { e.printStackTrace(); }
+                    } catch (final Exception e) { e.printStackTrace(); }
                 }
 
                 // External
@@ -111,7 +110,7 @@ public class OnGameMode implements Listener {
 
                         Main.getInstance().getSqLite().insertGameMode(Data.serverName, playerName, playerUUID.toString(), gameMode, worldName, player.hasPermission(loggerStaffLog));
 
-                    } catch (Exception e) { e.printStackTrace(); }
+                    } catch (final Exception e) { e.printStackTrace(); }
                 }
             }
         }

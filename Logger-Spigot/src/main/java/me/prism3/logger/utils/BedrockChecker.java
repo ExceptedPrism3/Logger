@@ -1,6 +1,6 @@
 package me.prism3.logger.utils;
 
-import me.prism3.logger.api.FloodGateUtil;
+import me.prism3.logger.hooks.FloodGateUtil;
 import org.geysermc.floodgate.api.FloodgateApi;
 
 import java.util.UUID;

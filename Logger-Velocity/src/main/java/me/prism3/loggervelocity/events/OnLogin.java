@@ -5,6 +5,7 @@ import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.proxy.Player;
 import me.prism3.loggervelocity.Main;
 import me.prism3.loggervelocity.utils.FileHandler;
+import me.prism3.loggervelocity.utils.Log;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -29,7 +30,6 @@ public class OnLogin {
         final String playerName = player.getUsername();
         final UUID playerUUID = player.getUniqueId();
         InetSocketAddress playerIP = player.getRemoteAddress();
-
         if (!isPlayerIP) playerIP = null;
 
         // Log To Files
@@ -37,29 +37,25 @@ public class OnLogin {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                try {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true))) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
                     out.write(main.getMessages().getString("Files.Player-Login-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%IP%", String.valueOf(playerIP)) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    main.getLogger().error("An error occurred while logging into the appropriate file.");
+                    Log.error("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
             } else {
 
-                try {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLoginLogFile(), true))) {
 
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLoginLogFile(), true));
                     out.write(main.getMessages().getString("Files.Player-Login").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%IP%", String.valueOf(playerIP)) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    main.getLogger().error("An error occurred while logging into the appropriate file.");
+                    Log.error("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -93,7 +89,7 @@ public class OnLogin {
 
                 Main.getInstance().getDatabase().insertPlayerLogin(serverName, playerName, playerUUID.toString(), playerIP, player.hasPermission(loggerStaffLog));
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
 
         // SQLite
@@ -103,7 +99,7 @@ public class OnLogin {
 
                 Main.getInstance().getSqLite().insertPlayerLogin(serverName, playerName, playerUUID.toString(), playerIP, player.hasPermission(loggerStaffLog));
 
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

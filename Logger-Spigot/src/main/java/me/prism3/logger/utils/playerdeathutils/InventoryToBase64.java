@@ -39,8 +39,9 @@ public class InventoryToBase64 {
                 byte[] byteArr = outputStream.toByteArray();
 
                 return Base64Coder.encodeLines(byteArr);
-            } catch (Exception e) {
-                throw new IllegalStateException("An error has occurred whilst saving the Player Inventory. Does the proper file exists? If the issue persists, contact the Authors!", e);
+            } catch (final Exception e) {
+                throw new IllegalStateException("An error has occurred whilst saving the Player Inventory." +
+                        " Does the proper file exists? If the issue persists, contact the Authors!", e);
             }
         }
         return null;

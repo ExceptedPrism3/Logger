@@ -3,6 +3,7 @@ package me.prism3.logger.serverside;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,7 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 
-public class OnCommandBlock implements Listener {
+public class CommandBlock implements Listener {
 
     private final Main main = Main.getInstance();
 
@@ -28,15 +29,13 @@ public class OnCommandBlock implements Listener {
             // Log To Files
             if (Data.isLogToFiles) {
 
-                try {
-
-                    final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandBlockFile(), true));
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandBlockFile(), true))){
+                    
                     out.write(this.main.getMessages().get().getString("Files.Server-Side.Command-Block").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command) + "\n");
-                    out.close();
 
-                } catch (IOException e) {
+                } catch (final IOException e) {
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -53,7 +52,7 @@ public class OnCommandBlock implements Listener {
 
                     Main.getInstance().getDatabase().insertCommandBlock(Data.serverName, command);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -63,7 +62,7 @@ public class OnCommandBlock implements Listener {
 
                     Main.getInstance().getSqLite().insertCommandBlock(Data.serverName, command);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
         }
     }

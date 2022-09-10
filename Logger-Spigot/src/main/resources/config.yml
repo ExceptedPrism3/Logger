@@ -5,21 +5,40 @@
 # /                    [ Bukkit Version ]                     /
 # /                                                           /
 # /////////////////////////////////////////////////////////////
+#
 # Thank you for using Logger Plugin! If you are experiencing any issues
 # or have any suggestions / features you want to be implemented into the plugin
 # feel free to join the support Discord Server!
+#
 # Spigot: Prism3
 # Discord: Prism3#9371 ID: 403667971089760257
 # Discord Server: https://discord.gg/MfR5mcpVfX
-# Config: 1.8
+
+
+# Messages file to use
 Language: en_en
+
+# Server Name
 Server-Name: "Server_Name"
+
+# Plugin's Prefix
 Plugin-Prefix: "&bLogger &8&l| &r "
+
+# Date & Time Formatter
 Time-Formatter: "yyyy-MM-dd HH:mm:ss"
+
+# How many Days for the logs to be deleted
+# Set it to -1 to cancel the Deletion
 File-Deletion: 7
+
+# Log to Files
 Log-to-Files: true
+
+# This will log players with the "logger.staff.log" permission node in their own folder / file
 Staff:
   Enabled: false
+
+# Logging features
 Log-Player:
   Chat: true
   Commands: true
@@ -50,6 +69,7 @@ Log-Player:
   Item-Frame-Break: true
   ArmorStand-Place: true
   ArmorStand-Break: true
+
 Log-Server:
   Start: true
   Stop: true
@@ -60,6 +80,8 @@ Log-Server:
   RCON: true
   Command-Block: true
   Player-Count: true
+
+# This Section requires other plugins to function
 Log-Extras:
   Essentials-AFK: true
   AuthMe-Wrong-Password: true
@@ -67,8 +89,13 @@ Log-Extras:
   LiteBans: true
   AdvancedBan: true
   ViaVersion: true
+
+# This Section logs some events depending on the server's version
 Log-Version-Exceptions:
   Wood-Stripping: true
+
+# Only Log Specified Commands
+# Block Commands from getting Logged
 Player-Commands:
   Whitelist-Commands: false
   Commands-to-Log:
@@ -82,30 +109,52 @@ Player-Commands:
     - /login
     - /changepassword
     - /register
+
+# Enable to display Player's IPs
 Player-Join:
   Player-IP: false
-Player-Level:
-  Log-Above: 100
+
+# Log players if their level exceeds the set amount
+Player-Level: 100
+
+# Which Game-Mode to get logged?
 Game-Mode: Creative
+
+# Player Death Backup System
 Player-Death-Backup:
   Enabled: true
   Max-Backup: 7
+
+# Commands to be blocked in console
+# Do not include the /
 Console-Commands:
   Blacklist-Commands: false
   Commands-to-Block:
     - list
     - op
     - ban
-RAM-TPS-Checker: 6000
-Vault-Checker: 6000
-RAM:
-  Percent: 50
+
+# How often should the Checkers run
+# It's better to have it above 1 min to avoid any complications
+# Value in Ticks, 20 Ticks = 1 Second
+Checkers:
+  RAM-TPS: 6000
+  Vault: 6000
+  Player-Count: 6000
+
+# Server RAM Log
+# Value in Percent: 0 -> 100
+RAM: 50
+
+# Server TPS Logging
 TPS:
-  Value-Medium: 16
-  Value-Critical: 7
-Player-Count:
-  Number: 50
-  Checker: 6000
+  Medium: 16
+  Critical: 7
+
+# Log when set amount of players are online
+Player-Count: 50
+
+# Spy Features Settings
 Spy-Features:
   Commands-Spy:
     Enable: false
@@ -119,6 +168,10 @@ Spy-Features:
   Anvil-Spy:
     Enable: false
     Message: "&8[&bLogger &8&l| &eAnvil-Spy&8] &7%player% >> %renamed%"
+
+# External Database Feature
+# Available Types are MySQL and MariaDB
+# Data-Deletion Value in Days, Set it -1 to cancel
 Database:
   Enable: false
   Type: MySQL
@@ -128,7 +181,18 @@ Database:
   Password: PassworD
   Database: database
   Data-Deletion: 7
+
+# SQLite Feature
+# Data-Deletion Value in Days, Set it -1 to cancel
 SQLite:
   Enable: false
   Data-Deletion: 7
-Update-Checker: true
+
+# Updates Settings
+Updater:
+  Checker: true
+  Auto-Download: true
+  Auto-Config-Updater: true
+
+# Do not touch unless you want to reset the config
+Config-Version: 1

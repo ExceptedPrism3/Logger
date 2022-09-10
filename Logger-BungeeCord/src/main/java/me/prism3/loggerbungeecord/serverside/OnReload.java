@@ -2,6 +2,7 @@ package me.prism3.loggerbungeecord.serverside;
 
 import me.prism3.loggerbungeecord.Main;
 import me.prism3.loggerbungeecord.utils.FileHandler;
+import me.prism3.loggerbungeecord.utils.Log;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ProxyReloadEvent;
@@ -40,29 +41,25 @@ public class OnReload implements Listener {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    try {
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true))) {
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true));
                         out.write(this.main.getMessages().getString("Files.Server-Reload-Player-Staff-").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", playerName) + "\n");
-                        out.close();
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                        Log.severe("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
                 } else {
 
-                    try {
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getReloadLogFile(), true))) {
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getReloadLogFile(), true));
                         out.write(this.main.getMessages().getString("Files.Server-Reload-Player").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", playerName) + "\n");
-                        out.close();
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                        Log.severe("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
@@ -96,7 +93,7 @@ public class OnReload implements Listener {
 
                     Main.getInstance().getDatabase().insertServerReload(serverName, playerName, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -108,7 +105,7 @@ public class OnReload implements Listener {
 
                     Main.getInstance().getSqLite().insertServerReload(serverName, playerName, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -116,15 +113,13 @@ public class OnReload implements Listener {
         } else {
 
             // File Logging
-            try {
+            try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getReloadLogFile(), true))) {
 
-                final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getReloadLogFile(), true));
                 out.write(this.main.getMessages().getString("Files.Server-Side.Reload-Console").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())) + "\n");
-                out.close();
 
-            } catch (IOException e) {
+            } catch (final IOException e) {
 
-                Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                Log.severe("An error occurred while logging into the appropriate file.");
                 e.printStackTrace();
 
             }
@@ -140,7 +135,7 @@ public class OnReload implements Listener {
                     //TODO server reload
                     Main.getInstance().getDatabase().insertServerReload(serverName, null, true);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -150,7 +145,7 @@ public class OnReload implements Listener {
 
                     Main.getInstance().getSqLite().insertServerReload(serverName, null, true);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
         }
     }

@@ -4,7 +4,8 @@ import litebans.api.Entry;
 import litebans.api.Events;
 import me.prism3.loggerbungeecord.Main;
 import me.prism3.loggerbungeecord.utils.FileHandler;
-import me.prism3.loggerbungeecord.utils.litebanutil.UsernameFetcher;
+import me.prism3.loggerbungeecord.utils.Log;
+import me.prism3.loggerbungeecord.utils.liteban.UsernameFetcher;
 import net.md_5.bungee.api.plugin.Listener;
 
 import java.io.BufferedWriter;
@@ -79,15 +80,13 @@ public class OnLiteBan implements Listener, Runnable {
 
                     assert fileLog != null;
 
-                    try {
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(fileLog, true))) {
 
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(fileLog, true));
                         out.write(main.getMessages().getString("Files.Extras.LiteBans").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()) + "\n");
-                        out.close();
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                        Log.severe("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
@@ -104,7 +103,7 @@ public class OnLiteBan implements Listener, Runnable {
 
                         Main.getInstance().getDatabase().insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
 
-                    } catch (Exception e) { e.printStackTrace(); }
+                    } catch (final Exception e) { e.printStackTrace(); }
                 }
 
                 // SQLite
@@ -114,7 +113,7 @@ public class OnLiteBan implements Listener, Runnable {
 
                         Main.getInstance().getSqLite().insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
 
-                    } catch (Exception e) { e.printStackTrace(); }
+                    } catch (final Exception e) { e.printStackTrace(); }
                 }
             }
         });

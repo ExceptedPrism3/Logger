@@ -1,10 +1,11 @@
 package me.prism3.logger.events;
 
-import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
+import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -60,49 +61,25 @@ public class OnItemPickup implements Listener {
 
                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
-                    try {
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
 
-                        final BufferedWriter out = new BufferedWriter(
-                                new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(this.main.getMessages().get().getString("Files.Item-Pickup-Staff")
-                                .replace("%time%",
-                                        Data.dateTimeFormatter.format(ZonedDateTime.now()))
-                                .replace("%world%", worldName).replace("%player%", playerName)
-                                .replace("%item%", String.valueOf(item))
-                                .replace("%amount%", String.valueOf(amount))
-                                .replace("%x%", String.valueOf(blockX))
-                                .replace("%y%", String.valueOf(blockY))
-                                .replace("%z%", String.valueOf(blockZ)).replace("%renamed%",
-                                        itemName) + "\n");
-                        out.close();
+                        out.write(this.main.getMessages().get().getString("Files.Item-Pickup-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", String.valueOf(item)).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName) + "\n");
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
                 } else {
 
-                    try {
+                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getItemPickupFile(), true))) {
 
-                        final BufferedWriter out = new BufferedWriter(
-                                new FileWriter(FileHandler.getItemPickupFile(), true));
-                        out.write(this.main.getMessages().get().getString("Files.Item-Pickup")
-                                .replace("%time%",
-                                        Data.dateTimeFormatter.format(ZonedDateTime.now()))
-                                .replace("%world%", worldName).replace("%player%", playerName)
-                                .replace("%item%", String.valueOf(item))
-                                .replace("%amount%", String.valueOf(amount))
-                                .replace("%x%", String.valueOf(blockX))
-                                .replace("%y%", String.valueOf(blockY))
-                                .replace("%z%", String.valueOf(blockZ)).replace("%renamed%",
-                                        itemName) + "\n");
-                        out.close();
+                        out.write(this.main.getMessages().get().getString("Files.Item-Pickup").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", String.valueOf(item)).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName) + "\n");
 
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
@@ -116,34 +93,14 @@ public class OnItemPickup implements Listener {
 
                     if (!this.main.getMessages().get().getString("Discord.Item-Pickup-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(playerName, playerUUID,
-                                this.main.getMessages().get().getString("Discord.Item-Pickup-Staff")
-                                        .replace("%time%",
-                                                Data.dateTimeFormatter.format(ZonedDateTime.now()))
-                                        .replace("%world%", worldName)
-                                        .replace("%item%", String.valueOf(item))
-                                        .replace("%amount%", String.valueOf(amount))
-                                        .replace("%x%", String.valueOf(blockX))
-                                        .replace("%y%", String.valueOf(blockY))
-                                        .replace("%z%", String.valueOf(blockZ)).replace("%renamed%",
-                                                itemName), false);
+                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Item-Pickup-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", String.valueOf(item)).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName), false);
 
                     }
                 } else {
 
                     if (!this.main.getMessages().get().getString("Discord.Item-Pickup").isEmpty()) {
 
-                        this.main.getDiscord().itemPickup(playerName, playerUUID,
-                                this.main.getMessages().get().getString("Discord.Item-Pickup")
-                                        .replace("%time%",
-                                                Data.dateTimeFormatter.format(ZonedDateTime.now()))
-                                        .replace("%world%", worldName)
-                                        .replace("%item%", String.valueOf(item))
-                                        .replace("%amount%", String.valueOf(amount))
-                                        .replace("%x%", String.valueOf(blockX))
-                                        .replace("%y%", String.valueOf(blockY))
-                                        .replace("%z%", String.valueOf(blockZ)).replace("%renamed%",
-                                                itemName), false);
+                        this.main.getDiscord().itemPickup(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Item-Pickup").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", String.valueOf(item)).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName), false);
                     }
                 }
             }
@@ -155,7 +112,7 @@ public class OnItemPickup implements Listener {
 
                     Main.getInstance().getDatabase().insertItemPickup(Data.serverName, playerName, playerUUID.toString(), item.name(), amount, coordinates, itemName, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -165,7 +122,7 @@ public class OnItemPickup implements Listener {
 
                     Main.getInstance().getSqLite().insertItemPickup(Data.serverName, playerName, playerUUID.toString(), item.name(), amount, coordinates, itemName, player.hasPermission(loggerStaffLog));
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
         }
     }

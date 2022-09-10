@@ -56,7 +56,7 @@ public class OnAnvilSpy implements Listener {
                                     players.sendMessage(ChatColor.translateAlternateColorCodes('&',
                                             this.main.getConfig().getString("Spy-Features.Anvil-Spy.Message")).
                                                     replace("%player%", player.getName()).
-                                                    replace("%renamed%", displayName));
+                                                        replace("%renamed%", displayName));
 
                                 }
                             }
