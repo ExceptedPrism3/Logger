@@ -25,17 +25,6 @@ import java.util.stream.Stream;
 
 public final class SQLite implements DataSourceInterface {
 
-    private static final List<String> tablesNames = Stream
-            .of("player_chat", "player_commands", "player_sign_text",
-                    "player_death", "player_teleport", "player_connection", "block_interaction",
-                    "player_kick", "player_level", "bucket_action", "anvil",
-                    "item_action", "enchanting",
-                    "book_editing", "item_pickup", "furnace", "game_mode", "crafting",
-                    "registration", "server_start",
-                    "server_stop", "console_commands", "ram", "tps", "portal_creation", "rcon",
-                    "primed_tnt", "command_block",
-                    "chest_interaction", "entity_death")
-            .collect(Collectors.toCollection(ArrayList::new));
     private Connection connection;
     private final File databaseFile;
 
@@ -50,11 +39,11 @@ public final class SQLite implements DataSourceInterface {
         catch (ClassNotFoundException e) { throw new RuntimeException(e); }
 
 
-        this.createTable();
+        this.createTables();
 
     }
 
-    public Connection getConnection() throws SQLException {
+    private Connection getConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:sqlite:" + this.databaseFile.getAbsolutePath());
     }
 
@@ -63,7 +52,7 @@ public final class SQLite implements DataSourceInterface {
         return ("jdbc:sqlite:" + this.databaseFile.getAbsolutePath());
     }
 
-    private void createTable() {
+    private void createTables() {
 
         try (final Connection connection = this.getConnection();
              final Statement statement = connection.createStatement()) {
@@ -223,7 +212,6 @@ public final class SQLite implements DataSourceInterface {
                                 " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
                                 " player_name TEXT, x INT, y INT, z INT, is_staff BOOLEAN)");
 
-                tablesNames.add("afk");
             }
 
             if (this.options.isAuthMeEnabled()) {
@@ -233,7 +221,6 @@ public final class SQLite implements DataSourceInterface {
                                 " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
                                 "player_name TEXT, is_staff BOOLEAN)");
 
-                tablesNames.add("wrong_password");
             }
 
             if (this.options.isVaultEnabled()) {
@@ -243,7 +230,6 @@ public final class SQLite implements DataSourceInterface {
                                 " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
                                 "player_name TEXT, old_balance DOUBLE, new_balance DOUBLE, is_staff BOOLEAN)");
 
-                tablesNames.add("vault");
             }
 
             if (this.options.isLiteBansEnabled()) {
@@ -253,7 +239,6 @@ public final class SQLite implements DataSourceInterface {
                         " sender TEXT, command TEXT, onwho TEXT, reason TEXT," +
                         " duration TEXT, is_silent BOOLEAN)");
 
-                tablesNames.add("litebans");
             }
 
             if (this.options.isAdvancedBanEnabled()) {
@@ -263,7 +248,6 @@ public final class SQLite implements DataSourceInterface {
                                 " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, type TEXT,executor TEXT," +
                                 " executed_on TEXT, reason TEXT, expiration_date TEXT)");
 
-                tablesNames.add("advanced_ban");
             }
 
             // Version Exceptions Part
@@ -274,7 +258,6 @@ public final class SQLite implements DataSourceInterface {
                                 " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, " +
                                 "uuid TEXT, player_name TEXT, log_name TEXT, x INT, y INT, z INT, is_staff BOOLEAN)");
 
-                tablesNames.add("wood_stripping");
             }
 
         }
@@ -640,7 +623,18 @@ public final class SQLite implements DataSourceInterface {
     @Override
     public void insertAnvil(String serverName, String playerName, String playerUUID, String newName,
                             boolean isStaff) {
+        try (final Connection connection = this.getConnection();
+             final PreparedStatement anvil = connection.prepareStatement("INSERT INTO `anvil` (server_name, new_name, player_name, is_staff) VALUES(?,?,?,?)")) {
 
+            anvil.setString(1, serverName);
+            anvil.setString(2, newName);
+            anvil.setString(3, playerName);
+            anvil.setBoolean(4, isStaff);
+            anvil.executeUpdate();
+
+
+        }
+        catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -1014,8 +1008,8 @@ public final class SQLite implements DataSourceInterface {
             advancedBan.setString(4, executedOn);
             advancedBan.setString(5, reason);
             advancedBan.setLong(6, expirationDate);
-
             advancedBan.executeUpdate();
+
 
         }
         catch (final SQLException e) { e.printStackTrace(); }
