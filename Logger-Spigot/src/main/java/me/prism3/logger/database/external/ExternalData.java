@@ -130,7 +130,7 @@ public class ExternalData {
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS chest_interaction "
                     + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_uuid VARCHAR(80), player_name VARCHAR(100), x INT, y INT, z INT, items VARCHAR(255), is_staff TINYINT)");
+                    "player_uuid VARCHAR(80), player_name VARCHAR(100), x INT, y INT, z INT, items TEXT, is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS entity_death "
                     + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +

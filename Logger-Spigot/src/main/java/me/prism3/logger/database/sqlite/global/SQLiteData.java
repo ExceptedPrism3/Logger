@@ -128,7 +128,7 @@ public class SQLiteData {
 
             chestInteraction = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS chest_interaction" +
                     "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, world TEXT(50), player_uuid INTEGER, " +
-                    "player_name TEXT(40), x INTEGER, y INTEGER, z INTEGER, items TEXT(255), is_staff INTEGER)");
+                    "player_name TEXT(40), x INTEGER, y INTEGER, z INTEGER, items TEXT, is_staff INTEGER)");
 
             entityDeath = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS entity_death" +
                     "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, world TEXT(50), player_uuid INTEGER, " +
