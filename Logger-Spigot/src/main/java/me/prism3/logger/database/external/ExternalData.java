@@ -739,7 +739,7 @@ public class ExternalData {
 
         try (Connection connection = plugin.getExternal().getHikari().getConnection();
              final PreparedStatement rCon = connection.prepareStatement("INSERT INTO rcon" +
-                     " (server_name, ip, command) VALUES(?,?,?)")) {
+                     " (server_name, ip, command) VALUES(?,INET_ATON(?),?)")) {
 
             rCon.setString(1, serverName);
             rCon.setString(2, ip);
