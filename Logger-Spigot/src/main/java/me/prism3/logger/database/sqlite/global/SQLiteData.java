@@ -155,7 +155,7 @@ public class SQLiteData {
                     "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, world TEXT(50), caused_by TEXT(50))");
 
             rCon = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS rcon" +
-                    "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, ip TEXT, command TEXT(100))");
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, command TEXT(100))");
 
             commandBlock = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS command_block" +
                     "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, command TEXT(256))");
@@ -773,13 +773,12 @@ public class SQLiteData {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    public static void insertRcon(String serverName, String ip, String command) {
+    public static void insertRcon(String serverName, String command) {
         try {
-            final PreparedStatement rCon = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO rcon (server_name, date, ip, Command) VALUES (?,?,?,?)");
+            final PreparedStatement rCon = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO rcon (server_name, date, Command) VALUES (?,?,?)");
             rCon.setString(1, serverName);
             rCon.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
-            rCon.setString(3, ip);
-            rCon.setString(4, command);
+            rCon.setString(3, command);
 
             rCon.executeUpdate();
             rCon.close();

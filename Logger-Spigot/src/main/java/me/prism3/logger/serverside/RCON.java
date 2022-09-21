@@ -25,7 +25,6 @@ public class RCON implements Listener {
 
         if (this.main.getConfig().getBoolean("Log-Server.RCON")) {
 
-            final String ip = event.getSender().getServer().getIp();
             final String command = event.getCommand();
 
             // Log To Files
@@ -34,7 +33,7 @@ public class RCON implements Listener {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRconFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.RCON")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%IP%", ip).replace("%command%", command)) + "\n");
+                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.RCON")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -48,7 +47,7 @@ public class RCON implements Listener {
             // Discord
             if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.RCON")).isEmpty()) {
 
-                this.main.getDiscord().rCon(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.RCON")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%IP%", ip).replace("%command%", command)), false);
+                this.main.getDiscord().rCon(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.RCON")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%command%", command)), false);
             }
 
             // External
@@ -56,7 +55,7 @@ public class RCON implements Listener {
 
                 try {
 
-                    ExternalData.rCon(Data.serverName, ip, command);
+                    ExternalData.rCon(Data.serverName, command);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }
@@ -66,7 +65,7 @@ public class RCON implements Listener {
 
                 try {
 
-                    SQLiteData.insertRcon(Data.serverName, ip, command);
+                    SQLiteData.insertRcon(Data.serverName, command);
 
                 } catch (Exception e) { e.printStackTrace(); }
             }

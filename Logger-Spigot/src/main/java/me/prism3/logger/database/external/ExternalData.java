@@ -161,7 +161,7 @@ public class ExternalData {
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS rcon "
                     + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
-                    "ip INT UNSIGNED, command VARCHAR(50))");
+                    ", command VARCHAR(50))");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS command_block "
                     + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()," +
@@ -735,15 +735,14 @@ public class ExternalData {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    public static void rCon(String serverName, String ip, String command) {
+    public static void rCon(String serverName, String command) {
 
         try (Connection connection = plugin.getExternal().getHikari().getConnection();
              final PreparedStatement rCon = connection.prepareStatement("INSERT INTO rcon" +
-                     " (server_name, ip, command) VALUES(?,INET_ATON(?),?)")) {
+                     " (server_name, command) VALUES(?,?)")) {
 
             rCon.setString(1, serverName);
-            rCon.setString(2, ip);
-            rCon.setString(3, command);
+            rCon.setString(2, command);
 
             rCon.executeUpdate();
 

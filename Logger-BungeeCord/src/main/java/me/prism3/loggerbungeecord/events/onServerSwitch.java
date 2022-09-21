@@ -28,7 +28,7 @@ public class onServerSwitch implements Listener {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                Server from = event.getPlayer().getServer().getInfo().getName()
+                Server from = event.getPlayer().getServer().getInfo().getName();
                 Server destination = event.getPlayer().getServer().getInfo().getName();
 
                 // I only did discord for now

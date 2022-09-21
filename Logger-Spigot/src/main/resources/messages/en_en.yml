@@ -67,7 +67,7 @@ Files:
     TPS-Medium: "[%time%] The TPS has dropped to %TPS%"
     TPS-Critical: "[%time%] WARNING! The TPS has dropped to %TPS%"
     Portal-Creation: "[%time%] A portal has been created in [%world%] using %material%"
-    RCON: "[%time%] RCON Command %command% has been sent via this IP %IP%"
+    RCON: "[%time%] This Command '%command%' has been executed via an RCON"
     Command-Block: "[%time%] %command%"
   Extras:
     AFK-Staff: "[%time%] [%world%] The Staff <%player%> has went AFK at X= %x%, Y= %y%, Z= %z%"
@@ -145,7 +145,7 @@ Discord:
     TPS-Medium: "**[%time%]** The TPS has dropped to **%TPS%**"
     TPS-Critical: "**[%time%]** WARNING! The TPS has dropped to **%TPS%**"
     Portal-Creation: "**[%time%]** A portal has been created in **[%time%]** **[%world%]** using **%material%**"
-    RCON: "[%time%] RCON Command **%command%** has been sent via this IP ****%IP%****"
+    RCON: "[%time%] This command '**%command%**' has been executed via an RCON"
     Command-Block: "**[%time%]** **%command%**"
   Extras:
     AFK-Staff: "**[%time%]** **[%world%]*X= **%x%** `|` Y= **%y%** `|` Z= **%z%**"
