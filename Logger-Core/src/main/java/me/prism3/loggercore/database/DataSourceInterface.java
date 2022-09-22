@@ -84,7 +84,7 @@ public interface DataSourceInterface extends DataInterface {
     void insertFurnace(String serverName, String playerName, String playerUUID, String item,
                        int amount, Coordinates coords, boolean isStaff);
 
-    void insertRCON(String serverName, String ip, String command);
+    void insertRCON(String serverName, String command);
 
     void insertGameMode(String serverName, String playerName, String playerUUID, String theGameMode,
                         String worldName, boolean isStaff);

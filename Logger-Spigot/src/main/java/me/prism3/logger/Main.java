@@ -5,12 +5,12 @@ import me.prism3.logger.commands.getting.Chat;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteRegistration;
 import me.prism3.logger.discord.Discord;
-import me.prism3.logger.discord.DiscordFile;
 import me.prism3.logger.serverside.Start;
 import me.prism3.logger.serverside.Stop;
 import me.prism3.logger.utils.*;
 import me.prism3.logger.utils.enums.NmsVersions;
 import me.prism3.logger.utils.manager.ConfigManager;
+import me.prism3.logger.utils.manager.DiscordManager;
 import me.prism3.logger.utils.updater.BukkitUpdater;
 import me.prism3.logger.utils.updater.SpigotUpdater;
 import me.prism3.logger.utils.updater.Updater;
@@ -18,6 +18,7 @@ import me.prism3.loggercore.database.DataSourceInterface;
 import me.prism3.loggercore.database.datasource.Database;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import static me.prism3.logger.utils.Data.*;
@@ -34,7 +35,7 @@ public class Main extends JavaPlugin {
     private SQLiteRegistration sqLiteReg;
 
     private Discord discord;
-    private DiscordFile discordFile;
+    private DiscordManager discordFile;
 
     private final NmsVersions version = NmsVersions.valueOf(Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3]);
 
@@ -46,16 +47,13 @@ public class Main extends JavaPlugin {
         Log.setup(this.getLogger());
 
         new ConfigManager(this);
+        discordFile = new DiscordManager(this);
 
         this.initializer(new Data());
 
         if (!this.langChecker()) return;
 
-        new FileUpdater(this.getDataFolder());
-
-        this.discordFile = new DiscordFile();
-        this.discordFile.setup();
-        this.discordFile.get().options().copyDefaults(true);
+//        new FileUpdater(this.getDataFolder());
 
         this.discord = new Discord();
         this.discord.run();
@@ -201,7 +199,7 @@ public class Main extends JavaPlugin {
 
     public Discord getDiscord() { return this.discord; }
 
-    public DiscordFile getDiscordFile() { return this.discordFile; }
+    public FileConfiguration getDiscordFile() { return this.discordFile.getDiscord(); }
 
     public Messages getMessages() { return this.messages; }
 

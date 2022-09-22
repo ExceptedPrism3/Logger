@@ -201,6 +201,7 @@ Fixes
     [!] Commands not working in console
     [!] LiteBans table not auto deleting on Velocity instance
     [!] Commands not working from console
+    [!] RCON not logging into Files
 
 Changes
     [*] Remade permissions which will log OP and NOT OP players until they're permitted with the exempt permission
@@ -208,4 +209,7 @@ Changes
     [*] Minor messages changes
     [*] Minor Velocity & Bungee Code improvements
     [*] Changed BungeeCord commands to /loggerb and Velocity to /loggerv
+
+Removed
+    [-] IP Column from RCON checher
 

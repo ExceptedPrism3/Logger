@@ -65,15 +65,15 @@ public class Discord {
 
     public void run() {
 
-        if (this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
+        if (this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-            final String botToken = this.main.getDiscordFile().get().getString("Discord.Bot-Token");
+            final String botToken = this.main.getDiscordFile().getString("Discord.Bot-Token");
 
             try {
 
                 this.jda = JDABuilder.createDefault(botToken).build().awaitReady();
 
-                if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Enabled")) new DiscordStatus(this.jda);
+                if (this.main.getDiscordFile().getBoolean("ActivityCycling.Enabled")) new DiscordStatus(this.jda);
 
             } catch (final Exception e) {
 
@@ -84,96 +84,96 @@ public class Discord {
             }
 
             // Player Side Part
-            final String staffChannelID = this.main.getDiscordFile().get().getString("Discord.Staff.Channel-ID");
+            final String staffChannelID = this.main.getDiscordFile().getString("Discord.Staff.Channel-ID");
 
-            final String playerChatChannelID = this.main.getDiscordFile().get().getString("Discord.Player-Chat.Channel-ID");
+            final String playerChatChannelID = this.main.getDiscordFile().getString("Discord.Player-Chat.Channel-ID");
 
-            final String playerCommandsChannelID = this.main.getDiscordFile().get().getString("Discord.Player-Commands.Channel-ID");
+            final String playerCommandsChannelID = this.main.getDiscordFile().getString("Discord.Player-Commands.Channel-ID");
 
-            final String playerSignTextChannelID = this.main.getDiscordFile().get().getString("Discord.Player-Sign-Text.Channel-ID");
+            final String playerSignTextChannelID = this.main.getDiscordFile().getString("Discord.Player-Sign-Text.Channel-ID");
 
-            final String playerJoinChannelID = this.main.getDiscordFile().get().getString("Discord.Player-Join.Channel-ID");
+            final String playerJoinChannelID = this.main.getDiscordFile().getString("Discord.Player-Join.Channel-ID");
 
-            final String playerLeaveChannelID = this.main.getDiscordFile().get().getString("Discord.Player-Leave.Channel-ID");
+            final String playerLeaveChannelID = this.main.getDiscordFile().getString("Discord.Player-Leave.Channel-ID");
 
-            final String playerKickChannelID = this.main.getDiscordFile().get().getString("Discord.Player-Kick.Channel-ID");
+            final String playerKickChannelID = this.main.getDiscordFile().getString("Discord.Player-Kick.Channel-ID");
 
-            final String playerDeathChannelID = this.main.getDiscordFile().get().getString("Discord.Player-Death.Channel-ID");
+            final String playerDeathChannelID = this.main.getDiscordFile().getString("Discord.Player-Death.Channel-ID");
 
-            final String playerTeleportChannelID = this.main.getDiscordFile().get().getString("Discord.Player-Teleport.Channel-ID");
+            final String playerTeleportChannelID = this.main.getDiscordFile().getString("Discord.Player-Teleport.Channel-ID");
 
-            final String playerLevelChannelID = this.main.getDiscordFile().get().getString("Discord.Player-Level.Channel-ID");
+            final String playerLevelChannelID = this.main.getDiscordFile().getString("Discord.Player-Level.Channel-ID");
 
-            final String blockPlaceChannelID = this.main.getDiscordFile().get().getString("Discord.Block-Place.Channel-ID");
+            final String blockPlaceChannelID = this.main.getDiscordFile().getString("Discord.Block-Place.Channel-ID");
 
-            final String blockBreakChannelID = this.main.getDiscordFile().get().getString("Discord.Block-Break.Channel-ID");
+            final String blockBreakChannelID = this.main.getDiscordFile().getString("Discord.Block-Break.Channel-ID");
 
-            final String bucketFillChannelID = this.main.getDiscordFile().get().getString("Discord.Bucket-Fill.Channel-ID");
+            final String bucketFillChannelID = this.main.getDiscordFile().getString("Discord.Bucket-Fill.Channel-ID");
 
-            final String bucketEmptyChannelID = this.main.getDiscordFile().get().getString("Discord.Bucket-Empty.Channel-ID");
+            final String bucketEmptyChannelID = this.main.getDiscordFile().getString("Discord.Bucket-Empty.Channel-ID");
 
-            final String anvilChannelID = this.main.getDiscordFile().get().getString("Discord.Anvil.Channel-ID");
+            final String anvilChannelID = this.main.getDiscordFile().getString("Discord.Anvil.Channel-ID");
 
-            final String itemDropChannelID = this.main.getDiscordFile().get().getString("Discord.Item-Drop.Channel-ID");
+            final String itemDropChannelID = this.main.getDiscordFile().getString("Discord.Item-Drop.Channel-ID");
 
-            final String enchantingChannelID = this.main.getDiscordFile().get().getString("Discord.Enchanting.Channel-ID");
+            final String enchantingChannelID = this.main.getDiscordFile().getString("Discord.Enchanting.Channel-ID");
 
-            final String bookEditingChannelID = this.main.getDiscordFile().get().getString("Discord.Book-Editing.Channel-ID");
+            final String bookEditingChannelID = this.main.getDiscordFile().getString("Discord.Book-Editing.Channel-ID");
 
-            final String itemPickupChannelID = this.main.getDiscordFile().get().getString("Discord.Item-Pickup.Channel-ID");
+            final String itemPickupChannelID = this.main.getDiscordFile().getString("Discord.Item-Pickup.Channel-ID");
 
-            final String furnaceChannelID = this.main.getDiscordFile().get().getString("Discord.Furnace.Channel-ID");
+            final String furnaceChannelID = this.main.getDiscordFile().getString("Discord.Furnace.Channel-ID");
 
-            final String gameModeChannelID = this.main.getDiscordFile().get().getString("Discord.Game-Mode.Channel-ID");
+            final String gameModeChannelID = this.main.getDiscordFile().getString("Discord.Game-Mode.Channel-ID");
 
-            final String craftChannelID = this.main.getDiscordFile().get().getString("Discord.Craft.Channel-ID");
+            final String craftChannelID = this.main.getDiscordFile().getString("Discord.Craft.Channel-ID");
 
-            final String registrationChannelID = this.main.getDiscordFile().get().getString("Discord.Registration.Channel-ID");
+            final String registrationChannelID = this.main.getDiscordFile().getString("Discord.Registration.Channel-ID");
 
-            final String primedTNTChannelID = this.main.getDiscordFile().get().getString("Discord.Primed-TNT.Channel-ID");
+            final String primedTNTChannelID = this.main.getDiscordFile().getString("Discord.Primed-TNT.Channel-ID");
 
-            final String chestInteractionChannelID = this.main.getDiscordFile().get().getString("Discord.Chest-Interaction.Channel-ID");
+            final String chestInteractionChannelID = this.main.getDiscordFile().getString("Discord.Chest-Interaction.Channel-ID");
 
-            final String entityDeathChannelID = this.main.getDiscordFile().get().getString("Discord.Entity-Death.Channel-ID");
+            final String entityDeathChannelID = this.main.getDiscordFile().getString("Discord.Entity-Death.Channel-ID");
 
-            final String itemFramePlaceChannelID = this.main.getDiscordFile().get().getString("Discord.Item-Frame-Place.Channel-ID");
+            final String itemFramePlaceChannelID = this.main.getDiscordFile().getString("Discord.Item-Frame-Place.Channel-ID");
 
-            final String itemFrameBreakChannelID = this.main.getDiscordFile().get().getString("Discord.Item-Frame-Break.Channel-ID");
+            final String itemFrameBreakChannelID = this.main.getDiscordFile().getString("Discord.Item-Frame-Break.Channel-ID");
 
-            final String armorStandPlaceChannelID = this.main.getDiscordFile().get().getString("Discord.ArmorStand-Place.Channel-ID");
+            final String armorStandPlaceChannelID = this.main.getDiscordFile().getString("Discord.ArmorStand-Place.Channel-ID");
 
-            final String armorStandBreakChannelID = this.main.getDiscordFile().get().getString("Discord.ArmorStand-Break.Channel-ID");
+            final String armorStandBreakChannelID = this.main.getDiscordFile().getString("Discord.ArmorStand-Break.Channel-ID");
 
             // Server Side Part
-            final String serverStartChannelID = this.main.getDiscordFile().get().getString("Discord.Server-Side.Start.Channel-ID");
+            final String serverStartChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Start.Channel-ID");
 
-            final String serverStopChannelID = this.main.getDiscordFile().get().getString("Discord.Server-Side.Stop.Channel-ID");
+            final String serverStopChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Stop.Channel-ID");
 
-            final String consoleChannelID = this.main.getDiscordFile().get().getString("Discord.Server-Side.Console-Commands.Channel-ID");
+            final String consoleChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Console-Commands.Channel-ID");
 
-            final String ramChannelID = this.main.getDiscordFile().get().getString("Discord.Server-Side.RAM.Channel-ID");
+            final String ramChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.RAM.Channel-ID");
 
-            final String tpsChannelID = this.main.getDiscordFile().get().getString("Discord.Server-Side.TPS.Channel-ID");
+            final String tpsChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.TPS.Channel-ID");
 
-            final String portalCreationChannelID = this.main.getDiscordFile().get().getString("Discord.Server-Side.Portal-Creation.Channel-ID");
+            final String portalCreationChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Portal-Creation.Channel-ID");
 
-            final String rConChannelID = this.main.getDiscordFile().get().getString("Discord.Server-Side.RCON.Channel-ID");
+            final String rConChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.RCON.Channel-ID");
 
-            final String commandBlockChannelID = this.main.getDiscordFile().get().getString("Discord.Server-Side.Command-Block.Channel-ID");
+            final String commandBlockChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Command-Block.Channel-ID");
 
             // Extras
-            final String afkChannelID = this.main.getDiscordFile().get().getString("Discord.Extras.AFK.Channel-ID");
+            final String afkChannelID = this.main.getDiscordFile().getString("Discord.Extras.AFK.Channel-ID");
 
-            final String wrongPasswordChannelID = this.main.getDiscordFile().get().getString("Discord.Extras.Wrong-Password.Channel-ID");
+            final String wrongPasswordChannelID = this.main.getDiscordFile().getString("Discord.Extras.Wrong-Password.Channel-ID");
 
-            final String vaultChannelID = this.main.getDiscordFile().get().getString("Discord.Extras.Vault.Channel-ID");
+            final String vaultChannelID = this.main.getDiscordFile().getString("Discord.Extras.Vault.Channel-ID");
 
-            final String liteBansChannelID = this.main.getDiscordFile().get().getString("Discord.Extras.LiteBans.Channel-ID");
+            final String liteBansChannelID = this.main.getDiscordFile().getString("Discord.Extras.LiteBans.Channel-ID");
 
-            final String advancedBanChannelID = this.main.getDiscordFile().get().getString("Discord.Extras.AdvancedBan.Channel-ID");
+            final String advancedBanChannelID = this.main.getDiscordFile().getString("Discord.Extras.AdvancedBan.Channel-ID");
 
             // Version Exception
-            final String woodStrippingChannelID = this.main.getDiscordFile().get().getString("Discord.Version-Exceptions.Wood-Stripping.Channel-ID");
+            final String woodStrippingChannelID = this.main.getDiscordFile().getString("Discord.Version-Exceptions.Wood-Stripping.Channel-ID");
 
             try {
 
@@ -594,7 +594,7 @@ public class Discord {
 
                 this.jda.shutdown();
                 this.jda = null;
-                if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Enabled")) DiscordStatus.getThreadPool().shutdown();
+                if (this.main.getDiscordFile().getBoolean("ActivityCycling.Enabled")) DiscordStatus.getThreadPool().shutdown();
                 Log.info("Discord Bot Bridge has been closed!");
 
             } catch (final Exception e) {

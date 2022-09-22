@@ -20,7 +20,6 @@ public class ConfigManager {
 
 	private final Main plugin;
 	private final File configFile;
-	private Config config;
 
 	public ConfigManager(final Main plugin) {
 		this.plugin = plugin;
@@ -58,8 +57,6 @@ public class ConfigManager {
 			try {
 				FileUpdater.update(this.plugin, "config.yml", this.configFile, Arrays.asList("Config-Version", "Updater.Checker"));
 				Log.warning("Config file updated from version " + oldVersion + " to version " + currentVersion);
-//				Messages.queueAdminMsg(Messages.PREFIXMSG + " §aConfiguration updated from version §c" + oldVersion + " §ato §c" + currentVersion);
-//				Messages.queueAdminMsg(Messages.PREFIXMSG + " §aChecking the config file and adjusting the new settings is highly recommended");
 			} catch (final IOException e) {
 				Log.severe("Error reading the config file, if the issue persists contact the authors!");
 				this.resetConfig();
@@ -69,26 +66,19 @@ public class ConfigManager {
 
 	private void initConfig() {
 		try {
-			this.config = new Config(this.plugin, "config.yml");
-		} catch (final FileNotFoundException e) {
-			Log.severe("Config file not found", e);
-		}
+			new Config(this.plugin, "config.yml");
+		} catch (final FileNotFoundException e) { Log.severe("Config file not found", e); }
 	}
 
 	private void resetConfig() {
 
 		try {
 			Files.move(this.configFile.toPath(), this.configFile.toPath().resolveSibling("config.old.yml"), StandardCopyOption.REPLACE_EXISTING);
-		} catch (final IOException e) {
-			Log.severe("Error resetting the config file");
-		}
+		} catch (final IOException e) { Log.severe("Error resetting the config file"); }
 
 		this.initConfig();
 		Log.warning("Due to an error reading the config, it was reset to default settings");
 		Log.warning("This was likely caused by a mistake while you changed settings, like an extra space or missing quotes");
 		Log.warning("The broken config was renamed to config.old.yml, you can copy your old settings manually if you need them");
-//		Messages.queueAdminMsg(Messages.PREFIXMSG + " §cDue to an error reading the config, it was reset to default settings"//TODO
-//		        + "\n§cThis was likely caused by a mistake while you changed settings, like an extra space or missing quotes");
-//		Messages.queueAdminMsg(Messages.PREFIXMSG + "§cThe broken config was renamed to config.old.yml, you can copy your old settings manually if you need them");
 	}
 }

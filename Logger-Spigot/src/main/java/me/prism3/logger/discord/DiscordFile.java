@@ -1,3 +1,4 @@
+/*
 package me.prism3.logger.discord;
 
 import org.bukkit.Bukkit;
@@ -30,3 +31,4 @@ public class DiscordFile {
 
     }
 }
+*/

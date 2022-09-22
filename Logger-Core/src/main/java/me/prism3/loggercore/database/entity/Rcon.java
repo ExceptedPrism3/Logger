@@ -15,8 +15,6 @@ public class Rcon {
     private String serverName;
     @Column(name = "date", nullable = false)
     private Instant date;
-    @Column(name = "ip", columnDefinition = "INT UNSIGNED")
-    private Long ip;
     @Column(name = "command", length = 50)
     private String command;
 
@@ -48,14 +46,6 @@ public class Rcon {
 
     public void setDate(Instant date) {
         this.date = date;
-    }
-
-    public Long getIp() {
-        return this.ip;
-    }
-
-    public void setIp(Long ip) {
-        this.ip = ip;
     }
 
     public String getCommand() {

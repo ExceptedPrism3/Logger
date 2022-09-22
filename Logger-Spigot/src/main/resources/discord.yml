@@ -1,6 +1,7 @@
 # Discord Bridge Configuration for Logger Plugin [ Bukkit Version]
 # Need Support Join the Discord Server: https://discord.gg/MfR5mcpVfX
-# Config 1.8
+
+
 # Leaving Channel-ID empty will disable the Channel
 Discord:
   Enable: false
@@ -65,6 +66,7 @@ Discord:
     Channel-ID: 'LINK_HERE'
   ArmorStand-Break:
     Channel-ID: 'LINK_HERE'
+
   # Server Side Checkers
   Server-Side:
     Start:
@@ -81,6 +83,7 @@ Discord:
       Channel-ID: 'LINK_HERE'
     RCON:
       Channel-ID: 'LINK_HERE'
+
   # Extra Side Checkers
   Extras:
     AFK:
@@ -98,18 +101,24 @@ Discord:
   Version-Exceptions:
     Wood-Stripping:
       Channel-ID: 'LINK_HERE'
+
+
 # Bot Activity Status
 # Randomize the shown status
-# First Part must not be different from
+# Change the Status of the Bot
+# Activities: First Part must not be different from
 # Playing, Watching, Listening, Streaming, Competing
 # Otherwise it will not work
 # Time in Seconds
 ActivityCycling:
   Enabled: true
   Random: false
+  Status: playing
   Activities:
     - ["watching", "Minecraft Movie"]
     - ["playing", "Minecraft 1.7"]
     - ["listening", "Dragon's Heart Beats"]
     - ["streaming", "Minecraft Gameplay"]
   Time: 30
+
+Version: 1

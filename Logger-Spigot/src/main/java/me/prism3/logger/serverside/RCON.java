@@ -29,13 +29,12 @@ public class RCON implements Listener {
 
             try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRconFile(), true))) {
                 
-                out.write(this.main.getMessages().get().getString("Files.Server-Side.RCON").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%IP%", ip).replace("%command%", command)) + "\n");
+                out.write(this.main.getMessages().get().getString("Files.Server-Side.RCON").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%IP%", ip).replace("%command%", command) + "\n");
 
             } catch (final IOException e) {
 
                 Log.warning("An error occurred while logging into the appropriate file.");
                 e.printStackTrace();
-
             }
         }
 
@@ -48,7 +47,7 @@ public class RCON implements Listener {
 
             try {
 
-                Main.getInstance().getDatabase().insertRCON(Data.serverName, ip, command);
+                Main.getInstance().getDatabase().insertRCON(Data.serverName, command);
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
@@ -58,7 +57,7 @@ public class RCON implements Listener {
 
             try {
 
-                Main.getInstance().getSqLite().insertRCON(Data.serverName, ip, command);
+                Main.getInstance().getSqLite().insertRCON(Data.serverName, command);
 
             } catch (final Exception e) { e.printStackTrace(); }
         }

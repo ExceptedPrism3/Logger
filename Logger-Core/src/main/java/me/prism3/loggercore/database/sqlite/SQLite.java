@@ -1,10 +1,8 @@
 package me.prism3.loggercore.database.sqlite;
 
-import me.prism3.loggercore.database.AbstractDataSource;
 import me.prism3.loggercore.database.DataSourceInterface;
 import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.loggercore.database.data.Options;
-import me.prism3.loggercore.database.entity.BlockInteraction;
 import me.prism3.loggercore.database.entity.PlayerChat;
 import me.prism3.loggercore.database.entity.enums.BucketActionType;
 import me.prism3.loggercore.database.entity.enums.InteractionType;
@@ -12,16 +10,12 @@ import me.prism3.loggercore.database.entity.enums.ItemActionType;
 import me.prism3.loggercore.database.entity.enums.PlayerConnectionType;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public final class SQLite implements DataSourceInterface {
 
@@ -30,6 +24,7 @@ public final class SQLite implements DataSourceInterface {
 
     private final Logger logger = Logger.getLogger(this.getClass().getName());
     private final Options options;
+
     public SQLite(Options options, File dataFolder) throws SQLException {
         this.options = options;
         this.databaseFile = new File(dataFolder, "data.db");
@@ -38,15 +33,12 @@ public final class SQLite implements DataSourceInterface {
         }
         catch (ClassNotFoundException e) { throw new RuntimeException(e); }
 
-
         this.createTables();
-
     }
 
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:sqlite:" + this.databaseFile.getAbsolutePath());
     }
-
 
     private String getJdbcUrl() {
         return ("jdbc:sqlite:" + this.databaseFile.getAbsolutePath());
@@ -89,8 +81,6 @@ public final class SQLite implements DataSourceInterface {
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
             "player_name TEXT, x INT, y INT, z INT, ip INT, is_staff BOOLEAN, player_connection_type VARCHAR(20) NOT NULL)");
-
-
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS block_interaction"
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
@@ -198,7 +188,7 @@ public final class SQLite implements DataSourceInterface {
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS rcon"
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
-                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, ip INT, command TEXT)");
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, command TEXT)");
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS command_block"
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
@@ -845,15 +835,14 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertRCON(String serverName, String ip, String command) {
+    public void insertRCON(String serverName, String command) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement rCon = connection.prepareStatement("INSERT INTO rcon" +
-                     " (server_name, ip, command) VALUES(?,?,?)")) {
+                     " (server_name, ip, command) VALUES(?,?)")) {
 
             rCon.setString(1, serverName);
-            rCon.setString(2, ip);
-            rCon.setString(3, command);
+            rCon.setString(2, command);
 
             rCon.executeUpdate();
 
