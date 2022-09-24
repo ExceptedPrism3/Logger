@@ -36,7 +36,7 @@ public class OnPlayerTeleport implements Listener {
 
             final Player player = event.getPlayer();
 
-            if (player.hasPermission(Data.loggerExempt) || (AuthMeUtil.getAuthMeAPI() != null && !AuthMeApi.getInstance().isAuthenticated(player))
+            if (player.hasPermission(Data.loggerExempt) || (AuthMeUtil.isAllowed && !AuthMeApi.getInstance().isAuthenticated(player))
                     || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
             final World world = player.getWorld();
@@ -67,7 +67,6 @@ public class OnPlayerTeleport implements Listener {
 
                         Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 } else {
 
@@ -79,7 +78,6 @@ public class OnPlayerTeleport implements Listener {
 
                         Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 }
             }
@@ -92,7 +90,6 @@ public class OnPlayerTeleport implements Listener {
                     if (!this.main.getMessages().get().getString("Discord.Player-Teleport-Staff").isEmpty()) {
 
                         this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Teleport-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%oldX%", String.valueOf(ox)).replace("%oldY%", String.valueOf(oy)).replace("%oldZ%", String.valueOf(oz)).replace("%newX%", String.valueOf(tx)).replace("%newY%", String.valueOf(ty)).replace("%newZ%", String.valueOf(tz)), false);
-
                     }
                 } else {
 

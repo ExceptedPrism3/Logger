@@ -29,7 +29,7 @@ public class OnVault implements Listener, Runnable {
 
     private final Main main = Main.getInstance();
     private final HashMap<UUID, Double> players = new HashMap<>();
-    private final Economy econ = VaultUtil.getVault();
+    private final Economy econ = VaultUtil.getVaultEcon();
 
     @Override
     public void run() {

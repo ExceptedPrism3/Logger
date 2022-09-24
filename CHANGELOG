@@ -191,6 +191,7 @@ Additions
     [+] 1.19.2 Support
     [+] Server Switch Checker on BungeeCord Instance
     [+] PartyAndFriend Plugin Support on BungeeCord Instance
+    [+] NL Language file
 
 Fixes
     [!] Plugin not starting up correctly

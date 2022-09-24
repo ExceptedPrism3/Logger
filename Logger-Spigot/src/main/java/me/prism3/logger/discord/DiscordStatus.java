@@ -3,6 +3,7 @@ package me.prism3.logger.discord;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Log;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 
 import java.util.Collections;
@@ -27,6 +28,11 @@ public class DiscordStatus {
 
         try {
 
+            final String status = this.main.getDiscordFile().getString("ActivityCycling.Status");
+
+            if (status != null)
+                this.jda.getPresence().setStatus(OnlineStatus.valueOf(status.toUpperCase()));
+
             assert this.activities != null;
             this.activities.forEach((list -> Activity.ActivityType.valueOf(list.
                     get(0).replace("playing", "streaming").toUpperCase())));
@@ -35,7 +41,6 @@ public class DiscordStatus {
 
             Log.severe("Discord Status Activity is invalid. It has been disabled.");
             return;
-
         }
 
         if (this.main.getDiscordFile().getBoolean("ActivityCycling.Random"))
@@ -53,5 +58,4 @@ public class DiscordStatus {
     }
 
     public static ScheduledExecutorService getThreadPool() { return threadPool; }
-
 }

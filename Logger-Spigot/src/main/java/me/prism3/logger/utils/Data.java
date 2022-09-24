@@ -1,6 +1,8 @@
 package me.prism3.logger.utils;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.commands.CommandManager;
+import me.prism3.logger.commands.getting.Chat;
 import me.prism3.logger.commands.subcommands.PlayerInventory;
 import me.prism3.logger.events.*;
 import me.prism3.logger.events.commands.OnCommand;
@@ -8,7 +10,6 @@ import me.prism3.logger.events.inventories.OnChestInteraction;
 import me.prism3.logger.events.inventories.OnCraft;
 import me.prism3.logger.events.inventories.OnFurnace;
 import me.prism3.logger.events.misc.*;
-import me.prism3.logger.events.plugindependent.*;
 import me.prism3.logger.events.versioncompatibility.OnWoodStripping;
 import me.prism3.logger.hooks.*;
 import me.prism3.logger.serverside.*;
@@ -82,7 +83,6 @@ public class Data {
     public static String loggerExemptDiscord;
     public static String loggerStaff;
     public static String loggerStaffLog;
-    public static String loggerUpdate;
     public static String loggerSpyBypass;
     public static String loggerSpy;
     public static String loggerReload;
@@ -90,9 +90,7 @@ public class Data {
     public static Settings databaseCredentials;
 
     public void initializeDateFormatter() {
-
         dateTimeFormatter = DateTimeFormatter.ofPattern(this.main.getConfig().getString("Time-Formatter"));
-
     }
 
     public void initializeStrings() {
@@ -104,7 +102,6 @@ public class Data {
         selectedLang = this.main.getConfig().getString("Language");
         discordSupportServer = "https://discord.gg/MfR5mcpVfX";
         pluginPrefix = this.main.getConfig().getString("Plugin-Prefix");
-
     }
 
     public void initializeDatabaseCredentials() {
@@ -127,9 +124,7 @@ public class Data {
         optionS.putAll(main.getConfig().getConfigurationSection("Log-Server").getValues(false));
         optionS.putAll(main.getConfig().getConfigurationSection("Log-Extras").getValues(false));
 //        options.putAll(main.getConfig().getConfigurationSection("Log-Version-Exceptions").getValues(false));
-        System.out.println(optionS);
         options.setEnabledLogs(optionS);
-
     }
 
     public void initializeListOfStrings() {
@@ -137,7 +132,6 @@ public class Data {
         commandsToBlock = this.main.getConfig().getStringList("Player-Commands.Commands-to-Block");
         commandsToLog = this.main.getConfig().getStringList("Player-Commands.Commands-to-Log");
         consoleCommandsToBlock = this.main.getConfig().getStringList("Console-Commands.Commands-to-Block");
-
     }
 
     public void initializeIntegers() {
@@ -154,14 +148,11 @@ public class Data {
         allowedBackups = this.main.getConfig().getInt("Player-Death-Backup.Max-Backup");
         playerCountNumber = this.main.getConfig().getInt("Player-Count");
         playerCountChecker = this.main.getConfig().getInt("Checkers.Player-Count");
-        configVersion = this.main.getConfig().getInt("Config-Version");
-
+        configVersion = this.main.getConfig().getInt("Config-Version", 0);
     }
 
     public void initializeLongs() {
-
         fileDeletion = this.main.getConfig().getLong("File-Deletion");
-
     }
 
     public void initializeBooleans() {
@@ -179,7 +170,6 @@ public class Data {
         isConsoleCommands = this.main.getConfig().getBoolean("Console-Commands.Blacklist-Commands");
         isRegistration = this.main.getConfig().getBoolean("Log-Player.Registration");
         isPlayerDeathBackup = this.main.getConfig().getBoolean("Player-Death-Backup.Enabled");
-
     }
 
     public void initializePermissionStrings() {
@@ -191,7 +181,12 @@ public class Data {
         loggerSpyBypass = "logger.spy.bypass";
         loggerSpy = "logger.spy";
         loggerReload = "logger.reload";
+    }
 
+    public void commandsInitializer() {
+
+        this.main.getCommand("logger").setExecutor(new CommandManager());
+        this.main.getCommand("loggerget").setExecutor(new Chat());
     }
 
     public void eventInitializer() {
@@ -258,8 +253,8 @@ public class Data {
         if (this.main.getConfig().getBoolean("Log-Player.Primed-TNT"))
             this.main.getServer().getPluginManager().registerEvents(new OnPrimedTNT(), this.main);
 
-//        if (this.main.getConfig().getBoolean("Log-Player.Chat"))
-        this.main.getServer().getPluginManager().registerEvents(new OnSpawnEgg(), this.main);
+        if (this.main.getConfig().getBoolean("Log-Player.Spawn-Egg"))
+            this.main.getServer().getPluginManager().registerEvents(new OnSpawnEgg(), this.main);
 
         if (this.main.getConfig().getBoolean("Log-Player.Entity-Death"))
             this.main.getServer().getPluginManager().registerEvents(new OnEntityDeath(), this.main);
@@ -282,13 +277,13 @@ public class Data {
         if (this.main.getConfig().getBoolean("Log-Player.ArmorStand-Place"))
             this.main.getServer().getPluginManager().registerEvents(new ArmorStandPlace(), this.main);
 
-        if (this.main.getConfig().getBoolean("Log-Player.ArmorStand-Break"))
+//        if (this.main.getConfig().getBoolean("Log-Player.ArmorStand-Break"))
 //            this.main.getServer().getPluginManager().registerEvents(new ArmorStandBreak(), this.main);
 
-//        if (this.main.getConfig().getBoolean("Log-Player.Lever-Interaction"))
-        this.main.getServer().getPluginManager().registerEvents(new LeverInteraction(), this.main);
+        if (this.main.getConfig().getBoolean("Log-Player.Lever-Interaction"))
+            this.main.getServer().getPluginManager().registerEvents(new LeverInteraction(), this.main);
 
-        this.main.getServer().getPluginManager().registerEvents(new OnArmorStandEndCrystalBreak(), this.main);
+        this.main.getServer().getPluginManager().registerEvents(new OnArmorStandEndCrystalBreak(), this.main);//TODO me1
 
         // Server Side
         if (this.main.getConfig().getBoolean("Log-Server.Console-Commands"))
@@ -317,80 +312,24 @@ public class Data {
                 this.main.getServer().getPluginManager().registerEvents(new OnWoodStripping(), this.main);
 
         this.dependentEventInitializer();
-
     }
 
     private void dependentEventInitializer() {
 
-        if (EssentialsUtil.getEssentialsAPI() != null && this.main.getConfig().getBoolean("Log-Extras.Essentials-AFK")) {
+        EssentialsUtil.getEssentialsHook();
 
-            this.main.getServer().getPluginManager().registerEvents(new OnAFK(), this.main);
+        AuthMeUtil.getAuthMeHook();
 
-            Log.info("Essentials Plugin Detected!");
+        VaultUtil.getVaultHook();
 
-            options.setEssentialsEnabled(true);
+        LiteBanUtil.getLiteBanHook();
 
-        }
+        AdvancedBanUtil.getAdvancedBanHook();
 
-        if (AuthMeUtil.getAuthMeAPI() != null && this.main.getConfig().getBoolean("Log-Extras.AuthMe-Wrong-Password")) {
+        PlaceHolderAPIUtil.getPlaceHolderHook();
 
-            this.main.getServer().getPluginManager().registerEvents(new OnAuthMePassword(), this.main);
+        GeyserUtil.getGeyserHook();
 
-            Log.info("AuthMe Plugin Detected!");
-
-            options.setAuthMeEnabled(true);
-
-        }
-
-        if (VaultUtil.getVaultAPI() && this.main.getConfig().getBoolean("Log-Extras.Vault")) {
-
-            if (VaultUtil.getVault() != null) {
-
-                final OnVault vault = new OnVault();
-                this.main.getServer().getPluginManager().registerEvents(vault, this.main);
-                this.main.getServer().getScheduler().scheduleSyncRepeatingTask(this.main, vault, 10L, vaultChecker);
-            }
-
-            Log.info("Vault Plugin Detected!");
-            options.setVaultEnabled(true);
-        }
-
-        if (LiteBansUtil.getLiteBansAPI() != null && this.main.getConfig().getBoolean("Log-Extras.LiteBans")) {
-
-            this.main.getServer().getScheduler().scheduleSyncDelayedTask(this.main, new OnLiteBanEvents(), 10L);
-
-            Log.info("LiteBans Plugin Detected!");
-
-            options.setLiteBansEnabled(true);
-        }
-
-        if (AdvancedBanUtil.getAdvancedBanAPI() != null && this.main.getConfig().getBoolean("Log-Extras.AdvancedBan")) {
-
-            this.main.getServer().getPluginManager().registerEvents(new OnAdvancedBan(), this.main);
-
-            Log.info("AdvancedBan Plugin Detected!");
-
-            options.setAdvancedBanEnabled(true);
-        }
-
-        if (PlaceHolderAPIUtil.getPlaceHolderAPI() != null) {
-
-            Log.info("PlaceHolderAPI Plugin Detected!");
-
-        }
-
-        if (GeyserUtil.getGeyserAPI() != null && FloodGateUtil.getFloodGateAPI()) {
-
-            Log.info("Geyser & FloodGate Plugins Detected!");
-            Log.warning("Geyser & FloodGate are not fully supported! If any errors occurs, contact the authors.");
-
-        }
-
-        if (ViaVersionUtil.getViaVersionAPI() != null && this.main.getConfig().getBoolean("Log-Extras.ViaVersion")) {
-
-            Log.info("ViaVersion Plugin Detected!");
-
-            options.setViaVersion(true);
-        }
+        ViaVersionUtil.getViaVersionHook();
     }
 }

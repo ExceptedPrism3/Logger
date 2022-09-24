@@ -69,6 +69,8 @@ Log-Player:
   Item-Frame-Break: true
   ArmorStand-Place: true
   ArmorStand-Break: true
+  Lever-Interaction: true
+  Spawn-Egg: true
 
 Log-Server:
   Start: true
@@ -194,5 +196,6 @@ Updater:
   Auto-Download: true
   Auto-Config-Updater: true
 
-# Do not touch unless you want to reset the config
+# Do not touch unless you want to reset it's content
 Config-Version: 1
+Discord-Version: 1

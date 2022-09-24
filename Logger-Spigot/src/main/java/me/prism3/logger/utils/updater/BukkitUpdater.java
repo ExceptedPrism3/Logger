@@ -43,10 +43,12 @@ public class BukkitUpdater extends Updater {
 	@SuppressWarnings("resource")
 	@Override
 	public final boolean downloadFile() {
+
 		try {
 			HttpURLConnection httpConn = (HttpURLConnection) new URL(versionLink).openConnection();
 			// curse has a redirect
 			int responseCode = httpConn.getResponseCode();
+
 			if (responseCode == HttpURLConnection.HTTP_MOVED_PERM || responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
 				final String location = httpConn.getHeaderField("Location");
 				httpConn = (HttpURLConnection) new URL(location).openConnection();
@@ -72,6 +74,7 @@ public class BukkitUpdater extends Updater {
 			conn.addRequestProperty("User-Agent", "Updater");
 			conn.setDoOutput(true);
 			try (final BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+
 				final String response = reader.readLine();
 				@SuppressWarnings("deprecation") // 1.8.8 compatibility..
 				final JsonArray array = new JsonParser().parse(response).getAsJsonArray();

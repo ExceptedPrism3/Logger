@@ -34,22 +34,17 @@ public class Pastebin {
         if (request.hasUserKey())
             arguments.put("api_user_key", request.getUserKey());
 
-
         if (request.hasPasteName())
             arguments.put("api_paste_name", request.getPasteName());
-
 
         if (request.hasPasteFormat())
             arguments.put("api_paste_format", request.getPasteFormat());
 
-
         if (request.hasPasteState())
             arguments.put("api_paste_private", request.getPasteState() + "");
 
-
         if (request.hasPasteExpire())
             arguments.put("api_paste_expire_date", request.getPasteExpire());
-
 
         final String postData = postMap(arguments);
         final byte[] postDataB = postData.getBytes(StandardCharsets.UTF_8);
@@ -61,17 +56,13 @@ public class Pastebin {
         con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
         con.connect();
-        try (OutputStream os = con.getOutputStream()) {
-            os.write(postDataB);
-        }
+        try (final OutputStream os = con.getOutputStream()) { os.write(postDataB); }
 
         final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;
         final StringBuilder response = new StringBuilder();
 
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
+        while ((inputLine = in.readLine()) != null) { response.append(inputLine); }
 
         in.close();
         con.disconnect();
@@ -104,11 +95,11 @@ public class Pastebin {
         }
 
         public String getDevKey() {
-            return devKey;
+            return this.devKey;
         }
 
         public String getPaste() {
-            return paste;
+            return this.paste;
         }
 
         public String getUserKey() {
@@ -116,19 +107,19 @@ public class Pastebin {
         }
 
         public String getPasteName() {
-            return pasteName;
+            return this.pasteName;
         }
 
         public String getPasteFormat() {
-            return pasteFormat;
+            return this.pasteFormat;
         }
 
         public int getPasteState() {
-            return pasteState;
+            return this.pasteState;
         }
 
         public String getPasteExpire() {
-            return pasteExpire;
+            return this.pasteExpire;
         }
 
         public boolean hasUserKey() {
@@ -136,19 +127,19 @@ public class Pastebin {
         }
 
         public boolean hasPasteName() {
-            return !Objects.equals(pasteName, DEFAULT_INV);
+            return !Objects.equals(this.pasteName, DEFAULT_INV);
         }
 
         public boolean hasPasteFormat() {
-            return !Objects.equals(pasteFormat, DEFAULT_INV);
+            return !Objects.equals(this.pasteFormat, DEFAULT_INV);
         }
 
         public boolean hasPasteState() {
-            return pasteState != -1;
+            return this.pasteState != -1;
         }
 
         public boolean hasPasteExpire() {
-            return !Objects.equals(pasteExpire, DEFAULT_INV);
+            return !Objects.equals(this.pasteExpire, DEFAULT_INV);
         }
 
         public void setPasteName(String pasteName) {

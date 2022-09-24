@@ -4,6 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.Log;
 import me.prism3.logger.utils.config.Config;
 import me.prism3.logger.utils.updater.FileUpdater;
+import me.prism3.logger.utils.updater.RunUpdater;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -12,7 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
+import java.util.Collections;
 
 import static me.prism3.logger.utils.Data.configVersion;
 
@@ -33,7 +34,7 @@ public class ConfigManager {
 		new BukkitRunnable() {
 				@Override
 				public void run() {
-					plugin.updateChecker();
+					new RunUpdater().updateChecker();
 				}
 			}.runTaskTimerAsynchronously(this.plugin, 0, 360000);
 	}
@@ -55,7 +56,7 @@ public class ConfigManager {
 
 		if (oldVersion < currentVersion) {
 			try {
-				FileUpdater.update(this.plugin, "config.yml", this.configFile, Arrays.asList("Config-Version", "Updater.Checker"));
+				FileUpdater.update(this.plugin, "config.yml", this.configFile, Collections.singletonList("Config-Version"));
 				Log.warning("Config file updated from version " + oldVersion + " to version " + currentVersion);
 			} catch (final IOException e) {
 				Log.severe("Error reading the config file, if the issue persists contact the authors!");

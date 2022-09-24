@@ -1875,7 +1875,7 @@ class UPotion implements Versionable {
     private final UMaterial.PotionBase base;
     private final ItemStack potion;
     private final PotionType type;
-    private final Object potiondata;
+    private final Object potionData;
 
     public UPotion(UMaterial.PotionBase base, String type, boolean extended, boolean upgraded) {
 
@@ -1887,7 +1887,7 @@ class UPotion implements Versionable {
         final String potionBaseName = base.name();
         if (EIGHT) {
             potion = potionType.equals(PotionType.WATER) ? new Potion(potionType).toItemStack(1) : new Potion(potionType, upgraded ? 2 : 1, potionBaseName.equals("SPLASH")).toItemStack(1);
-            potiondata = potion.getItemMeta();
+            potionData = potion.getItemMeta();
         } else {
             final ItemStack is = new ItemStack(Material.getMaterial(potionBaseName.equals("NORMAL") ? "POTION" : potionBaseName.contains("ARROW") ? potionBaseName.contains("TIPPED") ? "TIPPED_ARROW" : "ARROW" : potionBaseName + "_POTION"));
             final boolean isNotArrow = !is.getType().equals(Material.ARROW);
@@ -1897,7 +1897,7 @@ class UPotion implements Versionable {
                 pm = (PotionMeta) is.getItemMeta();
                 pd = new org.bukkit.potion.PotionData(potionType, potionType.isExtendable() && extended, potionType.isUpgradeable() && upgraded);
             }
-            potiondata = pd;
+            potionData = pd;
             if (isNotArrow) {
                 pm.setBasePotionData(pd);
                 is.setItemMeta(pm);

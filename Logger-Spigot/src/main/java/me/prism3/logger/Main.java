@@ -11,9 +11,6 @@ import me.prism3.logger.utils.*;
 import me.prism3.logger.utils.enums.NmsVersions;
 import me.prism3.logger.utils.manager.ConfigManager;
 import me.prism3.logger.utils.manager.DiscordManager;
-import me.prism3.logger.utils.updater.BukkitUpdater;
-import me.prism3.logger.utils.updater.SpigotUpdater;
-import me.prism3.logger.utils.updater.Updater;
 import me.prism3.loggercore.database.DataSourceInterface;
 import me.prism3.loggercore.database.datasource.Database;
 import org.bukkit.Bukkit;
@@ -46,17 +43,16 @@ public class Main extends JavaPlugin {
 
         Log.setup(this.getLogger());
 
-        new ConfigManager(this);
-        discordFile = new DiscordManager(this);
-
         this.initializer(new Data());
 
-        if (!this.langChecker()) return;
+        new ConfigManager(this);
 
-//        new FileUpdater(this.getDataFolder());
+        this.discordFile = new DiscordManager(this);
 
         this.discord = new Discord();
         this.discord.run();
+
+        if (!this.langChecker()) return;
 
         if (isLogToFiles && isSqlite)
             Log.warning("File and SQLite logging are both enabled, this might impact your Server's Performance!");
@@ -67,8 +63,6 @@ public class Main extends JavaPlugin {
         this.loadPluginDepends();
 
         this.databaseSetup();
-
-        this.commandsInitializer();
 
         new ASCIIArt().art();
 
@@ -95,42 +89,6 @@ public class Main extends JavaPlugin {
         this.discord.disconnect();
 
         Log.info("Plugin Disabled!");
-
-    }
-
-    public void updateChecker() {
-
-        Log.info("Checking for updates...");
-
-        Updater updater = new BukkitUpdater(this, 669177, Updater.UpdateType.VERSION_CHECK).check();
-
-        if (updater.getResult() != Updater.UpdateResult.UPDATE_AVAILABLE) {
-            updater = new SpigotUpdater(this, 94236, Updater.UpdateType.VERSION_CHECK).check();
-        }
-
-        if (updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE) {
-
-//            Messages.setNewVersion(updater.getLatestName());
-//            System.out.println(" §aUpdate available: §c" + Messages.getNewVersion() + " §aCurrent version: §c"
-//                    + Messages.getCurrentversion());
-
-//            Messages.queueAdminMsg(updateMsg);
-//            Bukkit.broadcast(updateMsg, "pvpmanager.admin");
-
-            if (this.getConfig().getBoolean("Updater.Checker")) {
-
-                if (updater.downloadFile()) {
-
-                    System.out.println("§aUpdate downloaded, it will be applied automatically on the next server restart");
-                    System.out.println("§aUpdate downloaded to your update folder, it will be applied automatically on the next server restart");
-                    return;
-                }
-                Log.info("Could not download latest update. Please update manually from one of the links below.");
-            }
-
-            System.out.println("§aFollow the link to download: §8" + updater.getUpdateLink());
-
-        } else { Log.info("No update found"); }
     }
 
     public void initializer(Data data) {
@@ -145,14 +103,7 @@ public class Main extends JavaPlugin {
         data.initializeDatabaseCredentials();
         data.initializeOptions();
         data.eventInitializer();
-
-    }
-
-    private void commandsInitializer() {
-
-        this.getCommand("logger").setExecutor(new CommandManager());
-        this.getCommand("loggerget").setExecutor(new Chat());
-
+        data.commandsInitializer();
     }
 
     private void databaseSetup() {
@@ -171,6 +122,7 @@ public class Main extends JavaPlugin {
 
         } catch (final Exception e) { Log.severe(e.getMessage()); }
     }
+
     private void disconnectDatabase() {
         this.database.disconnect();
     }
@@ -199,7 +151,7 @@ public class Main extends JavaPlugin {
 
     public Discord getDiscord() { return this.discord; }
 
-    public FileConfiguration getDiscordFile() { return this.discordFile.getDiscord(); }
+    public FileConfiguration getDiscordFile() { return this.discordFile.get(); }
 
     public Messages getMessages() { return this.messages; }
 

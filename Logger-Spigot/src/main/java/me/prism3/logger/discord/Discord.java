@@ -45,6 +45,8 @@ public class Discord {
     private TextChannel itemFrameBreakChannel;
     private TextChannel armorStandPlaceChannel;
     private TextChannel armorStandBreakChannel;
+    private TextChannel leverInteractionChannel;
+    private TextChannel spawnEggChannel;
 
     private TextChannel serverStartChannel;
     private TextChannel serverStopChannel;
@@ -80,7 +82,6 @@ public class Discord {
                 Log.severe("An error has occurred whilst connecting to the Bot." +
                         " Is the Bot Key Valid?");
                 return;
-
             }
 
             // Player Side Part
@@ -143,6 +144,10 @@ public class Discord {
             final String armorStandPlaceChannelID = this.main.getDiscordFile().getString("Discord.ArmorStand-Place.Channel-ID");
 
             final String armorStandBreakChannelID = this.main.getDiscordFile().getString("Discord.ArmorStand-Break.Channel-ID");
+
+            final String leverInteractionChannelID = this.main.getDiscordFile().getString("Discord.Lever-Interaction.Channel-ID");
+
+            final String spawnEggChannelID = this.main.getDiscordFile().getString("Discord.Spawn-Egg.Channel-ID");
 
             // Server Side Part
             final String serverStartChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Start.Channel-ID");
@@ -267,6 +272,12 @@ public class Discord {
 
                 if (this.isValid(armorStandBreakChannelID, "Log-Player.ArmorStand-Break"))
                     this.armorStandBreakChannel = this.jda.getTextChannelById(armorStandBreakChannelID);
+
+                if (this.isValid(leverInteractionChannelID, "Log-Player.Lever-Interaction"))
+                    this.leverInteractionChannel = this.jda.getTextChannelById(leverInteractionChannelID);
+
+                if (this.isValid(spawnEggChannelID, "Log-Player.Spawn-Egg"))
+                    this.spawnEggChannel = this.jda.getTextChannelById(spawnEggChannelID);
 
                 // Server Side Part
                 if (this.isValid(serverStartChannelID, "Log-Server.Start"))
@@ -573,6 +584,14 @@ public class Discord {
 
     public void armorStandBreak(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.armorStandBreakChannel);
+    }
+
+    public void leverInteraction(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.leverInteractionChannel);
+    }
+
+    public void spawnEgg(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.spawnEggChannel);
     }
 
     private void discordUtil(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine, TextChannel channel) {

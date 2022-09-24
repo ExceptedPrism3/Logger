@@ -1,7 +1,5 @@
 package me.prism3.logger.utils;
 
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,6 +32,4 @@ public final class Log {
 	public static void warning(final String message, final Throwable thrown) {
 		logger.log(Level.WARNING, message, thrown);
 	}
-
-	private static final Queue<String> messageQueue = new LinkedList<>();
 }

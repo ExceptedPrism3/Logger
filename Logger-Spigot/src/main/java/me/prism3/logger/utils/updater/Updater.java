@@ -1,6 +1,5 @@
 package me.prism3.logger.utils.updater;
 
-import me.prism3.logger.Main;
 import me.prism3.logger.utils.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;

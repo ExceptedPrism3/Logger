@@ -37,5 +37,4 @@ public abstract class AbstractDataSource implements DataSourceInterface {
     }
 
     protected abstract String getJdbcUrl();
-
 }

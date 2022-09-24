@@ -23,7 +23,7 @@ public class Config extends YamlConfiguration {
 		this.file = new File(plugin.getDataFolder(), name);
 		if (!this.file.exists()) {
 			this.prepareFile(name);
-			Log.info("New config file has been created successfully!");
+			Log.info("New " + name + " file has been created successfully!");
 		}
 		this.configFile = YamlConfiguration.loadConfiguration(new InputStreamReader(new FileInputStream(this.file), StandardCharsets.UTF_8));
 	}
@@ -105,9 +105,7 @@ public class Config extends YamlConfiguration {
 			int lenght;
 			final byte[] buf = new byte[1024];
 
-			while ((lenght = resource.read(buf)) > 0) {
-				out.write(buf, 0, lenght);
-			}
+			while ((lenght = resource.read(buf)) > 0) { out.write(buf, 0, lenght); }
 			resource.close();
 		} catch (final Exception e) { e.printStackTrace(); }
 	}

@@ -18,7 +18,7 @@ public class GetCommandBuilder {
 
     public static List<String> actionParameters;
 
-    public static HashMap<String, String> getCommandList() {
+    public static Map<String, String> getCommandList() {
         return commandList;
     }
 
@@ -57,8 +57,6 @@ public class GetCommandBuilder {
         commandNames = new ArrayList<>(commandList.keySet());
         GetCommandBuilder.actionParameters = new ArrayList<>();
         for(String a : commandNames)
-        {
             GetCommandBuilder.actionParameters.add("action:"+a);
-        }
     }
 }

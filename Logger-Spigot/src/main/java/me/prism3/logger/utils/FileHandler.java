@@ -47,6 +47,8 @@ public class FileHandler {
     private static File itemFrameBreakFolder;
     private static File armorStandPlaceFolder;
     private static File armorStandBreakFolder;
+    private static File leverInteractionFolder;
+    private static File spawnEggFolder;
 
     // Server Side
     private static File serverStartFolder;
@@ -100,6 +102,8 @@ public class FileHandler {
     private static File itemFrameBreakFile;
     private static File armorStandPlaceFile;
     private static File armorStandBreakFile;
+    private static File leverInteractionFile;
+    private static File spawnEggFile;
 
     // Server Side
     private static File serverStartFile;
@@ -229,6 +233,12 @@ public class FileHandler {
         armorStandBreakFolder = new File(logsFolder, "ArmorStand Break");
         armorStandBreakFile = new File(armorStandBreakFolder, filenameDateFormat.format(date) + ".log");
 
+        leverInteractionFolder = new File(logsFolder, "Level Interaction");
+        leverInteractionFile = new File(leverInteractionFolder, filenameDateFormat.format(date) + ".log");
+
+        spawnEggFolder = new File(logsFolder, "Spawn Egg");
+        spawnEggFile = new File(spawnEggFolder, filenameDateFormat.format(date) + ".log");
+
         // Server Side Part
         serverStartFolder = new File(logsFolder, "Server Start");
         serverStartFile = new File(serverStartFolder, filenameDateFormat.format(date) + ".log");
@@ -341,6 +351,10 @@ public class FileHandler {
 
             armorStandBreakFolder.mkdir();
 
+            playerLevelFolder.mkdir();
+
+            spawnEggFolder.mkdir();
+
             // Server Side Part
             serverStartFolder.mkdir();
 
@@ -359,15 +373,15 @@ public class FileHandler {
             commandBlockFolder.mkdir();
 
             // Extras Side Part
-            if (EssentialsUtil.getEssentialsAPI() != null) afkFolder.mkdir();
+            if (EssentialsUtil.isAllowed) afkFolder.mkdir();
 
-            if (AuthMeUtil.getAuthMeAPI() != null) wrongPasswordFolder.mkdir();
+            if (AuthMeUtil.isAllowed) wrongPasswordFolder.mkdir();
 
-            if (VaultUtil.getVaultAPI()) vaultFolder.mkdir();
+            if (VaultUtil.isAllowed && VaultUtil.getVaultEcon() != null) vaultFolder.mkdir();
 
-            if (LiteBansUtil.getLiteBansAPI() != null) liteBansFolder.mkdir();
+            if (LiteBanUtil.isAllowed) liteBansFolder.mkdir();
 
-            if (AdvancedBanUtil.getAdvancedBanAPI() != null) advancedBanFolder.mkdir();
+            if (AdvancedBanUtil.isAllowed) advancedBanFolder.mkdir();
 
             // Version Exception Part
             if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFolder.mkdir();
@@ -435,6 +449,10 @@ public class FileHandler {
 
             armorStandBreakFile.createNewFile();
 
+            leverInteractionFile.createNewFile();
+
+            spawnEggFile.createNewFile();
+
             // Server Side
             serverStartFile.createNewFile();
 
@@ -453,15 +471,15 @@ public class FileHandler {
             commandBlockFile.createNewFile();
 
             // Extras Side
-            if (EssentialsUtil.getEssentialsAPI() != null) afkFile.createNewFile();
+            if (EssentialsUtil.isAllowed) afkFile.createNewFile();
 
-            if (AuthMeUtil.getAuthMeAPI() != null) wrongPasswordFile.createNewFile();
+            if (AuthMeUtil.isAllowed) wrongPasswordFile.createNewFile();
 
-            if (VaultUtil.getVaultAPI()) vaultFile.createNewFile();
+            if (VaultUtil.isAllowed && VaultUtil.getVaultEcon() != null) vaultFile.createNewFile();
 
-            if (LiteBansUtil.getLiteBansAPI() != null) liteBansFile.createNewFile();
+            if (LiteBanUtil.isAllowed) liteBansFile.createNewFile();
 
-            if (AdvancedBanUtil.getAdvancedBanAPI() != null) advancedBanFile.createNewFile();
+            if (AdvancedBanUtil.isAllowed) advancedBanFile.createNewFile();
 
             // Version Exception Part
             if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFile.createNewFile();
@@ -531,6 +549,10 @@ public class FileHandler {
 
     public static File getArmorStandBreakFile() { return armorStandBreakFile; }
 
+    public static File getLeverInteractionFile() { return leverInteractionFile; }
+
+    public static File getSpawnEggFile() { return spawnEggFile; }
+
     // Server Side Part
     public static File getServerStartFile() { return serverStartFile; }
 
@@ -561,7 +583,6 @@ public class FileHandler {
 
     // Version Exception Part
     public static File getWoodStrippingFile() { return woodStrippingFile; }
-
 
     private void deleteFile(File file) {
 
@@ -647,6 +668,10 @@ public class FileHandler {
 
         for (File armorStandBreak : armorStandBreakFolder.listFiles()) { this.deleteFile(armorStandBreak); }
 
+        for (File lever : leverInteractionFolder.listFiles()) { this.deleteFile(lever); }
+
+        for (File spawnEgg : spawnEggFolder.listFiles()) { this.deleteFile(spawnEgg); }
+
         // Server Side
         for (File serverStart : serverStartFolder.listFiles()) { this.deleteFile(serverStart); }
 
@@ -667,19 +692,19 @@ public class FileHandler {
         for (File commandBlock : commandBlockFolder.listFiles()) { this.deleteFile(commandBlock); }
 
         // Extra Side
-        if (EssentialsUtil.getEssentialsAPI() != null)
+        if (EssentialsUtil.isAllowed)
             for (File afk : afkFolder.listFiles()) { this.deleteFile(afk); }
 
-        if (AuthMeUtil.getAuthMeAPI() != null)
+        if (AuthMeUtil.isAllowed)
             for (File password : wrongPasswordFolder.listFiles()) { this.deleteFile(password); }
 
-        if (VaultUtil.getVaultAPI() && VaultUtil.getVault() != null)
+        if (VaultUtil.isAllowed && VaultUtil.getVaultEcon() != null)
             for (File vault : vaultFolder.listFiles()) { this.deleteFile(vault); }
 
-        if (LiteBansUtil.getLiteBansAPI() != null)
+        if (LiteBanUtil.isAllowed)
             for (File liteBans : liteBansFolder.listFiles()) { this.deleteFile(liteBans); }
 
-        if (AdvancedBanUtil.getAdvancedBanAPI() != null)
+        if (AdvancedBanUtil.isAllowed)
             for (File advancedBan : advancedBanFolder.listFiles()) { this.deleteFile(advancedBan); }
 
         // Version Exception Part

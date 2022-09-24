@@ -135,12 +135,16 @@ public interface DataSourceInterface extends DataInterface {
                             String destination, boolean isStaff);
 
     void insertPAFFriendMessage(String serverName, String playerUUID, String playerName,
-                                String message,
-                                String receiver, boolean isStaff);
+                                String message, String receiver, boolean isStaff);
 
     void insertPAFPartyMessage(String serverName, String playerUUID, String playerName,
-                               String message,
-                               String leader, List<String> partyMembers, boolean isStaff);
+                               String message, String leader, List<String> partyMembers, boolean isStaff);
+
+    void insertLeverInteraction(String serverName, String playerUUID, String worldName, String playerName,
+                               int x, int y, int z, boolean isStaff);
+
+    void insertSpawnEgg(String serverName, String playerUUID, String worldName, String playerName,
+                                int x, int y, int z, String entity, boolean isStaff);
 
     void disconnect();
 

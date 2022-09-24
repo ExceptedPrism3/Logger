@@ -1156,8 +1156,17 @@ public final class SQLite implements DataSourceInterface {
 
     }
 
+    @Override
+    public void insertLeverInteraction(String serverName, String playerUUID, String worldName, String playerName,
+                                       int x, int y, int z, boolean isStaff) {
 
+    }
 
+    @Override
+    public void insertSpawnEgg(String serverName, String playerUUID, String worldName, String playerName,
+                               int x, int y, int z, String entity, boolean isStaff) {
+
+    }
 
 
     @Override
