@@ -11,6 +11,8 @@ public class OnTotemUse implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onTotem(final EntityResurrectEvent event) {
 
+
+        System.out.println("1");
         if (event.getEntity() instanceof Player) {
 
             final Player player = (Player) event.getEntity();

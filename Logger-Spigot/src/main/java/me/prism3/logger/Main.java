@@ -54,7 +54,7 @@ public class Main extends JavaPlugin {
         this.discord.run();
 
 //        new OnWorldGuard()
-//
+
         SessionManager sessionManager = WorldGuard.getInstance().getPlatform().getSessionManager();
         // second param allows for ordering of handlers - see the JavaDocs
         sessionManager.registerHandler(OnWorldGuard.FACTORY, null);
