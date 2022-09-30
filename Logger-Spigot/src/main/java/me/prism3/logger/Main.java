@@ -1,7 +1,5 @@
 package me.prism3.logger;
 
-import me.prism3.logger.commands.CommandManager;
-import me.prism3.logger.commands.getting.Chat;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteRegistration;
 import me.prism3.logger.discord.Discord;

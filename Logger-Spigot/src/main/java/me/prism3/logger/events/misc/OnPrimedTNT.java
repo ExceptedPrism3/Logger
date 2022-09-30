@@ -69,7 +69,6 @@ public class OnPrimedTNT implements Listener {
 
                         Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 }
             }
@@ -82,7 +81,6 @@ public class OnPrimedTNT implements Listener {
                     if (!this.main.getMessages().get().getString("Discord.Primed-TNT-Staff").isEmpty()) {
 
                         this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Primed-TNT-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()), false);
-
                     }
                 } else {
 

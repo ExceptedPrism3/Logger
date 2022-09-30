@@ -103,8 +103,11 @@ Discord:
       Channel-ID: 'LINK_HERE'
     Command-Block:
       Channel-ID: 'LINK_HERE'
+
   Version-Exceptions:
     Wood-Stripping:
+      Channel-ID: 'LINK_HERE'
+    Totem-of-Undying:
       Channel-ID: 'LINK_HERE'
 
 

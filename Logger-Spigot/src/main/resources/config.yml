@@ -95,6 +95,7 @@ Log-Extras:
 # This Section logs some events depending on the server's version
 Log-Version-Exceptions:
   Wood-Stripping: true
+  Totem-of-Undying: true
 
 # Only Log Specified Commands
 # Block Commands from getting Logged

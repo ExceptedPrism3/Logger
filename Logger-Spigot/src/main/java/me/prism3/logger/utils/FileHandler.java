@@ -69,6 +69,7 @@ public class FileHandler {
 
     // Version Exception Part
     private static File woodStrippingFolder;
+    private static File totemUndyingFolder;
 
     // Files Part
     // Player Side
@@ -124,6 +125,7 @@ public class FileHandler {
 
     // Version Exception Part
     private static File woodStrippingFile;
+    private static File totemUndyingFile;
 
 
     private final Main main = Main.getInstance();
@@ -284,6 +286,9 @@ public class FileHandler {
         woodStrippingFolder = new File(logsFolder, "Wood Stripping");
         woodStrippingFile = new File(woodStrippingFolder, filenameDateFormat.format(date) + ".log");
 
+        totemUndyingFolder = new File(logsFolder, "Totem of Undying");
+        totemUndyingFile = new File(totemUndyingFolder, filenameDateFormat.format(date) + ".log");
+
         try {
 
             // Folder Handling
@@ -385,6 +390,7 @@ public class FileHandler {
 
             // Version Exception Part
             if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFolder.mkdir();
+            if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_11_R1)) totemUndyingFolder.mkdir();
 
 
             // Files Handling
@@ -483,6 +489,7 @@ public class FileHandler {
 
             // Version Exception Part
             if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFile.createNewFile();
+            if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_11_R1)) totemUndyingFile.createNewFile();
 
         } catch (final IOException e) { e.printStackTrace(); }
     }
@@ -583,6 +590,8 @@ public class FileHandler {
 
     // Version Exception Part
     public static File getWoodStrippingFile() { return woodStrippingFile; }
+
+    public static File getTotemUndyingFile() { return totemUndyingFile; }
 
     private void deleteFile(File file) {
 
@@ -710,5 +719,8 @@ public class FileHandler {
         // Version Exception Part
         if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1))
             for (File woodStripping : woodStrippingFolder.listFiles()) { this.deleteFile(woodStripping); }
+
+        if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_11_R1))
+            for (File totem : totemUndyingFolder.listFiles()) { this.deleteFile(totem); }
     }
 }
