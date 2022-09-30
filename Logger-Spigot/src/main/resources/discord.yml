@@ -103,6 +103,10 @@ Discord:
       Channel-ID: 'LINK_HERE'
     Command-Block:
       Channel-ID: 'LINK_HERE'
+    WorldGuard:
+      Channel-ID: 'LINK_HERE'
+
+  # Server Version Exception Side Checkers
   Version-Exceptions:
     Wood-Stripping:
       Channel-ID: 'LINK_HERE'

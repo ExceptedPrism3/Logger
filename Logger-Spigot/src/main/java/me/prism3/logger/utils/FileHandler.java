@@ -233,7 +233,7 @@ public class FileHandler {
         armorStandBreakFolder = new File(logsFolder, "ArmorStand Break");
         armorStandBreakFile = new File(armorStandBreakFolder, filenameDateFormat.format(date) + ".log");
 
-        leverInteractionFolder = new File(logsFolder, "Level Interaction");
+        leverInteractionFolder = new File(logsFolder, "Lever Interaction");
         leverInteractionFile = new File(leverInteractionFolder, filenameDateFormat.format(date) + ".log");
 
         spawnEggFolder = new File(logsFolder, "Spawn Egg");
@@ -352,6 +352,8 @@ public class FileHandler {
             armorStandBreakFolder.mkdir();
 
             playerLevelFolder.mkdir();
+
+            leverInteractionFolder.mkdir();
 
             spawnEggFolder.mkdir();
 

@@ -4,7 +4,7 @@ main: me.prism3.logger.Main
 api-version: 1.13
 authors: [ Prism3, thelooter, Sidna ]
 description: Log all Activities from Players and Server Side!
-softdepend: [Essentials, AuthMe, Vault, PlaceholderAPI, LiteBans, AdvancedBan, PlaceholderAPI, Geyser, Floodgate, ViaVersion]
+softdepend: [Essentials, AuthMe, Vault, PlaceholderAPI, LiteBans, AdvancedBan, PlaceholderAPI, Geyser, Floodgate, ViaVersion, WorldGuard]
 commands:
   logger:
     description: "Plugin command."

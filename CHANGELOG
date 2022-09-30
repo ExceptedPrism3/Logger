@@ -192,6 +192,9 @@ Additions
     [+] Server Switch Checker on BungeeCord Instance
     [+] PartyAndFriend Plugin Support on BungeeCord Instance
     [+] NL Language file
+    [+] Lever Interaction & Spawn Egg Checkers
+    [+] Config and Discord will auto update
+    [+] Plugin auto update
 
 Fixes
     [!] Plugin not starting up correctly
@@ -210,6 +213,7 @@ Changes
     [*] Minor messages changes
     [*] Minor Velocity & Bungee Code improvements
     [*] Changed BungeeCord commands to /loggerb and Velocity to /loggerv
+    [*] Fixed OP or players that have * permissions not being logged by default
 
 Removed
     [-] IP Column from RCON checher

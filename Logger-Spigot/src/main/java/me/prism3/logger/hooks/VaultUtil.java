@@ -27,11 +27,11 @@ public class VaultUtil {
                 final OnVault vault = new OnVault();
                 Main.getInstance().getServer().getPluginManager().registerEvents(vault, Main.getInstance());
                 Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), vault, 10L, vaultChecker);
+                options.setVaultEnabled(true);
+                isAllowed = true;
             }
 
             Log.info("Vault Plugin Detected!");
-            options.setVaultEnabled(true);
-            isAllowed = true;
         }
     }
 

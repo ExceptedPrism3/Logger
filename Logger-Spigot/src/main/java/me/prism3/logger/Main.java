@@ -1,10 +1,11 @@
 package me.prism3.logger;
 
-import me.prism3.logger.commands.CommandManager;
-import me.prism3.logger.commands.getting.Chat;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.session.SessionManager;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteRegistration;
 import me.prism3.logger.discord.Discord;
+import me.prism3.logger.events.plugindependent.OnWorldGuard;
 import me.prism3.logger.serverside.Start;
 import me.prism3.logger.serverside.Stop;
 import me.prism3.logger.utils.*;
@@ -51,6 +52,12 @@ public class Main extends JavaPlugin {
 
         this.discord = new Discord();
         this.discord.run();
+
+//        new OnWorldGuard()
+//
+        SessionManager sessionManager = WorldGuard.getInstance().getPlatform().getSessionManager();
+        // second param allows for ordering of handlers - see the JavaDocs
+        sessionManager.registerHandler(OnWorldGuard.FACTORY, null);
 
         if (!this.langChecker()) return;
 

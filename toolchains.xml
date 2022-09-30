@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF8"?>
+<toolchains>
+    <!-- JDK toolchains -->
+    <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>8</version>
+        </provides>
+        <configuration>
+            <jdkHome>/usr/lib/jvm/java-8-openjdk-amd64/jre</jdkHome>
+        </configuration>
+    </toolchain>
+    <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>11</version>
+        </provides>
+        <configuration>
+            <jdkHome>/home/sasa/Downloads/jdk11/amazon-corretto-11.0.6.10.1-linux-x64</jdkHome>
+        </configuration>
+    </toolchain>
+    <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>14</version>
+        </provides>
+        <configuration>
+            <jdkHome>/home/sasa/Downloads/jdk11/jdk-14</jdkHome>
+        </configuration>
+    </toolchain>
+    <!-- other toolchains -->
+</toolchains>

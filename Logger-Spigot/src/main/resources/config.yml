@@ -36,7 +36,7 @@ Log-to-Files: true
 
 # This will log players with the "logger.staff.log" permission node in their own folder / file
 Staff:
-  Enabled: false
+  Enabled: true
 
 # Logging features
 Log-Player:
@@ -91,6 +91,7 @@ Log-Extras:
   LiteBans: true
   AdvancedBan: true
   ViaVersion: true
+  WorldGuard: true
 
 # This Section logs some events depending on the server's version
 Log-Version-Exceptions:

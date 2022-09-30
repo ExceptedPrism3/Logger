@@ -331,5 +331,7 @@ public class Data {
         GeyserUtil.getGeyserHook();
 
         ViaVersionUtil.getViaVersionHook();
+
+        WorldGuardUtil.getWorldGuardHook();
     }
 }
