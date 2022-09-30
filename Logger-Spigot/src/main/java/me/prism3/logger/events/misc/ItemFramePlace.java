@@ -56,7 +56,6 @@ public class ItemFramePlace implements Listener {
 
                         Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 } else {
 
@@ -68,7 +67,6 @@ public class ItemFramePlace implements Listener {
 
                         Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 }
             }

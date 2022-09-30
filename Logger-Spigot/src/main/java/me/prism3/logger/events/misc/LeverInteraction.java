@@ -55,7 +55,6 @@ public class LeverInteraction implements Listener {
 
                         Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 } else {
 

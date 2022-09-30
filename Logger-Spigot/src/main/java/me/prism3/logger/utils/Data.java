@@ -10,6 +10,7 @@ import me.prism3.logger.events.inventories.OnChestInteraction;
 import me.prism3.logger.events.inventories.OnCraft;
 import me.prism3.logger.events.inventories.OnFurnace;
 import me.prism3.logger.events.misc.*;
+import me.prism3.logger.events.versioncompatibility.OnTotemUse;
 import me.prism3.logger.events.versioncompatibility.OnWoodStripping;
 import me.prism3.logger.hooks.*;
 import me.prism3.logger.serverside.*;
@@ -310,6 +311,9 @@ public class Data {
         // Version Exceptions
         if (this.main.getVersion().isAtLeast(NmsVersions.v1_13_R1) && this.main.getConfig().getBoolean("Log-Version-Exceptions.Wood-Stripping"))
                 this.main.getServer().getPluginManager().registerEvents(new OnWoodStripping(), this.main);
+
+//        if (this.main.getVersion().isAtLeast(NmsVersions.v1_11_R1) && this.main.getConfig().getBoolean("Log-Version-Exceptions.Totem-of-Undying"))
+            this.main.getServer().getPluginManager().registerEvents(new OnTotemUse(), this.main);
 
         this.dependentEventInitializer();
     }
