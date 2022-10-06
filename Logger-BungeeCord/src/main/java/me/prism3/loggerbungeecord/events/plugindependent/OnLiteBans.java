@@ -5,7 +5,7 @@ import litebans.api.Events;
 import me.prism3.loggerbungeecord.Main;
 import me.prism3.loggerbungeecord.utils.FileHandler;
 import me.prism3.loggerbungeecord.utils.Log;
-import me.prism3.loggerbungeecord.utils.liteban.UsernameFetcher;
+import me.prism3.loggerbungeecord.utils.litebans.UsernameFetcher;
 import net.md_5.bungee.api.plugin.Listener;
 
 import java.io.BufferedWriter;
@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
 
 import static me.prism3.loggerbungeecord.utils.Data.*;
 
-public class OnLiteBan implements Listener, Runnable {
+public class OnLiteBans implements Listener, Runnable {
 
     private final Main main = Main.getInstance();
 
@@ -82,7 +82,7 @@ public class OnLiteBan implements Listener, Runnable {
 
                     try (final BufferedWriter out = new BufferedWriter(new FileWriter(fileLog, true))) {
 
-                        out.write(main.getMessages().getString("Files.Extras.LiteBans").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()) + "\n");
+                        out.write(main.getMessages().getString("Files.Extras.LiteBans").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()).replace("%uuid%", entry.getExecutorUUID()) + "\n");
 
                     } catch (final IOException e) {
 
@@ -93,8 +93,8 @@ public class OnLiteBan implements Listener, Runnable {
                 }
 
                 // Discord Integration
-                if (!main.getMessages().getString("Discord.Extras.LiteBans").isEmpty())
-                    main.getDiscord().liteBans(main.getMessages().getString("Discord.Extras.LiteBans").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()), false);
+                if (!main.getMessages().getString("Discord.Extras.LiteBans").isEmpty() && main.getDiscordFile().getBoolean("Discord.Enable"))
+                    main.getDiscord().liteBans(main.getMessages().getString("Discord.Extras.LiteBans").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%on%", onWho).replace("%duration%", duration).replace("%reason%", reason).replace("%executor%", executorName).replace("%silent%", String.valueOf(isSilent)).replace("%command%", entryType.toUpperCase()).replace("%uuid%", entry.getExecutorUUID()), false);
 
                 // External
                 if (isExternal) {

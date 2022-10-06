@@ -7,10 +7,14 @@ import me.prism3.logger.utils.enums.NmsVersions;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.attribute.FileTime;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
+
+import static me.prism3.logger.utils.Data.fileDeletion;
 
 public class FileHandler {
 
@@ -59,6 +63,7 @@ public class FileHandler {
     private static File portalCreateFolder;
     private static File rConFolder;
     private static File commandBlockFolder;
+    private static File playerCountFolder;
 
     // Extras Side Part
     private static File afkFolder;
@@ -66,6 +71,7 @@ public class FileHandler {
     private static File vaultFolder;
     private static File liteBansFolder;
     private static File advancedBanFolder;
+    private static File worldGuardFolder;
 
     // Version Exception Part
     private static File woodStrippingFolder;
@@ -115,6 +121,7 @@ public class FileHandler {
     private static File portalCreateFile;
     private static File rConFile;
     private static File commandBlockFile;
+    private static File playerCountFile;
 
     // Extras Side
     private static File afkFile;
@@ -122,13 +129,11 @@ public class FileHandler {
     private static File vaultFile;
     private static File liteBansFile;
     private static File advancedBanFile;
+    private static File worldGuardFile;
 
     // Version Exception Part
     private static File woodStrippingFile;
     private static File totemUndyingFile;
-
-
-    private final Main main = Main.getInstance();
 
     public FileHandler(File dataFolder) {
 
@@ -266,6 +271,9 @@ public class FileHandler {
         commandBlockFolder = new File(logsFolder, "Command Block");
         commandBlockFile = new File(commandBlockFolder, filenameDateFormat.format(date) + ".log");
 
+        playerCountFolder = new File(logsFolder, "Player Count");
+        playerCountFile = new File(playerCountFolder, filenameDateFormat.format(date) + ".log");
+
         // Extras Side Part
         afkFolder = new File(logsFolder, "AFK");
         afkFile = new File(afkFolder, filenameDateFormat.format(date) + ".log");
@@ -281,6 +289,9 @@ public class FileHandler {
 
         advancedBanFolder = new File(logsFolder, "AdvancedBan");
         advancedBanFile = new File(advancedBanFolder, filenameDateFormat.format(date) + ".log");
+
+        worldGuardFolder = new File(logsFolder, "World Guard");
+        worldGuardFile = new File(worldGuardFolder, filenameDateFormat.format(date) + ".log");
 
         // Version Exception Part
         woodStrippingFolder = new File(logsFolder, "Wood Stripping");
@@ -379,6 +390,8 @@ public class FileHandler {
 
             commandBlockFolder.mkdir();
 
+            playerCountFolder.mkdir();
+
             // Extras Side Part
             if (EssentialsUtil.isAllowed) afkFolder.mkdir();
 
@@ -389,6 +402,8 @@ public class FileHandler {
             if (LiteBanUtil.isAllowed) liteBansFolder.mkdir();
 
             if (AdvancedBanUtil.isAllowed) advancedBanFolder.mkdir();
+
+            if (WorldGuardUtil.isAllowed) worldGuardFolder.mkdir();
 
             // Version Exception Part
             if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFolder.mkdir();
@@ -478,6 +493,8 @@ public class FileHandler {
 
             commandBlockFile.createNewFile();
 
+            playerCountFile.createNewFile();
+
             // Extras Side
             if (EssentialsUtil.isAllowed) afkFile.createNewFile();
 
@@ -488,6 +505,8 @@ public class FileHandler {
             if (LiteBanUtil.isAllowed) liteBansFile.createNewFile();
 
             if (AdvancedBanUtil.isAllowed) advancedBanFile.createNewFile();
+
+            if (WorldGuardUtil.isAllowed) worldGuardFile.createNewFile();
 
             // Version Exception Part
             if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFile.createNewFile();
@@ -579,6 +598,8 @@ public class FileHandler {
 
     public static File getCommandBlockFile() { return commandBlockFile; }
 
+    public static File getPlayerCountFile() { return playerCountFile; }
+
     // Extras Side Part
     public static File getAfkFile() { return afkFile; }
 
@@ -590,139 +611,44 @@ public class FileHandler {
 
     public static File getAdvancedBanFile() { return advancedBanFile; }
 
+    public static File getWorldGuardFile() { return worldGuardFile; }
+
     // Version Exception Part
     public static File getWoodStrippingFile() { return woodStrippingFile; }
 
     public static File getTotemUndyingFile() { return totemUndyingFile; }
 
-    private void deleteFile(File file) {
+    public void deleteFiles(File dataFolder) {
 
-        if (Data.fileDeletion <= 0 ) return;
+        if (fileDeletion <= 0 ) return;
 
-        FileTime creationTime = null;
+        final File logsFolder = new File(dataFolder, "Logs");
 
-        try {
+        for (File subLogs : logsFolder.listFiles()) {
 
-            creationTime = (FileTime) Files.getAttribute(file.toPath(), "creationTime");
-
-        } catch (final IOException e) { e.printStackTrace(); }
-
-        assert creationTime != null;
-        final long offset = System.currentTimeMillis() - creationTime.toMillis();
-        final long maxAge = TimeUnit.DAYS.toMillis(Data.fileDeletion);
-
-        if (offset > maxAge) file.delete();
+            this.deleteFilesOlderThanNDays(subLogs);
+        }
     }
 
-    public void deleteFiles() {
+    private void deleteFilesOlderThanNDays(File dirPath) {
 
-        if (Data.fileDeletion <= 0 ) return;
+        final long deadLine = System.currentTimeMillis() - (fileDeletion * 24 * 60 * 60 * 1000);
 
-        // Player Side
-        for (File chatLog : chatLogFolder.listFiles()) { this.deleteFile(chatLog); }
+        try (final Stream<Path> files = Files.list(Paths.get(String.valueOf(dirPath)))) {
 
-        for (File commandLog : commandLogFolder.listFiles()) { this.deleteFile(commandLog); }
+            files.filter(path -> {
+                try {
+                    return Files.isRegularFile(path) && Files.getLastModifiedTime(path).to(TimeUnit.MILLISECONDS) < deadLine;
+                } catch (final IOException ex) { return false; }
+            }).forEach(path -> {
+                try {
+                    Files.delete(path);
+                } catch (final IOException ex) { Log.severe("An error has occurred, Error Code 4."); }
+            });
+        } catch (final IOException e) {
 
-        for (File signLog : signLogFolder.listFiles()) { this.deleteFile(signLog); }
-
-        for (File playerJoinLog : playerJoinLogFolder.listFiles()) { this.deleteFile(playerJoinLog); }
-
-        for (File playerLeaveLog : playerLeaveLogFolder.listFiles()) { this.deleteFile(playerLeaveLog); }
-
-        for (File playerDeathLog : playerDeathLogFolder.listFiles()) { this.deleteFile(playerDeathLog); }
-
-        for (File playerTeleportLog : playerTeleportLogFolder.listFiles()) { this.deleteFile(playerTeleportLog); }
-
-        for (File blockPlaceLog : blockPlaceLogFolder.listFiles()) { this.deleteFile(blockPlaceLog); }
-
-        for (File blockBreakLog : blockBreakLogFolder.listFiles()) { this.deleteFile(blockBreakLog); }
-
-        for (File kickLog : playerKickLogFolder.listFiles()) { this.deleteFile(kickLog); }
-
-        for (File playerLevelLog : playerLevelFolder.listFiles()) { this.deleteFile(playerLevelLog); }
-
-        for (File bucketFill : bucketFillFolder.listFiles()) { this.deleteFile(bucketFill); }
-
-        for (File bucketEmpty : bucketEmptyFolder.listFiles()) { this.deleteFile(bucketEmpty); }
-
-        for (File anvil : anvilFolder.listFiles()) { this.deleteFile(anvil); }
-
-
-        if (main.getConfig().getBoolean("Staff.Enabled"))
-            for (File Staff : staffFolder.listFiles()) { this.deleteFile(Staff); }
-
-        for (File itemDrop : itemDropFolder.listFiles()) { this.deleteFile(itemDrop); }
-
-        for (File enchanting : enchantFolder.listFiles()) { this.deleteFile(enchanting); }
-
-        for (File book : bookEditingFolder.listFiles()) { this.deleteFile(book); }
-
-        for (File pickup : itemPickupFolder.listFiles()) { this.deleteFile(pickup); }
-
-        for (File furnace : furnaceFolder.listFiles()) { this.deleteFile(furnace); }
-
-        for (File craft : craftFolder.listFiles()) { this.deleteFile(craft); }
-
-        for (File register : registrationFolder.listFiles()) { this.deleteFile(register); }
-
-        for (File primedTNT : primedTNTFolder.listFiles()) { this.deleteFile(primedTNT); }
-
-        for (File chestInteraction : chestInteractionFolder.listFiles()) { this.deleteFile(chestInteraction); }
-
-        for (File entityDeath : entityDeathFolder.listFiles()) { this.deleteFile(entityDeath); }
-
-        for (File itemFramePlace : itemFramePlaceFolder.listFiles()) { this.deleteFile(itemFramePlace); }
-
-        for (File itemFrameBreak : itemFrameBreakFolder.listFiles()) { this.deleteFile(itemFrameBreak); }
-
-        for (File armorStandPlace : armorStandPlaceFolder.listFiles()) { this.deleteFile(armorStandPlace); }
-
-        for (File armorStandBreak : armorStandBreakFolder.listFiles()) { this.deleteFile(armorStandBreak); }
-
-        for (File lever : leverInteractionFolder.listFiles()) { this.deleteFile(lever); }
-
-        for (File spawnEgg : spawnEggFolder.listFiles()) { this.deleteFile(spawnEgg); }
-
-        // Server Side
-        for (File serverStart : serverStartFolder.listFiles()) { this.deleteFile(serverStart); }
-
-        for (File serverStop : serverStopFolder.listFiles()) { this.deleteFile(serverStop); }
-
-        for (File consoleLog : consoleLogFolder.listFiles()) { this.deleteFile(consoleLog); }
-
-        for (File RAMLog : ramFolder.listFiles()) { this.deleteFile(RAMLog); }
-
-        for (File TPSLog : tpsFolder.listFiles()) { this.deleteFile(TPSLog); }
-
-        for (File portalCreate : portalCreateFolder.listFiles()) { this.deleteFile(portalCreate); }
-
-        for (File rcon : rConFolder.listFiles()) { this.deleteFile(rcon); }
-
-        for (File creative : gameModeFolder.listFiles()) { this.deleteFile(creative); }
-
-        for (File commandBlock : commandBlockFolder.listFiles()) { this.deleteFile(commandBlock); }
-
-        // Extra Side
-        if (EssentialsUtil.isAllowed)
-            for (File afk : afkFolder.listFiles()) { this.deleteFile(afk); }
-
-        if (AuthMeUtil.isAllowed)
-            for (File password : wrongPasswordFolder.listFiles()) { this.deleteFile(password); }
-
-        if (VaultUtil.isAllowed && VaultUtil.getVaultEcon() != null)
-            for (File vault : vaultFolder.listFiles()) { this.deleteFile(vault); }
-
-        if (LiteBanUtil.isAllowed)
-            for (File liteBans : liteBansFolder.listFiles()) { this.deleteFile(liteBans); }
-
-        if (AdvancedBanUtil.isAllowed)
-            for (File advancedBan : advancedBanFolder.listFiles()) { this.deleteFile(advancedBan); }
-
-        // Version Exception Part
-        if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1))
-            for (File woodStripping : woodStrippingFolder.listFiles()) { this.deleteFile(woodStripping); }
-
-        if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_11_R1))
-            for (File totem : totemUndyingFolder.listFiles()) { this.deleteFile(totem); }
+            Log.severe("An error occurred whilst deleting files. If the issue persists, contact the Authors.");
+            e.printStackTrace();
+        }
     }
 }

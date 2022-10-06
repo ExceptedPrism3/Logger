@@ -10,6 +10,10 @@ import me.prism3.logger.events.inventories.OnChestInteraction;
 import me.prism3.logger.events.inventories.OnCraft;
 import me.prism3.logger.events.inventories.OnFurnace;
 import me.prism3.logger.events.misc.*;
+import me.prism3.logger.events.spy.OnAnvilSpy;
+import me.prism3.logger.events.spy.OnBookSpy;
+import me.prism3.logger.events.spy.OnCommandSpy;
+import me.prism3.logger.events.spy.OnSignSpy;
 import me.prism3.logger.events.versioncompatibility.OnTotemUse;
 import me.prism3.logger.events.versioncompatibility.OnWoodStripping;
 import me.prism3.logger.hooks.*;
@@ -45,6 +49,7 @@ public class Data {
     public static List<String> commandsToBlock;
     public static List<String> commandsToLog;
     public static List<String> consoleCommandsToBlock;
+    public static List<String> worldGuardRegions;
 
     // Integer
     public static int resource_ID;
@@ -57,7 +62,6 @@ public class Data {
     public static int playerCountNumber;
     public static int playerCountChecker;
     public static int configVersion;
-
     public static int sqliteDataDel;
     public static int allowedBackups;
 
@@ -121,9 +125,11 @@ public class Data {
 
         final Map<String, Object> optionS = new HashMap<>(30);
 
-        optionS.putAll(main.getConfig().getConfigurationSection("Log-Player").getValues(false));
-        optionS.putAll(main.getConfig().getConfigurationSection("Log-Server").getValues(false));
-        optionS.putAll(main.getConfig().getConfigurationSection("Log-Extras").getValues(false));
+        optionS.putAll(this.main.getConfig().getConfigurationSection("Log-Player").getValues(false));
+        optionS.putAll(this.main.getConfig().getConfigurationSection("Log-Server").getValues(false));
+        optionS.putAll(this.main.getConfig().getConfigurationSection("Log-Extras").getValues(false));
+        options.setDataDelete(this.main.getConfig().getInt("Database.Data-Deletion"));
+        options.setPlayerIPEnabled(this.main.getConfig().getBoolean("Player-Join.Player-IP"));
 //        options.putAll(main.getConfig().getConfigurationSection("Log-Version-Exceptions").getValues(false));
         options.setEnabledLogs(optionS);
     }
@@ -133,6 +139,7 @@ public class Data {
         commandsToBlock = this.main.getConfig().getStringList("Player-Commands.Commands-to-Block");
         commandsToLog = this.main.getConfig().getStringList("Player-Commands.Commands-to-Log");
         consoleCommandsToBlock = this.main.getConfig().getStringList("Console-Commands.Commands-to-Block");
+        worldGuardRegions = this.main.getConfig().getStringList("WorldGuard-Regions");
     }
 
     public void initializeIntegers() {
@@ -314,6 +321,19 @@ public class Data {
 
 //        if (this.main.getVersion().isAtLeast(NmsVersions.v1_11_R1) && this.main.getConfig().getBoolean("Log-Version-Exceptions.Totem-of-Undying"))
             this.main.getServer().getPluginManager().registerEvents(new OnTotemUse(), this.main);
+
+        // Spy Features
+        if (this.main.getConfig().getBoolean("Spy-Features.Commands-Spy.Enable"))
+            this.main.getServer().getPluginManager().registerEvents(new OnCommandSpy(), this.main);
+
+        if (this.main.getConfig().getBoolean("Spy-Features.Anvil-Spy.Enable"))
+            this.main.getServer().getPluginManager().registerEvents(new OnAnvilSpy(), this.main);
+
+        if (this.main.getConfig().getBoolean("Spy-Features.Book-Spy.Enable"))
+            this.main.getServer().getPluginManager().registerEvents(new OnBookSpy(), this.main);
+
+        if (this.main.getConfig().getBoolean("Spy-Features.Sign-Spy.Enable"))
+            this.main.getServer().getPluginManager().registerEvents(new OnSignSpy(), this.main);
 
         this.dependentEventInitializer();
     }

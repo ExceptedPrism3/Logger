@@ -40,49 +40,48 @@ public class OnAdvancedBan implements Listener {
 
                 try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
                    
-                    out.write(this.main.getMessages().get().getString("Files.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type) + "\n");
+                    out.write(this.main.getMessages().get().getString("Files.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type).replace("%uuid%", player.getUniqueId().toString()) + "\n");
 
                 } catch (final IOException e) {
 
                     Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
-
                 }
             } else {
 
                 try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAdvancedBanFile(), true))) {
 
-                    out.write(this.main.getMessages().get().getString("Files.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type) + "\n");
+                    out.write(this.main.getMessages().get().getString("Files.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type).replace("%uuid%", player.getUniqueId().toString()) + "\n");
 
                 } catch (final IOException e) {
 
                     Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
-
                 }
             }
         }
 
         // Discord Integration
-        if (player == null) { // This is essential when performed by the console
-
-            if (!this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").isEmpty()) {
-
-                this.main.getDiscord().advancedBan(this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type), false);
-            }
-        } else if (!player.hasPermission(Data.loggerExemptDiscord)) {
-
-            if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+        if (this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+            if (player == null) { // This is essential when performed by the console
 
                 if (!this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").isEmpty()) {
 
-                    this.main.getDiscord().staffChat(player.getName(), player.getUniqueId(), this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type), false);
-
+                    this.main.getDiscord().advancedBan(this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type).replace("%uuid%", player.getUniqueId().toString()), false);
                 }
-            } else {
-                if (!this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").isEmpty()) {
+            } else if (!player.hasPermission(Data.loggerExemptDiscord)) {
 
-                    this.main.getDiscord().advancedBan(this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type), false);
+                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+
+                    if (!this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").isEmpty()) {
+
+                        this.main.getDiscord().staffChat(player.getName(), player.getUniqueId(), this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type).replace("%uuid%", player.getUniqueId().toString()), false);
+                    }
+                } else {
+                    if (!this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").isEmpty()) {
+
+                        this.main.getDiscord().advancedBan(this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executed_on).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type).replace("%uuid%", player.getUniqueId().toString()), false);
+                    }
                 }
             }
         }

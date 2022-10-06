@@ -29,12 +29,11 @@ public class Start {
 
                     Log.severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
-
                 }
             }
 
             // Discord
-            if (!this.main.getMessages().getString("Discord.Server-Side.Start").isEmpty())
+            if (!this.main.getMessages().getString("Discord.Server-Side.Start").isEmpty() && this.main.getDiscordFile().getBoolean("Discord.Enable"))
                 this.main.getDiscord().serverStart(this.main.getMessages().getString("Discord.Server-Side.Start").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())), false);
 
             // External
@@ -57,6 +56,7 @@ public class Start {
                 } catch (final Exception e) { e.printStackTrace(); }
             }
         }
+
         if (Data.isWhitelisted && Data.isBlacklisted)
             this.main.getLogger().warning("Enabling both Whitelist and Blacklist isn't supported. " +
                     "Disable one of them to continue logging Player Commands.");

@@ -1,7 +1,6 @@
 package me.prism3.loggerbungeecord;
 
 import me.prism3.loggercore.database.DataSourceInterface;
-import me.prism3.loggerbungeecord.commands.Reload;
 import me.prism3.loggerbungeecord.discord.Discord;
 import me.prism3.loggerbungeecord.discord.DiscordFile;
 import me.prism3.loggerbungeecord.serverside.Start;
@@ -9,6 +8,9 @@ import me.prism3.loggerbungeecord.serverside.Stop;
 import me.prism3.loggerbungeecord.utils.*;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.plugin.Plugin;
+
+import java.io.File;
+import java.io.IOException;
 
 import static me.prism3.loggerbungeecord.utils.Data.*;
 
@@ -33,8 +35,10 @@ public final class Main extends Plugin {
 
         Log.setup(this.getLogger());
 
-        this.cm = new ConfigManager();
-        this.cm.init();
+//        this.cm = new ConfigManager();
+//        this.cm.init();
+
+        loadConfiguration();
 
         this.messages = new Messages();
         this.messages.init();
@@ -45,17 +49,15 @@ public final class Main extends Plugin {
         this.discord = new Discord();
         this.discord.run();
         
-        final FileHandler fileHandler = new FileHandler(getDataFolder());
-        fileHandler.deleteFiles();
+        final FileHandler fileHandler = new FileHandler(this.getDataFolder());
+        fileHandler.deleteFiles(this.getDataFolder());
 
         this.initializer(new Data());
 
-        this.databaseSetup();
+//        this.databaseSetup();//TODO DB
 
         if (isLogToFiles && isSqlite)
             Log.warning("File and SQLite logging are both enabled, this might impact your Server's Performance!");
-
-        this.getProxy().getPluginManager().registerCommand(this, new Reload());
 
         new ASCIIArt().art();
 
@@ -70,6 +72,16 @@ public final class Main extends Plugin {
         Log.info("has been Enabled!");
 
         new Start().run();
+    }
+
+    private ConfigLoader config;
+
+    private void loadConfiguration() {
+        try {
+            config = new me.prism3.loggerbungeecord.utils.ConfigLoader(new File(Main.getInstance().getDataFolder(), "config - Bungee.yml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -95,11 +107,6 @@ public final class Main extends Plugin {
         data.initializeBoolean();
         data.initializePermissionStrings();
         data.eventInitializer();
-
-    }
-
-    private void databaseSetup() {
-//TODO DB Hna
     }
 
     public static Main getInstance() { return instance; }

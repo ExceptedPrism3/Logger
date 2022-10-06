@@ -21,7 +21,7 @@ public class OnTotemUse implements Listener {
             final int x = player.getLocation().getBlockX();
             final int y = player.getLocation().getBlockY();
             final int z = player.getLocation().getBlockZ();
-
+//todo 5
 
             System.out.println(playerName + " " + worldName + " " + x + " " +  y + " " + z);
         }

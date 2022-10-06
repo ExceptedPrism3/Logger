@@ -44,45 +44,41 @@ public class OnLeave implements Listener {
 
                 try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true))) {
 
-                    out.write(this.main.getMessages().getString("Files.Player-Leave-Staff").replace("%server%", playerServerName).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName) + "\n");
+                    out.write(this.main.getMessages().getString("Files.Player-Leave-Staff").replace("%server%", playerServerName).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%uuid%", playerUUID.toString()) + "\n");
 
                 } catch (final IOException e) {
 
                     Log.severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
-
                 }
             } else {
 
                 try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLeaveLogFile(), true))) {
 
-                    out.write(this.main.getMessages().getString("Files.Player-Leave").replace("%server%", playerServerName).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName) + "\n");
+                    out.write(this.main.getMessages().getString("Files.Player-Leave").replace("%server%", playerServerName).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%uuid%", playerUUID.toString()) + "\n");
 
                 } catch (final IOException e) {
 
                     Log.severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
-
                 }
             }
         }
 
         // Discord Integration
-        if (!player.hasPermission(Data.loggerExemptDiscord)) {
+        if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
             if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
                 if (!this.main.getMessages().getString("Discord.Player-Leave-Staff").isEmpty()) {
 
-                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().getString("Discord.Player-Leave-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", playerServerName), false);
-
+                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().getString("Discord.Player-Leave-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", playerServerName).replace("%uuid%", playerUUID.toString()), false);
                 }
             } else {
 
                 if (!this.main.getMessages().getString("Discord.Player-Leave").isEmpty()) {
 
-                    this.main.getDiscord().playerLeave(playerName, playerUUID, this.main.getMessages().getString("Discord.Player-Leave").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", playerServerName), false);
-
+                    this.main.getDiscord().playerLeave(playerName, playerUUID, this.main.getMessages().getString("Discord.Player-Leave").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", playerServerName).replace("%uuid%", playerUUID.toString()), false);
                 }
             }
         }

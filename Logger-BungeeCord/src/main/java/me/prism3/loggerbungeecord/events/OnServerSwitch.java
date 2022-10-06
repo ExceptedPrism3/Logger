@@ -53,7 +53,6 @@ public class OnServerSwitch implements Listener {
 
                     Log.severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
-
                 }
             } else {
 
@@ -65,20 +64,18 @@ public class OnServerSwitch implements Listener {
 
                     Log.severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
-
                 }
             }
         }
 
         // Discord Integration
-        if (!player.hasPermission(Data.loggerExemptDiscord)) {
+        if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
             if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
                 if (!this.main.getMessages().getString("Discord.Server-Switch-Staff").isEmpty()) {
 
                     this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().getString("Discord.Server-Switch-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%from%", from).replace("%destination%", destination), false);
-
                 }
             } else {
 

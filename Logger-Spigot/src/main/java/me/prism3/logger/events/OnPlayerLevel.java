@@ -35,7 +35,6 @@ public class OnPlayerLevel implements Listener {
         final int logAbove = Data.abovePlayerLevel;
         final double playerLevel = event.getNewLevel();
 
-
         if (playerLevel == logAbove) {
 
             // Log To Files
@@ -45,44 +44,41 @@ public class OnPlayerLevel implements Listener {
 
                     try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
 
-                        out.write(this.main.getMessages().get().getString("Files.Player-Level-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%level%", String.valueOf(logAbove)) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Player-Level-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%level%", String.valueOf(logAbove)).replace("%uuid%", playerUUID.toString()) + "\n");
 
                     } catch (final IOException e) {
 
                         Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 } else {
 
                     try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerLevelFile(), true))) {
 
-                        out.write(this.main.getMessages().get().getString("Files.Player-Level").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%level%", String.valueOf(logAbove)) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Player-Level").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%level%", String.valueOf(logAbove)).replace("%uuid%", playerUUID.toString()) + "\n");
 
                     } catch (final IOException e) {
 
                         Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 }
             }
 
-            // Discord
-            if (!player.hasPermission(Data.loggerExemptDiscord)) {
+            // Discord Integration
+            if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
                     if (!this.main.getMessages().get().getString("Discord.Player-Level-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Level-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
-
+                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Level-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)).replace("%uuid%", playerUUID.toString()), false);
                     }
                 } else {
 
                     if (!this.main.getMessages().get().getString("Discord.Player-Level").isEmpty()) {
 
-                        this.main.getDiscord().playerLevel(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Level").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)), false);
+                        this.main.getDiscord().playerLevel(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Level").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)).replace("%uuid%", playerUUID.toString()), false);
                     }
                 }
             }

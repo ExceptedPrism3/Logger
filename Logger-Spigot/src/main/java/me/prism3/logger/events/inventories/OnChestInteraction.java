@@ -33,7 +33,7 @@ public class OnChestInteraction implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryOpenEvent(final InventoryOpenEvent event) {
 
-        if (event.getInventory().getLocation() == null) return;
+        if (event.getInventory().getLocation() == null) return; //TODO FIX
 
         if (!event.isCancelled()) {
 
@@ -41,7 +41,7 @@ public class OnChestInteraction implements Listener {
 
             if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
-            String chestName;
+            final String chestName;
 
             if (event.getInventory().getType() == InventoryType.CHEST && event.getInventory().getSize() == 54) {
 
@@ -76,7 +76,8 @@ public class OnChestInteraction implements Listener {
             final int y = event.getInventory().getLocation().getBlockY();
             final int z = event.getInventory().getLocation().getBlockZ();
 
-            final String[] items = Arrays.stream(event.getInventory().getContents()).filter(Objects::nonNull).map(stack -> MessageFormat.format("{0} x {1}", stack.getType(), stack.getAmount())).toArray(String[]::new);
+            final String[] items = Arrays.stream(event.getInventory().getContents()).filter(Objects::nonNull)
+                    .map(stack -> MessageFormat.format("{0} x {1}", stack.getType(), stack.getAmount())).toArray(String[]::new);
 
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
@@ -93,7 +94,6 @@ public class OnChestInteraction implements Listener {
 
                         Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 } else {
 
@@ -105,20 +105,18 @@ public class OnChestInteraction implements Listener {
 
                         Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 }
             }
 
             // Discord Integration
-            if (!player.hasPermission(Data.loggerExemptDiscord)) {
+            if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!this.main.getMessages().get().getString("Discord.Chest-Interaction-Staff").isEmpty()) {
 
                         this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Chest-Interaction-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%chest%", chestName).replace("%items%", Arrays.toString(items)), false);
-
                     }
                 } else {
 

@@ -146,6 +146,11 @@ public interface DataSourceInterface extends DataInterface {
     void insertSpawnEgg(String serverName, String playerUUID, String worldName, String playerName,
                                 int x, int y, int z, String entity, boolean isStaff);
 
+    void insertWorldGuard(String serverName, String playerUUID, String worldName, String playerName,
+                        String regionName, boolean isStaff);
+
+    void insertPlayerCount(String serverName, int playerCount);
+
     void disconnect();
 
     List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset, int limit);

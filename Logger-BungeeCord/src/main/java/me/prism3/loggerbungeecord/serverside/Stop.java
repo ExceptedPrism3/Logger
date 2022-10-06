@@ -29,12 +29,11 @@ public class Stop {
 
                     Log.severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
-
                 }
             }
 
             // Discord
-            if (!this.main.getMessages().getString("Discord.Server-Side.Stop").isEmpty())
+            if (!this.main.getMessages().getString("Discord.Server-Side.Stop").isEmpty() && this.main.getDiscordFile().getBoolean("Discord.Enable"))
                 this.main.getDiscord().serverStop(this.main.getMessages().getString("Discord.Server-Side.Stop").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())), false);
 
             // External

@@ -72,14 +72,13 @@ public class ItemFramePlace implements Listener {
             }
 
             // Discord Integration
-            if (!player.hasPermission(Data.loggerExemptDiscord)) {
+            if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!this.main.getMessages().get().getString("Discord.Item-Frame-Place-Staff").isEmpty()) {
 
                         this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Item-Frame-Place-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%uuid%", playerUUID.toString()).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-
                     }
                 } else {
 

@@ -53,7 +53,6 @@ public class OnPartyMessage implements Listener {
 
                         Log.severe("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 } else {
 
@@ -65,20 +64,18 @@ public class OnPartyMessage implements Listener {
 
                         Log.severe("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 }
             }
 
             // Discord Integration
-            if (!sender.hasPermission(Data.loggerExemptDiscord)) {
+            if (!sender.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
                 if (Data.isStaffEnabled && sender.hasPermission(Data.loggerStaffLog)) {
 
                     if (!this.main.getMessages().getString("Discord.Extras.PAF-Party-Message-Staff").isEmpty()) {
 
                         this.main.getDiscord().staffChat(senderName, senderUUID, this.main.getMessages().getString("Discord.Extras.PAF-Party-Message-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", serverName).replace("%player%", sender.getName()).replace("%msg%", message).replace("%leader%", partyLeader).replace("%uuid%", senderUUID.toString()).replaceAll("%members%", String.valueOf(partyMembers)), false);
-
                     }
                 } else {
 

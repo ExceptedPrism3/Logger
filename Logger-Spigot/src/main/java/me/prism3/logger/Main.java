@@ -1,11 +1,8 @@
 package me.prism3.logger;
 
-import com.sk89q.worldguard.WorldGuard;
-import com.sk89q.worldguard.session.SessionManager;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteRegistration;
 import me.prism3.logger.discord.Discord;
-import me.prism3.logger.events.plugindependent.OnWorldGuard;
 import me.prism3.logger.serverside.Start;
 import me.prism3.logger.serverside.Stop;
 import me.prism3.logger.utils.*;
@@ -53,21 +50,13 @@ public class Main extends JavaPlugin {
         this.discord = new Discord();
         this.discord.run();
 
-//        new OnWorldGuard()
-
-        SessionManager sessionManager = WorldGuard.getInstance().getPlatform().getSessionManager();
-        // second param allows for ordering of handlers - see the JavaDocs
-        sessionManager.registerHandler(OnWorldGuard.FACTORY, null);
-
         if (!this.langChecker()) return;
 
         if (isLogToFiles && isSqlite)
             Log.warning("File and SQLite logging are both enabled, this might impact your Server's Performance!");
 
         final FileHandler fileHandler = new FileHandler(this.getDataFolder());
-        fileHandler.deleteFiles();
-
-        this.loadPluginDepends();
+        fileHandler.deleteFiles(this.getDataFolder());
 
         this.databaseSetup();
 
@@ -116,6 +105,7 @@ public class Main extends JavaPlugin {
     private void databaseSetup() {
 
         try {
+
             this.database = new Database(databaseCredentials, Data.options);
             this.sqLite = null;
 
@@ -132,11 +122,6 @@ public class Main extends JavaPlugin {
 
     private void disconnectDatabase() {
         this.database.disconnect();
-    }
-
-    private void loadPluginDepends() {//TODO 7ta tgad m3k had joj m3rftch ach ndir lihom
-        Data.options.setDataDelete(this.getConfig().getInt("Database.Data-Deletion"));
-        Data.options.setPlayerIPEnabled(this.getConfig().getBoolean("Player-Join.Player-IP"));
     }
 
     private boolean langChecker() {

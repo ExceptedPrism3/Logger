@@ -42,7 +42,6 @@ public class OnVault implements Listener, Runnable {
             final String playerName = player.getName();
             final UUID playerUUID = player.getUniqueId();
 
-
             for (Map.Entry<UUID, Double> bal : this.players.entrySet()) {
 
                 if (this.econ.getBalance(player.getPlayer()) != this.players.get(player.getUniqueId())) {
@@ -58,45 +57,41 @@ public class OnVault implements Listener, Runnable {
 
                             try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
 
-                                out.write(this.main.getMessages().get().getString("Files.Extras.Vault-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)) + "\n");
+                                out.write(this.main.getMessages().get().getString("Files.Extras.Vault-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)).replace("%uuid%", playerUUID.toString()) + "\n");
 
                             } catch (final IOException e) {
 
                                 Log.warning("An error occurred while logging into the appropriate file.");
                                 e.printStackTrace();
-
                             }
                         } else {
 
                             try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getVaultFile(), true))) {
 
-                                out.write(this.main.getMessages().get().getString("Files.Extras.Vault").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)) + "\n");
+                                out.write(this.main.getMessages().get().getString("Files.Extras.Vault").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)).replace("%uuid%", playerUUID.toString()) + "\n");
 
                             } catch (final IOException e) {
 
                                 Log.warning("An error occurred while logging into the appropriate file.");
                                 e.printStackTrace();
-
                             }
                         }
                     }
 
                     // Discord Integration
-                    if (!player.hasPermission(Data.loggerExemptDiscord)) {
+                    if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
                         if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                             if (!this.main.getMessages().get().getString("Discord.Extras.Vault-Staff").isEmpty()) {
 
-                                this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Vault-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)), false);
-
+                                this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Vault-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)).replace("%uuid%", playerUUID.toString()), false);
                             }
-
                         } else {
 
                             if (!this.main.getMessages().get().getString("Discord.Extras.Vault").isEmpty()) {
 
-                                this.main.getDiscord().vault(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Vault").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)), false);
+                                this.main.getDiscord().vault(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Vault").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)).replace("%uuid%", playerUUID.toString()), false);
                             }
                         }
                     }

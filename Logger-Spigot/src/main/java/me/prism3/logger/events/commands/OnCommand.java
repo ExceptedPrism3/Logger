@@ -1,11 +1,9 @@
 package me.prism3.logger.events.commands;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.events.spy.OnCommandSpy;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.Log;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -29,10 +27,6 @@ public class OnCommand implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerCmd(final PlayerCommandPreprocessEvent event) {
 
-        // Commands Spy
-        if (this.main.getConfig().getBoolean("Spy-Features.Commands-Spy.Enable"))
-            new OnCommandSpy().onCmdSpy(event);
-
         // Whitelist Commands
         if (isWhitelisted) {
             new OnCommandWhitelist().onWhitelistedCommand(event);
@@ -45,8 +39,7 @@ public class OnCommand implements Listener {
 
             if (player.hasPermission(loggerExempt) || (isWhitelisted && isBlacklisted) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
-            final World world = player.getWorld();
-            final String worldName = world.getName();
+            final String worldName = player.getWorld().getName();
             final UUID playerUUID = player.getUniqueId();
             final String playerName = player.getName();
             final String command = event.getMessage().replace("\\", "\\\\");
@@ -63,44 +56,41 @@ public class OnCommand implements Listener {
 
                     try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
                         
-                        out.write(this.main.getMessages().get().getString("Files.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%command%", command) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%command%", command).replace("%uuid%", playerUUID.toString()) + "\n");
 
                     } catch (final IOException e) {
 
                         Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 } else {
 
                     try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true))) {
                         
-                        out.write(this.main.getMessages().get().getString("Files.Player-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%command%", command) + "\n");
+                        out.write(this.main.getMessages().get().getString("Files.Player-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%command%", command).replace("%uuid%", playerUUID.toString()) + "\n");
 
                     } catch (final IOException e) {
 
                         Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 }
             }
 
-            // Discord
-            if (!player.hasPermission(loggerExemptDiscord)) {
+            // Discord Integration
+            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!this.main.getMessages().get().getString("Discord.Player-Commands-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
-
+                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command).replace("%uuid%", playerUUID.toString()), false);
                     }
                 } else {
 
                     if (!this.main.getMessages().get().getString("Discord.Player-Commands").isEmpty()) {
 
-                        this.main.getDiscord().playerCommand(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
+                        this.main.getDiscord().playerCommand(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command).replace("%uuid%", playerUUID.toString()), false);
                     }
                 }
             }
@@ -112,7 +102,7 @@ public class OnCommand implements Listener {
 
                     Main.getInstance().getDatabase().insertPlayerCommands(serverName, playerName, playerUUID.toString(), worldName, command, player.hasPermission(loggerStaffLog));
 
-                } catch (final Exception exception) { exception.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -122,7 +112,7 @@ public class OnCommand implements Listener {
 
                     Main.getInstance().getSqLite().insertPlayerCommands(serverName, playerName, playerUUID.toString(), worldName, command, player.hasPermission(loggerStaffLog));
 
-                } catch (final Exception exception) { exception.printStackTrace(); }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
         }
     }

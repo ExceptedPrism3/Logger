@@ -40,7 +40,6 @@ public class UpdateChecker {
 
                                 Log.info(ChatColor.GOLD + "A new version is available for download " + ChatColor.GREEN + VERSION);
                                 Log.info(ChatColor.GOLD + "Download Link: " + ChatColor.GREEN + DOWNLOAD_URL);
-
                             }
                         }
 
@@ -50,7 +49,6 @@ public class UpdateChecker {
 
                         Log.warning("Could not check for Updates, if the issue persists contact the Authors!");
                         e.printStackTrace();
-
                     }
                 }
 
@@ -58,7 +56,6 @@ public class UpdateChecker {
 
                 Log.warning("Could not check for Updates, if the issue persists contact the Authors!");
                 e.printStackTrace();
-
             }
         });
     }

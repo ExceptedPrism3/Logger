@@ -17,23 +17,19 @@ public class OnCommandSpy implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCmdSpy(final PlayerCommandPreprocessEvent event) {
 
-        if (this.main.getConfig().getBoolean("Log-Player.Commands")
-                && this.main.getConfig().getBoolean("Spy-Features.Commands-Spy.Enable")) {
+        final Player player = event.getPlayer();
 
-            final Player player = event.getPlayer();
+        if (player.hasPermission(Data.loggerExempt) || player.hasPermission(Data.loggerSpyBypass)) return;
 
-            if (player.hasPermission(Data.loggerExempt) || player.hasPermission(Data.loggerSpyBypass)) return;
+        for (Player players : Bukkit.getOnlinePlayers()) {
 
-            for (Player players : Bukkit.getOnlinePlayers()) {
+            if (players.hasPermission(Data.loggerSpy)) {
 
-                if (players.hasPermission(Data.loggerSpy)) {
+                players.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                                this.main.getConfig().getString("Spy-Features.Commands-Spy.Message")).
+                        replace("%player%", player.getName()).
+                            replace("%cmd%", event.getMessage().replace("\\", "\\\\")));
 
-                    players.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                            this.main.getConfig().getString("Spy-Features.Commands-Spy.Message")).
-                                    replace("%player%", player.getName()).
-                                        replace("%cmd%", event.getMessage().replace("\\", "\\\\")));
-
-                }
             }
         }
     }

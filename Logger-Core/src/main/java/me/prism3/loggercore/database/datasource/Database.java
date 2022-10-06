@@ -1,6 +1,5 @@
 package me.prism3.loggercore.database.datasource;
 
-import me.prism3.loggercore.database.DataInterface;
 import me.prism3.loggercore.database.DataSourceInterface;
 import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.loggercore.database.data.Options;
@@ -20,7 +19,7 @@ import java.net.InetSocketAddress;
 import java.time.Instant;
 import java.util.List;
 
-public final class Database implements DataSourceInterface{
+public final class Database implements DataSourceInterface {
 
     private final Options options;
     private final Queue queue = new Queue();
@@ -675,6 +674,17 @@ public final class Database implements DataSourceInterface{
     @Override
     public void insertSpawnEgg(String serverName, String playerUUID, String worldName, String playerName,
                                int x, int y, int z, String entity, boolean isStaff) {
+
+    }
+
+    @Override
+    public void insertWorldGuard(String serverName, String playerUUID, String worldName, String playerName,
+                                 String regionName, boolean isStaff) {
+
+    }
+
+    @Override
+    public void insertPlayerCount(String serverName, int playerCount) {
 
     }
 

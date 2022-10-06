@@ -18,7 +18,7 @@ public class ArmorStandPlace implements Listener {
 
 //            event.get
 
-            System.out.println(event.getSpawnReason());
+            System.out.println(event.getSpawnReason());//TODO 2
 
             System.out.println(event.getLocation().getBlockX() + " " + event.getLocation().getBlockY() + " " + event.getLocation().getBlockZ());
         }

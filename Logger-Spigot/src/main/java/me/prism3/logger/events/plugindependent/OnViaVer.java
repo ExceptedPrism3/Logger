@@ -18,7 +18,7 @@ public class OnViaVer {
 //        System.out.println(via.getVersion());
 
 
-//        if (via.getPlayerVersion(player) == ProtocolVersion.v1_8.getId()) {
+//        if (via.getPlayerVersion(player) == ProtocolVersion.v1_8.getId()) {//TODO 4
 //            player.sendMessage("You are on 1.8 !");
 //
 //        }

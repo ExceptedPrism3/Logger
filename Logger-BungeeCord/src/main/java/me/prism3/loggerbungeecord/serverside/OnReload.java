@@ -43,45 +43,41 @@ public class OnReload implements Listener {
 
                     try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true))) {
 
-                        out.write(this.main.getMessages().getString("Files.Server-Reload-Player-Staff-").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", playerName) + "\n");
+                        out.write(this.main.getMessages().getString("Files.Server-Reload-Player-Staff-").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", playerName).replace("%uuid%", playerUUID.toString()) + "\n");
 
                     } catch (final IOException e) {
 
                         Log.severe("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 } else {
 
                     try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getReloadLogFile(), true))) {
 
-                        out.write(this.main.getMessages().getString("Files.Server-Reload-Player").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", playerName) + "\n");
+                        out.write(this.main.getMessages().getString("Files.Server-Reload-Player").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%player%", playerName).replace("%uuid%", playerUUID.toString()) + "\n");
 
                     } catch (final IOException e) {
 
                         Log.severe("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 }
             }
 
             // Discord Integration
-            if (!player.hasPermission(loggerExemptDiscord)) {
+            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!this.main.getMessages().getString("Discord.Server-Reload-Player-Staff").isEmpty()) {
 
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().getString("Discord.Server-Reload-Player-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server), false);
-
+                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().getString("Discord.Server-Reload-Player-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%uuid%", playerUUID.toString()), false);
                     }
                 } else {
 
                     if (!this.main.getMessages().getString("Discord.Server-Reload-Player").isEmpty()) {
 
-                        this.main.getDiscord().serverReload(playerName, this.main.getMessages().getString("Discord.Server-Reload-Player").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server), false);
-
+                        this.main.getDiscord().serverReload(playerName, this.main.getMessages().getString("Discord.Server-Reload-Player").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%uuid%", playerUUID.toString()), false);
                     }
                 }
             }
@@ -93,9 +89,7 @@ public class OnReload implements Listener {
 
                     Main.getInstance().getDatabase().insertServerReload(serverName, playerName, player.hasPermission(loggerStaffLog));
 
-                } catch (final Exception e) {
-                    e.printStackTrace();
-                }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
             // SQLite
@@ -105,9 +99,7 @@ public class OnReload implements Listener {
 
                     Main.getInstance().getSqLite().insertServerReload(serverName, playerName, player.hasPermission(loggerStaffLog));
 
-                } catch (final Exception e) {
-                    e.printStackTrace();
-                }
+                } catch (final Exception e) { e.printStackTrace(); }
             }
 
         } else {
@@ -121,18 +113,17 @@ public class OnReload implements Listener {
 
                 Log.severe("An error occurred while logging into the appropriate file.");
                 e.printStackTrace();
-
             }
 
             // Discord
-            if (!this.main.getMessages().getString("Discord.Server-Side.Restart-Console").isEmpty())
+            if (!this.main.getMessages().getString("Discord.Server-Side.Restart-Console").isEmpty() && this.main.getDiscordFile().getBoolean("Discord.Enable"))
                 this.main.getDiscord().serverReload(null, this.main.getMessages().getString("Discord.Server-Side.Restart-Console").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())), false);
 
             // External
             if (isExternal) {
 
                 try {
-                    //TODO server reload
+
                     Main.getInstance().getDatabase().insertServerReload(serverName, null, true);
 
                 } catch (final Exception e) { e.printStackTrace(); }

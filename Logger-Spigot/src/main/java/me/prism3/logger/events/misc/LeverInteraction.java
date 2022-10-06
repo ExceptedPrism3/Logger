@@ -71,7 +71,7 @@ public class LeverInteraction implements Listener {
             }
 
             // Discord Integration
-            if (!player.hasPermission(Data.loggerExemptDiscord)) {
+            if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 

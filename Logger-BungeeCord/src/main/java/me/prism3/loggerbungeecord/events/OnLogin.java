@@ -39,45 +39,41 @@ public class OnLogin implements Listener {
 
                 try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffLogFile(), true))) {
 
-                    out.write(this.main.getMessages().getString("Files.Player-Login-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%IP%", String.valueOf(playerIP)) + "\n");
+                    out.write(this.main.getMessages().getString("Files.Player-Login-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%IP%", String.valueOf(playerIP)).replace("%uuid%", playerUUID.toString()) + "\n");
 
                 } catch (final IOException e) {
 
                     Log.severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
-
                 }
             } else {
 
                 try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLoginLogFile(), true))) {
 
-                    out.write(this.main.getMessages().getString("Files.Player-Login").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%IP%", String.valueOf(playerIP)) + "\n");
+                    out.write(this.main.getMessages().getString("Files.Player-Login").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%IP%", String.valueOf(playerIP).replace("%uuid%", playerUUID.toString()) + "\n"));
 
                 } catch (final IOException e) {
 
                     Log.severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
-
                 }
             }
         }
 
         // Discord Integration
-        if (!player.hasPermission(Data.loggerExemptDiscord)) {
+        if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
             if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
                 if (!this.main.getMessages().getString("Discord.Player-Login-Staff").isEmpty()) {
 
-                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().getString("Discord.Player-Login-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%IP%", String.valueOf(playerIP)), false);
-
+                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().getString("Discord.Player-Login-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%IP%", String.valueOf(playerIP)).replace("%uuid%", playerUUID.toString()), false);
                 }
             } else {
 
                 if (!this.main.getMessages().getString("Discord.Player-Login").isEmpty()) {
 
-                    this.main.getDiscord().playerLogin(playerName, playerUUID, this.main.getMessages().getString("Discord.Player-Login").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%IP%", String.valueOf(playerIP)), false);
-
+                    this.main.getDiscord().playerLogin(playerName, playerUUID, this.main.getMessages().getString("Discord.Player-Login").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%IP%", String.valueOf(playerIP)).replace("%uuid%", playerUUID.toString()), false);
                 }
             }
         }
@@ -85,7 +81,7 @@ public class OnLogin implements Listener {
         // External
         if (Data.isExternal) {
 
-            try {//TODO check
+            try {
 
                 Main.getInstance().getDatabase().insertPlayerLogin(Data.serverName, playerName, playerUUID.toString(), playerIP, player.hasPermission(Data.loggerStaffLog));
 

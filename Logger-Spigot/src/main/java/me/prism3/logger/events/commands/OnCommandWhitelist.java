@@ -1,10 +1,8 @@
 package me.prism3.logger.events.commands;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.Log;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,9 +15,8 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
 
 public class OnCommandWhitelist implements Listener {
 
@@ -29,86 +26,80 @@ public class OnCommandWhitelist implements Listener {
     public void onWhitelistedCommand(final PlayerCommandPreprocessEvent event) {
 
         final Player player = event.getPlayer();
-        final World world = player.getWorld();
-        final String worldName = world.getName();
-        final String playerName = player.getName();
-        final UUID playerUUID = player.getUniqueId();
         final String command = event.getMessage().replace("\\", "\\\\");
         final List<String> commandParts = Arrays.asList(event.getMessage().split("\\s+"));
 
-        for (String m : Data.commandsToLog) {
+        for (String m : commandsToLog)
+            if (commandParts.get(0).equalsIgnoreCase(m))
+                this.commandWhitelistLog(player, command);
+    }
 
-            if (commandParts.get(0).equalsIgnoreCase(m)) {
+    private void commandWhitelistLog(Player player, String command) {
 
-                // Log To Files
-                if (Data.isLogToFiles) {
+        // Log To Files
+        if (isLogToFiles) {
 
-                    if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                        try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
 
-                            out.write(this.main.getMessages().get().getString("Files.Player-Commands-Whitelisted-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%command%", command) + "\n");
+                    out.write(this.main.getMessages().get().getString("Files.Player-Commands-Whitelisted-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", player.getWorld().getName()).replace("%player%", player.getName()).replace("%command%", command).replace("%uuid%", player.getUniqueId().toString()) + "\n");
 
-                        } catch (final IOException e) {
+                } catch (final IOException e) {
 
-                            Log.warning("An error occurred while logging into the appropriate file.");
-                            e.printStackTrace();
-
-                        }
-                    } else {
-
-                        try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true))) {
-
-                            out.write(this.main.getMessages().get().getString("Files.Player-Commands-Whitelisted").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%command%", command) + "\n");
-
-                        } catch (final IOException e) {
-
-                            Log.warning("An error occurred while logging into the appropriate file.");
-                            e.printStackTrace();
-
-                        }
-                    }
+                    Log.warning("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
                 }
+            } else {
 
-                // Discord
-                if (!player.hasPermission(Data.loggerExemptDiscord)) {
+                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true))) {
 
-                    if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                    out.write(this.main.getMessages().get().getString("Files.Player-Commands-Whitelisted").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", player.getWorld().getName()).replace("%player%", player.getName()).replace("%command%", command).replace("%uuid%", player.getUniqueId().toString()) + "\n");
 
-                        if (!this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted-Staff").isEmpty()) {
+                } catch (final IOException e) {
 
-                            this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Commands-Staff-Whitelisted").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
-
-                        }
-                    } else {
-
-                        if (!this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted").isEmpty()) {
-
-                            this.main.getDiscord().playerCommand(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command), false);
-                        }
-                    }
-                }
-
-                // External
-                if (Data.isExternal) {
-
-                    try {
-
-                        Main.getInstance().getDatabase().insertPlayerCommands(Data.serverName, playerName, playerUUID.toString(), worldName, command, player.hasPermission(loggerStaffLog));
-
-                    } catch (final Exception exception) { exception.printStackTrace(); }
-                }
-
-                // SQLite
-                if (Data.isSqlite) {
-
-                    try {
-
-                        Main.getInstance().getSqLite().insertPlayerCommands(Data.serverName, playerName, playerUUID.toString(), worldName, command, player.hasPermission(loggerStaffLog));
-
-                    } catch (final Exception exception) { exception.printStackTrace(); }
+                    Log.warning("An error occurred while logging into the appropriate file.");
+                    e.printStackTrace();
                 }
             }
+        }
+
+        // Discord Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+
+            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+
+                if (!this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted-Staff").isEmpty()) {
+
+                    this.main.getDiscord().staffChat(player.getName(), player.getUniqueId(), this.main.getMessages().get().getString("Discord.Player-Commands-Staff-Whitelisted").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", player.getWorld().getName()).replace("%command%", command).replace("%uuid%", player.getUniqueId().toString()), false);
+                }
+            } else {
+
+                if (!this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted").isEmpty()) {
+
+                    this.main.getDiscord().playerCommand(player.getName(), player.getUniqueId(), this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", player.getWorld().getName()).replace("%command%", command).replace("%uuid%", player.getUniqueId().toString()), false);
+                }
+            }
+        }
+
+        // External
+        if (isExternal) {
+
+            try {
+
+                Main.getInstance().getDatabase().insertPlayerCommands(serverName, player.getName(), player.getUniqueId().toString(), player.getWorld().getName(), command, player.hasPermission(loggerStaffLog));
+
+            } catch (final Exception e) { e.printStackTrace(); }
+        }
+
+        // SQLite
+        if (isSqlite) {
+
+            try {
+
+                Main.getInstance().getSqLite().insertPlayerCommands(serverName, player.getName(), player.getUniqueId().toString(), player.getWorld().getName(), command, player.hasPermission(loggerStaffLog));
+
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

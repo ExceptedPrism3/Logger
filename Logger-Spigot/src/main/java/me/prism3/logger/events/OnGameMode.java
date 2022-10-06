@@ -6,7 +6,6 @@ import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.Log;
 import org.bukkit.GameMode;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -39,8 +38,7 @@ public class OnGameMode implements Listener {
 
                 final String playerName = player.getName();
                 final UUID playerUUID = player.getUniqueId();
-                final World world = player.getWorld();
-                final String worldName = world.getName();
+                final String worldName = player.getWorld().getName();
 
                 // Log To Files
                 if (Data.isLogToFiles) {
@@ -49,46 +47,41 @@ public class OnGameMode implements Listener {
 
                         try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
 
-                            out.write(this.main.getMessages().get().getString("Files.Game-Mode-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%game-mode%", gameMode) + "\n");
+                            out.write(this.main.getMessages().get().getString("Files.Game-Mode-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%game-mode%", gameMode).replace("%uuid%", playerUUID.toString()) + "\n");
 
                         } catch (final IOException e) {
 
                             Log.warning("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
-
                         }
                     } else {
 
-                        try {
+                        try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getGameModeFile(), true))) {
 
-                            final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getGameModeFile(), true));
-                            out.write(this.main.getMessages().get().getString("Files.Game-Mode").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%game-mode%", gameMode) + "\n");
-                            out.close();
+                            out.write(this.main.getMessages().get().getString("Files.Game-Mode").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%game-mode%", gameMode).replace("%uuid%", playerUUID.toString()) + "\n");
 
                         } catch (final IOException e) {
 
                             Log.warning("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
-
                         }
                     }
                 }
 
                 // Discord Integration
-                if (!player.hasPermission(Data.loggerExemptDiscord)) {
+                if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
                     if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
                         if (!this.main.getMessages().get().getString("Discord.Game-Mode-Staff").isEmpty()) {
 
-                            this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Game-Mode-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%game-mode%", gameMode), false);
-
+                            this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Game-Mode-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%game-mode%", gameMode).replace("%uuid%", playerUUID.toString()), false);
                         }
                     } else {
 
                         if (!this.main.getMessages().get().getString("Discord.Game-Mode").isEmpty()) {
 
-                            this.main.getDiscord().gameMode(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Game-Mode").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%game-mode%", gameMode), false);
+                            this.main.getDiscord().gameMode(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Game-Mode").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%game-mode%", gameMode).replace("%uuid%", playerUUID.toString()), false);
                         }
                     }
                 }

@@ -51,11 +51,13 @@ public class TPS implements Runnable {
             }
 
             // Discord
-            if (this.getTPS() <= Data.tpsMedium && !this.main.getMessages().get().getString("Discord.Server-Side.TPS-Medium").isEmpty())
-                this.main.getDiscord().tps(this.main.getMessages().get().getString("Discord.Server-Side.TPS-Medium").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())), false);
+            if (this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+                if (this.getTPS() <= Data.tpsMedium && !this.main.getMessages().get().getString("Discord.Server-Side.TPS-Medium").isEmpty())
+                    this.main.getDiscord().tps(this.main.getMessages().get().getString("Discord.Server-Side.TPS-Medium").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())), false);
 
-            else if (this.getTPS() <= Data.tpsCritical && !this.main.getMessages().get().getString("Discord.Server-Side.TPS-Critical").isEmpty())
-                this.main.getDiscord().tps(this.main.getMessages().get().getString("Discord.Server-Side.TPS-Critical").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())), false);
+                else if (this.getTPS() <= Data.tpsCritical && !this.main.getMessages().get().getString("Discord.Server-Side.TPS-Critical").isEmpty())
+                    this.main.getDiscord().tps(this.main.getMessages().get().getString("Discord.Server-Side.TPS-Critical").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%TPS%", String.valueOf(getTPS())), false);
+            }
 
             // External
             if (Data.isExternal) {
@@ -95,6 +97,5 @@ public class TPS implements Runnable {
         int target = (this.tickCount - 1 - ticks) % this.ticks.length;
         long elapsed = System.currentTimeMillis() - this.ticks[target];
         return ticks / (elapsed / 1000.0D);
-
     }
 }

@@ -56,12 +56,14 @@ public class Discord {
     private TextChannel portalCreationChannel;
     private TextChannel rConChannel;
     private TextChannel commandBlockChannel;
+    private TextChannel playerCountChannel;
 
     private TextChannel afkChannel;
     private TextChannel wrongPasswordChannel;
     private TextChannel vaultChannel;
     private TextChannel liteBansChannel;
     private TextChannel advancedBanChannel;
+    private TextChannel worldGuardChannel;
 
     private TextChannel woodStrippingChannel;
 
@@ -166,6 +168,8 @@ public class Discord {
 
             final String commandBlockChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Command-Block.Channel-ID");
 
+            final String playerCountChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Player-Count.Channel-ID");
+
             // Extras
             final String afkChannelID = this.main.getDiscordFile().getString("Discord.Extras.AFK.Channel-ID");
 
@@ -176,6 +180,8 @@ public class Discord {
             final String liteBansChannelID = this.main.getDiscordFile().getString("Discord.Extras.LiteBans.Channel-ID");
 
             final String advancedBanChannelID = this.main.getDiscordFile().getString("Discord.Extras.AdvancedBan.Channel-ID");
+
+            final String worldGuardChannelID = this.main.getDiscordFile().getString("Discord.Extras.WorldGuard.Channel-ID");
 
             // Version Exception
             final String woodStrippingChannelID = this.main.getDiscordFile().getString("Discord.Version-Exceptions.Wood-Stripping.Channel-ID");
@@ -304,6 +310,9 @@ public class Discord {
                 if (this.isValid(commandBlockChannelID, "Log-Server.Command-Block"))
                     this.commandBlockChannel = this.jda.getTextChannelById(commandBlockChannelID);
 
+                if (this.isValid(playerCountChannelID, "Log-Server.Player-Count"))
+                    this.playerCountChannel = this.jda.getTextChannelById(playerCountChannelID);
+
                 // Extra Checkers Part
                 if (this.isValid(afkChannelID, "Log-Extras.Essentials-AFK"))
                     this.afkChannel = this.jda.getTextChannelById(afkChannelID);
@@ -320,14 +329,15 @@ public class Discord {
                 if (this.isValid(advancedBanChannelID, "Log-Extras.AdvancedBan"))
                     this.advancedBanChannel = this.jda.getTextChannelById(advancedBanChannelID);
 
+                if (this.isValid(worldGuardChannelID, "Log-Extras.WorldGuard"))
+                    this.worldGuardChannel = this.jda.getTextChannelById(worldGuardChannelID);
+
                 // Version Exception Part
                 if (this.isValid(woodStrippingChannelID, "Log-Version-Exceptions.Wood-Stripping"))
                     this.woodStrippingChannel = this.jda.getTextChannelById(woodStrippingChannelID);
 
             } catch (final Exception e) {
-
                 Log.severe("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
-
             }
         }
     }
@@ -336,8 +346,7 @@ public class Discord {
 
         if (channelID == null) return false;
 
-        return (!channelID.isEmpty() && this.main.getConfig().getBoolean(path) && !channelID.equals("LINK_HERE"));
-
+        return (!channelID.isEmpty() && this.main.getConfig().getBoolean(path) && !channelID.equals("CHANNEL_ID"));
     }
 
     public void staffChat(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
@@ -594,6 +603,21 @@ public class Discord {
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.spawnEggChannel);
     }
 
+    public void worldGuard(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.worldGuardChannel);
+    }
+
+    public void playerCount(String content, boolean contentInAuthorLine) {
+
+        if (this.playerCountChannel == null) return;
+
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("Player Count");
+
+        if (!contentInAuthorLine) builder.setDescription(content);
+
+        this.playerCountChannel.sendMessage(builder.build()).queue();
+    }
+
     private void discordUtil(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine, TextChannel channel) {
 
         if (channel == null) return;
@@ -621,7 +645,6 @@ public class Discord {
                 Log.severe("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
                         " If this Issue Persists, Contact the Authors!");
                 e.printStackTrace();
-
             }
         }
     }

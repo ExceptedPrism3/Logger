@@ -36,7 +36,7 @@ public class OnArmorStandEndCrystalBreak implements Listener {
             final int y = entity.getLocation().getBlockY();
             final int z = entity.getLocation().getBlockZ();
 
-            System.out.println(worldName + " " + playerUUID + " " + playerName + " " + entityName + " " + x + " " + y + " " + z);
+            System.out.println(worldName + " " + playerUUID + " " + playerName + " " + entityName + " " + x + " " + y + " " + z);//TODO 3
 
         }
     }

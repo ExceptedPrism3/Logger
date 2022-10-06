@@ -56,20 +56,16 @@ public class OnWoodStripping implements Listener {
         axes.add(Material.DIAMOND_AXE);
         if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_16_R1))
             axes.add(Material.NETHERITE_AXE);
-
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onWoodStripped(final PlayerInteractEvent event) {
 
-        if (!event.isCancelled()) {
+        if (!event.isCancelled() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 
             final Player player = event.getPlayer();
 
             if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
-
-            // If Action is NOT A Right Click, Stop
-            if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
             if (event.getItem() == null) return;
 
@@ -88,7 +84,6 @@ public class OnWoodStripping implements Listener {
             final int z = event.getClickedBlock().getZ();
             final String logName = event.getClickedBlock().getType().name();
 
-
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
@@ -104,7 +99,6 @@ public class OnWoodStripping implements Listener {
 
                         Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 } else {
 
@@ -116,20 +110,18 @@ public class OnWoodStripping implements Listener {
 
                         Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 }
             }
 
             // Discord Integration
-            if (!player.hasPermission(Data.loggerExemptDiscord)) {
+            if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
                     if (!this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping-Staff").isEmpty()) {
 
                         this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-
                     }
                 } else {
 

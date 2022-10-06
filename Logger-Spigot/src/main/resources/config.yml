@@ -158,6 +158,11 @@ TPS:
 # Log when set amount of players are online
 Player-Count: 50
 
+# World Guard Regions to log once a player access
+WorldGuard-Regions:
+  - exit
+  - "Don't enter"
+
 # Spy Features Settings
 Spy-Features:
   Commands-Spy:

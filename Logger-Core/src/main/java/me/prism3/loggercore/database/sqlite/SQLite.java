@@ -1168,6 +1168,17 @@ public final class SQLite implements DataSourceInterface {
 
     }
 
+    @Override
+    public void insertWorldGuard(String serverName, String playerUUID, String worldName, String playerName,
+                                 String regionName, boolean isStaff) {
+
+    }
+
+    @Override
+    public void insertPlayerCount(String serverName, int playerCount) {
+
+    }
+
 
     @Override
     public void disconnect() {

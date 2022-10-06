@@ -5,7 +5,6 @@ import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.Log;
 import me.prism3.loggercore.database.data.Coordinates;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
@@ -36,8 +35,7 @@ public class OnPrimedTNT implements Listener {
 
             final String playerName = player.getName();
             final UUID playerUUID = player.getUniqueId();
-            final World world = player.getWorld();
-            final String worldName = world.getName();
+            final String worldName = player.getWorld().getName();
             final int x = event.getLocation().getBlockX();
             final int y = event.getLocation().getBlockY();
             final int z = event.getLocation().getBlockZ();
@@ -57,7 +55,6 @@ public class OnPrimedTNT implements Listener {
 
                         Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
-
                     }
                 } else {
 
@@ -74,7 +71,7 @@ public class OnPrimedTNT implements Listener {
             }
 
             // Discord Integration
-            if (!player.hasPermission(loggerExemptDiscord)) {
+            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 

@@ -1,14 +1,14 @@
 package me.prism3.loggerbungeecord.utils;
 
 import me.prism3.loggerbungeecord.Main;
-import me.prism3.loggerbungeecord.hooks.LiteBanUtil;
+import me.prism3.loggerbungeecord.hooks.LiteBansUtil;
 import me.prism3.loggerbungeecord.hooks.PartyAndFriendsUtil;
 import me.prism3.loggerbungeecord.events.OnChat;
 import me.prism3.loggerbungeecord.events.OnLeave;
 import me.prism3.loggerbungeecord.events.OnLogin;
 import me.prism3.loggerbungeecord.events.OnServerSwitch;
 import me.prism3.loggerbungeecord.events.oncommands.OnCommand;
-import me.prism3.loggerbungeecord.events.plugindependent.OnLiteBan;
+import me.prism3.loggerbungeecord.events.plugindependent.OnLiteBans;
 import me.prism3.loggerbungeecord.events.plugindependent.paf.OnFriendMessage;
 import me.prism3.loggerbungeecord.events.plugindependent.paf.OnPartyMessage;
 import me.prism3.loggerbungeecord.serverside.OnReload;
@@ -77,9 +77,7 @@ public class Data {
     public static String loggerStaffLog;
 
     public void initializeDateFormatter() {
-
         dateTimeFormatter = DateTimeFormatter.ofPattern(Objects.requireNonNull(config.getString("Time-Formatter")));
-
     }
 
     public void initializeStrings() {
@@ -87,7 +85,6 @@ public class Data {
         pluginVersion = this.main.getDescription().getVersion();
         serverName = this.config.getString("Server-Name");
         discordSupportServer = "https://discord.gg/MfR5mcpVfX";
-
     }
 
     public void initializeListOfStrings() {
@@ -100,7 +97,6 @@ public class Data {
         dbUserName = this.config.getString("Database.Username");
         dbPassword = this.config.getString("Database.Password");
         dbName = this.config.getString("Database.Database");
-
     }
 
     public void initializeIntegers() {
@@ -111,7 +107,6 @@ public class Data {
         dbPort = this.config.getInt("Database.Port");
         externalDataDel = this.config.getInt("Database.Data-Deletion");
         sqliteDataDel = this.config.getInt("SQLite.Data-Deletion");
-
     }
 
     public void initializeBoolean() {
@@ -133,7 +128,6 @@ public class Data {
         isLiteBansTempMute = this.config.getBoolean("LiteBans.Temp-Mute");
         isLiteBansKick = this.config.getBoolean("LiteBans.Kick");
         isUpdateChecker = this.config.getBoolean("Update.Checker");
-
     }
 
     public void initializePermissionStrings() {
@@ -143,7 +137,6 @@ public class Data {
         loggerExempt = "loggerproxy.exempt";
         loggerExemptDiscord = "loggerproxy.exempt.discord";
         loggerStaffLog = "loggerproxy.staff.log";
-
     }
 
     public void eventInitializer() {
@@ -175,23 +168,8 @@ public class Data {
 
     private void dependentEventInitializer() {
 
-        if (LiteBanUtil.getLiteBansAPI() != null && this.main.getConfig().getBoolean("Log-Extras.LiteBans")) {
+        LiteBansUtil.getLiteBansHook();
 
-            this.main.getProxy().getScheduler().schedule(this.main, new OnLiteBan(), 5L, 0, TimeUnit.SECONDS);
-            Log.info("LiteBans Plugin Detected!");
-
-        }
-
-        if (PartyAndFriendsUtil.getPartyAndFriendsAPI() != null && this.main.getConfig().getBoolean("Log-Extras.PAF")) {
-
-            if (this.main.getConfig().getBoolean("PAF.Friend-Message"))
-                this.main.getProxy().getPluginManager().registerListener(this.main, new OnFriendMessage());
-
-            if (this.main.getConfig().getBoolean("PAF.Party-Message"))
-                this.main.getProxy().getPluginManager().registerListener(this.main, new OnPartyMessage());
-
-            Log.info("PartyAndFriends Plugin Detected!");
-
-        }
+        PartyAndFriendsUtil.getPartyAndFriendsHook();
     }
 }

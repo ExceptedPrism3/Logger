@@ -17,7 +17,7 @@ public class OnCreativeInteraction implements Listener {
 
         if (player.getGameMode().equals(GameMode.CREATIVE)) {
 
-            ItemStack[] iuv = player.getInventory().getContents();
+            ItemStack[] iuv = player.getInventory().getContents();//TODO 1
 
 
 

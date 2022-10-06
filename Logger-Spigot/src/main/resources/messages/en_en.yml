@@ -81,6 +81,7 @@ Files:
     Portal-Creation: "[%time%] A portal has been created in [%world%] using %material%"
     RCON: "[%time%] This command '%command%' has been executed via an RCON"
     Command-Block: "[%time%] %command%"
+    Player-Count: "[%time%] The Server has hit %amount% player(s)!"
   Extras:
     AFK-Staff: "[%time%] [%world%] The Staff <%player%> has went AFK at X= %x%, Y= %y%, Z= %z%"
     AFK: "[%time%] [%world%] The Player <%player%> has went AFK at X= %x%, Y= %y%, Z= %z%"
@@ -90,6 +91,8 @@ Files:
     Vault: "[%time%] The balance of the Staff <%player%> has changed from %oldbal% to %newbal%"
     LiteBans: "[%time%] A %type% has been occurred on %executed_on% by %executor% reason of '%reason%' that will expire on %expiration%, %silent%"
     AdvancedBan: "[%time%] The Player %executed_on% has been punished by %executor% with a %type% by %executor% with a reason of '%reason%' that will expire on %expiration%"
+    WorldGuard-Staff: "[%time%] %uuid% %world% The Staff <%player%> has entered the marked region '%region%'"
+    WorldGuard: "[%time%] %uuid% %world% The Player <%player%> has entered the marked region '%region%'"
   Version-Exceptions:
     Wood-Stripping-Staff: "[%time%] [%world%] [%uuid%] The Staff <%player%> has stripped %logname% at X= %x%, Y= %y%, Z= %z%"
     Wood-Stripping: "[%time%] [%world%] [%uuid%] The Player <%player%> has stripped %logname% at X= %x%, Y= %y%, Z= %z%"
@@ -171,6 +174,7 @@ Discord:
     Portal-Creation: "**[%time%]** A portal has been created in **[%time%]** **[%world%]** using **%material%**"
     RCON: "[%time%] This command '**%command%**' has been executed via an RCON"
     Command-Block: "**[%time%]** **%command%**"
+    Player-Count: "**[%time%]** The Server has hit **%amount%** player(s)!"
   Extras:
     AFK-Staff: "**[%time%]** **[%world%]*X= **%x%** `|` Y= **%y%** `|` Z= **%z%**"
     AFK: "**[%time%]** **[%world%]** X= **%x%** `|` Y= **%y%** `|` Z= **%z%**"
@@ -180,6 +184,8 @@ Discord:
     Vault: "**[%time%]** The balance has changed from **%oldbal%** to **%newbal%**"
     LiteBans: "**[%time%]** A **%type%** has been occurred on **%executed_on%** by **%executor%** reason of '**%reason%**' that will expire on **%expiration%**, **%silent%**"
     AdvancedBan: "**[%time%]** The Player **%executed_on%** has been punished by **%executor%** with a **%type%** with a reason of '**%reason%**' that will expire on **%expiration%**"
+    WorldGuard-Staff: "**[%time%]** **%uuid%** **%%world%** has entered the marked region '**%region%**'"
+    WorldGuard: "**[%time%]** **%uuid%** **%%world%** has entered the marked region '**%region%**'"
   Version-Exceptions:
     Wood-Stripping-Staff: "**[%time%]** **[%world%]** **[%uuid%]** has stripped **%logname%** at X= **%x%**, Y= **%y%**, Z= **%z%**"
     Wood-Stripping: "**[%time%]** **[%world%]** **[%uuid%]** has stripped **%logname%** at X= **%x%**, Y= **%y%**, Z= **%z%**"

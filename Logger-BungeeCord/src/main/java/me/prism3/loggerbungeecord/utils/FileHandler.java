@@ -1,16 +1,18 @@
 package me.prism3.loggerbungeecord.utils;
 
-import me.prism3.loggerbungeecord.Main;
-import me.prism3.loggerbungeecord.hooks.LiteBanUtil;
+import me.prism3.loggerbungeecord.hooks.LiteBansUtil;
 import me.prism3.loggerbungeecord.hooks.PartyAndFriendsUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import static me.prism3.loggerbungeecord.utils.Data.fileDeletion;
 
@@ -120,13 +122,13 @@ public class FileHandler {
             serverStopLogFolder.mkdir();
             ramLogFolder.mkdir();
             serverSwitchLogFolder.mkdir();
-            if (LiteBanUtil.getLiteBansAPI() != null) {
+            if (LiteBansUtil.isAllowed) {
                 liteBansLogFolder.mkdir();
                 liteBansBansLogFolder.mkdir();
                 liteBansMuteLogFolder.mkdir();
                 liteBansKickLogFolder.mkdir();
             }
-            if (PartyAndFriendsUtil.getPartyAndFriendsAPI() != null) {
+            if (PartyAndFriendsUtil.isAllowed) {
                 pafFriendMessageLogFolder.mkdir();
                 pafPartyMessageLogFolder.mkdir();
             }
@@ -141,12 +143,12 @@ public class FileHandler {
             serverStopLogFile.createNewFile();
             ramLogFile.createNewFile();
             serverSwitchLogFile.createNewFile();
-            if (LiteBanUtil.getLiteBansAPI() != null) {
+            if (LiteBansUtil.isAllowed) {
                 liteBansBansLogFile.createNewFile();
                 liteBansMuteLogFile.createNewFile();
                 liteBansKickLogFile.createNewFile();
             }
-            if (PartyAndFriendsUtil.getPartyAndFriendsAPI() != null) {
+            if (PartyAndFriendsUtil.isAllowed) {
                 pafFriendMessageLogFile.createNewFile();
                 pafPartyMessageLogFile.createNewFile();
             }
@@ -204,51 +206,37 @@ public class FileHandler {
         if (offset > maxAge) file.delete();
     }
 
-    public void deleteFiles() {
+    public void deleteFiles(File dataFolder) {
 
         if (fileDeletion<= 0 ) { return; }
 
-        if (Data.isStaffEnabled)
-            for (File staffLog : staffLogFolder.listFiles())
-                this.deleteFile(staffLog);
+        final File logsFolder = new File(dataFolder, "Logs");
 
-        for (File chatLog : chatLogFolder.listFiles())
-            this.deleteFile(chatLog);
+        for (File subLogs : logsFolder.listFiles()) {
 
-        for (File commandsLog : commandLogFolder.listFiles())
-            this.deleteFile(commandsLog);
+            this.deleteFilesOlderThanNDays(subLogs);
+        }
+    }
 
-        for (File loginLog : loginLogFolder.listFiles())
-            this.deleteFile(loginLog);
+    private void deleteFilesOlderThanNDays(File dirPath) {
 
-        for (File leaveLog : leaveLogFolder.listFiles())
-            this.deleteFile(leaveLog);
+        final long deadLine = System.currentTimeMillis() - (fileDeletion * 24 * 60 * 60 * 1000);
 
-        for (File reloadLog : reloadLogFolder.listFiles())
-            this.deleteFile(reloadLog);
+        try (final Stream<Path> files = Files.list(Paths.get(String.valueOf(dirPath)))) {
 
-        for (File serverStartLog : serverStartLogFolder.listFiles())
-            this.deleteFile(serverStartLog);
+            files.filter(path -> {
+                try {
+                    return Files.isRegularFile(path) && Files.getLastModifiedTime(path).to(TimeUnit.MILLISECONDS) < deadLine;
+                } catch (final IOException ex) { return false; }
+            }).forEach(path -> {
+                try {
+                    Files.delete(path);
+                } catch (final IOException ex) { Log.severe("An error has occurred, Error Code 4."); }
+            });
+        } catch (final IOException e) {
 
-        for (File serverStopLog : serverStopLogFolder.listFiles())
-            this.deleteFile(serverStopLog);
-
-        for (File ramLog : ramLogFolder.listFiles())
-            this.deleteFile(ramLog);
-
-        for (File serverSwitchLog : serverSwitchLogFolder.listFiles())
-            this.deleteFile(serverSwitchLog);
-
-        if (LiteBanUtil.getLiteBansAPI() != null)
-            for (File liteBansLog : liteBansLogFolder.listFiles())
-                this.deleteFile(liteBansLog);
-
-        if (PartyAndFriendsUtil.getPartyAndFriendsAPI() != null) {
-            for (File pafFriendMessage : pafFriendMessageLogFolder.listFiles())
-                this.deleteFile(pafFriendMessage);
-
-            for (File pafPartyMessage : pafPartyMessageLogFolder.listFiles())
-                this.deleteFile(pafPartyMessage);
+            Log.severe("An error occurred whilst deleting files. If the issue persists, contact the Authors.");
+            e.printStackTrace();
         }
     }
 }

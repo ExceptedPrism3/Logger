@@ -1,7 +1,6 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.events.spy.OnAnvilSpy;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -31,11 +30,6 @@ private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClick(final InventoryClickEvent event) {
-
-        // Anvil Spy
-        if (this.main.getConfig().getBoolean("Spy-Features.Anvil-Spy.Enable")) {
-            new OnAnvilSpy().onAnvilSpy(event);
-        }
 
         if (!event.isCancelled()) {
 
@@ -72,50 +66,47 @@ private final Main main = Main.getInstance();
 
                                     try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
 
-                                        out.write(this.main.getMessages().get().getString("Files.Anvil-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%renamed%", displayName) + "\n");
+                                        out.write(this.main.getMessages().get().getString("Files.Anvil-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%renamed%", displayName).replace("%uuid%", playerUUID.toString()) + "\n");
 
                                     } catch (final IOException e) {
 
                                         Log.warning("An error occurred while logging into the appropriate file.");
                                         e.printStackTrace();
-
                                     }
                                 } else {
 
                                     try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAnvilFile(), true))) {
 
-                                        out.write(this.main.getMessages().get().getString("Files.Anvil").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%renamed%", displayName) + "\n");
+                                        out.write(this.main.getMessages().get().getString("Files.Anvil").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%renamed%", displayName).replace("%uuid%", playerUUID.toString()) + "\n");
 
                                     } catch (final IOException e) {
 
                                         Log.warning("An error occurred while logging into the appropriate file.");
                                         e.printStackTrace();
-
                                     }
                                 }
                             }
 
                             // Discord
-                            if (!player.hasPermission(Data.loggerExemptDiscord)) {
+                            if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
                                 if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
                                     if (!this.main.getMessages().get().getString("Discord.Anvil-Staff").isEmpty()) {
 
-                                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Anvil-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%renamed%", displayName), false);
-
+                                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Anvil-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%renamed%", displayName).replace("%uuid%", playerUUID.toString()), false);
                                     }
                                 } else {
 
                                     if (!this.main.getMessages().get().getString("Discord.Anvil").isEmpty()) {
 
-                                        this.main.getDiscord().anvil(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Anvil").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%renamed%", displayName), false);
+                                        this.main.getDiscord().anvil(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Anvil").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%renamed%", displayName).replace("%uuid%", playerUUID.toString()), false);
                                     }
                                 }
                             }
 
                             // External
-                            if (Data.isExternal ) {
+                            if (Data.isExternal) {
 
                                 try {
 

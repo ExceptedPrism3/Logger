@@ -40,19 +40,18 @@ public class OnPlayerRegister {
 
             try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRegistrationFile(), true))) {
 
-                out.write(this.main.getMessages().get().getString("Files.Player-Registration").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())) + "\n");
+                out.write(this.main.getMessages().get().getString("Files.Player-Registration").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()) + "\n");
 
             } catch (final IOException e) {
 
                 Log.warning("An error occurred while logging into the appropriate file.");
                 e.printStackTrace();
-
             }
         }
 
         // Discord Integration
-        if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getMessages().get().getString("Discord.Player-Registration").isEmpty())
-            this.main.getDiscord().playerRegistration(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Registration").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())), false);
+        if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable") && this.main.getMessages().get().getString("Discord.Player-Registration").isEmpty())
+            this.main.getDiscord().playerRegistration(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Registration").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()), false);
 
         // External
         if (Data.isExternal) {

@@ -48,19 +48,18 @@ public class OnLiteBanEvents implements Listener, Runnable {
 
                         try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
 
-                            out.write(main.getMessages().get().getString("Files.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)) + "\n");
+                            out.write(main.getMessages().get().getString("Files.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)).replace("%uuid%", executorUUID.toString()) + "\n");
 
                         } catch (final IOException e) {
 
                             Log.warning("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
-
                         }
                     } else {
 
                         try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLiteBansFile(), true))) {
 
-                            out.write(main.getMessages().get().getString("Files.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)) + "\n");
+                            out.write(main.getMessages().get().getString("Files.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)).replace("%uuid%", executorUUID.toString()) + "\n");
 
                         } catch (final IOException e) {
 
@@ -72,20 +71,25 @@ public class OnLiteBanEvents implements Listener, Runnable {
                 }
 
                 // Discord Integration
-                if (player == null) { // This is essential when performed by the console
+                if (main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-                    if (!main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
-                        main.getDiscord().advancedBan(main.getMessages().get().getString("Discord.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
+                    if (player == null) { // This is essential when performed by the console
 
-                } else if (!player.hasPermission(Data.loggerExemptDiscord)) {
-
-                    if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog))
                         if (!main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
-                            main.getDiscord().staffChat(executorName, executorUUID, main.getMessages().get().getString("Discord.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
+                            main.getDiscord().advancedBan(main.getMessages().get().getString("Discord.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)).replace("%uuid%", executorUUID.toString()), false);
 
-                        else if (!main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
-                            main.getDiscord().advancedBan(main.getMessages().get().getString("Discord.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
+                    } else if (!player.hasPermission(Data.loggerExemptDiscord)) {
 
+                        if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+
+                            if (!main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
+                                main.getDiscord().staffChat(executorName, executorUUID, main.getMessages().get().getString("Discord.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)).replace("%uuid%", executorUUID.toString()), false);
+
+                        } else {
+                            if (!main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
+                                main.getDiscord().advancedBan(main.getMessages().get().getString("Discord.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)).replace("%uuid%", executorUUID.toString()), false);
+                        }
+                    }
                 }
 
                 // External

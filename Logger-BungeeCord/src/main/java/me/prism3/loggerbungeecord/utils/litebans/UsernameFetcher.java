@@ -1,4 +1,4 @@
-package me.prism3.loggerbungeecord.utils.liteban;
+package me.prism3.loggerbungeecord.utils.litebans;
 
 import litebans.api.Database;
 

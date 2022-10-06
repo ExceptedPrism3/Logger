@@ -44,7 +44,6 @@ public class OnEntityDeath implements Listener {
         final int y = entity.getLocation().getBlockY();
         final int z = entity.getLocation().getBlockZ();
 
-
         final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
         // Log To Files
@@ -71,23 +70,20 @@ public class OnEntityDeath implements Listener {
 
                     Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
-
                 }
             }
         }
 
         // Discord Integration
-        if (!player.hasPermission(Data.loggerExemptDiscord)) {
+        if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
             if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
 
                 if (!this.main.getMessages().get().getString("Discord.Entity-Death-Staff").isEmpty()) {
 
                     this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Entity-Death-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-
                 }
             } else {
-
                 if (!this.main.getMessages().get().getString("Discord.Entity-Death").isEmpty()) {
 
                     this.main.getDiscord().entityDeath(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Entity-Death").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);

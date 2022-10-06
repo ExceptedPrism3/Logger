@@ -9,7 +9,6 @@ import me.prism3.logger.utils.playerdeathutils.InventoryToBase64;
 import me.prism3.logger.utils.playerdeathutils.PlayerFolder;
 import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -67,8 +66,7 @@ public class OnPlayerDeath implements Listener {
         }
         // ******
 
-        final World world = player.getWorld();
-        final String worldName = world.getName();
+        final String worldName = player.getWorld().getName();
         final String playerName = player.getName();
         final UUID playerUUID = player.getUniqueId();
         final int x = player.getLocation().getBlockX();
@@ -84,9 +82,7 @@ public class OnPlayerDeath implements Listener {
                 cause = "Player";
 
             killer = player.getKiller().getName();
-
         }
-
 
         final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
@@ -97,25 +93,23 @@ public class OnPlayerDeath implements Listener {
 
                 try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
                    
-                    out.write(this.main.getMessages().get().getString("Files.Player-Death-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)) + "\n");
+                    out.write(this.main.getMessages().get().getString("Files.Player-Death-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)).replace("%uuid%", playerUUID.toString()) + "\n");
 
                 } catch (final IOException e) {
 
                     Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
-
                 }
             } else {
 
                 try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerDeathLogFile(), true))) {
 
-                    out.write(this.main.getMessages().get().getString("Files.Player-Death").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)) + "\n");
+                    out.write(this.main.getMessages().get().getString("Files.Player-Death").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)).replace("%uuid%", playerUUID.toString()) + "\n");
 
                 } catch (final IOException e) {
 
                     Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
-
                 }
             }
         }
@@ -127,14 +121,12 @@ public class OnPlayerDeath implements Listener {
 
                 if (!this.main.getMessages().get().getString("Discord.Player-Death-Staff").isEmpty()) {
 
-                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Death-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
-
+                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Death-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)).replace("%uuid%", playerUUID.toString()), false);
                 }
             } else {
-
                 if (!this.main.getMessages().get().getString("Discord.Player-Death").isEmpty()) {
 
-                    this.main.getDiscord().playerDeath(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Death").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)), false);
+                    this.main.getDiscord().playerDeath(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Death").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%cause%", cause).replace("%killer%", killer).replace("%level%", String.valueOf(playerLevel)).replace("%uuid%", playerUUID.toString()), false);
                 }
             }
         }

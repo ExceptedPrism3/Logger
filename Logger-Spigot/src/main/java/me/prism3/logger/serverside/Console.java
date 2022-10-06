@@ -46,12 +46,11 @@ public class Console implements Listener {
 
                 Log.warning("An error occurred while logging into the appropriate file.");
                 e.printStackTrace();
-
             }
         }
 
         // Discord
-        if (!this.main.getMessages().get().getString("Discord.Server-Side.Console-Commands").isEmpty())
+        if (!this.main.getMessages().get().getString("Discord.Server-Side.Console-Commands").isEmpty() && this.main.getDiscordFile().getBoolean("Discord.Enable"))
             this.main.getDiscord().console(this.main.getMessages().get().getString("Discord.Server-Side.Console-Commands").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command), false);
 
         // External
