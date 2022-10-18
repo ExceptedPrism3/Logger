@@ -10,12 +10,16 @@ import net.md_5.bungee.config.YamlConfiguration;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ConfigManager {
 
     private Configuration config = null;
 
     public void init() {
+
+        Main.getInstance().getProxy().getScheduler().schedule(Main.getInstance(), () ->
+                new PluginUpdater().run(), 1, 10, TimeUnit.SECONDS);
 
         this.saveDefaultConfig();
 

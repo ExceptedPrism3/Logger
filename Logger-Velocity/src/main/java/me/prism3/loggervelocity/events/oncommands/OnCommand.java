@@ -67,7 +67,6 @@ public class OnCommand {
 
                             Log.error("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
-
                         }
                     } else {
 
@@ -79,7 +78,6 @@ public class OnCommand {
 
                             Log.error("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
-
                         }
                     }
                 }
@@ -92,14 +90,12 @@ public class OnCommand {
                         if (!main.getMessages().getString("Discord.Player-Commands-Staff").isEmpty()) {
 
                             main.getDiscord().staffChat(playerName, playerUUID, main.getMessages().getString("Discord.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
-
                         }
                     } else {
 
                         if (!main.getMessages().getString("Discord.Player-Commands").isEmpty()) {
 
                             main.getDiscord().playerCommands(playerName, playerUUID, main.getMessages().getString("Discord.Player-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%server%", server).replace("%command%", command), false);
-
                         }
                     }
                 }
@@ -125,8 +121,6 @@ public class OnCommand {
                 }
             }
         }
-        else if (main.getConfig().getBoolean("Log-Server.Console-Commands")) {
-            new Console().onConsole(event);
-        }
+        else if (main.getConfig().getBoolean("Log-Server.Console-Commands")) { new Console().onConsole(event); }
     }
 }

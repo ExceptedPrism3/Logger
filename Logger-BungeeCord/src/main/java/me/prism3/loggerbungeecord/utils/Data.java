@@ -37,6 +37,8 @@ public class Data {
     public static String dbName;
     public static String configVersion;
     public static String discordSupportServer;
+    public static String resourceAPIChecker;
+    public static String resourceLink;
 
     // List<String>
     public static List<String> commandsToBlock;
@@ -85,6 +87,8 @@ public class Data {
         pluginVersion = this.main.getDescription().getVersion();
         serverName = this.config.getString("Server-Name");
         discordSupportServer = "https://discord.gg/MfR5mcpVfX";
+        resourceAPIChecker = "https://api.spigotmc.org/legacy/update.php?resource=94236/";
+        resourceLink = "https://www.spigotmc.org/resources/logger-1-7-1-19.94236/";
     }
 
     public void initializeListOfStrings() {

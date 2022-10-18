@@ -2,9 +2,9 @@ package me.prism3.logger.utils.manager;
 
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Log;
+import me.prism3.logger.utils.PluginUpdater;
 import me.prism3.logger.utils.config.Config;
 import me.prism3.logger.utils.updater.FileUpdater;
-import me.prism3.logger.utils.updater.RunUpdater;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -34,9 +34,9 @@ public class ConfigManager {
 		new BukkitRunnable() {
 				@Override
 				public void run() {
-					new RunUpdater().updateChecker();
+					new PluginUpdater().run();
 				}
-			}.runTaskTimerAsynchronously(this.plugin, 0, 360000);
+			}.runTaskTimerAsynchronously(this.plugin, 0, 12L * 60 * 60 * 20);
 	}
 
 	private void checkConfig() {

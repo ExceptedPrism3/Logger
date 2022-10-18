@@ -35,10 +35,8 @@ public final class Main extends Plugin {
 
         Log.setup(this.getLogger());
 
-//        this.cm = new ConfigManager();
-//        this.cm.init();
-
-        loadConfiguration();
+        this.cm = new ConfigManager();
+        this.cm.init();
 
         this.messages = new Messages();
         this.messages.init();
@@ -65,23 +63,13 @@ public final class Main extends Plugin {
         new Metrics(this, 12036);
 
         // Update Checker
-        if (isUpdateChecker) new UpdateChecker().checkUpdates();
+//        if (isUpdateChecker) new UpdateChecker().checkUpdates();
 
         Log.info(ChatColor.GOLD + "Thanks to everyone's contributions that helped made this project possible!");
 
         Log.info("has been Enabled!");
 
         new Start().run();
-    }
-
-    private ConfigLoader config;
-
-    private void loadConfiguration() {
-        try {
-            config = new me.prism3.loggerbungeecord.utils.ConfigLoader(new File(Main.getInstance().getDataFolder(), "config - Bungee.yml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -94,6 +82,9 @@ public final class Main extends Plugin {
 //        if (isSqlite && this.sqLite.isConnected()) this.sqLite.disconnect();
 
         this.discord.disconnect();
+
+        PluginUpdater as = new PluginUpdater();
+        if (PluginUpdater.isUpdated) as.movePlugin();
 
         Log.info("has been Disabled!");
     }

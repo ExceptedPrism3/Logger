@@ -38,12 +38,13 @@ public class Data {
     public static String pluginVersion;
     public static String serverName;
     public static String gameModeConf;
-
     public static String langPath;
     public static String fileType;
     public static String selectedLang;
     public static String discordSupportServer;
     public static String pluginPrefix;
+    public static String resourceAPIChecker;
+    public static String resourceLink;
 
     // List<String>
     public static List<String> commandsToBlock;
@@ -91,6 +92,8 @@ public class Data {
     public static String loggerSpyBypass;
     public static String loggerSpy;
     public static String loggerReload;
+
+
     public static Options options = new Options();
     public static Settings databaseCredentials;
 
@@ -100,6 +103,7 @@ public class Data {
 
     public void initializeStrings() {
 
+        pluginVersion = this.main.getDescription().getVersion();
         serverName = this.main.getConfig().getString("Server-Name");
         gameModeConf = this.main.getConfig().getString("Game-Mode");
         langPath = "messages";
@@ -107,6 +111,8 @@ public class Data {
         selectedLang = this.main.getConfig().getString("Language");
         discordSupportServer = "https://discord.gg/MfR5mcpVfX";
         pluginPrefix = this.main.getConfig().getString("Plugin-Prefix");
+        resourceAPIChecker = "https://api.spigotmc.org/legacy/update.php?resource=94236/";
+        resourceLink = "https://www.spigotmc.org/resources/logger-1-7-1-19.94236/";
     }
 
     public void initializeDatabaseCredentials() {
@@ -144,7 +150,6 @@ public class Data {
 
     public void initializeIntegers() {
 
-        pluginVersion = this.main.getDescription().getVersion();
         resource_ID = 94236;
         ramTpsChecker = this.main.getConfig().getInt("Checkers.RAM-TPS");
         vaultChecker = this.main.getConfig().getInt("Checkers.Vault");
@@ -356,6 +361,6 @@ public class Data {
 
         ViaVersionUtil.getViaVersionHook();
 
-        WorldGuardUtil.getWorldGuardHook();
+//        WorldGuardUtil.getWorldGuardHook();
     }
 }

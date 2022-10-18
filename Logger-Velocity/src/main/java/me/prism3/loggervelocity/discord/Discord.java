@@ -44,7 +44,6 @@ public class Discord {
                 Log.error("An error has occurred whilst connecting to the Bot." +
                         " Is the Bot Key Valid?");
                 return;
-
             }
 
             final String staffChannelID = this.main.getDiscordFile().getString("Discord.Staff.Channel-ID");
@@ -75,7 +74,7 @@ public class Discord {
                 if (this.isValid(playerChatChannelID, "Log-Player.Chat"))
                     this.playerChatChannel = this.jda.getTextChannelById(playerChatChannelID);
 
-                if (this.isValid(consoleCommandsChannelID, "Log-Player.Commands"))
+                if (this.isValid(playerCommandsChannelID, "Log-Player.Commands"))
                     this.playerCommandsChannel = this.jda.getTextChannelById(playerCommandsChannelID);
 
                 if (this.isValid(playerLoginChannelID, "Log-Player.Login"))
@@ -102,7 +101,6 @@ public class Discord {
             } catch (final Exception e) {
 
                 Log.error("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
-
             }
         }
     }
@@ -112,7 +110,6 @@ public class Discord {
         if (channelID == null) return false;
 
         return (!channelID.isEmpty() && this.main.getConfig().getBoolean(path) && !channelID.equals("LINK_HERE"));
-
     }
 
     public void staffChat(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
@@ -218,7 +215,6 @@ public class Discord {
                 Log.error("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
                         " If this Issue Persists, Contact the Authors!");
                 e.printStackTrace();
-
             }
         }
     }

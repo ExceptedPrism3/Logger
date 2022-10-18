@@ -403,7 +403,7 @@ public class FileHandler {
 
             if (AdvancedBanUtil.isAllowed) advancedBanFolder.mkdir();
 
-            if (WorldGuardUtil.isAllowed) worldGuardFolder.mkdir();
+//            if (WorldGuardUtil.isAllowed) worldGuardFolder.mkdir();
 
             // Version Exception Part
             if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFolder.mkdir();
@@ -506,7 +506,7 @@ public class FileHandler {
 
             if (AdvancedBanUtil.isAllowed) advancedBanFile.createNewFile();
 
-            if (WorldGuardUtil.isAllowed) worldGuardFile.createNewFile();
+//            if (WorldGuardUtil.isAllowed) worldGuardFile.createNewFile();
 
             // Version Exception Part
             if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFile.createNewFile();

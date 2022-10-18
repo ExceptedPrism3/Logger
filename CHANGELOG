@@ -206,6 +206,7 @@ Fixes
     [!] LiteBans table not auto deleting on Velocity instance
     [!] Commands not working from console
     [!] RCON not logging into Files
+    [!] PlayerCommands not sending over Discord for Velocity Servers
 
 Changes
     [*] Remade permissions which will log OP and NOT OP players until they're permitted with the exempt permission

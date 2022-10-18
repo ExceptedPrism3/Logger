@@ -58,7 +58,9 @@ public class Main extends JavaPlugin {
         final FileHandler fileHandler = new FileHandler(this.getDataFolder());
         fileHandler.deleteFiles(this.getDataFolder());
 
-        this.databaseSetup();
+//        new PluginUpdater().run();
+
+//        this.databaseSetup();
 
         new ASCIIArt().art();
 
@@ -79,9 +81,9 @@ public class Main extends JavaPlugin {
 
         new Stop().run();
 
-        if (isRegistration && this.sqLiteReg.isConnected()) this.sqLiteReg.disconnect();
+//        if (isRegistration && this.sqLiteReg.isConnected()) this.sqLiteReg.disconnect();
 
-        this.disconnectDatabase();
+//        this.disconnectDatabase();
         this.discord.disconnect();
 
         Log.info("Plugin Disabled!");
