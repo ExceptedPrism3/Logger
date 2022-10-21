@@ -115,3 +115,7 @@ SQLite:
 
 # Checks for Updates
 Update-Checker: true
+
+# Do not touch unless you want to reset it's content
+Config-Version: 1
+Discord-Version: 1

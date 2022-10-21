@@ -9,9 +9,6 @@ import me.prism3.loggerbungeecord.utils.*;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.plugin.Plugin;
 
-import java.io.File;
-import java.io.IOException;
-
 import static me.prism3.loggerbungeecord.utils.Data.*;
 
 public final class Main extends Plugin {
@@ -62,9 +59,6 @@ public final class Main extends Plugin {
         // bStats
         new Metrics(this, 12036);
 
-        // Update Checker
-//        if (isUpdateChecker) new UpdateChecker().checkUpdates();
-
         Log.info(ChatColor.GOLD + "Thanks to everyone's contributions that helped made this project possible!");
 
         Log.info("has been Enabled!");
@@ -83,8 +77,7 @@ public final class Main extends Plugin {
 
         this.discord.disconnect();
 
-        PluginUpdater as = new PluginUpdater();
-        if (PluginUpdater.isUpdated) as.movePlugin();
+        if (PluginUpdater.isUpdated) PluginUpdater.movePlugin();
 
         Log.info("has been Disabled!");
     }

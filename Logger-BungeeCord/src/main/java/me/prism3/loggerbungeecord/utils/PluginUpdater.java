@@ -17,7 +17,7 @@ public class PluginUpdater {
 
     public static boolean isUpdated = false;
     private String newTag = "";
-    private final File updateFolder = new File(Main.getInstance().getDataFolder().getParentFile(), "update");
+    private static final File updateFolder = new File(Main.getInstance().getDataFolder().getParentFile(), "update");
 
     public void run() { this.checkForUpdate(); }
 
@@ -40,14 +40,14 @@ public class PluginUpdater {
 
             this.newTag = stringBuilder.toString();
 
-            this.versionChecker(stringBuilder.toString());
+            this.pluginVersionChecker(stringBuilder.toString());
 
         } catch (final IOException e) { Log.severe("Could not check for updates."); }
     }
 
-    private void versionChecker(String remote) {
+    private void pluginVersionChecker(final String remote) {
 
-        if (this.versionCheck(remote)) {
+        if (this.versionTagChecker(remote)) {
 
             if (!updateFolder.exists())
                 updateFolder.mkdir();
@@ -80,7 +80,7 @@ public class PluginUpdater {
         else Log.info("You're using the latest plugin version");
     }
 
-    private boolean versionCheck(final String remoteVersion) {
+    private boolean versionTagChecker(final String remoteVersion) {
 
         if (remoteVersion.equalsIgnoreCase(pluginVersion))
             return false;
@@ -116,19 +116,22 @@ public class PluginUpdater {
         return newVersion.exists();
     }
 
-    public void movePlugin() {
+    public static void movePlugin() {
 
-        if (OsUtils.isWindows()) {
+        if (OsUtils.isWindows() || !OsUtils.isKnownOS()) {
 
-            Log.severe("Auto-Plugin installing is not supported on Windows OS. You'll have to do it manually.");
+            Log.severe("Auto-Plugin installing is not supported on this OS. You'll have to do it manually.");
             return;
         }
 
         final File newV = new File(updateFolder, "Logger.jar");
 
         try {
-            Files.move(newV.toPath(), Main.getInstance().getDataFolder().getParentFile().toPath().resolve(Main.getInstance().getFile().getName()), StandardCopyOption.REPLACE_EXISTING);
-        } catch (Exception e) { e.printStackTrace(); }
+
+            Files.delete(Main.getInstance().getFile().toPath());
+
+            Files.move(newV.toPath(), Main.getInstance().getDataFolder().getParentFile().toPath().resolve(newV.getName()), StandardCopyOption.REPLACE_EXISTING);
+        } catch (final IOException e) { e.printStackTrace(); }
     }
 }
 

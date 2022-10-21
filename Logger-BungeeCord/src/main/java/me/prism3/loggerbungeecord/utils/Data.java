@@ -35,7 +35,6 @@ public class Data {
     public static String dbUserName;
     public static String dbPassword;
     public static String dbName;
-    public static String configVersion;
     public static String discordSupportServer;
     public static String resourceAPIChecker;
     public static String resourceLink;
@@ -51,6 +50,7 @@ public class Data {
     public static int externalDataDel;
     public static int sqliteDataDel;
     public static int dbPort;
+    public static int configVersion;
 
     // Boolean
     public static boolean isExternal;
@@ -93,7 +93,6 @@ public class Data {
 
     public void initializeListOfStrings() {
 
-        configVersion = this.config.getString("Config");
         commandsToBlock = this.config.getStringList("Player-Commands.Commands-to-Block");
         commandsToLog = this.config.getStringList("Player-Commands.Commands-to-Log");
         dbType = this.config.getString("Database.Type");
@@ -111,6 +110,7 @@ public class Data {
         dbPort = this.config.getInt("Database.Port");
         externalDataDel = this.config.getInt("Database.Data-Deletion");
         sqliteDataDel = this.config.getInt("SQLite.Data-Deletion");
+        configVersion = this.config.getInt("Config-Version");
     }
 
     public void initializeBoolean() {

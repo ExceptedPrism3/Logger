@@ -159,5 +159,12 @@
             <artifactId>json</artifactId>
             <version>20220924</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml -->
+        <dependency>
+            <groupId>ru.vyarus</groupId>
+            <artifactId>yaml-config-updater</artifactId>
+            <version>1.4.2</version>
+        </dependency>
+
     </dependencies>
 </project>
