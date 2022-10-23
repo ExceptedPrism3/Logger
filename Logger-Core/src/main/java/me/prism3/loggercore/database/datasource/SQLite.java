@@ -3,6 +3,7 @@ package me.prism3.loggercore.database.datasource;
 import me.prism3.loggercore.database.DataSourceInterface;
 import me.prism3.loggercore.database.data.Options;
 import me.prism3.loggercore.database.entity.PlayerChat;
+import me.prism3.loggercore.database.queue.QueueManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +19,7 @@ public final class SQLite implements DataSourceInterface {
     private final Options options;
     private Connection connection;
 
+    private QueueManager queueManager;
 
     public SQLite(Options options, File dataFolder) throws SQLException {
         this.options = options;
@@ -34,6 +36,14 @@ public final class SQLite implements DataSourceInterface {
         }
 
         this.createTables();
+    }
+
+    public QueueManager getQueueManager() {
+        return queueManager;
+    }
+
+    public void setQueueManager(QueueManager queueManager) {
+        this.queueManager = queueManager;
     }
 
     public Connection getConnection() throws SQLException {
@@ -529,51 +539,51 @@ public final class SQLite implements DataSourceInterface {
     @Override
     public PreparedStatement getPrimedTntStsm(Connection connection) throws SQLException {
 
-return connection.prepareStatement(
-                     "INSERT INTO primed_tnt" +
-                             " (server_name, world, player_uuid, player_name, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)");
+        return connection.prepareStatement(
+                "INSERT INTO primed_tnt" +
+                        " (server_name, world, player_uuid, player_name, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)");
 
     }
 
     @Override
     public PreparedStatement getLiteBansStsm(Connection connection) throws SQLException {
 
-return   connection.prepareStatement("INSERT INTO litebans" +
-                     " (server_name, sender, command, onwho, reason, duration, is_silent) VALUES(?,?,?,?,?,?,?)");
+        return connection.prepareStatement("INSERT INTO litebans" +
+                " (server_name, sender, command, onwho, reason, duration, is_silent) VALUES(?,?,?,?,?,?,?)");
     }
 
     @Override
     public PreparedStatement getAdvancedDataStsm(Connection connection) throws SQLException {
 
-return connection.prepareStatement(
-                     "INSERT INTO advanced_ban" +
-                             " (server_name, type, executor, executed_on, reason, expiration_date) VALUES(?,?,?,?,?,?)");
+        return connection.prepareStatement(
+                "INSERT INTO advanced_ban" +
+                        " (server_name, type, executor, executed_on, reason, expiration_date) VALUES(?,?,?,?,?,?)");
 
     }
 
     @Override
     public PreparedStatement getCommandBlockStsm(Connection connection) throws SQLException {
 
-return connection.prepareStatement(
-                     "INSERT INTO command_block" +
-                             " (server_name, command) VALUES(?,?)");
+        return connection.prepareStatement(
+                "INSERT INTO command_block" +
+                        " (server_name, command) VALUES(?,?)");
     }
 
     @Override
     public PreparedStatement getWoodStrippingStsm(Connection connection) throws SQLException {
 
-return connection.prepareStatement(
-                     "INSERT INTO wood_stripping" +
-                             " (server_name, world, uuid, player_name, log_name, x, y, z, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?,?)");
+        return connection.prepareStatement(
+                "INSERT INTO wood_stripping" +
+                        " (server_name, world, uuid, player_name, log_name, x, y, z, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?,?)");
 
     }
 
     @Override
     public PreparedStatement getChestInteractionStsm(Connection connection) throws SQLException {
 
-return connection.prepareStatement(
-                     "INSERT INTO chest_interaction" +
-                             " (server_name, world, player_uuid, player_name, x, y, z, items, is_staff) VALUES(?,?,?,?,?,?,?,?,?)");
+        return connection.prepareStatement(
+                "INSERT INTO chest_interaction" +
+                        " (server_name, world, player_uuid, player_name, x, y, z, items, is_staff) VALUES(?,?,?,?,?,?,?,?,?)");
 
     }
 
@@ -590,9 +600,9 @@ return connection.prepareStatement(
     @Override
     public PreparedStatement getConsoleCommandStsm(Connection connection) throws SQLException {
 
-return connection.prepareStatement(
-                     "INSERT INTO console_commands" +
-                             " (server_name, command, date) VALUES(?,?,?)");
+        return connection.prepareStatement(
+                "INSERT INTO console_commands" +
+                        " (server_name, command, date) VALUES(?,?,?)");
 
     }
 
@@ -623,29 +633,29 @@ return connection.prepareStatement(
     }
 
     @Override
-    public PreparedStatement getLeverInteractionStsm(Connection connection)throws SQLException  {
-    return null;
+    public PreparedStatement getLeverInteractionStsm(Connection connection) throws SQLException {
+        return null;
     }
 
     @Override
-    public PreparedStatement getSpawnEggStsm(Connection connection)throws SQLException  {
-    return null;
+    public PreparedStatement getSpawnEggStsm(Connection connection) throws SQLException {
+        return null;
     }
 
     @Override
-    public PreparedStatement getWorldGuardStsm(Connection connection)throws SQLException  {
-return null;
+    public PreparedStatement getWorldGuardStsm(Connection connection) throws SQLException {
+        return null;
     }
 
     @Override
-    public PreparedStatement getPlayerCountStsm(Connection connection)throws SQLException  {
-return null;
+    public PreparedStatement getPlayerCountStsm(Connection connection) throws SQLException {
+        return null;
     }
 
 
     @Override
     public void disconnect() {
-        //TODO chof m3k
+        this.queueManager.flushQueue();
     }
 
     @Override
@@ -666,12 +676,12 @@ return null;
                         " (server_name, world, player_name, block, x, y, z, is_staff, interaction_type, date) VALUES(?,?,?,?,?,?,?,?,?,?)");
     }
 
-@Override
+    @Override
     public PreparedStatement getLevelChangeStsm(Connection connection) throws SQLException {
 
-return connection.prepareStatement(
-                     "INSERT INTO player_level" +
-                             " (server_name, player_name, is_staff) VALUES(?,?,?)");
+        return connection.prepareStatement(
+                "INSERT INTO player_level" +
+                        " (server_name, player_name, is_staff) VALUES(?,?,?)");
     }
 
     public void insertAnvil(String serverName, String playerName, String newName, boolean isStaff) {

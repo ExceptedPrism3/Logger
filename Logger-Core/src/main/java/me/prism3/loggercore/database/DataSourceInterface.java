@@ -1,22 +1,20 @@
 package me.prism3.loggercore.database;
 
-import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.loggercore.database.entity.PlayerChat;
 
-import java.net.InetSocketAddress;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface DataSourceInterface  {
+public interface DataSourceInterface {
     Connection getConnection() throws SQLException;
-    PreparedStatement getPlayerChatStsm(Connection connection) throws SQLException ;
+
+    PreparedStatement getPlayerChatStsm(Connection connection) throws SQLException;
 
     PreparedStatement getPlayerCommandStsm(Connection connection) throws SQLException;
 
-    PreparedStatement getPlayerSignTextStsm(Connection connection) throws SQLException ;
+    PreparedStatement getPlayerSignTextStsm(Connection connection) throws SQLException;
 
     PreparedStatement getPlayerDeathStsm(Connection connection) throws SQLException;
 
@@ -88,6 +86,7 @@ public interface DataSourceInterface  {
 
 
     PreparedStatement getServerSwitchStsm(Connection connection) throws SQLException;
+
     PreparedStatement getPAFFriendMessageStsm(Connection connection) throws SQLException;
 
 
@@ -107,7 +106,8 @@ public interface DataSourceInterface  {
     List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset, int limit);
 
     Long countByTable(String action);
-    PreparedStatement getBlockInteractionStsm(Connection connection) throws SQLException ;
+
+    PreparedStatement getBlockInteractionStsm(Connection connection) throws SQLException;
 
     PreparedStatement getPlayerLevelStsm(Connection connection) throws SQLException;
 

@@ -147,7 +147,7 @@ public final class QueueManager extends Queue {
     }
 
     public void queueBlockInteraction(String serverName, String playerName, String playerUUID,
-                                String block, Coordinates coords, boolean isStaff, InteractionType type) {
+                                      String block, Coordinates coords, boolean isStaff, InteractionType type) {
 
         final BlockInteraction p = new BlockInteraction();
         p.setDate(Instant.now());

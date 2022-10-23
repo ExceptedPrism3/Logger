@@ -7,7 +7,8 @@ import me.prism3.loggercore.database.utils.DateUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeUnit;
 
 class Queue {
 
@@ -102,13 +103,14 @@ class Queue {
         itemActionStsm.executeBatch();
         itemActionStsm.close();
     }
+
     protected static void insertConsoleCommandBatch(PreparedStatement consoleComamndStsm, ConcurrentLinkedQueue<ConsoleCommand> consoleCommandQueue) throws SQLException {
         int size = consoleCommandQueue.size();
         for (int i = 0; i < size; i++) {
             ConsoleCommand consoleCommand = consoleCommandQueue.poll();
             consoleComamndStsm.setString(1, consoleCommand.getServerName());
             consoleComamndStsm.setString(2, consoleCommand.getCommand());
-            consoleComamndStsm.setString(3,DateUtils.formatInstant(consoleCommand.getDate()));
+            consoleComamndStsm.setString(3, DateUtils.formatInstant(consoleCommand.getDate()));
             consoleComamndStsm.addBatch();
 
         }
@@ -135,8 +137,7 @@ class Queue {
         } else {
             throw new RuntimeException("Unidentified Object type!" + item.getClass());
         }
-        if(currentSize == 100)
-        {
+        if (currentSize == 100) {
             currentSize = 0;
             Thread periodicTask = new Thread() {
                 @Override
@@ -144,7 +145,7 @@ class Queue {
                     long start1 = System.nanoTime();
                     flushQueue();
                     long end1 = System.nanoTime();
-                    System.out.println("Time in seconds: "+ TimeUnit.SECONDS.convert((end1-start1), TimeUnit.NANOSECONDS));
+                    System.out.println("Time in seconds: " + TimeUnit.SECONDS.convert((end1 - start1), TimeUnit.NANOSECONDS));
                 }
             };
             periodicTask.start();
@@ -158,11 +159,11 @@ class Queue {
 
     }
 
-    synchronized protected void flushQueue() {
+    public void flushQueue() {
         try (Connection connection = database.getConnection()) {
             connection.setAutoCommit(false);
 
-            Queue.insertBatchBlock(database.getBlockInteractionStsm(connection), blockQueue);
+            Queue.insertBatchBlock(database.getBlockInteractionStsm(connection), this.blockQueue);
             Queue.insertBucketBatch(database.getBucketActionStsm(connection), this.bucketQueue);
             Queue.insertItemActionBatch(database.getItemActionStsm(connection), this.itemActionQueue);
             Queue.insertConsoleCommandBatch(database.getConsoleCommandStsm(connection), this.consoleComamndQueue);
@@ -173,8 +174,6 @@ class Queue {
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
-
-
 
 
     }
