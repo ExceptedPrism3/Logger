@@ -95,7 +95,7 @@ public class OnBlockPlace implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertBlockPlace(Data.serverName, playerName, playerUUID.toString(), blockType.name(), coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queueBlockPlace(Data.serverName, playerName, playerUUID.toString(), blockType.name(), coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -105,7 +105,7 @@ public class OnBlockPlace implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertBlockPlace(Data.serverName, playerName, playerUUID.toString(), blockType.name(), coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queueBlockPlace(Data.serverName, playerName, playerUUID.toString(), blockType.name(), coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

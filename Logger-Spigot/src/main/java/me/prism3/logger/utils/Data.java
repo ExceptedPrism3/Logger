@@ -2,7 +2,6 @@ package me.prism3.logger.utils;
 
 import me.prism3.logger.Main;
 import me.prism3.logger.commands.CommandManager;
-import me.prism3.logger.commands.getting.Chat;
 import me.prism3.logger.commands.subcommands.PlayerInventory;
 import me.prism3.logger.events.*;
 import me.prism3.logger.events.commands.OnCommand;
@@ -199,7 +198,7 @@ public class Data {
     public void commandsInitializer() {
 
         this.main.getCommand("logger").setExecutor(new CommandManager());
-        this.main.getCommand("loggerget").setExecutor(new Chat());
+        //this.main.getCommand("loggerget").setExecutor(new Chat());
     }
 
     public void eventInitializer() {

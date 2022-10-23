@@ -1,7 +1,7 @@
+/*
 package me.prism3.logger.commands.getting;
 
 import me.prism3.logger.Main;
-import me.prism3.loggercore.database.DataInterface;
 import me.prism3.loggercore.database.data.Arguments;
 import me.prism3.loggercore.database.entity.ActionInterface;
 import me.prism3.loggercore.database.utils.GetCommandBuilder;
@@ -115,3 +115,5 @@ public class Chat implements TabExecutor {
         return null;
     }
 }
+
+ */

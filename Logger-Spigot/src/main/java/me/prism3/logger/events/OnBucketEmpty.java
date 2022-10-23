@@ -94,7 +94,7 @@ public class OnBucketEmpty implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertBucketEmpty(Data.serverName, playerName, playerUUID.toString(), bucket, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queueBucketEmpty(Data.serverName, playerName, playerUUID.toString(), bucket, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -104,7 +104,7 @@ public class OnBucketEmpty implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertBucketEmpty(Data.serverName, playerName, playerUUID.toString(), bucket, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queueBucketEmpty(Data.serverName, playerName, playerUUID.toString(), bucket, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

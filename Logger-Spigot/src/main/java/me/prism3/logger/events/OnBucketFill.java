@@ -94,7 +94,7 @@ public class OnBucketFill implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertBucketFill(Data.serverName, playerName, playerUUID.toString(), bucket, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queueBucketFill(Data.serverName, playerName, playerUUID.toString(), bucket, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -104,7 +104,7 @@ public class OnBucketFill implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertBucketFill(Data.serverName, playerName, playerUUID.toString(), bucket, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queueBucketFill(Data.serverName, playerName, playerUUID.toString(), bucket, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

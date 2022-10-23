@@ -4,10 +4,14 @@ import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.loggercore.database.entity.PlayerChat;
 
 import java.net.InetSocketAddress;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
-public interface DataSourceInterface extends DataInterface {
-
+public interface DataSourceInterface  {
+    Connection getConnection() throws SQLException;
     void insertPlayerChat(String serverName, String playerName, String playerUUID, String worldName,
                           String msg, boolean isStaff);
 
@@ -29,12 +33,6 @@ public interface DataSourceInterface extends DataInterface {
     void insertPlayerLeave(String serverName, String playerName, String playerUUID,
                            Coordinates coords, boolean isStaff);
 
-    void insertBlockPlace(String serverName, String playerName, String playerUUID, String block,
-                          Coordinates coords, boolean isStaff);
-
-    void insertBlockBreak(String serverName, String playerName, String playerUUID, String blockName,
-                          Coordinates coords, boolean isStaff);
-
     void insertTps(String serverName, double tpss);
 
     void insertRam(String serverName, long tm, long um, long fm);
@@ -43,15 +41,10 @@ public interface DataSourceInterface extends DataInterface {
                           Coordinates coords, String reason, boolean isStaff);
 
     void insertPortalCreate(String serverName, String worldName, String by);
-
+//TODO remove insertStatements and ADD getPreparedStatement methods
     void insertLevelChange(String serverName, String playerName, String playerUUID,
                            boolean isStaff);
 
-    void insertBucketFill(String serverName, String playerName, String playerUUID, String bucket,
-                          Coordinates coords, boolean isStaff);
-
-    void insertBucketEmpty(String serverName, String playerName, String playerUUID, String bucket,
-                           Coordinates coords, boolean isStaff);
 
     void insertAnvil(String serverName, String playerName, String playerUUID, String newName,
                      boolean isStaff);
@@ -156,5 +149,8 @@ public interface DataSourceInterface extends DataInterface {
     List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset, int limit);
 
     Long countByTable(String action);
+    PreparedStatement getBlockInteractionStsm(Connection connection) throws SQLException;
+    PreparedStatement getBucketActionStsm(Connection connection) throws SQLException;
+
 
 }
