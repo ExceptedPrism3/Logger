@@ -10,11 +10,14 @@ import me.prism3.logger.utils.enums.NmsVersions;
 import me.prism3.logger.utils.manager.ConfigManager;
 import me.prism3.logger.utils.manager.DiscordManager;
 import me.prism3.loggercore.database.DataSourceInterface;
-import me.prism3.loggercore.database.datasource.Database;
+import me.prism3.loggercore.database.datasource.QueueManager;
+import me.prism3.loggercore.database.sqlite.SQLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
 
 import static me.prism3.logger.utils.Data.*;
 
@@ -33,6 +36,7 @@ public class Main extends JavaPlugin {
     private DiscordManager discordFile;
 
     private final NmsVersions version = NmsVersions.valueOf(Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3]);
+    private QueueManager queueManager;
 
     @Override
     public void onEnable() {
@@ -60,7 +64,7 @@ public class Main extends JavaPlugin {
 
 //        new PluginUpdater().run();
 
-//        this.databaseSetup();
+        this.databaseSetup();
 
         new ASCIIArt().art();
 
@@ -108,7 +112,9 @@ public class Main extends JavaPlugin {
 
         try {
 
-            this.database = new Database(databaseCredentials, Data.options);
+            this.database = new SQLite(Data.options, this.getDataFolder());
+            this.sqLite = this.database;
+            this.queueManager = new QueueManager(this.database);
             this.sqLite = null;
 
             if (isRegistration) {
@@ -152,4 +158,6 @@ public class Main extends JavaPlugin {
     public DataSourceInterface getDatabase() { return this.database; }
 
     public DataSourceInterface getSqLite() { return this.sqLite; }
+
+    public QueueManager getQueueManager(){ return this.queueManager; }
 }
