@@ -5,6 +5,7 @@ import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.Log;
 import me.prism3.loggercore.database.data.Coordinates;
+import me.prism3.loggercore.database.entity.enums.InteractionType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -97,7 +98,7 @@ public class ItemFrameBreak implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertItemFrameBreak(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queueBlockInteraction(Data.serverName, playerName, playerUUID.toString(),event.getEntity().getName(), coordinates, player.hasPermission(loggerStaffLog), InteractionType.BLOCK_BREAK);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -107,7 +108,7 @@ public class ItemFrameBreak implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertItemFrameBreak(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queueBlockInteraction(Data.serverName, playerName, playerUUID.toString(),event.getEntity().getName(), coordinates, player.hasPermission(loggerStaffLog), InteractionType.BLOCK_BREAK);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

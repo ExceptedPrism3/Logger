@@ -7,6 +7,7 @@ import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.Log;
 import me.prism3.logger.utils.enums.FriendlyEnchants;
 import me.prism3.loggercore.database.data.Coordinates;
+import me.prism3.loggercore.database.entity.enums.ItemActionType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -111,7 +112,7 @@ public class OnItemDrop implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertItemDrop(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, enchs, itemName, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queueItemAction(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, enchs.toString(), itemName, player.hasPermission(loggerStaffLog), ItemActionType.ITEM_DROP);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -121,7 +122,7 @@ public class OnItemDrop implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertItemDrop(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, enchs, itemName, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queueItemAction(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, enchs.toString(), itemName, player.hasPermission(loggerStaffLog), ItemActionType.ITEM_DROP);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

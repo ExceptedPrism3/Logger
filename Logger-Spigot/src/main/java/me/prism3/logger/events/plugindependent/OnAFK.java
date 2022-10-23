@@ -93,7 +93,7 @@ public class OnAFK implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertAfk(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queueAfk(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -103,7 +103,7 @@ public class OnAFK implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertAfk(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queueAfk(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

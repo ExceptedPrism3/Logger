@@ -102,7 +102,7 @@ public class OnPlayerTeleport implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerTeleport(Data.serverName, playerName, playerUUID.toString(), oldCoords, newCoords, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queuePlayerTeleport(Data.serverName, playerName, playerUUID.toString(), oldCoords, newCoords, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -112,7 +112,7 @@ public class OnPlayerTeleport implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerTeleport(Data.serverName, playerName, playerUUID.toString(), oldCoords, newCoords, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queuePlayerTeleport(Data.serverName, playerName, playerUUID.toString(), oldCoords, newCoords, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

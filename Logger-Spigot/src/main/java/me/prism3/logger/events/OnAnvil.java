@@ -110,7 +110,7 @@ private final Main main = Main.getInstance();
 
                                 try {
 
-                                    Main.getInstance().getDatabase().insertAnvil(Data.serverName, playerName, playerUUID.toString(), displayName, player.hasPermission(loggerStaffLog));
+                                    Main.getInstance().getQueueManager().queueAnvil(Data.serverName, playerName, playerUUID.toString(), displayName, player.hasPermission(loggerStaffLog));
 
                                 } catch (final Exception e) { e.printStackTrace(); }
                             }
@@ -120,7 +120,7 @@ private final Main main = Main.getInstance();
 
                                 try {
 
-                                    Main.getInstance().getSqLite().insertAnvil(Data.serverName, playerName, playerUUID.toString(), displayName, player.hasPermission(loggerStaffLog));
+                                    Main.getInstance().getQueueManager().queueAnvil(Data.serverName, playerName, playerUUID.toString(), displayName, player.hasPermission(loggerStaffLog));
 
                                 } catch (final Exception e) { e.printStackTrace(); }
                             }

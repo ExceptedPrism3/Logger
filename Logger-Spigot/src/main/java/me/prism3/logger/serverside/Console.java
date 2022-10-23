@@ -58,7 +58,7 @@ public class Console implements Listener {
 
             try {
 
-                Main.getInstance().getDatabase().insertConsoleCommand(Data.serverName, command);
+                Main.getInstance().getQueueManager().queueConsoleCommand(Data.serverName, command);
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
@@ -68,7 +68,7 @@ public class Console implements Listener {
 
             try {
 
-                Main.getInstance().getSqLite().insertConsoleCommand(Data.serverName, command);
+                Main.getInstance().getQueueManager().queueConsoleCommand(Data.serverName, command);
 
             } catch (final Exception e) { e.printStackTrace(); }
         }

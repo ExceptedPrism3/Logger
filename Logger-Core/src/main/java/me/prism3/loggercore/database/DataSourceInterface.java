@@ -12,144 +12,105 @@ import java.util.List;
 
 public interface DataSourceInterface  {
     Connection getConnection() throws SQLException;
-    void insertPlayerChat(String serverName, String playerName, String playerUUID, String worldName,
-                          String msg, boolean isStaff);
+    PreparedStatement getPlayerChatStsm(Connection connection) throws SQLException ;
 
-    void insertPlayerCommands(String serverName, String playerName, String playerUUID,
-                              String worldName, String command, boolean isStaff);
+    PreparedStatement getPlayerCommandStsm(Connection connection) throws SQLException;
 
-    void insertPlayerSignText(String serverName, String playerName, String playerUUID,
-                              Coordinates coords, String lines, boolean isStaff);
+    PreparedStatement getPlayerSignTextStsm(Connection connection) throws SQLException ;
 
-    void insertPlayerDeath(String serverName, String playerName, String playerUUID, int level,
-                           String cause, String who, Coordinates coordinates, boolean isStaff);
+    PreparedStatement getPlayerDeathStsm(Connection connection) throws SQLException;
 
-    void insertPlayerTeleport(String serverName, String playerName, String playerUUID,
-                              Coordinates oldCoords, Coordinates newCoords, boolean isStaff);
+    PreparedStatement getPlayerTeleportStsm(Connection connection) throws SQLException;
 
-    void insertPlayerJoin(String serverName, String playerName, String playerUUID,
-                          Coordinates coords, InetSocketAddress ip, boolean isStaff);
+    PreparedStatement getPlayerJoinStsm(Connection connection) throws SQLException;
 
-    void insertPlayerLeave(String serverName, String playerName, String playerUUID,
-                           Coordinates coords, boolean isStaff);
+    PreparedStatement getPlayerLeaveStsm(Connection connection) throws SQLException;
 
-    void insertTps(String serverName, double tpss);
+    PreparedStatement getTpsStsm(Connection connection) throws SQLException;
 
-    void insertRam(String serverName, long tm, long um, long fm);
+    PreparedStatement getRAMStsm(Connection connection) throws SQLException;
 
-    void insertPlayerKick(String serverName, String playerName, String playerUUID,
-                          Coordinates coords, String reason, boolean isStaff);
+    PreparedStatement getPlayerKickStsm(Connection connection) throws SQLException;
 
-    void insertPortalCreate(String serverName, String worldName, String by);
-//TODO remove insertStatements and ADD getPreparedStatement methods
-    void insertLevelChange(String serverName, String playerName, String playerUUID,
-                           boolean isStaff);
+    PreparedStatement getPortalCreateStsm(Connection connection) throws SQLException;
 
+    PreparedStatement getLevelChangeStsm(Connection connection) throws SQLException;
 
-    void insertAnvil(String serverName, String playerName, String playerUUID, String newName,
-                     boolean isStaff);
+    PreparedStatement getAnvilStsm(Connection connection) throws SQLException;
 
     void insertServerStart(String serverName);
 
     void insertServerStop(String serverName);
 
-    void insertItemDrop(String serverName, String playerName, String playerUUID, String item,
-                        int amount, Coordinates coords,
-                        List<String> enchantment, String changedName, boolean isStaff);
+    PreparedStatement getItemActionStsm(Connection connection) throws SQLException;
 
-    void insertEnchant(String serverName, String playerName, String playerUUID,
-                       List<String> enchantment, int enchantmentLevel,
-                       String item, int cost, Coordinates coordinates, boolean isStaff);
+    PreparedStatement getEnchantStsm(Connection connection) throws SQLException;
 
-    void insertBookEditing(String serverName, String playerName, String playerUUID,
-                           String worldName, int pages, List<String> content,
-                           String signedBy, boolean isStaff);
+    PreparedStatement getBookEditingStsm(Connection connection) throws SQLException;
 
-    void insertAfk(String serverName, String playerName, String playerUUID, Coordinates coords,
-                   boolean isStaff);
+    PreparedStatement getAfkStsm(Connection connection) throws SQLException;
 
-    void insertWrongPassword(String serverName, String playerName, String playerUUID,
-                             String worldName, boolean isStaff);
+    PreparedStatement getWrongPasswordStsm(Connection connection) throws SQLException;
 
-    void insertItemPickup(String serverName, String playerName, String playerUUID, String item,
-                          int amount, Coordinates coords, String changedName, boolean isStaff);
 
-    void insertFurnace(String serverName, String playerName, String playerUUID, String item,
-                       int amount, Coordinates coords, boolean isStaff);
+    PreparedStatement getFurnaceStsm(Connection connection) throws SQLException;
 
     void insertRCON(String serverName, String command);
 
-    void insertGameMode(String serverName, String playerName, String playerUUID, String theGameMode,
-                        String worldName, boolean isStaff);
+    PreparedStatement getGamemodeStsm(Connection connection) throws SQLException;
 
-    void insertPlayerCraft(String serverName, String playerName, String playerUUID, String item,
-                           int amount, Coordinates coordinates, boolean isStaff);
+    PreparedStatement getPlayerCraftStsm(Connection connection) throws SQLException;
 
-    void insertVault(String serverName, String playerName, String playerUUID, double oldBal,
-                     double newBal, boolean isStaff);
+    PreparedStatement getVaultStsm(Connection connection) throws SQLException;
 
     void insertPlayerRegistration(String serverName, String playerName, String playerUUID,
                                   String joinDate);
 
-    void insertPrimedTnt(String serverName, String playerName, String playerUUID,
-                         Coordinates coords, boolean isStaff);
+    PreparedStatement getPrimedTntStsm(Connection connection) throws SQLException;
 
-    void insertLiteBans(String serverName, String executor, String command, String onWho,
-                        String duration, String reason, boolean isSilent);
+    PreparedStatement getLiteBansStsm(Connection connection) throws SQLException;
 
-    void insertAdvanceBanData(String serverName, String type, String executor, String executedOn,
-                              String reason, long expirationDate);
+    PreparedStatement getAdvancedDataStsm(Connection connection) throws SQLException;
 
-    void insertCommandBlock(String serverName, String msg);
+    PreparedStatement getCommandBlockStsm(Connection connection) throws SQLException;
 
-    void insertWoodStripping(String serverName, String playerName, String playerUUID,
-                             String logName, Coordinates coords, boolean isStaff);
+    PreparedStatement getWoodStrippingStsm(Connection connection) throws SQLException;
 
-    void insertChestInteraction(String serverName, String playerName, String playerUUID,
-                                Coordinates coords, String[] items, boolean isStaff);
+    PreparedStatement getChestInteractionStsm(Connection connection) throws SQLException;
 
-    void insertEntityDeath(String serverName, String playerName, String playerUUID, String mob,
-                           Coordinates coords, boolean isStaff);
+    PreparedStatement getEntityDeathStsm(Connection connection) throws SQLException;
 
-    void insertConsoleCommand(String serverName, String msg);
+    PreparedStatement getConsoleCommandStsm(Connection connection) throws SQLException;
 
     void insertServerReload(String serverName, String playerName, boolean isStaff);
 
-    void insertPlayerLogin(String serverName, String playerName, String toString,
-                           InetSocketAddress playerIP, boolean hasPermission);
+    PreparedStatement getPlayerLoginStsm(Connection connection) throws SQLException;
 
-    void insertItemFramePlace(String serverName, String playerName, String playerUUID,
-                              Coordinates coords, boolean isStaff);
 
-    void insertItemFrameBreak(String serverName, String playerName, String playerUUID,
-                              Coordinates coords, boolean isStaff);
+    PreparedStatement getServerSwitchStsm(Connection connection) throws SQLException;
+    PreparedStatement getPAFFriendMessageStsm(Connection connection) throws SQLException;
 
-    void insertServerSwitch(String serverName, String playerUUID, String playerName, String from,
-                            String destination, boolean isStaff);
 
-    void insertPAFFriendMessage(String serverName, String playerUUID, String playerName,
-                                String message, String receiver, boolean isStaff);
+    PreparedStatement getPAFPartyMessageStsm(Connection connection) throws SQLException;
 
-    void insertPAFPartyMessage(String serverName, String playerUUID, String playerName,
-                               String message, String leader, List<String> partyMembers, boolean isStaff);
 
-    void insertLeverInteraction(String serverName, String playerUUID, String worldName, String playerName,
-                               int x, int y, int z, boolean isStaff);
+    PreparedStatement getLeverInteractionStsm(Connection connection) throws SQLException;
 
-    void insertSpawnEgg(String serverName, String playerUUID, String worldName, String playerName,
-                                int x, int y, int z, String entity, boolean isStaff);
+    PreparedStatement getSpawnEggStsm(Connection connection) throws SQLException;
 
-    void insertWorldGuard(String serverName, String playerUUID, String worldName, String playerName,
-                        String regionName, boolean isStaff);
+    PreparedStatement getWorldGuardStsm(Connection connection) throws SQLException;
 
-    void insertPlayerCount(String serverName, int playerCount);
+    PreparedStatement getPlayerCountStsm(Connection connection) throws SQLException;
 
     void disconnect();
 
     List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset, int limit);
 
     Long countByTable(String action);
-    PreparedStatement getBlockInteractionStsm(Connection connection) throws SQLException;
+    PreparedStatement getBlockInteractionStsm(Connection connection) throws SQLException ;
+
+    PreparedStatement getPlayerLevelStsm(Connection connection) throws SQLException;
+
     PreparedStatement getBucketActionStsm(Connection connection) throws SQLException;
 
 

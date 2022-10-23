@@ -91,7 +91,7 @@ public class OnAdvancedBan implements Listener {
 
             try {
 
-                Main.getInstance().getDatabase().insertAdvanceBanData(Data.serverName, type, executor, executed_on, reason, expirationDate);
+                Main.getInstance().getQueueManager().queueAdvanceBanData(Data.serverName, type, executor, executed_on, reason, expirationDate);
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
@@ -101,7 +101,7 @@ public class OnAdvancedBan implements Listener {
 
             try {
 
-                Main.getInstance().getSqLite().insertAdvanceBanData(Data.serverName, type, executor, executed_on, reason, expirationDate);
+                Main.getInstance().getQueueManager().queueAdvanceBanData(Data.serverName, type, executor, executed_on, reason, expirationDate);
 
             } catch (final Exception e) { e.printStackTrace(); }
         }

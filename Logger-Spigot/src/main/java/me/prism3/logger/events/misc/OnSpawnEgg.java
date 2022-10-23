@@ -123,7 +123,7 @@ public class OnSpawnEgg implements Listener {
 
             try {
 
-                Main.getInstance().getDatabase().insertSpawnEgg(Data.serverName, playerUUID.toString(), worldName, playerName, x, y, z, entity, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getQueueManager().queueSpawnEgg(Data.serverName, playerUUID.toString(), worldName, playerName, x, y, z, entity, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
@@ -133,7 +133,7 @@ public class OnSpawnEgg implements Listener {
 
             try {
 
-                Main.getInstance().getSqLite().insertSpawnEgg(Data.serverName, playerUUID.toString(), worldName, playerName, x, y, z, entity, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getQueueManager().queueSpawnEgg(Data.serverName, playerUUID.toString(), worldName, playerName, x, y, z, entity, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
