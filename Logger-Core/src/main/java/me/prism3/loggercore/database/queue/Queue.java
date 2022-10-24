@@ -118,6 +118,23 @@ class Queue {
         consoleComamndStsm.close();
     }
 
+    protected static void insertGamemodeBatch(PreparedStatement stsm, ConcurrentLinkedQueue<GameMode> queue) throws SQLException {
+        int size = queue.size();
+        for (int i = 0; i < size; i++) {
+            GameMode gamemode = queue.poll();
+            stsm.setString(1, gamemode.getServerName());
+            stsm.setString(2, gamemode.getWorld());
+            stsm.setString(3, gamemode.getEntityPlayer().getPlayerName());
+            stsm.setString(4, gamemode.getGameMode());
+            stsm.setBoolean(5, gamemode.isStaff());
+            stsm.setString(6, DateUtils.formatInstant(gamemode.getDate()));
+            stsm.addBatch();
+
+        }
+        stsm.executeBatch();
+        stsm.close();
+
+    }
     protected void setBatchSize(int batchSize) {
         this.batchSize = batchSize;
     }
@@ -165,6 +182,7 @@ class Queue {
 
             Queue.insertBatchBlock(database.getBlockInteractionStsm(connection), this.blockQueue);
             Queue.insertBucketBatch(database.getBucketActionStsm(connection), this.bucketQueue);
+            Queue.insertGamemodeBatch(database.getGamemodeStsm(connection), this.gamemodeQueue);
             Queue.insertItemActionBatch(database.getItemActionStsm(connection), this.itemActionQueue);
             Queue.insertConsoleCommandBatch(database.getConsoleCommandStsm(connection), this.consoleComamndQueue);
 

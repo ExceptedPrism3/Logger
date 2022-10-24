@@ -497,7 +497,7 @@ public final class SQLite implements DataSourceInterface {
 
         return connection.prepareStatement(
                 "INSERT INTO game_mode" +
-                        " (server_name, world, player_name, game_mode, is_staff) VALUES(?,?,?,?,?)");
+                        " (server_name, world, player_name, game_mode, is_staff, date) VALUES(?,?,?,?,?,?)");
     }
 
     @Override
