@@ -73,7 +73,7 @@ public final class SQLite implements DataSourceInterface {
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_sign_text"
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
-                    "x INT, y INT, z INT, player_name TEXT, line VARCHAR(60), is_staff BOOLEAN)");
+                    "x INT, y INT, z INT, player_name TEXT, line VARCHAR(80), is_staff BOOLEAN)");
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_death"
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
