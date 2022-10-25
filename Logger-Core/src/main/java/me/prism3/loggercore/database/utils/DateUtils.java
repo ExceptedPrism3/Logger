@@ -6,12 +6,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class DateUtils {
-    public static String formatInstant(Instant instant)
-    {
+    public static String formatInstant(Instant instant) {
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
                         .withLocale(Locale.getDefault())
-                        .withZone( ZoneId.systemDefault());
+                        .withZone(ZoneId.systemDefault());
 
         return formatter.format(instant);
 

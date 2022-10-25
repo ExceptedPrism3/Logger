@@ -100,7 +100,7 @@ public class OnCommand implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerCommands(serverName, playerName, playerUUID.toString(), worldName, command, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queuePlayerCommands(serverName, playerName, playerUUID.toString(), worldName, command, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -110,7 +110,7 @@ public class OnCommand implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerCommands(serverName, playerName, playerUUID.toString(), worldName, command, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queuePlayerCommands(serverName, playerName, playerUUID.toString(), worldName, command, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

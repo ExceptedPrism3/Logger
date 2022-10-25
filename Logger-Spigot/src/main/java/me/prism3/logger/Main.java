@@ -10,14 +10,12 @@ import me.prism3.logger.utils.enums.NmsVersions;
 import me.prism3.logger.utils.manager.ConfigManager;
 import me.prism3.logger.utils.manager.DiscordManager;
 import me.prism3.loggercore.database.DataSourceInterface;
-import me.prism3.loggercore.database.datasource.QueueManager;
-import me.prism3.loggercore.database.sqlite.SQLite;
+import me.prism3.loggercore.database.queue.QueueManager;
+import me.prism3.loggercore.database.datasource.SQLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
 
 import static me.prism3.logger.utils.Data.*;
 

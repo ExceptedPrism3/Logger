@@ -93,7 +93,7 @@ public class OnPrimedTNT implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPrimedTnt(serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queuePrimedTnt(serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -103,7 +103,7 @@ public class OnPrimedTNT implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPrimedTnt(serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queuePrimedTnt(serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

@@ -136,7 +136,7 @@ public class OnPlayerDeath implements Listener {
 
             try {
 
-                Main.getInstance().getDatabase().insertPlayerDeath(Data.serverName, playerName, playerUUID.toString(), playerLevel, cause, killer, coordinates, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getQueueManager().queuePlayerDeath(Data.serverName, playerName, playerUUID.toString(), playerLevel, cause, killer, coordinates, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
@@ -146,7 +146,7 @@ public class OnPlayerDeath implements Listener {
 
             try {
 
-                Main.getInstance().getSqLite().insertPlayerDeath(Data.serverName, playerName, playerUUID.toString(), playerLevel, cause, killer, coordinates, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getQueueManager().queuePlayerDeath(Data.serverName, playerName, playerUUID.toString(), playerLevel, cause, killer, coordinates, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }

@@ -121,7 +121,7 @@ public class OnWorldGuard extends Handler {
 
             try {
 
-                Main.getInstance().getDatabase().insertWorldGuard(Data.serverName, playerUUID.toString(), worldName, playerName, regionName, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getQueueManager().queueWorldGuard(Data.serverName, playerUUID.toString(), worldName, playerName, regionName, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
@@ -131,7 +131,7 @@ public class OnWorldGuard extends Handler {
 
             try {
 
-                Main.getInstance().getSqLite().insertWorldGuard(Data.serverName, playerUUID.toString(), worldName, playerName, regionName, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getQueueManager().queueWorldGuard(Data.serverName, playerUUID.toString(), worldName, playerName, regionName, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }

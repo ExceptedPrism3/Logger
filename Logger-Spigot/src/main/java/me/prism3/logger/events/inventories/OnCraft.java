@@ -95,7 +95,7 @@ public class OnCraft implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerCraft(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queuePlayerCraft(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -105,7 +105,7 @@ public class OnCraft implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerCraft(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queuePlayerCraft(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception exception) { exception.printStackTrace(); }
             }

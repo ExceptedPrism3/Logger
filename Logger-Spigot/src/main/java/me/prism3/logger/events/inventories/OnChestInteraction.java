@@ -132,7 +132,7 @@ public class OnChestInteraction implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertChestInteraction(Data.serverName, playerName, playerUUID.toString(), coordinates, items, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queueChestInteraction(Data.serverName, playerName, playerUUID.toString(), coordinates, items, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -142,7 +142,7 @@ public class OnChestInteraction implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertChestInteraction(Data.serverName, playerName, playerUUID.toString(), coordinates, items, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queueChestInteraction(Data.serverName, playerName, playerUUID.toString(), coordinates, items, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

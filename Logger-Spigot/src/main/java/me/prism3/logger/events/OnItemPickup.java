@@ -6,6 +6,7 @@ import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.Log;
 import me.prism3.loggercore.database.data.Coordinates;
+import me.prism3.loggercore.database.entity.enums.ItemActionType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -104,7 +105,7 @@ public class OnItemPickup implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertItemPickup(Data.serverName, playerName, playerUUID.toString(), item.name(), amount, coordinates, itemName, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getQueueManager().queueItemAction(Data.serverName, playerName, playerUUID.toString(), item.name(), amount, coordinates, "", itemName, player.hasPermission(loggerStaffLog),  ItemActionType.ITEM_PICKUP);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -113,8 +114,8 @@ public class OnItemPickup implements Listener {
             if (Data.isSqlite) {
 
                 try {
-
-                    Main.getInstance().getSqLite().insertItemPickup(Data.serverName, playerName, playerUUID.toString(), item.name(), amount, coordinates, itemName, player.hasPermission(loggerStaffLog));
+//TODO enchantments
+                    Main.getInstance().getQueueManager().queueItemAction(Data.serverName, playerName, playerUUID.toString(), item.name(), amount, coordinates, "", itemName, player.hasPermission(loggerStaffLog), ItemActionType.ITEM_PICKUP);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

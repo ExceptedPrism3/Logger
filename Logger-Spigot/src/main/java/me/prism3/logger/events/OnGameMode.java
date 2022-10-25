@@ -91,7 +91,7 @@ public class OnGameMode implements Listener {
 
                     try {
 
-                        Main.getInstance().getDatabase().insertGameMode(Data.serverName, playerName, playerUUID.toString(), gameMode, worldName, player.hasPermission(loggerStaffLog));
+                        Main.getInstance().getQueueManager().queueGameMode(Data.serverName, playerName, playerUUID.toString(), gameMode, worldName, player.hasPermission(loggerStaffLog));
 
                     } catch (final Exception e) { e.printStackTrace(); }
                 }
@@ -101,7 +101,7 @@ public class OnGameMode implements Listener {
 
                     try {
 
-                        Main.getInstance().getSqLite().insertGameMode(Data.serverName, playerName, playerUUID.toString(), gameMode, worldName, player.hasPermission(loggerStaffLog));
+                        Main.getInstance().getQueueManager().queueGameMode(Data.serverName, playerName, playerUUID.toString(), gameMode, worldName, player.hasPermission(loggerStaffLog));
 
                     } catch (final Exception e) { e.printStackTrace(); }
                 }

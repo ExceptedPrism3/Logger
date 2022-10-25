@@ -48,7 +48,7 @@ public class RAM implements Runnable {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertRam(Data.serverName, maxMemory, usedMemory, freeMemory);
+                    Main.getInstance().getQueueManager().queueRam(Data.serverName, maxMemory, usedMemory, freeMemory);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -58,7 +58,7 @@ public class RAM implements Runnable {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertRam(Data.serverName, maxMemory, usedMemory, freeMemory);
+                    Main.getInstance().getQueueManager().queueRam(Data.serverName, maxMemory, usedMemory, freeMemory);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
