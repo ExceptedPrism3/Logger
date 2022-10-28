@@ -1,33 +1,26 @@
 package me.prism3.loggercore.database.entity;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "player_death")
 public class PlayerDeath extends AbstractAction {
 
-    @Column(name = "world", length = 100)
+
     private String world;
 
-    @Column(name = "player_level")
+
     private Integer playerLevel;
 
-    @Column(name = "x")
     private Integer x;
 
-    @Column(name = "y")
     private Integer y;
 
-    @Column(name = "z")
     private Integer z;
 
-    @Column(name = "cause", length = 40)
+
     private String cause;
 
-    @Column(name = "by_who", length = 30)
+
     private String byWho;
 
-    @Column(name = "is_staff")
+
     private Boolean isStaff;
 
 
@@ -96,5 +89,7 @@ public class PlayerDeath extends AbstractAction {
     }
 
     @Override
-    public String getAction() { return this.entityPlayer.getPlayerName() + " playerdeath"; }
+    public String getAction() {
+        return this.entityPlayer.getPlayerName() + " playerdeath";
+    }
 }

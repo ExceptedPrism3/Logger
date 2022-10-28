@@ -1,25 +1,14 @@
 package me.prism3.loggercore.database.entity;
 
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "player_commands")
-@NamedQueries({
-        @NamedQuery(name = "playercommand.findAllByName", query = "select e from PlayerCommand e where e.entityPlayer.playerName = :playerName")
-})
-@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class PlayerCommand extends AbstractAction {
 
-    @Column(name = "world", length = 100)
+
     private String world;
 
-    @Column(name = "command", length = 256)
     private String command;
 
-    @Column(name = "is_staff")
+
     private Boolean isStaff;
 
 
@@ -48,5 +37,7 @@ public class PlayerCommand extends AbstractAction {
     }
 
     @Override
-    public String getAction() { return this.entityPlayer.getPlayerName() + " playercommand"; }
+    public String getAction() {
+        return this.entityPlayer.getPlayerName() + " playercommand";
+    }
 }

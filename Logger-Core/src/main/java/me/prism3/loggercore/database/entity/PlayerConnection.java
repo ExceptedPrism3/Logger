@@ -2,34 +2,31 @@ package me.prism3.loggercore.database.entity;
 
 import me.prism3.loggercore.database.entity.enums.PlayerConnectionType;
 
-import javax.persistence.*;
 
-@Entity
-@Table(name = "player_connection")
 public class PlayerConnection extends AbstractAction {
 
-    @Column(name = "world", length = 100)
+
     private String world;
 
-    @Column(name = "x")
     private Integer x;
-    @Column(name = "y")
     private Integer y;
-    @Column(name = "z")
     private Integer z;
-    @Column(name = "ip", columnDefinition = "INT UNSIGNED")
+
     private Long ip;
-    @Column(name = "is_staff")
+
     private Boolean isStaff;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "player_connection_type", nullable = false)
+
     private PlayerConnectionType playerConnectionType;
 
-    public PlayerConnectionType getPlayerConnectionType() { return playerConnectionType; }
+    public PlayerConnectionType getPlayerConnectionType() {
+        return playerConnectionType;
+    }
 
     public void setPlayerConnectionType(
-            PlayerConnectionType playerConnectionType) { this.playerConnectionType = playerConnectionType; }
+            PlayerConnectionType playerConnectionType) {
+        this.playerConnectionType = playerConnectionType;
+    }
 
 
     public String getWorld() {

@@ -1,28 +1,17 @@
 package me.prism3.loggercore.database.entity;
 
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "book_editing")
-@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class BookEditing extends AbstractAction {
 
-    @Column(name = "world", length = 100)
+
     private String world;
 
-    @Column(name = "page_count")
     private Integer pageCount;
 
-    @Column(name = "page_content", length = 250)
     private String pageContent;
 
-    @Column(name = "signed_by", length = 25)
     private String signedBy;
 
-    @Column(name = "is_staff")
     private Boolean isStaff;
 
     public String getWorld() {
@@ -66,5 +55,7 @@ public class BookEditing extends AbstractAction {
     }
 
     @Override
-    public String getAction() { return this.entityPlayer.getPlayerName() + " book editing"; }
+    public String getAction() {
+        return this.entityPlayer.getPlayerName() + " book editing";
+    }
 }

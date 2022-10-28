@@ -1,31 +1,21 @@
 package me.prism3.loggercore.database.entity;
 
 import me.prism3.loggercore.database.entity.enums.InteractionType;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.*;
 
-@Entity
-@Table(name = "block_interaction")
-@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class BlockInteraction extends AbstractAction {
 
-    @Column(name = "world", length = 100)
+
     private String world;
-    @Column(name = "block", length = 40)
+
     private String block;
-    @Column(name = "x")
+
     private Integer x;
-    @Column(name = "y")
     private Integer y;
-    @Column(name = "z")
     private Integer z;
-    @Column(name = "is_staff")
     private Boolean isStaff;
 
-    @Column(name = "interaction_type")
-    @Enumerated(EnumType.STRING)
+
     private InteractionType interactionType;
 
 

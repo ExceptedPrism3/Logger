@@ -1,34 +1,23 @@
 package me.prism3.loggercore.database.entity;
 
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-
-@Entity
-@Table(name = "furnace")
-@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Furnace extends AbstractAction {
 
-    @Column(name = "world", length = 100)
+
     private String world;
 
-    @Column(name = "item", length = 250)
+
     private String item;
 
-    @Column(name = "amount")
+
     private Integer amount;
 
-    @Column(name = "x")
     private Integer x;
 
-    @Column(name = "y")
     private Integer y;
 
-    @Column(name = "z")
     private Integer z;
 
-    @Column(name = "is_staff")
+
     private Boolean isStaff;
 
     public String getWorld() {
@@ -88,5 +77,7 @@ public class Furnace extends AbstractAction {
     }
 
     @Override
-    public String getAction() { return this.entityPlayer.getPlayerName() + " furnace"; }
+    public String getAction() {
+        return this.entityPlayer.getPlayerName() + " furnace";
+    }
 }

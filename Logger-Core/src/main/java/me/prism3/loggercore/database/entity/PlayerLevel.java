@@ -1,12 +1,8 @@
 package me.prism3.loggercore.database.entity;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "player_level")
 public class PlayerLevel extends AbstractAction {
 
-    @Column(name = "is_staff")
+
     private Boolean isStaff;
 
 
@@ -14,8 +10,12 @@ public class PlayerLevel extends AbstractAction {
         return this.isStaff;
     }
 
-    public void isStaff(Boolean staff) { this.isStaff = staff; }
+    public void isStaff(Boolean staff) {
+        this.isStaff = staff;
+    }
 
     @Override
-    public String getAction() { return this.entityPlayer.getPlayerName() + " playerleve"; }
+    public String getAction() {
+        return this.entityPlayer.getPlayerName() + " playerleve";
+    }
 }
