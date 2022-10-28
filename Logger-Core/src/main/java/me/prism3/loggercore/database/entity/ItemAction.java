@@ -2,46 +2,43 @@ package me.prism3.loggercore.database.entity;
 
 import me.prism3.loggercore.database.entity.enums.ItemActionType;
 
-import javax.persistence.*;
 
-@Entity
-@Table(name = "item_action")
 public class ItemAction extends AbstractAction {
 
-    @Column(name = "world", length = 100)
+
     private String world;
 
-    @Column(name = "item", length = 50)
+
     private String item;
 
-    @Column(name = "amount")
+
     private Integer amount;
 
-    @Column(name = "x")
     private Integer x;
 
-    @Column(name = "y")
     private Integer y;
 
-    @Column(name = "z")
     private Integer z;
 
-    @Column(name = "enchantment", length = 50)
+
     private String enchantment;
 
-    @Column(name = "changed_name", length = 50)
+
     private String changedName;
 
-    @Column(name = "is_staff")
+
     private Boolean isStaff;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "item_action_type", nullable = false)
+
     private ItemActionType itemActionType;
 
-    public ItemActionType getItemActionType() { return itemActionType; }
+    public ItemActionType getItemActionType() {
+        return itemActionType;
+    }
 
-    public void setItemActionType(ItemActionType itemActionType) { this.itemActionType = itemActionType; }
+    public void setItemActionType(ItemActionType itemActionType) {
+        this.itemActionType = itemActionType;
+    }
 
     public String getWorld() {
         return this.world;
@@ -116,5 +113,7 @@ public class ItemAction extends AbstractAction {
     }
 
     @Override
-    public String getAction() { return this.entityPlayer.getPlayerName() + " itemactoin"; }
+    public String getAction() {
+        return this.entityPlayer.getPlayerName() + " itemactoin";
+    }
 }

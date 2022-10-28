@@ -1,24 +1,17 @@
 package me.prism3.loggercore.database.entity;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "primed_tnt")
 public class PrimedTnt extends AbstractAction {
 
-    @Column(name = "world", length = 100)
+
     private String world;
 
-    @Column(name = "x")
     private Integer x;
 
-    @Column(name = "y")
     private Integer y;
 
-    @Column(name = "z")
     private Integer z;
 
-    @Column(name = "is_staff")
+
     private Boolean isStaff;
 
 
@@ -63,5 +56,7 @@ public class PrimedTnt extends AbstractAction {
     }
 
     @Override
-    public String getAction() { return this.entityPlayer.getPlayerName() + " primedtnt"; }
+    public String getAction() {
+        return this.entityPlayer.getPlayerName() + " primedtnt";
+    }
 }

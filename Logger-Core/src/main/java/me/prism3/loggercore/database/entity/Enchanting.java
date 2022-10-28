@@ -1,40 +1,25 @@
 package me.prism3.loggercore.database.entity;
 
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-
-@Entity
-@Table(name = "enchanting")
-@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Enchanting extends AbstractAction {
 
-    @Column(name = "world", length = 100)
+
     private String world;
 
-    @Column(name = "x")
     private Integer x;
 
-    @Column(name = "y")
     private Integer y;
 
-    @Column(name = "z")
     private Integer z;
 
-    @Column(name = "enchantment", length = 50)
     private String enchantment;
 
-    @Column(name = "enchantment_level")
     private Integer enchantmentLevel;
 
-    @Column(name = "item", length = 50)
     private String item;
 
-    @Column(name = "cost")
     private Integer cost;
 
-    @Column(name = "is_staff")
+
     private Boolean isStaff;
 
     public String getWorld() {
@@ -110,5 +95,7 @@ public class Enchanting extends AbstractAction {
     }
 
     @Override
-    public String getAction() { return this.entityPlayer.getPlayerName() + " enchanting"; }
+    public String getAction() {
+        return this.entityPlayer.getPlayerName() + " enchanting";
+    }
 }

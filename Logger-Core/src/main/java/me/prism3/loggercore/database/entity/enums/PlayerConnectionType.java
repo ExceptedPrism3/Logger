@@ -7,7 +7,11 @@ public enum PlayerConnectionType {
 
     private final String action;
 
-    PlayerConnectionType(String action) { this.action = action; }
+    PlayerConnectionType(String action) {
+        this.action = action;
+    }
 
-    public String rawAction() { return this.action; }
+    public String rawAction() {
+        return this.action;
+    }
 }

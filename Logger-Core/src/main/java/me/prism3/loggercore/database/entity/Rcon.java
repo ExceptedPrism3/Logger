@@ -1,25 +1,20 @@
 package me.prism3.loggercore.database.entity;
 
-import javax.persistence.*;
 import java.time.Instant;
 
-@Entity
-@Table(name = "rcon")
+
 public class Rcon {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+
     private Long id;
-    @Column(name = "server_name", length = 30)
+
     private String serverName;
-    @Column(name = "date", nullable = false)
+
     private Instant date;
-    @Column(name = "command", length = 50)
+
     private String command;
 
 
-    @PrePersist
     public void prePersist() {
         this.date = Instant.now();
     }

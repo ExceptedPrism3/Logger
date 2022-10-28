@@ -2,28 +2,21 @@ package me.prism3.loggercore.database.entity;
 
 import me.prism3.loggercore.database.data.Coordinates;
 
-import javax.persistence.*;
 
-@Entity
-@Table(name = "player_sign_text")
 public class PlayerSignText extends AbstractAction {
 
-    @Column(name = "world", length = 100)
+
     private String world;
 
-    @Column(name = "x")
     private Integer x;
 
-    @Column(name = "y")
     private Integer y;
 
-    @Column(name = "z")
     private Integer z;
 
-    @Column(name = "line", length = 60)
     private String line;
 
-    @Column(name = "is_staff")
+
     private Boolean isStaff;
 
 
@@ -83,5 +76,7 @@ public class PlayerSignText extends AbstractAction {
     }
 
     @Override
-    public String getAction() { return this.entityPlayer.getPlayerName() + " playersigntesxt"; }
+    public String getAction() {
+        return this.entityPlayer.getPlayerName() + " playersigntesxt";
+    }
 }
