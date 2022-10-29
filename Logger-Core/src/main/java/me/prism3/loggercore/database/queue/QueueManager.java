@@ -18,8 +18,8 @@ public final class QueueManager extends Queue {
         super(dataSource);
     }
 
-    public void queuePlayerChat(String serverName, String playerName, String playerUUID,
-                                String worldName, String msg, boolean isStaff) throws InterruptedException {
+    public void queuePlayerChat(String serverName, String playerName, String playerUUID, String worldName, String msg,
+                                boolean isStaff) {
 
         final PlayerChat p = new PlayerChat();
 
@@ -29,11 +29,12 @@ public final class QueueManager extends Queue {
         p.setWorld(worldName);
         p.setEntityPlayer(new EntityPlayer(playerName, playerUUID));
         p.isStaff(isStaff);
+
         super.addItemToQueue(p);
     }
 
-    public void queuePlayerCommands(String serverName, String playerName, String playerUUID,
-                                    String worldName, String command, boolean isStaff) {
+    public void queuePlayerCommands(String serverName, String playerName, String playerUUID, String worldName,
+                                    String command, boolean isStaff) {
 
         final PlayerCommand p = new PlayerCommand();
 
@@ -47,9 +48,8 @@ public final class QueueManager extends Queue {
         super.addItemToQueue(p);
     }
 
-    public void queuePlayerSignText(String serverName, String playerName, String playerUUID,
-                                    Coordinates coords, String lines,
-                                    boolean isStaff) {
+    public void queuePlayerSignText(String serverName, String playerName, String playerUUID, Coordinates coords,
+                                    String lines, boolean isStaff) {
 
         final PlayerSignText p = new PlayerSignText();
 
@@ -64,10 +64,8 @@ public final class QueueManager extends Queue {
         super.addItemToQueue(p);
     }
 
-    public void queuePlayerDeath(
-            String serverName, String playerName, String playerUUID, int level, String cause,
-            String who,
-            Coordinates coordinates, boolean isStaff) {
+    public void queuePlayerDeath(String serverName, String playerName, String playerUUID, int level, String cause,
+                                 String who, Coordinates coordinates, boolean isStaff) {
 
         final PlayerDeath p = new PlayerDeath();
 
@@ -86,8 +84,8 @@ public final class QueueManager extends Queue {
         super.addItemToQueue(p);
     }
 
-    public void queuePlayerTeleport(String serverName, String playerName, String playerUUID,
-                                    Coordinates oldCoords, Coordinates newCoords, boolean isStaff) {
+    public void queuePlayerTeleport(String serverName, String playerName, String playerUUID, Coordinates oldCoords,
+                                    Coordinates newCoords, boolean isStaff) {
 
         final PlayerTeleport p = new PlayerTeleport();
 
@@ -106,8 +104,8 @@ public final class QueueManager extends Queue {
         super.addItemToQueue(p);
     }
 
-    public void queuePlayerJoin(String serverName, String playerName, String playerUUID,
-                                Coordinates coords, InetSocketAddress ip, boolean isStaff) {
+    public void queuePlayerJoin(String serverName, String playerName, String playerUUID, Coordinates coords,
+                                InetSocketAddress ip, boolean isStaff) {
 
         final PlayerConnection p = new PlayerConnection();
 
@@ -128,8 +126,8 @@ public final class QueueManager extends Queue {
         super.addItemToQueue(p);
     }
 
-    public void queuePlayerLeave(String serverName, String playerName, String playerUUID,
-                                 Coordinates coords, boolean isStaff) {
+    public void queuePlayerLeave(String serverName, String playerName, String playerUUID, Coordinates coords,
+                                 boolean isStaff) {
 
         final PlayerConnection p = new PlayerConnection();
 
@@ -143,13 +141,15 @@ public final class QueueManager extends Queue {
         p.setEntityPlayer(new EntityPlayer(playerName, playerUUID));
         p.isStaff(isStaff);
         p.setPlayerConnectionType(PlayerConnectionType.PLAYER_LEAVE);
+
         super.addItemToQueue(p);
     }
 
-    public void queueBlockInteraction(String serverName, String playerName, String playerUUID,
-                                      String block, Coordinates coords, boolean isStaff, InteractionType type) {
+    public void queueBlockInteraction(String serverName, String playerName, String playerUUID, String block,
+                                      Coordinates coords, boolean isStaff, InteractionType type) {
 
         final BlockInteraction p = new BlockInteraction();
+
         p.setDate(Instant.now());
         p.setServerName(serverName);
         p.setWorld(coords.getWorldName());
@@ -160,9 +160,9 @@ public final class QueueManager extends Queue {
         p.setEntityPlayer(new EntityPlayer(playerName, playerUUID));
         p.isStaff(isStaff);
         p.setInteractionType(type);
+
         super.addItemToQueue(p);
     }
-
 
     public void queueTps(String serverName, double tpss) {
 
@@ -188,8 +188,8 @@ public final class QueueManager extends Queue {
         super.addItemToQueue(p);
     }
 
-    public void queuePlayerKick(String serverName, String playerName, String playerUUID,
-                                Coordinates coords, String reason, boolean isStaff) {
+    public void queuePlayerKick(String serverName, String playerName, String playerUUID, Coordinates coords,
+                                String reason, boolean isStaff) {
 
         final PlayerKick p = new PlayerKick();
 
@@ -230,8 +230,8 @@ public final class QueueManager extends Queue {
         super.addItemToQueue(p);
     }
 
-    public void queueBucketFill(String serverName, String playerName, String playerUUID,
-                                String bucket, Coordinates coords, boolean isStaff) {
+    public void queueBucketFill(String serverName, String playerName, String playerUUID, String bucket,
+                                Coordinates coords, boolean isStaff) {
 
         final BucketAction b = new BucketAction();
 
@@ -249,8 +249,8 @@ public final class QueueManager extends Queue {
         super.addItemToQueue(b);
     }
 
-    public void queueBucketEmpty(String serverName, String playerName, String playerUUID,
-                                 String bucket, Coordinates coords, boolean isStaff) {
+    public void queueBucketEmpty(String serverName, String playerName, String playerUUID, String bucket,
+                                 Coordinates coords, boolean isStaff) {
 
         final BucketAction b = new BucketAction();
 
@@ -300,9 +300,8 @@ public final class QueueManager extends Queue {
     }
 
 
-    public void queueEnchant(
-            String serverName, String playerName, String playerUUID, List<String> enchantment, int enchantmentLevel,
-            String item, int cost, Coordinates coordinates, boolean isStaff) {
+    public void queueEnchant(String serverName, String playerName, String playerUUID, List<String> enchantment,
+                             int enchantmentLevel, String item, int cost, Coordinates coordinates, boolean isStaff) {
 
         final Enchanting e = new Enchanting();
 
@@ -322,9 +321,8 @@ public final class QueueManager extends Queue {
         super.addItemToQueue(e);
     }
 
-    public void queueBookEditing(
-            String serverName, String playerName, String playerUUID, String worldName, int pages,
-            List<String> content, String signedBy, boolean isStaff) {
+    public void queueBookEditing(String serverName, String playerName, String playerUUID, String worldName,
+                                 int pages, List<String> content, String signedBy, boolean isStaff) {
 
         final BookEditing b = new BookEditing();
         b.setDate(Instant.now());
@@ -348,7 +346,8 @@ public final class QueueManager extends Queue {
     }
 
     public void queueItemAction(String serverName, String playerName, String playerUUID, String item, int amount,
-                                Coordinates coords, String enchantment, String changedName, boolean isStaff, ItemActionType type) {
+                                Coordinates coords, String enchantment, String changedName, boolean isStaff,
+                                ItemActionType type) {
 
         final ItemAction b = new ItemAction();
 
@@ -365,6 +364,7 @@ public final class QueueManager extends Queue {
         b.isStaff(isStaff);
         b.setItemActionType(type);
         b.setEnchantment(enchantment);
+
         super.addItemToQueue(b);
     }
 
@@ -439,7 +439,8 @@ public final class QueueManager extends Queue {
 
     }
 
-    public void queuePrimedTnt(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+    public void queuePrimedTnt(String serverName, String playerName, String playerUUID, Coordinates coords,
+                               boolean isStaff) {
 
         final PrimedTnt b = new PrimedTnt();
 
@@ -474,8 +475,8 @@ public final class QueueManager extends Queue {
         super.addItemToQueue(b);
     }
 
-    public void queueWoodStripping(String serverName, String playerName, String playerUUID, String logName, Coordinates coords,
-                                   boolean isStaff) {
+    public void queueWoodStripping(String serverName, String playerName, String playerUUID, String logName,
+                                   Coordinates coords, boolean isStaff) {
 
     }
 
@@ -523,28 +524,28 @@ public final class QueueManager extends Queue {
     }
 
 
-    public void queueServerSwitch(String serverName, String playerUUID, String playerName,
-                                  String from, String destination, boolean isStaff) {
+    public void queueServerSwitch(String serverName, String playerUUID, String playerName, String from,
+                                  String destination, boolean isStaff) {
 
     }
 
-    public void queuePAFFriendMessage(String serverName, String playerUUID, String playerName,
-                                      String message, String receiver, boolean isStaff) {
+    public void queuePAFFriendMessage(String serverName, String playerUUID, String playerName, String message,
+                                      String receiver, boolean isStaff) {
 
     }
 
-    public void queuePAFPartyMessage(String serverName, String playerUUID, String playerName,
-                                     String message, String leader, List<String> partyMembers, boolean isStaff) {
+    public void queuePAFPartyMessage(String serverName, String playerUUID, String playerName, String message,
+                                     String leader, List<String> partyMembers, boolean isStaff) {
 
     }
 
-    public void queueLeverInteraction(String serverName, String playerUUID, String worldName, String playerName,
-                                      int x, int y, int z, boolean isStaff) {
+    public void queueLeverInteraction(String serverName, String playerUUID, String worldName, String playerName, int x,
+                                      int y, int z, boolean isStaff) {
 
     }
 
-    public void queueSpawnEgg(String serverName, String playerUUID, String worldName, String playerName,
-                              int x, int y, int z, String entity, boolean isStaff) {
+    public void queueSpawnEgg(String serverName, String playerUUID, String worldName, String playerName, int x, int y,
+                              int z, String entity, boolean isStaff) {
 
     }
 
@@ -556,6 +557,4 @@ public final class QueueManager extends Queue {
     public void queuePlayerCount(String serverName, int playerCount) {
 
     }
-
-
 }

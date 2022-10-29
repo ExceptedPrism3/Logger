@@ -1,6 +1,7 @@
 package me.prism3.loggercore.database;
 
 import me.prism3.loggercore.database.entity.PlayerChat;
+import me.prism3.loggercore.database.queue.QueueManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,6 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface DataSourceInterface {
+
     Connection getConnection() throws SQLException;
 
     PreparedStatement getPlayerChatStsm(Connection connection) throws SQLException;
@@ -20,9 +22,7 @@ public interface DataSourceInterface {
 
     PreparedStatement getPlayerTeleportStsm(Connection connection) throws SQLException;
 
-    PreparedStatement getPlayerJoinStsm(Connection connection) throws SQLException;
-
-    PreparedStatement getPlayerLeaveStsm(Connection connection) throws SQLException;
+    PreparedStatement getPlayerConnectionStsm(Connection connection) throws SQLException;
 
     PreparedStatement getTpsStsm(Connection connection) throws SQLException;
 
@@ -113,5 +113,5 @@ public interface DataSourceInterface {
 
     PreparedStatement getBucketActionStsm(Connection connection) throws SQLException;
 
-
+    void setQueueManager(QueueManager queueManager);
 }

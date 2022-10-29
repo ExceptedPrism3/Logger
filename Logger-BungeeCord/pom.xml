@@ -165,5 +165,10 @@
             <artifactId>yaml-config-updater</artifactId>
             <version>1.4.2</version>
         </dependency>
+        <dependency>
+            <groupId>ru.vyarus</groupId>
+            <artifactId>yaml-config-updater</artifactId>
+            <version>1.4.2</version>
+        </dependency>
     </dependencies>
 </project>

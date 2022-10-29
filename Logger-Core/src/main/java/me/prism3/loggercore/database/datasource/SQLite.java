@@ -21,7 +21,7 @@ public final class SQLite implements DataSourceInterface {
 
     private QueueManager queueManager;
 
-    public SQLite(Options options, File dataFolder) throws SQLException {
+    public SQLite(Options options, File dataFolder) {
         this.options = options;
         this.databaseFile = new File(dataFolder, "data.db");
         try {
@@ -315,24 +315,13 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public PreparedStatement getPlayerJoinStsm(Connection connection) throws SQLException {
+    public PreparedStatement getPlayerConnectionStsm(Connection connection) throws SQLException {
 //TODO convert ip in java instead of database
         return connection.prepareStatement(
                 "INSERT INTO player_connection" +
                         " (server_name, world, player_name, x, y, z, ip, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?)");
 
     }
-
-    @Override
-    public PreparedStatement getPlayerLeaveStsm(Connection connection) throws SQLException {
-
-        return connection.prepareStatement(
-                "INSERT INTO player_connection" +
-                        " (server_name, world, player_name, x, y, z, is_staff, player_connection_type, date) VALUES(?,?,?,?,?,?,?,?,?)");
-
-
-    }
-
 
     @Override
     public PreparedStatement getTpsStsm(Connection connection) throws SQLException {
@@ -654,13 +643,10 @@ public final class SQLite implements DataSourceInterface {
 
 
     @Override
-    public void disconnect() {
-        this.queueManager.flushQueue();
-    }
+    public void disconnect() { this.queueManager.flushQueue(); }
 
     @Override
-    public List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset,
-                                                      int limit) {
+    public List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset, int limit) {
         return Collections.emptyList();
     }
 

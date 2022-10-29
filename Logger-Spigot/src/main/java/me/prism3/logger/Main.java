@@ -85,7 +85,7 @@ public class Main extends JavaPlugin {
 
 //        if (isRegistration && this.sqLiteReg.isConnected()) this.sqLiteReg.disconnect();
 
-//        this.disconnectDatabase();
+        this.disconnectDatabase();
         this.discord.disconnect();
 
         Log.info("Plugin Disabled!");
@@ -113,22 +113,21 @@ public class Main extends JavaPlugin {
             this.database = new SQLite(Data.options, this.getDataFolder());
             this.sqLite = this.database;
             this.queueManager = new QueueManager(this.database);
-            this.sqLite = null;
+            this.sqLite.setQueueManager(this.queueManager);
 
             if (isRegistration) {
 
                 this.sqLiteReg = new SQLiteRegistration();
                 this.sqLiteReg.connect();
                 final SQLiteDataRegistration sqLiteDataRegistration = new SQLiteDataRegistration();
-                if (this.sqLiteReg.isConnected()) sqLiteDataRegistration.createTable();
+                if (this.sqLiteReg.isConnected())
+                    sqLiteDataRegistration.createTable();
             }
 
         } catch (final Exception e) { Log.severe(e.getMessage()); }
     }
 
-    private void disconnectDatabase() {
-        this.database.disconnect();
-    }
+    public void disconnectDatabase() { this.database.disconnect(); }
 
     private boolean langChecker() {
 
