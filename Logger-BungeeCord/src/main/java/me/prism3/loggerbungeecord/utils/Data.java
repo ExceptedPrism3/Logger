@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 public class Data {
 
     private final Main main = Main.getInstance();
-    private final ConfigManager config = main.getConfig();
+    private final ConfigManager config = this.main.getConfig();
 
     // Date Format
     public static DateTimeFormatter dateTimeFormatter;
@@ -38,6 +38,7 @@ public class Data {
     public static String discordSupportServer;
     public static String resourceAPIChecker;
     public static String resourceLink;
+    public static String configVersion;
 
     // List<String>
     public static List<String> commandsToBlock;
@@ -50,7 +51,6 @@ public class Data {
     public static int externalDataDel;
     public static int sqliteDataDel;
     public static int dbPort;
-    public static int configVersion;
 
     // Boolean
     public static boolean isExternal;
@@ -89,6 +89,7 @@ public class Data {
         discordSupportServer = "https://discord.gg/MfR5mcpVfX";
         resourceAPIChecker = "https://api.spigotmc.org/legacy/update.php?resource=94236/";
         resourceLink = "https://www.spigotmc.org/resources/logger-1-7-1-19.94236/";
+        configVersion = this.config.getString("Config-Version");
     }
 
     public void initializeListOfStrings() {
@@ -110,7 +111,6 @@ public class Data {
         dbPort = this.config.getInt("Database.Port");
         externalDataDel = this.config.getInt("Database.Data-Deletion");
         sqliteDataDel = this.config.getInt("SQLite.Data-Deletion");
-        configVersion = this.config.getInt("Config-Version");
     }
 
     public void initializeBoolean() {

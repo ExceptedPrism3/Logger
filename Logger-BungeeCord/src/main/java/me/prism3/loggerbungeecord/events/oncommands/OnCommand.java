@@ -100,7 +100,7 @@ public class OnCommand implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPlayerCommands(Data.serverName, playerName, playerUUID.toString(),null, command, player.hasPermission(Data.loggerStaffLog));
+//                    Main.getInstance().getDatabase().insertPlayerCommands(Data.serverName, playerName, playerUUID.toString(),null, command, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -110,7 +110,7 @@ public class OnCommand implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPlayerCommands(Data.serverName, playerName, playerUUID.toString(),null, command, player.hasPermission(Data.loggerStaffLog));
+//                    Main.getInstance().getSqLite().insertPlayerCommands(Data.serverName, playerName, playerUUID.toString(),null, command, player.hasPermission(Data.loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

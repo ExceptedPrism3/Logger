@@ -101,7 +101,7 @@ public class OnLiteBans implements Listener, Runnable {
 
                     try {
 
-                        Main.getInstance().getDatabase().insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
+//                        Main.getInstance().getDatabase().insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
 
                     } catch (final Exception e) { e.printStackTrace(); }
                 }
@@ -111,7 +111,7 @@ public class OnLiteBans implements Listener, Runnable {
 
                     try {
 
-                        Main.getInstance().getSqLite().insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
+//                        Main.getInstance().getSqLite().insertLiteBans(serverName, executorName, entryType.toUpperCase(), onWho, duration, reason, isSilent);
 
                     } catch (final Exception e) { e.printStackTrace(); }
                 }

@@ -91,7 +91,7 @@ public class OnPartyMessage implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPAFPartyMessage(Data.serverName, senderUUID.toString(), senderName, message, partyLeader, Collections.singletonList(partyMembers.toString()), sender.hasPermission(Data.loggerStaffLog));
+//                    Main.getInstance().getDatabase().insertPAFPartyMessage(Data.serverName, senderUUID.toString(), senderName, message, partyLeader, Collections.singletonList(partyMembers.toString()), sender.hasPermission(Data.loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -101,7 +101,7 @@ public class OnPartyMessage implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPAFPartyMessage(Data.serverName, senderUUID.toString(), senderName, message, partyLeader, Collections.singletonList(partyMembers.toString()), sender.hasPermission(Data.loggerStaffLog));
+//                    Main.getInstance().getSqLite().insertPAFPartyMessage(Data.serverName, senderUUID.toString(), senderName, message, partyLeader, Collections.singletonList(partyMembers.toString()), sender.hasPermission(Data.loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

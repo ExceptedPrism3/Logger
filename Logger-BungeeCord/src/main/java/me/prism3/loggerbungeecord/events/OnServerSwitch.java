@@ -91,7 +91,7 @@ public class OnServerSwitch implements Listener {
 
             try {
 
-                Main.getInstance().getDatabase().insertServerSwitch(Data.serverName, playerUUID.toString(), playerName, from, destination, player.hasPermission(Data.loggerStaffLog));
+//                Main.getInstance().getDatabase().insertServerSwitch(Data.serverName, playerUUID.toString(), playerName, from, destination, player.hasPermission(Data.loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
@@ -101,7 +101,7 @@ public class OnServerSwitch implements Listener {
 
             try {
 
-                Main.getInstance().getSqLite().insertServerSwitch(Data.serverName, playerUUID.toString(), playerName, from, destination, player.hasPermission(Data.loggerStaffLog));
+//                Main.getInstance().getSqLite().insertServerSwitch(Data.serverName, playerUUID.toString(), playerName, from, destination, player.hasPermission(Data.loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }

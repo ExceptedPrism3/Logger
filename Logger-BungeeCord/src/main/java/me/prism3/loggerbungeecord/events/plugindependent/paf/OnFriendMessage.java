@@ -85,7 +85,7 @@ public class OnFriendMessage implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertPAFFriendMessage(Data.serverName, senderUUID.toString(), senderName, message, receiverName, sender.hasPermission(Data.loggerStaffLog));
+//                    Main.getInstance().getDatabase().insertPAFFriendMessage(Data.serverName, senderUUID.toString(), senderName, message, receiverName, sender.hasPermission(Data.loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -95,7 +95,7 @@ public class OnFriendMessage implements Listener {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertPAFFriendMessage(Data.serverName, senderUUID.toString(), senderName, message, receiverName, sender.hasPermission(Data.loggerStaffLog));
+//                    Main.getInstance().getSqLite().insertPAFFriendMessage(Data.serverName, senderUUID.toString(), senderName, message, receiverName, sender.hasPermission(Data.loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

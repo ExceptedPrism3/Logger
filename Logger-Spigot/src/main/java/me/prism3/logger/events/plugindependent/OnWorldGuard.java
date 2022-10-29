@@ -1,3 +1,4 @@
+/*
 package me.prism3.logger.events.plugindependent;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -137,3 +138,4 @@ public class OnWorldGuard extends Handler {
         }
     }
 }
+*/

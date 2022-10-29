@@ -33,7 +33,6 @@ public final class Main extends Plugin {
         Log.setup(this.getLogger());
 
         this.cm = new ConfigManager();
-        this.cm.init();
 
         this.messages = new Messages();
         this.messages.init();

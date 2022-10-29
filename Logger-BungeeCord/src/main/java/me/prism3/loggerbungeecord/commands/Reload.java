@@ -26,20 +26,17 @@ public class Reload extends Command {
 
             } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
 
-                main.getConfig().init();
+//                main.getConfig().init();
                 main.getMessages().init();
                 main.initializer(new Data());
                 sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', main.getMessages().getString("General.Reload").replace("%prefix%", pluginVersion))));
-
             } else {
 
                 sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', main.getMessages().getString("General.Invalid-Syntax").replace("%prefix%", pluginVersion))));
-
             }
         } else {
 
             sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', main.getMessages().getString("General.No-Permission").replace("%prefix%", pluginVersion))));
-
         }
     }
 }

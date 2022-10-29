@@ -88,7 +88,7 @@ public class OnLeave implements Listener {
 
             try {
 
-                Main.getInstance().getDatabase().insertPlayerLeave(Data.serverName, playerName, playerUUID.toString(), new Coordinates(), player.hasPermission(Data.loggerStaffLog));
+//                Main.getInstance().getDatabase().insertPlayerLeave(Data.serverName, playerName, playerUUID.toString(), new Coordinates(), player.hasPermission(Data.loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
@@ -98,7 +98,7 @@ public class OnLeave implements Listener {
 
             try {
 
-                Main.getInstance().getSqLite().insertPlayerLeave(Data.serverName, playerName, playerUUID.toString(), new Coordinates(), player.hasPermission(Data.loggerStaffLog));
+//                Main.getInstance().getSqLite().insertPlayerLeave(Data.serverName, playerName, playerUUID.toString(), new Coordinates(), player.hasPermission(Data.loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
