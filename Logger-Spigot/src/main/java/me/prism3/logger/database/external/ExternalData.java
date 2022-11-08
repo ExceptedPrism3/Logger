@@ -850,8 +850,8 @@ public class ExternalData {
             liteBans.setString(2, executor);
             liteBans.setString(3, command);
             liteBans.setString(4, onWho);
-            liteBans.setString(5, duration);
-            liteBans.setString(6, reason);
+            liteBans.setString(5, reason);
+            liteBans.setString(6, duration);
             liteBans.setBoolean(7, isSilent);
 
             liteBans.executeUpdate();
