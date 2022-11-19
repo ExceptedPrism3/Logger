@@ -19,6 +19,7 @@ class Queue {
     private final ConcurrentLinkedQueue<ItemAction> itemActionQueue = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<ConsoleCommand> consoleCommandQueue = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<PlayerConnection> playerConnectionQueue = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<PlayerChat> playerChatQueue = new ConcurrentLinkedQueue<>();
 
     private final DataSourceInterface database;
 
@@ -200,6 +201,28 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+    protected static void insertPlayerChatBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerChat> queue ) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final PlayerChat playerChat = queue.poll();
+
+            stsm.setString(1, playerChat.getServerName());
+            stsm.setString(2, playerChat.getWorld());
+            stsm.setString(3, playerChat.getEntityPlayer().getPlayerName());
+            stsm.setString(4, playerChat.getMessage());
+            stsm.setBoolean(5, playerChat.isStaff());
+            stsm.setString(6, DateUtils.formatInstant(playerChat.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+
+    }
 
     protected void addItemToQueue(Object item) {
 
@@ -215,6 +238,9 @@ class Queue {
             consoleCommandQueue.add((ConsoleCommand) item);
         } else if (item instanceof PlayerConnection) {
             playerConnectionQueue.add((PlayerConnection) item);
+
+        } else if (item instanceof PlayerChat) {
+            playerChatQueue.add((PlayerChat) item );
         } else {
             throw new RuntimeException("Unidentified Object type! " + item.getClass());
         }
@@ -247,6 +273,7 @@ class Queue {
             Queue.insertItemActionBatch(database.getItemActionStsm(connection), this.itemActionQueue);
             Queue.insertConsoleCommandBatch(database.getConsoleCommandStsm(connection), this.consoleCommandQueue);
             Queue.insertPlayerConnectionBatch(database.getPlayerConnectionStsm(connection), this.playerConnectionQueue);
+            Queue.insertPlayerChatBatch(database.getPlayerChatStsm(connection), this.playerChatQueue);
 
             connection.commit();
             System.out.println("Commited!");
