@@ -192,6 +192,7 @@ class Queue {
                 stsm.setLong(7, playerConnection.getIp());
             stsm.setBoolean(8, playerConnection.isStaff());
             stsm.setString(9, DateUtils.formatInstant(playerConnection.getDate()));
+            stsm.setString(10, playerConnection.getPlayerConnectionType().name());
 
             stsm.addBatch();
         }

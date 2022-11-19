@@ -319,7 +319,7 @@ public final class SQLite implements DataSourceInterface {
 //TODO convert ip in java instead of database
         return connection.prepareStatement(
                 "INSERT INTO player_connection" +
-                        " (server_name, world, player_name, x, y, z, ip, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?)");
+                        " (server_name, world, player_name, x, y, z, ip, is_staff, date, player_connection_type) VALUES(?,?,?,?,?,?,?,?,?,?)");
 
     }
 
