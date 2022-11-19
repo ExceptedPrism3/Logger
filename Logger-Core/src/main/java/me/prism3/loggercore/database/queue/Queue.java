@@ -34,8 +34,15 @@ class Queue {
 
     protected Queue(DataSourceInterface database) {
         this.database = database;
-        this.enableRepeater();
-        this.timer.scheduleAtFixedRate(this.timerTask, 500, 1000);
+        try {
+
+            this.enableRepeater();
+            this.timer.scheduleAtFixedRate(this.timerTask, 500, 1000);
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
     protected static void insertBatchBlock(PreparedStatement stsm, ConcurrentLinkedQueue<BlockInteraction> queue) {
@@ -181,7 +188,8 @@ class Queue {
             stsm.setInt(4, playerConnection.getX());
             stsm.setInt(5, playerConnection.getY());
             stsm.setInt(6, playerConnection.getZ());
-            stsm.setLong(7, playerConnection.getIp());
+            if(playerConnection.getIp() != null)
+                stsm.setLong(7, playerConnection.getIp());
             stsm.setBoolean(8, playerConnection.isStaff());
             stsm.setString(9, DateUtils.formatInstant(playerConnection.getDate()));
 

@@ -111,9 +111,10 @@ public class Main extends JavaPlugin {
         try {
 
             this.database = new SQLite(Data.options, this.getDataFolder());
+            final QueueManager qm = new QueueManager(this.database);
+            this.database.setQueueManager(qm);
             this.sqLite = this.database;
-            this.queueManager = new QueueManager(this.database);
-            this.sqLite.setQueueManager(this.queueManager);
+            this.queueManager = qm;
 
             if (isRegistration) {
 
