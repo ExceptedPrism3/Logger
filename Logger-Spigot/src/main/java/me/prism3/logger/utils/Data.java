@@ -82,6 +82,7 @@ public class Data {
     public static boolean isConsoleCommands;
     public static boolean isRegistration;
     public static boolean isPlayerDeathBackup;
+    public static boolean isViaVersion;
 
     // Permission String
     public static String loggerExempt;
@@ -182,6 +183,7 @@ public class Data {
         isConsoleCommands = this.main.getConfig().getBoolean("Console-Commands.Blacklist-Commands");
         isRegistration = this.main.getConfig().getBoolean("Log-Player.Registration");
         isPlayerDeathBackup = this.main.getConfig().getBoolean("Player-Death-Backup.Enabled");
+        isViaVersion = this.main.getConfig().getBoolean("Log-Extras.ViaVersion");
     }
 
     public void initializePermissionStrings() {
@@ -263,10 +265,10 @@ public class Data {
             this.main.getServer().getPluginManager().registerEvents(new OnGameMode(), this.main);
 
         if (this.main.getConfig().getBoolean("Log-Player.Primed-TNT"))
-            this.main.getServer().getPluginManager().registerEvents(new OnPrimedTNT(), this.main);
+            this.main.getServer().getPluginManager().registerEvents(new PrimedTNT(), this.main);
 
         if (this.main.getConfig().getBoolean("Log-Player.Spawn-Egg"))
-            this.main.getServer().getPluginManager().registerEvents(new OnSpawnEgg(), this.main);
+            this.main.getServer().getPluginManager().registerEvents(new SpawnEgg(), this.main);
 
         if (this.main.getConfig().getBoolean("Log-Player.Entity-Death"))
             this.main.getServer().getPluginManager().registerEvents(new OnEntityDeath(), this.main);
@@ -286,16 +288,19 @@ public class Data {
         if (this.main.getConfig().getBoolean("Log-Player.Item-Frame-Break"))
             this.main.getServer().getPluginManager().registerEvents(new ItemFrameBreak(), this.main);
 
-        if (this.main.getConfig().getBoolean("Log-Player.ArmorStand-Place"))
-            this.main.getServer().getPluginManager().registerEvents(new ArmorStandPlace(), this.main);
+        if (this.main.getConfig().getBoolean("Log-Player.ArmorStand-Place")
+                || this.main.getConfig().getBoolean("Log-Player.EndCrystal-Place"))
+            this.main.getServer().getPluginManager().registerEvents(new ArmorStandEndCrystalPlace(), this.main);
 
-//        if (this.main.getConfig().getBoolean("Log-Player.ArmorStand-Break"))
-//            this.main.getServer().getPluginManager().registerEvents(new ArmorStandBreak(), this.main);
+        if (this.main.getConfig().getBoolean("Log-Player.ArmorStand-Break")
+                || this.main.getConfig().getBoolean("Log-Player.EndCrystal-Break"))
+            this.main.getServer().getPluginManager().registerEvents(new ArmorStandEndCrystalBreak(), this.main);
 
         if (this.main.getConfig().getBoolean("Log-Player.Lever-Interaction"))
             this.main.getServer().getPluginManager().registerEvents(new LeverInteraction(), this.main);
 
-        this.main.getServer().getPluginManager().registerEvents(new OnArmorStandEndCrystalBreak(), this.main);//TODO me1
+        if (this.main.getConfig().getBoolean("Log-Player.ArmorStand-Interaction"))
+            this.main.getServer().getPluginManager().registerEvents(new ArmorStandInteraction(), this.main);
 
         // Server Side
         if (this.main.getConfig().getBoolean("Log-Server.Console-Commands"))
@@ -319,11 +324,14 @@ public class Data {
         if (this.main.getConfig().getBoolean("Log-Server.Player-Count"))
             this.main.getServer().getScheduler().scheduleSyncRepeatingTask(this.main, new PlayerCount(), 300L, playerCountChecker);
 
+        if (this.main.getConfig().getBoolean("Log-Server.Server-Address"))
+            this.main.getServer().getPluginManager().registerEvents(new ServerAddress(), this.main);
+
         // Version Exceptions
         if (this.main.getVersion().isAtLeast(NmsVersions.v1_13_R1) && this.main.getConfig().getBoolean("Log-Version-Exceptions.Wood-Stripping"))
                 this.main.getServer().getPluginManager().registerEvents(new OnWoodStripping(), this.main);
 
-//        if (this.main.getVersion().isAtLeast(NmsVersions.v1_11_R1) && this.main.getConfig().getBoolean("Log-Version-Exceptions.Totem-of-Undying"))
+        if (this.main.getVersion().isAtLeast(NmsVersions.v1_9_R1) && this.main.getConfig().getBoolean("Log-Version-Exceptions.Totem-of-Undying"))
             this.main.getServer().getPluginManager().registerEvents(new OnTotemUse(), this.main);
 
         // Spy Features

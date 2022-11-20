@@ -3,7 +3,7 @@ version: '${project.version}'
 main: me.prism3.loggerbungeecord.Main
 description: Log all Activities from Players and Server Side!
 author: Prism3 & theloother & Sidna
-softdepends: [LiteBans, PartyAndFriends]
+softdepends: [LiteBans, PartyAndFriends, AdvancedBan]
 commands:
   loggerb reload:
     description: "Reloads the plugin configs."

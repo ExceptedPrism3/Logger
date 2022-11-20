@@ -34,6 +34,8 @@ public final class Main extends Plugin {
 
         this.cm = new ConfigManager();
 
+        this.initializer(new Data());
+
         this.messages = new Messages();
         this.messages.init();
 
@@ -45,8 +47,6 @@ public final class Main extends Plugin {
         
         final FileHandler fileHandler = new FileHandler(this.getDataFolder());
         fileHandler.deleteFiles(this.getDataFolder());
-
-        this.initializer(new Data());
 
 //        this.databaseSetup();//TODO DB
 

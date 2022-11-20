@@ -1,7 +1,6 @@
 package me.prism3.loggerbungeecord.events;
 
 import me.prism3.loggerbungeecord.utils.Log;
-import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.loggerbungeecord.Main;
 import me.prism3.loggerbungeecord.utils.Data;
 import me.prism3.loggerbungeecord.utils.FileHandler;
@@ -9,6 +8,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.event.EventPriority;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -20,7 +20,7 @@ public class OnLeave implements Listener {
 
     private final Main main = Main.getInstance();
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onQuit(final PlayerDisconnectEvent event) {
 
         final ProxiedPlayer player = event.getPlayer();

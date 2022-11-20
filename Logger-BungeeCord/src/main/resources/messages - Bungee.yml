@@ -26,11 +26,13 @@ Files:
     Start: "[%time%] The server has started"
     Stop: "[%time%] The server has stopped"
     RAM: "[%time%] The Server has exceeded the set amount of percentage of RAM Usage! Total Memory: %max% | Used Memory: %used% | Free Memory: %free%"
+    Server-Address: "[%time%] <%player%> has joined with the following address: %address%"
 # Extra Side Part
   Extras:
     LiteBans: "[%time%] [%uuid%] The command '%command%' has been executed on %on% by %executor% for '%duration%' for the reason %reason% | %silent%"
     PAF-Friend-Message-Staff: "[%time%] [%server%] [%uuid%] The Staff <%player%> has sent a message %msg% to %receiver%"
     PAF-Friend-Message: "[%time%] [%server%] [%uuid%] The Player <%player%> has sent a message %msg% to %receiver%"
+    AdvancedBan: "[%time%] The Player %executed_on% has been punished by %executor% with a %type% by %executor% with a reason of '%reason%' that will expire on %expiration%"
 # Discord Instance
 # Emojis can be found here https://emojipedia.org/ or elsewhere. Emojis may not work on >1.12 Servers.
 Discord:
@@ -52,8 +54,10 @@ Discord:
     Start: "**[%time%]**"
     Stop: "**[%time%]**"
     RAM: "**[%time%]** The Server has exceeded the set amount of percentage of RAM Usage! Total Memory: **%max%** `|` Used Memory: **%used%** `|` Free Memory: **%free%**"
+    Server-Address: "**[%time%]** <**%player%**> has joined with the following address: **%address%**"
 # Extra Side Part
   Extras:
     LiteBans: "**[%time%]** **[%uuid%]** The command **%command%** has been executed on **%on%** by **%executor%** for **%duration%** for the reason **%reason%** | **%silent%**"
     PAF-Friend-Message-Staff: "**[%time%]** **[%server%]** **[%uuid%]** has sent a message **%msg%** to **%receiver%**"
     PAF-Friend-Message: "**[%time%]** **[%server%]** **[%uuid%]** has sent a message **%msg%** to **%receiver%**"
+    AdvancedBan: "**[%time%]** The Player **%executed_on%** has been punished by **%executor%** with a **%type%** with a reason of '**%reason%**' that will expire on **%expiration%**"

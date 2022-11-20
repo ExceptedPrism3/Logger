@@ -26,10 +26,12 @@ public class Discord {
     private TextChannel serverStartChannel;
     private TextChannel serverStopChannel;
     private TextChannel ramChannel;
+    private TextChannel serverAddressChannel;
 
     private TextChannel liteBansChannel;
     private TextChannel pafFriendMessageChannel;
     private TextChannel pafPartyMessageChannel;
+    private TextChannel advancedBanChannel;
 
     public void run() {
 
@@ -70,13 +72,17 @@ public class Discord {
 
             final String ramChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.RAM.Channel-ID");
 
-            final String serverSwitchChannelID = this.main.getDiscordFile().getString("Discord.Server-Switch.Channel-ID");
+            final String serverSwitchChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Server-Switch.Channel-ID");
+
+            final String serverAddressChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Server-Address.Channel-ID");
 
             final String liteBansChannelID = this.main.getDiscordFile().getString("Discord.Extras.LiteBans.Channel-ID");
 
             final String pafFriendMessageChannelID = this.main.getDiscordFile().getString("Discord.Extras.PAF-Friend-Message.Channel-ID");
 
             final String pafPartyMessageChannelID = this.main.getDiscordFile().getString("Discord.Extras.PAF-Party-Message.Channel-ID");
+
+            final String advancedBanChannelID = this.main.getDiscordFile().getString("Discord.Extras.AdvancedBan.Channel-ID");
 
             try {
 
@@ -110,6 +116,9 @@ public class Discord {
                 if (this.isValid(serverSwitchChannelID, "Log-Player.Server-Switch"))
                     this.serverSwitchChannel = this.jda.getTextChannelById(serverSwitchChannelID);
 
+                if (this.isValid(serverAddressChannelID, "Log-Server.Server-Address"))
+                    this.serverAddressChannel = this.jda.getTextChannelById(serverAddressChannelID);
+
                 if (this.isValid(liteBansChannelID, "Log-Extras.LiteBans"))
                     this.liteBansChannel = this.jda.getTextChannelById(liteBansChannelID);
 
@@ -119,10 +128,12 @@ public class Discord {
                 if (this.isValid(pafPartyMessageChannelID, "Log-Extras.PAF") && this.main.getConfig().getBoolean("PAF.Party-Message"))
                     this.pafPartyMessageChannel = this.jda.getTextChannelById(pafPartyMessageChannelID);
 
+                if (this.isValid(advancedBanChannelID, "Log-Extras.AdvancedBan"))
+                    this.advancedBanChannel = this.jda.getTextChannelById(advancedBanChannelID);
+
             } catch (final Exception e) {
 
                 Log.severe("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
-
             }
         }
     }
@@ -131,8 +142,7 @@ public class Discord {
 
         if (channelID == null) return false;
 
-        return (!channelID.isEmpty() && this.main.getConfig().getBoolean(path) && !channelID.equals("LINK_HERE"));
-
+        return (!channelID.isEmpty() && this.main.getConfig().getBoolean(path) && !channelID.equals("CHANNEL_ID"));
     }
 
     public void staffChat(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
@@ -222,6 +232,28 @@ public class Discord {
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.pafPartyMessageChannel);
     }
 
+    public void serverAddress(String content, boolean contentInAuthorLine) {
+
+        if (this.serverAddressChannel == null) return;
+
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("Server Address");
+
+        if (!contentInAuthorLine) builder.setDescription(content);
+
+        this.serverAddressChannel.sendMessage(builder.build()).queue();
+    }
+
+    public void advancedBan(String content, boolean contentInAuthorLine) {
+
+        if (this.advancedBanChannel == null) return;
+
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("AdvancedBan");
+
+        if (!contentInAuthorLine) builder.setDescription(content);
+
+        this.advancedBanChannel.sendMessage(builder.build()).queue();
+    }
+
     private void discordUtil(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine, TextChannel channel) {
 
         if (channel == null) return;
@@ -237,6 +269,7 @@ public class Discord {
     public void disconnect() {
 
         if (this.jda != null) {
+
             try {
 
                 this.jda.shutdown();
@@ -249,7 +282,6 @@ public class Discord {
                 Log.severe("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
                         " If this Issue Persists, Contact the Authors!");
                 e.printStackTrace();
-
             }
         }
     }

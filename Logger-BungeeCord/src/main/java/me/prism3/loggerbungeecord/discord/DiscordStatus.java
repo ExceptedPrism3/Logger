@@ -35,7 +35,6 @@ public class DiscordStatus {
 
             Log.severe("Discord Status Activity is invalid. It has been disabled.");
             return;
-
         }
 
         if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Random"))
@@ -53,5 +52,4 @@ public class DiscordStatus {
     }
 
     public static ScheduledExecutorService getThreadPool() { return threadPool; }
-
 }

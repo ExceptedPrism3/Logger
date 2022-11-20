@@ -8,6 +8,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.event.EventPriority;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -21,12 +22,12 @@ public class OnCommand implements Listener {
 
     private final Main main = Main.getInstance();
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onCmd(final ChatEvent event) {
 
         if (Data.isWhitelisted && Data.isBlacklisted) return;
 
-        if (event.isCommand() && !event.isCancelled()) {
+        if (!event.isCancelled() && event.isCommand()) {
 
             // Whitelist Commands
             if (this.main.getConfig().getBoolean("Player-Commands.Whitelist-Commands")) {

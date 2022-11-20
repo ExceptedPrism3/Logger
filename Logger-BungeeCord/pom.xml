@@ -93,6 +93,11 @@
             <id>simonsators Repo</id>
             <url>https://simonsator.de/repo</url>
         </repository>
+        <repository>
+            <!-- AdvancedBan -->
+            <id>spicord-repo</id>
+            <url>https://repo.spicord.org/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -159,16 +164,18 @@
             <artifactId>json</artifactId>
             <version>20220924</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml -->
+        <!-- Config Updater -->
         <dependency>
             <groupId>ru.vyarus</groupId>
             <artifactId>yaml-config-updater</artifactId>
             <version>1.4.2</version>
         </dependency>
+        <!-- AdvancedBan -->
         <dependency>
-            <groupId>ru.vyarus</groupId>
-            <artifactId>yaml-config-updater</artifactId>
-            <version>1.4.2</version>
+            <groupId>me.leoko.advancedban</groupId>
+            <artifactId>AdvancedBan-Bungee</artifactId>
+            <version>2.3.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

@@ -1,5 +1,6 @@
 package me.prism3.loggerbungeecord.utils;
 
+import me.prism3.loggerbungeecord.hooks.AdvancedBanUtil;
 import me.prism3.loggerbungeecord.hooks.LiteBansUtil;
 import me.prism3.loggerbungeecord.hooks.PartyAndFriendsUtil;
 
@@ -8,7 +9,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.FileTime;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -29,10 +29,15 @@ public class FileHandler {
     private static File serverStartLogFolder;
     private static File serverStopLogFolder;
     private static File ramLogFolder;
+    private static File serverAddressFolder;
 
     private static File liteBansLogFolder;
+    private static File liteBansBansLogFolder;
+    private static File liteBansMuteLogFolder;
+    private static File liteBansKickLogFolder;
     private static File pafFriendMessageLogFolder;
     private static File pafPartyMessageLogFolder;
+    private static File advancedBanFolder;
 
 
     private static File staffLogFile;
@@ -46,12 +51,14 @@ public class FileHandler {
     private static File serverStartLogFile;
     private static File serverStopLogFile;
     private static File ramLogFile;
+    private static File serverAddressFile;
 
     private static File liteBansBansLogFile;
     private static File liteBansMuteLogFile;
     private static File liteBansKickLogFile;
     private static File pafFriendMessageLogFile;
     private static File pafPartyMessageLogFile;
+    private static File advancedBanFile;
 
     public FileHandler(File dataFolder) {
 
@@ -78,6 +85,7 @@ public class FileHandler {
         leaveLogFolder = new File(logsFolder, "Player Leave");
         leaveLogFile = new File(leaveLogFolder, filenameDateFormat.format(date) + ".log");
 
+
         reloadLogFolder = new File(logsFolder, "Reload");
         reloadLogFile = new File(reloadLogFolder, filenameDateFormat.format(date) + ".log");
 
@@ -93,22 +101,29 @@ public class FileHandler {
         serverSwitchLogFolder = new File(logsFolder, "Server Switch");
         serverSwitchLogFile = new File(serverSwitchLogFolder, filenameDateFormat.format(date) + ".log");
 
+        serverAddressFolder = new File(logsFolder, "Server Address");
+        serverAddressFile = new File(serverAddressFolder, filenameDateFormat.format(date) + ".log");
+
+
         liteBansLogFolder = new File(logsFolder, "LiteBans");
 
-        final File liteBansBansLogFolder = new File(liteBansLogFolder, "Bans");
+        liteBansBansLogFolder = new File(liteBansLogFolder, "Bans");
         liteBansBansLogFile = new File(liteBansBansLogFolder, filenameDateFormat.format(date) + ".log");
 
-        final File liteBansMuteLogFolder = new File(liteBansLogFolder, "Mutes");
+        liteBansMuteLogFolder = new File(liteBansLogFolder, "Mutes");
         liteBansMuteLogFile = new File(liteBansMuteLogFolder, filenameDateFormat.format(date) + ".log");
 
-        final File liteBansKickLogFolder = new File(liteBansLogFolder, "Kick");
+        liteBansKickLogFolder = new File(liteBansLogFolder, "Kick");
         liteBansKickLogFile = new File(liteBansKickLogFolder, filenameDateFormat.format(date) + ".log");
 
-        final File pafFriendMessageLogFolder = new File(logsFolder, "PAF Friend Message");
+        pafFriendMessageLogFolder = new File(logsFolder, "PAF Friend Message");
         pafFriendMessageLogFile = new File(pafFriendMessageLogFolder, filenameDateFormat.format(date) + ".log");
 
-        final File pafPartyMessageLogFolder = new File(logsFolder, "PAF Party Message");
+        pafPartyMessageLogFolder = new File(logsFolder, "PAF Party Message");
         pafPartyMessageLogFile = new File(pafPartyMessageLogFolder, filenameDateFormat.format(date) + ".log");
+
+        advancedBanFolder = new File(logsFolder, "AdvancedBan");
+        advancedBanFile = new File(advancedBanFolder, filenameDateFormat.format(date) + ".log");
 
         try {
 
@@ -117,11 +132,14 @@ public class FileHandler {
             commandLogFolder.mkdir();
             loginLogFolder.mkdir();
             leaveLogFolder.mkdir();
+
             reloadLogFolder.mkdir();
             serverStartLogFolder.mkdir();
             serverStopLogFolder.mkdir();
             ramLogFolder.mkdir();
             serverSwitchLogFolder.mkdir();
+            serverAddressFolder.mkdir();
+
             if (LiteBansUtil.isAllowed) {
                 liteBansLogFolder.mkdir();
                 liteBansBansLogFolder.mkdir();
@@ -132,17 +150,23 @@ public class FileHandler {
                 pafFriendMessageLogFolder.mkdir();
                 pafPartyMessageLogFolder.mkdir();
             }
+            if (AdvancedBanUtil.isAllowed)
+                advancedBanFolder.mkdir();
+
 
             if (Data.isStaffEnabled) staffLogFile.createNewFile();
             chatLogFile.createNewFile();
             commandLogFile.createNewFile();
             loginLogFile.createNewFile();
             leaveLogFile.createNewFile();
+
             reloadLogFile.createNewFile();
             serverStartLogFile.createNewFile();
             serverStopLogFile.createNewFile();
             ramLogFile.createNewFile();
             serverSwitchLogFile.createNewFile();
+            serverAddressFile.createNewFile();
+
             if (LiteBansUtil.isAllowed) {
                 liteBansBansLogFile.createNewFile();
                 liteBansMuteLogFile.createNewFile();
@@ -152,6 +176,8 @@ public class FileHandler {
                 pafFriendMessageLogFile.createNewFile();
                 pafPartyMessageLogFile.createNewFile();
             }
+            if (AdvancedBanUtil.isAllowed)
+                advancedBanFile.createNewFile();
 
         } catch (final IOException e) { e.printStackTrace(); }
     }
@@ -186,43 +212,25 @@ public class FileHandler {
 
     public static File getPafPartyMessageLogFile() { return pafPartyMessageLogFile; }
 
-    private void deleteFile(File file) {
+    public static File getServerAddressLogFile() { return serverAddressFile; }
 
-        if (fileDeletion <= 0 ) return;
+    public static File getAdvancedBanLogFile() { return advancedBanFile; }
 
-        FileTime creationTime = null;
+    public void deleteFiles(final File dataFolder) {
 
-        try {
-
-            creationTime = (FileTime) Files.getAttribute(file.toPath(), "creationTime");
-
-        } catch (final IOException e) { e.printStackTrace(); }
-
-        assert creationTime != null;
-        final long offset = System.currentTimeMillis() - creationTime.toMillis();
-        final long fileDeletionDays = fileDeletion;
-        final long maxAge = TimeUnit.DAYS.toMillis(fileDeletionDays);
-
-        if (offset > maxAge) file.delete();
-    }
-
-    public void deleteFiles(File dataFolder) {
-
-        if (fileDeletion<= 0 ) { return; }
+        if (fileDeletion <= 0) return;
 
         final File logsFolder = new File(dataFolder, "Logs");
 
-        for (File subLogs : logsFolder.listFiles()) {
-
+        for (File subLogs : logsFolder.listFiles())
             this.deleteFilesOlderThanNDays(subLogs);
-        }
     }
 
-    private void deleteFilesOlderThanNDays(File dirPath) {
+    private void deleteFilesOlderThanNDays(final File dirPath) {
 
-        final long deadLine = System.currentTimeMillis() - (fileDeletion * 24 * 60 * 60 * 1000);
+        final long deadLine = System.currentTimeMillis() - (fileDeletion * 24L * 60 * 60 * 1000);
 
-        try (final Stream<Path> files = Files.list(Paths.get(String.valueOf(dirPath)))) {
+        try (final Stream<Path> files = Files.list(Paths.get(dirPath.getPath()))) {
 
             files.filter(path -> {
                 try {

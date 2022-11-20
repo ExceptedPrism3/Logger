@@ -50,7 +50,7 @@ public class RAM implements Runnable {
 
                 try {
 
-                    Main.getInstance().getDatabase().insertRam(serverName, maxMemory, usedMemory, freeMemory);
+//                    Main.getInstance().getDatabase().insertRam(serverName, maxMemory, usedMemory, freeMemory);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -60,7 +60,7 @@ public class RAM implements Runnable {
 
                 try {
 
-                    Main.getInstance().getSqLite().insertRam(serverName, maxMemory, usedMemory, freeMemory);
+//                    Main.getInstance().getSqLite().insertRam(serverName, maxMemory, usedMemory, freeMemory);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

@@ -69,6 +69,9 @@ Log-Player:
   Item-Frame-Break: true
   ArmorStand-Place: true
   ArmorStand-Break: true
+  ArmorStand-Interaction: true
+  EndCrystal-Place: true
+  EndCrystal-Break: true
   Lever-Interaction: true
   Spawn-Egg: true
 
@@ -82,6 +85,7 @@ Log-Server:
   RCON: true
   Command-Block: true
   Player-Count: true
+  Server-Address: true
 
 # This Section requires other plugins to function
 Log-Extras:
@@ -90,7 +94,7 @@ Log-Extras:
   Vault: true
   LiteBans: true
   AdvancedBan: true
-  ViaVersion: true
+  ViaVersion: true # Keep in mind that players can fake the Version they join with!
   WorldGuard: true
 
 # This Section logs some events depending on the server's version

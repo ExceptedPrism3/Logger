@@ -1,6 +1,7 @@
 package me.prism3.loggerbungeecord.utils;
 
 import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.hooks.AdvancedBanUtil;
 import me.prism3.loggerbungeecord.hooks.LiteBansUtil;
 import me.prism3.loggerbungeecord.hooks.PartyAndFriendsUtil;
 import me.prism3.loggerbungeecord.events.OnChat;
@@ -8,15 +9,12 @@ import me.prism3.loggerbungeecord.events.OnLeave;
 import me.prism3.loggerbungeecord.events.OnLogin;
 import me.prism3.loggerbungeecord.events.OnServerSwitch;
 import me.prism3.loggerbungeecord.events.oncommands.OnCommand;
-import me.prism3.loggerbungeecord.events.plugindependent.OnLiteBans;
-import me.prism3.loggerbungeecord.events.plugindependent.paf.OnFriendMessage;
-import me.prism3.loggerbungeecord.events.plugindependent.paf.OnPartyMessage;
 import me.prism3.loggerbungeecord.serverside.OnReload;
 import me.prism3.loggerbungeecord.serverside.RAM;
+import me.prism3.loggerbungeecord.serverside.ServerAddress;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class Data {
@@ -79,7 +77,7 @@ public class Data {
     public static String loggerStaffLog;
 
     public void initializeDateFormatter() {
-        dateTimeFormatter = DateTimeFormatter.ofPattern(Objects.requireNonNull(config.getString("Time-Formatter")));
+        dateTimeFormatter = DateTimeFormatter.ofPattern(this.config.getString("Time-Formatter"));
     }
 
     public void initializeStrings() {
@@ -145,27 +143,30 @@ public class Data {
 
     public void eventInitializer() {
 
-        if (this.main.getConfig().getBoolean("Log-Player.Chat"))
+        if (this.config.getBoolean("Log-Player.Chat"))
             this.main.getProxy().getPluginManager().registerListener(this.main, new OnChat());
 
-        if (this.main.getConfig().getBoolean("Log-Player.Commands"))
+        if (this.config.getBoolean("Log-Player.Commands"))
             this.main.getProxy().getPluginManager().registerListener(this.main, new OnCommand());
 
-        if (this.main.getConfig().getBoolean("Log-Player.Login"))
+        if (this.config.getBoolean("Log-Player.Login"))
             this.main.getProxy().getPluginManager().registerListener(this.main, new OnLogin());
 
-        if (this.main.getConfig().getBoolean("Log-Player.Leave"))
+        if (this.config.getBoolean("Log-Player.Leave"))
             this.main.getProxy().getPluginManager().registerListener(this.main, new OnLeave());
 
-        if (this.main.getConfig().getBoolean("Log-Player.Server-Switch"))
+        if (this.config.getBoolean("Log-Player.Server-Switch"))
             this.main.getProxy().getPluginManager().registerListener(this.main, new OnServerSwitch());
 
         // Server Side
-        if (this.main.getConfig().getBoolean("Log-Server.Reload"))
+        if (this.config.getBoolean("Log-Server.Reload"))
             this.main.getProxy().getPluginManager().registerListener(this.main, new OnReload());
 
-        if (this.main.getConfig().getBoolean("Log-Server.RAM"))
+        if (this.config.getBoolean("Log-Server.RAM"))
             this.main.getProxy().getScheduler().schedule(this.main, new RAM(), 200L, ramChecker / 20, TimeUnit.SECONDS);
+
+        if (this.config.getBoolean("Log-Server.Server-Address"))
+            this.main.getProxy().getPluginManager().registerListener(this.main, new ServerAddress());
 
         this.dependentEventInitializer();
     }
@@ -175,5 +176,7 @@ public class Data {
         LiteBansUtil.getLiteBansHook();
 
         PartyAndFriendsUtil.getPartyAndFriendsHook();
+
+        AdvancedBanUtil.getAdvancedBanHook();
     }
 }

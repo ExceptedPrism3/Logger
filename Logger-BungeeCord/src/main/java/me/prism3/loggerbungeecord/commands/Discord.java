@@ -32,12 +32,10 @@ public class Discord extends Command {
             } else {
 
                 sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', main.getMessages().getString("General.Invalid-Syntax").replace("%prefix%", pluginVersion))));
-
             }
         } else {
 
             sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', main.getMessages().getString("General.No-Permission").replace("%prefix%", pluginVersion))));
-
         }
     }
 }

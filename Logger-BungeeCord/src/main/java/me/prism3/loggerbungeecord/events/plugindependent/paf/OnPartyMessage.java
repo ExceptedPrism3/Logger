@@ -9,12 +9,12 @@ import me.prism3.loggerbungeecord.utils.Log;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.event.EventPriority;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +24,7 @@ public class OnPartyMessage implements Listener {
 
     private final Main main = Main.getInstance();
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onMessage(final PartyMessageEvent event) {
 
         if (!event.isCancelled()) {

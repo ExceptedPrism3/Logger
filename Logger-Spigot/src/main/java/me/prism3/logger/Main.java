@@ -60,7 +60,7 @@ public class Main extends JavaPlugin {
         final FileHandler fileHandler = new FileHandler(this.getDataFolder());
         fileHandler.deleteFiles(this.getDataFolder());
 
-//        new PluginUpdater().run();
+        new PluginUpdater().run();
 
         this.databaseSetup();
 

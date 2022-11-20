@@ -60,7 +60,6 @@ public class DiscordFile {
                     final OutputStream os = new FileOutputStream(file);
                     ByteStreams.copy(is, os);
                     os.close();
-
                 }
             } catch (final IOException e) { e.printStackTrace(); }
         }

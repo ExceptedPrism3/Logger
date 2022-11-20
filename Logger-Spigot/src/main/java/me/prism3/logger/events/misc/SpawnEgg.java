@@ -23,7 +23,7 @@ import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.loggerStaffLog;
 
-public class OnSpawnEgg implements Listener {
+public class SpawnEgg implements Listener {
 
     private final Main main = Main.getInstance();
 

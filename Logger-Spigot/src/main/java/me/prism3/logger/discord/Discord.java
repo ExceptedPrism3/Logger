@@ -47,6 +47,8 @@ public class Discord {
     private TextChannel armorStandBreakChannel;
     private TextChannel leverInteractionChannel;
     private TextChannel spawnEggChannel;
+    private TextChannel endCrystalPlace;
+    private TextChannel endCrystalBreak;
 
     private TextChannel serverStartChannel;
     private TextChannel serverStopChannel;
@@ -57,15 +59,18 @@ public class Discord {
     private TextChannel rConChannel;
     private TextChannel commandBlockChannel;
     private TextChannel playerCountChannel;
+    private TextChannel serverAddressChannel;
 
     private TextChannel afkChannel;
     private TextChannel wrongPasswordChannel;
     private TextChannel vaultChannel;
     private TextChannel liteBansChannel;
     private TextChannel advancedBanChannel;
+    private TextChannel viaVersionChannel;
     private TextChannel worldGuardChannel;
 
     private TextChannel woodStrippingChannel;
+    private TextChannel totemOfUndyingChannel;
 
     public void run() {
 
@@ -151,6 +156,10 @@ public class Discord {
 
             final String spawnEggChannelID = this.main.getDiscordFile().getString("Discord.Spawn-Egg.Channel-ID");
 
+            final String endCrystalPlaceChannelID = this.main.getDiscordFile().getString("Discord.EndCrystal-Place.Channel-ID");
+
+            final String endCrystalBreakChannelID = this.main.getDiscordFile().getString("Discord.EndCrystal-Break.Channel-ID");
+
             // Server Side Part
             final String serverStartChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Start.Channel-ID");
 
@@ -170,6 +179,8 @@ public class Discord {
 
             final String playerCountChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Player-Count.Channel-ID");
 
+            final String serverAddressChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Server-Address.Channel-ID");
+
             // Extras
             final String afkChannelID = this.main.getDiscordFile().getString("Discord.Extras.AFK.Channel-ID");
 
@@ -181,10 +192,14 @@ public class Discord {
 
             final String advancedBanChannelID = this.main.getDiscordFile().getString("Discord.Extras.AdvancedBan.Channel-ID");
 
+            final String viaVersionChannelID = this.main.getDiscordFile().getString("Discord.Extras.ViaVersion.Channel-ID");
+
             final String worldGuardChannelID = this.main.getDiscordFile().getString("Discord.Extras.WorldGuard.Channel-ID");
 
             // Version Exception
             final String woodStrippingChannelID = this.main.getDiscordFile().getString("Discord.Version-Exceptions.Wood-Stripping.Channel-ID");
+
+            final String totemOfUndyingChannelID = this.main.getDiscordFile().getString("Discord.Version-Exceptions.Totem-of-Undying.Channel-ID");
 
             try {
 
@@ -285,6 +300,12 @@ public class Discord {
                 if (this.isValid(spawnEggChannelID, "Log-Player.Spawn-Egg"))
                     this.spawnEggChannel = this.jda.getTextChannelById(spawnEggChannelID);
 
+                if (this.isValid(endCrystalPlaceChannelID, "Log-Player.EndCrystal-Place"))
+                    this.endCrystalPlace = this.jda.getTextChannelById(endCrystalPlaceChannelID);
+
+                if (this.isValid(endCrystalBreakChannelID, "Log-Player.EndCrystal-Break"))
+                    this.endCrystalBreak = this.jda.getTextChannelById(endCrystalBreakChannelID);
+
                 // Server Side Part
                 if (this.isValid(serverStartChannelID, "Log-Server.Start"))
                     this.serverStartChannel = this.jda.getTextChannelById(serverStartChannelID);
@@ -313,6 +334,9 @@ public class Discord {
                 if (this.isValid(playerCountChannelID, "Log-Server.Player-Count"))
                     this.playerCountChannel = this.jda.getTextChannelById(playerCountChannelID);
 
+                if (this.isValid(serverAddressChannelID, "Log-Server.Server-Address"))
+                    this.serverAddressChannel = this.jda.getTextChannelById(serverAddressChannelID);
+
                 // Extra Checkers Part
                 if (this.isValid(afkChannelID, "Log-Extras.Essentials-AFK"))
                     this.afkChannel = this.jda.getTextChannelById(afkChannelID);
@@ -329,12 +353,18 @@ public class Discord {
                 if (this.isValid(advancedBanChannelID, "Log-Extras.AdvancedBan"))
                     this.advancedBanChannel = this.jda.getTextChannelById(advancedBanChannelID);
 
+                if (this.isValid(viaVersionChannelID, "Log-Extras.ViaVersion"))
+                    this.viaVersionChannel = this.jda.getTextChannelById(viaVersionChannelID);
+
                 if (this.isValid(worldGuardChannelID, "Log-Extras.WorldGuard"))
                     this.worldGuardChannel = this.jda.getTextChannelById(worldGuardChannelID);
 
                 // Version Exception Part
                 if (this.isValid(woodStrippingChannelID, "Log-Version-Exceptions.Wood-Stripping"))
                     this.woodStrippingChannel = this.jda.getTextChannelById(woodStrippingChannelID);
+
+                if (this.isValid(totemOfUndyingChannelID, "Log-Version-Exceptions.Totem-of-Undying"))
+                    this.totemOfUndyingChannel = this.jda.getTextChannelById(totemOfUndyingChannelID);
 
             } catch (final Exception e) {
                 Log.severe("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
@@ -605,6 +635,26 @@ public class Discord {
 
     public void worldGuard(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.worldGuardChannel);
+    }
+
+    public void endCrystalPlace(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.endCrystalPlace);
+    }
+
+    public void endCrystalBreak(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.endCrystalBreak);
+    }
+
+    public void viaVersion(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.viaVersionChannel);
+    }
+
+    public void totemOfUdying(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.totemOfUndyingChannel);
+    }
+
+    public void serverAddress(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.serverAddressChannel);
     }
 
     public void playerCount(String content, boolean contentInAuthorLine) {

@@ -67,6 +67,12 @@ Discord:
     Channel-ID: 'CHANNEL_ID'
   ArmorStand-Break:
     Channel-ID: 'CHANNEL_ID'
+  ArmorStand-Interaction:
+    Channel-ID: 'CHANNEL_ID'
+  EndCrystal-Place:
+    Channel-ID: 'CHANNEL_ID'
+  EndCrystal-Break:
+    Channel-ID: 'CHANNEL_ID'
   Lever-Interaction:
     Channel-ID: 'CHANNEL_ID'
   Spawn-Egg:
@@ -92,6 +98,8 @@ Discord:
       Channel-ID: 'CHANNEL_ID'
     Player-Count:
       Channel-ID: 'CHANNEL_ID'
+    Server-Address:
+      Channel-ID: 'CHANNEL_ID'
 
   # Extra Side Checkers
   Extras:
@@ -105,12 +113,16 @@ Discord:
       Channel-ID: 'CHANNEL_ID'
     AdvancedBan:
       Channel-ID: 'CHANNEL_ID'
+    ViaVersion:
+      Channel-ID: 'CHANNEL_ID'
     WorldGuard:
       Channel-ID: 'CHANNEL_ID'
 
   # Server Version Exception Side Checkers
   Version-Exceptions:
     Wood-Stripping:
+      Channel-ID: 'CHANNEL_ID'
+    Totem-of-Undying:
       Channel-ID: 'CHANNEL_ID'
 
 

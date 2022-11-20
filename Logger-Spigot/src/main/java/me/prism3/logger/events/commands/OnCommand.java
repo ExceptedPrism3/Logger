@@ -27,8 +27,11 @@ public class OnCommand implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerCmd(final PlayerCommandPreprocessEvent event) {
 
+        if (isWhitelisted && isBlacklisted) return;
+
         // Whitelist Commands
         if (isWhitelisted) {
+
             new OnCommandWhitelist().onWhitelistedCommand(event);
             return;
         }
@@ -37,7 +40,7 @@ public class OnCommand implements Listener {
 
             final Player player = event.getPlayer();
 
-            if (player.hasPermission(loggerExempt) || (isWhitelisted && isBlacklisted) || BedrockChecker.isBedrock(player.getUniqueId())) return;
+            if (player.hasPermission(loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
             final String worldName = player.getWorld().getName();
             final UUID playerUUID = player.getUniqueId();

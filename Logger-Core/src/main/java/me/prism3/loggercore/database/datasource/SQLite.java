@@ -205,113 +205,75 @@ public final class SQLite implements DataSourceInterface {
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, command VARCHAR(256))");
 
             // Extras Side Part
-            if (this.options.isEssentialsEnabled()) {
-
-                statement.executeUpdate(
-                        "CREATE TABLE IF NOT EXISTS afk(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            if (this.options.isEssentialsEnabled())
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS afk(id INTEGER PRIMARY KEY AUTOINCREMENT," +
                                 " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
                                 " player_name TEXT, x INT, y INT, z INT, is_staff BOOLEAN)");
 
-            }
-
-            if (this.options.isAuthMeEnabled()) {
-
-                statement.executeUpdate(
-                        "CREATE TABLE IF NOT EXISTS wrong_password(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            if (this.options.isAuthMeEnabled())
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS wrong_password(id INTEGER PRIMARY KEY AUTOINCREMENT," +
                                 " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
                                 "player_name TEXT, is_staff BOOLEAN)");
 
-            }
-
-            if (this.options.isVaultEnabled()) {
-
-                statement.executeUpdate(
-                        "CREATE TABLE IF NOT EXISTS vault(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            if (this.options.isVaultEnabled())
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS vault(id INTEGER PRIMARY KEY AUTOINCREMENT," +
                                 " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
                                 "player_name TEXT, old_balance DOUBLE, new_balance DOUBLE, is_staff BOOLEAN)");
 
-            }
-
-            if (this.options.isLiteBansEnabled()) {
-
+            if (this.options.isLiteBansEnabled())
                 statement.executeUpdate("CREATE TABLE IF NOT EXISTS litebans "
                         + "(server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP," +
                         " sender TEXT, command TEXT, onwho TEXT, reason TEXT," +
                         " duration TEXT, is_silent BOOLEAN)");
 
-            }
-
-            if (this.options.isAdvancedBanEnabled()) {
-
-                statement.executeUpdate(
-                        "CREATE TABLE IF NOT EXISTS advanced_ban (server_name TEXT," +
+            if (this.options.isAdvancedBanEnabled())
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS advanced_ban (server_name TEXT," +
                                 " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, type TEXT,executor TEXT," +
                                 " executed_on TEXT, reason TEXT, expiration_date TEXT)");
 
-            }
-
             // Version Exceptions Part
-            if (this.options.isViaVersion()) {
-
-                statement.executeUpdate(
-                        "CREATE TABLE IF NOT EXISTS wood_stripping (id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            if (this.options.isViaVersion())
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS wood_stripping (id INTEGER PRIMARY KEY AUTOINCREMENT," +
                                 " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, " +
                                 "uuid TEXT, player_name TEXT, log_name TEXT, x INT, y INT, z INT, is_staff BOOLEAN)");
 
-            }
-
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
 
     @Override
     public PreparedStatement getPlayerChatStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO player_chat" +
-                        " (server_name, world, player_name, message, is_staff, date) VALUES(?,?,?,?,?,?)");
-
-
+        return connection.prepareStatement("INSERT INTO player_chat (server_name, world, player_name, message," +
+                " is_staff, date) VALUES(?,?,?,?,?,?)");
     }
 
     @Override
     public PreparedStatement getPlayerCommandStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO player_commands" +
-                        " (server_name, world, player_name, command, is_staff, date) VALUES(?,?,?,?,?,?)");
-
+        return connection.prepareStatement("INSERT INTO player_commands (server_name, world, player_name, command," +
+                " is_staff, date) VALUES(?,?,?,?,?,?)");
     }
 
     @Override
     public PreparedStatement getPlayerSignTextStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO player_sign_text" +
-                        " (server_name, world, x, y, z, player_name, line, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?)");
-
+        return connection.prepareStatement("INSERT INTO player_sign_text (server_name, world, x, y, z," +
+                " player_name, line, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?)");
     }
 
     @Override
     public PreparedStatement getPlayerDeathStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO player_death" +
-                        " (server_name, world, player_name, player_level, x, y, z, cause, by_who, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
-
-
+        return connection.prepareStatement("INSERT INTO player_death (server_name, world, player_name, player_level," +
+                " x, y, z, cause, by_who, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
     }
 
     @Override
     public PreparedStatement getPlayerTeleportStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO player_teleport" +
-                        " (server_name, world, player_name, from_x, from_y, from_z, to_x, to_y, to_z, is_staff, date)" +
-                        " VALUES(?,?,?,?,?,?,?,?,?,?,?)");
-
+        return connection.prepareStatement("INSERT INTO player_teleport (server_name, world, player_name, from_x," +
+                " from_y, from_z, to_x, to_y, to_z, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
     }
 
     @Override
@@ -325,176 +287,139 @@ public final class SQLite implements DataSourceInterface {
 
     @Override
     public PreparedStatement getTpsStsm(Connection connection) throws SQLException {
-//TODO check if it has date
 
-        return connection.prepareStatement(
-                "INSERT INTO tps (server_name, tps) VALUES(?,?)");
-
-
+        return connection.prepareStatement("INSERT INTO tps (server_name, tps, date) VALUES(?,?,?)");
     }
 
     @Override
     public PreparedStatement getRAMStsm(Connection connection) throws SQLException {
-//TODO check if it has date
-        return connection.prepareStatement("INSERT INTO ram" +
-                " (server_name, total_memory, used_memory, free_memory) VALUES(?,?,?,?)");
+
+        return connection.prepareStatement("INSERT INTO ram (server_name, total_memory, used_memory," +
+                " free_memory, date) VALUES(?,?,?,?,?)");
     }
 
     @Override
     public PreparedStatement getPlayerKickStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO player_kick" +
-                        " (server_name, world, player_name, x, y, z, reason, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?)");
-
-
+        return connection.prepareStatement("INSERT INTO player_kick (server_name, world, player_name, x, y, z," +
+                " reason, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?)");
     }
 
     @Override
     public PreparedStatement getPortalCreateStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO portal_creation" +
-                        " (server_name, world, caused_by) VALUES(?,?,?)");
+        return connection.prepareStatement("INSERT INTO portal_creation (server_name, world, caused_by) VALUES(?,?,?)");
     }
-
-    @Override
-    public PreparedStatement getPlayerLevelStsm(Connection connection) throws SQLException {
-        return null;
-    }
-
 
     @Override
     public PreparedStatement getBucketActionStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO bucket_action" +
-                        " (server_name, world, player_name, bucket, x, y, z, is_staff, bucket_action, date ) VALUES(?,?,?,?,?,?,?,?,?,?)");
-
-
+        return connection.prepareStatement("INSERT INTO bucket_action (server_name, world, player_name, bucket," +
+                " x, y, z, is_staff, bucket_action, date ) VALUES(?,?,?,?,?,?,?,?,?,?)");
     }
 
     @Override
     public PreparedStatement getAnvilStsm(Connection connection) throws SQLException {
-        return connection.prepareStatement("INSERT INTO `anvil` (server_name, new_name, player_name, is_staff) VALUES(?,?,?,?)");
+
+        return connection.prepareStatement("INSERT INTO `anvil` (server_name, new_name, player_name, is_staff," +
+                " date) VALUES(?,?,?,?,?)");
     }
 
     @Override
     public void insertServerStart(String serverName) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement serverStart = connection.prepareStatement(
-                     "INSERT INTO server_start (server_name) VALUES(?)")) {
+             final PreparedStatement serverStart = connection.prepareStatement("INSERT INTO server_start (server_name) VALUES(?)")) {
 
             serverStart.setString(1, serverName);
 
             serverStart.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
     public void insertServerStop(String serverName) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement serverStop = connection.prepareStatement(
-                     "INSERT INTO server_stop (server_name) VALUES(?)")) {
+             final PreparedStatement serverStop = connection.prepareStatement("INSERT INTO server_stop (server_name) VALUES(?)")) {
 
             serverStop.setString(1, serverName);
 
             serverStop.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
 
     @Override
     public PreparedStatement getEnchantStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO enchanting" +
-                        " (server_name, world, player_name, x, y, z, enchantment, enchantment_level, item, cost, is_staff)" +
-                        " VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+        return connection.prepareStatement("INSERT INTO enchanting (server_name, world, player_name, x, y, z," +
+                " enchantment, enchantment_level, item, cost, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
     }
 
     @Override
     public PreparedStatement getBookEditingStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO book_editing" +
-                        " (server_name, world, player_name, page_count, page_content, signed_by, is_staff) VALUES(?,?,?,?,?,?,?)");
-
-
+        return connection.prepareStatement("INSERT INTO book_editing (server_name, world, player_name, page_count," +
+                " page_content, signed_by, is_staff, date) VALUES(?,?,?,?,?,?,?,?)");
     }
 
     @Override
     public PreparedStatement getAfkStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement("INSERT INTO afk" +
-                " (server_name, world, player_name, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?)");
+        return connection.prepareStatement("INSERT INTO afk (server_name, world, player_name, x, y, z, is_staff)" +
+                " VALUES(?,?,?,?,?,?,?)");
     }
 
     @Override
     public PreparedStatement getWrongPasswordStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO wrong_password" +
-                        " (server_name, world, player_name, is_staff) VALUES(?,?,?,?)");
+        return connection.prepareStatement("INSERT INTO wrong_password (server_name, world, player_name," +
+                " is_staff) VALUES(?,?,?,?)");
     }
 
     @Override
     public PreparedStatement getItemActionStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO item_action" +
-                        " (server_name, world, player_name, item, amount, x, y, z ,changed_name, is_staff, item_action_type, date, enchantment) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
-
+        return connection.prepareStatement("INSERT INTO item_action (server_name, world, player_name, item, amount," +
+                " x, y, z ,changed_name, is_staff, item_action_type, date, enchantment) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
     }
 
     @Override
     public PreparedStatement getFurnaceStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement("INSERT INTO furnace" +
-                " (server_name, world, player_name, item, amount, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?,?)");
-
-
+        return connection.prepareStatement("INSERT INTO furnace (server_name, world, player_name, item, amount," +
+                " x, y, z, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?,?)");
     }
 
     @Override
     public void insertRCON(String serverName, String command) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement rCon = connection.prepareStatement("INSERT INTO rcon" +
-                     " (server_name, ip, command) VALUES(?,?)")) {
+             final PreparedStatement rCon = connection.prepareStatement("INSERT INTO rcon (server_name, command, date) VALUES(?,?,?)")) {
 
             rCon.setString(1, serverName);
             rCon.setString(2, command);
 
             rCon.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
     public PreparedStatement getGamemodeStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO game_mode" +
-                        " (server_name, world, player_name, game_mode, is_staff, date) VALUES(?,?,?,?,?,?)");
+        return connection.prepareStatement("INSERT INTO game_mode (server_name, world, player_name, game_mode," +
+                " is_staff, date) VALUES(?,?,?,?,?,?)");
     }
 
     @Override
     public PreparedStatement getPlayerCraftStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement("INSERT INTO crafting" +
-                " (server_name, world, player_name, item, amount, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?,?)");
-
+        return connection.prepareStatement("INSERT INTO crafting (server_name, world, player_name, item," +
+                " amount, x, y, z, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?,?)");
     }
 
     @Override
@@ -553,9 +478,7 @@ public final class SQLite implements DataSourceInterface {
     @Override
     public PreparedStatement getCommandBlockStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO command_block" +
-                        " (server_name, command) VALUES(?,?)");
+        return connection.prepareStatement("INSERT INTO command_block (server_name, command, date) VALUES(?,?,?)");
     }
 
     @Override
@@ -570,20 +493,15 @@ public final class SQLite implements DataSourceInterface {
     @Override
     public PreparedStatement getChestInteractionStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO chest_interaction" +
-                        " (server_name, world, player_uuid, player_name, x, y, z, items, is_staff) VALUES(?,?,?,?,?,?,?,?,?)");
-
+        return connection.prepareStatement("INSERT INTO chest_interaction (server_name, world, player_uuid," +
+                " player_name, x, y, z, items, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?,?)");
     }
 
     @Override
     public PreparedStatement getEntityDeathStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO entity_death" +
-                        " (server_name, world, player_uuid, player_name, mob, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?,?)");
-
-
+        return connection.prepareStatement("INSERT INTO entity_death (server_name, world, player_uuid, player_name," +
+                " mob, x, y, z, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?,?)");
     }
 
     @Override
@@ -667,7 +585,7 @@ public final class SQLite implements DataSourceInterface {
 
         return connection.prepareStatement(
                 "INSERT INTO player_level" +
-                        " (server_name, player_name, is_staff) VALUES(?,?,?)");
+                        " (server_name, player_name, is_staff, date) VALUES(?,?,?,?)");
     }
 
     public void insertAnvil(String serverName, String playerName, String newName, boolean isStaff) {

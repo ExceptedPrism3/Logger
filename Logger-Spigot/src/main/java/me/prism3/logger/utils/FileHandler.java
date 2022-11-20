@@ -51,6 +51,9 @@ public class FileHandler {
     private static File itemFrameBreakFolder;
     private static File armorStandPlaceFolder;
     private static File armorStandBreakFolder;
+    private static File armorStandInteractionFolder;
+    private static File endCrystalPlaceFolder;
+    private static File endCrystalBreakFolder;
     private static File leverInteractionFolder;
     private static File spawnEggFolder;
 
@@ -64,6 +67,7 @@ public class FileHandler {
     private static File rConFolder;
     private static File commandBlockFolder;
     private static File playerCountFolder;
+    private static File serverAddressFolder;
 
     // Extras Side Part
     private static File afkFolder;
@@ -71,6 +75,7 @@ public class FileHandler {
     private static File vaultFolder;
     private static File liteBansFolder;
     private static File advancedBanFolder;
+    private static File viaVersionFolder;
     private static File worldGuardFolder;
 
     // Version Exception Part
@@ -109,6 +114,9 @@ public class FileHandler {
     private static File itemFrameBreakFile;
     private static File armorStandPlaceFile;
     private static File armorStandBreakFile;
+    private static File armorStandInteractionFile;
+    private static File endCrystalPlaceFile;
+    private static File endCrystalBreakFile;
     private static File leverInteractionFile;
     private static File spawnEggFile;
 
@@ -122,6 +130,7 @@ public class FileHandler {
     private static File rConFile;
     private static File commandBlockFile;
     private static File playerCountFile;
+    private static File serverAddressFile;
 
     // Extras Side
     private static File afkFile;
@@ -129,6 +138,7 @@ public class FileHandler {
     private static File vaultFile;
     private static File liteBansFile;
     private static File advancedBanFile;
+    private static File viaVersionFile;
     private static File worldGuardFile;
 
     // Version Exception Part
@@ -240,6 +250,15 @@ public class FileHandler {
         armorStandBreakFolder = new File(logsFolder, "ArmorStand Break");
         armorStandBreakFile = new File(armorStandBreakFolder, filenameDateFormat.format(date) + ".log");
 
+        endCrystalPlaceFolder = new File(logsFolder, "EndCrystal Place");
+        endCrystalPlaceFile = new File(endCrystalPlaceFolder, filenameDateFormat.format(date) + ".log");
+
+        endCrystalBreakFolder = new File(logsFolder, "EndCrystal Break");
+        endCrystalBreakFile = new File(endCrystalBreakFolder, filenameDateFormat.format(date) + ".log");
+
+        armorStandInteractionFolder = new File(logsFolder, "ArmorStand Interaction");
+        armorStandInteractionFile = new File(armorStandInteractionFolder, filenameDateFormat.format(date) + ".log");
+
         leverInteractionFolder = new File(logsFolder, "Lever Interaction");
         leverInteractionFile = new File(leverInteractionFolder, filenameDateFormat.format(date) + ".log");
 
@@ -274,6 +293,9 @@ public class FileHandler {
         playerCountFolder = new File(logsFolder, "Player Count");
         playerCountFile = new File(playerCountFolder, filenameDateFormat.format(date) + ".log");
 
+        serverAddressFolder = new File(logsFolder, "Server Address");
+        serverAddressFile = new File(serverAddressFolder, filenameDateFormat.format(date) + ".log");
+
         // Extras Side Part
         afkFolder = new File(logsFolder, "AFK");
         afkFile = new File(afkFolder, filenameDateFormat.format(date) + ".log");
@@ -289,6 +311,9 @@ public class FileHandler {
 
         advancedBanFolder = new File(logsFolder, "AdvancedBan");
         advancedBanFile = new File(advancedBanFolder, filenameDateFormat.format(date) + ".log");
+
+        viaVersionFolder = new File(logsFolder, "ViaVersion");
+        viaVersionFile = new File(viaVersionFolder, filenameDateFormat.format(date) + ".log");
 
         worldGuardFolder = new File(logsFolder, "World Guard");
         worldGuardFile = new File(worldGuardFolder, filenameDateFormat.format(date) + ".log");
@@ -367,6 +392,12 @@ public class FileHandler {
 
             armorStandBreakFolder.mkdir();
 
+            armorStandInteractionFolder.mkdir();
+
+            endCrystalPlaceFolder.mkdir();
+
+            endCrystalBreakFolder.mkdir();
+
             playerLevelFolder.mkdir();
 
             leverInteractionFolder.mkdir();
@@ -392,6 +423,8 @@ public class FileHandler {
 
             playerCountFolder.mkdir();
 
+            serverAddressFolder.mkdir();
+
             // Extras Side Part
             if (EssentialsUtil.isAllowed) afkFolder.mkdir();
 
@@ -402,6 +435,8 @@ public class FileHandler {
             if (LiteBanUtil.isAllowed) liteBansFolder.mkdir();
 
             if (AdvancedBanUtil.isAllowed) advancedBanFolder.mkdir();
+
+            if (ViaVersionUtil.isAllowed) viaVersionFolder.mkdir();
 
 //            if (WorldGuardUtil.isAllowed) worldGuardFolder.mkdir();
 
@@ -472,6 +507,12 @@ public class FileHandler {
 
             armorStandBreakFile.createNewFile();
 
+            endCrystalPlaceFile.createNewFile();
+
+            endCrystalBreakFile.createNewFile();
+
+            armorStandInteractionFile.createNewFile();
+
             leverInteractionFile.createNewFile();
 
             spawnEggFile.createNewFile();
@@ -495,6 +536,8 @@ public class FileHandler {
 
             playerCountFile.createNewFile();
 
+            serverAddressFile.createNewFile();
+
             // Extras Side
             if (EssentialsUtil.isAllowed) afkFile.createNewFile();
 
@@ -505,6 +548,8 @@ public class FileHandler {
             if (LiteBanUtil.isAllowed) liteBansFile.createNewFile();
 
             if (AdvancedBanUtil.isAllowed) advancedBanFile.createNewFile();
+
+            if (ViaVersionUtil.isAllowed) viaVersionFile.createNewFile();
 
 //            if (WorldGuardUtil.isAllowed) worldGuardFile.createNewFile();
 
@@ -577,6 +622,12 @@ public class FileHandler {
 
     public static File getArmorStandBreakFile() { return armorStandBreakFile; }
 
+    public static File getArmorStandInteractionFile() { return armorStandInteractionFile; }
+
+    public static File getEndCrystalPlaceFile() { return endCrystalPlaceFile; }
+
+    public static File getEndCrystalBreakFile() { return endCrystalBreakFile; }
+
     public static File getLeverInteractionFile() { return leverInteractionFile; }
 
     public static File getSpawnEggFile() { return spawnEggFile; }
@@ -600,6 +651,8 @@ public class FileHandler {
 
     public static File getPlayerCountFile() { return playerCountFile; }
 
+    public static File getServerAddressFile() { return serverAddressFile; }
+
     // Extras Side Part
     public static File getAfkFile() { return afkFile; }
 
@@ -611,6 +664,8 @@ public class FileHandler {
 
     public static File getAdvancedBanFile() { return advancedBanFile; }
 
+    public static File getViaVersionFile() { return viaVersionFile; }
+
     public static File getWorldGuardFile() { return worldGuardFile; }
 
     // Version Exception Part
@@ -618,23 +673,21 @@ public class FileHandler {
 
     public static File getTotemUndyingFile() { return totemUndyingFile; }
 
-    public void deleteFiles(File dataFolder) {
+    public void deleteFiles(final File dataFolder) {
 
-        if (fileDeletion <= 0 ) return;
+        if (fileDeletion <= 0) return;
 
         final File logsFolder = new File(dataFolder, "Logs");
 
-        for (File subLogs : logsFolder.listFiles()) {
-
+        for (File subLogs : logsFolder.listFiles())
             this.deleteFilesOlderThanNDays(subLogs);
-        }
     }
 
-    private void deleteFilesOlderThanNDays(File dirPath) {
+    private void deleteFilesOlderThanNDays(final File dirPath) {
 
         final long deadLine = System.currentTimeMillis() - (fileDeletion * 24 * 60 * 60 * 1000);
 
-        try (final Stream<Path> files = Files.list(Paths.get(String.valueOf(dirPath)))) {
+        try (final Stream<Path> files = Files.list(Paths.get(dirPath.getPath()))) {
 
             files.filter(path -> {
                 try {

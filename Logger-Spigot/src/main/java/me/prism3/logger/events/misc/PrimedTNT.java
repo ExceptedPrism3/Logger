@@ -20,7 +20,7 @@ import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.*;
 
-public class OnPrimedTNT implements Listener {
+public class PrimedTNT implements Listener {
 
     private final Main main = Main.getInstance();
 

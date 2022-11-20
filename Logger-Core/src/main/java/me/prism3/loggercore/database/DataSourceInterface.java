@@ -109,8 +109,6 @@ public interface DataSourceInterface {
 
     PreparedStatement getBlockInteractionStsm(Connection connection) throws SQLException;
 
-    PreparedStatement getPlayerLevelStsm(Connection connection) throws SQLException;
-
     PreparedStatement getBucketActionStsm(Connection connection) throws SQLException;
 
     void setQueueManager(QueueManager queueManager);

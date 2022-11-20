@@ -15,6 +15,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class ConfigManager {
 
@@ -33,9 +34,13 @@ public class ConfigManager {
         this.configVersionChecker();
 
         this.init();
-        //        Main.getInstance().getProxy().getScheduler().schedule(Main.getInstance(), () ->
-//                new PluginUpdater().run(), 1, 12L * 60, TimeUnit.MINUTES);
+
+        // Plugin Update Checker that runs every 12h
+        Main.getInstance().getProxy().getScheduler().schedule(Main.getInstance(), () ->
+                new PluginUpdater().run(), 5, 12L * 60, TimeUnit.MINUTES);
     }
+
+    public void reload() { this.init(); }
 
     private void init() {
 
@@ -84,6 +89,7 @@ public class ConfigManager {
 
     public File getFile() { return new File(Main.getInstance().getDataFolder(), "config - Bungee.yml"); }
 
+    // Compares the versions between the old config and the new
     private void configVersionChecker() {
 
         if (!this.configFile.exists())
@@ -92,9 +98,10 @@ public class ConfigManager {
         String currentVersion = "0";
 
         final Yaml currentFileYaml = new Yaml();
-        InputStream currentFileStream;
+        final InputStream currentFileStream;
 
-        Map<String, Object> currentFileObject;
+        final Map<String, Object> currentFileObject;
+
         try {
             currentFileStream = Files.newInputStream(new File(Main.getInstance().getDataFolder(), "config - Bungee.yml").toPath());
             currentFileObject = currentFileYaml.load(currentFileStream);
@@ -116,6 +123,7 @@ public class ConfigManager {
         }
 
         if (this.versionTagChecker(remoteVersion, currentVersion)) {
+
             try {
 
                 YamlUpdater.create(this.getFile(), Main.getInstance().getResourceAsStream("config - Bungee.yml"))
@@ -124,6 +132,7 @@ public class ConfigManager {
 
                 Log.warning("Config file updated from version " + currentVersion + " to version " + remoteVersion);
             } catch (final Exception e) {
+
                 Log.severe("Error reading the config file, if the issue persists contact the authors!");
                 e.printStackTrace();
                 this.resetConfig();
@@ -160,12 +169,12 @@ public class ConfigManager {
         return false;
     }
 
-
     private void resetConfig() {
 
         try {
             Files.move(this.getFile().toPath(), this.getFile().toPath().resolveSibling("config - Bungee.old.yml"),
                     StandardCopyOption.REPLACE_EXISTING);
+
         } catch (final IOException e) { Log.severe("Error resetting the config file"); }
 
         this.init();

@@ -47,10 +47,12 @@ Log-Server:
   Start: true
   Stop: true
   RAM: true
+  Server-Address: true
 
 Log-Extras:
   LiteBans: true
   PAF: true
+  AdvancedBan: true
 
 # Player-Commands features
 Player-Commands:

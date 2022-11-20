@@ -503,6 +503,7 @@ public final class QueueManager extends Queue {
 
         final EntityDeath b = new EntityDeath(serverName, coords, mob, new EntityPlayer(playerName, playerUUID), isStaff);
 
+        b.setDate(Instant.now());
         super.addItemToQueue(b);
     }
 

@@ -29,7 +29,7 @@ public class ItemFramePlace implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemFramePlace(final HangingPlaceEvent event) {
 
-        if (event.getEntity() instanceof ItemFrame && event.getEntity() instanceof Player) {
+        if (event.getEntity() instanceof ItemFrame) {
 
             final Player player = event.getPlayer();
 

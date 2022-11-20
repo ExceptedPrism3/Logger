@@ -1,6 +1,7 @@
 package me.prism3.loggerbungeecord.commands;
 
 import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.utils.ConfigManager;
 import me.prism3.loggerbungeecord.utils.Data;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -26,7 +27,7 @@ public class Reload extends Command {
 
             } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
 
-//                main.getConfig().init();
+                main.getConfig().reload();
                 main.getMessages().init();
                 main.initializer(new Data());
                 sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', main.getMessages().getString("General.Reload").replace("%prefix%", pluginVersion))));

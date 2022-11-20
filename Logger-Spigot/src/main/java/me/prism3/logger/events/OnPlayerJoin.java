@@ -2,6 +2,8 @@ package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
+import me.prism3.logger.events.plugindependent.OnViaVer;
+import me.prism3.logger.hooks.ViaVersionUtil;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -35,6 +37,9 @@ public class OnPlayerJoin implements Listener {
             SQLiteDataRegistration.insertRegistration(event.getPlayer());
             new OnPlayerRegister();
         }
+
+        if (Data.isViaVersion && ViaVersionUtil.isAllowed)
+            new OnViaVer(event.getPlayer());
 
         final Player player = event.getPlayer();
 

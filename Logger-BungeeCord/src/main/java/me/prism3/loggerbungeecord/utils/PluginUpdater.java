@@ -130,8 +130,13 @@ public class PluginUpdater {
 
             Files.delete(Main.getInstance().getFile().toPath());
 
-            Files.move(newV.toPath(), Main.getInstance().getDataFolder().getParentFile().toPath().resolve(newV.getName()), StandardCopyOption.REPLACE_EXISTING);
-        } catch (final IOException e) { e.printStackTrace(); }
+            Files.move(newV.toPath(), Main.getInstance().getDataFolder().getParentFile().toPath().resolve(newV.getName()),
+                    StandardCopyOption.REPLACE_EXISTING);
+        } catch (final IOException e) {
+
+            Log.severe("An error occurred whilst updating the Plugin. If the issue persists contact the Authors.");
+            e.printStackTrace();
+        }
     }
 }
 

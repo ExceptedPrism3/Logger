@@ -21,29 +21,71 @@ class Queue {
     private final ConcurrentLinkedQueue<PlayerConnection> playerConnectionQueue = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<PlayerChat> playerChatQueue = new ConcurrentLinkedQueue<>();
 
+    private final ConcurrentLinkedQueue<Anvil> anvilQueue = new ConcurrentLinkedQueue<>();
+
+    private final ConcurrentLinkedQueue<BookEditing> bookQueue = new ConcurrentLinkedQueue<>();
+
+    private final ConcurrentLinkedQueue<Enchanting> enchantingQueue = new ConcurrentLinkedQueue<>();
+
+    private final ConcurrentLinkedQueue<EntityDeath> entityDeathQueue = new ConcurrentLinkedQueue<>();
+
+    private final ConcurrentLinkedQueue<PlayerDeath> playerDeathQueue = new ConcurrentLinkedQueue<>();
+
+    private final ConcurrentLinkedQueue<PlayerKick> playerKickQueue = new ConcurrentLinkedQueue<>();
+
+    private final ConcurrentLinkedQueue<PlayerLevel> playerLevelQueue = new ConcurrentLinkedQueue<>();
+
+//    private final ConcurrentLinkedQueue<PlayerRegister> playerRegisterQueue = new ConcurrentLinkedQueue<>(); //TODO
+
+    private final ConcurrentLinkedQueue<PlayerTeleport> playerTeleportQueue = new ConcurrentLinkedQueue<>();
+
+    private final ConcurrentLinkedQueue<PlayerSignText> playerSignTextQueue = new ConcurrentLinkedQueue<>();
+
+    private final ConcurrentLinkedQueue<PlayerCommand> playerCommandsQueue = new ConcurrentLinkedQueue<>();
+
+    private final ConcurrentLinkedQueue<ChestInteraction> chestInteractionQueue = new ConcurrentLinkedQueue<>();
+
+    private final ConcurrentLinkedQueue<Crafting> craftingQueue = new ConcurrentLinkedQueue<>();
+
+    private final ConcurrentLinkedQueue<Furnace> furnaceQueue = new ConcurrentLinkedQueue<>();
+
+//    private final ConcurrentLinkedQueue<WoodSt> woodStrippingQueue = new ConcurrentLinkedQueue<>(); //TODO Check
+
+    private final ConcurrentLinkedQueue<CommandBlock> commandBlockQueue = new ConcurrentLinkedQueue<>();
+
+//    private final ConcurrentLinkedQueue<PlayerCount> playerCountQueue = new ConcurrentLinkedQueue<>(); //TODO Sob had class
+
+    private final ConcurrentLinkedQueue<Ram> ramQueue = new ConcurrentLinkedQueue<>();
+
+    private final ConcurrentLinkedQueue<Rcon> rconQueue = new ConcurrentLinkedQueue<>();
+
+//    private final ConcurrentLinkedQueue<ServerAddress> serverAddresseQueue = new ConcurrentLinkedQueue<>(); //TODO Sob had class
+
+    private final ConcurrentLinkedQueue<Tps> tpsQueue = new ConcurrentLinkedQueue<>();
+
+//    private final ConcurrentLinkedQueue<AdvancedBan> advancedBanQueue = new ConcurrentLinkedQueue<>(); //TODO Sob had class
+
+//    private final ConcurrentLinkedQueue<AFK> afkQueue = new ConcurrentLinkedQueue<>(); //TODO Sob had class
+
+
     private final DataSourceInterface database;
 
     private final Timer timer = new Timer();
     private final TimerTask timerTask = new TimerTask() {
         @Override
-        public void run() {
-
-            flushQueue();
-            System.out.println("Flushed down the Toilet!");
-        }
+        public void run() { flushQueue(); }
     };
 
     protected Queue(DataSourceInterface database) {
+
         this.database = database;
+
         try {
 
             this.enableRepeater();
             this.timer.scheduleAtFixedRate(this.timerTask, 500, 1000);
-        }catch(Exception e)
-        {
-            e.printStackTrace();
-        }
 
+        } catch(Exception e) { e.printStackTrace(); }
     }
 
     protected static void insertBatchBlock(PreparedStatement stsm, ConcurrentLinkedQueue<BlockInteraction> queue) {
@@ -221,7 +263,390 @@ class Queue {
 
         stsm.executeBatch();
         stsm.close();
+    }
+    protected static void insertAnvilBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Anvil> queue ) throws SQLException {
 
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final Anvil anvil = queue.poll();
+
+            stsm.setString(1, anvil.getServerName());
+            stsm.setString(2, anvil.getNewName());
+            stsm.setString(3, anvil.getEntityPlayer().getPlayerName());
+            stsm.setBoolean(4, anvil.isStaff());
+            stsm.setString(5, DateUtils.formatInstant(anvil.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertBookEditingBatch(PreparedStatement stsm, ConcurrentLinkedQueue<BookEditing> queue ) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final BookEditing bookEditing = queue.poll();
+
+            stsm.setString(1, bookEditing.getServerName());
+            stsm.setString(2, bookEditing.getWorld());
+            stsm.setString(3, bookEditing.getEntityPlayer().getPlayerName());
+            stsm.setInt(4, bookEditing.getPageCount());
+            stsm.setString(5, bookEditing.getPageContent());
+            stsm.setString(6, bookEditing.getSignedBy());
+            stsm.setBoolean(7, bookEditing.isStaff());
+            stsm.setString(8, DateUtils.formatInstant(bookEditing.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertEnchantingBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Enchanting> queue ) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final Enchanting enchanting = queue.poll();
+
+            stsm.setString(1, enchanting.getServerName());
+            stsm.setString(2, enchanting.getWorld());
+            stsm.setString(3, enchanting.getEntityPlayer().getPlayerName());
+            stsm.setInt(4, enchanting.getX());
+            stsm.setInt(5, enchanting.getY());
+            stsm.setInt(6, enchanting.getZ());
+            stsm.setString(7, enchanting.getEnchantment());
+            stsm.setInt(8, enchanting.getEnchantmentLevel());
+            stsm.setString(9, enchanting.getItem());
+            stsm.setInt(10, enchanting.getCost());
+            stsm.setBoolean(11, enchanting.isStaff());
+            stsm.setString(12, DateUtils.formatInstant(enchanting.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertEntityDeathBatch(PreparedStatement stsm, ConcurrentLinkedQueue<EntityDeath> queue ) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final EntityDeath entityDeath = queue.poll();
+
+            stsm.setString(1, entityDeath.getServerName());
+            stsm.setString(2, entityDeath.getWorld());
+            stsm.setString(3, entityDeath.getEntityPlayer().getPlayerUniqueID());
+            stsm.setString(4, entityDeath.getEntityPlayer().getPlayerName());
+            stsm.setString(5, entityDeath.getMob());
+            stsm.setInt(6, entityDeath.getX());
+            stsm.setInt(7, entityDeath.getY());
+            stsm.setInt(8, entityDeath.getZ());
+            stsm.setBoolean(9, entityDeath.isStaff());
+            stsm.setString(10, DateUtils.formatInstant(entityDeath.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertPlayerDeathBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerDeath> queue ) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final PlayerDeath playerDeath = queue.poll();
+
+            stsm.setString(1, playerDeath.getServerName());
+            stsm.setString(2, playerDeath.getWorld());
+            stsm.setString(3, playerDeath.getEntityPlayer().getPlayerName());
+            stsm.setInt(4, playerDeath.getPlayerLevel());
+            stsm.setInt(5, playerDeath.getX());
+            stsm.setInt(6, playerDeath.getY());
+            stsm.setInt(7, playerDeath.getZ());
+            stsm.setString(8, playerDeath.getCause());
+            stsm.setString(9, playerDeath.getByWho());
+            stsm.setBoolean(10, playerDeath.isStaff());
+            stsm.setString(11, DateUtils.formatInstant(playerDeath.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertPlayerKickBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerKick> queue ) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final PlayerKick playerKick = queue.poll();
+
+            stsm.setString(1, playerKick.getServerName());
+            stsm.setString(2, playerKick.getWorld());
+            stsm.setString(3, playerKick.getEntityPlayer().getPlayerName());
+            stsm.setInt(4, playerKick.getX());
+            stsm.setInt(5, playerKick.getY());
+            stsm.setInt(6, playerKick.getZ());
+            stsm.setString(7, playerKick.getReason());
+            stsm.setBoolean(8, playerKick.isStaff());
+            stsm.setString(9, DateUtils.formatInstant(playerKick.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertPlayerLevelBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerLevel> queue ) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final PlayerLevel playerLevel = queue.poll();
+
+            stsm.setString(1, playerLevel.getServerName());
+            stsm.setString(2, playerLevel.getEntityPlayer().getPlayerName());
+            stsm.setBoolean(3, playerLevel.isStaff());
+            stsm.setString(4, DateUtils.formatInstant(playerLevel.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertPlayerTeleportBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerTeleport> queue ) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final PlayerTeleport playerTeleport = queue.poll();
+
+            stsm.setString(1, playerTeleport.getServerName());
+            stsm.setString(2, playerTeleport.getWorld());
+            stsm.setString(3, playerTeleport.getEntityPlayer().getPlayerName());
+            stsm.setInt(4, playerTeleport.getFromX());
+            stsm.setInt(5, playerTeleport.getFromY());
+            stsm.setInt(6, playerTeleport.getFromZ());
+            stsm.setInt(7, playerTeleport.getToX());
+            stsm.setInt(8, playerTeleport.getToY());
+            stsm.setInt(9, playerTeleport.getToZ());
+            stsm.setBoolean(10, playerTeleport.isStaff());
+            stsm.setString(11, DateUtils.formatInstant(playerTeleport.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertPlayerSignTextBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerSignText> queue ) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final PlayerSignText playerSignText = queue.poll();
+
+            stsm.setString(1, playerSignText.getServerName());
+            stsm.setString(2, playerSignText.getWorld());
+            stsm.setInt(3, playerSignText.getX());
+            stsm.setInt(4, playerSignText.getY());
+            stsm.setInt(5, playerSignText.getZ());
+            stsm.setString(6, playerSignText.getEntityPlayer().getPlayerName());
+            stsm.setString(7, playerSignText.getLine());
+            stsm.setBoolean(8, playerSignText.isStaff());
+            stsm.setString(9, DateUtils.formatInstant(playerSignText.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertPlayerCommandBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerCommand> queue ) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final PlayerCommand playerCommand = queue.poll();
+
+            stsm.setString(1, playerCommand.getServerName());
+            stsm.setString(2, playerCommand.getWorld());
+            stsm.setString(3, playerCommand.getEntityPlayer().getPlayerName());
+            stsm.setString(4, playerCommand.getCommand());
+            stsm.setBoolean(5, playerCommand.isStaff());
+            stsm.setString(6, DateUtils.formatInstant(playerCommand.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertChestInteractionBatch(PreparedStatement stsm, ConcurrentLinkedQueue<ChestInteraction> queue ) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final ChestInteraction chestInteraction = queue.poll();
+
+            stsm.setString(1, chestInteraction.getServerName());
+            stsm.setString(2, chestInteraction.getWorld());
+            stsm.setString(3, chestInteraction.getEntityPlayer().getPlayerUniqueID());
+            stsm.setString(4, chestInteraction.getEntityPlayer().getPlayerName());
+            stsm.setInt(5, chestInteraction.getX());
+            stsm.setInt(6, chestInteraction.getY());
+            stsm.setInt(7, chestInteraction.getZ());
+            stsm.setString(8, chestInteraction.getItems());
+            stsm.setBoolean(9, chestInteraction.isStaff());
+            stsm.setString(10, DateUtils.formatInstant(chestInteraction.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertCraftingBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Crafting> queue ) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final Crafting crafting = queue.poll();
+
+            stsm.setString(1, crafting.getServerName());
+            stsm.setString(2, crafting.getWorld());
+            stsm.setString(3, crafting.getEntityPlayer().getPlayerName());
+            stsm.setString(4, crafting.getItem());
+            stsm.setInt(5, crafting.getAmount());
+            stsm.setInt(6, crafting.getX());
+            stsm.setInt(7, crafting.getY());
+            stsm.setInt(8, crafting.getZ());
+            stsm.setBoolean(9, crafting.isStaff());
+            stsm.setString(10, DateUtils.formatInstant(crafting.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertFurnaceBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Furnace> queue ) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final Furnace furnace = queue.poll();
+
+            stsm.setString(1, furnace.getServerName());
+            stsm.setString(2, furnace.getWorld());
+            stsm.setString(3, furnace.getEntityPlayer().getPlayerName());
+            stsm.setString(4, furnace.getItem());
+            stsm.setInt(5, furnace.getAmount());
+            stsm.setInt(6, furnace.getX());
+            stsm.setInt(7, furnace.getY());
+            stsm.setInt(8, furnace.getZ());
+            stsm.setBoolean(9, furnace.isStaff());
+            stsm.setString(10, DateUtils.formatInstant(furnace.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertCommandBlockBatch(PreparedStatement stsm, ConcurrentLinkedQueue<CommandBlock> queue ) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final CommandBlock commandBlock = queue.poll();
+
+            stsm.setString(1, commandBlock.getServerName());
+            stsm.setString(2, commandBlock.getCommand());
+            stsm.setString(3, DateUtils.formatInstant(commandBlock.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertRamBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Ram> queue ) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final Ram ram = queue.poll();
+
+            stsm.setString(1, ram.getServerName());
+            stsm.setInt(2, ram.getTotalMemory());
+            stsm.setInt(3, ram.getUsedMemory());
+            stsm.setInt(4, ram.getFreeMemory());
+            stsm.setString(5, DateUtils.formatInstant(ram.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertRconBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Rcon> queue ) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final Rcon rcon = queue.poll();
+
+            stsm.setString(1, rcon.getServerName());
+            stsm.setString(2, rcon.getCommand());
+            stsm.setString(3, DateUtils.formatInstant(rcon.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertTpsBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Tps> queue ) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final Tps tps = queue.poll();
+
+            stsm.setString(1, tps.getServerName());
+            stsm.setInt(2, tps.getTps());
+            stsm.setString(3, DateUtils.formatInstant(tps.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
     }
 
     protected void addItemToQueue(Object item) {
@@ -241,6 +666,57 @@ class Queue {
 
         } else if (item instanceof PlayerChat) {
             playerChatQueue.add((PlayerChat) item );
+
+        } else if (item instanceof Anvil) {
+            anvilQueue.add((Anvil) item );
+
+        } else if (item instanceof BookEditing) {
+            bookQueue.add((BookEditing) item );
+
+        } else if (item instanceof Enchanting) {
+            enchantingQueue.add((Enchanting) item);
+
+        } else if (item instanceof EntityDeath) {
+            entityDeathQueue.add((EntityDeath) item);
+
+        } else if (item instanceof PlayerDeath) {
+            playerDeathQueue.add((PlayerDeath) item);
+
+        } else if (item instanceof PlayerKick) {
+            playerKickQueue.add((PlayerKick) item);
+
+        } else if (item instanceof PlayerLevel) {
+            playerLevelQueue.add((PlayerLevel) item);
+
+        } else if (item instanceof PlayerTeleport) {
+            playerTeleportQueue.add((PlayerTeleport) item);
+
+        } else if (item instanceof PlayerSignText) {
+            playerSignTextQueue.add((PlayerSignText) item);
+
+        } else if (item instanceof PlayerCommand) {
+            playerCommandsQueue.add((PlayerCommand) item);
+
+        } else if (item instanceof ChestInteraction) {
+            chestInteractionQueue.add((ChestInteraction) item);
+
+        } else if (item instanceof Crafting) {
+            craftingQueue.add((Crafting) item);
+
+        } else if (item instanceof Furnace) {
+            furnaceQueue.add((Furnace) item);
+
+        } else if (item instanceof CommandBlock) {
+            commandBlockQueue.add((CommandBlock) item);
+
+        } else if (item instanceof Ram) {
+            ramQueue.add((Ram) item);
+
+        } else if (item instanceof Rcon) {
+            rconQueue.add((Rcon) item);
+
+        } else if (item instanceof Tps) {
+            tpsQueue.add((Tps) item);
         } else {
             throw new RuntimeException("Unidentified Object type! " + item.getClass());
         }
@@ -251,7 +727,7 @@ class Queue {
 
     protected void enableRepeater() {
 
-        this.timer.scheduleAtFixedRate(this.timerTask, 500, 1000);
+        this.timer.scheduleAtFixedRate(this.timerTask, 0, 10000);
     }
 
     protected void disableRepeater() {
@@ -274,11 +750,27 @@ class Queue {
             Queue.insertConsoleCommandBatch(database.getConsoleCommandStsm(connection), this.consoleCommandQueue);
             Queue.insertPlayerConnectionBatch(database.getPlayerConnectionStsm(connection), this.playerConnectionQueue);
             Queue.insertPlayerChatBatch(database.getPlayerChatStsm(connection), this.playerChatQueue);
+            Queue.insertAnvilBatch(database.getAnvilStsm(connection), this.anvilQueue);
+            Queue.insertBookEditingBatch(database.getBookEditingStsm(connection), this.bookQueue);
+            Queue.insertEnchantingBatch(database.getEnchantStsm(connection), this.enchantingQueue);
+            Queue.insertEntityDeathBatch(database.getEntityDeathStsm(connection), this.entityDeathQueue);
+            Queue.insertPlayerDeathBatch(database.getPlayerDeathStsm(connection), this.playerDeathQueue);
+            Queue.insertPlayerKickBatch(database.getPlayerKickStsm(connection), this.playerKickQueue);
+            Queue.insertPlayerLevelBatch(database.getLevelChangeStsm(connection), this.playerLevelQueue);
+            Queue.insertPlayerTeleportBatch(database.getPlayerTeleportStsm(connection), this.playerTeleportQueue);
+            Queue.insertPlayerSignTextBatch(database.getPlayerSignTextStsm(connection), this.playerSignTextQueue);
+            Queue.insertPlayerCommandBatch(database.getPlayerCommandStsm(connection), this.playerCommandsQueue);
+            Queue.insertChestInteractionBatch(database.getChestInteractionStsm(connection), this.chestInteractionQueue);
+            Queue.insertCraftingBatch(database.getPlayerCraftStsm(connection), this.craftingQueue);
+            Queue.insertFurnaceBatch(database.getFurnaceStsm(connection), this.furnaceQueue);
+            Queue.insertCommandBlockBatch(database.getCommandBlockStsm(connection), this.commandBlockQueue);
+            Queue.insertRamBatch(database.getRAMStsm(connection), this.ramQueue);
+//            Queue.insertRconBatch(database.getrcon(connection), this.rconQueue); //TODO FIX
+            Queue.insertTpsBatch(database.getTpsStsm(connection), this.tpsQueue);
 
             connection.commit();
-            System.out.println("Commited!");
 
-        } catch (final SQLException exception) { exception.printStackTrace(); }
+        } catch (final Exception exception) { exception.printStackTrace(); }
     }
 }
 
