@@ -82,8 +82,8 @@ public class ServerAddress implements Listener {
 
             try {
 
-//                Main.getInstance().getQueueManager().queuePlayerJoin(Data.serverName, playerName, playerUUID.toString(), coordinates, ip, player.hasPermission(loggerStaffLog));
-//TODO DB
+              Main.getInstance().getQueueManager().queueServerAddress(Data.serverName, playerName, playerUUID.toString(), address);
+
             } catch (final Exception e) { e.printStackTrace(); }
         }
 
@@ -92,7 +92,7 @@ public class ServerAddress implements Listener {
 
             try {
 
-//                Main.getInstance().getQueueManager().queuePlayerJoin(Data.serverName, playerName, playerUUID.toString(), coordinates, ip, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getQueueManager().queueServerAddress(Data.serverName, playerName, playerUUID.toString(), address);
 
             } catch (final Exception e) { e.printStackTrace(); }
         }

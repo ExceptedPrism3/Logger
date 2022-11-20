@@ -204,6 +204,10 @@ public final class SQLite implements DataSourceInterface {
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, command VARCHAR(256))");
 
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS server_address(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "server_name TEXT, player_name TEXT NOT NULL, player_UUID TEXT NOT NULL, date DATETIME NOT NULL," +
+                    " domain TEXT)");
+
             // Extras Side Part
             if (this.options.isEssentialsEnabled())
                 statement.executeUpdate("CREATE TABLE IF NOT EXISTS afk(id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -369,8 +373,8 @@ public final class SQLite implements DataSourceInterface {
     @Override
     public PreparedStatement getAfkStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement("INSERT INTO afk (server_name, world, player_name, x, y, z, is_staff)" +
-                " VALUES(?,?,?,?,?,?,?)");
+        return connection.prepareStatement("INSERT INTO afk (server_name, world, player_name, x, y, z, is_staff, date)" +
+                " VALUES(?,?,?,?,?,?,?,?)");
     }
 
     @Override
@@ -471,7 +475,7 @@ public final class SQLite implements DataSourceInterface {
 
         return connection.prepareStatement(
                 "INSERT INTO advanced_ban" +
-                        " (server_name, type, executor, executed_on, reason, expiration_date) VALUES(?,?,?,?,?,?)");
+                        " (server_name, type, executor, executed_on, reason, expiration_date, date) VALUES(?,?,?,?,?,?,?)");
 
     }
 
@@ -528,6 +532,12 @@ public final class SQLite implements DataSourceInterface {
     public PreparedStatement getServerSwitchStsm(Connection connection) throws SQLException {
         return null;
     }
+    @Override
+    public PreparedStatement getServerAddressStsm(Connection connection) throws SQLException {
+        return connection.prepareStatement(
+                "INSERT INTO server_address" +
+                        " (server_name, player_name, player_UUID,domain, date) VALUES(?,?,?,?,?)");
+    }
 
     @Override
     public PreparedStatement getPAFPartyMessageStsm(Connection connection) throws SQLException {
@@ -556,7 +566,9 @@ public final class SQLite implements DataSourceInterface {
 
     @Override
     public PreparedStatement getPlayerCountStsm(Connection connection) throws SQLException {
-        return null;
+        return connection.prepareStatement(
+                "INSERT INTO player_count" +
+                        " (server_name, count, date) VALUES(?,?,?)");
     }
 
 

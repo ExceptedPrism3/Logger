@@ -90,6 +90,8 @@ public interface DataSourceInterface {
     PreparedStatement getPAFFriendMessageStsm(Connection connection) throws SQLException;
 
 
+    PreparedStatement getServerAddressStsm(Connection connection) throws SQLException;
+
     PreparedStatement getPAFPartyMessageStsm(Connection connection) throws SQLException;
 
 

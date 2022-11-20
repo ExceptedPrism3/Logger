@@ -49,23 +49,23 @@ class Queue {
 
     private final ConcurrentLinkedQueue<Furnace> furnaceQueue = new ConcurrentLinkedQueue<>();
 
-//    private final ConcurrentLinkedQueue<WoodSt> woodStrippingQueue = new ConcurrentLinkedQueue<>(); //TODO Check
 
     private final ConcurrentLinkedQueue<CommandBlock> commandBlockQueue = new ConcurrentLinkedQueue<>();
 
-//    private final ConcurrentLinkedQueue<PlayerCount> playerCountQueue = new ConcurrentLinkedQueue<>(); //TODO Sob had class
 
     private final ConcurrentLinkedQueue<Ram> ramQueue = new ConcurrentLinkedQueue<>();
 
     private final ConcurrentLinkedQueue<Rcon> rconQueue = new ConcurrentLinkedQueue<>();
 
-//    private final ConcurrentLinkedQueue<ServerAddress> serverAddresseQueue = new ConcurrentLinkedQueue<>(); //TODO Sob had class
+    private final ConcurrentLinkedQueue<ServerAddress> serverAddresseQueue = new ConcurrentLinkedQueue<>(); //TODO Sob had class
 
     private final ConcurrentLinkedQueue<Tps> tpsQueue = new ConcurrentLinkedQueue<>();
 
-//    private final ConcurrentLinkedQueue<AdvancedBan> advancedBanQueue = new ConcurrentLinkedQueue<>(); //TODO Sob had class
+    private final ConcurrentLinkedQueue<AdvancedBan> advancedBanQueue = new ConcurrentLinkedQueue<>();
 
-//    private final ConcurrentLinkedQueue<AFK> afkQueue = new ConcurrentLinkedQueue<>(); //TODO Sob had class
+    private final ConcurrentLinkedQueue<Afk> afkQueue = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<PlayerCount> playerCountQueue = new ConcurrentLinkedQueue<>();
+
 
 
     private final DataSourceInterface database;
@@ -83,7 +83,7 @@ class Queue {
         try {
 
             this.enableRepeater();
-            this.timer.scheduleAtFixedRate(this.timerTask, 500, 1000);
+            this.timer.scheduleAtFixedRate(this.timerTask, 500, 5000);
 
         } catch(Exception e) { e.printStackTrace(); }
     }
@@ -630,7 +630,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
-    protected static void insertTpsBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Tps> queue ) throws SQLException {
+    protected static void insertTpsBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Tps> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -641,6 +641,90 @@ class Queue {
             stsm.setString(1, tps.getServerName());
             stsm.setInt(2, tps.getTps());
             stsm.setString(3, DateUtils.formatInstant(tps.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertAfkBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Afk> queue) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final Afk afk = queue.poll();
+
+            stsm.setString(1, afk.getServerName());
+            stsm.setString(2, afk.getWorld());
+            stsm.setString(3, afk.getEntityPlayer().getPlayerName());
+            stsm.setInt(4, afk.getX());
+            stsm.setInt(5, afk.getY());
+            stsm.setInt(6, afk.getZ());
+            stsm.setBoolean(7, afk.isStaff());
+            stsm.setString(8, DateUtils.formatInstant(afk.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertPlayerCountBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerCount> queue) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final PlayerCount playerCount = queue.poll();
+
+            stsm.setString(1, playerCount.getServerName());
+            stsm.setInt(2, playerCount.getCount());
+            stsm.setString(3, DateUtils.formatInstant(playerCount.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertAdvancedBanBatch(PreparedStatement stsm, ConcurrentLinkedQueue<AdvancedBan> queue) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final AdvancedBan advancedBan = queue.poll();
+
+            stsm.setString(1, advancedBan.getServerName());
+            stsm.setString(2, advancedBan.getType());
+            stsm.setString(3, advancedBan.getExecutor());
+            stsm.setString(4, advancedBan.getExecutedOn());
+            stsm.setString(5, advancedBan.getReason());
+            stsm.setLong(6, advancedBan.getExpirationDate());
+            stsm.setString(7, DateUtils.formatInstant(advancedBan.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    protected static void insertServerAddressBatch(PreparedStatement stsm, ConcurrentLinkedQueue<ServerAddress> queue) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final ServerAddress serverAddress = queue.poll();
+
+            stsm.setString(1, serverAddress.getServerName());
+            stsm.setString(2, serverAddress.getPlayerName());
+            stsm.setString(3, serverAddress.getPlayerUUID());
+            stsm.setString(4, serverAddress.getDomaineName());
+            stsm.setString(5, DateUtils.formatInstant(serverAddress.getDate()));
+
 
             stsm.addBatch();
         }
@@ -717,6 +801,14 @@ class Queue {
 
         } else if (item instanceof Tps) {
             tpsQueue.add((Tps) item);
+        } else if (item instanceof Afk) {
+            afkQueue.add((Afk) item);
+        } else if (item instanceof PlayerCount) {
+            playerCountQueue.add((PlayerCount) item);
+        } else if (item instanceof AdvancedBan) {
+            advancedBanQueue.add((AdvancedBan) item);
+        } else if (item instanceof ServerAddress) {
+            serverAddresseQueue.add((ServerAddress) item);
         } else {
             throw new RuntimeException("Unidentified Object type! " + item.getClass());
         }
@@ -767,7 +859,10 @@ class Queue {
             Queue.insertRamBatch(database.getRAMStsm(connection), this.ramQueue);
 //            Queue.insertRconBatch(database.getrcon(connection), this.rconQueue); //TODO FIX
             Queue.insertTpsBatch(database.getTpsStsm(connection), this.tpsQueue);
-
+            Queue.insertAfkBatch(database.getAfkStsm(connection), this.afkQueue);
+            Queue.insertPlayerCountBatch(database.getPlayerCountStsm(connection), this.playerCountQueue);
+            Queue.insertAdvancedBanBatch(database.getAdvancedDataStsm(connection), this.advancedBanQueue);
+            Queue.insertServerAddressBatch(database.getServerAddressStsm(connection), this.serverAddresseQueue);
             connection.commit();
 
         } catch (final Exception exception) { exception.printStackTrace(); }
