@@ -583,7 +583,6 @@ public final class QueueManager extends Queue {
 
     public void queuePlayerCount(String serverName, int playerCount) {
         final PlayerCount pc = new PlayerCount();
-        pc.setCount(playerCount);
         pc.setServerName(serverName);
         pc.setDate(Instant.now());
         this.addItemToQueue(pc);

@@ -57,7 +57,7 @@ class Queue {
 
     private final ConcurrentLinkedQueue<Rcon> rconQueue = new ConcurrentLinkedQueue<>();
 
-    private final ConcurrentLinkedQueue<ServerAddress> serverAddresseQueue = new ConcurrentLinkedQueue<>(); //TODO Sob had class
+    private final ConcurrentLinkedQueue<ServerAddress> serverAddresseQueue = new ConcurrentLinkedQueue<>();
 
     private final ConcurrentLinkedQueue<Tps> tpsQueue = new ConcurrentLinkedQueue<>();
 
@@ -243,6 +243,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertPlayerChatBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerChat> queue ) throws SQLException {
 
         final int size = queue.size();
@@ -264,6 +265,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertAnvilBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Anvil> queue ) throws SQLException {
 
         final int size = queue.size();
@@ -284,6 +286,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertBookEditingBatch(PreparedStatement stsm, ConcurrentLinkedQueue<BookEditing> queue ) throws SQLException {
 
         final int size = queue.size();
@@ -307,6 +310,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertEnchantingBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Enchanting> queue ) throws SQLException {
 
         final int size = queue.size();
@@ -334,6 +338,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertEntityDeathBatch(PreparedStatement stsm, ConcurrentLinkedQueue<EntityDeath> queue ) throws SQLException {
 
         final int size = queue.size();
@@ -359,6 +364,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertPlayerDeathBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerDeath> queue ) throws SQLException {
 
         final int size = queue.size();
@@ -385,6 +391,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertPlayerKickBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerKick> queue ) throws SQLException {
 
         final int size = queue.size();
@@ -409,6 +416,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertPlayerLevelBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerLevel> queue ) throws SQLException {
 
         final int size = queue.size();
@@ -428,6 +436,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertPlayerTeleportBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerTeleport> queue ) throws SQLException {
 
         final int size = queue.size();
@@ -454,6 +463,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertPlayerSignTextBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerSignText> queue ) throws SQLException {
 
         final int size = queue.size();
@@ -478,6 +488,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertPlayerCommandBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerCommand> queue ) throws SQLException {
 
         final int size = queue.size();
@@ -499,6 +510,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertChestInteractionBatch(PreparedStatement stsm, ConcurrentLinkedQueue<ChestInteraction> queue ) throws SQLException {
 
         final int size = queue.size();
@@ -524,6 +536,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertCraftingBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Crafting> queue ) throws SQLException {
 
         final int size = queue.size();
@@ -549,6 +562,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertFurnaceBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Furnace> queue ) throws SQLException {
 
         final int size = queue.size();
@@ -574,6 +588,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertCommandBlockBatch(PreparedStatement stsm, ConcurrentLinkedQueue<CommandBlock> queue ) throws SQLException {
 
         final int size = queue.size();
@@ -592,6 +607,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertRamBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Ram> queue ) throws SQLException {
 
         final int size = queue.size();
@@ -612,6 +628,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertRconBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Rcon> queue ) throws SQLException {
 
         final int size = queue.size();
@@ -630,6 +647,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertTpsBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Tps> queue) throws SQLException {
 
         final int size = queue.size();
@@ -648,6 +666,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertAfkBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Afk> queue) throws SQLException {
 
         final int size = queue.size();
@@ -671,6 +690,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertPlayerCountBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerCount> queue) throws SQLException {
 
         final int size = queue.size();
@@ -680,8 +700,7 @@ class Queue {
             final PlayerCount playerCount = queue.poll();
 
             stsm.setString(1, playerCount.getServerName());
-            stsm.setInt(2, playerCount.getCount());
-            stsm.setString(3, DateUtils.formatInstant(playerCount.getDate()));
+            stsm.setString(2, DateUtils.formatInstant(playerCount.getDate()));
 
             stsm.addBatch();
         }
@@ -689,6 +708,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertAdvancedBanBatch(PreparedStatement stsm, ConcurrentLinkedQueue<AdvancedBan> queue) throws SQLException {
 
         final int size = queue.size();
@@ -711,6 +731,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertServerAddressBatch(PreparedStatement stsm, ConcurrentLinkedQueue<ServerAddress> queue) throws SQLException {
 
         final int size = queue.size();
@@ -812,15 +833,9 @@ class Queue {
         } else {
             throw new RuntimeException("Unidentified Object type! " + item.getClass());
         }
-
-        //TODO add the rest of the entities
-
     }
 
-    protected void enableRepeater() {
-
-        this.timer.scheduleAtFixedRate(this.timerTask, 0, 10000);
-    }
+    protected void enableRepeater() { this.timer.scheduleAtFixedRate(this.timerTask, 0, 10000); }
 
     protected void disableRepeater() {
 
@@ -863,6 +878,7 @@ class Queue {
             Queue.insertPlayerCountBatch(database.getPlayerCountStsm(connection), this.playerCountQueue);
             Queue.insertAdvancedBanBatch(database.getAdvancedDataStsm(connection), this.advancedBanQueue);
             Queue.insertServerAddressBatch(database.getServerAddressStsm(connection), this.serverAddresseQueue);
+
             connection.commit();
 
         } catch (final Exception exception) { exception.printStackTrace(); }

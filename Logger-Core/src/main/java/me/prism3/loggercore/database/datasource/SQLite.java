@@ -97,7 +97,6 @@ public final class SQLite implements DataSourceInterface {
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
                     "player_name TEXT, block VARCHAR(40), x INT, y INT, z INT, is_staff BOOLEAN, interaction_type VARCHAR(30) NOT NULL)");
 
-
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_kick "
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT," +
@@ -135,7 +134,6 @@ public final class SQLite implements DataSourceInterface {
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, player_name TEXT," +
                     " page_count INT, page_content VARCHAR(250), signed_by VARCHAR(25), is_staff BOOLEAN)");
 
-
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS furnace"
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, player_name TEXT," +
@@ -172,6 +170,10 @@ public final class SQLite implements DataSourceInterface {
                     " player_name TEXT, mob TEXT, x INT, y INT, z INT, is_staff BOOLEAN)");
 
             // Server Side Part
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_count"
+                    + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
+                    " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP)");
+
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS server_start"
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP)");
@@ -283,9 +285,8 @@ public final class SQLite implements DataSourceInterface {
     @Override
     public PreparedStatement getPlayerConnectionStsm(Connection connection) throws SQLException {
 //TODO convert ip in java instead of database
-        return connection.prepareStatement(
-                "INSERT INTO player_connection" +
-                        " (server_name, world, player_name, x, y, z, ip, is_staff, date, player_connection_type) VALUES(?,?,?,?,?,?,?,?,?,?)");
+        return connection.prepareStatement("INSERT INTO player_connection (server_name, world, player_name, x, y," +
+                " z, ip, is_staff, date, player_connection_type) VALUES(?,?,?,?,?,?,?,?,?,?)");
 
     }
 
@@ -402,7 +403,8 @@ public final class SQLite implements DataSourceInterface {
     public void insertRCON(String serverName, String command) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement rCon = connection.prepareStatement("INSERT INTO rcon (server_name, command, date) VALUES(?,?,?)")) {
+             final PreparedStatement rCon = connection.prepareStatement("INSERT INTO rcon (server_name, command," +
+                     " date) VALUES(?,?,?)")) {
 
             rCon.setString(1, serverName);
             rCon.setString(2, command);
@@ -429,8 +431,8 @@ public final class SQLite implements DataSourceInterface {
     @Override
     public PreparedStatement getVaultStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement("INSERT INTO vault" +
-                " (server_name, player_name, old_balance, new_balance, is_staff) VALUES(?,?,?,?,?)");
+        return connection.prepareStatement("INSERT INTO vault (server_name, player_name, old_balance, new_balance," +
+                " is_staff) VALUES(?,?,?,?,?)");
     }
 
     @Override
@@ -438,9 +440,8 @@ public final class SQLite implements DataSourceInterface {
                                          String joinDate) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement register = connection.prepareStatement(
-                     "INSERT INTO registration" +
-                             " (server_name, player_name, player_uuid, join_date) VALUES(?,?,?,?)")) {
+             final PreparedStatement register = connection.prepareStatement("INSERT INTO registration (server_name," +
+                     " player_name, player_uuid, join_date) VALUES(?,?,?,?)")) {
 
             register.setString(1, serverName);
             register.setString(2, playerName);
@@ -449,34 +450,28 @@ public final class SQLite implements DataSourceInterface {
 
             register.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
     @Override
     public PreparedStatement getPrimedTntStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO primed_tnt" +
-                        " (server_name, world, player_uuid, player_name, x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)");
-
+        return connection.prepareStatement("INSERT INTO primed_tnt (server_name, world, player_uuid, player_name," +
+                " x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)");
     }
 
     @Override
     public PreparedStatement getLiteBansStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement("INSERT INTO litebans" +
-                " (server_name, sender, command, onwho, reason, duration, is_silent) VALUES(?,?,?,?,?,?,?)");
+        return connection.prepareStatement("INSERT INTO litebans (server_name, sender, command, onwho, reason," +
+                " duration, is_silent) VALUES(?,?,?,?,?,?,?)");
     }
 
     @Override
     public PreparedStatement getAdvancedDataStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO advanced_ban" +
-                        " (server_name, type, executor, executed_on, reason, expiration_date, date) VALUES(?,?,?,?,?,?,?)");
-
+        return connection.prepareStatement("INSERT INTO advanced_ban (server_name, type, executor, executed_on," +
+                " reason, expiration_date, date) VALUES(?,?,?,?,?,?,?)");
     }
 
     @Override
@@ -488,10 +483,8 @@ public final class SQLite implements DataSourceInterface {
     @Override
     public PreparedStatement getWoodStrippingStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO wood_stripping" +
-                        " (server_name, world, uuid, player_name, log_name, x, y, z, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?,?)");
-
+        return connection.prepareStatement("INSERT INTO wood_stripping (server_name, world, uuid, player_name," +
+                " log_name, x, y, z, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?,?)");
     }
 
     @Override
@@ -511,10 +504,7 @@ public final class SQLite implements DataSourceInterface {
     @Override
     public PreparedStatement getConsoleCommandStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO console_commands" +
-                        " (server_name, command, date) VALUES(?,?,?)");
-
+        return connection.prepareStatement("INSERT INTO console_commands (server_name, command, date) VALUES(?,?,?)");
     }
 
     @Override
@@ -534,9 +524,8 @@ public final class SQLite implements DataSourceInterface {
     }
     @Override
     public PreparedStatement getServerAddressStsm(Connection connection) throws SQLException {
-        return connection.prepareStatement(
-                "INSERT INTO server_address" +
-                        " (server_name, player_name, player_UUID,domain, date) VALUES(?,?,?,?,?)");
+        return connection.prepareStatement("INSERT INTO server_address (server_name, player_name, player_UUID, " +
+                "domain, date) VALUES(?,?,?,?,?)");
     }
 
     @Override
@@ -566,9 +555,8 @@ public final class SQLite implements DataSourceInterface {
 
     @Override
     public PreparedStatement getPlayerCountStsm(Connection connection) throws SQLException {
-        return connection.prepareStatement(
-                "INSERT INTO player_count" +
-                        " (server_name, count, date) VALUES(?,?,?)");
+
+        return connection.prepareStatement("INSERT INTO player_count (server_name, date) VALUES(?,?)");
     }
 
 
@@ -587,17 +575,14 @@ public final class SQLite implements DataSourceInterface {
 
     @Override
     public PreparedStatement getBlockInteractionStsm(Connection connection) throws SQLException {
-        return connection.prepareStatement(
-                "INSERT INTO block_interaction" +
-                        " (server_name, world, player_name, block, x, y, z, is_staff, interaction_type, date) VALUES(?,?,?,?,?,?,?,?,?,?)");
+        return connection.prepareStatement("INSERT INTO block_interaction (server_name, world, player_name, block," +
+                " x, y, z, is_staff, interaction_type, date) VALUES(?,?,?,?,?,?,?,?,?,?)");
     }
 
     @Override
     public PreparedStatement getLevelChangeStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement(
-                "INSERT INTO player_level" +
-                        " (server_name, player_name, is_staff, date) VALUES(?,?,?,?)");
+        return connection.prepareStatement("INSERT INTO player_level (server_name, player_name, is_staff, date) VALUES(?,?,?,?)");
     }
 
     public void insertAnvil(String serverName, String playerName, String newName, boolean isStaff) {
@@ -613,9 +598,6 @@ public final class SQLite implements DataSourceInterface {
 
             anvil.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
-
 }
