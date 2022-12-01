@@ -479,6 +479,7 @@ public final class QueueManager extends Queue {
         advancedBan.setExecutedOn(executedOn);
         advancedBan.setReason(reason);
         advancedBan.setExpirationDate(expirationDate);
+        advancedBan.setDate(Instant.now());
         this.addItemToQueue(advancedBan);
 
     }
@@ -488,6 +489,7 @@ public final class QueueManager extends Queue {
         final CommandBlock b = new CommandBlock();
         b.setServerName(serverName);
         b.setCommand(msg);
+        b.setDate(Instant.now());
 
         super.addItemToQueue(b);
     }

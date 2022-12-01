@@ -65,7 +65,8 @@ class Queue {
 
     private final ConcurrentLinkedQueue<Afk> afkQueue = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<PlayerCount> playerCountQueue = new ConcurrentLinkedQueue<>();
-
+    private final ConcurrentLinkedQueue<PortalCreation> portalCreateQueue = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<PrimedTnt> primedTntQueue = new ConcurrentLinkedQueue<>();
 
 
     private final DataSourceInterface database;
@@ -753,6 +754,55 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+    protected static void insertPortalCreateBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PortalCreation> queue) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final PortalCreation portalCreation = queue.poll();
+
+            stsm.setString(1, portalCreation.getServerName());
+            stsm.setString(2, portalCreation.getWorld());
+            stsm.setString(3, portalCreation.getCausedBy());
+            stsm.setString(4, DateUtils.formatInstant(portalCreation.getDate()));
+
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    /**
+     *         return connection.prepareStatement("INSERT INTO primed_tnt (server_name, world, player_uuid, player_name," +
+                " x, y, z, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?)");
+     */
+    protected static void insertPrimedTntBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PrimedTnt> queue) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final PrimedTnt primedTnt = queue.poll();
+
+            stsm.setString(1, primedTnt.getServerName());
+            stsm.setString(2, primedTnt.getWorld());
+            stsm.setString(3, primedTnt.getEntityPlayer().getPlayerUniqueID());
+            stsm.setString(4, primedTnt.getEntityPlayer().getPlayerName());
+            stsm.setInt(5, primedTnt.getX());
+            stsm.setInt(6, primedTnt.getY());
+            stsm.setInt(7, primedTnt.getZ());
+            stsm.setBoolean(8, primedTnt.isStaff());
+            stsm.setString(9, DateUtils.formatInstant(primedTnt.getDate()));
+
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
 
     protected void addItemToQueue(Object item) {
 
@@ -830,7 +880,12 @@ class Queue {
             advancedBanQueue.add((AdvancedBan) item);
         } else if (item instanceof ServerAddress) {
             serverAddresseQueue.add((ServerAddress) item);
-        } else {
+        } else if(item instanceof PortalCreation) {
+            portalCreateQueue.add((PortalCreation) item);
+        } else if(item instanceof PrimedTnt) {
+            primedTntQueue.add((PrimedTnt) item);
+        }
+         else {
             throw new RuntimeException("Unidentified Object type! " + item.getClass());
         }
     }
@@ -878,6 +933,8 @@ class Queue {
             Queue.insertPlayerCountBatch(database.getPlayerCountStsm(connection), this.playerCountQueue);
             Queue.insertAdvancedBanBatch(database.getAdvancedDataStsm(connection), this.advancedBanQueue);
             Queue.insertServerAddressBatch(database.getServerAddressStsm(connection), this.serverAddresseQueue);
+            Queue.insertPortalCreateBatch(database.getPortalCreateStsm(connection), this.portalCreateQueue);
+            Queue.insertPrimedTntBatch(database.getPrimedTntStsm(connection), this.primedTntQueue);
 
             connection.commit();
 

@@ -457,7 +457,7 @@ public final class SQLite implements DataSourceInterface {
     public PreparedStatement getPrimedTntStsm(Connection connection) throws SQLException {
 
         return connection.prepareStatement("INSERT INTO primed_tnt (server_name, world, player_uuid, player_name," +
-                " x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?)");
+                " x, y, z, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?)");
     }
 
     @Override
