@@ -473,7 +473,7 @@ public final class QueueManager extends Queue {
     public void queueAdvanceBanData(String serverName, String type, String executor, String executedOn,
                                     String reason, long expirationDate) {
         final AdvancedBan advancedBan = new AdvancedBan();
-        advancedBan.setServerName(advancedBan.getServerName());
+        advancedBan.setServerName(serverName);
         advancedBan.setType(type);
         advancedBan.setExecutor(executor);
         advancedBan.setExecutedOn(executedOn);
