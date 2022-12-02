@@ -26,11 +26,10 @@ public class Arguments {
 
         Arrays.stream(args).filter(argument -> argument.startsWith("page:")).findFirst()
               .ifPresent(pageParam -> this.page = Integer.parseUnsignedInt(pageParam.replace("page:", "")));
-
     }
 
     public Long getTotalCount() {
-        return totalCount;
+        return this.totalCount;
     }
 
     public void setTotalCount(Long totalCount) {
@@ -38,7 +37,7 @@ public class Arguments {
     }
 
     public String getInputCommand() {
-        return inputCommand;
+        return this.inputCommand;
     }
 
     public void setInputCommand(String inputCommand) {
@@ -46,7 +45,7 @@ public class Arguments {
     }
 
     public Integer getHeight() {
-        return height;
+        return this.height;
     }
 
     public void setHeight(Integer height) {
@@ -56,18 +55,18 @@ public class Arguments {
     @Override
     public String toString() {
         return "Arguments{" +
-                "username='" + username + '\'' +
-                ", time='" + time + '\'' +
-                ", action='" + action + '\'' +
-                ", page=" + page +
-                ", height=" + height +
-                ", totalCount=" + totalCount +
-                ", inputCommand='" + inputCommand + '\'' +
+                "username='" + this.username + '\'' +
+                ", time='" + this.time + '\'' +
+                ", action='" + this.action + '\'' +
+                ", page=" + this.page +
+                ", height=" + this.height +
+                ", totalCount=" + this.totalCount +
+                ", inputCommand='" + this.inputCommand + '\'' +
                 '}';
     }
 
     public Integer getPage() {
-        return page;
+        return this.page;
     }
 
     public void setPage(Integer page) {
@@ -75,7 +74,7 @@ public class Arguments {
     }
 
     public String getAction() {
-        return action;
+        return this.action;
     }
 
     public void setAction(String action) {
@@ -83,47 +82,44 @@ public class Arguments {
     }
 
     public String getMinimumDate() {
+
         String day = null;
         String week = null;
         String min = null;
         String hour = null;
 
-        if (this.getTime().endsWith("d")) {
+        if (this.getTime().endsWith("d"))
             day = this.getTime().replace("d", "");
 
-        }
-        if (this.getTime().endsWith("w")) {
+        if (this.getTime().endsWith("w"))
             week = this.getTime().replace("w", "");
 
-        }
-        if (this.getTime().endsWith("m")) {
+        if (this.getTime().endsWith("m"))
             min = this.getTime().replace("m", "");
 
-        }
-        if (this.getTime().endsWith("h")) {
+        if (this.getTime().endsWith("h"))
             hour = this.getTime().replace("h", "");
 
-        }
         SimpleDateFormat s = new SimpleDateFormat();
         s.applyPattern("yyyy-MM-dd HH:mm:ss");
-        if (min != null) {
 
+        if (min != null)
             return s.format(Date.from(Instant.now().minusSeconds(Long.parseLong(min) * 60)));
-        }
-        if (hour != null) {
+
+        if (hour != null)
             return s.format(Date.from(Instant.now().minusSeconds(Long.parseLong(hour) * 3600)));
-        }
-        if (day != null) {
+
+        if (day != null)
             return s.format(Date.from(Instant.now().minusSeconds(Long.parseLong(day) * 86400)));
-        }
-        if (week != null) {
+
+        if (week != null)
             return s.format(Date.from(Instant.now().minusSeconds(Long.parseLong(week) * 604800)));
-        }
+
         return null;
     }
 
     public String getTime() {
-        return time;
+        return this.time;
     }
 
     public void setTime(String time) {
@@ -135,22 +131,23 @@ public class Arguments {
     }
 
     public String returnCommand() {
+
         String a = "/loggerget ";
-        if (this.action != null) {
+
+        if (this.action != null)
             a += "action:" + this.action + " ";
-        }
-        if (this.time != null) {
+
+        if (this.time != null)
             a += "time:" + this.time + " ";
-        }
-        if (this.getUsername() != null) {
+
+        if (this.getUsername() != null)
             a += "user:" + this.username + " ";
-        }
 
         return a;
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     public void setUsername(String username) {
@@ -158,19 +155,17 @@ public class Arguments {
     }
 
     public String forPreviousPage() {
-        if (this.page == 0 || this.page == 1) {
+        if (this.page == 0 || this.page == 1)
             return returnCommand() + "page:" + (this.page);
-        }
+
         return returnCommand() + "page:" + (this.page - 1);
     }
 
     public boolean isValidTime() {
 
-        if (this.time == null || this.time.isEmpty()) {
+        if (this.time == null || this.time.isEmpty())
             return true;
-        }
-    return this.time.matches("^[1-9]\\d+[h|w|m|d]$");
+
+        return this.time.matches("^[1-9]\\d+[h|w|m|d]$");
     }
-
-
 }

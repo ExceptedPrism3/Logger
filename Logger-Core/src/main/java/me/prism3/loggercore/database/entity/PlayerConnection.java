@@ -5,7 +5,6 @@ import me.prism3.loggercore.database.entity.enums.PlayerConnectionType;
 
 public class PlayerConnection extends AbstractAction {
 
-
     private String world;
 
     private Integer x;
@@ -16,18 +15,13 @@ public class PlayerConnection extends AbstractAction {
 
     private Boolean isStaff;
 
-
     private PlayerConnectionType playerConnectionType;
 
     public PlayerConnectionType getPlayerConnectionType() {
-        return playerConnectionType;
+        return this.playerConnectionType;
     }
 
-    public void setPlayerConnectionType(
-            PlayerConnectionType playerConnectionType) {
-        this.playerConnectionType = playerConnectionType;
-    }
-
+    public void setPlayerConnectionType(PlayerConnectionType playerConnectionType) { this.playerConnectionType = playerConnectionType; }
 
     public String getWorld() {
         return this.world;
@@ -79,6 +73,7 @@ public class PlayerConnection extends AbstractAction {
 
     @Override
     public String getAction() {
+
         return this.entityPlayer.getPlayerName() + " " + this.getPlayerConnectionType()
                 .rawAction() + " at " + this.getDate().toString();
     }

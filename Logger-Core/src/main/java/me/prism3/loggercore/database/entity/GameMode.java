@@ -2,14 +2,11 @@ package me.prism3.loggercore.database.entity;
 
 public class GameMode extends AbstractAction {
 
-
     private String world;
 
     private String gameMode;
 
-
     private Boolean isStaff;
-
 
     public String getWorld() {
         return this.world;

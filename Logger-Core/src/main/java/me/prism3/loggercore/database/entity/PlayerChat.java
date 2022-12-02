@@ -18,7 +18,7 @@ public class PlayerChat extends AbstractAction {
     }
 
     public String getMessage() {
-        return message;
+        return this.message;
     }
 
     public void setMessage(String message) {

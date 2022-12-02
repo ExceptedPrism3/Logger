@@ -89,5 +89,4 @@ public class Options {
     public Boolean getBooleanValue(String key) {
         return ((Boolean) this.enabledLogs.get(key));
     }
-
 }

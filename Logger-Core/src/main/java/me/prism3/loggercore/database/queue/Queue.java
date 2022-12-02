@@ -14,11 +14,17 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 class Queue {
 
     private final ConcurrentLinkedQueue<BlockInteraction> blockQueue = new ConcurrentLinkedQueue<>();
+
     private final ConcurrentLinkedQueue<BucketAction> bucketQueue = new ConcurrentLinkedQueue<>();
+
     private final ConcurrentLinkedQueue<GameMode> gameModeQueue = new ConcurrentLinkedQueue<>();
+
     private final ConcurrentLinkedQueue<ItemAction> itemActionQueue = new ConcurrentLinkedQueue<>();
+
     private final ConcurrentLinkedQueue<ConsoleCommand> consoleCommandQueue = new ConcurrentLinkedQueue<>();
+
     private final ConcurrentLinkedQueue<PlayerConnection> playerConnectionQueue = new ConcurrentLinkedQueue<>();
+
     private final ConcurrentLinkedQueue<PlayerChat> playerChatQueue = new ConcurrentLinkedQueue<>();
 
     private final ConcurrentLinkedQueue<Anvil> anvilQueue = new ConcurrentLinkedQueue<>();
@@ -49,9 +55,7 @@ class Queue {
 
     private final ConcurrentLinkedQueue<Furnace> furnaceQueue = new ConcurrentLinkedQueue<>();
 
-
     private final ConcurrentLinkedQueue<CommandBlock> commandBlockQueue = new ConcurrentLinkedQueue<>();
-
 
     private final ConcurrentLinkedQueue<Ram> ramQueue = new ConcurrentLinkedQueue<>();
 
@@ -64,11 +68,14 @@ class Queue {
     private final ConcurrentLinkedQueue<AdvancedBan> advancedBanQueue = new ConcurrentLinkedQueue<>();
 
     private final ConcurrentLinkedQueue<Afk> afkQueue = new ConcurrentLinkedQueue<>();
-    private final ConcurrentLinkedQueue<PlayerCount> playerCountQueue = new ConcurrentLinkedQueue<>();
-    private final ConcurrentLinkedQueue<PortalCreation> portalCreateQueue = new ConcurrentLinkedQueue<>();
-    private final ConcurrentLinkedQueue<PrimedTnt> primedTntQueue = new ConcurrentLinkedQueue<>();
-    private final ConcurrentLinkedQueue<Litebans> liteBansQueue = new ConcurrentLinkedQueue<>();
 
+    private final ConcurrentLinkedQueue<PlayerCount> playerCountQueue = new ConcurrentLinkedQueue<>();
+
+    private final ConcurrentLinkedQueue<PortalCreation> portalCreateQueue = new ConcurrentLinkedQueue<>();
+
+    private final ConcurrentLinkedQueue<PrimedTnt> primedTntQueue = new ConcurrentLinkedQueue<>();
+
+    private final ConcurrentLinkedQueue<LiteBans> liteBansQueue = new ConcurrentLinkedQueue<>();
 
     private final DataSourceInterface database;
 
@@ -87,7 +94,7 @@ class Queue {
             this.enableRepeater();
             this.timer.scheduleAtFixedRate(this.timerTask, 500, 5000);
 
-        } catch(Exception e) { e.printStackTrace(); }
+        } catch(final Exception e) { e.printStackTrace(); }
     }
 
     protected static void insertBatchBlock(PreparedStatement stsm, ConcurrentLinkedQueue<BlockInteraction> queue) {
@@ -194,7 +201,7 @@ class Queue {
         consoleComamndStsm.close();
     }
 
-    protected static void insertGamemodeBatch(PreparedStatement stsm,
+    protected static void insertGameModeBatch(PreparedStatement stsm,
                                               ConcurrentLinkedQueue<GameMode> queue) throws SQLException {
 
         final int size = queue.size();
@@ -245,7 +252,8 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertPlayerChatBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerChat> queue ) throws SQLException {
+    protected static void insertPlayerChatBatch(PreparedStatement stsm,
+                                                ConcurrentLinkedQueue<PlayerChat> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -267,7 +275,7 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertAnvilBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Anvil> queue ) throws SQLException {
+    protected static void insertAnvilBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Anvil> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -288,7 +296,8 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertBookEditingBatch(PreparedStatement stsm, ConcurrentLinkedQueue<BookEditing> queue ) throws SQLException {
+    protected static void insertBookEditingBatch(PreparedStatement stsm,
+                                                 ConcurrentLinkedQueue<BookEditing> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -312,7 +321,8 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertEnchantingBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Enchanting> queue ) throws SQLException {
+    protected static void insertEnchantingBatch(PreparedStatement stsm,
+                                                ConcurrentLinkedQueue<Enchanting> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -340,7 +350,8 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertEntityDeathBatch(PreparedStatement stsm, ConcurrentLinkedQueue<EntityDeath> queue ) throws SQLException {
+    protected static void insertEntityDeathBatch(PreparedStatement stsm,
+                                                 ConcurrentLinkedQueue<EntityDeath> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -366,7 +377,8 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertPlayerDeathBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerDeath> queue ) throws SQLException {
+    protected static void insertPlayerDeathBatch(PreparedStatement stsm,
+                                                 ConcurrentLinkedQueue<PlayerDeath> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -393,7 +405,8 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertPlayerKickBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerKick> queue ) throws SQLException {
+    protected static void insertPlayerKickBatch(PreparedStatement stsm,
+                                                ConcurrentLinkedQueue<PlayerKick> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -418,7 +431,8 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertPlayerLevelBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerLevel> queue ) throws SQLException {
+    protected static void insertPlayerLevelBatch(PreparedStatement stsm,
+                                                 ConcurrentLinkedQueue<PlayerLevel> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -438,7 +452,8 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertPlayerTeleportBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerTeleport> queue ) throws SQLException {
+    protected static void insertPlayerTeleportBatch(PreparedStatement stsm,
+                                                    ConcurrentLinkedQueue<PlayerTeleport> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -465,7 +480,8 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertPlayerSignTextBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerSignText> queue ) throws SQLException {
+    protected static void insertPlayerSignTextBatch(PreparedStatement stsm,
+                                                    ConcurrentLinkedQueue<PlayerSignText> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -490,7 +506,8 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertPlayerCommandBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerCommand> queue ) throws SQLException {
+    protected static void insertPlayerCommandBatch(PreparedStatement stsm,
+                                                   ConcurrentLinkedQueue<PlayerCommand> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -512,7 +529,8 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertChestInteractionBatch(PreparedStatement stsm, ConcurrentLinkedQueue<ChestInteraction> queue ) throws SQLException {
+    protected static void insertChestInteractionBatch(PreparedStatement stsm,
+                                                      ConcurrentLinkedQueue<ChestInteraction> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -538,7 +556,7 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertCraftingBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Crafting> queue ) throws SQLException {
+    protected static void insertCraftingBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Crafting> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -564,7 +582,7 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertFurnaceBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Furnace> queue ) throws SQLException {
+    protected static void insertFurnaceBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Furnace> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -590,7 +608,8 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertCommandBlockBatch(PreparedStatement stsm, ConcurrentLinkedQueue<CommandBlock> queue ) throws SQLException {
+    protected static void insertCommandBlockBatch(PreparedStatement stsm,
+                                                  ConcurrentLinkedQueue<CommandBlock> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -609,7 +628,7 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertRamBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Ram> queue ) throws SQLException {
+    protected static void insertRamBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Ram> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -630,7 +649,7 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertRconBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Rcon> queue ) throws SQLException {
+    protected static void insertRconBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Rcon> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -692,7 +711,8 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertPlayerCountBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PlayerCount> queue) throws SQLException {
+    protected static void insertPlayerCountBatch(PreparedStatement stsm,
+                                                 ConcurrentLinkedQueue<PlayerCount> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -710,7 +730,8 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertAdvancedBanBatch(PreparedStatement stsm, ConcurrentLinkedQueue<AdvancedBan> queue) throws SQLException {
+    protected static void insertAdvancedBanBatch(PreparedStatement stsm,
+                                                 ConcurrentLinkedQueue<AdvancedBan> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -733,13 +754,13 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertLiteBansBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Litebans> queue) throws SQLException {
+    protected static void insertLiteBansBatch(PreparedStatement stsm, ConcurrentLinkedQueue<LiteBans> queue) throws SQLException {
 
         final int size = queue.size();
 
         for (int i = 0; i < size; i++) {
 
-            final Litebans litebans = queue.poll();
+            final LiteBans litebans = queue.poll();
 
             stsm.setString(1, litebans.getServerName());
             stsm.setString(2, litebans.getCommand());
@@ -757,7 +778,8 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertServerAddressBatch(PreparedStatement stsm, ConcurrentLinkedQueue<ServerAddress> queue) throws SQLException {
+    protected static void insertServerAddressBatch(PreparedStatement stsm,
+                                                   ConcurrentLinkedQueue<ServerAddress> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -771,7 +793,6 @@ class Queue {
             stsm.setString(4, serverAddress.getDomaineName());
             stsm.setString(5, DateUtils.formatInstant(serverAddress.getDate()));
 
-
             stsm.addBatch();
         }
 
@@ -779,7 +800,8 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertPortalCreateBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PortalCreation> queue) throws SQLException {
+    protected static void insertPortalCreateBatch(PreparedStatement stsm,
+                                                  ConcurrentLinkedQueue<PortalCreation> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -792,7 +814,6 @@ class Queue {
             stsm.setString(3, portalCreation.getCausedBy());
             stsm.setString(4, DateUtils.formatInstant(portalCreation.getDate()));
 
-
             stsm.addBatch();
         }
 
@@ -800,7 +821,8 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertPrimedTntBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PrimedTnt> queue) throws SQLException {
+    protected static void insertPrimedTntBatch(PreparedStatement stsm,
+                                               ConcurrentLinkedQueue<PrimedTnt> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -817,7 +839,6 @@ class Queue {
             stsm.setInt(7, primedTnt.getZ());
             stsm.setBoolean(8, primedTnt.isStaff());
             stsm.setString(9, DateUtils.formatInstant(primedTnt.getDate()));
-
 
             stsm.addBatch();
         }
@@ -854,15 +875,15 @@ class Queue {
 
         } else if (item instanceof PlayerChat) {
 
-            playerChatQueue.add((PlayerChat) item );
+            playerChatQueue.add((PlayerChat) item);
 
         } else if (item instanceof Anvil) {
 
-            anvilQueue.add((Anvil) item );
+            anvilQueue.add((Anvil) item);
 
         } else if (item instanceof BookEditing) {
 
-            bookQueue.add((BookEditing) item );
+            bookQueue.add((BookEditing) item);
 
         } else if (item instanceof Enchanting) {
 
@@ -948,13 +969,11 @@ class Queue {
 
             primedTntQueue.add((PrimedTnt) item);
 
-        } else if (item instanceof Litebans) {
+        } else if (item instanceof LiteBans) {
 
-            liteBansQueue.add((Litebans) item);
+            liteBansQueue.add((LiteBans) item);
 
-        } else {
-            throw new RuntimeException("Unidentified Object type! " + item.getClass());
-        }
+        } else { throw new RuntimeException("Unidentified Object type! " + item.getClass()); }
     }
 
     protected void enableRepeater() { this.timer.scheduleAtFixedRate(this.timerTask, 0, 10000); }
@@ -974,7 +993,7 @@ class Queue {
 
             Queue.insertBatchBlock(database.getBlockInteractionStsm(connection), this.blockQueue);
             Queue.insertBucketBatch(database.getBucketActionStsm(connection), this.bucketQueue);
-            Queue.insertGamemodeBatch(database.getGamemodeStsm(connection), this.gameModeQueue);
+            Queue.insertGameModeBatch(database.getGamemodeStsm(connection), this.gameModeQueue);
             Queue.insertItemActionBatch(database.getItemActionStsm(connection), this.itemActionQueue);
             Queue.insertConsoleCommandBatch(database.getConsoleCommandStsm(connection), this.consoleCommandQueue);
             Queue.insertPlayerConnectionBatch(database.getPlayerConnectionStsm(connection), this.playerConnectionQueue);

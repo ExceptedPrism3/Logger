@@ -2,9 +2,7 @@ package me.prism3.loggercore.database.entity;
 
 import java.time.Instant;
 
-
 public class Ram {
-
 
     private Long id;
 
@@ -17,7 +15,6 @@ public class Ram {
     private Integer usedMemory;
 
     private Integer freeMemory;
-
 
     public void prePersist() {
         this.date = Instant.now();

@@ -2,7 +2,6 @@ package me.prism3.loggercore.database.entity;
 
 public class Enchanting extends AbstractAction {
 
-
     private String world;
 
     private Integer x;
@@ -18,7 +17,6 @@ public class Enchanting extends AbstractAction {
     private String item;
 
     private Integer cost;
-
 
     private Boolean isStaff;
 

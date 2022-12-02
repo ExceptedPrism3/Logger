@@ -18,18 +18,18 @@ public class Afk {
 
     private Instant date;
 
+    private EntityPlayer entityPlayer;
+
     public EntityPlayer getEntityPlayer() {
-        return entityPlayer;
+        return this.entityPlayer;
     }
 
     public void setEntityPlayer(EntityPlayer entityPlayer) {
         this.entityPlayer = entityPlayer;
     }
 
-    private EntityPlayer entityPlayer;
-
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -85,7 +85,7 @@ public class Afk {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {

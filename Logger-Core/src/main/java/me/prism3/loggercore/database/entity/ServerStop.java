@@ -5,13 +5,11 @@ import java.time.Instant;
 
 public class ServerStop {
 
-
     private Long id;
 
     private String serverName;
 
     private Instant date;
-
 
     public void prePersist() {
         this.date = Instant.now();

@@ -14,5 +14,4 @@ public enum ItemActionType {
     public String rawInteraction() {
         return this.action;
     }
-
 }

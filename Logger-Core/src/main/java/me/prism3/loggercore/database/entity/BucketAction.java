@@ -7,7 +7,6 @@ import java.time.Instant;
 
 public class BucketAction extends AbstractAction {
 
-
     private String world;
 
     private String bucket;
@@ -20,17 +19,15 @@ public class BucketAction extends AbstractAction {
 
     private Boolean isStaff;
 
-
     private BucketActionType bucketActionType;
 
     public BucketActionType getBucketActionType() {
-        return bucketActionType;
+        return this.bucketActionType;
     }
 
     public void setBucketActionType(BucketActionType bucketActionType) {
         this.bucketActionType = bucketActionType;
     }
-
 
     public String getWorld() {
         return this.world;

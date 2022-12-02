@@ -13,7 +13,7 @@ public class AdvancedBan {
     private String serverName;
 
     public String getType() {
-        return type;
+        return this.type;
     }
 
     public void setType(String type) {
@@ -21,7 +21,7 @@ public class AdvancedBan {
     }
 
     public String getExecutor() {
-        return executor;
+        return this.executor;
     }
 
     public void setExecutor(String executor) {
@@ -29,7 +29,7 @@ public class AdvancedBan {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -37,7 +37,7 @@ public class AdvancedBan {
     }
 
     public String getReason() {
-        return reason;
+        return this.reason;
     }
 
     public void setReason(String reason) {
@@ -45,7 +45,7 @@ public class AdvancedBan {
     }
 
     public String getExecutedOn() {
-        return executedOn;
+        return this.executedOn;
     }
 
     public void setExecutedOn(String executedOn) {
@@ -53,7 +53,7 @@ public class AdvancedBan {
     }
 
     public Long getExpirationDate() {
-        return expirationDate;
+        return this.expirationDate;
     }
 
     public void setExpirationDate(Long expirationDate) {
@@ -61,7 +61,7 @@ public class AdvancedBan {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {

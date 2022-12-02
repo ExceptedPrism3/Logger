@@ -5,12 +5,9 @@ import me.prism3.loggercore.database.entity.enums.ItemActionType;
 
 public class ItemAction extends AbstractAction {
 
-
     private String world;
 
-
     private String item;
-
 
     private Integer amount;
 
@@ -20,20 +17,16 @@ public class ItemAction extends AbstractAction {
 
     private Integer z;
 
-
     private String enchantment;
-
 
     private String changedName;
 
-
     private Boolean isStaff;
-
 
     private ItemActionType itemActionType;
 
     public ItemActionType getItemActionType() {
-        return itemActionType;
+        return this.itemActionType;
     }
 
     public void setItemActionType(ItemActionType itemActionType) {
@@ -89,7 +82,7 @@ public class ItemAction extends AbstractAction {
     }
 
     public String getEnchantment() {
-        return enchantment;
+        return this.enchantment;
     }
 
     public void setEnchantment(String enchantment) {
@@ -97,7 +90,7 @@ public class ItemAction extends AbstractAction {
     }
 
     public String getChangedName() {
-        return changedName;
+        return this.changedName;
     }
 
     public void setChangedName(String changedName) {
@@ -114,6 +107,6 @@ public class ItemAction extends AbstractAction {
 
     @Override
     public String getAction() {
-        return this.entityPlayer.getPlayerName() + " itemactoin";
+        return this.entityPlayer.getPlayerName() + " itemaction";
     }
 }

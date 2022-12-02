@@ -47,5 +47,4 @@ public class Coordinates {
     public void setWorldName(String worldName) {
         this.worldName = worldName;
     }
-
 }

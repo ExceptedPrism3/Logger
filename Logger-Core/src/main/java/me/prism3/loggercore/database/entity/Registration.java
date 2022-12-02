@@ -5,7 +5,6 @@ import java.time.Instant;
 
 public class Registration {
 
-
     private Long id;
 
     private String serverName;
@@ -17,7 +16,6 @@ public class Registration {
     private String playerUuid;
 
     private String joinDate;
-
 
     public void prePersist() {
         this.date = Instant.now();

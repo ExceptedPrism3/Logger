@@ -2,7 +2,7 @@ package me.prism3.loggercore.database.entity;
 
 import java.time.Instant;
 
-public class Litebans {
+public class LiteBans {
 
     private String command;
     private String sender;
@@ -15,15 +15,15 @@ public class Litebans {
     private Boolean isSilent;
 
     public Boolean getSilent() {
-        return isSilent;
+        return this.isSilent;
     }
 
     public void setSilent(Boolean silent) {
-        isSilent = silent;
+        this.isSilent = silent;
     }
 
     public String getCommand() {
-        return command;
+        return this.command;
     }
 
     public void setCommand(String command) {
@@ -31,7 +31,7 @@ public class Litebans {
     }
 
     public String getSender() {
-        return sender;
+        return this.sender;
     }
 
     public void setSender(String executor) {
@@ -39,7 +39,7 @@ public class Litebans {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {
@@ -47,7 +47,7 @@ public class Litebans {
     }
 
     public String getReason() {
-        return reason;
+        return this.reason;
     }
 
     public void setReason(String reason) {
@@ -55,7 +55,7 @@ public class Litebans {
     }
 
     public String getOnWho() {
-        return onWho;
+        return this.onWho;
     }
 
     public void setOnWho(String onWho) {
@@ -63,7 +63,7 @@ public class Litebans {
     }
 
     public String getDuration() {
-        return duration;
+        return this.duration;
     }
 
     public void setDuration(String duration) {
@@ -71,7 +71,7 @@ public class Litebans {
     }
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {

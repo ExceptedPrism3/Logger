@@ -60,6 +60,6 @@ public class GetCommandBuilder {
         commandNames = new ArrayList<>(commandList.keySet());
         GetCommandBuilder.actionParameters = new ArrayList<>();
         for(String a : commandNames)
-            GetCommandBuilder.actionParameters.add("action:"+a);
+            GetCommandBuilder.actionParameters.add("action:" + a);
     }
 }

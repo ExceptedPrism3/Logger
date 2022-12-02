@@ -7,5 +7,4 @@ public interface ActionInterface {
     String getAction();
 
     Instant getDate();
-
 }

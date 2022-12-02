@@ -2,12 +2,9 @@ package me.prism3.loggercore.database.entity;
 
 public class Furnace extends AbstractAction {
 
-
     private String world;
 
-
     private String item;
-
 
     private Integer amount;
 
@@ -16,7 +13,6 @@ public class Furnace extends AbstractAction {
     private Integer y;
 
     private Integer z;
-
 
     private Boolean isStaff;
 

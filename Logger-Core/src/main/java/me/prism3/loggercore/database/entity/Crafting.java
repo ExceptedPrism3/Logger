@@ -3,11 +3,9 @@ package me.prism3.loggercore.database.entity;
 
 public class Crafting extends AbstractAction {
 
-
     private String world;
 
     private String item;
-
 
     private Integer amount;
 
@@ -17,9 +15,7 @@ public class Crafting extends AbstractAction {
 
     private Integer z;
 
-
     private Boolean isStaff;
-
 
     @Override
     public String getAction() {

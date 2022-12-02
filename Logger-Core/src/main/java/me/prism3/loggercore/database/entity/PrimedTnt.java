@@ -2,7 +2,6 @@ package me.prism3.loggercore.database.entity;
 
 public class PrimedTnt extends AbstractAction {
 
-
     private String world;
 
     private Integer x;
@@ -11,9 +10,7 @@ public class PrimedTnt extends AbstractAction {
 
     private Integer z;
 
-
     private Boolean isStaff;
-
 
     public String getWorld() {
         return this.world;

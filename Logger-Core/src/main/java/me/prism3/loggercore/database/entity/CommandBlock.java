@@ -5,12 +5,9 @@ import java.time.Instant;
 
 public class CommandBlock {
 
-
     private Long id;
 
-
     private String serverName;
-
 
     private Instant date;
 
@@ -47,7 +44,6 @@ public class CommandBlock {
     public void setCommand(String command) {
         this.command = command;
     }
-
 
     public void prePersist() {
         this.date = Instant.now();

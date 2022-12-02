@@ -5,18 +5,13 @@ import java.time.Instant;
 
 public class ConsoleCommand implements ActionInterface {
 
-
     private Long id;
 
     private String serverName;
 
-
     private Instant date;
 
     private String command;
-
-    public ConsoleCommand() {
-    }
 
     public ConsoleCommand(String serverName, String command) {
         this.serverName = serverName;

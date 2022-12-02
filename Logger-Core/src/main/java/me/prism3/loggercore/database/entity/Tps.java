@@ -5,7 +5,6 @@ import java.time.Instant;
 
 public class Tps {
 
-
     private Long id;
 
     private String serverName;
@@ -13,7 +12,6 @@ public class Tps {
     private Instant date;
 
     private Integer tps;
-
 
     public void prePersist() {
         this.date = Instant.now();

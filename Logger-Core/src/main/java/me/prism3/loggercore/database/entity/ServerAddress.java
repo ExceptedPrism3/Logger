@@ -10,7 +10,7 @@ public class ServerAddress {
     private Instant date;
 
     public String getServerName() {
-        return serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
@@ -18,7 +18,7 @@ public class ServerAddress {
     }
 
     public String getPlayerName() {
-        return playerName;
+        return this.playerName;
     }
 
     public void setPlayerName(String playerName) {
@@ -26,7 +26,7 @@ public class ServerAddress {
     }
 
     public String getPlayerUUID() {
-        return playerUUID;
+        return this.playerUUID;
     }
 
     public void setPlayerUUID(String playerUUID) {
@@ -34,7 +34,7 @@ public class ServerAddress {
     }
 
     public String getDomaineName() {
-        return domaineName;
+        return this.domaineName;
     }
 
     public void setDomaineName(String domaineName) {
@@ -42,7 +42,7 @@ public class ServerAddress {
     }
 
     public Instant getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Instant date) {

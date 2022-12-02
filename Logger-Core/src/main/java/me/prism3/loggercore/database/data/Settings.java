@@ -14,6 +14,7 @@ public final class Settings {
 
     public Settings(String dbType, String dbHost, String dbUsername, String dbPassword,
                     String dbName, int dbPort, boolean isEnabled) {
+
         this.dbType = dbType;
         this.dbHost = dbHost;
         this.dbUsername = dbUsername;

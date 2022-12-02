@@ -2,9 +2,7 @@ package me.prism3.loggercore.database.entity;
 
 import java.time.Instant;
 
-
 public class PortalCreation {
-
 
     private Long id;
 
@@ -15,7 +13,6 @@ public class PortalCreation {
     private String world;
 
     private String causedBy;
-
 
     public void prePersist() {
         this.date = Instant.now();

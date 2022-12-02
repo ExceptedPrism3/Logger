@@ -1,5 +1,6 @@
 package me.prism3.logger.commands;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
@@ -13,7 +14,7 @@ public interface SubCommand {
 
     String getSyntax();
 
-    void perform(Player player, String[] args) throws IOException;
+    void perform(CommandSender commandSender, String[] args) throws IOException;
 
-    List<String> getSubCommandsArgs(Player player, String[] args);
+    List<String> getSubCommandsArgs(CommandSender commandSender, String[] args);
 }

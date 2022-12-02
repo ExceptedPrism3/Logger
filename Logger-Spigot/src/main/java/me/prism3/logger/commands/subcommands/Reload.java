@@ -4,7 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.commands.SubCommand;
 import me.prism3.logger.utils.Data;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,17 +31,15 @@ public class Reload implements SubCommand {
     }
 
     @Override
-    public void perform(Player player, String[] args) {
+    public void perform(CommandSender commandSender, String[] args) {
 
         this.main.reloadConfig();
         this.main.getMessages().reload();
 //        this.main.getDiscordFile().getDiscord().reload();
         this.main.initializer(new Data());//todo data comparision
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getMessages().get().getString("General.Reload").replace("%prefix%", pluginPrefix)));
+        commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getMessages().get().getString("General.Reload").replace("%prefix%", pluginPrefix)));
     }
 
     @Override
-    public List<String> getSubCommandsArgs(Player player, String[] args) {
-        return Collections.emptyList();
-    }
+    public List<String> getSubCommandsArgs(CommandSender commandSender, String[] args) { return Collections.emptyList(); }
 }

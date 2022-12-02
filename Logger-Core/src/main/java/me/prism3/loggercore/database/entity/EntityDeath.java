@@ -5,7 +5,6 @@ import me.prism3.loggercore.database.data.Coordinates;
 
 public class EntityDeath extends AbstractAction {
 
-
     private String world;
 
     private String mob;
@@ -15,10 +14,8 @@ public class EntityDeath extends AbstractAction {
 
     private Boolean isStaff;
 
-    public EntityDeath() {
-    }
-
     public EntityDeath(String serverName, Coordinates coords, String mob, EntityPlayer entityPlayer, Boolean isStaff) {
+
         this.serverName = serverName;
         this.world = coords.getWorldName();
         this.mob = mob;
@@ -38,7 +35,7 @@ public class EntityDeath extends AbstractAction {
     }
 
     public String getMob() {
-        return mob;
+        return this.mob;
     }
 
     public void setMob(String mob) {

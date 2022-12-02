@@ -6,9 +6,7 @@ import java.time.Instant;
 
 public class AbstractAction implements ActionInterface {
 
-
     protected Long id;
-
 
     protected EntityPlayer entityPlayer;
 

@@ -1,13 +1,13 @@
 package me.prism3.loggercore.database.entity.enums;
 
-public enum BucketActionType {
+public enum ArmorStandActionType {
 
-    BUCKET_FILL("filled"),
-    BUCKET_EMPTY("emptied");
+    ARMORSTAND_PLACE("placed"),
+    ARMORSTAND_BREAK("broke");
 
     private final String action;
 
-    BucketActionType(String action) {
+    ArmorStandActionType(String action) {
         this.action = action;
     }
 

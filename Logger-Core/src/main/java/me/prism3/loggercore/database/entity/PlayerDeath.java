@@ -2,9 +2,7 @@ package me.prism3.loggercore.database.entity;
 
 public class PlayerDeath extends AbstractAction {
 
-
     private String world;
-
 
     private Integer playerLevel;
 
@@ -14,15 +12,11 @@ public class PlayerDeath extends AbstractAction {
 
     private Integer z;
 
-
     private String cause;
-
 
     private String byWho;
 
-
     private Boolean isStaff;
-
 
     public String getWorld() {
         return this.world;
@@ -33,7 +27,7 @@ public class PlayerDeath extends AbstractAction {
     }
 
     public Integer getPlayerLevel() {
-        return playerLevel;
+        return this.playerLevel;
     }
 
     public void setPlayerLevel(Integer playerLevel) {

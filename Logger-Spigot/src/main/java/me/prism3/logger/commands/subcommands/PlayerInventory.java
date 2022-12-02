@@ -7,6 +7,7 @@ import me.prism3.logger.utils.playerdeathutils.PlayerFolder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -40,13 +41,10 @@ public class PlayerInventory implements Listener, SubCommand {
     public String getSyntax() { return "/logger playerinventory"; }
 
     @Override
-    public void perform(Player player, String[] args) {
-
-        this.stepOne(player);
-    }
+    public void perform(CommandSender commandSender, String[] args) { this.stepOne((Player) commandSender); }
 
     @Override
-    public List<String> getSubCommandsArgs(Player player, String[] args) { return Collections.emptyList(); }
+    public List<String> getSubCommandsArgs(CommandSender commandSender, String[] args) { return Collections.emptyList(); }
 
     // Opening the first GUI with all online players and their available backups
     private void stepOne(Player player) {
@@ -73,7 +71,6 @@ public class PlayerInventory implements Listener, SubCommand {
             skull.setItemMeta(meta);
 
             firstInv.addItem(skull);
-
         }
 
         player.openInventory(firstInv);
@@ -106,7 +103,6 @@ public class PlayerInventory implements Listener, SubCommand {
                     this.selectedPlayer = onlinePlayer;
                     this.stepTwo();
                     break;
-
                 }
 
                 if (event.getCurrentItem().getType() == Material.CHEST) {
@@ -119,15 +115,14 @@ public class PlayerInventory implements Listener, SubCommand {
                             this.backupFile = new File(FileHandler.getPlayerDeathBackupLogFolder(), onlinePlayer.getName() + File.separator + list);
                             this.stepThree();
                             break;
-
                         }
                     }
 
                     if (isPresent) break;
-
                 }
 
-                if (event.getCurrentItem().getType() == Material.ENDER_CHEST) { this.stepTwo(); }
+                if (event.getCurrentItem().getType() == Material.ENDER_CHEST)
+                    this.stepTwo();
 
                 if (event.getCurrentItem().getType() == Material.EMERALD_BLOCK) {
 
@@ -139,7 +134,6 @@ public class PlayerInventory implements Listener, SubCommand {
 
                         this.selectedBy.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix + "An error has occurred whilst restoring " + selectedPlayer + "'s Inventory"));
                         except.printStackTrace();
-
                     }
                     break;
                 }
@@ -172,7 +166,6 @@ public class PlayerInventory implements Listener, SubCommand {
             chest.setItemMeta(chestMeta);
 
             secondInv.setItem(e, chest);
-
         }
 
         this.selectedBy.openInventory(secondInv);

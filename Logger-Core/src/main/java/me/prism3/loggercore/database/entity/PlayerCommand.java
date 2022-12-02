@@ -3,14 +3,11 @@ package me.prism3.loggercore.database.entity;
 
 public class PlayerCommand extends AbstractAction {
 
-
     private String world;
 
     private String command;
 
-
     private Boolean isStaff;
-
 
     public String getWorld() {
         return this.world;
@@ -21,7 +18,7 @@ public class PlayerCommand extends AbstractAction {
     }
 
     public String getCommand() {
-        return command;
+        return this.command;
     }
 
     public void setCommand(String command) {

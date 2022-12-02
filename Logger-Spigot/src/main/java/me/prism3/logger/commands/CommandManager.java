@@ -7,7 +7,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,10 +47,8 @@ public class CommandManager implements TabExecutor {
             for (int i = 0; i < this.getSubCommands().size(); i++) {
                 if (args[0].equalsIgnoreCase(this.getSubCommands().get(i).getName())) {
                     try {
-                        this.getSubCommands().get(i).perform((Player) sender, args); //TODO to fix all commands are treated as Player which is wrong
-                    } catch (final IOException e) {
-                        e.printStackTrace();
-                    }
+                        this.getSubCommands().get(i).perform(sender, args); //TODO to fix all commands are treated as Player which is wrong
+                    } catch (final IOException e) { e.printStackTrace(); }
                 }
             }
         }
@@ -85,7 +82,7 @@ public class CommandManager implements TabExecutor {
 
             for (int i = 0; i < this.getSubCommands().size(); i++)
                 if (args[0].equalsIgnoreCase(this.getSubCommands().get(i).getName()))
-                    return this.getSubCommands().get(i).getSubCommandsArgs((Player) sender, args);
+                    return this.getSubCommands().get(i).getSubCommandsArgs(sender, args);
         } return null;
     }
 }

@@ -5,7 +5,6 @@ import java.time.Instant;
 
 public class Rcon {
 
-
     private Long id;
 
     private String serverName;
@@ -13,7 +12,6 @@ public class Rcon {
     private Instant date;
 
     private String command;
-
 
     public void prePersist() {
         this.date = Instant.now();

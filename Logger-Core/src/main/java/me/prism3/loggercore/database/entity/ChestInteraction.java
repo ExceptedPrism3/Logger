@@ -2,7 +2,6 @@ package me.prism3.loggercore.database.entity;
 
 public class ChestInteraction extends AbstractAction {
 
-
     private String world;
 
     private Integer x;
@@ -11,9 +10,7 @@ public class ChestInteraction extends AbstractAction {
 
     private Integer z;
 
-
     private String items;
-
 
     private Boolean isStaff;
 

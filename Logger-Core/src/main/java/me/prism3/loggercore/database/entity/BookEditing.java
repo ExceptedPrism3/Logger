@@ -3,7 +3,6 @@ package me.prism3.loggercore.database.entity;
 
 public class BookEditing extends AbstractAction {
 
-
     private String world;
 
     private Integer pageCount;

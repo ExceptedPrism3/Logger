@@ -1,12 +1,14 @@
 # Logger
 
-![Updated Badge](https://badges.pufler.dev/updated/ExceptedPrism3/Logger)
 [![CodeFactor](https://www.codefactor.io/repository/github/exceptedprism3/logger/badge)](https://www.codefactor.io/repository/github/exceptedprism3/logger)
 ![Version](https://img.shields.io/github/v/release/ExceptedPrism3/Logger)
 ![Servers](https://img.shields.io/bstats/servers/12036?color=brightgreen)
 ![Downloads](https://img.shields.io/github/downloads/ExceptedPrism3/Logger/total)
+<a href="https://www.spigotmc.org/resources/94236/" title="See our Spigot rating.">
+<img src="https://img.shields.io/spiget/stars/2117?style=plastic"/>
 ![Issues](https://img.shields.io/github/issues/ExceptedPrism3/Logger)
-[![Discord](https://img.shields.io/discord/850407951629287424?color=%235865F2&label=Join%20Our%20Discord)](https://discord.gg/MfR5mcpVfX)
+[![Discord](https://img.shields.io/discord/850407951629287424?color=%235865F2&label=join%20our%20discord)](https://discord.gg/MfR5mcpVfX)
+[![](https://img.shields.io/github/license/ExceptedPrism3/Logger.svg)](https://github.com/ExceptedPrism3/Logger/blob/master/LICENSE "License")
 
 An All-in-One plugin that logs all Activities from Commands, Chat, Player Join, Player Leave, Player Death and even Server's RAM, TPS and Much More for both Proxy and Bukkit Servers!
 

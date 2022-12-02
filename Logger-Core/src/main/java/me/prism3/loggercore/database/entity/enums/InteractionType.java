@@ -15,5 +15,4 @@ public enum InteractionType {
     public String rawInteraction() {
         return this.interaction;
     }
-
 }

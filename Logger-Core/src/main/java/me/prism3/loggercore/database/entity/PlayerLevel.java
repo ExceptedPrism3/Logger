@@ -2,9 +2,7 @@ package me.prism3.loggercore.database.entity;
 
 public class PlayerLevel extends AbstractAction {
 
-
     private Boolean isStaff;
-
 
     public Boolean isStaff() {
         return this.isStaff;
@@ -16,6 +14,6 @@ public class PlayerLevel extends AbstractAction {
 
     @Override
     public String getAction() {
-        return this.entityPlayer.getPlayerName() + " playerleve";
+        return this.entityPlayer.getPlayerName() + " playerlevel";
     }
 }

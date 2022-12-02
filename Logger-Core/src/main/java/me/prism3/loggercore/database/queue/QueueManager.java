@@ -474,7 +474,7 @@ public final class QueueManager extends Queue {
     public void queueLiteBans(String serverName, String executor, String command, String onWho, String duration,
                               String reason, boolean isSilent) {
 
-        final Litebans litebans = new Litebans();
+        final LiteBans litebans = new LiteBans();
 
         litebans.setServerName(serverName);
         litebans.setCommand(command);

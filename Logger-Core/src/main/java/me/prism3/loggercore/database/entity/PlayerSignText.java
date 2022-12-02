@@ -5,7 +5,6 @@ import me.prism3.loggercore.database.data.Coordinates;
 
 public class PlayerSignText extends AbstractAction {
 
-
     private String world;
 
     private Integer x;
@@ -16,9 +15,7 @@ public class PlayerSignText extends AbstractAction {
 
     private String line;
 
-
     private Boolean isStaff;
-
 
     public String getWorld() {
         return this.world;
@@ -53,7 +50,7 @@ public class PlayerSignText extends AbstractAction {
     }
 
     public String getLine() {
-        return line;
+        return this.line;
     }
 
     public void setLine(String line) {
@@ -77,6 +74,6 @@ public class PlayerSignText extends AbstractAction {
 
     @Override
     public String getAction() {
-        return this.entityPlayer.getPlayerName() + " playersigntesxt";
+        return this.entityPlayer.getPlayerName() + " playersigntext";
     }
 }

@@ -3,29 +3,21 @@ package me.prism3.loggercore.database.entity;
 
 public class PlayerTeleport extends AbstractAction {
 
-
     private String world;
 
-
     private Integer fromX;
-
 
     private Integer fromY;
 
     private Integer fromZ;
 
-
     private Integer toX;
-
 
     private Integer toY;
 
-
     private Integer toZ;
 
-
     private Boolean isStaff;
-
 
     public String getWorld() {
         return this.world;

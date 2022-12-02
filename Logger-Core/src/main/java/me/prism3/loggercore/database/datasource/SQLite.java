@@ -10,25 +10,24 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 
 public final class SQLite implements DataSourceInterface {
 
     private final File databaseFile;
-    private final Logger logger = Logger.getLogger(this.getClass().getName());
     private final Options options;
-    private Connection connection;
-
     private QueueManager queueManager;
 
     public SQLite(Options options, File dataFolder) {
+
         this.options = options;
         this.databaseFile = new File(dataFolder, "data.db");
+
         try {
             this.databaseFile.createNewFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
@@ -39,7 +38,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     public QueueManager getQueueManager() {
-        return queueManager;
+        return this.queueManager;
     }
 
     public void setQueueManager(QueueManager queueManager) {
@@ -47,6 +46,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     public Connection getConnection() throws SQLException {
+        System.out.println("hi ----------------- " + this.databaseFile.getAbsolutePath());
         return DriverManager.getConnection("jdbc:sqlite:" + this.databaseFile.getAbsolutePath());
     }
 
@@ -436,8 +436,7 @@ public final class SQLite implements DataSourceInterface {
     }
 
     @Override
-    public void insertPlayerRegistration(String serverName, String playerName, String playerUUID,
-                                         String joinDate) {
+    public void insertPlayerRegistration(String serverName, String playerName, String playerUUID, String joinDate) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement register = connection.prepareStatement("INSERT INTO registration (server_name," +
@@ -524,6 +523,7 @@ public final class SQLite implements DataSourceInterface {
     }
     @Override
     public PreparedStatement getServerAddressStsm(Connection connection) throws SQLException {
+
         return connection.prepareStatement("INSERT INTO server_address (server_name, player_name, player_UUID, " +
                 "domain, date) VALUES(?,?,?,?,?)");
     }
@@ -575,6 +575,7 @@ public final class SQLite implements DataSourceInterface {
 
     @Override
     public PreparedStatement getBlockInteractionStsm(Connection connection) throws SQLException {
+
         return connection.prepareStatement("INSERT INTO block_interaction (server_name, world, player_name, block," +
                 " x, y, z, is_staff, interaction_type, date) VALUES(?,?,?,?,?,?,?,?,?,?)");
     }

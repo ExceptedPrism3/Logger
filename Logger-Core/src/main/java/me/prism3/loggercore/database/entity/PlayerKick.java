@@ -11,12 +11,9 @@ public class PlayerKick extends AbstractAction {
 
     private Integer z;
 
-
     private String reason;
 
-
     private Boolean isStaff;
-
 
     public String getWorld() {
         return this.world;
@@ -51,7 +48,7 @@ public class PlayerKick extends AbstractAction {
     }
 
     public String getReason() {
-        return reason;
+        return this.reason;
     }
 
     public void setReason(String reason) {

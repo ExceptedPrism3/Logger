@@ -6,16 +6,11 @@ import java.time.Instant;
 
 public class EntityPlayer implements Serializable {
 
-
     private String playerName;
 
     private String playerUniqueID;
 
-
     private Instant createdAt;
-
-    public EntityPlayer() {
-    }
 
     public EntityPlayer(String playerName, String playerUniqueID) {
         this.playerName = playerName;
@@ -41,7 +36,6 @@ public class EntityPlayer implements Serializable {
     public void setPlayerUniqueID(String playerUniqueID) {
         this.playerUniqueID = playerUniqueID;
     }
-
 
     public void prePersist() {
         this.createdAt = Instant.now();
