@@ -463,7 +463,7 @@ public final class SQLite implements DataSourceInterface {
     public PreparedStatement getLiteBansStsm(Connection connection) throws SQLException {
 
         return connection.prepareStatement("INSERT INTO litebans (server_name, sender, command, onwho, reason," +
-                " duration, is_silent) VALUES(?,?,?,?,?,?,?)");
+                " duration, is_silent, date) VALUES(?,?,?,?,?,?,?,?)");
     }
 
     @Override

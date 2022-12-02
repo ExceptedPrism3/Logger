@@ -763,8 +763,8 @@ class Queue {
             final LiteBans litebans = queue.poll();
 
             stsm.setString(1, litebans.getServerName());
-            stsm.setString(2, litebans.getCommand());
-            stsm.setString(3, litebans.getSender());
+            stsm.setString(2, litebans.getSender());
+            stsm.setString(3, litebans.getCommand());
             stsm.setString(4, litebans.getOnWho());
             stsm.setString(5, litebans.getReason());
             stsm.setString(6, litebans.getDuration());
@@ -821,8 +821,7 @@ class Queue {
         stsm.close();
     }
 
-    protected static void insertPrimedTntBatch(PreparedStatement stsm,
-                                               ConcurrentLinkedQueue<PrimedTnt> queue) throws SQLException {
+    protected static void insertPrimedTntBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PrimedTnt> queue) throws SQLException {
 
         final int size = queue.size();
 
