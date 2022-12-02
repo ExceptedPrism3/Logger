@@ -48,7 +48,7 @@ public class CommandManager implements TabExecutor {
             for (int i = 0; i < this.getSubCommands().size(); i++) {
                 if (args[0].equalsIgnoreCase(this.getSubCommands().get(i).getName())) {
                     try {
-                        this.getSubCommands().get(i).perform((Player) sender, args);
+                        this.getSubCommands().get(i).perform((Player) sender, args); //TODO to fix all commands are treated as Player which is wrong
                     } catch (final IOException e) {
                         e.printStackTrace();
                     }

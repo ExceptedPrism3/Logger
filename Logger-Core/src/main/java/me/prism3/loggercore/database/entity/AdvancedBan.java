@@ -3,11 +3,7 @@ package me.prism3.loggercore.database.entity;
 import java.time.Instant;
 
 public class AdvancedBan {
-    /*
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS advanced_ban (server_name TEXT," +
-                                " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, type TEXT,executor TEXT," +
-                                " executed_on TEXT, reason TEXT, expiration_date TEXT)");
-     */
+
     private String type;
     private String executor;
     private Instant date;

@@ -3,11 +3,9 @@ package me.prism3.loggercore.database.entity;
 
 public class PlayerChat extends AbstractAction {
 
-
     private String world;
 
     private String message;
-
 
     private Boolean isStaff;
 

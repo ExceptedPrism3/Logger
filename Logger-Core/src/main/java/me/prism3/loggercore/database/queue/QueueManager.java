@@ -133,7 +133,6 @@ public final class QueueManager extends Queue {
 
         p.setDate(Instant.now());
         p.setServerName(serverName);
-
         p.setWorld(coords.getWorldName());
         p.setX(coords.getX());
         p.setY(coords.getY());
@@ -284,6 +283,7 @@ public final class QueueManager extends Queue {
     public void queueServerStart(String serverName) {
 
         final ServerStart s = new ServerStart();
+
         s.setDate(Instant.now());
         s.setServerName(serverName);
 
@@ -293,6 +293,7 @@ public final class QueueManager extends Queue {
     public void queueServerStop(String serverName) {
 
         final ServerStop s = new ServerStop();
+
         s.setDate(Instant.now());
         s.setServerName(serverName);
 
@@ -325,6 +326,7 @@ public final class QueueManager extends Queue {
                                  int pages, List<String> content, String signedBy, boolean isStaff) {
 
         final BookEditing b = new BookEditing();
+
         b.setDate(Instant.now());
         b.setServerName(serverName);
         b.setWorld(worldName);
@@ -338,7 +340,9 @@ public final class QueueManager extends Queue {
     }
 
     public void queueAfk(String serverName, String playerName, String playerUUID, Coordinates coords, boolean isStaff) {
+
         final Afk afk = new Afk();
+
         afk.setServerName(serverName);
         afk.setEntityPlayer(new EntityPlayer(playerName, playerUUID));
         afk.setX(coords.getX());
@@ -347,6 +351,7 @@ public final class QueueManager extends Queue {
         afk.isStaff(isStaff);
         afk.setWorld(coords.getWorldName());
         afk.setDate(Instant.now());
+
         this.addItemToQueue(afk);
     }
 
@@ -399,6 +404,7 @@ public final class QueueManager extends Queue {
     public void queueRCON(String serverName, String command) {
 
         final Rcon b = new Rcon();
+
         b.setDate(Instant.now());
         b.setServerName(serverName);
 
@@ -468,11 +474,25 @@ public final class QueueManager extends Queue {
     public void queueLiteBans(String serverName, String executor, String command, String onWho, String duration,
                               String reason, boolean isSilent) {
 
+        final Litebans litebans = new Litebans();
+
+        litebans.setServerName(serverName);
+        litebans.setCommand(command);
+        litebans.setSender(executor);
+        litebans.setOnWho(onWho);
+        litebans.setReason(reason);
+        litebans.setDuration(duration);
+        litebans.setSilent(isSilent);
+        litebans.setDate(Instant.now());
+
+        this.addItemToQueue(litebans);
     }
 
     public void queueAdvanceBanData(String serverName, String type, String executor, String executedOn,
                                     String reason, long expirationDate) {
+
         final AdvancedBan advancedBan = new AdvancedBan();
+
         advancedBan.setServerName(serverName);
         advancedBan.setType(type);
         advancedBan.setExecutor(executor);
@@ -480,13 +500,14 @@ public final class QueueManager extends Queue {
         advancedBan.setReason(reason);
         advancedBan.setExpirationDate(expirationDate);
         advancedBan.setDate(Instant.now());
-        this.addItemToQueue(advancedBan);
 
+        this.addItemToQueue(advancedBan);
     }
 
     public void queueCommandBlock(String serverName, String msg) {
 
         final CommandBlock b = new CommandBlock();
+
         b.setServerName(serverName);
         b.setCommand(msg);
         b.setDate(Instant.now());
@@ -523,6 +544,7 @@ public final class QueueManager extends Queue {
         final EntityDeath b = new EntityDeath(serverName, coords, mob, new EntityPlayer(playerName, playerUUID), isStaff);
 
         b.setDate(Instant.now());
+
         super.addItemToQueue(b);
     }
 
@@ -542,13 +564,17 @@ public final class QueueManager extends Queue {
                                  boolean hasPermission) {
 
     }
-    public void queueServerAddress(String serverName, String playerName, String playerUUID, String domainName){
+
+    public void queueServerAddress(String serverName, String playerName, String playerUUID, String domainName) {
+
         final ServerAddress s = new ServerAddress();
+
         s.setServerName(serverName);
         s.setPlayerName(playerName);
         s.setPlayerUUID(playerUUID);
         s.setDomaineName(domainName);
         s.setDate(Instant.now());
+
         this.addItemToQueue(s);
     }
 
@@ -584,9 +610,12 @@ public final class QueueManager extends Queue {
     }
 
     public void queuePlayerCount(String serverName, int playerCount) {
+
         final PlayerCount pc = new PlayerCount();
+
         pc.setServerName(serverName);
         pc.setDate(Instant.now());
+
         this.addItemToQueue(pc);
     }
 }

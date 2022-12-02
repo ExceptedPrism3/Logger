@@ -67,6 +67,7 @@ class Queue {
     private final ConcurrentLinkedQueue<PlayerCount> playerCountQueue = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<PortalCreation> portalCreateQueue = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<PrimedTnt> primedTntQueue = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<Litebans> liteBansQueue = new ConcurrentLinkedQueue<>();
 
 
     private final DataSourceInterface database;
@@ -119,7 +120,6 @@ class Queue {
         } catch (final Exception exception) { exception.printStackTrace(); }
     }
 
-    //TODO add the rest of the insert Batches
     protected static void insertBucketBatch(PreparedStatement bucketStsm,
                                             ConcurrentLinkedQueue<BucketAction> bucketQueue) throws SQLException {
 
@@ -232,7 +232,7 @@ class Queue {
             stsm.setInt(4, playerConnection.getX());
             stsm.setInt(5, playerConnection.getY());
             stsm.setInt(6, playerConnection.getZ());
-            if(playerConnection.getIp() != null)
+            if (playerConnection.getIp() != null)
                 stsm.setLong(7, playerConnection.getIp());
             stsm.setBoolean(8, playerConnection.isStaff());
             stsm.setString(9, DateUtils.formatInstant(playerConnection.getDate()));
@@ -733,6 +733,30 @@ class Queue {
         stsm.close();
     }
 
+    protected static void insertLiteBansBatch(PreparedStatement stsm, ConcurrentLinkedQueue<Litebans> queue) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final Litebans litebans = queue.poll();
+
+            stsm.setString(1, litebans.getServerName());
+            stsm.setString(2, litebans.getCommand());
+            stsm.setString(3, litebans.getSender());
+            stsm.setString(4, litebans.getOnWho());
+            stsm.setString(5, litebans.getReason());
+            stsm.setString(6, litebans.getDuration());
+            stsm.setBoolean(7, litebans.getSilent());
+            stsm.setString(8, DateUtils.formatInstant(litebans.getDate()));
+
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+
     protected static void insertServerAddressBatch(PreparedStatement stsm, ConcurrentLinkedQueue<ServerAddress> queue) throws SQLException {
 
         final int size = queue.size();
@@ -754,6 +778,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
+
     protected static void insertPortalCreateBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PortalCreation> queue) throws SQLException {
 
         final int size = queue.size();
@@ -774,10 +799,7 @@ class Queue {
         stsm.executeBatch();
         stsm.close();
     }
-    /**
-     *         return connection.prepareStatement("INSERT INTO primed_tnt (server_name, world, player_uuid, player_name," +
-                " x, y, z, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?)");
-     */
+
     protected static void insertPrimedTntBatch(PreparedStatement stsm, ConcurrentLinkedQueue<PrimedTnt> queue) throws SQLException {
 
         final int size = queue.size();
@@ -807,85 +829,130 @@ class Queue {
     protected void addItemToQueue(Object item) {
 
         if (item instanceof BlockInteraction) {
+
             blockQueue.add((BlockInteraction) item);
+
         } else if (item instanceof BucketAction) {
+
             bucketQueue.add((BucketAction) item);
+
         } else if (item instanceof GameMode) {
+
             gameModeQueue.add((GameMode) item);
+
         } else if (item instanceof ItemAction) {
+
             itemActionQueue.add((ItemAction) item);
+
         } else if (item instanceof ConsoleCommand) {
+
             consoleCommandQueue.add((ConsoleCommand) item);
+
         } else if (item instanceof PlayerConnection) {
+
             playerConnectionQueue.add((PlayerConnection) item);
 
         } else if (item instanceof PlayerChat) {
+
             playerChatQueue.add((PlayerChat) item );
 
         } else if (item instanceof Anvil) {
+
             anvilQueue.add((Anvil) item );
 
         } else if (item instanceof BookEditing) {
+
             bookQueue.add((BookEditing) item );
 
         } else if (item instanceof Enchanting) {
+
             enchantingQueue.add((Enchanting) item);
 
         } else if (item instanceof EntityDeath) {
+
             entityDeathQueue.add((EntityDeath) item);
 
         } else if (item instanceof PlayerDeath) {
+
             playerDeathQueue.add((PlayerDeath) item);
 
         } else if (item instanceof PlayerKick) {
+
             playerKickQueue.add((PlayerKick) item);
 
         } else if (item instanceof PlayerLevel) {
+
             playerLevelQueue.add((PlayerLevel) item);
 
         } else if (item instanceof PlayerTeleport) {
+
             playerTeleportQueue.add((PlayerTeleport) item);
 
         } else if (item instanceof PlayerSignText) {
+
             playerSignTextQueue.add((PlayerSignText) item);
 
         } else if (item instanceof PlayerCommand) {
+
             playerCommandsQueue.add((PlayerCommand) item);
 
         } else if (item instanceof ChestInteraction) {
+
             chestInteractionQueue.add((ChestInteraction) item);
 
         } else if (item instanceof Crafting) {
+
             craftingQueue.add((Crafting) item);
 
         } else if (item instanceof Furnace) {
+
             furnaceQueue.add((Furnace) item);
 
         } else if (item instanceof CommandBlock) {
+
             commandBlockQueue.add((CommandBlock) item);
 
         } else if (item instanceof Ram) {
+
             ramQueue.add((Ram) item);
 
         } else if (item instanceof Rcon) {
+
             rconQueue.add((Rcon) item);
 
         } else if (item instanceof Tps) {
+
             tpsQueue.add((Tps) item);
+
         } else if (item instanceof Afk) {
+
             afkQueue.add((Afk) item);
+
         } else if (item instanceof PlayerCount) {
+
             playerCountQueue.add((PlayerCount) item);
+
         } else if (item instanceof AdvancedBan) {
+
             advancedBanQueue.add((AdvancedBan) item);
+
         } else if (item instanceof ServerAddress) {
+
             serverAddresseQueue.add((ServerAddress) item);
-        } else if(item instanceof PortalCreation) {
+
+        } else if (item instanceof PortalCreation) {
+
             portalCreateQueue.add((PortalCreation) item);
-        } else if(item instanceof PrimedTnt) {
+
+        } else if (item instanceof PrimedTnt) {
+
             primedTntQueue.add((PrimedTnt) item);
-        }
-         else {
+
+        } else if (item instanceof Litebans) {
+
+            liteBansQueue.add((Litebans) item);
+
+        } else {
             throw new RuntimeException("Unidentified Object type! " + item.getClass());
         }
     }
@@ -935,6 +1002,7 @@ class Queue {
             Queue.insertServerAddressBatch(database.getServerAddressStsm(connection), this.serverAddresseQueue);
             Queue.insertPortalCreateBatch(database.getPortalCreateStsm(connection), this.portalCreateQueue);
             Queue.insertPrimedTntBatch(database.getPrimedTntStsm(connection), this.primedTntQueue);
+            Queue.insertLiteBansBatch(database.getLiteBansStsm(connection), this.liteBansQueue);
 
             connection.commit();
 
