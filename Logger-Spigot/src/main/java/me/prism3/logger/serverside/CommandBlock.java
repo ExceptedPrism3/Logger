@@ -49,7 +49,7 @@ public class CommandBlock implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queueCommandBlock(Data.serverName, command);
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueCommandBlock(Data.serverName, command);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -59,7 +59,7 @@ public class CommandBlock implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queueCommandBlock(Data.serverName, command);
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueCommandBlock(Data.serverName, command);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

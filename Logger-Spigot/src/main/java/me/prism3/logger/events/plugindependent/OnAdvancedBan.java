@@ -55,7 +55,7 @@ public class OnAdvancedBan implements Listener {
 
             try {
 
-                Main.getInstance().getQueueManager().queueAdvanceBanData(Data.serverName, type, executor, executedOn, reason, expirationDate);
+                Main.getInstance().getDatabase().getDatabaseQueue().queueAdvanceBanData(Data.serverName, type, executor, executedOn, reason, expirationDate);
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
@@ -65,7 +65,7 @@ public class OnAdvancedBan implements Listener {
 
             try {
 
-                Main.getInstance().getQueueManager().queueAdvanceBanData(Data.serverName, type, executor, executedOn, reason, expirationDate);
+                Main.getInstance().getDatabase().getDatabaseQueue().queueAdvanceBanData(Data.serverName, type, executor, executedOn, reason, expirationDate);
 
             } catch (final Exception e) { e.printStackTrace(); }
         }

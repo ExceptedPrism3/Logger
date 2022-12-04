@@ -85,7 +85,7 @@ public class OnViaVer {
 
             try {
 
-//                Main.getInstance().getQueueManager().queuePlayerChat(Data.serverName, playerName, playerUUID.toString(), worldName, msg, player.hasPermission(loggerStaffLog));
+//                Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerChat(Data.serverName, playerName, playerUUID.toString(), worldName, msg, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
@@ -95,7 +95,7 @@ public class OnViaVer {
 
             try {
 
-//                Main.getInstance().getQueueManager().queuePlayerChat(Data.serverName, playerName, playerUUID.toString(), worldName, msg, player.hasPermission(loggerStaffLog));
+//                Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerChat(Data.serverName, playerName, playerUUID.toString(), worldName, msg, player.hasPermission(loggerStaffLog));
 //TODO DB
             } catch (final Exception e) { e.printStackTrace(); }
         }

@@ -94,7 +94,7 @@ public class Data {
     public static String loggerReload;
 
 
-    public static Options options = new Options();
+    public static final Options options = new Options();
     public static Settings databaseCredentials;
 
     public void initializeDateFormatter() {

@@ -98,7 +98,7 @@ public class OnSign implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queuePlayerSignText(Data.serverName, playerName, playerUUID.toString(), coordinates, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerSignText(Data.serverName, playerName, playerUUID.toString(), coordinates, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -108,7 +108,7 @@ public class OnSign implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queuePlayerSignText(Data.serverName, playerName, playerUUID.toString(), coordinates, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerSignText(Data.serverName, playerName, playerUUID.toString(), coordinates, "[" + lines.get(0) + "] " + "[" + lines.get(1) + "] " + "[" + lines.get(2) + "] " + "[" + lines.get(3) + "]", player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

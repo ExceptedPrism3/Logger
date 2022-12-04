@@ -96,7 +96,7 @@ public class OnEntityDeath implements Listener {
 
             try {
 
-                Main.getInstance().getQueueManager().queueEntityDeath(Data.serverName, playerName, playerUUID.toString(), entityName, coordinates, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queueEntityDeath(Data.serverName, playerName, playerUUID.toString(), entityName, coordinates, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
@@ -106,7 +106,7 @@ public class OnEntityDeath implements Listener {
 
             try {
 
-                Main.getInstance().getQueueManager().queueEntityDeath(Data.serverName, playerName, playerUUID.toString(), entityName, coordinates, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queueEntityDeath(Data.serverName, playerName, playerUUID.toString(), entityName, coordinates, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }

@@ -96,7 +96,7 @@ public class OnBlockPlace implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queueBlockInteraction(Data.serverName, playerName, playerUUID.toString(), blockType.name(), coordinates, player.hasPermission(loggerStaffLog), InteractionType.BLOCK_PLACE);
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueBlockInteraction(Data.serverName, playerName, playerUUID.toString(), blockType.name(), coordinates, player.hasPermission(loggerStaffLog), InteractionType.BLOCK_PLACE);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -106,7 +106,7 @@ public class OnBlockPlace implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queueBlockInteraction(Data.serverName, playerName, playerUUID.toString(), blockType.name(), coordinates, player.hasPermission(loggerStaffLog), InteractionType.BLOCK_PLACE);
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueBlockInteraction(Data.serverName, playerName, playerUUID.toString(), blockType.name(), coordinates, player.hasPermission(loggerStaffLog), InteractionType.BLOCK_PLACE);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

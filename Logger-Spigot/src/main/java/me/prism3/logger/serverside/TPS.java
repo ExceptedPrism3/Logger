@@ -65,10 +65,10 @@ public class TPS implements Runnable {
                 try {
 
                     if (this.getTPS() <= Data.tpsMedium)
-                        Main.getInstance().getQueueManager().queueTps(Data.serverName, this.getTPS());
+                        Main.getInstance().getDatabase().getDatabaseQueue().queueTps(Data.serverName, this.getTPS());
 
                     else if (this.getTPS() <= Data.tpsCritical)
-                        Main.getInstance().getQueueManager().queueTps(Data.serverName, this.getTPS());
+                        Main.getInstance().getDatabase().getDatabaseQueue().queueTps(Data.serverName, this.getTPS());
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -79,10 +79,10 @@ public class TPS implements Runnable {
                 try {
 
                     if (this.getTPS() <= Data.tpsMedium)
-                        Main.getInstance().getQueueManager().queueTps(Data.serverName, this.getTPS());
+                        Main.getInstance().getDatabase().getDatabaseQueue().queueTps(Data.serverName, this.getTPS());
 
                     else if (this.getTPS() <= Data.tpsCritical)
-                        Main.getInstance().getQueueManager().queueTps(Data.serverName, this.getTPS());
+                        Main.getInstance().getDatabase().getDatabaseQueue().queueTps(Data.serverName, this.getTPS());
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

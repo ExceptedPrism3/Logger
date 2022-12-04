@@ -61,7 +61,7 @@ public class OnLiteBanEvents implements Listener, Runnable {
 
                     try {
 
-                        Main.getInstance().getQueueManager().queueLiteBans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
+                        Main.getInstance().getDatabase().getDatabaseQueue().queueLiteBans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
 
                     } catch (final Exception e) { e.printStackTrace(); }
                 }
@@ -71,7 +71,7 @@ public class OnLiteBanEvents implements Listener, Runnable {
 
                     try {
 
-                        Main.getInstance().getQueueManager().queueLiteBans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
+                        Main.getInstance().getDatabase().getDatabaseQueue().queueLiteBans(Data.serverName, executorName, entryType, onWho, duration, reason, isSilent);
 
                     } catch (final Exception e) { e.printStackTrace(); }
                 }

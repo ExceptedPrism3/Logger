@@ -49,7 +49,7 @@ public class PortalCreation implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queuePortalCreate(Data.serverName, worldName, reason.toString());
+                    Main.getInstance().getDatabase().getDatabaseQueue().queuePortalCreate(Data.serverName, worldName, reason.toString());
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -59,7 +59,7 @@ public class PortalCreation implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queuePortalCreate(Data.serverName, worldName, reason.toString());
+                    Main.getInstance().getDatabase().getDatabaseQueue().queuePortalCreate(Data.serverName, worldName, reason.toString());
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

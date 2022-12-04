@@ -98,7 +98,7 @@ public class ItemFrameBreak implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queueBlockInteraction(Data.serverName, playerName, playerUUID.toString(),event.getEntity().getName(), coordinates, player.hasPermission(loggerStaffLog), InteractionType.BLOCK_BREAK);
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueBlockInteraction(Data.serverName, playerName, playerUUID.toString(),event.getEntity().getName(), coordinates, player.hasPermission(loggerStaffLog), InteractionType.BLOCK_BREAK);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -108,7 +108,7 @@ public class ItemFrameBreak implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queueBlockInteraction(Data.serverName, playerName, playerUUID.toString(),event.getEntity().getName(), coordinates, player.hasPermission(loggerStaffLog), InteractionType.BLOCK_BREAK);
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueBlockInteraction(Data.serverName, playerName, playerUUID.toString(),event.getEntity().getName(), coordinates, player.hasPermission(loggerStaffLog), InteractionType.BLOCK_BREAK);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

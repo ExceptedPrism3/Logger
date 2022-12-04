@@ -85,7 +85,7 @@ public class OnAuthMePassword implements Listener {
 
             try {
 
-                Main.getInstance().getQueueManager().queueWrongPassword(Data.serverName, playerName, playerUUID.toString(), worldName, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queueWrongPassword(Data.serverName, playerName, playerUUID.toString(), worldName, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
@@ -95,7 +95,7 @@ public class OnAuthMePassword implements Listener {
 
             try {
 
-                Main.getInstance().getQueueManager().queueWrongPassword(Data.serverName, playerName, playerUUID.toString(), worldName, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queueWrongPassword(Data.serverName, playerName, playerUUID.toString(), worldName, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }

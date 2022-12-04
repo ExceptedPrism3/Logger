@@ -109,7 +109,7 @@ public class OnEnchant implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queueEnchant(Data.serverName, playerName, playerUUID.toString(), enchs, enchantmentLevel, item, cost, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueEnchant(Data.serverName, playerName, playerUUID.toString(), enchs, enchantmentLevel, item, cost, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -119,7 +119,7 @@ public class OnEnchant implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queueEnchant(Data.serverName, playerName, playerUUID.toString(), enchs, enchantmentLevel, item, cost, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueEnchant(Data.serverName, playerName, playerUUID.toString(), enchs, enchantmentLevel, item, cost, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

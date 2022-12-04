@@ -101,7 +101,7 @@ public class OnVault implements Listener, Runnable {
 
                         try {
 
-                            Main.getInstance().getQueueManager().queueVault(Data.serverName, playerName, playerUUID.toString(), oldBalance, newBalance, player.hasPermission(loggerStaffLog));
+                            Main.getInstance().getDatabase().getDatabaseQueue().queueVault(Data.serverName, playerName, playerUUID.toString(), oldBalance, newBalance, player.hasPermission(loggerStaffLog));
 
                         } catch (final Exception e) { e.printStackTrace(); }
                     }
@@ -111,7 +111,7 @@ public class OnVault implements Listener, Runnable {
 
                         try {
 
-                            Main.getInstance().getQueueManager().queueVault(Data.serverName, playerName, playerUUID.toString(), oldBalance, newBalance, player.hasPermission(loggerStaffLog));
+                            Main.getInstance().getDatabase().getDatabaseQueue().queueVault(Data.serverName, playerName, playerUUID.toString(), oldBalance, newBalance, player.hasPermission(loggerStaffLog));
 
                         } catch (final Exception e) { e.printStackTrace(); }
                     }

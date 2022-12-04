@@ -90,7 +90,7 @@ public class OnPlayerLeave implements Listener {
 
             try {
 
-                Main.getInstance().getQueueManager().queuePlayerLeave(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerLeave(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
@@ -100,7 +100,7 @@ public class OnPlayerLeave implements Listener {
 
             try {
 
-                Main.getInstance().getQueueManager().queuePlayerLeave(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerLeave(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }

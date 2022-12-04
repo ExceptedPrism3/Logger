@@ -113,7 +113,7 @@ public class OnPlayerJoin implements Listener {
 
             try {
 
-                Main.getInstance().getQueueManager().queuePlayerJoin(Data.serverName, playerName, playerUUID.toString(), coordinates, ip, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerJoin(Data.serverName, playerName, playerUUID.toString(), coordinates, ip, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
@@ -123,7 +123,7 @@ public class OnPlayerJoin implements Listener {
 
             try {
 
-                Main.getInstance().getQueueManager().queuePlayerJoin(Data.serverName, playerName, playerUUID.toString(), coordinates, ip, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerJoin(Data.serverName, playerName, playerUUID.toString(), coordinates, ip, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }

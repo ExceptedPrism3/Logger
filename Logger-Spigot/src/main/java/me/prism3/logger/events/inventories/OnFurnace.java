@@ -93,7 +93,7 @@ public class OnFurnace implements Listener {
 
             try {
 
-                Main.getInstance().getQueueManager().queueFurnace(Data.serverName, playerName, playerUUID.toString(), item.toString(), amount, coordinates, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queueFurnace(Data.serverName, playerName, playerUUID.toString(), item.toString(), amount, coordinates, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
@@ -103,7 +103,7 @@ public class OnFurnace implements Listener {
 
             try {
 
-                Main.getInstance().getQueueManager().queueFurnace(Data.serverName, playerName, playerUUID.toString(), item.toString(), amount, coordinates, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queueFurnace(Data.serverName, playerName, playerUUID.toString(), item.toString(), amount, coordinates, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }

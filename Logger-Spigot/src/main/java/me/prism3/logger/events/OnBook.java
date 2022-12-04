@@ -95,7 +95,7 @@ public class OnBook implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queueBookEditing(Data.serverName, playerName, playerUUID.toString(), worldName, pageCount, pageContent, signature, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueBookEditing(Data.serverName, playerName, playerUUID.toString(), worldName, pageCount, pageContent, signature, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -105,7 +105,7 @@ public class OnBook implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queueBookEditing(Data.serverName, playerName, playerUUID.toString(), worldName, pageCount, pageContent, signature, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueBookEditing(Data.serverName, playerName, playerUUID.toString(), worldName, pageCount, pageContent, signature, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception exception) { exception.printStackTrace(); }
             }

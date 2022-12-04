@@ -123,7 +123,7 @@ public class SpawnEgg implements Listener {
 
             try {
 
-                Main.getInstance().getQueueManager().queueSpawnEgg(Data.serverName, playerUUID.toString(), worldName, playerName, x, y, z, entity, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queueSpawnEgg(Data.serverName, playerUUID.toString(), worldName, playerName, x, y, z, entity, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
@@ -133,7 +133,7 @@ public class SpawnEgg implements Listener {
 
             try {
 
-                Main.getInstance().getQueueManager().queueSpawnEgg(Data.serverName, playerUUID.toString(), worldName, playerName, x, y, z, entity, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queueSpawnEgg(Data.serverName, playerUUID.toString(), worldName, playerName, x, y, z, entity, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }

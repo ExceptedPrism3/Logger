@@ -87,7 +87,7 @@ public class OnCommandWhitelist implements Listener {
 
             try {
 
-                Main.getInstance().getQueueManager().queuePlayerCommands(serverName, player.getName(), player.getUniqueId().toString(), player.getWorld().getName(), command, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerCommands(serverName, player.getName(), player.getUniqueId().toString(), player.getWorld().getName(), command, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
@@ -97,7 +97,7 @@ public class OnCommandWhitelist implements Listener {
 
             try {
 
-                Main.getInstance().getQueueManager().queuePlayerCommands(serverName, player.getName(), player.getUniqueId().toString(), player.getWorld().getName(), command, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerCommands(serverName, player.getName(), player.getUniqueId().toString(), player.getWorld().getName(), command, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }

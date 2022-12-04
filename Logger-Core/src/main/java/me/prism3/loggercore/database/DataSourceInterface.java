@@ -1,7 +1,6 @@
 package me.prism3.loggercore.database;
 
 import me.prism3.loggercore.database.entity.PlayerChat;
-import me.prism3.loggercore.database.queue.QueueManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -113,5 +112,5 @@ public interface DataSourceInterface {
 
     PreparedStatement getBucketActionStsm(Connection connection) throws SQLException;
 
-    void setQueueManager(QueueManager queueManager);
+
 }

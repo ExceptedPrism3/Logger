@@ -93,7 +93,7 @@ public class LeverInteraction implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queueLeverInteraction(Data.serverName, playerUUID.toString(), worldName, playerName, x, y, z, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueLeverInteraction(Data.serverName, playerUUID.toString(), worldName, playerName, x, y, z, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -103,7 +103,7 @@ public class LeverInteraction implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queueLeverInteraction(Data.serverName, playerUUID.toString(), worldName, playerName, x, y, z, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueLeverInteraction(Data.serverName, playerUUID.toString(), worldName, playerName, x, y, z, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

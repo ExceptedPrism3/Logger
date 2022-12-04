@@ -82,7 +82,7 @@ public class ServerAddress implements Listener {
 
             try {
 
-              Main.getInstance().getQueueManager().queueServerAddress(Data.serverName, playerName, playerUUID.toString(), address);
+              Main.getInstance().getDatabase().getDatabaseQueue().queueServerAddress(Data.serverName, playerName, playerUUID.toString(), address);
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
@@ -92,7 +92,7 @@ public class ServerAddress implements Listener {
 
             try {
 
-                Main.getInstance().getQueueManager().queueServerAddress(Data.serverName, playerName, playerUUID.toString(), address);
+                Main.getInstance().getDatabase().getDatabaseQueue().queueServerAddress(Data.serverName, playerName, playerUUID.toString(), address);
 
             } catch (final Exception e) { e.printStackTrace(); }
         }

@@ -9,8 +9,7 @@ import me.prism3.logger.utils.*;
 import me.prism3.logger.utils.enums.NmsVersions;
 import me.prism3.logger.utils.manager.ConfigManager;
 import me.prism3.logger.utils.manager.DiscordManager;
-import me.prism3.loggercore.database.DataSourceInterface;
-import me.prism3.loggercore.database.queue.QueueManager;
+import me.prism3.loggercore.database.AbstractDataSource;
 import me.prism3.loggercore.database.datasource.SQLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,16 +24,15 @@ public class Main extends JavaPlugin {
 
     private Messages messages;
 
-    private DataSourceInterface database;
+    private AbstractDataSource database;
+    private AbstractDataSource sqLite;
 
-    private DataSourceInterface sqLite;
     private SQLiteRegistration sqLiteReg;
 
     private Discord discord;
     private DiscordManager discordFile;
 
     private final NmsVersions version = NmsVersions.valueOf(Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3]);
-    private QueueManager queueManager;
 
     @Override
     public void onEnable() {
@@ -111,10 +109,7 @@ public class Main extends JavaPlugin {
         try {
 
             this.database = new SQLite(Data.options, this.getDataFolder());
-            final QueueManager qm = new QueueManager(this.database);
-            this.database.setQueueManager(qm);
             this.sqLite = this.database;
-            this.queueManager = qm;
 
             if (isRegistration) {
 
@@ -153,9 +148,8 @@ public class Main extends JavaPlugin {
 
     public Messages getMessages() { return this.messages; }
 
-    public DataSourceInterface getDatabase() { return this.database; }
+    public AbstractDataSource getDatabase() { return this.database; }
 
-    public DataSourceInterface getSqLite() { return this.sqLite; }
+    public AbstractDataSource getSqLite() { return this.sqLite; }
 
-    public QueueManager getQueueManager(){ return this.queueManager; }
 }

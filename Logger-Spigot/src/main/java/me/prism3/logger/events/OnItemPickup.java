@@ -105,7 +105,7 @@ public class OnItemPickup implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queueItemAction(Data.serverName, playerName, playerUUID.toString(), item.name(), amount, coordinates, "", itemName, player.hasPermission(loggerStaffLog),  ItemActionType.ITEM_PICKUP);
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueItemAction(Data.serverName, playerName, playerUUID.toString(), item.name(), amount, coordinates, "", itemName, player.hasPermission(loggerStaffLog),  ItemActionType.ITEM_PICKUP);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -115,7 +115,7 @@ public class OnItemPickup implements Listener {
 
                 try {
 //TODO enchantments
-                    Main.getInstance().getQueueManager().queueItemAction(Data.serverName, playerName, playerUUID.toString(), item.name(), amount, coordinates, "", itemName, player.hasPermission(loggerStaffLog), ItemActionType.ITEM_PICKUP);
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueItemAction(Data.serverName, playerName, playerUUID.toString(), item.name(), amount, coordinates, "", itemName, player.hasPermission(loggerStaffLog), ItemActionType.ITEM_PICKUP);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

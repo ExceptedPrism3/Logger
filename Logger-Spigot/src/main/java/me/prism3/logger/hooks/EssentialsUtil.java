@@ -4,6 +4,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
 import me.prism3.logger.Main;
 import me.prism3.logger.events.plugindependent.OnAFK;
+import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.Log;
 import org.bukkit.Bukkit;
 
@@ -19,11 +20,12 @@ public class EssentialsUtil {
 
         if (getEssentials() != null && Main.getInstance().getConfig().getBoolean("Log-Extras.Essentials-AFK")) {
 
+            Data.options.setEssentialsEnabled(true);
+
             Main.getInstance().getServer().getPluginManager().registerEvents(new OnAFK(), Main.getInstance());
 
             Log.info("Essentials Plugin Detected!");
 
-            options.setEssentialsEnabled(true);
             isAllowed = true;
         }
     }

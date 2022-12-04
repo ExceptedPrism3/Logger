@@ -94,7 +94,7 @@ public class OnPlayerKick implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queuePlayerKick(Data.serverName, playerName, playerUUID.toString(), coordinates, reason, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerKick(Data.serverName, playerName, playerUUID.toString(), coordinates, reason, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -104,7 +104,7 @@ public class OnPlayerKick implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queuePlayerKick(Data.serverName, playerName, playerUUID.toString(), coordinates, reason, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerKick(Data.serverName, playerName, playerUUID.toString(), coordinates, reason, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

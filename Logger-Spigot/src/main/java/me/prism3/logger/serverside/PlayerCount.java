@@ -46,7 +46,7 @@ public class PlayerCount implements Runnable {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queuePlayerCount(Data.serverName, playerCountNumber);
+                    Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerCount(Data.serverName, playerCountNumber);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -56,7 +56,7 @@ public class PlayerCount implements Runnable {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queuePlayerCount(Data.serverName, playerCountNumber);
+                    Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerCount(Data.serverName, playerCountNumber);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

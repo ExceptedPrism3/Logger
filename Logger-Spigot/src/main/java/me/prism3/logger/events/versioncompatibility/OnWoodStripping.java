@@ -137,7 +137,7 @@ public class OnWoodStripping implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queueWoodStripping(Data.serverName, playerName, playerUUID.toString(), logName, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueWoodStripping(Data.serverName, playerName, playerUUID.toString(), logName, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -147,7 +147,7 @@ public class OnWoodStripping implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queueWoodStripping(Data.serverName, playerName, playerUUID.toString(), logName, coordinates, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueWoodStripping(Data.serverName, playerName, playerUUID.toString(), logName, coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

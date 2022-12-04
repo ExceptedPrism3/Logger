@@ -112,7 +112,7 @@ public class OnItemDrop implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queueItemAction(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, enchs.toString(), itemName, player.hasPermission(loggerStaffLog), ItemActionType.ITEM_DROP);
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueItemAction(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, enchs.toString(), itemName, player.hasPermission(loggerStaffLog), ItemActionType.ITEM_DROP);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -122,7 +122,7 @@ public class OnItemDrop implements Listener {
 
                 try {
 
-                    Main.getInstance().getQueueManager().queueItemAction(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, enchs.toString(), itemName, player.hasPermission(loggerStaffLog), ItemActionType.ITEM_DROP);
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueItemAction(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, enchs.toString(), itemName, player.hasPermission(loggerStaffLog), ItemActionType.ITEM_DROP);
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

@@ -89,4 +89,19 @@ public class Options {
     public Boolean getBooleanValue(String key) {
         return ((Boolean) this.enabledLogs.get(key));
     }
+
+    @Override
+    public String toString() {
+        return "Options{" +
+                "isAuthMeEnabled=" + isAuthMeEnabled +
+                ", isEssentialsEnabled=" + isEssentialsEnabled +
+                ", isVaultEnabled=" + isVaultEnabled +
+                ", isLiteBansEnabled=" + isLiteBansEnabled +
+                ", isAdvancedBanEnabled=" + isAdvancedBanEnabled +
+                ", isViaVersion=" + isViaVersion +
+                ", dataDelete=" + dataDelete +
+                ", isPlayerIPEnabled=" + isPlayerIPEnabled +
+                ", enabledLogs=" + enabledLogs +
+                '}';
+    }
 }
