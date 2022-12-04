@@ -2,7 +2,7 @@ package me.prism3.logger.commands.subcommands;
 
 import me.prism3.logger.commands.SubCommand;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,14 +22,11 @@ public class Discord implements SubCommand {
     public String getSyntax() { return "/logger discord"; }
 
     @Override
-    public void perform(Player player, String[] args) {
+    public void perform(CommandSender commandSender, String[] args) {
 
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix + "Discord Support Server: &b" + discordSupportServer));
-
+        commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix + "Discord Support Server: &b" + discordSupportServer));
     }
 
     @Override
-    public List<String> getSubCommandsArgs(Player player, String[] args) {
-        return Collections.emptyList();
-    }
+    public List<String> getSubCommandsArgs(CommandSender commandSender, String[] args) { return Collections.emptyList(); }
 }

@@ -105,7 +105,7 @@ public class OnLiteBanEvents implements Listener, Runnable {
 
                             if (!Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).isEmpty()) {
 
-                                main.getDiscord().advancedBan(Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
+                                main.getDiscord().liteBans(Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
                             }
                         } else
                             if (!player.hasPermission(Data.loggerExemptDiscord)) {
@@ -120,7 +120,7 @@ public class OnLiteBanEvents implements Listener, Runnable {
                             } else {
                                 if (!Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).isEmpty()) {
 
-                                    main.getDiscord().advancedBan(Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
+                                    main.getDiscord().liteBans(Objects.requireNonNull(main.getMessages().get().getString("Discord.Extras.LiteBans")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)), false);
                                 }
                             }
                         }
@@ -145,7 +145,6 @@ public class OnLiteBanEvents implements Listener, Runnable {
                             } catch (Exception e) { e.printStackTrace(); }
                         }
                     }
-
                 }
             }
         });

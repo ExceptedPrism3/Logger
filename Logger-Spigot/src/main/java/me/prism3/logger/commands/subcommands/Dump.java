@@ -6,7 +6,7 @@ import me.prism3.logger.commands.SubCommand;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Pastebin;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -36,18 +36,12 @@ public class Dump implements SubCommand {
     }
 
     @Override
-    public void perform(Player player, String[] args) throws IOException {
-
-        this.pastebinExecution(player);
-
-    }
+    public void perform(CommandSender commandSender, String[] args) throws IOException { this.pastebinExecution(commandSender); }
 
     @Override
-    public List<String> getSubCommandsArgs(Player player, String[] args) {
-        return Collections.emptyList();
-    }
+    public List<String> getSubCommandsArgs(CommandSender commandSender, String[] args) { return Collections.emptyList(); }
 
-    private void pastebinExecution(Player player) throws IOException {
+    private void pastebinExecution(CommandSender commandSender) throws IOException {
 
         final Dotenv dotenv = Dotenv.load();
 
@@ -60,8 +54,7 @@ public class Dump implements SubCommand {
         request.setPasteFormat("yaml");
         request.setPasteState(1);
         request.setPasteExpire("10M");
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+        commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&',
                 pluginPrefix + request.postPaste() + "\n&cDo not share this link at all!"));
-
     }
 }
