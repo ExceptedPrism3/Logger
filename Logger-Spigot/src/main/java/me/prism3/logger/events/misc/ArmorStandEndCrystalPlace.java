@@ -112,7 +112,7 @@ public class ArmorStandEndCrystalPlace implements Listener {
 
                 try {
 
-//                    Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerChat(Data.serverName, playerName, playerUUID.toString(), worldName, msg, player.hasPermission(loggerStaffLog));
+//                    Main.getInstance().getDatabase().getDatabaseQueue().queueStandCrystal(Data.serverName, playerName, playerUUID.toString(), worldName, msg, player.hasPermission(loggerStaffLog));
 //todo DB
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -122,7 +122,7 @@ public class ArmorStandEndCrystalPlace implements Listener {
 
                 try {
 
-//                    Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerChat(Data.serverName, playerName, playerUUID.toString(), worldName, msg, player.hasPermission(loggerStaffLog));
+//                    Main.getInstance().getDatabase().getDatabaseQueue().queueStandCrystal(Data.serverName, playerName, playerUUID.toString(), worldName, msg, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

@@ -113,8 +113,8 @@ public class ArmorStandEndCrystalBreak implements Listener {
 
                 try {
 
-//                    Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerChat(Data.serverName, playerName, playerUUID.toString(), worldName, msg, player.hasPermission(loggerStaffLog));
-
+//                    Main.getInstance().getDatabase().getDatabaseQueue().queueStandCrystal(Data.serverName, playerName, playerUUID.toString(), worldName, msg, player.hasPermission(loggerStaffLog));
+//TODO fix arguments
                 } catch (final Exception e) { e.printStackTrace(); }
             }
 
@@ -122,8 +122,8 @@ public class ArmorStandEndCrystalBreak implements Listener {
             if (Data.isSqlite) {
 
                 try {
-//todo DB
-//                    Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerChat(Data.serverName, playerName, playerUUID.toString(), worldName, msg, player.hasPermission(loggerStaffLog));
+//TODO fix arguments
+//                    Main.getInstance().getDatabase().getDatabaseQueue().queueStandCrystal(Data.serverName, playerName, playerUUID.toString(), worldName, msg, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

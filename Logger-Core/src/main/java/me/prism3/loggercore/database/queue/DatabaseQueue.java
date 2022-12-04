@@ -3,10 +3,7 @@ package me.prism3.loggercore.database.queue;
 import me.prism3.loggercore.database.AbstractDataSource;
 import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.loggercore.database.entity.*;
-import me.prism3.loggercore.database.entity.enums.BucketActionType;
-import me.prism3.loggercore.database.entity.enums.InteractionType;
-import me.prism3.loggercore.database.entity.enums.ItemActionType;
-import me.prism3.loggercore.database.entity.enums.PlayerConnectionType;
+import me.prism3.loggercore.database.entity.enums.*;
 import me.prism3.loggercore.database.utils.DateUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,7 +51,9 @@ public final class DatabaseQueue {
     private final ConcurrentLinkedQueue<PrimedTnt> primedTntQueue = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<LiteBans> liteBansQueue = new ConcurrentLinkedQueue<>();
 
-    private final ConcurrentLinkedQueue<ArmorStandInteraction> armorStandQueue = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<StandCrystal> standCrystalQueue = new ConcurrentLinkedQueue<>();
+
+    private final ConcurrentLinkedQueue<ArmorStandAction> armorStandQueue = new ConcurrentLinkedQueue<>();
     private final Timer timer = new Timer();
     private final TimerTask timerTask = new TimerTask() {
         @Override
@@ -828,6 +827,55 @@ public final class DatabaseQueue {
         stsm.executeBatch();
         stsm.close();
     }
+    private static void insertStandCrystalBatch(PreparedStatement stsm, ConcurrentLinkedQueue<StandCrystal> queue) throws SQLException {
+
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final StandCrystal standCrystal = queue.poll();
+
+            stsm.setString(1, standCrystal.getServerName());
+            stsm.setString(2, standCrystal.getWorld());
+            stsm.setString(3, standCrystal.getEntityPlayer().getPlayerName());
+            stsm.setString(4, standCrystal.getEntityPlayer().getPlayerUniqueID());
+            stsm.setInt(5, standCrystal.getX());
+            stsm.setInt(6, standCrystal.getY());
+            stsm.setInt(7, standCrystal.getZ());
+            stsm.setString(8, standCrystal.getArmorStandActionType().name());
+            stsm.setString( 9, DateUtils.formatInstant(standCrystal.getDate()));
+            stsm.setString(10, standCrystal.getBlock());
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+    private static void insertArmorStandBatch(PreparedStatement stsm, ConcurrentLinkedQueue<ArmorStandAction> queue) throws SQLException {
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final ArmorStandAction armorStandAction = queue.poll();
+
+            stsm.setString(1, armorStandAction.getServerName());
+            stsm.setString(2, armorStandAction.getWorld());
+            stsm.setString(3, armorStandAction.getEntityPlayer().getPlayerName());
+            stsm.setString(4, armorStandAction.getEntityPlayer().getPlayerUniqueID());
+            stsm.setInt(5, armorStandAction.getX());
+            stsm.setInt(6, armorStandAction.getY());
+            stsm.setInt(7, armorStandAction.getZ());
+            stsm.setBoolean(8, armorStandAction.isStaff());
+            stsm.setString( 9, DateUtils.formatInstant(armorStandAction.getDate()));
+            stsm.setString(10, armorStandAction.getItem());
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+        
+    }
 
     public void queuePlayerChat(String serverName, String playerName, String playerUUID, String worldName, String msg,
                                 boolean isStaff) {
@@ -1099,6 +1147,37 @@ public final class DatabaseQueue {
         s.setServerName(serverName);
 
         this.addItemToQueue(s);
+    }
+    public void queueStandCrystal(String serverName, String playerName, String playerUUID, String worldName, int x, int y, int z, boolean isStaff, ArmorStandActionType armorStandActionType, String block)
+    {
+        final StandCrystal standCrystal = new StandCrystal();
+        standCrystal.setServerName(serverName);
+        standCrystal.setEntityPlayer(new EntityPlayer(playerName, playerUUID));
+        standCrystal.setWorld(worldName);
+        standCrystal.setX(x);
+        standCrystal.setY(y);
+        standCrystal.setZ(z);
+        standCrystal.isStaff(isStaff);
+        standCrystal.setBlock(block);
+        standCrystal.setDate(Instant.now());
+        standCrystal.setArmorStandActionType(armorStandActionType);
+        this.addItemToQueue(standCrystal);
+
+
+
+    }
+        public void queueArmorStand(String serverName, String playerName, String playerUUID, String worldName, int x, int y, int z, boolean isStaff, String item)
+    {
+        final ArmorStandAction armorStand = new ArmorStandAction();
+        armorStand.setDate(Instant.now());
+        armorStand.setServerName(serverName);
+        armorStand.setEntityPlayer(new EntityPlayer(playerName, playerUUID));
+        armorStand.setX(x);
+        armorStand.setY(y);
+        armorStand.setZ(z);
+        armorStand.setWorld(worldName);
+        armorStand.isStaff(isStaff);
+        armorStand.setItem(item);
     }
 
     public void queueServerStop(String serverName) {
@@ -1428,6 +1507,7 @@ public final class DatabaseQueue {
         this.addItemToQueue(pc);
     }
 
+
     private void addItemToQueue(Object item) {
 
         if (item instanceof BlockInteraction) {
@@ -1554,6 +1634,10 @@ public final class DatabaseQueue {
 
             liteBansQueue.add((LiteBans) item);
 
+        } else if (item instanceof StandCrystal) {
+            standCrystalQueue.add((StandCrystal) item);
+        } else if (item instanceof ArmorStandAction) {
+            armorStandQueue.add((ArmorStandAction) item);
         } else {
             throw new RuntimeException("Unidentified Object type! " + item.getClass());
         }
@@ -1636,7 +1720,11 @@ public final class DatabaseQueue {
                 DatabaseQueue.insertPrimedTntBatch(database.getPrimedTntStsm(connection), this.primedTntQueue);
             if (!this.liteBansQueue.isEmpty())
                 DatabaseQueue.insertLiteBansBatch(database.getLiteBansStsm(connection), this.liteBansQueue);
-            //TODO add armro stand batch
+            if(!this.standCrystalQueue.isEmpty())
+                DatabaseQueue.insertStandCrystalBatch(database.getStandCrystalStsm(connection), this.standCrystalQueue);
+            if(!this.armorStandQueue.isEmpty())
+                DatabaseQueue.insertArmorStandBatch(database.getArmorStandStsm(connection), this.armorStandQueue);
+
             connection.commit();
 
         } catch (final Exception exception) {

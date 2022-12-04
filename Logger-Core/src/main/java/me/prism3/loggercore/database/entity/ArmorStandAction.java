@@ -1,17 +1,15 @@
 package me.prism3.loggercore.database.entity;
 
-import me.prism3.loggercore.database.entity.enums.ArmorStandActionType;
 
-
-public class ArmorStandInteraction extends AbstractAction {
+public class ArmorStandAction extends AbstractAction {
 
     private String world;
+
     private Integer x;
     private Integer y;
     private Integer z;
     private Boolean isStaff;
-
-    private ArmorStandActionType interactionType;
+    private String item;
 
     public String getWorld() {
         return this.world;
@@ -21,6 +19,13 @@ public class ArmorStandInteraction extends AbstractAction {
         this.world = world;
     }
 
+    public String getItem() {
+        return item;
+    }
+
+    public void setItem(String item) {
+        this.item = item;
+    }
 
     public Integer getX() {
         return this.x;
@@ -52,14 +57,6 @@ public class ArmorStandInteraction extends AbstractAction {
 
     public void isStaff(Boolean staff) {
         this.isStaff = staff;
-    }
-
-    public ArmorStandActionType getInteractionType() {
-        return interactionType;
-    }
-
-    public void setInteractionType(ArmorStandActionType interactionType) {
-        this.interactionType = interactionType;
     }
 
 }

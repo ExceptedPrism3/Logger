@@ -370,10 +370,15 @@ public abstract class AbstractDataSource {
         return connection.prepareStatement("INSERT INTO block_interaction (server_name, world, player_name, block," +
                 " x, y, z, is_staff, interaction_type, date) VALUES(?,?,?,?,?,?,?,?,?,?)");
     }
+    public PreparedStatement getStandCrystalStsm(Connection connection) throws SQLException {
+
+        return connection.prepareStatement("INSERT INTO armorstand_endcrystal (server_name, world, player_name," +
+                " x, y, z, is_staff, interaction_type, date, block) VALUES(?,?,?,?,?,?,?,?,?,?)");
+    }
     public PreparedStatement getArmorStandStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement("INSERT INTO armor_stand (server_name, world, player_name," +
-                " x, y, z, is_staff, interaction_type, date) VALUES(?,?,?,?,?,?,?,?,?)");
+        return connection.prepareStatement("INSERT INTO armorstand (server_name, world, player_name," +
+                " x, y, z, is_staff, date, item) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
     }
 
 
