@@ -102,7 +102,7 @@ public abstract class AbstractDataSource {
 
     public PreparedStatement getPortalCreateStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement("INSERT INTO portal_creation (server_name, world, caused_by) VALUES(?,?,?)");
+        return connection.prepareStatement("INSERT INTO portal_creation (server_name, world, caused_by, date) VALUES(?,?,?,?)");
     }
 
 
