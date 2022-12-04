@@ -843,9 +843,10 @@ public final class DatabaseQueue {
             stsm.setInt(5, standCrystal.getX());
             stsm.setInt(6, standCrystal.getY());
             stsm.setInt(7, standCrystal.getZ());
-            stsm.setString(8, standCrystal.getArmorStandActionType().name());
-            stsm.setString( 9, DateUtils.formatInstant(standCrystal.getDate()));
-            stsm.setString(10, standCrystal.getBlock());
+            stsm.setBoolean(8, standCrystal.isStaff());
+            stsm.setString(9, standCrystal.getArmorStandActionType().name());
+            stsm.setString( 10, DateUtils.formatInstant(standCrystal.getDate()));
+            stsm.setString(11, standCrystal.getBlock());
             stsm.addBatch();
         }
 

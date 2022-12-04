@@ -9,7 +9,6 @@ public class ArmorStandAction extends AbstractAction {
     private Integer y;
     private Integer z;
     private Boolean isStaff;
-    private String item;
 
     public String getWorld() {
         return this.world;
@@ -17,14 +16,6 @@ public class ArmorStandAction extends AbstractAction {
 
     public void setWorld(String world) {
         this.world = world;
-    }
-
-    public String getItem() {
-        return item;
-    }
-
-    public void setItem(String item) {
-        this.item = item;
     }
 
     public Integer getX() {
