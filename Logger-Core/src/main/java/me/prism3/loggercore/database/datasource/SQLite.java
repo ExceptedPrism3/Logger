@@ -192,12 +192,12 @@ public final class SQLite extends AbstractDataSource {
                     "server_name TEXT, player_name TEXT NOT NULL, player_UUID TEXT NOT NULL, date DATETIME NOT NULL," +
                     " domain TEXT)");
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS armorstand(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS armorstand_interaction(id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     " server_name TEXT," +
                     " player_name TEXT NOT NULL," +
                     " player_uuid TEXT NOT NULL," +
                     " date DATETIME NOT NULL," +
-                    " x int NOT NULL, y int NOT NULL, z int NOT NULL, world TEXT NOT NULL, item TEXT NOT NULL)");
+                    " x int NOT NULL, y int NOT NULL, z int NOT NULL, world TEXT NOT NULL, is_staff BOOLEAN)");
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS armorstand_endcrystal(id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     " server_name TEXT," +
                     " player_name TEXT NOT NULL," +
@@ -205,7 +205,7 @@ public final class SQLite extends AbstractDataSource {
                     " date DATETIME NOT NULL," +
                     " x int NOT NULL, y int NOT NULL, z int NOT NULL, world TEXT NOT NULL," +
                     " block TEXT NOT NULL," +
-                    "interaction_type TEXT NOT NULL)");
+                    " interaction_type TEXT NOT NULL, is_staff BOOLEAN)");
 
             // Extras Side Part
 

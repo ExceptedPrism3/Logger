@@ -5,6 +5,7 @@ import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.Log;
+import me.prism3.loggercore.database.entity.enums.ArmorStandActionType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -112,8 +113,8 @@ public class ArmorStandEndCrystalPlace implements Listener {
 
                 try {
 
-//                    Main.getInstance().getDatabase().getDatabaseQueue().queueStandCrystal(Data.serverName, playerName, playerUUID.toString(), worldName, msg, player.hasPermission(loggerStaffLog));
-//todo DB
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueStandCrystal(Data.serverName, playerName, playerUUID.toString(), worldName, x, y, z, player.hasPermission(loggerStaffLog), ArmorStandActionType.ARMORSTAND_PLACE, event.getItem().getType().name());
+
                 } catch (final Exception e) { e.printStackTrace(); }
             }
 
@@ -122,7 +123,7 @@ public class ArmorStandEndCrystalPlace implements Listener {
 
                 try {
 
-//                    Main.getInstance().getDatabase().getDatabaseQueue().queueStandCrystal(Data.serverName, playerName, playerUUID.toString(), worldName, msg, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueStandCrystal(Data.serverName, playerName, playerUUID.toString(), worldName, x, y, z, player.hasPermission(loggerStaffLog), ArmorStandActionType.ARMORSTAND_PLACE, event.getItem().getType().name());
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }

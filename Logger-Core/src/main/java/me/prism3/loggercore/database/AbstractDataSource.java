@@ -1,19 +1,15 @@
 package me.prism3.loggercore.database;
 
 import me.prism3.loggercore.database.data.Options;
-import me.prism3.loggercore.database.data.Settings;
 import me.prism3.loggercore.database.entity.PlayerChat;
 import me.prism3.loggercore.database.queue.DatabaseQueue;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public abstract class AbstractDataSource {
 
@@ -21,7 +17,6 @@ public abstract class AbstractDataSource {
     protected final Logger logger = Logger.getLogger(AbstractDataSource.class.getName());
     protected final Options options;
     private final String className;
-
 
     protected AbstractDataSource(Options options, String className) {
 
@@ -370,24 +365,25 @@ public abstract class AbstractDataSource {
         return connection.prepareStatement("INSERT INTO block_interaction (server_name, world, player_name, block," +
                 " x, y, z, is_staff, interaction_type, date) VALUES(?,?,?,?,?,?,?,?,?,?)");
     }
+
     public PreparedStatement getStandCrystalStsm(Connection connection) throws SQLException {
 
         return connection.prepareStatement("INSERT INTO armorstand_endcrystal (server_name, world, player_name," +
-                " x, y, z, is_staff, interaction_type, date, block) VALUES(?,?,?,?,?,?,?,?,?,?)");
+                " player_uuid, x, y, z, is_staff, interaction_type, date, block) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
     }
+
     public PreparedStatement getArmorStandStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement("INSERT INTO armorstand (server_name, world, player_name," +
-                " x, y, z, is_staff, date, item) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+        return connection.prepareStatement("INSERT INTO armorstand_interaction (server_name, world, player_name," +
+                " player_uuid, x, y, z, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?)");
     }
-
 
     public PreparedStatement getLevelChangeStsm(Connection connection) throws SQLException {
 
         return connection.prepareStatement("INSERT INTO player_level (server_name, player_name, is_staff, date) VALUES(?,?,?,?)");
     }
 
-    public void insertAnvil(String serverName, String playerName, String newName, boolean isStaff) {
+    public void insertAnvil(String serverName, String playerName, String newName, boolean isStaff) { //todo Sidna
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement anvil = connection.prepareStatement("INSERT INTO anvil" +

@@ -827,8 +827,8 @@ public final class DatabaseQueue {
         stsm.executeBatch();
         stsm.close();
     }
-    private static void insertStandCrystalBatch(PreparedStatement stsm, ConcurrentLinkedQueue<StandCrystal> queue) throws SQLException {
 
+    private static void insertStandCrystalBatch(PreparedStatement stsm, ConcurrentLinkedQueue<StandCrystal> queue) throws SQLException {
 
         final int size = queue.size();
 
@@ -852,6 +852,7 @@ public final class DatabaseQueue {
         stsm.executeBatch();
         stsm.close();
     }
+
     private static void insertArmorStandBatch(PreparedStatement stsm, ConcurrentLinkedQueue<ArmorStandAction> queue) throws SQLException {
         final int size = queue.size();
 
@@ -868,13 +869,11 @@ public final class DatabaseQueue {
             stsm.setInt(7, armorStandAction.getZ());
             stsm.setBoolean(8, armorStandAction.isStaff());
             stsm.setString( 9, DateUtils.formatInstant(armorStandAction.getDate()));
-            stsm.setString(10, armorStandAction.getItem());
             stsm.addBatch();
         }
 
         stsm.executeBatch();
         stsm.close();
-        
     }
 
     public void queuePlayerChat(String serverName, String playerName, String playerUUID, String worldName, String msg,
@@ -1148,9 +1147,12 @@ public final class DatabaseQueue {
 
         this.addItemToQueue(s);
     }
-    public void queueStandCrystal(String serverName, String playerName, String playerUUID, String worldName, int x, int y, int z, boolean isStaff, ArmorStandActionType armorStandActionType, String block)
-    {
+
+    public void queueStandCrystal(String serverName, String playerName, String playerUUID, String worldName, int x,
+                                  int y, int z, boolean isStaff, ArmorStandActionType armorStandActionType, String block) {
+
         final StandCrystal standCrystal = new StandCrystal();
+
         standCrystal.setServerName(serverName);
         standCrystal.setEntityPlayer(new EntityPlayer(playerName, playerUUID));
         standCrystal.setWorld(worldName);
@@ -1161,14 +1163,15 @@ public final class DatabaseQueue {
         standCrystal.setBlock(block);
         standCrystal.setDate(Instant.now());
         standCrystal.setArmorStandActionType(armorStandActionType);
+
         this.addItemToQueue(standCrystal);
-
-
-
     }
-        public void queueArmorStand(String serverName, String playerName, String playerUUID, String worldName, int x, int y, int z, boolean isStaff, String item)
-    {
+
+    public void queueArmorStandInteraction(String serverName, String playerName, String playerUUID, String worldName, int x,
+                                int y, int z, boolean isStaff) {
+
         final ArmorStandAction armorStand = new ArmorStandAction();
+
         armorStand.setDate(Instant.now());
         armorStand.setServerName(serverName);
         armorStand.setEntityPlayer(new EntityPlayer(playerName, playerUUID));
@@ -1177,7 +1180,8 @@ public final class DatabaseQueue {
         armorStand.setZ(z);
         armorStand.setWorld(worldName);
         armorStand.isStaff(isStaff);
-        armorStand.setItem(item);
+
+        this.addItemToQueue(armorStand);
     }
 
     public void queueServerStop(String serverName) {

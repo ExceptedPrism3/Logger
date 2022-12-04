@@ -95,7 +95,7 @@ public class ArmorStandInteraction implements Listener {
 
                 try {
 
-                   //Main.getInstance().getDatabase().getDatabaseQueue().queueArmorStand(Data.serverName, playerName, playerUUID.toString(), worldName,x, y, z, player.hasPermission(loggerStaffLog));
+                   Main.getInstance().getDatabase().getDatabaseQueue().queueArmorStandInteraction(Data.serverName, playerName, playerUUID.toString(), worldName,x, y, z, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -105,8 +105,8 @@ public class ArmorStandInteraction implements Listener {
 
                 try {
 
-                    //Main.getInstance().getDatabase().getDatabaseQueue().queueArmorStand(Data.serverName, playerName, playerUUID.toString(), worldName,x, y, z, player.hasPermission(loggerStaffLog));
-//TODO fix arguments!
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueArmorStandInteraction(Data.serverName, playerName, playerUUID.toString(), worldName,x, y, z, player.hasPermission(loggerStaffLog));
+
                 } catch (final Exception e) { e.printStackTrace(); }
             }
         }
