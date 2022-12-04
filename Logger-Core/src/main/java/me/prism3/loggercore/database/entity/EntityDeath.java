@@ -2,11 +2,9 @@ package me.prism3.loggercore.database.entity;
 
 import me.prism3.loggercore.database.data.Coordinates;
 
-
 public class EntityDeath extends AbstractAction {
 
     private String world;
-
     private String mob;
     private Integer x;
     private Integer y;

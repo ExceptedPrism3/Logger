@@ -5,9 +5,9 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-public class DateUtils {
+public class DataBaseUtils {
 
-    private DateUtils() {}
+    private DataBaseUtils() {}
 
     public static String formatInstant(Instant instant) {
 

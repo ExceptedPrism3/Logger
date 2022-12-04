@@ -14,9 +14,12 @@ public final class SQLite extends AbstractDataSource {
     private final Options options;
     private final DatabaseQueue databaseQueue;
     public SQLite(Options options, File dataFolder) {
+
         super(options, SQLite.class.getName());
+
         this.options = options;
         this.databaseFile = new File(dataFolder, "data.db");
+
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
@@ -25,16 +28,17 @@ public final class SQLite extends AbstractDataSource {
 
         this.createTables();
         this.databaseQueue = new DatabaseQueue(this);
-
     }
 
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:sqlite:" + this.databaseFile.getAbsolutePath());
     }
+
     @Override
     protected String getJdbcUrl() {
         return ("jdbc:sqlite:" + this.databaseFile.getAbsolutePath());
     }
+
     @Override
     protected void createTables() {
 
@@ -189,7 +193,7 @@ public final class SQLite extends AbstractDataSource {
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, command VARCHAR(256))");
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS server_address(id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "server_name TEXT, player_name TEXT NOT NULL, player_UUID TEXT NOT NULL, date DATETIME NOT NULL," +
+                    "server_name TEXT, player_name TEXT NOT NULL, player_uuid TEXT NOT NULL, date DATETIME NOT NULL," +
                     " domain TEXT)");
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS armorstand_interaction(id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -198,6 +202,7 @@ public final class SQLite extends AbstractDataSource {
                     " player_uuid TEXT NOT NULL," +
                     " date DATETIME NOT NULL," +
                     " x int NOT NULL, y int NOT NULL, z int NOT NULL, world TEXT NOT NULL, is_staff BOOLEAN)");
+
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS armorstand_endcrystal(id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     " server_name TEXT," +
                     " player_name TEXT NOT NULL," +
@@ -206,6 +211,14 @@ public final class SQLite extends AbstractDataSource {
                     " x int NOT NULL, y int NOT NULL, z int NOT NULL, world TEXT NOT NULL," +
                     " block TEXT NOT NULL," +
                     " interaction_type TEXT NOT NULL, is_staff BOOLEAN)");
+
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS lever_interaction (id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    " date DATETIME NOT NULL," +
+                    " server_name TEXT," +
+                    " world TEXT NOT NULL," +
+                    " player_uuid TEXT NOT NULL," +
+                    " player_name TEXT NOT NULL," +
+                    " x int NOT NULL, y int NOT NULL, z int NOT NULL, is_staff BOOLEAN)");
 
             // Extras Side Part
 

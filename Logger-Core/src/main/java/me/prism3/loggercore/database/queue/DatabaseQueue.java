@@ -4,7 +4,7 @@ import me.prism3.loggercore.database.AbstractDataSource;
 import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.loggercore.database.entity.*;
 import me.prism3.loggercore.database.entity.enums.*;
-import me.prism3.loggercore.database.utils.DateUtils;
+import me.prism3.loggercore.database.utils.DataBaseUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.InetSocketAddress;
@@ -18,6 +18,7 @@ import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public final class DatabaseQueue {
+
     private final AbstractDataSource database;
     private final ConcurrentLinkedQueue<BlockInteraction> blockQueue = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<BucketAction> bucketQueue = new ConcurrentLinkedQueue<>();
@@ -50,10 +51,10 @@ public final class DatabaseQueue {
     private final ConcurrentLinkedQueue<PortalCreation> portalCreateQueue = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<PrimedTnt> primedTntQueue = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<LiteBans> liteBansQueue = new ConcurrentLinkedQueue<>();
-
     private final ConcurrentLinkedQueue<StandCrystal> standCrystalQueue = new ConcurrentLinkedQueue<>();
-
     private final ConcurrentLinkedQueue<ArmorStandAction> armorStandQueue = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<LeverInteraction> leverInteractionQueue = new ConcurrentLinkedQueue<>();
+
     private final Timer timer = new Timer();
     private final TimerTask timerTask = new TimerTask() {
         @Override
@@ -63,16 +64,14 @@ public final class DatabaseQueue {
     };
 
     public DatabaseQueue(@NotNull AbstractDataSource database) {
+
         this.database = database;
+
         try {
 
             this.enableRepeater();
 
-        } catch (final Exception e) {
-            e.printStackTrace();
-        }
-
-
+        } catch (final Exception e) { e.printStackTrace(); }
     }
 
     private static void insertBatchBlock(PreparedStatement stsm, ConcurrentLinkedQueue<BlockInteraction> queue) {
@@ -94,7 +93,7 @@ public final class DatabaseQueue {
                 stsm.setInt(7, block.getZ());
                 stsm.setBoolean(8, block.isStaff());
                 stsm.setString(9, block.getInteractionType().name());
-                stsm.setString(10, DateUtils.formatInstant(block.getDate()));
+                stsm.setString(10, DataBaseUtils.formatInstant(block.getDate()));
 
                 stsm.addBatch();
             }
@@ -102,9 +101,7 @@ public final class DatabaseQueue {
             stsm.executeBatch();
             stsm.close();
 
-        } catch (final Exception exception) {
-            exception.printStackTrace();
-        }
+        } catch (final Exception exception) { exception.printStackTrace(); }
     }
 
     private static void insertBucketBatch(PreparedStatement bucketStsm,
@@ -125,7 +122,7 @@ public final class DatabaseQueue {
             bucketStsm.setInt(7, bucket.getZ());
             bucketStsm.setBoolean(8, bucket.isStaff());
             bucketStsm.setString(9, bucket.getBucketActionType().name());
-            bucketStsm.setString(10, DateUtils.formatInstant(bucket.getDate()));
+            bucketStsm.setString(10, DataBaseUtils.formatInstant(bucket.getDate()));
 
             bucketStsm.addBatch();
         }
@@ -152,7 +149,7 @@ public final class DatabaseQueue {
             itemActionStsm.setString(8, itemAction.getChangedName());
             itemActionStsm.setBoolean(9, itemAction.isStaff());
             itemActionStsm.setString(10, itemAction.getItemActionType().name());
-            itemActionStsm.setString(11, DateUtils.formatInstant(itemAction.getDate()));
+            itemActionStsm.setString(11, DataBaseUtils.formatInstant(itemAction.getDate()));
             itemActionStsm.setInt(12, itemAction.getAmount());
 
             itemActionStsm.addBatch();
@@ -172,7 +169,7 @@ public final class DatabaseQueue {
 
             consoleComamndStsm.setString(1, consoleCommand.getServerName());
             consoleComamndStsm.setString(2, consoleCommand.getCommand());
-            consoleComamndStsm.setString(3, DateUtils.formatInstant(consoleCommand.getDate()));
+            consoleComamndStsm.setString(3, DataBaseUtils.formatInstant(consoleCommand.getDate()));
 
             consoleComamndStsm.addBatch();
         }
@@ -195,7 +192,7 @@ public final class DatabaseQueue {
             stsm.setString(3, gamemode.getEntityPlayer().getPlayerName());
             stsm.setString(4, gamemode.getGameMode());
             stsm.setBoolean(5, gamemode.isStaff());
-            stsm.setString(6, DateUtils.formatInstant(gamemode.getDate()));
+            stsm.setString(6, DataBaseUtils.formatInstant(gamemode.getDate()));
 
             stsm.addBatch();
         }
@@ -222,7 +219,7 @@ public final class DatabaseQueue {
             if (playerConnection.getIp() != null)
                 stsm.setLong(7, playerConnection.getIp());
             stsm.setBoolean(8, playerConnection.isStaff());
-            stsm.setString(9, DateUtils.formatInstant(playerConnection.getDate()));
+            stsm.setString(9, DataBaseUtils.formatInstant(playerConnection.getDate()));
             stsm.setString(10, playerConnection.getPlayerConnectionType().name());
 
             stsm.addBatch();
@@ -246,7 +243,7 @@ public final class DatabaseQueue {
             stsm.setString(3, playerChat.getEntityPlayer().getPlayerName());
             stsm.setString(4, playerChat.getMessage());
             stsm.setBoolean(5, playerChat.isStaff());
-            stsm.setString(6, DateUtils.formatInstant(playerChat.getDate()));
+            stsm.setString(6, DataBaseUtils.formatInstant(playerChat.getDate()));
 
             stsm.addBatch();
         }
@@ -267,7 +264,7 @@ public final class DatabaseQueue {
             stsm.setString(2, anvil.getNewName());
             stsm.setString(3, anvil.getEntityPlayer().getPlayerName());
             stsm.setBoolean(4, anvil.isStaff());
-            stsm.setString(5, DateUtils.formatInstant(anvil.getDate()));
+            stsm.setString(5, DataBaseUtils.formatInstant(anvil.getDate()));
 
             stsm.addBatch();
         }
@@ -292,7 +289,7 @@ public final class DatabaseQueue {
             stsm.setString(5, bookEditing.getPageContent());
             stsm.setString(6, bookEditing.getSignedBy());
             stsm.setBoolean(7, bookEditing.isStaff());
-            stsm.setString(8, DateUtils.formatInstant(bookEditing.getDate()));
+            stsm.setString(8, DataBaseUtils.formatInstant(bookEditing.getDate()));
 
             stsm.addBatch();
         }
@@ -321,7 +318,7 @@ public final class DatabaseQueue {
             stsm.setString(9, enchanting.getItem());
             stsm.setInt(10, enchanting.getCost());
             stsm.setBoolean(11, enchanting.isStaff());
-            stsm.setString(12, DateUtils.formatInstant(enchanting.getDate()));
+            stsm.setString(12, DataBaseUtils.formatInstant(enchanting.getDate()));
 
             stsm.addBatch();
         }
@@ -348,7 +345,7 @@ public final class DatabaseQueue {
             stsm.setInt(7, entityDeath.getY());
             stsm.setInt(8, entityDeath.getZ());
             stsm.setBoolean(9, entityDeath.isStaff());
-            stsm.setString(10, DateUtils.formatInstant(entityDeath.getDate()));
+            stsm.setString(10, DataBaseUtils.formatInstant(entityDeath.getDate()));
 
             stsm.addBatch();
         }
@@ -376,7 +373,7 @@ public final class DatabaseQueue {
             stsm.setString(8, playerDeath.getCause());
             stsm.setString(9, playerDeath.getByWho());
             stsm.setBoolean(10, playerDeath.isStaff());
-            stsm.setString(11, DateUtils.formatInstant(playerDeath.getDate()));
+            stsm.setString(11, DataBaseUtils.formatInstant(playerDeath.getDate()));
 
             stsm.addBatch();
         }
@@ -402,7 +399,7 @@ public final class DatabaseQueue {
             stsm.setInt(6, playerKick.getZ());
             stsm.setString(7, playerKick.getReason());
             stsm.setBoolean(8, playerKick.isStaff());
-            stsm.setString(9, DateUtils.formatInstant(playerKick.getDate()));
+            stsm.setString(9, DataBaseUtils.formatInstant(playerKick.getDate()));
 
             stsm.addBatch();
         }
@@ -423,7 +420,7 @@ public final class DatabaseQueue {
             stsm.setString(1, playerLevel.getServerName());
             stsm.setString(2, playerLevel.getEntityPlayer().getPlayerName());
             stsm.setBoolean(3, playerLevel.isStaff());
-            stsm.setString(4, DateUtils.formatInstant(playerLevel.getDate()));
+            stsm.setString(4, DataBaseUtils.formatInstant(playerLevel.getDate()));
 
             stsm.addBatch();
         }
@@ -451,7 +448,7 @@ public final class DatabaseQueue {
             stsm.setInt(8, playerTeleport.getToY());
             stsm.setInt(9, playerTeleport.getToZ());
             stsm.setBoolean(10, playerTeleport.isStaff());
-            stsm.setString(11, DateUtils.formatInstant(playerTeleport.getDate()));
+            stsm.setString(11, DataBaseUtils.formatInstant(playerTeleport.getDate()));
 
             stsm.addBatch();
         }
@@ -477,7 +474,7 @@ public final class DatabaseQueue {
             stsm.setString(6, playerSignText.getEntityPlayer().getPlayerName());
             stsm.setString(7, playerSignText.getLine());
             stsm.setBoolean(8, playerSignText.isStaff());
-            stsm.setString(9, DateUtils.formatInstant(playerSignText.getDate()));
+            stsm.setString(9, DataBaseUtils.formatInstant(playerSignText.getDate()));
 
             stsm.addBatch();
         }
@@ -500,7 +497,7 @@ public final class DatabaseQueue {
             stsm.setString(3, playerCommand.getEntityPlayer().getPlayerName());
             stsm.setString(4, playerCommand.getCommand());
             stsm.setBoolean(5, playerCommand.isStaff());
-            stsm.setString(6, DateUtils.formatInstant(playerCommand.getDate()));
+            stsm.setString(6, DataBaseUtils.formatInstant(playerCommand.getDate()));
 
             stsm.addBatch();
         }
@@ -527,7 +524,7 @@ public final class DatabaseQueue {
             stsm.setInt(7, chestInteraction.getZ());
             stsm.setString(8, chestInteraction.getItems());
             stsm.setBoolean(9, chestInteraction.isStaff());
-            stsm.setString(10, DateUtils.formatInstant(chestInteraction.getDate()));
+            stsm.setString(10, DataBaseUtils.formatInstant(chestInteraction.getDate()));
 
             stsm.addBatch();
         }
@@ -553,7 +550,7 @@ public final class DatabaseQueue {
             stsm.setInt(7, crafting.getY());
             stsm.setInt(8, crafting.getZ());
             stsm.setBoolean(9, crafting.isStaff());
-            stsm.setString(10, DateUtils.formatInstant(crafting.getDate()));
+            stsm.setString(10, DataBaseUtils.formatInstant(crafting.getDate()));
 
             stsm.addBatch();
         }
@@ -579,7 +576,7 @@ public final class DatabaseQueue {
             stsm.setInt(7, furnace.getY());
             stsm.setInt(8, furnace.getZ());
             stsm.setBoolean(9, furnace.isStaff());
-            stsm.setString(10, DateUtils.formatInstant(furnace.getDate()));
+            stsm.setString(10, DataBaseUtils.formatInstant(furnace.getDate()));
 
             stsm.addBatch();
         }
@@ -599,7 +596,7 @@ public final class DatabaseQueue {
 
             stsm.setString(1, commandBlock.getServerName());
             stsm.setString(2, commandBlock.getCommand());
-            stsm.setString(3, DateUtils.formatInstant(commandBlock.getDate()));
+            stsm.setString(3, DataBaseUtils.formatInstant(commandBlock.getDate()));
 
             stsm.addBatch();
         }
@@ -620,7 +617,7 @@ public final class DatabaseQueue {
             stsm.setInt(2, ram.getTotalMemory());
             stsm.setInt(3, ram.getUsedMemory());
             stsm.setInt(4, ram.getFreeMemory());
-            stsm.setString(5, DateUtils.formatInstant(ram.getDate()));
+            stsm.setString(5, DataBaseUtils.formatInstant(ram.getDate()));
 
             stsm.addBatch();
         }
@@ -639,7 +636,7 @@ public final class DatabaseQueue {
 
             stsm.setString(1, rcon.getServerName());
             stsm.setString(2, rcon.getCommand());
-            stsm.setString(3, DateUtils.formatInstant(rcon.getDate()));
+            stsm.setString(3, DataBaseUtils.formatInstant(rcon.getDate()));
 
             stsm.addBatch();
         }
@@ -658,7 +655,7 @@ public final class DatabaseQueue {
 
             stsm.setString(1, tps.getServerName());
             stsm.setInt(2, tps.getTps());
-            stsm.setString(3, DateUtils.formatInstant(tps.getDate()));
+            stsm.setString(3, DataBaseUtils.formatInstant(tps.getDate()));
 
             stsm.addBatch();
         }
@@ -682,7 +679,7 @@ public final class DatabaseQueue {
             stsm.setInt(5, afk.getY());
             stsm.setInt(6, afk.getZ());
             stsm.setBoolean(7, afk.isStaff());
-            stsm.setString(8, DateUtils.formatInstant(afk.getDate()));
+            stsm.setString(8, DataBaseUtils.formatInstant(afk.getDate()));
 
             stsm.addBatch();
         }
@@ -701,7 +698,7 @@ public final class DatabaseQueue {
             final PlayerCount playerCount = queue.poll();
 
             stsm.setString(1, playerCount.getServerName());
-            stsm.setString(2, DateUtils.formatInstant(playerCount.getDate()));
+            stsm.setString(2, DataBaseUtils.formatInstant(playerCount.getDate()));
 
             stsm.addBatch();
         }
@@ -725,7 +722,7 @@ public final class DatabaseQueue {
             stsm.setString(4, advancedBan.getExecutedOn());
             stsm.setString(5, advancedBan.getReason());
             stsm.setLong(6, advancedBan.getExpirationDate());
-            stsm.setString(7, DateUtils.formatInstant(advancedBan.getDate()));
+            stsm.setString(7, DataBaseUtils.formatInstant(advancedBan.getDate()));
 
             stsm.addBatch();
         }
@@ -749,7 +746,7 @@ public final class DatabaseQueue {
             stsm.setString(5, litebans.getReason());
             stsm.setString(6, litebans.getDuration());
             stsm.setBoolean(7, litebans.getSilent());
-            stsm.setString(8, DateUtils.formatInstant(litebans.getDate()));
+            stsm.setString(8, DataBaseUtils.formatInstant(litebans.getDate()));
 
             stsm.addBatch();
         }
@@ -773,7 +770,7 @@ public final class DatabaseQueue {
             stsm.setString(2, serverAddress.getPlayerName());
             stsm.setString(3, serverAddress.getPlayerUUID());
             stsm.setString(4, serverAddress.getDomaineName());
-            stsm.setString(5, DateUtils.formatInstant(serverAddress.getDate()));
+            stsm.setString(5, DataBaseUtils.formatInstant(serverAddress.getDate()));
 
             stsm.addBatch();
         }
@@ -794,7 +791,7 @@ public final class DatabaseQueue {
             stsm.setString(1, portalCreation.getServerName());
             stsm.setString(2, portalCreation.getWorld());
             stsm.setString(3, portalCreation.getCausedBy());
-            stsm.setString(4, DateUtils.formatInstant(portalCreation.getDate()));
+            stsm.setString(4, DataBaseUtils.formatInstant(portalCreation.getDate()));
 
             stsm.addBatch();
         }
@@ -819,7 +816,7 @@ public final class DatabaseQueue {
             stsm.setInt(6, primedTnt.getY());
             stsm.setInt(7, primedTnt.getZ());
             stsm.setBoolean(8, primedTnt.isStaff());
-            stsm.setString(9, DateUtils.formatInstant(primedTnt.getDate()));
+            stsm.setString(9, DataBaseUtils.formatInstant(primedTnt.getDate()));
 
             stsm.addBatch();
         }
@@ -845,7 +842,7 @@ public final class DatabaseQueue {
             stsm.setInt(7, standCrystal.getZ());
             stsm.setBoolean(8, standCrystal.isStaff());
             stsm.setString(9, standCrystal.getArmorStandActionType().name());
-            stsm.setString( 10, DateUtils.formatInstant(standCrystal.getDate()));
+            stsm.setString( 10, DataBaseUtils.formatInstant(standCrystal.getDate()));
             stsm.setString(11, standCrystal.getBlock());
             stsm.addBatch();
         }
@@ -869,7 +866,32 @@ public final class DatabaseQueue {
             stsm.setInt(6, armorStandAction.getY());
             stsm.setInt(7, armorStandAction.getZ());
             stsm.setBoolean(8, armorStandAction.isStaff());
-            stsm.setString( 9, DateUtils.formatInstant(armorStandAction.getDate()));
+            stsm.setString( 9, DataBaseUtils.formatInstant(armorStandAction.getDate()));
+            stsm.addBatch();
+        }
+
+        stsm.executeBatch();
+        stsm.close();
+    }
+
+    private static void insertLeverInteractionBatch(PreparedStatement stsm,
+                                                    ConcurrentLinkedQueue<LeverInteraction> queue) throws SQLException {
+
+        final int size = queue.size();
+
+        for (int i = 0; i < size; i++) {
+
+            final LeverInteraction leverInteraction = queue.poll();
+
+            stsm.setString( 1, DataBaseUtils.formatInstant(leverInteraction.getDate()));
+            stsm.setString(2, leverInteraction.getServerName());
+            stsm.setString(3, leverInteraction.getWorld());
+            stsm.setString(4, leverInteraction.getEntityPlayer().getPlayerUniqueID());
+            stsm.setString(5, leverInteraction.getEntityPlayer().getPlayerName());
+            stsm.setInt(6, leverInteraction.getX());
+            stsm.setInt(7, leverInteraction.getY());
+            stsm.setInt(8, leverInteraction.getZ());
+            stsm.setBoolean(9, leverInteraction.isStaff());
             stsm.addBatch();
         }
 
@@ -1398,6 +1420,23 @@ public final class DatabaseQueue {
         this.addItemToQueue(advancedBan);
     }
 
+    public void queueLeverInteraction(String serverName, String playerName, String playerUUID, Coordinates coords,
+                                      boolean isStaff) {
+
+        final LeverInteraction leverInteraction = new LeverInteraction();
+
+        leverInteraction.setDate(Instant.now());
+        leverInteraction.setServerName(serverName);
+        leverInteraction.setWorld(coords.getWorldName());
+        leverInteraction.setX(coords.getX());
+        leverInteraction.setY(coords.getY());
+        leverInteraction.setZ(coords.getZ());
+        leverInteraction.setEntityPlayer(new EntityPlayer(playerName, playerUUID));
+        leverInteraction.isStaff(isStaff);
+
+        this.addItemToQueue(leverInteraction);
+    }
+
     public void queueCommandBlock(String serverName, String msg) {
 
         final CommandBlock b = new CommandBlock();
@@ -1484,11 +1523,6 @@ public final class DatabaseQueue {
 
     public void queuePAFPartyMessage(String serverName, String playerUUID, String playerName, String message,
                                      String leader, List<String> partyMembers, boolean isStaff) {
-
-    }
-
-    public void queueLeverInteraction(String serverName, String playerUUID, String worldName, String playerName, int x,
-                                      int y, int z, boolean isStaff) {
 
     }
 
@@ -1640,9 +1674,17 @@ public final class DatabaseQueue {
             liteBansQueue.add((LiteBans) item);
 
         } else if (item instanceof StandCrystal) {
+
             standCrystalQueue.add((StandCrystal) item);
+
         } else if (item instanceof ArmorStandAction) {
+
             armorStandQueue.add((ArmorStandAction) item);
+
+        } else if (item instanceof LeverInteraction) {
+
+            leverInteractionQueue.add((LeverInteraction) item);
+
         } else {
             throw new RuntimeException("Unidentified Object type! " + item.getClass());
         }
@@ -1729,11 +1771,11 @@ public final class DatabaseQueue {
                 DatabaseQueue.insertStandCrystalBatch(database.getStandCrystalStsm(connection), this.standCrystalQueue);
             if(!this.armorStandQueue.isEmpty())
                 DatabaseQueue.insertArmorStandBatch(database.getArmorStandStsm(connection), this.armorStandQueue);
+            if(!this.leverInteractionQueue.isEmpty())
+                DatabaseQueue.insertLeverInteractionBatch(database.getLeverInteractionStsm(connection), this.leverInteractionQueue);
 
             connection.commit();
 
-        } catch (final Exception exception) {
-            exception.printStackTrace();
-        }
+        } catch (final Exception exception) { exception.printStackTrace(); }
     }
 }

@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 
 public abstract class AbstractDataSource {
 
-
     protected final Logger logger = Logger.getLogger(AbstractDataSource.class.getName());
     protected final Options options;
     private final String className;
@@ -22,8 +21,8 @@ public abstract class AbstractDataSource {
 
         this.className = className;
         this.options = options;
-
     }
+
     abstract public DatabaseQueue getDatabaseQueue();
 
     protected abstract String getJdbcUrl();
@@ -38,13 +37,11 @@ public abstract class AbstractDataSource {
                 " is_staff, date) VALUES(?,?,?,?,?,?)");
     }
 
-
     public PreparedStatement getPlayerCommandStsm(Connection connection) throws SQLException {
 
         return connection.prepareStatement("INSERT INTO player_commands (server_name, world, player_name, command," +
                 " is_staff, date) VALUES(?,?,?,?,?,?)");
     }
-
 
     public PreparedStatement getPlayerSignTextStsm(Connection connection) throws SQLException {
 
@@ -52,13 +49,11 @@ public abstract class AbstractDataSource {
                 " player_name, line, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?)");
     }
 
-
     public PreparedStatement getPlayerDeathStsm(Connection connection) throws SQLException {
 
         return connection.prepareStatement("INSERT INTO player_death (server_name, world, player_name, player_level," +
                 " x, y, z, cause, by_who, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
     }
-
 
     public PreparedStatement getPlayerTeleportStsm(Connection connection) throws SQLException {
 
@@ -66,20 +61,16 @@ public abstract class AbstractDataSource {
                 " from_y, from_z, to_x, to_y, to_z, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
     }
 
-
     public PreparedStatement getPlayerConnectionStsm(Connection connection) throws SQLException {
 //TODO convert ip in java instead of database
         return connection.prepareStatement("INSERT INTO player_connection (server_name, world, player_name, x, y," +
                 " z, ip, is_staff, date, player_connection_type) VALUES(?,?,?,?,?,?,?,?,?,?)");
-
     }
-
 
     public PreparedStatement getTpsStsm(Connection connection) throws SQLException {
 
         return connection.prepareStatement("INSERT INTO tps (server_name, tps, date) VALUES(?,?,?)");
     }
-
 
     public PreparedStatement getRAMStsm(Connection connection) throws SQLException {
 
@@ -87,19 +78,16 @@ public abstract class AbstractDataSource {
                 " free_memory, date) VALUES(?,?,?,?,?)");
     }
 
-
     public PreparedStatement getPlayerKickStsm(Connection connection) throws SQLException {
 
         return connection.prepareStatement("INSERT INTO player_kick (server_name, world, player_name, x, y, z," +
                 " reason, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?)");
     }
 
-
     public PreparedStatement getPortalCreateStsm(Connection connection) throws SQLException {
 
         return connection.prepareStatement("INSERT INTO portal_creation (server_name, world, caused_by, date) VALUES(?,?,?,?)");
     }
-
 
     public PreparedStatement getBucketActionStsm(Connection connection) throws SQLException {
 
@@ -107,13 +95,11 @@ public abstract class AbstractDataSource {
                 " x, y, z, is_staff, bucket_action, date ) VALUES(?,?,?,?,?,?,?,?,?,?)");
     }
 
-
     public PreparedStatement getAnvilStsm(Connection connection) throws SQLException {
 
         return connection.prepareStatement("INSERT INTO `anvil` (server_name, new_name, player_name, is_staff," +
                 " date) VALUES(?,?,?,?,?)");
     }
-
 
     public void insertServerStart(String serverName) {
 
@@ -124,9 +110,7 @@ public abstract class AbstractDataSource {
 
             serverStart.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
 
@@ -139,11 +123,8 @@ public abstract class AbstractDataSource {
 
             serverStop.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
-
 
     public PreparedStatement getEnchantStsm(Connection connection) throws SQLException {
 
@@ -151,13 +132,11 @@ public abstract class AbstractDataSource {
                 " enchantment, enchantment_level, item, cost, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
     }
 
-
     public PreparedStatement getBookEditingStsm(Connection connection) throws SQLException {
 
         return connection.prepareStatement("INSERT INTO book_editing (server_name, world, player_name, page_count," +
                 " page_content, signed_by, is_staff, date) VALUES(?,?,?,?,?,?,?,?)");
     }
-
 
     public PreparedStatement getAfkStsm(Connection connection) throws SQLException {
 
@@ -165,13 +144,11 @@ public abstract class AbstractDataSource {
                 " VALUES(?,?,?,?,?,?,?,?)");
     }
 
-
     public PreparedStatement getWrongPasswordStsm(Connection connection) throws SQLException {
 
         return connection.prepareStatement("INSERT INTO wrong_password (server_name, world, player_name," +
                 " is_staff) VALUES(?,?,?,?)");
     }
-
 
     public PreparedStatement getItemActionStsm(Connection connection) throws SQLException {
 
@@ -179,13 +156,11 @@ public abstract class AbstractDataSource {
                 " x, y, z ,changed_name, is_staff, item_action_type, date, enchantment) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
     }
 
-
     public PreparedStatement getFurnaceStsm(Connection connection) throws SQLException {
 
         return connection.prepareStatement("INSERT INTO furnace (server_name, world, player_name, item, amount," +
                 " x, y, z, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?,?)");
     }
-
 
     public void insertRCON(String serverName, String command) {
 
@@ -198,11 +173,8 @@ public abstract class AbstractDataSource {
 
             rCon.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
-
 
     public PreparedStatement getGamemodeStsm(Connection connection) throws SQLException {
 
@@ -210,13 +182,11 @@ public abstract class AbstractDataSource {
                 " is_staff, date) VALUES(?,?,?,?,?,?)");
     }
 
-
     public PreparedStatement getPlayerCraftStsm(Connection connection) throws SQLException {
 
         return connection.prepareStatement("INSERT INTO crafting (server_name, world, player_name, item," +
                 " amount, x, y, z, is_staff, date) VALUES(?,?,?,?,?,?,?,?,?,?)");
     }
-
 
     public PreparedStatement getVaultStsm(Connection connection) throws SQLException {
 
@@ -224,8 +194,7 @@ public abstract class AbstractDataSource {
                 " is_staff) VALUES(?,?,?,?,?)");
     }
 
-
-    public void insertPlayerRegistration(String serverName, String playerName, String playerUUID, String joinDate) {
+    public void insertPlayerRegistration(String serverName, String playerName, String playeruuid, String joinDate) {
 
         try (final Connection connection = this.getConnection();
              final PreparedStatement register = connection.prepareStatement("INSERT INTO registration (server_name," +
@@ -233,14 +202,12 @@ public abstract class AbstractDataSource {
 
             register.setString(1, serverName);
             register.setString(2, playerName);
-            register.setString(3, playerUUID);
+            register.setString(3, playeruuid);
             register.setString(4, joinDate);
 
             register.executeUpdate();
 
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (final SQLException e) { e.printStackTrace(); }
     }
 
 
@@ -314,7 +281,7 @@ public abstract class AbstractDataSource {
 
     public PreparedStatement getServerAddressStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement("INSERT INTO server_address (server_name, player_name, player_UUID, " +
+        return connection.prepareStatement("INSERT INTO server_address (server_name, player_name, player_uuid, " +
                 "domain, date) VALUES(?,?,?,?,?)");
     }
 
@@ -328,37 +295,32 @@ public abstract class AbstractDataSource {
         return null;
     }
 
-
     public PreparedStatement getLeverInteractionStsm(Connection connection) throws SQLException {
-        return null;
-    }
 
+        return connection.prepareStatement("INSERT INTO lever_interaction (date, server_name, world, player_uuid, player_name, " +
+                "x, y, z, is_staff) VALUES(?,?,?,?,?,?,?,?,?)");
+    }
 
     public PreparedStatement getSpawnEggStsm(Connection connection) throws SQLException {
         return null;
     }
 
-
     public PreparedStatement getWorldGuardStsm(Connection connection) throws SQLException {
         return null;
     }
-
 
     public PreparedStatement getPlayerCountStsm(Connection connection) throws SQLException {
 
         return connection.prepareStatement("INSERT INTO player_count (server_name, date) VALUES(?,?)");
     }
 
-
     public List<PlayerChat> getPlayerChatByPlayerName(String playerName, int offset, int limit) {
         return Collections.emptyList();
     }
 
-
     public Long countByTable(String action) {
         return 0L;
     }
-
 
     public PreparedStatement getBlockInteractionStsm(Connection connection) throws SQLException {
 
@@ -398,7 +360,6 @@ public abstract class AbstractDataSource {
 
         } catch (final SQLException e) { e.printStackTrace(); }
     }
-    abstract public void disconnect();
 
-
+    public abstract void disconnect();
 }

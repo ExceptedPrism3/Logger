@@ -1,14 +1,13 @@
 package me.prism3.loggercore.database.entity;
 
-
-public class ArmorStandAction extends AbstractAction {
+public class LeverInteraction extends AbstractAction {
 
     private String world;
-
     private Integer x;
     private Integer y;
     private Integer z;
     private Boolean isStaff;
+
 
     public String getWorld() {
         return this.world;

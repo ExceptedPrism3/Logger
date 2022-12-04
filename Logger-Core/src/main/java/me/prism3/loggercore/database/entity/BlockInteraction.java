@@ -6,14 +6,11 @@ import me.prism3.loggercore.database.entity.enums.InteractionType;
 public class BlockInteraction extends AbstractAction {
 
     private String world;
-
     private String block;
-
     private Integer x;
     private Integer y;
     private Integer z;
     private Boolean isStaff;
-
     private InteractionType interactionType;
 
     public String getWorld() {

@@ -3,9 +3,7 @@ package me.prism3.loggercore.database.entity;
 public class Anvil extends AbstractAction {
 
     private String newName;
-
     private Boolean isStaff;
-
 
     public String getNewName() {
         return this.newName;

@@ -5,6 +5,7 @@ import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.Log;
+import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,6 +42,8 @@ public class LeverInteraction implements Listener {
             final int x = event.getClickedBlock().getX();
             final int y = event.getClickedBlock().getY();
             final int z = event.getClickedBlock().getZ();
+
+            final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
             // Log To Files
             if (Data.isLogToFiles) {
@@ -93,7 +96,7 @@ public class LeverInteraction implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().getDatabaseQueue().queueLeverInteraction(Data.serverName, playerUUID.toString(), worldName, playerName, x, y, z, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueLeverInteraction(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -103,7 +106,7 @@ public class LeverInteraction implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().getDatabaseQueue().queueLeverInteraction(Data.serverName, playerUUID.toString(), worldName, playerName, x, y, z, player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueLeverInteraction(Data.serverName, playerName, playerUUID.toString(), coordinates, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
