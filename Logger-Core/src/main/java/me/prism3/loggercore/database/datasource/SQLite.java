@@ -197,7 +197,7 @@ public final class SQLite extends AbstractDataSource {
                     " player_name TEXT NOT NULL," +
                     " player_uuid TEXT NOT NULL," +
                     " date DATETIME NOT NULL," +
-                    " x int NOT NULL, y int NOT NULL, y int NOT NULL, world TEXT NOT NULL," +
+                    " x int NOT NULL, y int NOT NULL, z int NOT NULL, world TEXT NOT NULL," +
                     " interaction_type TEXT NOT NULL )");
 
             // Extras Side Part
