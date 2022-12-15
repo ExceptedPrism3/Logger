@@ -63,56 +63,6 @@
                             <pattern>io.github.cdimascio</pattern>
                             <shadedPattern>me.prism3.io.github.cdimascio</shadedPattern>
                         </relocation>
-
-                        <!-- Relocation of JDA and its dependencies -->
-
-                        <relocation>
-                            <pattern>net.dv8tion.jda</pattern>
-                            <shadedPattern>me.prism3.net.dv8tion.jda</shadedPattern>
-                        </relocation>
-
-                        <relocation>
-                            <pattern>com.neovisionaries</pattern>
-                            <shadedPattern>me.prism3.com.neovisionaries</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.iwebpp</pattern>
-                            <shadedPattern>me.prism3.com.iwebpp</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.fasterxml</pattern>
-                            <shadedPattern>me.prism3.com.fasterxml</shadedPattern>
-                        </relocation>
-
-                        <relocation>
-                            <pattern>org.apache</pattern>
-                            <shadedPattern>me.prism3.org.apache</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.jetbrains</pattern>
-                            <shadedPattern>me.prism3.org.jetbrains</shadedPattern>
-                        </relocation>
-
-                        <relocation>
-                            <pattern>okhttp3</pattern>
-                            <shadedPattern>me.prism3.okhttp3</shadedPattern>
-                        </relocation>
-
-                        <relocation>
-                            <pattern>okio</pattern>
-                            <shadedPattern>me.prism3.okio</shadedPattern>
-                        </relocation>
-
-                        <relocation>
-                            <pattern>gnu.trove</pattern>
-                            <shadedPattern>me.prism3.gnu.trove</shadedPattern>
-                        </relocation>
-
-                        <relocation>
-                            <pattern>javax.annotation</pattern>
-                            <shadedPattern>me.prism3.javax.annotation</shadedPattern>
-                        </relocation>
-
                     </relocations>
                 </configuration>
                 <executions>
@@ -252,7 +202,6 @@
             <groupId>com.github.DevLeoko.AdvancedBan</groupId>
             <artifactId>AdvancedBan-Bukkit</artifactId>
             <version>v2.3.0</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.geysermc</groupId>
