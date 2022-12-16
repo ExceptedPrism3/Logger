@@ -73,6 +73,8 @@ Discord:
       Channel-ID: 'LINK_HERE'
     RCON:
       Channel-ID: 'LINK_HERE'
+    Command-Block:
+      Channel-ID: 'LINK_HERE'
   # Extra Side Checkers
   Extras:
     AFK:
@@ -84,8 +86,6 @@ Discord:
     LiteBans:
       Channel-ID: 'LINK_HERE'
     AdvancedBan:
-      Channel-ID: 'LINK_HERE'
-    Command-Block:
       Channel-ID: 'LINK_HERE'
   Version-Exceptions:
     Wood-Stripping:

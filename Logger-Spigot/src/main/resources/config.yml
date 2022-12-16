@@ -14,7 +14,7 @@
 # Config: 1.8
 Language: en_en
 Server-Name: "Server_Name"
-Plugin-Prefix: "&bLogger &8&l|&r"
+Plugin-Prefix: "&bLogger &8&l|&r "
 Time-Formatter: "yyyy-MM-dd HH:mm:ss"
 File-Deletion: 7
 Log-to-Files: true

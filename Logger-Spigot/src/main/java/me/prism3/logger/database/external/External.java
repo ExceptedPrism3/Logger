@@ -55,7 +55,6 @@ public class External {
             hikari.addDataSourceProperty("user", USERNAME);
             hikari.addDataSourceProperty("password", PASSWORD);
             this.main.getLogger().info(this.jdbc + " Connection has been established!");
-
         }
     }
 

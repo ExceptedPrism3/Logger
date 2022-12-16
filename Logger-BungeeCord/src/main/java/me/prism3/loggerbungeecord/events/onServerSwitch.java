@@ -13,6 +13,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class onServerSwitch implements Listener {
+/*
 
     @EventHandler
     public void onServerSwitch(ServerSwitchEvent event) {
@@ -55,6 +56,7 @@ public class onServerSwitch implements Listener {
             }
         }, 0, 500); // 0,5s
     }
+*/
 }
 
 

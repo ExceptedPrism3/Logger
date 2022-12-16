@@ -20,7 +20,6 @@ import me.prism3.logger.events.onversioncompatibility.OnWoodStripping;
 import me.prism3.logger.events.plugindependent.*;
 import me.prism3.logger.database.sqlite.global.SQLite;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
-import de.jeff_media.updatechecker.UpdateChecker;
 import me.prism3.logger.events.*;
 import me.prism3.logger.serverside.*;
 import me.prism3.logger.utils.*;

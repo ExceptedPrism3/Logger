@@ -237,7 +237,7 @@ public class Discord {
 
                 }
 
-                if (this.isValid(bucketFillChannelID, "Log-Player.Bucket-Fill\"")) {
+                if (this.isValid(bucketFillChannelID, "Log-Player.Bucket-Fill")) {
 
                     this.bucketFillChannel = this.jda.getTextChannelById(bucketFillChannelID);
 
