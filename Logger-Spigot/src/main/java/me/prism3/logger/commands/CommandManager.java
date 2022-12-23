@@ -28,6 +28,7 @@ public class CommandManager implements TabExecutor {
         this.subCommands.add(new ToggleSpy());
         this.subCommands.add(new Discord());
         this.subCommands.add(new Dump());
+        this.subCommands.add(new Manual());
     }
 
     @Override
@@ -47,7 +48,7 @@ public class CommandManager implements TabExecutor {
             for (int i = 0; i < this.getSubCommands().size(); i++) {
                 if (args[0].equalsIgnoreCase(this.getSubCommands().get(i).getName())) {
                     try {
-                        this.getSubCommands().get(i).perform(sender, args); //TODO to fix all commands are treated as Player which is wrong
+                        this.getSubCommands().get(i).perform(sender, args);
                     } catch (final IOException e) { e.printStackTrace(); }
                 }
             }

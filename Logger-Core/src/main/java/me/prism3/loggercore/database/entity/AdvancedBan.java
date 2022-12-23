@@ -12,6 +12,12 @@ public class AdvancedBan {
     private Long expirationDate;
     private String serverName;
 
+    public String getExecutorUUID() { return executorUUID; }
+
+    public void setExecutorUUID(String executorUUID) { this.executorUUID = executorUUID; }
+
+    private String executorUUID;
+
     public String getType() {
         return this.type;
     }

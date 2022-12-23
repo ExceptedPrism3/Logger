@@ -227,7 +227,7 @@ public abstract class AbstractDataSource {
 
     public PreparedStatement getAdvancedDataStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement("INSERT INTO advanced_ban (server_name, type, executor, executed_on," +
+        return connection.prepareStatement("INSERT INTO advanced_ban (server_name, type, executor_uuid, executor, executed_on," +
                 " reason, expiration_date, date) VALUES(?,?,?,?,?,?,?)");
     }
 

@@ -718,11 +718,12 @@ public final class DatabaseQueue {
 
             stsm.setString(1, advancedBan.getServerName());
             stsm.setString(2, advancedBan.getType());
-            stsm.setString(3, advancedBan.getExecutor());
-            stsm.setString(4, advancedBan.getExecutedOn());
-            stsm.setString(5, advancedBan.getReason());
-            stsm.setLong(6, advancedBan.getExpirationDate());
-            stsm.setString(7, DataBaseUtils.formatInstant(advancedBan.getDate()));
+            stsm.setString(3, advancedBan.getExecutorUUID());
+            stsm.setString(4, advancedBan.getExecutor());
+            stsm.setString(5, advancedBan.getExecutedOn());
+            stsm.setString(6, advancedBan.getReason());
+            stsm.setLong(7, advancedBan.getExpirationDate());
+            stsm.setString(8, DataBaseUtils.formatInstant(advancedBan.getDate()));
 
             stsm.addBatch();
         }
@@ -1405,7 +1406,7 @@ public final class DatabaseQueue {
     }
 
     public void queueAdvanceBanData(String serverName, String type, String executor, String executedOn,
-                                    String reason, long expirationDate) {
+                                    String reason, long expirationDate, String executorUUID) {
 
         final AdvancedBan advancedBan = new AdvancedBan();
 
@@ -1416,6 +1417,7 @@ public final class DatabaseQueue {
         advancedBan.setReason(reason);
         advancedBan.setExpirationDate(expirationDate);
         advancedBan.setDate(Instant.now());
+        advancedBan.setExecutorUUID(executorUUID);
 
         this.addItemToQueue(advancedBan);
     }

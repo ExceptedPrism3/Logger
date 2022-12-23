@@ -244,9 +244,9 @@ public final class SQLite extends AbstractDataSource {
                         " duration TEXT, is_silent BOOLEAN)");
 
             if (this.options.isAdvancedBanEnabled())
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS advanced_ban (server_name TEXT," +
-                                " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, type TEXT,executor TEXT," +
-                                " executed_on TEXT, reason TEXT, expiration_date TEXT)");
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS advanced_ban (server_name TEXT, " +
+                        "date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, type TEXT, executor_uuid TEXT NOT NULL, " +
+                        "executor TEXT, executed_on TEXT, reason TEXT, expiration_date TEXT)");
 
             // Version Exceptions Part
             if (this.options.isViaVersion())
