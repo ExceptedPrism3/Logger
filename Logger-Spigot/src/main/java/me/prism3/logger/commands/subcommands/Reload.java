@@ -22,7 +22,7 @@ public class Reload implements SubCommand {
 
     @Override
     public String getDescription() {
-        return "Reloads the plugin files.";
+        return "Reloads the plugin files";
     }
 
     @Override

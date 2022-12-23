@@ -27,7 +27,7 @@ public class Dump implements SubCommand {
 
     @Override
     public String getDescription() {
-        return "Creates an online pastebin url of the plugin's config and discord";
+        return "Creates an online pastebin url of the plugin's config, discord, the used messages file and server's latest.log file";
     }
 
     @Override

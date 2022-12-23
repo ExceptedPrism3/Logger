@@ -184,7 +184,8 @@ Changes
 
 Additions
     [+] Plugin Prefix
-    [+] Added 1.7 server versions enums
+    [+] 1.7 server versions enums
+    [+] 1.19.2 / 1.19.3 Support
 
 Fixes
     [!] Plugin not starting up correctly

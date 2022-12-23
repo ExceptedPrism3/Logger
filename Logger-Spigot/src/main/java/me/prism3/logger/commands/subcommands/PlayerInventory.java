@@ -36,7 +36,7 @@ public class PlayerInventory implements Listener, SubCommand {
     public String getName() { return "playerinventory"; }
 
     @Override
-    public String getDescription() { return "Opens a menu with all online players and their available inventory backups."; }
+    public String getDescription() { return "Opens a menu with all online players and their available inventory backups"; }
 
     @Override
     public String getSyntax() { return "/logger playerinventory"; }

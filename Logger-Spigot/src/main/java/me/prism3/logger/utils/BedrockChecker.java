@@ -14,6 +14,5 @@ public class BedrockChecker {
         if (!FloodGateUtil.getFloodGateAPI()) return false;
 
         return FloodgateApi.getInstance().isFloodgatePlayer(playerUUID);
-
     }
 }

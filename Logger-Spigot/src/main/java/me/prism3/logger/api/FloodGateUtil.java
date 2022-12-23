@@ -10,11 +10,7 @@ public class FloodGateUtil {
 
             Class.forName("org.geysermc.floodgate.api.FloodgateApi");
 
-        } catch (Exception ignored) {
-
-            return false;
-
-        }
+        } catch (Exception ignored) { return false; }
 
         return true;
     }

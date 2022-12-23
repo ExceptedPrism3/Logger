@@ -24,7 +24,8 @@ public enum NmsVersions {
     v1_17_R1,
     v1_18_R1,
     v1_18_R2,
-    v1_19_R1;
+    v1_19_R1,
+    v1_19_R2;
 
     public boolean isAtLeast(NmsVersions version) {
         return this.ordinal() >= version.ordinal();
@@ -32,9 +33,5 @@ public enum NmsVersions {
 
     public boolean isNoHigherThan(NmsVersions version) {
         return this.ordinal() <= version.ordinal();
-    }
-
-    public boolean isWithin(NmsVersions versionLow, NmsVersions versionHigh) {
-        return this.isAtLeast(versionLow) && this.isNoHigherThan(versionHigh);
     }
 }
