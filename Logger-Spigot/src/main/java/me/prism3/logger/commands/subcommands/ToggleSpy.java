@@ -31,7 +31,7 @@ public class ToggleSpy implements SubCommand {
 
         if (args.length <= 3 && args[1].equalsIgnoreCase("spy")) {
 
-            final String args2 = args[2];
+            final String args2 = args[2].toLowerCase();
 
             boolean isToggled;
 
