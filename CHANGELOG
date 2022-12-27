@@ -195,6 +195,7 @@ Fixes
     [!] Reload command not reloading from the config
     [!] Commands not working in console
     [!] LiteBans table not auto deleting on Velocity instance
+    [!] Toggle Commands are no longer case sensitive
 
 Changes
     [*] Remade permissions which will log OP and NOT OP players until they're permitted with the exempt permission
