@@ -61,7 +61,6 @@ public class PlayerFolder {
         yaml.createSection("armor");
 
         yaml.save(file);
-
     }
 
     // Counts the total backup files of a player

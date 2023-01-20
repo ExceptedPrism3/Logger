@@ -1,7 +1,6 @@
 package me.prism3.logger.commands;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.io.IOException;
 import java.util.List;

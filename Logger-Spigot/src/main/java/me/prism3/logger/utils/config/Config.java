@@ -23,7 +23,7 @@ public class Config extends YamlConfiguration {
 		this.file = new File(plugin.getDataFolder(), name);
 		if (!this.file.exists()) {
 			this.prepareFile(name);
-			Log.info("New " + name + " file has been created successfully!");
+			Log.info("New " + name + " file has been created!");
 		}
 		this.configFile = YamlConfiguration.loadConfiguration(new InputStreamReader(new FileInputStream(this.file), StandardCharsets.UTF_8));
 	}

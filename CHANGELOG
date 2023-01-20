@@ -225,6 +225,7 @@ Changes
     [*] Fixed OP or players that have * permissions not being logged by default
     [*] Improved the accuracy of File Deletion
     [*] Slight AdvancedBan typo in the messages file
+    [*] /logger dump will not print out specific errors rather than an error spam
 
 Removed
     [-] IP Column from RCON checher

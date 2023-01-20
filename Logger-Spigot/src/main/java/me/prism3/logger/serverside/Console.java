@@ -1,21 +1,21 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.Discord2;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
+import net.dv8tion.jda.api.EmbedBuilder;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerCommandEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Console implements Listener {
 
@@ -35,23 +35,23 @@ public class Console implements Listener {
             return;
         }
 
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%command%", command);
+
         // Log To Files
-        if (Data.isLogToFiles) {
-
-            try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getConsoleLogFile(), true))) {
-
-                out.write(this.main.getMessages().get().getString("Files.Server-Side.Console-Commands").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command) + "\n");
-
-            } catch (final IOException e) {
-
-                Log.warning("An error occurred while logging into the appropriate file.");
-                e.printStackTrace();
-            }
-        }
+        if (Data.isLogToFiles)
+            FileHandler.handleFileLog("Files.Server-Side.Console-Commands", placeholders, FileHandler.getConsoleLogFile());
 
         // Discord
-        if (!this.main.getMessages().get().getString("Discord.Server-Side.Console-Commands").isEmpty() && this.main.getDiscordFile().getBoolean("Discord.Enable"))
-            this.main.getDiscord().console(this.main.getMessages().get().getString("Discord.Server-Side.Console-Commands").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command), false);
+        if (this.main.getDiscordFile().getBoolean("Discord.Enable"))
+            this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Console-Commands", placeholders, this.main.getDiscord()::console);
+
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("Manual Log");
+
+        builder.setDescription(command);
+
+        this.main.getDiscord2().getChannels().get(Discord2.CONSOLE_CHANNEL).sendMessage(builder.build()).queue();
 
         // External
         if (Data.isExternal) {

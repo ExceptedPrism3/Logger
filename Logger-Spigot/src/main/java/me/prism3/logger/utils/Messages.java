@@ -33,18 +33,30 @@ public class Messages {
             return;
         }
 
-        this.messagesFile = YamlConfiguration.loadConfiguration(new File(this.main.getDataFolder() + File.separator + langPath, this.main.getConfig().getString("Language") + fileType));
+        final String langFilePath = this.main.getDataFolder() + File.separator + langPath + File.separator + selectedLang + fileType;
+        File langFile = new File(langFilePath);
+        if (!langFile.exists()) {
+            this.main.saveResource(langPath + File.separator + selectedLang + fileType, false);
+            langFile = new File(langFilePath);
+        }
+        this.messagesFile = YamlConfiguration.loadConfiguration(langFile);
     }
 
     public FileConfiguration get() { return this.messagesFile; }
 
     public void reload() {
-        this.messagesFile = YamlConfiguration.loadConfiguration(new File(this.main.getDataFolder() + File.separator + langPath, this.main.getConfig().getString("Language") + fileType));
+        final String langFilePath = this.main.getDataFolder() + File.separator + langPath + File.separator + selectedLang + fileType;
+        File langFile = new File(langFilePath);
+        if (!langFile.exists()) {
+            this.main.saveResource(langPath + File.separator + selectedLang + fileType, false);
+            langFile = new File(langFilePath);
+        }
+        this.messagesFile = YamlConfiguration.loadConfiguration(langFile);
     }
+
 
     // Cycle through the Messages Folder and load what's listed in the Array
     private void copyLangFiles() {
-
         for (String l : this.langFiles)
             if (!new File(this.main.getDataFolder() + File.separator + langPath + File.separator + l + fileType).exists())
                 this.main.saveResource(langPath + File.separator + l + fileType, false);

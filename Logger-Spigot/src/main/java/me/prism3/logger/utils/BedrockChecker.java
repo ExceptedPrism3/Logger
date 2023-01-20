@@ -9,10 +9,13 @@ public class BedrockChecker {
 
     private BedrockChecker() {}
 
+    private static final BedrockChecker INSTANCE = new BedrockChecker();
+    private static final boolean FLOODGATE_API_ENABLED = FloodGateUtil.getFloodGateAPI();
+
+    public static BedrockChecker getInstance() { return INSTANCE; }
+
     public static boolean isBedrock(UUID playerUUID) {
-
-        if (!FloodGateUtil.getFloodGateAPI()) return false;
-
+        if (!FLOODGATE_API_ENABLED) return false;
         return FloodgateApi.getInstance().isFloodgatePlayer(playerUUID);
     }
 }

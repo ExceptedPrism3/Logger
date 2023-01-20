@@ -77,7 +77,7 @@ public class OnChestInteraction implements Listener {
             final int z = event.getInventory().getLocation().getBlockZ();
 
             final String[] items = Arrays.stream(event.getInventory().getContents()).filter(Objects::nonNull)
-                    .map(stack -> MessageFormat.format("{0} x {1}", stack.getType(), stack.getAmount())).toArray(String[]::new);
+                    .map(stack -> MessageFormat.format("({0}){1} x {2}", stack.hasItemMeta() && stack.getItemMeta().hasDisplayName() ? stack.getItemMeta().getDisplayName() : "", stack.getType(), stack.getAmount())).toArray(String[]::new);
 
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 

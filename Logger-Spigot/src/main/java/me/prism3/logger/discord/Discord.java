@@ -7,7 +7,11 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class Discord {
 
@@ -60,6 +64,7 @@ public class Discord {
     private TextChannel commandBlockChannel;
     private TextChannel playerCountChannel;
     private TextChannel serverAddressChannel;
+    private TextChannel advancementChannel;
 
     private TextChannel afkChannel;
     private TextChannel wrongPasswordChannel;
@@ -72,6 +77,8 @@ public class Discord {
     private TextChannel woodStrippingChannel;
     private TextChannel totemOfUndyingChannel;
 
+    private TextChannel manualChannel;
+
     public void run() {
 
         if (this.main.getDiscordFile().getBoolean("Discord.Enable")) {
@@ -80,9 +87,9 @@ public class Discord {
 
             try {
 
-                this.jda = JDABuilder.createDefault(botToken).build().awaitReady();
+//                this.jda = JDABuilder.createDefault(botToken).build().awaitReady();
 
-                if (this.main.getDiscordFile().getBoolean("ActivityCycling.Enabled")) new DiscordStatus(this.jda);
+//                if (this.main.getDiscordFile().getBoolean("ActivityCycling.Enabled")) new DiscordStatus(this.jda);
 
             } catch (final Exception e) {
 
@@ -181,6 +188,8 @@ public class Discord {
 
             final String serverAddressChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Server-Address.Channel-ID");
 
+            final String advancementChannelID = this.main.getDiscordFile().getString("Discord.Server-Side.Advancement.Channel-ID");
+
             // Extras
             final String afkChannelID = this.main.getDiscordFile().getString("Discord.Extras.AFK.Channel-ID");
 
@@ -200,6 +209,9 @@ public class Discord {
             final String woodStrippingChannelID = this.main.getDiscordFile().getString("Discord.Version-Exceptions.Wood-Stripping.Channel-ID");
 
             final String totemOfUndyingChannelID = this.main.getDiscordFile().getString("Discord.Version-Exceptions.Totem-of-Undying.Channel-ID");
+
+            //Custom
+            final String manualChannelID = this.main.getDiscordFile().getString("Discord.Custom.Manual.Channel-ID");
 
             try {
 
@@ -337,6 +349,9 @@ public class Discord {
                 if (this.isValid(serverAddressChannelID, "Log-Server.Server-Address"))
                     this.serverAddressChannel = this.jda.getTextChannelById(serverAddressChannelID);
 
+                if (this.isValid(advancementChannelID, "Log-Server.Advancement"))
+                    this.advancementChannel = this.jda.getTextChannelById(advancementChannelID);
+
                 // Extra Checkers Part
                 if (this.isValid(afkChannelID, "Log-Extras.Essentials-AFK"))
                     this.afkChannel = this.jda.getTextChannelById(afkChannelID);
@@ -365,6 +380,9 @@ public class Discord {
 
                 if (this.isValid(totemOfUndyingChannelID, "Log-Version-Exceptions.Totem-of-Undying"))
                     this.totemOfUndyingChannel = this.jda.getTextChannelById(totemOfUndyingChannelID);
+                // Custom Part
+                if (this.isValid(manualChannelID, "Log-Custom.Manual"))
+                    this.manualChannel = this.jda.getTextChannelById(manualChannelID);
 
             } catch (final Exception e) {
                 Log.severe("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
@@ -379,6 +397,23 @@ public class Discord {
         return (!channelID.isEmpty() && this.main.getConfig().getBoolean(path) && !channelID.equals("CHANNEL_ID"));
     }
 
+    public void handleDiscordLog(String messagePath, Map<String, String> placeholders, Consumer<String> logMethod) {
+
+        final String discordMessage = this.main.getMessages().get().getString(messagePath);
+
+        if (discordMessage != null) {
+
+            final StringBuilder sb = new StringBuilder(discordMessage);
+
+            for (Map.Entry<String, String> placeholder : placeholders.entrySet()) {
+                final int start = sb.indexOf(placeholder.getKey());
+                final int end = start + placeholder.getKey().length();
+                sb.replace(start, end, placeholder.getValue());
+            }
+            logMethod.accept(sb.toString());
+        }
+    }
+
     public void staffChat(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.staffChannel);
     }
@@ -391,13 +426,13 @@ public class Discord {
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerCommandsChannel);
     }
 
-    public void console(String content, boolean contentInAuthorLine) {
+    public void console(String content) {
 
         if (this.consoleChannel == null) return;
 
         final EmbedBuilder builder = new EmbedBuilder().setAuthor("Console");
 
-        if (!contentInAuthorLine) builder.setDescription(content);
+        builder.setDescription(content);
 
         this.consoleChannel.sendMessage(builder.build()).queue();
     }
@@ -649,7 +684,7 @@ public class Discord {
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.viaVersionChannel);
     }
 
-    public void totemOfUdying(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
+    public void totemOfUndying(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
         this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.totemOfUndyingChannel);
     }
 
@@ -666,6 +701,21 @@ public class Discord {
         if (!contentInAuthorLine) builder.setDescription(content);
 
         this.playerCountChannel.sendMessage(builder.build()).queue();
+    }
+
+    public void manualLog(String content) {
+
+        if (this.manualChannel == null) return;
+
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor("Manual Log");
+
+        builder.setDescription(content);
+
+        this.manualChannel.sendMessage(builder.build()).queue();
+    }
+
+    public void advancementGain(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
+        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.advancementChannel);
     }
 
     private void discordUtil(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine, TextChannel channel) {

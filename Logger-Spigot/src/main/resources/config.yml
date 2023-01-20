@@ -86,6 +86,7 @@ Log-Server:
   Command-Block: true
   Player-Count: true
   Server-Address: true
+  Advancement: true
 
 # This Section requires other plugins to function
 Log-Extras:
@@ -101,6 +102,9 @@ Log-Extras:
 Log-Version-Exceptions:
   Wood-Stripping: true
   Totem-of-Undying: true
+
+Log-Custom:
+  Manual: true
 
 # Only Log Specified Commands
 # Block Commands from getting Logged

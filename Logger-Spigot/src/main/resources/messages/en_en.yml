@@ -90,6 +90,8 @@ Files:
     Player-Count: "[%time%] The Server has hit %amount% player(s)!"
     Server-Address-Staff: "[%time%] [%uuid%] The Staff <%player%> has joined using this address %address%"
     Server-Address: "[%time%] [%uuid%] The Player <%player%> has joined using this address %address%"
+    Advancement-Staff: "[%time%] [%uuid%] The Staff <%player%> has gained the %advancement% advancement"
+    Advancement: "[%time%] [%uuid%] The Player <%player%> has gained the %advancement% advancement"
   Extras:
     AFK-Staff: "[%time%] [%world%] The Staff <%player%> has went AFK at X= %x%, Y= %y%, Z= %z%"
     AFK: "[%time%] [%world%] The Player <%player%> has went AFK at X= %x%, Y= %y%, Z= %z%"
@@ -104,10 +106,12 @@ Files:
     WorldGuard-Staff: "[%time%] %uuid% %world% The Staff <%player%> has entered the marked region '%region%'"
     WorldGuard: "[%time%] %uuid% %world% The Player <%player%> has entered the marked region '%region%'"
   Version-Exceptions:
-    Wood-Stripping-Staff: "**[%time%]** **[%world%]** **[%uuid%]** The Staff <%player%> has stripped %logname% at X= %x%, Y= %y%, Z= %z%"
-    Wood-Stripping: "**[%time%]** **[%world%]** **[%uuid%]** The Player <%player%> has stripped %logname% at X= %x%, Y= %y%, Z= %z%"
-    Totem-of-Undying-Staff: "**[%time%]** **[%world%]** **[%uuid%]** The Staff <%player%> has used Totem of Undying at X= %x%, Y= %y%, Z= %z%"
-    Totem-of-Undying: "**[%time%]** **[%world%]** **[%uuid%]** The Player <%player%> has used Totem of Undying at X= %x%, Y= %y%, Z= %z%"
+    Wood-Stripping-Staff: "[%time%] [%world%] [%uuid%] The Staff <%player%> has stripped %logname% at X= %x%, Y= %y%, Z= %z%"
+    Wood-Stripping: "[%time%] [%world%] [%uuid%] The Player <%player%> has stripped %logname% at X= %x%, Y= %y%, Z= %z%"
+    Totem-of-Undying-Staff: "[%time%] [%world%] [%uuid%] The Staff <%player%> has used Totem of Undying at X= %x%, Y= %y%, Z= %z%"
+    Totem-of-Undying: "[%time%] [%world%] [%uuid%] The Player <%player%> has used Totem of Undying at X= %x%, Y= %y%, Z= %z%"
+  Custom:
+    Manual: "[%time%] %log%"
 # Discord Instance
 # Emojis can be found here https://emojipedia.org/ or elsewhere. Emojis may not work on > 1.12 Servers.
 Discord:
@@ -194,6 +198,8 @@ Discord:
     Player-Count: "**[%time%]** The Server has hit **%amount%** player(s)!"
     Server-Address-Staff: "**[%time%]** **[%uuid%]** Has joined using this address **%address%**"
     Server-Address: "**[%time%]** **[%uuid%]** Has joined using this address **%address%**"
+    Advancement-Staff: "**[%time%]** **[%uuid%]** The Staff has gained the **%advancement%** Advancement"
+    Advancement: "**[%time%]** **[%uuid%]** The Staff has gained the **%advancement%** Advancement"
   Extras:
     AFK-Staff: "**[%time%]** **[%world%]*X= **%x%** `|` Y= **%y%** `|` Z= **%z%**"
     AFK: "**[%time%]** **[%world%]** X= **%x%** `|` Y= **%y%** `|` Z= **%z%**"
@@ -212,3 +218,5 @@ Discord:
     Wood-Stripping: "**[%time%]** **[%world%]** **[%uuid%]** has stripped **%logname%** at X= **%x%**, Y= **%y%**, Z= **%z%**"
     Totem-of-Undying-Staff: "**[%time%]** **[%world%]** **[%uuid%]** has used Totem of Undying at X= **%x%**, Y= **%y%**, Z= **%z%**"
     Totem-of-Undying: "**[%time%]** **[%world%]** **[%uuid%]** has used Totem of Undying at X= **%x%**, Y= **%y%**, Z= **%z%**"
+  Custom:
+    Manual: "**[%time%]** **%log%**"

@@ -4,13 +4,15 @@ import me.prism3.logger.Main;
 import me.prism3.logger.hooks.*;
 import me.prism3.logger.utils.enums.NmsVersions;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -68,6 +70,7 @@ public class FileHandler {
     private static File commandBlockFolder;
     private static File playerCountFolder;
     private static File serverAddressFolder;
+    private static File advancementFolder;
 
     // Extras Side Part
     private static File afkFolder;
@@ -81,6 +84,9 @@ public class FileHandler {
     // Version Exception Part
     private static File woodStrippingFolder;
     private static File totemUndyingFolder;
+
+    // Custom Part
+    private static File manualFolder;
 
     // Files Part
     // Player Side
@@ -131,6 +137,7 @@ public class FileHandler {
     private static File commandBlockFile;
     private static File playerCountFile;
     private static File serverAddressFile;
+    private static File advancementFile;
 
     // Extras Side
     private static File afkFile;
@@ -144,6 +151,9 @@ public class FileHandler {
     // Version Exception Part
     private static File woodStrippingFile;
     private static File totemUndyingFile;
+
+    // Custom Part
+    private static File manualFile;
 
     public FileHandler(File dataFolder) {
 
@@ -296,6 +306,9 @@ public class FileHandler {
         serverAddressFolder = new File(logsFolder, "Server Address");
         serverAddressFile = new File(serverAddressFolder, filenameDateFormat.format(date) + ".log");
 
+        advancementFolder = new File(logsFolder, "Advancement");
+        advancementFile = new File(advancementFolder, filenameDateFormat.format(date) + ".log");
+
         // Extras Side Part
         afkFolder = new File(logsFolder, "AFK");
         afkFile = new File(afkFolder, filenameDateFormat.format(date) + ".log");
@@ -324,6 +337,10 @@ public class FileHandler {
 
         totemUndyingFolder = new File(logsFolder, "Totem of Undying");
         totemUndyingFile = new File(totemUndyingFolder, filenameDateFormat.format(date) + ".log");
+
+        // Custom Part
+        manualFolder = new File(logsFolder, "Manual");
+        manualFile = new File(manualFolder, filenameDateFormat.format(date) + ".log");
 
         try {
 
@@ -425,6 +442,8 @@ public class FileHandler {
 
             serverAddressFolder.mkdir();
 
+            advancementFolder.mkdir();
+
             // Extras Side Part
             if (EssentialsUtil.isAllowed) afkFolder.mkdir();
 
@@ -443,6 +462,9 @@ public class FileHandler {
             // Version Exception Part
             if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFolder.mkdir();
             if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_11_R1)) totemUndyingFolder.mkdir();
+
+            // Custom Part
+            manualFolder.mkdir();
 
 
             // Files Handling
@@ -538,6 +560,8 @@ public class FileHandler {
 
             serverAddressFile.createNewFile();
 
+            advancementFile.createNewFile();
+
             // Extras Side
             if (EssentialsUtil.isAllowed) afkFile.createNewFile();
 
@@ -556,6 +580,9 @@ public class FileHandler {
             // Version Exception Part
             if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFile.createNewFile();
             if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_11_R1)) totemUndyingFile.createNewFile();
+
+            // Custom Part
+            manualFile.createNewFile();
 
         } catch (final IOException e) { e.printStackTrace(); }
     }
@@ -653,6 +680,8 @@ public class FileHandler {
 
     public static File getServerAddressFile() { return serverAddressFile; }
 
+    public static File getAdvancementFile() { return advancementFile; }
+
     // Extras Side Part
     public static File getAfkFile() { return afkFile; }
 
@@ -673,35 +702,580 @@ public class FileHandler {
 
     public static File getTotemUndyingFile() { return totemUndyingFile; }
 
+    // CustomPart
+    public static File getManualFile() { return manualFile; }
+
+    public static void handleFileLog(String messagePath, Map<String, String> placeholders, File logFile) {
+
+        String message = Main.getInstance().getMessages().get().getString(messagePath);
+
+        for (Map.Entry<String, String> placeholder : placeholders.entrySet())
+            message = message.replace(placeholder.getKey(), placeholder.getValue());
+
+        try (final BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true))) {
+            out.append(message).append(System.lineSeparator());
+        } catch (final IOException e) {
+            Log.warning("An error occurred while logging into the appropriate file.");
+            Log.warning(e.getMessage());
+        }
+    }
+
     public void deleteFiles(final File dataFolder) {
 
         if (fileDeletion <= 0) return;
 
+        final long deadLine = System.currentTimeMillis() - (fileDeletion * 24 * 60 * 60 * 1000);
         final File logsFolder = new File(dataFolder, "Logs");
 
-        for (File subLogs : logsFolder.listFiles())
-            this.deleteFilesOlderThanNDays(subLogs);
-    }
-
-    private void deleteFilesOlderThanNDays(final File dirPath) {
-
-        final long deadLine = System.currentTimeMillis() - (fileDeletion * 24 * 60 * 60 * 1000);
-
-        try (final Stream<Path> files = Files.list(Paths.get(dirPath.getPath()))) {
-
+        try (final Stream<Path> files = Files.walk(Paths.get(logsFolder.getPath()))) {
             files.filter(path -> {
                 try {
                     return Files.isRegularFile(path) && Files.getLastModifiedTime(path).to(TimeUnit.MILLISECONDS) < deadLine;
-                } catch (final IOException ex) { return false; }
+                } catch (final IOException ex) {
+                    Log.severe("An error occurred while checking file modification time.", ex);
+                    return false;
+                }
             }).forEach(path -> {
                 try {
-                    Files.delete(path);
-                } catch (final IOException ex) { Log.severe("An error has occurred, Error Code 4."); }
+                    Files.deleteIfExists(path);
+                } catch (final IOException ex) {
+                    Log.severe("An error occurred while deleting files.", ex);
+                }
             });
         } catch (final IOException e) {
-
-            Log.severe("An error occurred whilst deleting files. If the issue persists, contact the Authors.");
-            e.printStackTrace();
+            Log.severe("An error occurred while searching for files to delete.", e);
         }
     }
 }
+
+/*
+package me.prism3.logger.utils;
+
+        import java.io.BufferedWriter;
+        import java.io.File;
+        import java.io.FileWriter;
+        import java.io.IOException;
+        import java.nio.file.*;
+        import java.text.SimpleDateFormat;
+        import java.util.*;
+        import java.util.concurrent.*;
+        import java.util.stream.Stream;
+
+        import static me.prism3.logger.utils.Data.fileDeletion;
+
+public class FileHandler {
+
+    private static final SimpleDateFormat filenameDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private static final String LOGS_FOLDER_NAME = "Logs";
+
+    // Files
+    private static final List<File> playerFiles = new ArrayList<>();
+    private static final List<File> serverFiles = new ArrayList<>();
+    private static final List<File> extrasFiles = new ArrayList<>();
+    private static final List<File> versionExceptionFiles = new ArrayList<>();
+    private static final List<File> customFiles = new ArrayList<>();
+
+    public FileHandler(File dataFolder) {
+
+        final File logsFolder = new File(dataFolder, LOGS_FOLDER_NAME);
+
+        dataFolder.mkdir();
+        logsFolder.mkdirs();
+
+        // Adding player folders
+        final String[] playerFolderNames = {"Player Chat", "Player Commands", "Player Sign Text", "Player Join",
+                "Player Leave", "Player Death", "Player Teleport", "Block Place", "Block Break", "Player Kick",
+                "Player Level", "Bucket Fill", "Bucket Empty", "Anvil", "Staff", "Item Drop", "Item Pickup", "Enchant",
+                "Book Editing", "Furnace", "Game Mode", "Craft", "Registration", "Primed TNT", "Chest Interaction",
+                "Entity Death", "Item Frame Place", "Item Frame Break", "Armor Stand Place", "Armor Stand Break",
+                "Armor Stand Interaction", "End Crystal Place", "End Crystal Break", "Lever Interaction", "Spawn Egg"};
+
+        final String[] serverFolderNames = {"Server Start", "Server Stop", "Console Log", "RAM", "TPS", "Portal Create",
+                "rCon", "Command Block", "Player Count", "Server Address", "Advancement"};
+
+        final String[] extraFolderNames = {"AFK", "Wrong Password", "Vault", "LiteBans", "AdvancedBan", "ViaVersion", "WorldGuard"};
+
+        final String[] versionExceptionFolderNames = {"Wood Stripping", "Totem of Undying"};
+
+        final String[] customFolderNames = {"Manual"};
+
+        // Creating folders
+        // Creating Folders
+        for (String folderName : playerFolderNames) {
+            File playerFolder = new File(logsFolder, folderName);
+            playerFolder.mkdirs();
+            playerFiles.add(new File(playerFolder, filenameDateFormat.format(new Date()) + ".log"));
+        }
+
+        for (String folderName : serverFolderNames) {
+            File serverFolder = new File(logsFolder, folderName);
+            serverFolder.mkdirs();
+            serverFiles.add(new File(serverFolder, filenameDateFormat.format(new Date()) + ".log"));
+        }
+
+        for (String folderName : extraFolderNames) {
+            File extrasFolder = new File(logsFolder, folderName);
+            extrasFolder.mkdirs();
+            extrasFiles.add(new File(extrasFolder, filenameDateFormat.format(new Date()) + ".log"));
+        }
+
+        for (String folderName : versionExceptionFolderNames) {
+            File versionExceptionFolder = new File(logsFolder, folderName);
+            versionExceptionFolder.mkdirs();
+            versionExceptionFiles.add(new File(versionExceptionFolder, filenameDateFormat.format(new Date()) + ".log"));
+        }
+
+        for (String folderName : customFolderNames) {
+            File customFolder = new File(logsFolder, folderName);
+            customFolder.mkdirs();
+            customFiles.add(new File(customFolder, filenameDateFormat.format(new Date()) + ".log"));
+        }
+
+        // Create the files if they don't exist
+        Stream.of(playerFiles, serverFiles, extrasFiles, versionExceptionFiles, customFiles)
+                .flatMap(Collection::stream)
+                .forEach(file -> {
+                    try {
+                        file.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    public static File getChatLogFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Player Chat"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getCommandLogFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Player Commands"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getSignLogFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Player Sign Text"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getPlayerJoinLogFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Player Join"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getPlayerLeaveLogFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Player Leave"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getPlayerDeathLogFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Player Death"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getPlayerDeathBackupLogFolder() { //TODO 1
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Player Tel1eport"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getPlayerTeleportLogFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Player Teleport"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getBlockPlaceLogFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Block Place"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getBlockBreakLogFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Block Break"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getPlayerKickLogFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Player Kick"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getPlayerLevelFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Player Level"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getBucketFillFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Bucket Fill"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getBucketEmptyFolder() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Bucket Empty"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getAnvilFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Anvil"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getStaffFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Staff"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getItemDropFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Item Drop"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getEnchantFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Item Pickup"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getBookEditingFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Enchant"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getItemPickupFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Book Editing"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getFurnaceFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Furnace"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getGameModeFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Game Mode"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getCraftFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Craft"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getRegistrationFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Registration"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getPrimedTNTFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Primed TNT"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getChestInteractionFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Chest Interaction"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getEntityDeathFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Entity Death"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getItemFramePlaceFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Item Frame Place"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getItemFrameBreakFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Item Frame Break"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getArmorStandPlaceFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Armor Stand Place"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getArmorStandBreakFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Armor Stand Break"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getArmorStandInteractionFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Armor Stand Interaction"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getEndCrystalPlaceFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("End Crystal Place"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getEndCrystalBreakFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("End Crystal Break"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getLeverInteractionFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Lever Interaction"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getSpawnEggFile() {
+        return playerFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Spawn Egg"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    // Server Side Part
+    public static File getServerStartFile() {
+        return serverFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Server Start"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getServerStopFile() {
+        return serverFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Server Stop"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getConsoleLogFile() {
+        return serverFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Console Log "))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getRAMLogFile() {
+        return serverFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("RAM"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getTPSLogFile() {
+        return serverFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("TPS"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getPortalCreateFile() {
+        return serverFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Portal Create"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getRconFile() {
+        return serverFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("rCon"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getCommandBlockFile() {
+        return serverFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Command Block"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getPlayerCountFile() {
+        return serverFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Player Count"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getServerAddressFile() {
+        return serverFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Server Address"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getAdvancementFile() {
+        return serverFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Advancement"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    // Extras Side Part
+    public static File getAfkFile() {
+        return extrasFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("AFK"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getWrongPasswordFile() {
+        return extrasFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Wrong Password"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getVaultFile() {
+        return extrasFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Vault"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getLiteBansFile() {
+        return extrasFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Litebans"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getAdvancedBanFile() {
+        return extrasFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("AdvancedBan"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getViaVersionFile() {
+        return extrasFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("ViaVersion"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getWorldGuardFile() {
+        return extrasFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("WorldGuard"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    // Version Exception Part
+    public static File getWoodStrippingFile() {
+        return versionExceptionFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Wood Stripping"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getTotemUndyingFile() {
+        return versionExceptionFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Totem of Undying"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static File getManualFile() {
+        return customFiles.stream()
+                .filter(file -> file.getParentFile().getName().equals("Manual"))
+                .max(Comparator.comparingLong(File::lastModified))
+                .orElse(null);
+    }
+
+    public static void writeToFile(File file, String message) {
+        try (final BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
+            out.write(message);
+        } catch (final IOException e) {
+            Log.warning("An error occurred while logging into the appropriate file.");
+            Log.warning(e.getMessage(), e);
+        }
+    }
+
+    public void deleteFiles(final File dataFolder) {
+
+        if (fileDeletion <= 0) return;
+
+        final long deadLine = System.currentTimeMillis() - (fileDeletion * 24 * 60 * 60 * 1000);
+        final File logsFolder = new File(dataFolder, "Logs");
+
+        try (final Stream<Path> files = Files.walk(Paths.get(logsFolder.getPath()))) {
+            files.filter(path -> {
+                try {
+                    return Files.isRegularFile(path) && Files.getLastModifiedTime(path).to(TimeUnit.MILLISECONDS) < deadLine;
+                } catch (final IOException ex) {
+                    Log.severe("An error occurred while checking file modification time.", ex);
+                    return false;
+                }
+            }).forEach(path -> {
+                try {
+                    Files.deleteIfExists(path);
+                } catch (final IOException ex) {
+                    Log.severe("An error occurred while deleting files.", ex);
+                }
+            });
+        } catch (final IOException e) { Log.severe("An error occurred while searching for files to delete.", e); }
+    }
+}*/

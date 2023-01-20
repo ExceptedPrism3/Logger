@@ -44,13 +44,18 @@ public class Dump implements SubCommand {
     private void pastebinExecution(CommandSender commandSender) {
 
         try {
+
             final Dotenv dotenv = Dotenv.load();
 
-            final String config = Files.asCharSource(new File(dataFolder + "/config.yml"), StandardCharsets.UTF_8).read();
-            final String discord = Files.asCharSource(new File(dataFolder + "/discord.yml"), StandardCharsets.UTF_8).read();
-            final String messages = Files.asCharSource(new File(dataFolder + "/messages/" + selectedLang + ".yml"), StandardCharsets.UTF_8).read();
-            final String latest = Files.asCharSource(new File("logs/latest.log"), StandardCharsets.UTF_8).read();
-            final Pastebin.PasteRequest request = new Pastebin.PasteRequest(dotenv.get("PASTEBIN_API"), config + " \n\n\n\nDISCORD CONFIG\n\n\n\n " + discord + " \n\n\n\nMESSAGES PART\n\n\n\n " + messages + " \n\n\n\nLATEST LOG PART\n\n\n\n " + latest);
+            final String[] loggerFiles = { "config.yml", "discord.yml", "messages" + File.separator + selectedLang + ".yml" };
+            final StringBuilder sb = new StringBuilder();
+
+            for (final String file : loggerFiles)
+                sb.append(Files.asCharSource(new File(dataFolder + File.separator + file), StandardCharsets.UTF_8).read()).append("\n\n\n");
+
+            sb.append(Files.asCharSource(new File("logs" + File.separator + "latest.log"), StandardCharsets.UTF_8).read());
+
+            final Pastebin.PasteRequest request = new Pastebin.PasteRequest(dotenv.get("PASTEBIN_API"), sb.toString());
             request.setPasteName("Logger MC Plugin");
             request.setPasteFormat("yaml");
             request.setPasteState(1);
@@ -61,8 +66,13 @@ public class Dump implements SubCommand {
         } catch (final Exception e) {
 
             commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    pluginPrefix + "An error occurred whist executing this command. Before reporting this issue "));
+                    pluginPrefix + "&cAn error occurred while executing this command." +
+                            " This can be caused by the following:\n" +
+                            "- No internet connection\n" +
+                            "- FireWall preventing the connection to the PasteBin site\n" +
+                            "If the issue persists, contact the authors!"));
 
+            e.printStackTrace();
         }
     }
 }

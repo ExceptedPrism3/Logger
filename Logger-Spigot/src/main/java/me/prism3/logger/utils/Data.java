@@ -7,6 +7,7 @@ import me.prism3.logger.events.*;
 import me.prism3.logger.events.commands.OnCommand;
 import me.prism3.logger.events.inventories.OnChestInteraction;
 import me.prism3.logger.events.inventories.OnCraft;
+import me.prism3.logger.serverside.OnAdvancement;
 import me.prism3.logger.events.inventories.OnFurnace;
 import me.prism3.logger.events.misc.*;
 import me.prism3.logger.events.spy.OnAnvilSpy;
@@ -301,6 +302,9 @@ public class Data {
 
         if (this.main.getConfig().getBoolean("Log-Player.ArmorStand-Interaction"))
             this.main.getServer().getPluginManager().registerEvents(new ArmorStandInteraction(), this.main);
+
+        if (this.main.getConfig().getBoolean("Log-Server.Advancements"))
+            this.main.getServer().getPluginManager().registerEvents(new OnAdvancement(), this.main);
 
         // Server Side
         if (this.main.getConfig().getBoolean("Log-Server.Console-Commands"))

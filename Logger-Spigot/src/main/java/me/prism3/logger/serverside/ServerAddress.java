@@ -72,7 +72,7 @@ public class ServerAddress implements Listener {
             } else {
                 if (!this.main.getMessages().get().getString("Discord.Server-Side.Server-Address").isEmpty()) {
 
-                    this.main.getDiscord().playerJoin(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Server-Side.Server-Address").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%address%", address).replace("%uuid%", playerUUID.toString()), false);
+                    this.main.getDiscord().serverAddress(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Server-Side.Server-Address").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%address%", address).replace("%uuid%", playerUUID.toString()), false);
                 }
             }
         }

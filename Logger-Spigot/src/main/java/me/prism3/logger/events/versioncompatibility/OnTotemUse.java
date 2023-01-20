@@ -80,7 +80,7 @@ public class OnTotemUse implements Listener {
 
                     if (!this.main.getMessages().get().getString("Discord.Version-Exceptions.Totem-of-Undying").isEmpty()) {
 
-                        this.main.getDiscord().totemOfUdying(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Version-Exceptions.Totem-of-Undying").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
+                        this.main.getDiscord().totemOfUndying(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Version-Exceptions.Totem-of-Undying").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
                     }
                 }
             }

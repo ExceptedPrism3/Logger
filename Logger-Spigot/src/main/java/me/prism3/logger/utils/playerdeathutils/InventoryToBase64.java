@@ -15,71 +15,42 @@ public class InventoryToBase64 {
 
     public static String toBase64(ItemStack[] contents) {
 
-        boolean convert = false;
+        try {
 
-        for (ItemStack item : contents) {
-            if (item != null) {
-                convert = true;
-                break;
-            }
+            final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            final BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);
+
+            dataOutput.writeInt(contents.length);
+
+            for (ItemStack stack : contents)
+                dataOutput.writeObject(stack);
+
+            dataOutput.close();
+
+            byte[] byteArr = outputStream.toByteArray();
+
+            return Base64Coder.encodeLines(byteArr);
+        } catch (final IOException e) {
+            throw new IllegalStateException("An error has occurred whilst saving the Player Inventory." +
+                    " Does the proper file exists? If the issue persists, contact the Authors!", e);
         }
-
-        if (convert) {
-            try {
-                final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                final BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);
-
-                dataOutput.writeInt(contents.length);
-
-                for (ItemStack stack : contents)
-                    dataOutput.writeObject(stack);
-
-                dataOutput.close();
-
-                byte[] byteArr = outputStream.toByteArray();
-
-                return Base64Coder.encodeLines(byteArr);
-            } catch (final Exception e) {
-                throw new IllegalStateException("An error has occurred whilst saving the Player Inventory." +
-                        " Does the proper file exists? If the issue persists, contact the Authors!", e);
-            }
-        }
-        return null;
     }
 
     public static ItemStack[] stacksFromBase64(String data) {
 
-        if (data == null) return new ItemStack[]{};
-
-        final ByteArrayInputStream inputStream;
-
         try {
-            inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
-        } catch (IllegalArgumentException e) { return new ItemStack[]{}; }
 
-        BukkitObjectInputStream dataInput = null;
-        ItemStack[] stacks = null;
+            final ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
+            final BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
+            final ItemStack[] stacks = new ItemStack[dataInput.readInt()];
 
-        try {
-            dataInput = new BukkitObjectInputStream(inputStream);
-            stacks = new ItemStack[dataInput.readInt()];
-        } catch (IOException e1) { e1.printStackTrace(); }
-
-        if (stacks == null) return new ItemStack[]{};
-
-        for (int i = 0; i < stacks.length; i++) {
-            try {
+            for (int i = 0; i < stacks.length; i++)
                 stacks[i] = (ItemStack) dataInput.readObject();
-            } catch (IOException | ClassNotFoundException | NullPointerException e) {
 
-                try { dataInput.close(); } catch (IOException ignored) {}
-
-                return new ItemStack[0];
-            }
+            return stacks;
+        } catch (final IOException | ClassNotFoundException e) {
+            throw new IllegalStateException("An error has occurred whilst loading the Player Inventory." +
+                    " Does the proper file exists? If the issue persists, contact the Authors!", e);
         }
-
-        try { dataInput.close(); } catch (IOException ignored) {}
-
-        return stacks;
     }
 }

@@ -100,6 +100,8 @@ Discord:
       Channel-ID: 'CHANNEL_ID'
     Server-Address:
       Channel-ID: 'CHANNEL_ID'
+    Advancement:
+      Channel-ID: 'CHANNEL_ID'
 
   # Extra Side Checkers
   Extras:
@@ -123,6 +125,10 @@ Discord:
     Wood-Stripping:
       Channel-ID: 'CHANNEL_ID'
     Totem-of-Undying:
+      Channel-ID: 'CHANNEL_ID'
+
+  Custom:
+    Manual:
       Channel-ID: 'CHANNEL_ID'
 
 
