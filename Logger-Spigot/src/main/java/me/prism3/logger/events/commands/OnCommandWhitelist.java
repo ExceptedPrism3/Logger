@@ -1,20 +1,17 @@
 package me.prism3.logger.events.commands;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static me.prism3.logger.utils.Data.*;
 
@@ -36,31 +33,23 @@ public class OnCommandWhitelist implements Listener {
 
     private void commandWhitelistLog(Player player, String command) {
 
+        final String worldName = player.getWorld().getName();
+        final UUID playerUUID = player.getUniqueId();
+        final String playerName = player.getName();
+
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%world%", worldName);
+        placeholders.put("%uuid%", playerUUID.toString());
+        placeholders.put("%player%", playerName);
+        placeholders.put("%command%", command);
+
         // Log To Files
-        if (isLogToFiles) {
-
-            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-
-                    out.write(this.main.getMessages().get().getString("Files.Player-Commands-Whitelisted-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", player.getWorld().getName()).replace("%player%", player.getName()).replace("%command%", command).replace("%uuid%", player.getUniqueId().toString()) + "\n");
-
-                } catch (final IOException e) {
-
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
+        if (Data.isLogToFiles) {
+            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                FileHandler.handleFileLog("Files.Player-Commands-Whitelisted-Staff", placeholders, FileHandler.getStaffFile());
             } else {
-
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true))) {
-
-                    out.write(this.main.getMessages().get().getString("Files.Player-Commands-Whitelisted").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", player.getWorld().getName()).replace("%player%", player.getName()).replace("%command%", command).replace("%uuid%", player.getUniqueId().toString()) + "\n");
-
-                } catch (final IOException e) {
-
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
+                FileHandler.handleFileLog("Files.Player-Commands-Whitelisted", placeholders, FileHandler.getPlayerCommandLogFile());
             }
         }
 
@@ -69,16 +58,10 @@ public class OnCommandWhitelist implements Listener {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                if (!this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted-Staff").isEmpty()) {
-
-                    this.main.getDiscord().staffChat(player.getName(), player.getUniqueId(), this.main.getMessages().get().getString("Discord.Player-Commands-Staff-Whitelisted").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", player.getWorld().getName()).replace("%command%", command).replace("%uuid%", player.getUniqueId().toString()), false);
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Commands-Whitelisted-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                if (!this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted").isEmpty()) {
-
-                    this.main.getDiscord().playerCommand(player.getName(), player.getUniqueId(), this.main.getMessages().get().getString("Discord.Player-Commands-Whitelisted").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", player.getWorld().getName()).replace("%command%", command).replace("%uuid%", player.getUniqueId().toString()), false);
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Commands-Whitelisted", placeholders, DiscordChannels.PLAYER_COMMANDS, playerName, playerUUID);
             }
         }
 

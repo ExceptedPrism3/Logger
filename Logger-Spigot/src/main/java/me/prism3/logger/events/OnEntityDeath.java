@@ -1,10 +1,10 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -13,13 +13,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
 
 public class OnEntityDeath implements Listener {
 
@@ -46,48 +45,34 @@ public class OnEntityDeath implements Listener {
 
         final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%world%", worldName);
+        placeholders.put("%uuid%", playerUUID.toString());
+        placeholders.put("%player%", playerName);
+        placeholders.put("%x%", String.valueOf(x));
+        placeholders.put("%y%", String.valueOf(y));
+        placeholders.put("%z%", String.valueOf(z));
+        placeholders.put("%mob%", entityName);
+
         // Log To Files
         if (Data.isLogToFiles) {
-
-            if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-                   
-                    out.write(this.main.getMessages().get().getString("Files.Entity-Death-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-
-                } catch (final IOException e) {
-
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
+            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                FileHandler.handleFileLog("Files.Entity-Death-Staff", placeholders, FileHandler.getStaffFile());
             } else {
-
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getEntityDeathFile(), true))) {
-
-                    out.write(this.main.getMessages().get().getString("Files.Entity-Death").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-
-                } catch (final IOException e) {
-
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
+                FileHandler.handleFileLog("Files.Entity-Death", placeholders, FileHandler.getEntityDeathFile());
             }
         }
 
         // Discord Integration
-        if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-            if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                if (!this.main.getMessages().get().getString("Discord.Entity-Death-Staff").isEmpty()) {
-
-                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Entity-Death-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Entity-Death-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
-                if (!this.main.getMessages().get().getString("Discord.Entity-Death").isEmpty()) {
 
-                    this.main.getDiscord().entityDeath(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Entity-Death").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%mob%", entityName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Entity-Death", placeholders, DiscordChannels.ENTITY_DEATH, playerName, playerUUID);
             }
         }
 

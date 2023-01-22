@@ -1,10 +1,10 @@
 package me.prism3.logger.events.misc;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import me.prism3.loggercore.database.entity.enums.ArmorStandActionType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,14 +14,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
 
 public class ArmorStandEndCrystalPlace implements Listener {
 
@@ -30,10 +29,11 @@ public class ArmorStandEndCrystalPlace implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onArmorStandEndCrystalPlace(final PlayerInteractEvent event) {
 
-        if (event.getPlayer().hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(event.getPlayer().getUniqueId()))
+        if (event.isCancelled() || event.getPlayer().hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(event.getPlayer().getUniqueId())
+                || event.getItem() == null)
             return;
 
-        if (!event.isCancelled() && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.hasItem()
+        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.hasItem()
                 && (event.getItem().getType().equals(Material.ARMOR_STAND) || event.getItem().getType().equals(Material.END_CRYSTAL))) {
 
             final Player player = event.getPlayer();
@@ -44,67 +44,55 @@ public class ArmorStandEndCrystalPlace implements Listener {
             final String playerName = player.getName();
             final UUID playerUUID = player.getUniqueId();
             final Material entity = event.getItem().getType();
+
+            if (event.getClickedBlock() == null)
+                return;
+
             final int x = event.getClickedBlock().getLocation().getBlockX();
             final int y = event.getClickedBlock().getLocation().getBlockY();
             final int z = event.getClickedBlock().getLocation().getBlockZ();
 
             final String path;
             final File getter;
+            final DiscordChannels discordChannels;
 
             if (entity.equals(Material.ARMOR_STAND)) {
                 path = "ArmorStand-Place";
                 getter = FileHandler.getArmorStandPlaceFile();
+                discordChannels = DiscordChannels.ARMOR_STAND_PLACE;
             } else {
                 path = "EndCrystal-Place";
                 getter = FileHandler.getEndCrystalPlaceFile();
+                discordChannels = DiscordChannels.END_CRYSTAL_PLACE;
             }
+
+            final Map<String, String> placeholders = new HashMap<>();
+            placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+            placeholders.put("%world%", worldName);
+            placeholders.put("%uuid%", playerUUID.toString());
+            placeholders.put("%player%", playerName);
+            placeholders.put("%x%", String.valueOf(x));
+            placeholders.put("%y%", String.valueOf(y));
+            placeholders.put("%z%", String.valueOf(z));
 
             // Log To Files
             if (Data.isLogToFiles) {
-
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files." + path + "-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
+                    FileHandler.handleFileLog("Files." + path + "-Staff", placeholders, FileHandler.getStaffFile());
                 } else {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(getter, true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files." + path).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
+                    FileHandler.handleFileLog("Files." + path, placeholders, getter);
                 }
             }
 
             // Discord Integration
-            if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!this.main.getMessages().get().getString("Discord." + path + "-Staff").isEmpty()) {
-
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord." + path + "-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-                    }
+                    this.main.getDiscord().handleDiscordLog("Discord." + path + "-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                 } else {
 
-                    if (!this.main.getMessages().get().getString("Discord." + path).isEmpty()) {
-
-                        if (entity.equals(Material.ARMOR_STAND))
-                            this.main.getDiscord().armorStandPlace(playerName, playerUUID, this.main.getMessages().get().getString("Discord." + path).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-                        else
-                            this.main.getDiscord().endCrystalPlace(playerName, playerUUID, this.main.getMessages().get().getString("Discord." + path).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-                    }
+                    this.main.getDiscord().handleDiscordLog("Discord." + path, placeholders, discordChannels, playerName, playerUUID);
                 }
             }
 

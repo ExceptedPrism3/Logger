@@ -1,21 +1,22 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+
+import static me.prism3.logger.utils.Data.*;
 
 public class OnPlayerRegister {
 
@@ -35,23 +36,19 @@ public class OnPlayerRegister {
 
         final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%date%", dateFormat.format(ZonedDateTime.now()));
+        placeholders.put("%uuid%", playerUUID.toString());
+        placeholders.put("%player%", playerName);
+
         // Log To Files
-        if (Data.isLogToFiles) {
-
-            try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRegistrationFile(), true))) {
-
-                out.write(this.main.getMessages().get().getString("Files.Player-Registration").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()) + "\n");
-
-            } catch (final IOException e) {
-
-                Log.warning("An error occurred while logging into the appropriate file.");
-                e.printStackTrace();
-            }
-        }
+        if (Data.isLogToFiles)
+            FileHandler.handleFileLog("Files.Player-Registration", placeholders, FileHandler.getRegistrationFile());
 
         // Discord Integration
-        if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable") && this.main.getMessages().get().getString("Discord.Player-Registration").isEmpty())
-            this.main.getDiscord().playerRegistration(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Registration").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%date%", dateFormat.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()), false);
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable"))
+            this.main.getDiscord().handleDiscordLog("Discord.Player-Registration", placeholders, DiscordChannels.REGISTRATION, playerName, playerUUID);
 
         // External
         if (Data.isExternal) {

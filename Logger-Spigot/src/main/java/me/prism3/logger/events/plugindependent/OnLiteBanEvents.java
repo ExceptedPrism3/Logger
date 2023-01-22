@@ -3,18 +3,19 @@ package me.prism3.logger.events.plugindependent;
 import litebans.api.Entry;
 import litebans.api.Events;
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import me.prism3.logger.utils.liteban.UsernameFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+import static me.prism3.logger.utils.Data.*;
 
 public class OnLiteBanEvents implements Listener, Runnable {
 
@@ -38,23 +39,23 @@ public class OnLiteBanEvents implements Listener, Runnable {
                 final Player player = Bukkit.getPlayer(executorName);
                 final String playerUUID = player == null ? "" : player.getUniqueId().toString();
 
+                final Map<String, String> placeholders = new HashMap<>();
+                placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+                placeholders.put("%uuid%", playerUUID);
+                placeholders.put("%executor%", executorName);
+                placeholders.put("%executed_on%", onWho);
+                placeholders.put("%reason%", reason);
+                placeholders.put("%expiration%", duration);
+                placeholders.put("%type%", entryType);
+                placeholders.put("%silent%", String.valueOf(isSilent));
+
                 // Log To Files
-                if (Data.isLogToFiles) {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLiteBansFile(), true))) {
-
-                        out.write(main.getMessages().get().getString("Files.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", duration).replace("%type%", entryType).replace("%silent%", String.valueOf(isSilent)).replace("%uuid%", playerUUID) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
-                }
+                if (Data.isLogToFiles)
+                    FileHandler.handleFileLog("Files.Extras.LiteBans", placeholders, FileHandler.getLiteBansFile());
 
                 // Discord Integration
-                if (main.getDiscordFile().getBoolean("Discord.Enable") && !main.getMessages().get().getString("Discord.Extras.LiteBans").isEmpty())
-                    main.getDiscord().liteBans(main.getMessages().get().getString("Discord.Extras.LiteBans").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executorName).replace("%executed_on%", onWho).replace("%reason%", reason).replace("%expiration%", String.valueOf(duration)).replace("%type%", entryType).replace("%uuid%", playerUUID).replace("%silent%", String.valueOf(isSilent)), false);
+                if (!player.hasPermission(loggerExemptDiscord) && main.getDiscordFile().getBoolean("Discord.Enable"))
+                    main.getDiscord().handleDiscordLog("Discord.Primed-TNT", placeholders, DiscordChannels.LITE_BANS, executorName, player.getUniqueId());
 
                 // External
                 if (Data.isExternal) {

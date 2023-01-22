@@ -2,12 +2,12 @@ package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.events.plugindependent.OnViaVer;
 import me.prism3.logger.hooks.ViaVersionUtil;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -16,14 +16,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
 
 public class OnPlayerJoin implements Listener {
 
@@ -43,6 +42,13 @@ public class OnPlayerJoin implements Listener {
 
         final Player player = event.getPlayer();
 
+        if (Data.isCommandsToBlock && Data.isCommandsToLog && player.hasPermission(Data.loggerStaff)) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    "&bLogger &8&l| &cEnabling both Whitelist" +
+                            " and Blacklist isn't supported. Disable one of them" +
+                            " to continue logging Player Commands."));
+        }
+
         if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
         final String worldName = player.getWorld().getName();
@@ -56,55 +62,34 @@ public class OnPlayerJoin implements Listener {
 
         final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
-        if (Data.isCommandsToBlock && Data.isCommandsToLog && player.hasPermission(Data.loggerStaff)) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    "&bLogger &8&l| &cEnabling both Whitelist" +
-                            " and Blacklist isn't supported. Disable one of them" +
-                            " to continue logging Player Commands."));
-        }
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%world%", worldName);
+        placeholders.put("%uuid%", playerUUID.toString());
+        placeholders.put("%player%", playerName);
+        placeholders.put("%x%", String.valueOf(x));
+        placeholders.put("%y%", String.valueOf(y));
+        placeholders.put("%z%", String.valueOf(z));
+        placeholders.put("%IP%", String.valueOf(ip));
 
         // Log To Files
         if (Data.isLogToFiles) {
-
-            if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-                   
-                    out.write(this.main.getMessages().get().getString("Files.Player-Join-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%IP%", String.valueOf(ip)).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                } catch (final IOException e) {
-
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
+            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                FileHandler.handleFileLog("Files.Player-Join-Staff", placeholders, FileHandler.getStaffFile());
             } else {
-
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerJoinLogFile(), true))) {
-
-                    out.write(this.main.getMessages().get().getString("Files.Player-Join").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%IP%", String.valueOf(ip)).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                } catch (final IOException e) {
-
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
+                FileHandler.handleFileLog("Files.Player-Join", placeholders, FileHandler.getPlayerJoinLogFile());
             }
         }
 
         // Discord
-        if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-            if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                if (!this.main.getMessages().get().getString("Discord.Player-Join-Staff").isEmpty()) {
-
-                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Join-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%IP%", String.valueOf(ip)).replace("%uuid%", playerUUID.toString()), false);
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Join-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
-                if (!this.main.getMessages().get().getString("Discord.Player-Join").isEmpty()) {
 
-                    this.main.getDiscord().playerJoin(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Join").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%IP%", String.valueOf(ip)).replace("%uuid%", playerUUID.toString()), false);
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Join", placeholders, DiscordChannels.PLAYER_JOIN, playerName, playerUUID);
             }
         }
 

@@ -2,22 +2,21 @@ package me.prism3.logger.events.plugindependent;
 
 import fr.xephi.authme.events.FailedLoginEvent;
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
 
 public class OnAuthMePassword implements Listener {
 
@@ -34,49 +33,30 @@ public class OnAuthMePassword implements Listener {
         final UUID playerUUID = player.getUniqueId();
         final String worldName = player.getWorld().getName();
 
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%world%", worldName);
+        placeholders.put("%uuid%", playerUUID.toString());
+        placeholders.put("%player%", playerName);
+
         // Log To Files
         if (Data.isLogToFiles) {
-
             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-                   
-                    out.write(this.main.getMessages().get().getString("Files.Extras.Wrong-Password-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                } catch (final IOException e) {
-
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
+                FileHandler.handleFileLog("Files.Extras.Wrong-Password-Staff", placeholders, FileHandler.getStaffFile());
             } else {
-
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getWrongPasswordFile(), true))) {
-
-                    out.write(this.main.getMessages().get().getString("Files.Extras.Wrong-Password").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                } catch (final IOException e) {
-
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
+                FileHandler.handleFileLog("Files.Extras.Wrong-Password", placeholders, FileHandler.getWrongPasswordFile());
             }
         }
 
         // Discord
-        if (!player.hasPermission(Data.loggerExemptDiscord)) {
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                if (!this.main.getMessages().get().getString("Discord.Extras.Wrong-Password-Staff").isEmpty()) {
-
-                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Wrong-Password-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%uuid%", playerUUID.toString()), false);
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Extras.Wrong-Password-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                if (!this.main.getMessages().get().getString("Discord.Extras.Wrong-Password").isEmpty()) {
-
-                    this.main.getDiscord().wrongPassword(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Wrong-Password").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%uuid%", playerUUID.toString()), false);
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Extras.Wrong-Password", placeholders, DiscordChannels.WRONG_PASSWORD, playerName, playerUUID);
             }
         }
 

@@ -1,10 +1,9 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.Discord2;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import net.dv8tion.jda.api.EmbedBuilder;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,7 +25,6 @@ public class Console implements Listener {
 
         if (event.getSender() instanceof BlockCommandSender) return;
 
-        final String command = event.getCommand().replace("\\", "\\\\");
         final List<String> commandParts = Arrays.asList(event.getCommand().split("\\s+"));
 
         // Blacklisted Commands
@@ -34,6 +32,8 @@ public class Console implements Listener {
             event.setCancelled(true);
             return;
         }
+
+        final String command = event.getCommand().replace("\\", "\\\\");
 
         final Map<String, String> placeholders = new HashMap<>();
         placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
@@ -45,13 +45,7 @@ public class Console implements Listener {
 
         // Discord
         if (this.main.getDiscordFile().getBoolean("Discord.Enable"))
-            this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Console-Commands", placeholders, this.main.getDiscord()::console);
-
-        final EmbedBuilder builder = new EmbedBuilder().setAuthor("Manual Log");
-
-        builder.setDescription(command);
-
-        this.main.getDiscord2().getChannels().get(Discord2.CONSOLE_CHANNEL).sendMessage(builder.build()).queue();
+            this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Console-Commands", placeholders, DiscordChannels.CONSOLE, "Console Commands", null);
 
         // External
         if (Data.isExternal) {

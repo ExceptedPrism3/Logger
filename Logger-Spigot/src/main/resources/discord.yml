@@ -134,7 +134,7 @@ Discord:
 
 # Bot Activity Status
 # Randomize the shown status
-# Change the Status of the Bot [ online , idle , busy , invisible ]
+# Change the Status of the Bot [ online , idle , dnd , invisible ]
 # Activities: First Part must not be different from
 # Playing, Watching, Listening, Streaming, Competing
 # Otherwise it will not work

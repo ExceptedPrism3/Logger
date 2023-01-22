@@ -1,14 +1,13 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Stop {
 
@@ -16,45 +15,38 @@ public class Stop {
 
     public void run() {
 
-        if (this.main.getConfig().getBoolean("Log-Server.Stop")) {
+        if (!this.main.getConfig().getBoolean("Log-Server.Stop"))
+            return;
 
-            // Log To Files
-            if (Data.isLogToFiles) {
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
 
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStopFile(), true))) {
+        // Log To Files
+        if (Data.isLogToFiles)
+            FileHandler.handleFileLog("Files.Server-Side.Stop", placeholders, FileHandler.getServerStopFile());
 
-                    out.write(this.main.getMessages().get().getString("Files.Server-Side.Stop").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())) + "\n");
+        // Discord
+        if (this.main.getDiscordFile().getBoolean("Discord.Enable"))
+            this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Stop", placeholders, DiscordChannels.SERVER_STOP, "Server Stop", null);
 
-                } catch (final IOException e) {
+        // External
+        if (Data.isExternal) {
 
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
-            }
+            try {
 
-            // Discord
-            if (!this.main.getMessages().get().getString("Discord.Server-Side.Stop").isEmpty() && this.main.getDiscordFile().getBoolean("Discord.Enable"))
-                this.main.getDiscord().serverStop(this.main.getMessages().get().getString("Discord.Server-Side.Stop").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())), false);
+                Main.getInstance().getDatabase().insertServerStop(Data.serverName);
 
-            // External
-            if (Data.isExternal) {
+            } catch (final Exception e) { e.printStackTrace(); }
+        }
 
-                try {
+        // SQLite
+        if (Data.isSqlite) {
 
-                    Main.getInstance().getDatabase().insertServerStop(Data.serverName);
+            try {
 
-                } catch (final Exception e) { e.printStackTrace(); }
-            }
+                Main.getInstance().getSqLite().insertServerStop(Data.serverName);
 
-            // SQLite
-            if (Data.isSqlite) {
-
-                try {
-
-                    Main.getInstance().getSqLite().insertServerStop(Data.serverName);
-
-                } catch (final Exception e) { e.printStackTrace(); }
-            }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

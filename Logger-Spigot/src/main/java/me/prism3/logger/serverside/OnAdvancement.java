@@ -1,6 +1,7 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -9,12 +10,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 
-import java.io.File;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
 
 public class OnAdvancement implements Listener {
 
@@ -43,11 +43,14 @@ public class OnAdvancement implements Listener {
         }
 
         // Discord
-        if (this.main.getDiscordFile().getBoolean("Discord.Enable") && !player.hasPermission(Data.loggerExemptDiscord)) {
-            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-//                this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Advancement-Staff", placeholders, player.getName(), player.getUniqueId(), this.main.getDiscord()::staffChat);
-//            } else {
-//                this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Advancement", placeholders, this.main.getDiscord()::advancementGain);
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+
+            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+
+                this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Advancement-Staff", placeholders, DiscordChannels.STAFF, player.getName(), player.getUniqueId());
+            } else {
+
+                this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Advancement", placeholders, DiscordChannels.ADVANCEMENT, player.getName(), player.getUniqueId());
             }
         }
     }

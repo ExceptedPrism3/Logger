@@ -2,19 +2,20 @@ package me.prism3.logger.events.plugindependent;
 
 import me.leoko.advancedban.bukkit.event.PunishmentEvent;
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+import static me.prism3.logger.utils.Data.*;
 
 public class OnAdvancedBan implements Listener {
 
@@ -31,24 +32,21 @@ public class OnAdvancedBan implements Listener {
         final String reason = event.getPunishment().getReason();
         final long expirationDate = event.getPunishment().getEnd();
 
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%uuid%", playerUUID);
+        placeholders.put("%executor%", executor);
+        placeholders.put("%executed_on%", executedOn);
+        placeholders.put("%expiration%", String.valueOf(expirationDate));
+        placeholders.put("%type%", type);
+
         // Log To Files
-        if (Data.isLogToFiles) {
-
-            try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAdvancedBanFile(), true))) {
-
-                out.write(this.main.getMessages().get().getString("Files.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executedOn).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type).replace("%uuid%", playerUUID) + "\n");
-
-            } catch (final IOException e) {
-
-                Log.warning("An error occurred while logging into the appropriate file.");
-                e.printStackTrace();
-            }
-        }
+        if (Data.isLogToFiles)
+            FileHandler.handleFileLog("Files.Extras.AdvancedBan", placeholders, FileHandler.getAdvancedBanFile());
 
         // Discord Integration
-        if (this.main.getDiscordFile().getBoolean("Discord.Enable") && !this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").isEmpty())
-            this.main.getDiscord().advancedBan(this.main.getMessages().get().getString("Discord.Extras.AdvancedBan").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%executor%", executor).replace("%executed_on%", executedOn).replace("%reason%", reason).replace("%expiration%", String.valueOf(expirationDate)).replace("%type%", type).replace("%uuid%", playerUUID), false);
-
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable"))
+                this.main.getDiscord().handleDiscordLog("Discord.Extras.AdvancedBan", placeholders, DiscordChannels.ADVANCED_BAN, executor, player.getUniqueId());
 
         // External
         if (Data.isExternal) {

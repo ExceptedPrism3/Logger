@@ -1,10 +1,10 @@
 package me.prism3.logger.events.misc;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,13 +14,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
 
 public class LeverInteraction implements Listener {
 
@@ -29,7 +28,10 @@ public class LeverInteraction implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLever(final PlayerInteractEvent event) {
 
-        if (!event.isCancelled() && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)
+        if (event.getClickedBlock() == null || event.isCancelled())
+            return;
+
+        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)
                 && event.getClickedBlock().getType().equals(Material.LEVER)) {
 
             final Player player = event.getPlayer();
@@ -45,49 +47,33 @@ public class LeverInteraction implements Listener {
 
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
+            final Map<String, String> placeholders = new HashMap<>();
+            placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+            placeholders.put("%world%", worldName);
+            placeholders.put("%uuid%", playerUUID.toString());
+            placeholders.put("%player%", playerName);
+            placeholders.put("%x%", String.valueOf(x));
+            placeholders.put("%y%", String.valueOf(y));
+            placeholders.put("%z%", String.valueOf(z));
+
             // Log To Files
             if (Data.isLogToFiles) {
-
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files.Lever-Interaction-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
+                    FileHandler.handleFileLog("Files.Lever-Interaction-Staff", placeholders, FileHandler.getStaffFile());
                 } else {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getLeverInteractionFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files.Lever-Interaction").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
+                    FileHandler.handleFileLog("Files.Lever-Interaction", placeholders, FileHandler.getLeverInteractionFile());
                 }
             }
 
             // Discord Integration
-            if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!this.main.getMessages().get().getString("Discord.Lever-Interaction-Staff").isEmpty()) {
-
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Lever-Interaction-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-                    }
+                    this.main.getDiscord().handleDiscordLog("Discord.Lever-Interaction-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                 } else {
 
-                    if (!this.main.getMessages().get().getString("Discord.Lever-Interaction").isEmpty()) {
-
-                        this.main.getDiscord().leverInteraction(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Lever-Interaction").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-                    }
+                    this.main.getDiscord().handleDiscordLog("Discord.Lever-Interaction", placeholders, DiscordChannels.LEVER_INTERACTION, playerName, playerUUID);
                 }
             }
 

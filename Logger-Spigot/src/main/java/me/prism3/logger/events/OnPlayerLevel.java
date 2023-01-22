@@ -1,23 +1,22 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
 
 public class OnPlayerLevel implements Listener {
 
@@ -35,51 +34,32 @@ public class OnPlayerLevel implements Listener {
         final int logAbove = Data.abovePlayerLevel;
         final double playerLevel = event.getNewLevel();
 
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%uuid%", playerUUID.toString());
+        placeholders.put("%player%", playerName);
+        placeholders.put("%level%", String.valueOf(logAbove));
+
         if (playerLevel == logAbove) {
 
             // Log To Files
             if (Data.isLogToFiles) {
-
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files.Player-Level-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%level%", String.valueOf(logAbove)).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
+                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                    FileHandler.handleFileLog("Files.Player-Level-Staff", placeholders, FileHandler.getStaffFile());
                 } else {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPlayerLevelFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files.Player-Level").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%level%", String.valueOf(logAbove)).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
+                    FileHandler.handleFileLog("Files.Player-Level", placeholders, FileHandler.getPlayerLevelFile());
                 }
             }
 
             // Discord Integration
-            if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!this.main.getMessages().get().getString("Discord.Player-Level-Staff").isEmpty()) {
-
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Level-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)).replace("%uuid%", playerUUID.toString()), false);
-                    }
+                    this.main.getDiscord().handleDiscordLog("Discord.Player-Level-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                 } else {
 
-                    if (!this.main.getMessages().get().getString("Discord.Player-Level").isEmpty()) {
-
-                        this.main.getDiscord().playerLevel(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Level").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%level%", String.valueOf(logAbove)).replace("%uuid%", playerUUID.toString()), false);
-                    }
+                    this.main.getDiscord().handleDiscordLog("Discord.Player-Level", placeholders, DiscordChannels.PLAYER_LEVEL, playerName, playerUUID);
                 }
             }
 

@@ -4,7 +4,6 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.Log;
 import me.prism3.logger.utils.config.Config;
 import me.prism3.logger.utils.updater.FileUpdater;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
@@ -36,9 +35,8 @@ public class DiscordManager {
         if (!this.discordFile.exists())
             return;
 
-        final Configuration defaults = this.plugin.getConfig().getDefaults();
-        final int oldVersion = this.plugin.getConfig().getInt("Discord-Version", 0);
-        final int currentVersion = defaults != null ? defaults.getInt("Discord-Version") : 0;
+        final int oldVersion = plugin.getConfig().getInt("Discord-Version", 0);
+        final int currentVersion = plugin.getConfig().getDefaults().getInt("Discord-Version");
 
         if (oldVersion == 0) {
             this.resetDiscord();
@@ -47,7 +45,7 @@ public class DiscordManager {
 
         if (oldVersion < currentVersion) {
             try {
-                FileUpdater.update(this.plugin, "discord.yml", this.discordFile, Collections.singletonList("Version"));
+                FileUpdater.update(this.plugin, "discord.yml", this.discordFile, Collections.singletonList("Discord-Version"));
                 Log.warning("Discord file updated from version " + oldVersion + " to version " + currentVersion);
                 Log.warning("Checking the discord file and adjusting the new settings is highly recommended");
             } catch (final IOException e) {

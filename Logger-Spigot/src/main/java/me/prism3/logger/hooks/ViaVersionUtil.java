@@ -4,6 +4,8 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.Log;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Optional;
+
 import static me.prism3.logger.utils.Data.options;
 
 public class ViaVersionUtil {
@@ -11,17 +13,15 @@ public class ViaVersionUtil {
     private ViaVersionUtil() {}
 
     public static boolean isAllowed = false;
-    
+
     public static void getViaVersionHook() {
 
-        if (getViaVersionAPI() != null && Main.getInstance().getConfig().getBoolean("Log-Extras.ViaVersion")) {
+        final Optional<Plugin> viaVersionAPI = Optional.ofNullable(Main.getInstance().getServer().getPluginManager().getPlugin("ViaVersion"));
 
-            Log.info("ViaVersion Plugin Detected!");
-
-            options.setViaVersion(true);
-            isAllowed = true;
-        }
+        viaVersionAPI.filter(p -> Main.getInstance().getConfig().getBoolean("Log-Extras.ViaVersion"))
+                .ifPresent(p -> {
+                    Log.info("ViaVersion Plugin Detected!");
+                    options.setViaVersion(true);
+                });
     }
-
-    private static Plugin getViaVersionAPI() { return Main.getInstance().getServer().getPluginManager().getPlugin("ViaVersion"); }
 }

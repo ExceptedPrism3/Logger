@@ -1,10 +1,10 @@
 package me.prism3.logger.events.versioncompatibility;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import me.prism3.logger.utils.enums.NmsVersions;
 import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.Material;
@@ -15,15 +15,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
 
 public class OnWoodStripping implements Listener {
 
@@ -67,13 +62,10 @@ public class OnWoodStripping implements Listener {
 
             if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
-            if (event.getItem() == null) return;
-
-            // If The Block Is NOT A Log, Stop
-            if (!logs.contains(event.getClickedBlock().getType())) return;
-
-            if (!axes.contains(event.getPlayer().getInventory().getItemInMainHand().getType())
-                    && !axes.contains(event.getPlayer().getInventory().getItemInOffHand().getType()))
+            if (event.getItem() == null || event.getClickedBlock() == null
+                    || !logs.contains(event.getClickedBlock().getType()) // If The Block Is NOT A Log, Stop
+                    || (!axes.contains(event.getPlayer().getInventory().getItemInMainHand().getType())
+                    && !axes.contains(event.getPlayer().getInventory().getItemInOffHand().getType())))
                 return;
 
             final UUID playerUUID = player.getUniqueId();
@@ -86,49 +78,34 @@ public class OnWoodStripping implements Listener {
 
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
+            final Map<String, String> placeholders = new HashMap<>();
+            placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+            placeholders.put("%world%", worldName);
+            placeholders.put("%uuid%", playerUUID.toString());
+            placeholders.put("%player%", playerName);
+            placeholders.put("%x%", String.valueOf(x));
+            placeholders.put("%y%", String.valueOf(y));
+            placeholders.put("%z%", String.valueOf(z));
+            placeholders.put("%logname%", logName);
+
             // Log To Files
             if (Data.isLogToFiles) {
-
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files.Version-Exceptions.Wood-Stripping-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%player%", playerName) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
+                    FileHandler.handleFileLog("Files.Version-Exceptions.Wood-Stripping-Staff", placeholders, FileHandler.getStaffFile());
                 } else {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getWoodStrippingFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files.Version-Exceptions.Wood-Stripping").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%player%", playerName) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
+                    FileHandler.handleFileLog("Files.Version-Exceptions.Wood-Stripping", placeholders, FileHandler.getWoodStrippingFile());
                 }
             }
 
             // Discord Integration
-            if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping-Staff").isEmpty()) {
-
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-                    }
+                    this.main.getDiscord().handleDiscordLog("Discord.Version-Exceptions.Wood-Stripping-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                 } else {
 
-                    if (!this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping").isEmpty()) {
-
-                        this.main.getDiscord().woodStripping(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Version-Exceptions.Wood-Stripping").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%uuid%", playerUUID.toString()).replace("%logname%", logName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-                    }
+                    this.main.getDiscord().handleDiscordLog("Discord.Version-Exceptions.Wood-Stripping", placeholders, DiscordChannels.WOOD_STRIPPING, playerName, playerUUID);
                 }
             }
 

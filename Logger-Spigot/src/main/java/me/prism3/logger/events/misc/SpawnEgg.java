@@ -1,10 +1,10 @@
 package me.prism3.logger.events.misc;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import me.prism3.logger.utils.enums.NmsVersions;
 import me.prism3.logger.utils.enums.UMaterial;
 import org.bukkit.entity.EntityType;
@@ -15,13 +15,12 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.meta.SpawnEggMeta;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
 
 public class SpawnEgg implements Listener {
 
@@ -30,9 +29,10 @@ public class SpawnEgg implements Listener {
     @EventHandler
     public void onEggSpawn(final PlayerInteractEvent event) {
 
-        if (event.getPlayer().hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(event.getPlayer().getUniqueId())) return;
+        if (event.isCancelled() || event.getPlayer().hasPermission(Data.loggerExempt)
+                || BedrockChecker.isBedrock(event.getPlayer().getUniqueId())) return;
 
-        if (!event.isCancelled() && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.hasItem()) {
+        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.hasItem()) {
 
             if (this.main.getVersion().isAtLeast(NmsVersions.v1_8_R1) && event.getItem().getType().name().contains("MONSTER_EGG")) {
 
@@ -72,49 +72,33 @@ public class SpawnEgg implements Listener {
         final String playerName = player.getName();
         final UUID playerUUID = player.getUniqueId();
 
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%world%", worldName);
+        placeholders.put("%uuid%", playerUUID.toString());
+        placeholders.put("%player%", playerName);
+        placeholders.put("%x%", String.valueOf(x));
+        placeholders.put("%y%", String.valueOf(y));
+        placeholders.put("%z%", String.valueOf(z));
+
         // Log To Files
         if (Data.isLogToFiles) {
-
             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-
-                    out.write(this.main.getMessages().get().getString("Files.Spawn-Egg-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%entity%", entity) + "\n");
-
-                } catch (final IOException e) {
-
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
+                FileHandler.handleFileLog("Files.Spawn-Egg-Staff", placeholders, FileHandler.getStaffFile());
             } else {
-
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getSpawnEggFile(), true))) {
-
-                    out.write(this.main.getMessages().get().getString("Files.Spawn-Egg").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%entity%", entity) + "\n");
-
-                } catch (final IOException e) {
-
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
+                FileHandler.handleFileLog("Files.Spawn-Egg", placeholders, FileHandler.getSpawnEggFile());
             }
         }
 
         // Discord Integration
-        if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                if (!this.main.getMessages().get().getString("Discord.Spawn-Egg-Staff").isEmpty()) {
-
-                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Spawn-Egg-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%entity%", entity), false);
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Spawn-Egg-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                if (!this.main.getMessages().get().getString("Discord.Spawn-Egg").isEmpty()) {
-
-                    this.main.getDiscord().spawnEgg(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Spawn-Egg").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%entity%", entity), false);
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Spawn-Egg", placeholders, DiscordChannels.SPAWN_EGG, playerName, playerUUID);
             }
         }
 

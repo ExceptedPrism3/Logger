@@ -1,10 +1,10 @@
 package me.prism3.logger.events.inventories;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,13 +13,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.FurnaceExtractEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
 
 public class OnFurnace implements Listener {
 
@@ -43,48 +42,35 @@ public class OnFurnace implements Listener {
         
         final Coordinates coordinates = new Coordinates(blockX, blockY, blockZ, worldName);
 
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%world%", worldName);
+        placeholders.put("%uuid%", playerUUID.toString());
+        placeholders.put("%player%", playerName);
+        placeholders.put("%x%", String.valueOf(blockX));
+        placeholders.put("%y%", String.valueOf(blockY));
+        placeholders.put("%z%", String.valueOf(blockZ));
+        placeholders.put("%amount%", String.valueOf(amount));
+        placeholders.put("%item%", item.toString());
+
         //Log To Files Handling
         if (Data.isLogToFiles) {
-
             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-                   
-                    out.write(this.main.getMessages().get().getString("Files.Furnace-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%amount%", String.valueOf(amount)).replace("%item%", String.valueOf(item)).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                } catch (final IOException e) {
-
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
+                FileHandler.handleFileLog("Files.Furnace-Staff", placeholders, FileHandler.getStaffFile());
             } else {
-
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getFurnaceFile(), true))) {
-
-                    out.write(this.main.getMessages().get().getString("Files.Furnace").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%amount%", String.valueOf(amount)).replace("%item%", String.valueOf(item)).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                } catch (final IOException e) {
-
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
+                FileHandler.handleFileLog("Files.Furnace", placeholders, FileHandler.getFurnaceFile());
             }
         }
 
         // Discord Integration
-        if (!player.hasPermission(Data.loggerExemptDiscord)) {
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                if (!this.main.getMessages().get().getString("Discord.Furnace-Staff").isEmpty()) {
-
-                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Furnace-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%amount%", String.valueOf(amount)).replace("%item%", String.valueOf(item)).replace("%uuid%", playerUUID.toString()), false);
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Furnace-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
-                if (!this.main.getMessages().get().getString("Discord.Furnace").isEmpty()) {
 
-                    this.main.getDiscord().furnace(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Furnace").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%amount%", String.valueOf(amount)).replace("%item%", String.valueOf(item)).replace("%uuid%", playerUUID.toString()), false);
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Furnace-Craft", placeholders, DiscordChannels.FURNACE, playerName, playerUUID);
             }
         }
 

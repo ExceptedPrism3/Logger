@@ -199,6 +199,7 @@ Additions
     [+] ArmorStand Interaction Checker
     [+] ServerAddress Checker which checks what IP/Domain the player used to join the server
     [+] Totem of Undying Usage Checker
+    [+] Discord Status [ online, idle, dnd, invisible ]
 
 Fixes
     [!] Plugin not starting up correctly

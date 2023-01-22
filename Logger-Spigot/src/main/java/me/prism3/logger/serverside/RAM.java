@@ -1,14 +1,13 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RAM implements Runnable {
 
@@ -25,23 +24,19 @@ public class RAM implements Runnable {
 
         if (Data.ramPercent <= percentUsed) {
 
+            final Map<String, String> placeholders = new HashMap<>();
+            placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+            placeholders.put("%max%", String.valueOf(maxMemory));
+            placeholders.put("%used%", String.valueOf(usedMemory));
+            placeholders.put("%free%", String.valueOf(freeMemory));
+
             // Log To Files
-            if (Data.isLogToFiles) {
-
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRAMLogFile(), true))) {
-                    
-                    out.write(this.main.getMessages().get().getString("Files.Server-Side.RAM").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)) + "\n");
-
-                } catch (final IOException e) {
-
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
-            }
+            if (Data.isLogToFiles)
+                FileHandler.handleFileLog("Files.Server-Side.RAM", placeholders, FileHandler.getRAMLogFile());
 
             // Discord
-            if (!this.main.getMessages().get().getString("Discord.Server-Side.RAM").isEmpty() && this.main.getDiscordFile().getBoolean("Discord.Enable"))
-                this.main.getDiscord().ram(this.main.getMessages().get().getString("Discord.Server-Side.RAM").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)), false);
+            if (this.main.getDiscordFile().getBoolean("Discord.Enable"))
+                this.main.getDiscord().handleDiscordLog("Discord.Server-Side.RAM", placeholders, DiscordChannels.RAM, "RAM", null);
 
             // External
             if (Data.isExternal) {

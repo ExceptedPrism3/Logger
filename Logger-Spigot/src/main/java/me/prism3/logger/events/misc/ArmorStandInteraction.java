@@ -1,22 +1,20 @@
 package me.prism3.logger.events.misc;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+
 import java.time.ZonedDateTime;
 import java.util.*;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
 
 public class ArmorStandInteraction implements Listener {
 
@@ -25,90 +23,67 @@ public class ArmorStandInteraction implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onArmorStandInteraction(final PlayerArmorStandManipulateEvent event) {
 
-        if (event.getPlayer().hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(event.getPlayer().getUniqueId()))
+        if (event.isCancelled() || event.getArmorStandItem().equals(event.getPlayerItem()) // If the armor stand already has the item then no need to log it to prevent useless logs
+                || event.getPlayer().hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(event.getPlayer().getUniqueId()))
             return;
 
-        if (!event.isCancelled()) {
+        final Player player = event.getPlayer();
 
-            final Player player = event.getPlayer();
+        final String worldName = player.getWorld().getName();
+        final String playerName = player.getName();
+        final UUID playerUUID = player.getUniqueId();
+        final int x = event.getRightClicked().getLocation().getBlockX();
+        final int y = event.getRightClicked().getLocation().getBlockY();
+        final int z = event.getRightClicked().getLocation().getBlockZ();
 
-            if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%world%", worldName);
+        placeholders.put("%uuid%", playerUUID.toString());
+        placeholders.put("%player%", playerName);
+        placeholders.put("%x%", String.valueOf(x));
+        placeholders.put("%y%", String.valueOf(y));
+        placeholders.put("%z%", String.valueOf(z));
 
-            final String worldName = player.getWorld().getName();
-            final String playerName = player.getName();
-            final UUID playerUUID = player.getUniqueId();
-            final int x = event.getRightClicked().getLocation().getBlockX();
-            final int y = event.getRightClicked().getLocation().getBlockY();
-            final int z = event.getRightClicked().getLocation().getBlockZ();
-
-            if (event.getArmorStandItem().equals(event.getPlayerItem()))
-                return; // If the armor stand already has the item then no need to log it to prevent useless logs
-
-            // Log To Files
-            if (Data.isLogToFiles) {
-
-                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files.ArmorStand-Interaction-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
-                } else {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getArmorStandInteractionFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files.ArmorStand-Interaction").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
-                }
+        // Log To Files
+        if (Data.isLogToFiles) {
+            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                FileHandler.handleFileLog("Files.ArmorStand-Interaction-Staff", placeholders, FileHandler.getStaffFile());
+            } else {
+                FileHandler.handleFileLog("Files.ArmorStand-Interaction", placeholders, FileHandler.getArmorStandInteractionFile());
             }
+        }
 
-            // Discord Integration
-            if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        // Discord Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!this.main.getMessages().get().getString("Discord.ArmorStand-Interaction-Staff").isEmpty()) {
+                this.main.getDiscord().handleDiscordLog("Discord.ArmorStand-Interaction-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+            } else {
 
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.ArmorStand-Interaction-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-                    }
-                } else {
-
-                    if (!this.main.getMessages().get().getString("Discord.ArmorStand-Interaction").isEmpty()) {
-
-                        this.main.getDiscord().armorStandPlace(playerName, playerUUID, this.main.getMessages().get().getString("Discord.ArmorStand-Interaction").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-                    }
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.ArmorStand-Interaction", placeholders, DiscordChannels.ARMOR_STAND_INTERACTION, playerName, playerUUID);
             }
+        }
 
-            // External
-            if (Data.isExternal) {
+        // External
+        if (Data.isExternal) {
 
-                try {
+            try {
 
-                   Main.getInstance().getDatabase().getDatabaseQueue().queueArmorStandInteraction(Data.serverName, playerName, playerUUID.toString(), worldName,x, y, z, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queueArmorStandInteraction(Data.serverName, playerName, playerUUID.toString(), worldName, x, y, z, player.hasPermission(loggerStaffLog));
 
-                } catch (final Exception e) { e.printStackTrace(); }
-            }
+            } catch (final Exception e) { e.printStackTrace(); }
+        }
 
-            // SQLite
-            if (Data.isSqlite) {
+        // SQLite
+        if (Data.isSqlite) {
 
-                try {
+            try {
 
-                    Main.getInstance().getDatabase().getDatabaseQueue().queueArmorStandInteraction(Data.serverName, playerName, playerUUID.toString(), worldName,x, y, z, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queueArmorStandInteraction(Data.serverName, playerName, playerUUID.toString(), worldName, x, y, z, player.hasPermission(loggerStaffLog));
 
-                } catch (final Exception e) { e.printStackTrace(); }
-            }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

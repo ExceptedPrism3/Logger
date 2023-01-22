@@ -1,21 +1,22 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+
+import static me.prism3.logger.utils.Data.*;
 
 public class ServerAddress implements Listener {
 
@@ -32,48 +33,30 @@ public class ServerAddress implements Listener {
         final String playerName = player.getName();
         final String address = event.getHostname();
 
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%address%", address);
+        placeholders.put("%uuid%", playerUUID.toString());
+        placeholders.put("%player%", playerName);
+
         // Log To Files
         if (Data.isLogToFiles) {
-
-            if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-
-                    out.write(this.main.getMessages().get().getString("Files.Server-Side.Server-Address-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%address%", address).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                } catch (final IOException e) {
-
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
+            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                FileHandler.handleFileLog("Files.Server-Side.Server-Address-Staff", placeholders, FileHandler.getStaffFile());
             } else {
-
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerAddressFile(), true))) {
-
-                    out.write(this.main.getMessages().get().getString("Files.Server-Side.Server-Address").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%address%", address).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                } catch (final IOException e) {
-
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
+                FileHandler.handleFileLog("Files.Server-Side.Server-Address", placeholders, FileHandler.getServerAddressFile());
             }
         }
 
         // Discord
-        if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-            if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                if (!this.main.getMessages().get().getString("Discord.Server-Side.Server-Address-Staff").isEmpty()) {
-
-                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Server-Side.Server-Address-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%address%", address).replace("%uuid%", playerUUID.toString()), false);
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Server-Address-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
-                if (!this.main.getMessages().get().getString("Discord.Server-Side.Server-Address").isEmpty()) {
 
-                    this.main.getDiscord().serverAddress(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Server-Side.Server-Address").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%address%", address).replace("%uuid%", playerUUID.toString()), false);
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Server-Address", placeholders, DiscordChannels.SERVER_ADDRESS, playerName, playerUUID);
             }
         }
 

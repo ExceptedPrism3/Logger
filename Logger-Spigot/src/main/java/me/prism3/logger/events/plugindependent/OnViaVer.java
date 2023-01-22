@@ -4,19 +4,18 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import org.bukkit.entity.Player;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
 
 public class OnViaVer {
 
@@ -34,49 +33,30 @@ public class OnViaVer {
         final int versionID = via.getPlayerVersion(player.getUniqueId());
         final String versionName = ProtocolVersion.getProtocol(versionID).getName();
 
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%uuid%", playerUUID.toString());
+        placeholders.put("%player%", playerName);
+        placeholders.put("%version%", versionName);
+
         // Log To Files
         if (Data.isLogToFiles) {
-
             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-
-                    out.write(this.main.getMessages().get().getString("Files.Extras.ViaVersion-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%version%", versionName) + "\n");
-
-                } catch (final IOException e) {
-
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
+                FileHandler.handleFileLog("Files.Extras.ViaVersion-Staff", placeholders, FileHandler.getStaffFile());
             } else {
-
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getViaVersionFile(), true))) {
-
-                    out.write(this.main.getMessages().get().getString("Files.Extras.ViaVersion").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%player%", playerName).replace("%version%", versionName) + "\n");
-
-                } catch (final IOException e) {
-
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
+                FileHandler.handleFileLog("Files.Extras.ViaVersion", placeholders, FileHandler.getViaVersionFile());
             }
         }
 
         // Discord Integration
-        if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                if (!this.main.getMessages().get().getString("Discord.Extras.ViaVersion-Staff").isEmpty()) {
-
-                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.ViaVersion-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%version%", versionName), false);
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Extras.ViaVersion-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                if (!this.main.getMessages().get().getString("Discord.Extras.ViaVersion").isEmpty()) {
-
-                    this.main.getDiscord().viaVersion(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.ViaVersion").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%version%", versionName), false);
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Extras.ViaVersion", placeholders, DiscordChannels.VIA_VERSION, playerName, playerUUID);
             }
         }
 

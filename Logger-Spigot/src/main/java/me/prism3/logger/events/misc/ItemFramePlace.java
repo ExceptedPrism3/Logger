@@ -1,9 +1,9 @@
 package me.prism3.logger.events.misc;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.loggercore.database.entity.enums.InteractionType;
 import org.bukkit.entity.ItemFrame;
@@ -13,14 +13,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-import static me.prism3.logger.utils.Data.loggerExempt;
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
+import static me.prism3.logger.utils.Data.isStaffEnabled;
 
 public class ItemFramePlace implements Listener {
 
@@ -29,86 +28,70 @@ public class ItemFramePlace implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemFramePlace(final HangingPlaceEvent event) {
 
-        if (event.getEntity() instanceof ItemFrame) {
+        if (event.isCancelled() || !(event.getEntity() instanceof ItemFrame))
+            return;
 
-            final Player player = event.getPlayer();
+        final Player player = event.getPlayer();
 
-            if (player.hasPermission(loggerExempt)) return;
+        if (player.hasPermission(loggerExempt)) return;
 
-            final String playerName = player.getName();
-            final UUID playerUUID = player.getUniqueId();
-            final String worldName = player.getWorld().getName();
-            final int x = event.getBlock().getX();
-            final int y = event.getBlock().getY();
-            final int z = event.getBlock().getZ();
+        final String playerName = player.getName();
+        final UUID playerUUID = player.getUniqueId();
+        final String worldName = player.getWorld().getName();
+        final int x = event.getBlock().getX();
+        final int y = event.getBlock().getY();
+        final int z = event.getBlock().getZ();
 
-            final Coordinates coordinates = new Coordinates(x, y, z, worldName);
+        final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
-            // Log To Files
-            if (Data.isLogToFiles) {
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%world%", worldName);
+        placeholders.put("%uuid%", playerUUID.toString());
+        placeholders.put("%player%", playerName);
+        placeholders.put("%x%", String.valueOf(x));
+        placeholders.put("%y%", String.valueOf(y));
+        placeholders.put("%z%", String.valueOf(z));
 
-                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files.Item-Frame-Place-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%uuid%", playerUUID.toString()).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
-                } else {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getItemFramePlaceFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files.Item-Frame-Place").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%uuid%", playerUUID.toString()).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
-                }
+        // Log To Files
+        if (Data.isLogToFiles) {
+            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                FileHandler.handleFileLog("Files.Item-Frame-Place-Staff", placeholders, FileHandler.getStaffFile());
+            } else {
+                FileHandler.handleFileLog("Files.Item-Frame-Place", placeholders, FileHandler.getItemFramePlaceFile());
             }
+        }
 
-            // Discord Integration
-            if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        // Discord Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!this.main.getMessages().get().getString("Discord.Item-Frame-Place-Staff").isEmpty()) {
+                this.main.getDiscord().handleDiscordLog("Discord.Item-Frame-Place-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+            } else {
 
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Item-Frame-Place-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%uuid%", playerUUID.toString()).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-                    }
-                } else {
-
-                    if (!this.main.getMessages().get().getString("Discord.Item-Frame-Place").isEmpty()) {
-
-                        this.main.getDiscord().itemFramePlace(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Item-Frame-Place").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%uuid%", playerUUID.toString()).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-                    }
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Item-Frame-Place", placeholders, DiscordChannels.ITEM_FRAME_PLACE, playerName, playerUUID);
             }
+        }
 
-            // External
-            if (Data.isExternal) {
+        // External
+        if (Data.isExternal) {
 
-                try {
+            try {
 
-                    Main.getInstance().getDatabase().getDatabaseQueue().queueBlockInteraction(Data.serverName, playerName, playerUUID.toString(),event.getEntity().getName(), coordinates, player.hasPermission(loggerStaffLog), InteractionType.BLOCK_PLACE);
+                Main.getInstance().getDatabase().getDatabaseQueue().queueBlockInteraction(Data.serverName, playerName, playerUUID.toString(), event.getEntity().getName(), coordinates, player.hasPermission(loggerStaffLog), InteractionType.BLOCK_PLACE);
 
-                } catch (final Exception e) { e.printStackTrace(); }
-            }
+            } catch (final Exception e) { e.printStackTrace(); }
+        }
 
-            // SQLite
-            if (Data.isSqlite) {
+        // SQLite
+        if (Data.isSqlite) {
 
-                try {
+            try {
 
-                    Main.getInstance().getDatabase().getDatabaseQueue().queueBlockInteraction(Data.serverName, playerName, playerUUID.toString(),event.getEntity().getName(), coordinates, player.hasPermission(loggerStaffLog), InteractionType.BLOCK_PLACE);
+                Main.getInstance().getDatabase().getDatabaseQueue().queueBlockInteraction(Data.serverName, playerName, playerUUID.toString(), event.getEntity().getName(), coordinates, player.hasPermission(loggerStaffLog), InteractionType.BLOCK_PLACE);
 
-                } catch (final Exception e) { e.printStackTrace(); }
-            }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

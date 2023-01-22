@@ -1,10 +1,10 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,13 +16,12 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
 
 public class OnAnvil implements Listener {
 
@@ -31,99 +30,82 @@ private final Main main = Main.getInstance();
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClick(final InventoryClickEvent event) {
 
-        if (!event.isCancelled()) {
+        if (event.isCancelled())
+            return;
 
-            final Player player = (Player) event.getWhoClicked();
+        final Player player = (Player) event.getWhoClicked();
 
-            if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
+        if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
-            final UUID playerUUID = player.getUniqueId();
-            final String playerName = player.getName();
-            final Inventory inv = event.getInventory();
+        final String worldName = player.getWorld().getName();
+        final UUID playerUUID = player.getUniqueId();
+        final String playerName = player.getName();
+        final Inventory inv = event.getInventory();
 
-            if (inv instanceof AnvilInventory) {
+        if (inv instanceof AnvilInventory) {
 
-                final InventoryView view = event.getView();
+            final InventoryView view = event.getView();
 
-                final int rawSlot = event.getRawSlot();
+            final int rawSlot = event.getRawSlot();
 
-                if (rawSlot == view.convertSlot(rawSlot) && rawSlot == 2) {
+            if (rawSlot == view.convertSlot(rawSlot) && rawSlot == 2) {
 
-                    final ItemStack item = event.getCurrentItem();
+                final ItemStack item = event.getCurrentItem();
 
-                    if (item != null) {
+                if (item != null) {
 
-                        final ItemMeta meta = item.getItemMeta();
+                    final ItemMeta meta = item.getItemMeta();
 
-                        if (meta != null && meta.hasDisplayName()) {
+                    if (meta != null && meta.hasDisplayName()) {
 
-                            final String displayName = meta.getDisplayName().replace("\\", "\\\\");
+                        final String displayName = meta.getDisplayName().replace("\\", "\\\\");
 
-                            // Log To Files
-                            if (Data.isLogToFiles) {
+                        final Map<String, String> placeholders = new HashMap<>();
+                        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+                        placeholders.put("%world%", worldName);
+                        placeholders.put("%uuid%", playerUUID.toString());
+                        placeholders.put("%player%", playerName);
+                        placeholders.put("%renamed%", displayName);
 
-                                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-
-                                        out.write(this.main.getMessages().get().getString("Files.Anvil-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%renamed%", displayName).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                                    } catch (final IOException e) {
-
-                                        Log.warning("An error occurred while logging into the appropriate file.");
-                                        e.printStackTrace();
-                                    }
-                                } else {
-
-                                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getAnvilFile(), true))) {
-
-                                        out.write(this.main.getMessages().get().getString("Files.Anvil").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%renamed%", displayName).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                                    } catch (final IOException e) {
-
-                                        Log.warning("An error occurred while logging into the appropriate file.");
-                                        e.printStackTrace();
-                                    }
-                                }
+                        // Log To Files
+                        if (Data.isLogToFiles) {
+                            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                                FileHandler.handleFileLog("Files.Anvil-Staff", placeholders, FileHandler.getStaffFile());
+                            } else {
+                                FileHandler.handleFileLog("Files.Anvil", placeholders, FileHandler.getAnvilFile());
                             }
+                        }
 
-                            // Discord
-                            if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+                        // Discord
+                        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-                                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+                            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                                    if (!this.main.getMessages().get().getString("Discord.Anvil-Staff").isEmpty()) {
+                                this.main.getDiscord().handleDiscordLog("Discord.Anvil-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                            } else {
 
-                                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Anvil-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%renamed%", displayName).replace("%uuid%", playerUUID.toString()), false);
-                                    }
-                                } else {
-
-                                    if (!this.main.getMessages().get().getString("Discord.Anvil").isEmpty()) {
-
-                                        this.main.getDiscord().anvil(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Anvil").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%renamed%", displayName).replace("%uuid%", playerUUID.toString()), false);
-                                    }
-                                }
+                                this.main.getDiscord().handleDiscordLog("Discord.Anvil", placeholders, DiscordChannels.ANVIL, playerName, playerUUID);
                             }
+                        }
 
-                            // External
-                            if (Data.isExternal) {
+                        // External
+                        if (Data.isExternal) {
 
-                                try {
+                            try {
 
-                                    Main.getInstance().getDatabase().getDatabaseQueue().queueAnvil(Data.serverName, playerName, playerUUID.toString(), displayName, player.hasPermission(loggerStaffLog));
+                                Main.getInstance().getDatabase().getDatabaseQueue().queueAnvil(Data.serverName, playerName, playerUUID.toString(), displayName, player.hasPermission(loggerStaffLog));
 
-                                } catch (final Exception e) { e.printStackTrace(); }
-                            }
+                            } catch (final Exception e) { e.printStackTrace(); }
+                        }
 
-                            // SQLite
-                            if (Data.isSqlite) {
+                        // SQLite
+                        if (Data.isSqlite) {
 
-                                try {
+                            try {
 
-                                    Main.getInstance().getDatabase().getDatabaseQueue().queueAnvil(Data.serverName, playerName, playerUUID.toString(), displayName, player.hasPermission(loggerStaffLog));
+                                Main.getInstance().getDatabase().getDatabaseQueue().queueAnvil(Data.serverName, playerName, playerUUID.toString(), displayName, player.hasPermission(loggerStaffLog));
 
-                                } catch (final Exception e) { e.printStackTrace(); }
-                            }
+                            } catch (final Exception e) { e.printStackTrace(); }
                         }
                     }
                 }

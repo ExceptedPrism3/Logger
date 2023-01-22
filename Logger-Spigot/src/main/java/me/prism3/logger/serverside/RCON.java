@@ -1,18 +1,17 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.RemoteServerCommandEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RCON implements Listener {
 
@@ -24,23 +23,18 @@ public class RCON implements Listener {
         final String ip = event.getSender().getServer().getIp();
         final String command = event.getCommand();
 
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%IP%", ip);
+        placeholders.put("%command%", command);
+
         // Log To Files
-        if (Data.isLogToFiles) {
-
-            try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRconFile(), true))) {
-                
-                out.write(this.main.getMessages().get().getString("Files.Server-Side.RCON").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%IP%", ip).replace("%command%", command) + "\n");
-
-            } catch (final IOException e) {
-
-                Log.warning("An error occurred while logging into the appropriate file.");
-                e.printStackTrace();
-            }
-        }
+        if (Data.isLogToFiles)
+            FileHandler.handleFileLog("Files.Server-Side.RCON", placeholders, FileHandler.getRconFile());
 
         // Discord
-        if (!this.main.getMessages().get().getString("Discord.Server-Side.RCON").isEmpty() && this.main.getDiscordFile().getBoolean("Discord.Enable"))
-            this.main.getDiscord().rCon(this.main.getMessages().get().getString("Discord.Server-Side.RCON").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()).replace("%IP%", ip).replace("%command%", command))), false);
+        if (this.main.getDiscordFile().getBoolean("Discord.Enable"))
+            this.main.getDiscord().handleDiscordLog("Discord.Server-Side.RCON", placeholders, DiscordChannels.RCON, "RCON", null);
 
         // External
         if (Data.isExternal) {

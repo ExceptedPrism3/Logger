@@ -1,10 +1,10 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import me.prism3.logger.utils.enums.FriendlyEnchants;
 import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.enchantments.Enchantment;
@@ -14,16 +14,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
 
 public class OnEnchant implements Listener {
 
@@ -32,97 +26,85 @@ public class OnEnchant implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEnchanting(final EnchantItemEvent event) {
 
-        if (!event.isCancelled()) {
+        if (event.isCancelled())
+            return;
 
-            final Player player = event.getEnchanter();
+        final Player player = event.getEnchanter();
 
-            if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
+        if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
-            final String playerName = player.getName();
-            final UUID playerUUID = player.getUniqueId();
-            final String worldName = player.getWorld().getName();
-            final String item = event.getItem().getType().toString();
-            final int cost = event.getExpLevelCost();
-            final int x = player.getLocation().getBlockX();
-            final int y = player.getLocation().getBlockY();
-            final int z = player.getLocation().getBlockZ();
-            final List<String> enchs = new ArrayList<>();
-            int enchantmentLevel = 0;
+        final String playerName = player.getName();
+        final UUID playerUUID = player.getUniqueId();
+        final String worldName = player.getWorld().getName();
+        final String item = event.getItem().getType().toString();
+        final int cost = event.getExpLevelCost();
+        final int x = player.getLocation().getBlockX();
+        final int y = player.getLocation().getBlockY();
+        final int z = player.getLocation().getBlockZ();
+        final List<String> enchs = new ArrayList<>();
+        int enchantmentLevel = 0;
 
-            for (Enchantment ench : event.getEnchantsToAdd().keySet())
-                enchs.add(FriendlyEnchants.getFriendlyEnchantment(ench).getFriendlyName());
+        for (Enchantment ench : event.getEnchantsToAdd().keySet())
+            enchs.add(FriendlyEnchants.getFriendlyEnchantment(ench).getFriendlyName());
 
-            for (Map.Entry<Enchantment, Integer> list : event.getEnchantsToAdd().entrySet())
-                enchantmentLevel = list.getValue();
+        for (Map.Entry<Enchantment, Integer> list : event.getEnchantsToAdd().entrySet())
+            enchantmentLevel = list.getValue();
 
 
-            final Coordinates coordinates = new Coordinates(x, y, z, worldName);
+        final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
-            // Log To Files
-            if (Data.isLogToFiles) {
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%world%", worldName);
+        placeholders.put("%uuid%", playerUUID.toString());
+        placeholders.put("%player%", playerName);
+        placeholders.put("%x%", String.valueOf(x));
+        placeholders.put("%y%", String.valueOf(y));
+        placeholders.put("%z%", String.valueOf(z));
+        placeholders.put("%item%", item);
+        placeholders.put("%level%", String.valueOf(enchs));
+        placeholders.put("%enchantment%", item);
+        placeholders.put("%enchlevel%", String.valueOf(enchantmentLevel));
 
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files.Enchanting-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%level%", String.valueOf(cost)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%enchantment%", String.valueOf(enchs)).replace("%enchlevel%", String.valueOf(enchantmentLevel)).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
-                } else {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getEnchantFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files.Enchanting").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%item%", item).replace("%enchantment%", String.valueOf(enchs)).replace("%level%", String.valueOf(cost)).replace("%enchlevel%", String.valueOf(enchantmentLevel)).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
-                }
+        // Log To Files
+        if (Data.isLogToFiles) {
+            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                FileHandler.handleFileLog("Files.Enchanting-Staff", placeholders, FileHandler.getStaffFile());
+            } else {
+                FileHandler.handleFileLog("Files.Enchanting", placeholders, FileHandler.getEnchantFile());
             }
+        }
 
-            // Discord Integration
-            if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        // Discord Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!this.main.getMessages().get().getString("Discord.Enchanting-Staff").isEmpty()) {
+                this.main.getDiscord().handleDiscordLog("Discord.Enchanting-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+            } else {
 
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Enchanting-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%level%", String.valueOf(cost)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%item%", item).replace("%enchantment%", String.valueOf(enchs)).replace("%enchlevel%", String.valueOf(enchantmentLevel)).replace("%uuid%", playerUUID.toString()), false);
-                    }
-                } else {
-
-                    if (!this.main.getMessages().get().getString("Discord.Enchanting").isEmpty()) {
-
-                        this.main.getDiscord().enchanting(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Enchanting").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%level%", String.valueOf(cost)).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%item%", item).replace("%enchantment%", String.valueOf(enchs)).replace("%enchlevel%", String.valueOf(enchantmentLevel)).replace("%uuid%", playerUUID.toString()), false);
-                    }
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Enchanting", placeholders, DiscordChannels.ENCHANTING, playerName, playerUUID);
             }
+        }
 
-            // External
-            if (Data.isExternal) {
+        // External
+        if (Data.isExternal) {
 
-                try {
+            try {
 
-                    Main.getInstance().getDatabase().getDatabaseQueue().queueEnchant(Data.serverName, playerName, playerUUID.toString(), enchs, enchantmentLevel, item, cost, coordinates, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queueEnchant(Data.serverName, playerName, playerUUID.toString(), enchs, enchantmentLevel, item, cost, coordinates, player.hasPermission(loggerStaffLog));
 
-                } catch (final Exception e) { e.printStackTrace(); }
-            }
+            } catch (final Exception e) { e.printStackTrace(); }
+        }
 
-            // SQLite
-            if (Data.isSqlite) {
+        // SQLite
+        if (Data.isSqlite) {
 
-                try {
+            try {
 
-                    Main.getInstance().getDatabase().getDatabaseQueue().queueEnchant(Data.serverName, playerName, playerUUID.toString(), enchs, enchantmentLevel, item, cost, coordinates, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queueEnchant(Data.serverName, playerName, playerUUID.toString(), enchs, enchantmentLevel, item, cost, coordinates, player.hasPermission(loggerStaffLog));
 
-                } catch (final Exception e) { e.printStackTrace(); }
-            }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

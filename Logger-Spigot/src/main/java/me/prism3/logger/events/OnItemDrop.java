@@ -1,10 +1,10 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import me.prism3.logger.utils.enums.FriendlyEnchants;
 import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.loggercore.database.entity.enums.ItemActionType;
@@ -15,15 +15,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
 
 public class OnItemDrop implements Listener {
 
@@ -32,100 +27,88 @@ public class OnItemDrop implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDrop(final PlayerDropItemEvent event) {
 
-        if (!event.isCancelled()) {
+        if (event.isCancelled())
+            return;
 
-            final Player player = event.getPlayer();
+        final Player player = event.getPlayer();
 
-            if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
+        if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
-            final String playerName = player.getName();
-            final UUID playerUUID = player.getUniqueId();
-            final String worldName = player.getWorld().getName();
-            final String item = event.getItemDrop().getItemStack().getType().name().replace("_", " ");
-            String itemName = event.getItemDrop().getItemStack().getItemMeta().getDisplayName();
+        final String playerName = player.getName();
+        final UUID playerUUID = player.getUniqueId();
+        final String worldName = player.getWorld().getName();
+        final String item = event.getItemDrop().getItemStack().getType().name().replace("_", " ");
+        String itemName = event.getItemDrop().getItemStack().getItemMeta().getDisplayName();
 
-            if (itemName != null) {
+        if (itemName != null) {
 
-                itemName = itemName.contains("\\") ? itemName : itemName.replace("\\", "\\\\");
+            itemName = itemName.contains("\\") ? itemName : itemName.replace("\\", "\\\\");
 
-            } else itemName = " ";
+        } else itemName = " ";
 
-            final int amount = event.getItemDrop().getItemStack().getAmount();
-            final int blockX = event.getItemDrop().getLocation().getBlockX();
-            final int blockY = event.getItemDrop().getLocation().getBlockY();
-            final int blockZ = event.getItemDrop().getLocation().getBlockZ();
-            final List<String> enchs = new ArrayList<>();
+        final int amount = event.getItemDrop().getItemStack().getAmount();
+        final int blockX = event.getItemDrop().getLocation().getBlockX();
+        final int blockY = event.getItemDrop().getLocation().getBlockY();
+        final int blockZ = event.getItemDrop().getLocation().getBlockZ();
+        final List<String> enchs = new ArrayList<>();
 
-            for (Enchantment ench : event.getItemDrop().getItemStack().getEnchantments().keySet())
-                enchs.add(FriendlyEnchants.getFriendlyEnchantment(ench).getFriendlyName());
+        for (Enchantment ench : event.getItemDrop().getItemStack().getEnchantments().keySet())
+            enchs.add(FriendlyEnchants.getFriendlyEnchantment(ench).getFriendlyName());
 
-            final Coordinates coordinates = new Coordinates(blockX, blockY, blockZ, worldName);
+        final Coordinates coordinates = new Coordinates(blockX, blockY, blockZ, worldName);
 
-            // Log To Files
-            if (Data.isLogToFiles) {
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%world%", worldName);
+        placeholders.put("%uuid%", playerUUID.toString());
+        placeholders.put("%player%", playerName);
+        placeholders.put("%x%", String.valueOf(blockX));
+        placeholders.put("%y%", String.valueOf(blockY));
+        placeholders.put("%z%", String.valueOf(blockZ));
+        placeholders.put("%amount%", String.valueOf(amount));
+        placeholders.put("%item%", item);
+        placeholders.put("%renamed%", itemName);
+        placeholders.put("%enchantment%", String.valueOf(enchs));
 
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files.Item-Drop-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName).replace("%enchantment%", String.valueOf(enchs)).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
-                } else {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getItemDropFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files.Item-Drop").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName).replace("%enchantment%", String.valueOf(enchs)).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
-                }
+        // Log To Files
+        if (Data.isLogToFiles) {
+            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                FileHandler.handleFileLog("Files.Item-Drop-Staff", placeholders, FileHandler.getStaffFile());
+            } else {
+                FileHandler.handleFileLog("Files.Item-Drop", placeholders, FileHandler.getItemDropFile());
             }
+        }
 
-            // Discord Integration
-            if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        // Discord Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!this.main.getMessages().get().getString("Discord.Item-Drop-Staff").isEmpty()) {
+                this.main.getDiscord().handleDiscordLog("Discord.Item-Drop-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+            } else {
 
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Item-Drop-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName).replace("%enchantment%", String.valueOf(enchs)).replace("%uuid%", playerUUID.toString()), false);
-                    }
-                } else {
-
-                    if (!this.main.getMessages().get().getString("Discord.Item-Drop").isEmpty()) {
-
-                        this.main.getDiscord().itemDrop(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Item-Drop").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName).replace("%enchantment%", String.valueOf(enchs)).replace("%uuid%", playerUUID.toString()), false);
-                    }
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Item-Drop", placeholders, DiscordChannels.ITEM_DROP, playerName, playerUUID);
             }
+        }
 
-            // External
-            if (Data.isExternal) {
+        // External
+        if (Data.isExternal) {
 
-                try {
+            try {
 
-                    Main.getInstance().getDatabase().getDatabaseQueue().queueItemAction(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, enchs.toString(), itemName, player.hasPermission(loggerStaffLog), ItemActionType.ITEM_DROP);
+                Main.getInstance().getDatabase().getDatabaseQueue().queueItemAction(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, enchs.toString(), itemName, player.hasPermission(loggerStaffLog), ItemActionType.ITEM_DROP);
 
-                } catch (final Exception e) { e.printStackTrace(); }
-            }
+            } catch (final Exception e) { e.printStackTrace(); }
+        }
 
-            // SQLite
-            if (Data.isSqlite) {
+        // SQLite
+        if (Data.isSqlite) {
 
-                try {
+            try {
 
-                    Main.getInstance().getDatabase().getDatabaseQueue().queueItemAction(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, enchs.toString(), itemName, player.hasPermission(loggerStaffLog), ItemActionType.ITEM_DROP);
+                Main.getInstance().getDatabase().getDatabaseQueue().queueItemAction(Data.serverName, playerName, playerUUID.toString(), item, amount, coordinates, enchs.toString(), itemName, player.hasPermission(loggerStaffLog), ItemActionType.ITEM_DROP);
 
-                } catch (final Exception e) { e.printStackTrace(); }
-            }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

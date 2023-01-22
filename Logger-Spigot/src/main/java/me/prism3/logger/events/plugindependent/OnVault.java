@@ -1,11 +1,11 @@
 package me.prism3.logger.events.plugindependent;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.hooks.VaultUtil;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -15,15 +15,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
 
 public class OnVault implements Listener, Runnable {
 
@@ -36,11 +33,17 @@ public class OnVault implements Listener, Runnable {
 
         for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 
-            if (player.hasPermission(Data.loggerExempt) || Bukkit.getOnlinePlayers().isEmpty() || BedrockChecker.isBedrock(player.getUniqueId()))
+            if (player.hasPermission(Data.loggerExempt) || Bukkit.getOnlinePlayers().isEmpty()
+                    || BedrockChecker.isBedrock(player.getUniqueId()))
                 return;
 
             final String playerName = player.getName();
             final UUID playerUUID = player.getUniqueId();
+
+            final Map<String, String> placeholders = new HashMap<>();
+            placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+            placeholders.put("%uuid%", playerUUID.toString());
+            placeholders.put("%player%", playerName);
 
             for (Map.Entry<UUID, Double> bal : this.players.entrySet()) {
 
@@ -50,49 +53,27 @@ public class OnVault implements Listener, Runnable {
                     this.players.put(player.getUniqueId(), this.econ.getBalance(player.getPlayer()));
                     double newBalance = bal.getValue();
 
+                    placeholders.put("%oldbal%", String.valueOf(oldBalance));
+                    placeholders.put("%newbal%", String.valueOf(newBalance));
+
                     // Log To Files
                     if (Data.isLogToFiles) {
-
                         if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                            try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-
-                                out.write(this.main.getMessages().get().getString("Files.Extras.Vault-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                            } catch (final IOException e) {
-
-                                Log.warning("An error occurred while logging into the appropriate file.");
-                                e.printStackTrace();
-                            }
+                            FileHandler.handleFileLog("Files.Extras.Vault-Staff", placeholders, FileHandler.getStaffFile());
                         } else {
-
-                            try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getVaultFile(), true))) {
-
-                                out.write(this.main.getMessages().get().getString("Files.Extras.Vault").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                            } catch (final IOException e) {
-
-                                Log.warning("An error occurred while logging into the appropriate file.");
-                                e.printStackTrace();
-                            }
+                            FileHandler.handleFileLog("Files.Extras.Vault", placeholders, FileHandler.getVaultFile());
                         }
                     }
 
                     // Discord Integration
-                    if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+                    if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-                        if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                        if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                            if (!this.main.getMessages().get().getString("Discord.Extras.Vault-Staff").isEmpty()) {
-
-                                this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Vault-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)).replace("%uuid%", playerUUID.toString()), false);
-                            }
+                            this.main.getDiscord().handleDiscordLog("Discord.Extras.Vault-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                         } else {
 
-                            if (!this.main.getMessages().get().getString("Discord.Extras.Vault").isEmpty()) {
-
-                                this.main.getDiscord().vault(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.Vault").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%player%", playerName).replace("%oldbal%", String.valueOf(oldBalance)).replace("%newbal%", String.valueOf(newBalance)).replace("%uuid%", playerUUID.toString()), false);
-                            }
+                            this.main.getDiscord().handleDiscordLog("Discord.Extras.Vault", placeholders, DiscordChannels.VAULT, playerName, playerUUID);
                         }
                     }
 

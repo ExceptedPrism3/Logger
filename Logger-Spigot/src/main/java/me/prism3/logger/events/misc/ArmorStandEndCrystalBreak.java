@@ -1,10 +1,10 @@
 package me.prism3.logger.events.misc;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import me.prism3.loggercore.database.entity.enums.ArmorStandActionType;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EnderCrystal;
@@ -15,15 +15,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-import static me.prism3.logger.utils.Data.loggerExempt;
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
+import static me.prism3.logger.utils.Data.isStaffEnabled;
 
 public class ArmorStandEndCrystalBreak implements Listener {
 
@@ -32,10 +31,13 @@ public class ArmorStandEndCrystalBreak implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onArmorStandEndCrystalBreak(final EntityDamageByEntityEvent event) {
 
+        if (event.isCancelled())
+            return;
+
         final Entity damager = event.getDamager();
 
         if ((event.getEntity() instanceof ArmorStand || event.getEntity() instanceof EnderCrystal)
-                && (damager != null && damager instanceof Player && !event.isCancelled())) {
+                && (damager != null && damager instanceof Player)) {
 
             final Player player = (Player) damager;
 
@@ -51,61 +53,45 @@ public class ArmorStandEndCrystalBreak implements Listener {
 
             final String path;
             final File getter;
+            final DiscordChannels discordChannels;
 
             if (entity instanceof ArmorStand) {
                 path = "ArmorStand-Break";
                 getter = FileHandler.getArmorStandBreakFile();
+                discordChannels = DiscordChannels.ARMOR_STAND_BREAK;
             } else {
                 path = "EndCrystal-Break";
                 getter = FileHandler.getEndCrystalBreakFile();
+                discordChannels = DiscordChannels.END_CRYSTAL_BREAK;
             }
+
+            final Map<String, String> placeholders = new HashMap<>();
+            placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+            placeholders.put("%world%", worldName);
+            placeholders.put("%uuid%", playerUUID.toString());
+            placeholders.put("%player%", playerName);
+            placeholders.put("%x%", String.valueOf(x));
+            placeholders.put("%y%", String.valueOf(y));
+            placeholders.put("%z%", String.valueOf(z));
 
             // Log To Files
             if (Data.isLogToFiles) {
-
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files." + path + "-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
+                    FileHandler.handleFileLog("Files." + path + "-Staff", placeholders, FileHandler.getStaffFile());
                 } else {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(getter, true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files." + path).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
+                    FileHandler.handleFileLog("Files." + path, placeholders, getter);
                 }
             }
 
             // Discord Integration
-            if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!this.main.getMessages().get().getString("Discord." + path + "-Staff").isEmpty()) {
-
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord." + path + "-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-                    }
+                    this.main.getDiscord().handleDiscordLog("Discord." + path + "-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                 } else {
 
-                    if (!this.main.getMessages().get().getString("Discord." + path).isEmpty()) {
-
-                        if (entity instanceof ArmorStand)
-                            this.main.getDiscord().armorStandBreak(playerName, playerUUID, this.main.getMessages().get().getString("Discord." + path).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-                        else
-                            this.main.getDiscord().endCrystalBreak(playerName, playerUUID, this.main.getMessages().get().getString("Discord." + path).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%uuid%", playerUUID.toString()).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)), false);
-                    }
+                    this.main.getDiscord().handleDiscordLog("Discord." + path, placeholders, discordChannels, playerName, playerUUID);
                 }
             }
 

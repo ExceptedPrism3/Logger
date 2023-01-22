@@ -8,10 +8,9 @@ public class FloodGateUtil {
 
         try {
 
-            Class.forName("org.geysermc.floodgate.api.FloodgateApi");
+            Class.forName("org.geysermc.floodgate.api.FloodgateApi").getMethod("getInstance");
 
+            return true;
         } catch (final Exception ignored) { return false; }
-
-        return true;
     }
 }

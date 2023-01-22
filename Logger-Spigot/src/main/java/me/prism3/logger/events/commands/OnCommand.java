@@ -1,22 +1,18 @@
 package me.prism3.logger.events.commands;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
+import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static me.prism3.logger.utils.Data.*;
 
@@ -27,6 +23,9 @@ public class OnCommand implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerCmd(final PlayerCommandPreprocessEvent event) {
 
+        if (event.isCancelled())
+            return;
+
         if (isWhitelisted && isBlacklisted) return;
 
         // Whitelist Commands
@@ -36,87 +35,67 @@ public class OnCommand implements Listener {
             return;
         }
 
-        if (!event.isCancelled()) {
+        final Player player = event.getPlayer();
 
-            final Player player = event.getPlayer();
+        if (player.hasPermission(loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
 
-            if (player.hasPermission(loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
+        final List<String> commandParts = Arrays.asList(event.getMessage().split("\\s+"));
 
-            final String worldName = player.getWorld().getName();
-            final UUID playerUUID = player.getUniqueId();
-            final String playerName = player.getName();
-            final String command = event.getMessage().replace("\\", "\\\\");
-            final List<String> commandParts = Arrays.asList(event.getMessage().split("\\s+"));
+        // Blacklisted Commands
+        if (isBlacklisted)
+            for (String m : commandsToBlock)
+                if (commandParts.get(0).equalsIgnoreCase(m)) return;
 
-            // Blacklisted Commands
-            if (isBlacklisted)
-                for (String m : commandsToBlock)
-                    if (commandParts.get(0).equalsIgnoreCase(m)) return;
+        final String worldName = player.getWorld().getName();
+        final UUID playerUUID = player.getUniqueId();
+        final String playerName = player.getName();
+        final String command = event.getMessage().replace("\\", "\\\\");
 
-            if (isLogToFiles) {
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%world%", worldName);
+        placeholders.put("%uuid%", playerUUID.toString());
+        placeholders.put("%player%", playerName);
+        placeholders.put("%command%", command);
 
-                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-                        
-                        out.write(this.main.getMessages().get().getString("Files.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%command%", command).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
-                } else {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandLogFile(), true))) {
-                        
-                        out.write(this.main.getMessages().get().getString("Files.Player-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%command%", command).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
-                }
+        if (Data.isLogToFiles) {
+            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                FileHandler.handleFileLog("Files.Player-Commands-Staff", placeholders, FileHandler.getStaffFile());
+            } else {
+                FileHandler.handleFileLog("Files.Player-Commands", placeholders, FileHandler.getPlayerCommandLogFile());
             }
+        }
 
-            // Discord Integration
-            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        // Discord Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!this.main.getMessages().get().getString("Discord.Player-Commands-Staff").isEmpty()) {
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Commands-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+            } else {
 
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Commands-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command).replace("%uuid%", playerUUID.toString()), false);
-                    }
-                } else {
-
-                    if (!this.main.getMessages().get().getString("Discord.Player-Commands").isEmpty()) {
-
-                        this.main.getDiscord().playerCommand(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Player-Commands").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%command%", command).replace("%uuid%", playerUUID.toString()), false);
-                    }
-                }
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Commands", placeholders, DiscordChannels.PLAYER_COMMANDS, playerName, playerUUID);
             }
+        }
 
-            // External
-            if (isExternal) {
+        // External
+        if (isExternal) {
 
-                try {
+            try {
 
-                    Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerCommands(serverName, playerName, playerUUID.toString(), worldName, command, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerCommands(serverName, playerName, playerUUID.toString(), worldName, command, player.hasPermission(loggerStaffLog));
 
-                } catch (final Exception e) { e.printStackTrace(); }
-            }
+            } catch (final Exception e) { e.printStackTrace(); }
+        }
 
-            // SQLite
-            if (isSqlite) {
+        // SQLite
+        if (isSqlite) {
 
-                try {
+            try {
 
-                    Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerCommands(serverName, playerName, playerUUID.toString(), worldName, command, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerCommands(serverName, playerName, playerUUID.toString(), worldName, command, player.hasPermission(loggerStaffLog));
 
-                } catch (final Exception e) { e.printStackTrace(); }
-            }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }

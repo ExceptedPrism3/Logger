@@ -1,9 +1,10 @@
 package me.prism3.logger.events.misc;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
+import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -12,10 +13,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.*;
@@ -42,31 +42,21 @@ public class PrimedTNT implements Listener {
 
             final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
+            final Map<String, String> placeholders = new HashMap<>();
+            placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+            placeholders.put("%world%", worldName);
+            placeholders.put("%uuid%", playerUUID.toString());
+            placeholders.put("%player%", playerName);
+            placeholders.put("%x%", String.valueOf(x));
+            placeholders.put("%y%", String.valueOf(y));
+            placeholders.put("%z%", String.valueOf(z));
+
             // File Logging
-            if (isLogToFiles) {
-
-                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files.Primed-TNT-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
+            if (Data.isLogToFiles) {
+                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                    FileHandler.handleFileLog("Files.Primed-TNT-Staff", placeholders, FileHandler.getStaffFile());
                 } else {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPrimedTNTFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files.Primed-TNT").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
+                    FileHandler.handleFileLog("Files.Primed-TNT", placeholders, FileHandler.getPrimedTNTFile());
                 }
             }
 
@@ -75,16 +65,10 @@ public class PrimedTNT implements Listener {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!this.main.getMessages().get().getString("Discord.Primed-TNT-Staff").isEmpty()) {
-
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Primed-TNT-Staff").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()), false);
-                    }
+                    this.main.getDiscord().handleDiscordLog("Discord.Primed-TNT-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                 } else {
 
-                    if (!this.main.getMessages().get().getString("Discord.Primed-TNT").isEmpty()) {
-
-                        this.main.getDiscord().primedTNT(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Primed-TNT").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%x%", String.valueOf(x)).replace("%y%", String.valueOf(y)).replace("%z%", String.valueOf(z)).replace("%uuid%", playerUUID.toString()), false);
-                    }
+                    this.main.getDiscord().handleDiscordLog("Discord.Primed-TNT", placeholders, DiscordChannels.PRIMED_TNT, playerName, playerUUID);
                 }
             }
 

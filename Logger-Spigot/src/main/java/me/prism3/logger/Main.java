@@ -3,7 +3,6 @@ package me.prism3.logger;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteRegistration;
 import me.prism3.logger.discord.Discord;
-import me.prism3.logger.discord.Discord2;
 import me.prism3.logger.serverside.Start;
 import me.prism3.logger.serverside.Stop;
 import me.prism3.logger.utils.*;
@@ -32,8 +31,6 @@ public class Main extends JavaPlugin {
 
     private Discord discord;
 
-    private Discord2 discord2;
-
     private DiscordManager discordFile;
 
     private final NmsVersions version = NmsVersions.valueOf(Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3]);
@@ -51,11 +48,10 @@ public class Main extends JavaPlugin {
 
         this.discordFile = new DiscordManager(this);
 
-        this.discord = new Discord();
-        this.discord.run();
-
-        this.discord2 = new Discord2();
-        this.discord2.run();
+        if (this.getDiscordFile().getBoolean("Discord.Enable")) {
+            this.discord = new Discord();
+            this.discord.run();
+        }
 
         if (!this.langChecker()) return;
 
@@ -91,7 +87,8 @@ public class Main extends JavaPlugin {
 //        if (isRegistration && this.sqLiteReg.isConnected()) this.sqLiteReg.disconnect();
 
         this.disconnectDatabase();
-        this.discord.disconnect();
+        if (this.discord != null)
+            this.discord.disconnect();
 
         Log.info("Plugin Disabled!");
     }
@@ -150,10 +147,6 @@ public class Main extends JavaPlugin {
     public NmsVersions getVersion() { return this.version; }
 
     public Discord getDiscord() { return this.discord; }
-
-    public Discord2 getDiscord2() {
-        return discord2;
-    }
 
     public FileConfiguration getDiscordFile() { return this.discordFile.get(); }
 

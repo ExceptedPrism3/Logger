@@ -1,6 +1,5 @@
 package me.prism3.logger.hooks;
 
-import fr.xephi.authme.AuthMe;
 import me.prism3.logger.Main;
 import me.prism3.logger.events.plugindependent.OnAuthMePassword;
 import me.prism3.logger.utils.Log;
@@ -16,18 +15,15 @@ public class AuthMeUtil {
 
     public static void getAuthMeHook() {
 
-        if (getAuthMe() != null && Main.getInstance().getConfig().getBoolean("Log-Extras.AuthMe-Wrong-Password")) {
-
-            Main.getInstance().getServer().getPluginManager().registerEvents(new OnAuthMePassword(), Main.getInstance());
+        if (Bukkit.getPluginManager().isPluginEnabled("AuthMe")) {
 
             Log.info("AuthMe Plugin Detected!");
+
+            final OnAuthMePassword authMePassword = new OnAuthMePassword();
+            Main.getInstance().getServer().getPluginManager().registerEvents(authMePassword, Main.getInstance());
 
             options.setAuthMeEnabled(true);
             isAllowed = true;
         }
-    }
-
-    private static AuthMe getAuthMe() {
-        return (AuthMe) Bukkit.getPluginManager().getPlugin("AuthMe");
     }
 }

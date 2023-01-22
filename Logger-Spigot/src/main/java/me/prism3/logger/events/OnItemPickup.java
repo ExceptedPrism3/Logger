@@ -1,10 +1,10 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.loggercore.database.entity.enums.ItemActionType;
 import org.bukkit.Material;
@@ -14,13 +14,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-import static me.prism3.logger.utils.Data.loggerStaffLog;
+import static me.prism3.logger.utils.Data.*;
 
 public class OnItemPickup implements Listener {
 
@@ -29,7 +28,7 @@ public class OnItemPickup implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemPick(final EntityPickupItemEvent event) {
 
-        if (event.getEntity() instanceof Player && !event.isCancelled()) {
+        if (!event.isCancelled() && event.getEntity() instanceof Player) {
 
             final Player player = (Player) event.getEntity();
 
@@ -54,49 +53,36 @@ public class OnItemPickup implements Listener {
 
             final Coordinates coordinates = new Coordinates(blockX, blockY, blockZ, worldName);
 
+            final Map<String, String> placeholders = new HashMap<>();
+            placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+            placeholders.put("%world%", worldName);
+            placeholders.put("%uuid%", playerUUID.toString());
+            placeholders.put("%player%", playerName);
+            placeholders.put("%x%", String.valueOf(blockX));
+            placeholders.put("%y%", String.valueOf(blockY));
+            placeholders.put("%z%", String.valueOf(blockZ));
+            placeholders.put("%amount%", String.valueOf(amount));
+            placeholders.put("%item%", String.valueOf(item));
+            placeholders.put("%renamed%", itemName);
+
             // Log To Files
             if (Data.isLogToFiles) {
-
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files.Item-Pickup-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", String.valueOf(item)).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
+                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                    FileHandler.handleFileLog("Files.Item-Pickup-Staff", placeholders, FileHandler.getStaffFile());
                 } else {
-
-                    try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getItemPickupFile(), true))) {
-
-                        out.write(this.main.getMessages().get().getString("Files.Item-Pickup").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", String.valueOf(item)).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName).replace("%uuid%", playerUUID.toString()) + "\n");
-
-                    } catch (final IOException e) {
-
-                        Log.warning("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-                    }
+                    FileHandler.handleFileLog("Files.Item-Pickup", placeholders, FileHandler.getItemPickupFile());
                 }
             }
 
             // Discord Integration
-            if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
 
-                if (Data.isStaffEnabled && player.hasPermission(Data.loggerStaffLog)) {
+                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    if (!this.main.getMessages().get().getString("Discord.Item-Pickup-Staff").isEmpty()) {
-
-                        this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Item-Pickup-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", String.valueOf(item)).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName).replace("%uuid%", playerUUID.toString()), false);
-                    }
+                    this.main.getDiscord().handleDiscordLog("Discord.Item-Pickup-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                 } else {
 
-                    if (!this.main.getMessages().get().getString("Discord.Item-Pickup").isEmpty()) {
-
-                        this.main.getDiscord().itemPickup(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Item-Pickup").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", String.valueOf(item)).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName).replace("%uuid%", playerUUID.toString()), false);
-                    }
+                    this.main.getDiscord().handleDiscordLog("Discord.Item-Pickup", placeholders, DiscordChannels.ITEM_PICKUP, playerName, playerUUID);
                 }
             }
 

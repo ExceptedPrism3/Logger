@@ -1,19 +1,18 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerCommandEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CommandBlock implements Listener {
 
@@ -26,23 +25,17 @@ public class CommandBlock implements Listener {
 
             final String command = event.getCommand().replace("\\", "\\\\");
 
+            final Map<String, String> placeholders = new HashMap<>();
+            placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+            placeholders.put("%command%", command);
+
             // Log To Files
-            if (Data.isLogToFiles) {
-
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getCommandBlockFile(), true))){
-                    
-                    out.write(this.main.getMessages().get().getString("Files.Server-Side.Command-Block").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command) + "\n");
-
-                } catch (final IOException e) {
-
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
-            }
+            if (Data.isLogToFiles)
+                FileHandler.handleFileLog("Files.Server-Side.Command-Block", placeholders, FileHandler.getCommandBlockFile());
 
             // Discord
-            if (!this.main.getMessages().get().getString("Discord.Server-Side.Command-Block").isEmpty() && this.main.getDiscordFile().getBoolean("Discord.Enable"))
-                this.main.getDiscord().commandBlock(this.main.getMessages().get().getString("Discord.Server-Side.Command-Block").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%command%", command), false);
+            if (this.main.getDiscordFile().getBoolean("Discord.Enable"))
+                this.main.getDiscord().handleDiscordLog("Discord.Enchanting", placeholders, DiscordChannels.COMMAND_BLOCK, "Command Block", null);
 
             // External
             if (Data.isExternal) {

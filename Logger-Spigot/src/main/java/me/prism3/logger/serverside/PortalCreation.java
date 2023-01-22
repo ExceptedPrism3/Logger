@@ -1,18 +1,17 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.discord.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.PortalCreateEvent;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PortalCreation implements Listener {
 
@@ -21,48 +20,43 @@ public class PortalCreation implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPortalCreate(final PortalCreateEvent event) {
 
-        if (!event.isCancelled()) {
+        if (event.isCancelled())
+            return;
 
-            final String worldName = event.getWorld().getName();
-            final PortalCreateEvent.CreateReason reason = event.getReason();
+        final String worldName = event.getWorld().getName();
+        final PortalCreateEvent.CreateReason reason = event.getReason();
 
-            // Log To Files
-            if (Data.isLogToFiles) {
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%world%", worldName);
+        placeholders.put("%material%", String.valueOf(reason));
 
-                try (final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getPortalCreateFile(), true))) {
-                    
-                    out.write(this.main.getMessages().get().getString("Files.Server-Side.Portal-Creation").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%material%", String.valueOf(reason)) + "\n");
+        // Log To Files
+        if (Data.isLogToFiles)
+            FileHandler.handleFileLog("Files.Server-Side.Portal-Creation", placeholders, FileHandler.getPortalCreateFile());
 
-                } catch (final IOException e) {
+        // Discord
+        if (this.main.getDiscordFile().getBoolean("Discord.Enable"))
+            this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Portal-Creation", placeholders, DiscordChannels.PORTAL_CREATION, "Portal Creation", null);
 
-                    Log.warning("An error occurred while logging into the appropriate file.");
-                    e.printStackTrace();
-                }
-            }
+        // External
+        if (Data.isExternal) {
 
-            // Discord
-            if (!this.main.getMessages().get().getString("Discord.Server-Side.Portal-Creation").isEmpty() && this.main.getDiscordFile().getBoolean("Discord.Enable"))
-                this.main.getDiscord().portalCreation(this.main.getMessages().get().getString("Discord.Server-Side.Portal-Creation").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%material%", String.valueOf(reason)), false);
+            try {
 
-            // External
-            if (Data.isExternal) {
+                Main.getInstance().getDatabase().getDatabaseQueue().queuePortalCreate(Data.serverName, worldName, reason.toString());
 
-                try {
+            } catch (final Exception e) { e.printStackTrace(); }
+        }
 
-                    Main.getInstance().getDatabase().getDatabaseQueue().queuePortalCreate(Data.serverName, worldName, reason.toString());
+        // SQLite
+        if (Data.isSqlite) {
 
-                } catch (final Exception e) { e.printStackTrace(); }
-            }
+            try {
 
-            // SQLite
-            if (Data.isSqlite) {
+                Main.getInstance().getDatabase().getDatabaseQueue().queuePortalCreate(Data.serverName, worldName, reason.toString());
 
-                try {
-
-                    Main.getInstance().getDatabase().getDatabaseQueue().queuePortalCreate(Data.serverName, worldName, reason.toString());
-
-                } catch (final Exception e) { e.printStackTrace(); }
-            }
+            } catch (final Exception e) { e.printStackTrace(); }
         }
     }
 }
