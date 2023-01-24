@@ -1,6 +1,6 @@
 # Discord Bridge Configuration for Logger Plugin [ Bukkit Version]
 # Need Support Join the Discord Server: https://discord.gg/MfR5mcpVfX
-# Version: 1.8.1
+# Version: ${project.version}
 
 
 # Leaving Channel-ID empty will disable the Channel

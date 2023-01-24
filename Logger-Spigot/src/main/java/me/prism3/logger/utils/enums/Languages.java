@@ -1,7 +1,6 @@
 package me.prism3.logger.utils.enums;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.EnumMap;
 
 public enum Languages {
 
@@ -18,12 +17,17 @@ public enum Languages {
 
     public String getMessageFile() { return this.messageFile; }
 
-    private static final Map<String, Languages> lookup = new HashMap<>();
+    private static final EnumMap<Languages, String> lookup = new EnumMap<>(Languages.class);
 
     static {
-        for (Languages lang : Languages.values())
-            lookup.put(lang.name(), lang);
+        for (final Languages lang : Languages.values())
+            lookup.put(lang, lang.name());
     }
 
-    public static Languages get(String code) { return lookup.get(code.toUpperCase()); }
+    public static Languages get(String code) { return lookup.entrySet().stream()
+            .filter(e -> e.getValue().equalsIgnoreCase(code))
+            .map(EnumMap.Entry::getKey)
+            .findFirst()
+            .orElse(null);
+    }
 }

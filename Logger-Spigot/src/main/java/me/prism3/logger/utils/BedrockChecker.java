@@ -4,18 +4,23 @@ import me.prism3.logger.hooks.FloodGateUtil;
 import org.geysermc.floodgate.api.FloodgateApi;
 
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class BedrockChecker {
 
-    private BedrockChecker() {}
+    private static final ConcurrentHashMap<UUID, Boolean> cache = new ConcurrentHashMap<>();
 
-    private static final BedrockChecker INSTANCE = new BedrockChecker();
+
     private static final boolean FLOODGATE_API_ENABLED = FloodGateUtil.getFloodGateAPI();
 
-    public static BedrockChecker getInstance() { return INSTANCE; }
+    private static final FloodgateApi floodgateApi = FloodgateApi.getInstance();
+
+    private BedrockChecker() {}
 
     public static boolean isBedrock(UUID playerUUID) {
+
         if (!FLOODGATE_API_ENABLED) return false;
-        return FloodgateApi.getInstance().isFloodgatePlayer(playerUUID);
+
+        return cache.computeIfAbsent(playerUUID, floodgateApi::isFloodgatePlayer);
     }
 }

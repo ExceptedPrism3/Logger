@@ -7,7 +7,6 @@ import me.prism3.logger.utils.updater.FileUpdater;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -58,7 +57,10 @@ public class DiscordManager {
     private void initDiscord() {
         try {
             this.discord = new Config(this.plugin, "discord.yml");
-        } catch (final FileNotFoundException e) { Log.severe("Discord file not found", e); }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void resetDiscord() {

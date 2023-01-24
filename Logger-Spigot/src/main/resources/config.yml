@@ -14,7 +14,6 @@
 # Discord: Prism3#9371 ID: 403667971089760257
 # Discord Server: https://discord.gg/MfR5mcpVfX
 
-
 # Messages file to use
 Language: en_en
 
@@ -213,4 +212,4 @@ Updater:
 
 # Do not touch unless you want to reset it's content
 Config-Version: 1
-Discord-Version: 1
+Discord-Version: 1.8.1

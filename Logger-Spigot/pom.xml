@@ -80,6 +80,22 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.7</version>
+                <executions>
+                    <execution>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>update-property</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <property>project.version</property>
+                </configuration>
+            </plugin>
         </plugins>
         <resources>
             <resource>

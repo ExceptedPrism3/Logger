@@ -1,110 +1,116 @@
 package me.prism3.logger.utils;
 
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import org.bukkit.Bukkit;
 import org.json.JSONObject;
 
-import java.io.*;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-import static me.prism3.logger.utils.Data.*;
-
 public class PluginUpdater {
 
-    private String newTag = "";
+    private final String resourceAPI = "https://api.github.com/repos/ExceptedPrism3/Logger/releases/latest";
+    private final String currentVersion;
+    private final File updateFolder = Bukkit.getUpdateFolderFile();
+    private final long checkInterval = TimeUnit.HOURS.toMillis(12);
+    private final ConcurrentHashMap<String, JSONObject> cache = new ConcurrentHashMap<>();
+    private long lastCheck;
+    private final ExecutorService threadPool = Executors.newFixedThreadPool(1);
 
-    public void run() { this.checkForUpdate(); }
+    public PluginUpdater(String currentVersion) { this.currentVersion = currentVersion; }
 
-    /**
-     * Check for a newer version of Logger every 12hrs
-     * If present Download > Store > Auto Install on Server Restart
-     */
-    private void checkForUpdate() {
+    public void checkForUpdates() {
 
-        try (final InputStream input = new URL(resourceAPIChecker).openStream();
-             final BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8))) {
+        if (System.currentTimeMillis() - this.lastCheck < this.checkInterval)
+            return;
 
-            final StringBuilder stringBuilder = new StringBuilder();
+        this.threadPool.submit(() -> {
+            final JSONObject json;
 
-            String line;
-            while ((line = reader.readLine()) != null)
-                stringBuilder.append(line);
+            if (this.cache.containsKey(this.resourceAPI)) {
 
-            new JSONObject(stringBuilder);
+                json = this.cache.get(this.resourceAPI);
 
-            this.newTag = stringBuilder.toString();
+            } else {
 
-            this.versionChecker(stringBuilder.toString());
+                try {
 
-        } catch (final IOException e) { Log.severe("Could not check for updates."); }
-    }
+                    final URL url = new URL(this.resourceAPI);
+                    final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestProperty("Accept", "application/vnd.github+json");
 
-    private void versionChecker(String remote) {
+                    if (conn.getResponseCode() != 200) {
+                        Log.severe("Error checking for updates. Got response code " + conn.getResponseCode());
+                        return;
+                    }
 
-        if (this.versionCheck(remote)) {
+                    try (final InputStreamReader reader = new InputStreamReader(conn.getInputStream());
+                         final BufferedReader buffer = new BufferedReader(reader)) {
 
-            if (!Bukkit.getUpdateFolderFile().exists())
+                        final StringBuilder response = new StringBuilder();
+                        buffer.lines().forEach(response::append);
+
+                        json = new JSONObject(response.toString());
+                        this.cache.put(this.resourceAPI, json);
+                    }
+
+                } catch (final IOException e) {
+                    Log.severe("Error checking for updates: " + e.getMessage());
+                    return;
+                }
+            }
+
+            final String latestTag = json.getString("tag_name");
+
+            if (this.compareVersions(this.currentVersion, latestTag.replace("v", "")) < 0) {
+
+                Log.info("A new update is available: " + latestTag);
+                Log.info("Downloading...");
+
+                final String downloadUrl = json.getJSONArray("assets")
+                        .getJSONObject(0)
+                        .getString("browser_download_url");
+
                 Bukkit.getUpdateFolderFile().mkdirs();
 
-            if (this.isThere()) {
+                this.downloadFile(downloadUrl, new File(this.updateFolder, "Logger.jar"));
 
-                Log.info("An update of the plugin is ready to be installed. Restart your server to install.");
-                return;
-            }
+                Log.info("The new version " + latestTag + " has been downloaded. It will be auto-installed on server restart.");
 
-            Log.info("Update Found! Attempt to download...");
+            } else { Log.info("You are using the latest version: " + this.currentVersion); }
 
-            try {
-
-                Files.copy(new URL("https://github.com/ExceptedPrism3/Logger/releases/download/v" + remote + "/Logger-Shaded-" + remote + ".jar").openStream(),
-                        Paths.get(Bukkit.getUpdateFolderFile() + File.separator + "Logger.jar"));
-
-                Log.info("The new version has been successfully downloaded and stored. Restart your server to auto-install." +
-                        " Current Version: " + pluginVersion + ", New Version: " + this.newTag);
-
-            } catch (final IOException e) {
-
-                Log.severe("An error has occurred whist downloading the new plugin version." +
-                        " You still can download it manually via the following link: " + resourceLink);
-            }
-        }
-        else Log.info("You're using the latest plugin version");
+            this.lastCheck = System.currentTimeMillis();
+        });
     }
 
-    private boolean versionCheck(final String remoteVersion) {
-
-        if (remoteVersion.equalsIgnoreCase(pluginVersion))
-            return false;
-
-        final String[] remote = remoteVersion.split("\\.");
-        final String[] local = pluginVersion.split("\\.");
-        final int length = Math.max(local.length, remote.length);
-
+    private void downloadFile(String url, File file) {
         try {
-            for (int i = 0; i < length; i++) {
-
-                final int localNumber = i < local.length ? Integer.parseInt(local[i]) : 0;
-                final int remoteNumber = i < remote.length ? Integer.parseInt(remote[i]) : 0;
-
-                if (remoteNumber > localNumber)
-                    return true;
-
-                if (remoteNumber < localNumber)
-                    return false;
+            final URL downloadUrl = new URL(url);
+            try (InputStream in = downloadUrl.openStream()) {
+                Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }
-        } catch (final NumberFormatException ex) { Log.warning("An Error has occurred whilst reading the version tag. " +
-                "If this issue persists contact the Authors."); }
-
-        return false;
+        } catch (final IOException e) { Log.severe("Error downloading file: " + e.getMessage()); }
     }
 
-    private boolean isThere() {
+    private int compareVersions(String current, String latest) {
 
-        final File newVersion = new File(Bukkit.getUpdateFolderFile(), "Logger.jar");
+        final String[] currentParts = current.split("\\.");
+        final String[] latestParts = latest.split("\\.");
 
-        return newVersion.exists();
+        for (int i = 0; i < Math.max(currentParts.length, latestParts.length); i++) {
+
+            int currentPart = i < currentParts.length ? Integer.parseInt(currentParts[i]) : 0;
+            int latestPart = i < latestParts.length ? Integer.parseInt(latestParts[i]) : 0;
+
+            if (currentPart != latestPart)
+                return currentPart - latestPart;
+        }
+        return 0;
     }
 }
-

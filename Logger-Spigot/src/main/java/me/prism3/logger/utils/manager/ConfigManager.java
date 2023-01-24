@@ -2,11 +2,9 @@ package me.prism3.logger.utils.manager;
 
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Log;
-import me.prism3.logger.utils.PluginUpdater;
 import me.prism3.logger.utils.config.Config;
 import me.prism3.logger.utils.updater.FileUpdater;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,12 +29,6 @@ public class ConfigManager {
 	private void loadConfig() {
 		this.checkConfig();
 		this.initConfig();
-		new BukkitRunnable() {
-				@Override
-				public void run() {
-					new PluginUpdater().run();
-				}
-			}.runTaskTimerAsynchronously(this.plugin, 0, 12L * 60 * 60 * 20);
 	}
 
 	private void checkConfig() {

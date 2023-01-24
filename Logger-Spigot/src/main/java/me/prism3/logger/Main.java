@@ -53,7 +53,10 @@ public class Main extends JavaPlugin {
             this.discord.run();
         }
 
-        if (!this.langChecker()) return;
+        if (this.langChecker()) {
+            this.getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 
         if (isLogToFiles && isSqlite)
             Log.warning("File and SQLite logging are both enabled, this might impact your Server's Performance!");
@@ -61,9 +64,9 @@ public class Main extends JavaPlugin {
         final FileHandler fileHandler = new FileHandler(this.getDataFolder());
         fileHandler.deleteFiles(this.getDataFolder());
 
-        new PluginUpdater().run();
+        new PluginUpdater(pluginVersion).checkForUpdates();
 
-        this.databaseSetup();
+//        this.databaseSetup();
 
         new ASCIIArt().art();
 
@@ -80,13 +83,15 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
 
-        if (!this.messages.getIsValid()) return;
+        if (this.messages.get() == null)
+            return;
 
         new Stop().run();
 
 //        if (isRegistration && this.sqLiteReg.isConnected()) this.sqLiteReg.disconnect();
 
         this.disconnectDatabase();
+
         if (this.discord != null)
             this.discord.disconnect();
 
@@ -133,11 +138,8 @@ public class Main extends JavaPlugin {
 
         this.messages = new Messages();
 
-        if (!this.messages.getIsValid()) {
-            this.getServer().getPluginManager().disablePlugin(this);
-            return false;
-        }
-        return true;
+        // Check if the selected Language is Valid | Exists
+        return this.messages.get() == null;
     }
 
     public static Main getInstance() { return instance; }

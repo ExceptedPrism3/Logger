@@ -1,6 +1,6 @@
 # Messages for Logger Plugin [ Bukkit Version ]
 # Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
-# Config 1.8
+# Config ${project.version}a
 # Plugin Messages
 General:
   No-Permission: "%prefix% &cليس لديك إذن لتشغيل هذا الأمر."

@@ -14,29 +14,24 @@ import static me.prism3.logger.utils.Data.*;
 
 public class Messages {
 
-    private final Main main = Main.getInstance();
     private FileConfiguration messagesFile;
     private final List<String> langFiles = Stream.of(Languages.values()).map(Languages::getMessageFile).collect(Collectors.toList());
 
-    private boolean isValid = true;
-
     public Messages() {
 
+        // Copy language files if they don't exist
         this.copyLangFiles();
 
-        // Check if the selected Language is Valid | Exists
-        if (!this.langFiles.contains(selectedLang.toLowerCase())) {
 
-            Log.severe("Unknown selected language file: '" + selectedLang + "'");
-            Log.severe("Disabling....");
-            this.isValid = false;
+        if (!this.langFiles.contains(selectedLang.toLowerCase())) {
+            Log.severe("The selected language file: '" + selectedLang + "' could not be found or invalid, disabling...");
             return;
         }
 
-        final String langFilePath = this.main.getDataFolder() + File.separator + langPath + File.separator + selectedLang + fileType;
+        final String langFilePath = Main.getInstance().getDataFolder() + File.separator + langPath + File.separator + selectedLang + fileType;
         File langFile = new File(langFilePath);
         if (!langFile.exists()) {
-            this.main.saveResource(langPath + File.separator + selectedLang + fileType, false);
+            Main.getInstance().saveResource(langPath + File.separator + selectedLang + fileType, false);
             langFile = new File(langFilePath);
         }
         this.messagesFile = YamlConfiguration.loadConfiguration(langFile);
@@ -45,22 +40,19 @@ public class Messages {
     public FileConfiguration get() { return this.messagesFile; }
 
     public void reload() {
-        final String langFilePath = this.main.getDataFolder() + File.separator + langPath + File.separator + selectedLang + fileType;
+        final String langFilePath = Main.getInstance().getDataFolder() + File.separator + langPath + File.separator + selectedLang + fileType;
         File langFile = new File(langFilePath);
         if (!langFile.exists()) {
-            this.main.saveResource(langPath + File.separator + selectedLang + fileType, false);
+            Main.getInstance().saveResource(langPath + File.separator + selectedLang + fileType, false);
             langFile = new File(langFilePath);
         }
         this.messagesFile = YamlConfiguration.loadConfiguration(langFile);
     }
 
-
     // Cycle through the Messages Folder and load what's listed in the Array
     private void copyLangFiles() {
         for (String l : this.langFiles)
-            if (!new File(this.main.getDataFolder() + File.separator + langPath + File.separator + l + fileType).exists())
-                this.main.saveResource(langPath + File.separator + l + fileType, false);
+            if (!new File(Main.getInstance().getDataFolder() + File.separator + langPath + File.separator + l + fileType).exists())
+                Main.getInstance().saveResource(langPath + File.separator + l + fileType, false);
     }
-
-    public boolean getIsValid() { return this.isValid; }
 }
