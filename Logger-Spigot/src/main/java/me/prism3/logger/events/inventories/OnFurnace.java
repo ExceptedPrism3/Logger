@@ -1,7 +1,7 @@
 package me.prism3.logger.events.inventories;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -62,15 +62,15 @@ public class OnFurnace implements Listener {
             }
         }
 
-        // Discord Integration
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        // DiscordManager Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("Discord.Furnace-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Furnace-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("Discord.Furnace-Craft", placeholders, DiscordChannels.FURNACE, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Furnace-Craft", placeholders, DiscordChannels.FURNACE, playerName, playerUUID);
             }
         }
 

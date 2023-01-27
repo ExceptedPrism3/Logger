@@ -1,9 +1,9 @@
-# Discord Bridge Configuration for Logger Plugin [ Bukkit Version]
-# Need Support Join the Discord Server: https://discord.gg/MfR5mcpVfX
+# DiscordManager Bridge Configuration for Logger PluginUpdater [ Bukkit Version ]
+# Need Support Join the DiscordManager Server: https://discord.gg/MfR5mcpVfX
 # Version: ${project.version}
 
 
-# Leaving Channel-ID empty will disable the Channel
+# Leaving Channel_ID empty will disable the Channel
 Discord:
   Enable: false
   Bot-Token: BOT_KEY
@@ -127,6 +127,7 @@ Discord:
     Totem-of-Undying:
       Channel-ID: 'CHANNEL_ID'
 
+  # Custom Side Checkers
   Custom:
     Manual:
       Channel-ID: 'CHANNEL_ID'
@@ -149,3 +150,6 @@ ActivityCycling:
     - ["listening", "Dragon's Heart Beats"]
     - ["streaming", "Minecraft Gameplay"]
   Time: 30
+
+# Do not touch unless you want to reset it's content
+Discord-Version: ${project.version}

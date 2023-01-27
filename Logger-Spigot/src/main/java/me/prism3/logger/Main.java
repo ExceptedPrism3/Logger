@@ -9,12 +9,17 @@ import me.prism3.logger.utils.*;
 import me.prism3.logger.utils.enums.NmsVersions;
 import me.prism3.logger.utils.manager.ConfigManager;
 import me.prism3.logger.utils.manager.DiscordManager;
+import me.prism3.logger.utils.manager.MessagesManager;
+import me.prism3.logger.utils.updater.PluginUpdater;
 import me.prism3.loggercore.database.AbstractDataSource;
 import me.prism3.loggercore.database.datasource.SQLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static me.prism3.logger.utils.Data.*;
 
@@ -22,18 +27,17 @@ public class Main extends JavaPlugin {
 
     private static Main instance;
 
-    private Messages messages;
-
     private AbstractDataSource database;
+
     private AbstractDataSource sqLite;
 
     private SQLiteRegistration sqLiteReg;
 
-    private Discord discord;
-
     private DiscordManager discordFile;
 
     private final NmsVersions version = NmsVersions.valueOf(Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3]);
+
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Override
     public void onEnable() {
@@ -48,10 +52,7 @@ public class Main extends JavaPlugin {
 
         this.discordFile = new DiscordManager(this);
 
-        if (this.getDiscordFile().getBoolean("Discord.Enable")) {
-            this.discord = new Discord();
-            this.discord.run();
-        }
+        Discord.getInstance().run();
 
         if (this.langChecker()) {
             this.getServer().getPluginManager().disablePlugin(this);
@@ -59,7 +60,7 @@ public class Main extends JavaPlugin {
         }
 
         if (isLogToFiles && isSqlite)
-            Log.warning("File and SQLite logging are both enabled, this might impact your Server's Performance!");
+            Log.warning("FileUpdater and SQLite logging are both enabled, this might impact your Server's Performance!");
 
         final FileHandler fileHandler = new FileHandler(this.getDataFolder());
         fileHandler.deleteFiles(this.getDataFolder());
@@ -75,7 +76,7 @@ public class Main extends JavaPlugin {
 
         Log.info(ChatColor.GOLD + "Thanks to everyone's contributions that helped made this project possible!");
 
-        Log.info("Plugin Enabled!");
+        Log.info("PluginUpdater Enabled!");
 
         new Start().run();
     }
@@ -83,19 +84,32 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
 
-        if (this.messages.get() == null)
+        if (MessagesManager.getInstance() == null)
             return;
 
         new Stop().run();
 
 //        if (isRegistration && this.sqLiteReg.isConnected()) this.sqLiteReg.disconnect();
 
-        this.disconnectDatabase();
+        // This will stop accepting new tasks, but it will wait for running tasks to complete for a maximum of 5 seconds.
+        // If tasks are still running after the 5 seconds, it will cancel them using the shutdownNow() method.
+        executor.shutdown();
+        try {
+            if (!executor.awaitTermination(5, TimeUnit.SECONDS)) {
+                executor.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executor.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
 
-        if (this.discord != null)
-            this.discord.disconnect();
+        if (this.database != null)
+            this.disconnectDatabase();
 
-        Log.info("Plugin Disabled!");
+        if (Discord.getInstance() != null)
+            Discord.getInstance().disconnect();
+
+        Log.info("PluginUpdater Disabled!");
     }
 
     public void initializer(Data data) {
@@ -136,10 +150,10 @@ public class Main extends JavaPlugin {
 
     private boolean langChecker() {
 
-        this.messages = new Messages();
+        MessagesManager.getInstance().init();
 
         // Check if the selected Language is Valid | Exists
-        return this.messages.get() == null;
+        return MessagesManager.getInstance().get() == null;
     }
 
     public static Main getInstance() { return instance; }
@@ -148,13 +162,15 @@ public class Main extends JavaPlugin {
 
     public NmsVersions getVersion() { return this.version; }
 
-    public Discord getDiscord() { return this.discord; }
+    public Discord getDiscord() { return Discord.getInstance(); }
 
-    public FileConfiguration getDiscordFile() { return this.discordFile.get(); }
+    public DiscordManager getDiscordFile() { return this.discordFile; }
 
-    public Messages getMessages() { return this.messages; }
+    public MessagesManager getMessagesFile() { return MessagesManager.getInstance(); }
 
     public AbstractDataSource getDatabase() { return this.database; }
 
     public AbstractDataSource getSqLite() { return this.sqLite; }
+
+    public ExecutorService getExecutor() { return this.executor; }
 }

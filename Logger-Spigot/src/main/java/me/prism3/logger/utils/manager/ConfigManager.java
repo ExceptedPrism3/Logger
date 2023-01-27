@@ -2,12 +2,10 @@ package me.prism3.logger.utils.manager;
 
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Log;
-import me.prism3.logger.utils.config.Config;
 import me.prism3.logger.utils.updater.FileUpdater;
 import org.bukkit.configuration.Configuration;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -19,10 +17,11 @@ public class ConfigManager {
 
 	private final Main plugin;
 	private final File configFile;
+	private final String configFileName = "config.yml";
 
 	public ConfigManager(final Main plugin) {
 		this.plugin = plugin;
-		this.configFile = new File(plugin.getDataFolder(), "config.yml");
+		this.configFile = new File(plugin.getDataFolder(), configFileName);
 		this.loadConfig();
 	}
 
@@ -33,45 +32,65 @@ public class ConfigManager {
 
 	private void checkConfig() {
 
-		if (!this.configFile.exists())
-			return;
+		this.plugin.getExecutor().submit(() -> {
 
-		this.plugin.reloadConfig();
-		final Configuration defaults = this.plugin.getConfig().getDefaults();
-		final int oldVersion = configVersion;
-		final int currentVersion = defaults != null ? defaults.getInt("Config-Version") : 0;
+			if (!this.configFile.exists())
+				return;
 
-		if (oldVersion == 0) {
-			this.resetConfig();
-			return;
-		}
+			this.plugin.reloadConfig();
+			final Configuration defaults = this.plugin.getConfig().getDefaults();
+			final String currentVersion = configVersion;
+			final String jarVersion = defaults != null ? defaults.getString("Config-Version") : "";
 
-		if (oldVersion < currentVersion) {
-			try {
-				FileUpdater.update(this.plugin, "config.yml", this.configFile, Collections.singletonList("Config-Version"));
-				Log.warning("Config file updated from version " + oldVersion + " to version " + currentVersion);
-			} catch (final IOException e) {
-				Log.severe("Error reading the config file, if the issue persists contact the authors!");
+			if (currentVersion == null || currentVersion.isEmpty()) {
 				this.resetConfig();
+				return;
 			}
-		}
+
+			if (this.compareVersions(currentVersion, jarVersion) < 0) {
+				try {
+					FileUpdater.update(this.plugin, configFileName, this.configFile, Collections.singletonList("Config-Version"));
+					Log.warning("FileInitializer file updated from version " + currentVersion + " to version " + jarVersion);
+				} catch (final IOException e) {
+					Log.severe("Error reading the config file, if the issue persists contact the authors!");
+					this.resetConfig();
+				}
+			}
+		});
 	}
 
-	private void initConfig() {
-		try {
-			new Config(this.plugin, "config.yml");
-		} catch (final FileNotFoundException e) { Log.severe("Config file not found", e); }
-	}
+	private void initConfig() { new FileInitializer(this.plugin, configFileName); }
 
 	private void resetConfig() {
 
-		try {
-			Files.move(this.configFile.toPath(), this.configFile.toPath().resolveSibling("config.old.yml"), StandardCopyOption.REPLACE_EXISTING);
-		} catch (final IOException e) { Log.severe("Error resetting the config file"); }
+		this.plugin.getExecutor().submit(() -> {
 
-		this.initConfig();
-		Log.warning("Due to an error reading the config, it was reset to default settings");
-		Log.warning("This was likely caused by a mistake while you changed settings, like an extra space or missing quotes");
-		Log.warning("The broken config was renamed to config.old.yml, you can copy your old settings manually if you need them");
+			try {
+
+				Files.move(this.configFile.toPath(), this.configFile.toPath().resolveSibling("config.old.yml"), StandardCopyOption.REPLACE_EXISTING);
+
+				this.initConfig();
+				Log.warning("Due to an error reading the config, it was reset to default settings");
+				Log.warning("This was likely caused by a mistake while you changed settings, like an extra space or missing quotes");
+				Log.warning("The broken config was renamed to config.old.yml, you can copy your old settings manually if you need them");
+
+			} catch (final IOException e) { Log.severe("Error resetting the config file"); }
+		});
+	}
+
+	private int compareVersions(String current, String latest) {
+
+		final String[] currentParts = current.split("\\.");
+		final String[] latestParts = latest.split("\\.");
+
+		for (int i = 0; i < Math.max(currentParts.length, latestParts.length); i++) {
+
+			int currentPart = i < currentParts.length ? Integer.parseInt(currentParts[i]) : 0;
+			int latestPart = i < latestParts.length ? Integer.parseInt(latestParts[i]) : 0;
+
+			if (currentPart != latestPart)
+				return currentPart - latestPart;
+		}
+		return 0;
 	}
 }

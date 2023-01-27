@@ -43,36 +43,39 @@ public class Dump implements SubCommand {
 
     private void pastebinExecution(CommandSender commandSender) {
 
-        try {
+        Main.getInstance().getExecutor().submit(() -> {
 
-            final Dotenv dotenv = Dotenv.load();
+            try {
 
-            final String[] loggerFiles = { "config.yml", "discord.yml", "messages" + File.separator + selectedLang + ".yml" };
-            final StringBuilder sb = new StringBuilder();
+                final Dotenv dotenv = Dotenv.load();
 
-            for (final String file : loggerFiles)
-                sb.append(Files.asCharSource(new File(dataFolder + File.separator + file), StandardCharsets.UTF_8).read()).append("\n\n\n");
+                final String[] loggerFiles = {"config.yml", "discord.yml", "messages" + File.separator + selectedLang + ".yml"};
+                final StringBuilder sb = new StringBuilder();
 
-            sb.append(Files.asCharSource(new File("logs" + File.separator + "latest.log"), StandardCharsets.UTF_8).read());
+                for (final String file : loggerFiles)
+                    sb.append(Files.asCharSource(new File(dataFolder + File.separator + file), StandardCharsets.UTF_8).read()).append("\n\n\n");
 
-            final Pastebin.PasteRequest request = new Pastebin.PasteRequest(dotenv.get("PASTEBIN_API"), sb.toString());
-            request.setPasteName("Logger MC Plugin");
-            request.setPasteFormat("yaml");
-            request.setPasteState(1);
-            request.setPasteExpire("10M");
-            commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    pluginPrefix + request.postPaste() + "\n&cDo not share this link at all!"));
+                sb.append(Files.asCharSource(new File("logs" + File.separator + "latest.log"), StandardCharsets.UTF_8).read());
 
-        } catch (final Exception e) {
+                final Pastebin.PasteRequest request = new Pastebin.PasteRequest(dotenv.get("PASTEBIN_API"), sb.toString());
+                request.setPasteName("Logger MC PluginUpdater");
+                request.setPasteFormat("yaml");
+                request.setPasteState(1);
+                request.setPasteExpire("10M");
+                commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                        pluginPrefix + request.postPaste() + "\n&cDo not share this link at all!"));
 
-            commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    pluginPrefix + "&cAn error occurred while executing this command." +
-                            " This can be caused by the following:\n" +
-                            "- No internet connection\n" +
-                            "- FireWall preventing the connection to the PasteBin site\n" +
-                            "If the issue persists, contact the authors!"));
+            } catch (final Exception e) {
 
-            e.printStackTrace();
-        }
+                commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                        pluginPrefix + "&cAn error occurred while executing this command." +
+                                " This can be caused by the following:\n" +
+                                "- No internet connection\n" +
+                                "- FireWall preventing the connection to the PasteBin site\n" +
+                                "If the issue persists, contact the authors!"));
+
+                e.printStackTrace();
+            }
+        });
     }
 }

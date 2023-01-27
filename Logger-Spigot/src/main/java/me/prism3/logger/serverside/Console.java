@@ -1,7 +1,7 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.command.BlockCommandSender;
@@ -43,9 +43,9 @@ public class Console implements Listener {
         if (Data.isLogToFiles)
             FileHandler.handleFileLog("Files.Server-Side.Console-Commands", placeholders, FileHandler.getConsoleLogFile());
 
-        // Discord
-        if (this.main.getDiscordFile().getBoolean("Discord.Enable"))
-            this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Console-Commands", placeholders, DiscordChannels.CONSOLE, "Console Commands", null);
+        // DiscordManager
+        if (this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
+            this.main.getDiscord().handleDiscordLog("DiscordManager.Server-Side.Console-Commands", placeholders, DiscordChannels.CONSOLE, "Console Commands", null);
 
         // External
         if (Data.isExternal) {

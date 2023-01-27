@@ -1,26 +1,27 @@
 # /////////////////////////////////////////////////////////////
 # /                                                           /
-# /                      Logger Plugin                        /
+# /                      Logger PluginUpdater                        /
 # /                                                           /
 # /                    [ Bukkit Version ]                     /
 # /                                                           /
 # /////////////////////////////////////////////////////////////
 #
-# Thank you for using Logger Plugin! If you are experiencing any issues
+# Thank you for using Logger PluginUpdater! If you are experiencing any issues
 # or have any suggestions / features you want to be implemented into the plugin
-# feel free to join the support Discord Server!
+# feel free to join the support DiscordManager Server!
 #
 # Spigot: Prism3
-# Discord: Prism3#9371 ID: 403667971089760257
-# Discord Server: https://discord.gg/MfR5mcpVfX
+# DiscordManager: Prism3#9371 ID: 403667971089760257
+# DiscordManager Server: https://discord.gg/MfR5mcpVfX
 
-# Messages file to use
+
+# MessagesManager file to use
 Language: en_en
 
 # Server Name
 Server-Name: "Server_Name"
 
-# Plugin's Prefix
+# PluginUpdater's Prefix
 Plugin-Prefix: "&bLogger &8&l|&r "
 
 # Date & Time Formatter
@@ -168,7 +169,7 @@ Player-Count: 50
 # World Guard Regions to log once a player access
 WorldGuard-Regions:
   - exit
-  - "Don't enter"
+  - enter
 
 # Spy Features Settings
 Spy-Features:
@@ -211,5 +212,4 @@ Updater:
   Auto-Config-Updater: true
 
 # Do not touch unless you want to reset it's content
-Config-Version: 1
-Discord-Version: 1.8.1
+Config-Version: ${project.version}

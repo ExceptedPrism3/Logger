@@ -4,7 +4,7 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -48,15 +48,15 @@ public class OnViaVer {
             }
         }
 
-        // Discord Integration
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        // DiscordManager Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("Discord.Extras.ViaVersion-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Extras.ViaVersion-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("Discord.Extras.ViaVersion", placeholders, DiscordChannels.VIA_VERSION, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Extras.ViaVersion", placeholders, DiscordChannels.VIA_VERSION, playerName, playerUUID);
             }
         }
 

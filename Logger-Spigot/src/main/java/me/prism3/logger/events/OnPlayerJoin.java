@@ -2,7 +2,7 @@ package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.events.plugindependent.OnViaVer;
 import me.prism3.logger.hooks.ViaVersionUtil;
 import me.prism3.logger.utils.BedrockChecker;
@@ -31,7 +31,7 @@ public class OnPlayerJoin implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(final PlayerJoinEvent event) {
 
-        if (Data.isRegistration && !SQLiteDataRegistration.playerExists(event.getPlayer())) {
+        if (Data.isRegistration && this.main.getSqLiteReg() != null && !SQLiteDataRegistration.playerExists(event.getPlayer())) {
 
             SQLiteDataRegistration.insertRegistration(event.getPlayer());
             new OnPlayerRegister();
@@ -81,15 +81,15 @@ public class OnPlayerJoin implements Listener {
             }
         }
 
-        // Discord
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        // DiscordManager
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("Discord.Player-Join-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Join-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("Discord.Player-Join", placeholders, DiscordChannels.PLAYER_JOIN, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Join", placeholders, DiscordChannels.PLAYER_JOIN, playerName, playerUUID);
             }
         }
 

@@ -1,7 +1,7 @@
 package me.prism3.logger.events.commands;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.entity.Player;
@@ -53,15 +53,15 @@ public class OnCommandWhitelist implements Listener {
             }
         }
 
-        // Discord Integration
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        // DiscordManager Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("Discord.Player-Commands-Whitelisted-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Commands-Whitelisted-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("Discord.Player-Commands-Whitelisted", placeholders, DiscordChannels.PLAYER_COMMANDS, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Commands-Whitelisted", placeholders, DiscordChannels.PLAYER_COMMANDS, playerName, playerUUID);
             }
         }
 

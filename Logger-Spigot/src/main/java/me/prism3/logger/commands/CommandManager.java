@@ -38,7 +38,7 @@ public class CommandManager implements TabExecutor {
 
         if (!sender.hasPermission(loggerStaff)) {
 
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', main.getMessages().get()
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', main.getMessagesFile().get()
                     .getString("General.No-Permission").replace("%prefix%", pluginPrefix)));
 
             return false;

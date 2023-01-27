@@ -23,7 +23,7 @@ public class LiteBanUtil {
         if (liteBansAPI.isPresent() && Main.getInstance().getConfig().getBoolean("Log-Extras.LiteBans")) {
 
             Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new OnLiteBanEvents(), 10L);
-            Log.info("LiteBans Plugin Detected!");
+            Log.info("LiteBans PluginUpdater Detected!");
 
             options.setLiteBansEnabled(true);
             isAllowed = true;

@@ -1,7 +1,7 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -79,15 +79,15 @@ public class OnItemDrop implements Listener {
             }
         }
 
-        // Discord Integration
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        // DiscordManager Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("Discord.Item-Drop-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Item-Drop-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("Discord.Item-Drop", placeholders, DiscordChannels.ITEM_DROP, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Item-Drop", placeholders, DiscordChannels.ITEM_DROP, playerName, playerUUID);
             }
         }
 

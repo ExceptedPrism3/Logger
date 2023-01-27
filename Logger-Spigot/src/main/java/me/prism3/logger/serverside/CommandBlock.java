@@ -1,7 +1,7 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.command.BlockCommandSender;
@@ -33,9 +33,9 @@ public class CommandBlock implements Listener {
             if (Data.isLogToFiles)
                 FileHandler.handleFileLog("Files.Server-Side.Command-Block", placeholders, FileHandler.getCommandBlockFile());
 
-            // Discord
-            if (this.main.getDiscordFile().getBoolean("Discord.Enable"))
-                this.main.getDiscord().handleDiscordLog("Discord.Enchanting", placeholders, DiscordChannels.COMMAND_BLOCK, "Command Block", null);
+            // DiscordManager
+            if (this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Enchanting", placeholders, DiscordChannels.COMMAND_BLOCK, "Command Block", null);
 
             // External
             if (Data.isExternal) {

@@ -2,7 +2,7 @@ package me.prism3.logger.commands.subcommands;
 
 import me.prism3.logger.Main;
 import me.prism3.logger.commands.SubCommand;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.Log;
@@ -54,9 +54,9 @@ public class Manual implements SubCommand {
         if (Data.isLogToFiles)
             FileHandler.handleFileLog("Files.Custom.Manual", placeholders, FileHandler.getManualFile());
 
-        // Discord
-        if (this.main.getDiscordFile().getBoolean("Discord.Enable"))
-            this.main.getDiscord().handleDiscordLog("Discord.Custom.Manual", placeholders, DiscordChannels.MANUAL, "Manual Log", null);
+        // DiscordManager
+        if (this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
+            this.main.getDiscord().handleDiscordLog("DiscordManager.Custom.Manual", placeholders, DiscordChannels.MANUAL, "Manual Log", null);
 
         // External
                 /*if (Data.isExternal) { //TODO DB

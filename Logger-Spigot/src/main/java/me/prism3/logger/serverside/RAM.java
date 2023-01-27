@@ -1,7 +1,7 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 
@@ -34,9 +34,9 @@ public class RAM implements Runnable {
             if (Data.isLogToFiles)
                 FileHandler.handleFileLog("Files.Server-Side.RAM", placeholders, FileHandler.getRAMLogFile());
 
-            // Discord
-            if (this.main.getDiscordFile().getBoolean("Discord.Enable"))
-                this.main.getDiscord().handleDiscordLog("Discord.Server-Side.RAM", placeholders, DiscordChannels.RAM, "RAM", null);
+            // DiscordManager
+            if (this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Server-Side.RAM", placeholders, DiscordChannels.RAM, "RAM", null);
 
             // External
             if (Data.isExternal) {

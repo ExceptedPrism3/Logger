@@ -45,6 +45,7 @@ public class Data {
     public static String pluginPrefix;
     public static String resourceAPIChecker;
     public static String resourceLink;
+    public static String configVersion;
 
     // List<String>
     public static List<String> commandsToBlock;
@@ -62,7 +63,6 @@ public class Data {
     public static int tpsCritical;
     public static int playerCountNumber;
     public static int playerCountChecker;
-    public static int configVersion;
     public static int sqliteDataDel;
     public static int allowedBackups;
 
@@ -111,9 +111,10 @@ public class Data {
         fileType = ".yml";
         selectedLang = this.main.getConfig().getString("Language");
         discordSupportServer = "https://discord.gg/MfR5mcpVfX";
-        pluginPrefix = this.main.getConfig().getString("Plugin-Prefix");
+        pluginPrefix = this.main.getConfig().getString("PluginUpdater-Prefix");
         resourceAPIChecker = "https://api.spigotmc.org/legacy/update.php?resource=94236/";
         resourceLink = "https://www.spigotmc.org/resources/logger-1-7-1-19.94236/";
+        configVersion = this.main.getConfig().getString("Config-Version", "");
     }
 
     public void initializeDatabaseCredentials() {
@@ -162,12 +163,9 @@ public class Data {
         allowedBackups = this.main.getConfig().getInt("Player-Death-Backup.Max-Backup");
         playerCountNumber = this.main.getConfig().getInt("Player-Count");
         playerCountChecker = this.main.getConfig().getInt("Checkers.Player-Count");
-        configVersion = this.main.getConfig().getInt("Config-Version", 0);
     }
 
-    public void initializeLongs() {
-        fileDeletion = this.main.getConfig().getLong("File-Deletion");
-    }
+    public void initializeLongs() { fileDeletion = this.main.getConfig().getLong("File-Deletion"); }
 
     public void initializeBooleans() {
 

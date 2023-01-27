@@ -34,10 +34,10 @@ public class Reload implements SubCommand {
     public void perform(CommandSender commandSender, String[] args) {
 
         this.main.reloadConfig();
-        this.main.getMessages().reload();
-//        this.main.getDiscordFile().getDiscord().reload();
-        this.main.initializer(new Data());//TODO data comparision
-        final String message = main.getMessages().get().getString("General.Reload");
+        this.main.getMessagesFile().reload();
+        this.main.getDiscordFile().reload();
+        this.main.initializer(new Data());
+        final String message = this.main.getMessagesFile().get().getString("General.Reload");
         commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("%prefix%", pluginPrefix)));
     }
 

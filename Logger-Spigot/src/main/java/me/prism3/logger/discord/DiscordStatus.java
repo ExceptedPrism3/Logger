@@ -24,7 +24,7 @@ public class DiscordStatus {
     public DiscordStatus(JDA jda) {
 
         final Main main = Main.getInstance();
-        final FileConfiguration discordFile = main.getDiscordFile();
+        final FileConfiguration discordFile = main.getDiscordFile().get();
         this.jda = jda;
 
         String discordStatus = discordFile.getString("ActivityCycling.Status");
@@ -51,7 +51,7 @@ public class DiscordStatus {
             try {
                 Activity.ActivityType.valueOf(activity.get(0).replace("playing", "streaming").toUpperCase());
             } catch (final IllegalArgumentException e) {
-                Log.severe("Discord activity is invalid, disabling...");
+                Log.severe("DiscordManager activity is invalid, disabling...");
                 return;
             }
         }

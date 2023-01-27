@@ -1,7 +1,7 @@
 package me.prism3.logger.events.misc;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.loggercore.database.data.Coordinates;
@@ -64,15 +64,15 @@ public class ItemFrameBreak implements Listener {
                 }
             }
 
-            // Discord Integration
-            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+            // DiscordManager Integration
+            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    this.main.getDiscord().handleDiscordLog("Discord.Item-Frame-Break-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                    this.main.getDiscord().handleDiscordLog("DiscordManager.Item-Frame-Break-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                 } else {
 
-                    this.main.getDiscord().handleDiscordLog("Discord.Item-Frame-Break", placeholders, DiscordChannels.ITEM_FRAME_BREAK, playerName, playerUUID);
+                    this.main.getDiscord().handleDiscordLog("DiscordManager.Item-Frame-Break", placeholders, DiscordChannels.ITEM_FRAME_BREAK, playerName, playerUUID);
                 }
             }
 

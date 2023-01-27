@@ -12,6 +12,6 @@ public class PlaceHolderAPIUtil {
 
         final Plugin plugin = Bukkit.getPluginManager().getPlugin("PlaceholderAPI");
         if (plugin != null)
-            Log.info("PlaceHolderAPI Plugin Detected!");
+            Log.info("PlaceHolderAPI PluginUpdater Detected!");
     }
 }

@@ -34,7 +34,7 @@ public class FileUpdater {
 			final BufferedWriter writer = Files.newBufferedWriter(toUpdate.toPath())) {
 			final List<String> newLines = newReader.lines().collect(Collectors.toList());
 
-			final FileConfiguration oldConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(new FileInputStream(toUpdate), StandardCharsets.UTF_8));
+			final FileConfiguration oldConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(Files.newInputStream(toUpdate.toPath()), StandardCharsets.UTF_8));
 			final FileConfiguration newConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(plugin.getResource(resourceName), StandardCharsets.UTF_8));
 
 			final List<String> ignoredSectionsArrayList = new ArrayList<>(ignoredSections);

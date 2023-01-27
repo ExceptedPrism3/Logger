@@ -3,7 +3,7 @@ package me.prism3.logger.events.plugindependent;
 import litebans.api.Entry;
 import litebans.api.Events;
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.liteban.UsernameFetcher;
@@ -53,9 +53,9 @@ public class OnLiteBanEvents implements Listener, Runnable {
                 if (Data.isLogToFiles)
                     FileHandler.handleFileLog("Files.Extras.LiteBans", placeholders, FileHandler.getLiteBansFile());
 
-                // Discord Integration
-                if (!player.hasPermission(loggerExemptDiscord) && main.getDiscordFile().getBoolean("Discord.Enable"))
-                    main.getDiscord().handleDiscordLog("Discord.Primed-TNT", placeholders, DiscordChannels.LITE_BANS, executorName, player.getUniqueId());
+                // DiscordManager Integration
+                if (!player.hasPermission(loggerExemptDiscord) && main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
+                    main.getDiscord().handleDiscordLog("DiscordManager.Primed-TNT", placeholders, DiscordChannels.LITE_BANS, executorName, player.getUniqueId());
 
                 // External
                 if (Data.isExternal) {

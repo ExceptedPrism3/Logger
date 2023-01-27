@@ -20,7 +20,7 @@ public class ViaVersionUtil {
 
         viaVersionAPI.filter(p -> Main.getInstance().getConfig().getBoolean("Log-Extras.ViaVersion"))
                 .ifPresent(p -> {
-                    Log.info("ViaVersion Plugin Detected!");
+                    Log.info("ViaVersion PluginUpdater Detected!");
                     options.setViaVersion(true);
                 });
     }

@@ -21,7 +21,7 @@ public class AdvancedBanUtil {
         advancedBanAPI.ifPresent(api -> {
             Main.getInstance().getServer().getPluginManager().registerEvents(new OnAdvancedBan(), Main.getInstance());
 
-            Log.info("AdvancedBan Plugin Detected!");
+            Log.info("AdvancedBan PluginUpdater Detected!");
 
             options.setAdvancedBanEnabled(true);
             isAllowed = true;

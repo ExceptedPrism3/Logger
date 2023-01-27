@@ -1,7 +1,7 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 
@@ -25,9 +25,9 @@ public class Stop {
         if (Data.isLogToFiles)
             FileHandler.handleFileLog("Files.Server-Side.Stop", placeholders, FileHandler.getServerStopFile());
 
-        // Discord
-        if (this.main.getDiscordFile().getBoolean("Discord.Enable"))
-            this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Stop", placeholders, DiscordChannels.SERVER_STOP, "Server Stop", null);
+        // DiscordManager
+        if (this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
+            this.main.getDiscord().handleDiscordLog("DiscordManager.Server-Side.Stop", placeholders, DiscordChannels.SERVER_STOP, "Server Stop", null);
 
         // External
         if (Data.isExternal) {

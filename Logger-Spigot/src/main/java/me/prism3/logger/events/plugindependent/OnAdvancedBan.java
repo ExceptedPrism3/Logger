@@ -2,7 +2,7 @@ package me.prism3.logger.events.plugindependent;
 
 import me.leoko.advancedban.bukkit.event.PunishmentEvent;
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.Bukkit;
@@ -44,9 +44,9 @@ public class OnAdvancedBan implements Listener {
         if (Data.isLogToFiles)
             FileHandler.handleFileLog("Files.Extras.AdvancedBan", placeholders, FileHandler.getAdvancedBanFile());
 
-        // Discord Integration
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable"))
-                this.main.getDiscord().handleDiscordLog("Discord.Extras.AdvancedBan", placeholders, DiscordChannels.ADVANCED_BAN, executor, player.getUniqueId());
+        // DiscordManager Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Extras.AdvancedBan", placeholders, DiscordChannels.ADVANCED_BAN, executor, player.getUniqueId());
 
         // External
         if (Data.isExternal) {

@@ -1,7 +1,7 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -107,15 +107,15 @@ public class OnPlayerDeath implements Listener {
             }
         }
 
-        // Discord
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        // DiscordManager
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("Discord.Player-Death-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Death-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("Discord.Player-Death", placeholders, DiscordChannels.PLAYER_DEATH, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Death", placeholders, DiscordChannels.PLAYER_DEATH, playerName, playerUUID);
             }
         }
 

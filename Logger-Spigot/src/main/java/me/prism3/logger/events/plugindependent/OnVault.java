@@ -1,7 +1,7 @@
 package me.prism3.logger.events.plugindependent;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.hooks.VaultUtil;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -65,15 +65,15 @@ public class OnVault implements Listener, Runnable {
                         }
                     }
 
-                    // Discord Integration
-                    if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+                    // DiscordManager Integration
+                    if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
 
                         if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                            this.main.getDiscord().handleDiscordLog("Discord.Extras.Vault-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                            this.main.getDiscord().handleDiscordLog("DiscordManager.Extras.Vault-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                         } else {
 
-                            this.main.getDiscord().handleDiscordLog("Discord.Extras.Vault", placeholders, DiscordChannels.VAULT, playerName, playerUUID);
+                            this.main.getDiscord().handleDiscordLog("DiscordManager.Extras.Vault", placeholders, DiscordChannels.VAULT, playerName, playerUUID);
                         }
                     }
 

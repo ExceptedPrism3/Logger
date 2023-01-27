@@ -1,7 +1,7 @@
 package me.prism3.logger.events.misc;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -51,7 +51,7 @@ public class PrimedTNT implements Listener {
             placeholders.put("%y%", String.valueOf(y));
             placeholders.put("%z%", String.valueOf(z));
 
-            // File Logging
+            // FileUpdater Logging
             if (Data.isLogToFiles) {
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
                     FileHandler.handleFileLog("Files.Primed-TNT-Staff", placeholders, FileHandler.getStaffFile());
@@ -60,15 +60,15 @@ public class PrimedTNT implements Listener {
                 }
             }
 
-            // Discord Integration
-            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+            // DiscordManager Integration
+            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    this.main.getDiscord().handleDiscordLog("Discord.Primed-TNT-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                    this.main.getDiscord().handleDiscordLog("DiscordManager.Primed-TNT-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                 } else {
 
-                    this.main.getDiscord().handleDiscordLog("Discord.Primed-TNT", placeholders, DiscordChannels.PRIMED_TNT, playerName, playerUUID);
+                    this.main.getDiscord().handleDiscordLog("DiscordManager.Primed-TNT", placeholders, DiscordChannels.PRIMED_TNT, playerName, playerUUID);
                 }
             }
 

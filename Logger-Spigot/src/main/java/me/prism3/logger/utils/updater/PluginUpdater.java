@@ -1,4 +1,4 @@
-package me.prism3.logger.utils;
+package me.prism3.logger.utils.updater;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import me.prism3.logger.utils.Log;
 import org.bukkit.Bukkit;
 import org.json.JSONObject;
 

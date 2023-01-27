@@ -2,7 +2,7 @@ package me.prism3.logger.events;
 
 import fr.xephi.authme.api.v3.AuthMeApi;
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.hooks.AuthMeUtil;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
@@ -70,15 +70,15 @@ public class OnPlayerTeleport implements Listener {
             }
         }
 
-        // Discord Integration
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        // DiscordManager Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("Discord.Player-Teleport-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Teleport-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("Discord.Player-Teleport", placeholders, DiscordChannels.PLAYER_TELEPORT, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Teleport", placeholders, DiscordChannels.PLAYER_TELEPORT, playerName, playerUUID);
             }
         }
 

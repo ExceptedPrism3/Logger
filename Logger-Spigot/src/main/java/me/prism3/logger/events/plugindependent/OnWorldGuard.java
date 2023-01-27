@@ -99,20 +99,20 @@ public class OnWorldGuard extends Handler {
             }
         }
 
-        // Discord Integration
-        if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        // DiscordManager Integration
+        if (!player.hasPermission(Data.loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
 
             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                if (!this.main.getMessages().get().getString("Discord.Extras.WorldGuard-Staff").isEmpty()) {
+                if (!this.main.getMessages().get().getString("DiscordManager.Extras.WorldGuard-Staff").isEmpty()) {
 
-                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.WorldGuard-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%region%", regionName).replace("%uuid%", playerUUID.toString()), false);
+                    this.main.getDiscord().staffChat(playerName, playerUUID, this.main.getMessages().get().getString("DiscordManager.Extras.WorldGuard-Staff").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%region%", regionName).replace("%uuid%", playerUUID.toString()), false);
                 }
             } else {
 
-                if (!this.main.getMessages().get().getString("Discord.Extras.WorldGuard").isEmpty()) {
+                if (!this.main.getMessages().get().getString("DiscordManager.Extras.WorldGuard").isEmpty()) {
 
-                    this.main.getDiscord().worldGuard(playerName, playerUUID, this.main.getMessages().get().getString("Discord.Extras.WorldGuard").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%region%", regionName).replace("%uuid%", playerUUID.toString()), false);
+                    this.main.getDiscord().worldGuard(playerName, playerUUID, this.main.getMessages().get().getString("DiscordManager.Extras.WorldGuard").replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%region%", regionName).replace("%uuid%", playerUUID.toString()), false);
                 }
             }
         }

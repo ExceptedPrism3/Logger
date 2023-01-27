@@ -1,7 +1,7 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -74,15 +74,15 @@ public class OnItemPickup implements Listener {
                 }
             }
 
-            // Discord Integration
-            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+            // DiscordManager Integration
+            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    this.main.getDiscord().handleDiscordLog("Discord.Item-Pickup-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                    this.main.getDiscord().handleDiscordLog("DiscordManager.Item-Pickup-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                 } else {
 
-                    this.main.getDiscord().handleDiscordLog("Discord.Item-Pickup", placeholders, DiscordChannels.ITEM_PICKUP, playerName, playerUUID);
+                    this.main.getDiscord().handleDiscordLog("DiscordManager.Item-Pickup", placeholders, DiscordChannels.ITEM_PICKUP, playerName, playerUUID);
                 }
             }
 

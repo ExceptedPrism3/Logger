@@ -707,7 +707,7 @@ public class FileHandler {
 
     public static void handleFileLog(String messagePath, Map<String, String> placeholders, File logFile) {
 
-        String message = Main.getInstance().getMessages().get().getString(messagePath);
+        String message = Main.getInstance().getMessagesFile().get().getString(messagePath);
 
         if (message == null) {
             Log.severe("The following path " + messagePath + " could not be found, make sure it's not renamed or deleted." +

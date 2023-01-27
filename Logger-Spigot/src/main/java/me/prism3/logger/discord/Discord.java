@@ -8,6 +8,7 @@ import javax.security.auth.login.LoginException;
 
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Log;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -17,6 +18,8 @@ public class Discord {
 
     private final Main main = Main.getInstance();
 
+    private static Discord discordInstance;
+
     private DiscordStatus discordStatus;
 
     private Map<DiscordChannels, TextChannel> channels;
@@ -24,25 +27,24 @@ public class Discord {
     private JDA jda;
 
     public void run() {
-        if (this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        if (this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
             try {
                 this.jda = connectToBot();
                 this.createChannelsMap(this.jda);
 
-                if (this.main.getDiscordFile().getBoolean("ActivityCycling.Enabled"))
+                if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Enabled"))
                     this.discordStatus = new DiscordStatus(this.jda);
 
             } catch (final InterruptedException e) {
                 Thread.currentThread().interrupt();
             } catch (final Exception e) {
                 Log.severe("An error has occurred whilst connecting to the Bot. Is the Bot Key Valid?");
-                e.printStackTrace();
             }
         }
     }
 
     private JDA connectToBot() throws LoginException, InterruptedException {
-        final String botToken = this.main.getDiscordFile().getString("Discord.Bot-Token");
+        final String botToken = this.main.getDiscordFile().get().getString("DiscordManager.Bot-Token");
         return JDABuilder.createDefault(botToken).build().awaitReady();
     }
 
@@ -52,7 +54,7 @@ public class Discord {
 
         for (final DiscordChannels channel : DiscordChannels.values()) {
 
-            final String channelId = this.main.getDiscordFile().getString(channel.getKey());
+            final String channelId = this.main.getDiscordFile().get().getString(channel.getKey());
 
             if (channelId == null || channelId.isEmpty() || channelId.equalsIgnoreCase("CHANNEL_ID"))
                 continue;
@@ -61,7 +63,7 @@ public class Discord {
                 final long id = Long.parseLong(channelId);
                 this.channels.put(channel, jda.getTextChannelById(id));
             } catch (final NumberFormatException e) {
-                Log.severe("The channel id for " + channel + " is not a valid Discord ID!");
+                Log.severe("The channel id for " + channel + " is not a valid DiscordManager ID!");
             }
         }
     }
@@ -74,7 +76,7 @@ public class Discord {
         if (textChannel == null)
             return;
 
-        String discordMessage = this.main.getMessages().get().getString(messagePath);
+        String discordMessage = this.main.getMessagesFile().get().getString(messagePath);
 
         if (discordMessage == null) {
             Log.severe("Invalid message path: " + messagePath +
@@ -97,12 +99,20 @@ public class Discord {
 
     public void disconnect() {
 
-        this.jda.shutdownNow();
-        this.jda = null;
+        if (this.jda != null) {
+            this.jda.shutdownNow();
+            this.jda = null;
 
-        if (this.main.getDiscordFile().getBoolean("ActivityCycling.Enabled") && this.discordStatus != null)
-            this.discordStatus.shutdownThreadPool();
+            if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Enabled") && this.discordStatus != null)
+                this.discordStatus.shutdownThreadPool();
 
-        Log.info("Discord Bot Bridge has been closed!");
+            Log.info("DiscordManager Bot Bridge has been closed!");
+        }
+    }
+
+    public static Discord getInstance() {
+        if (discordInstance == null)
+            discordInstance = new Discord();
+        return discordInstance;
     }
 }

@@ -1,7 +1,7 @@
 package me.prism3.logger.serverside;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import org.bukkit.event.EventHandler;
@@ -32,9 +32,9 @@ public class RCON implements Listener {
         if (Data.isLogToFiles)
             FileHandler.handleFileLog("Files.Server-Side.RCON", placeholders, FileHandler.getRconFile());
 
-        // Discord
-        if (this.main.getDiscordFile().getBoolean("Discord.Enable"))
-            this.main.getDiscord().handleDiscordLog("Discord.Server-Side.RCON", placeholders, DiscordChannels.RCON, "RCON", null);
+        // DiscordManager
+        if (this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
+            this.main.getDiscord().handleDiscordLog("DiscordManager.Server-Side.RCON", placeholders, DiscordChannels.RCON, "RCON", null);
 
         // External
         if (Data.isExternal) {

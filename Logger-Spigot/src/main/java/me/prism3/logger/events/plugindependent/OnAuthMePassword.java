@@ -2,7 +2,7 @@ package me.prism3.logger.events.plugindependent;
 
 import fr.xephi.authme.events.FailedLoginEvent;
 import me.prism3.logger.Main;
-import me.prism3.logger.discord.DiscordChannels;
+import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
@@ -48,15 +48,15 @@ public class OnAuthMePassword implements Listener {
             }
         }
 
-        // Discord
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().getBoolean("Discord.Enable")) {
+        // DiscordManager
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("Discord.Extras.Wrong-Password-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Extras.Wrong-Password-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("Discord.Extras.Wrong-Password", placeholders, DiscordChannels.WRONG_PASSWORD, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("DiscordManager.Extras.Wrong-Password", placeholders, DiscordChannels.WRONG_PASSWORD, playerName, playerUUID);
             }
         }
 
