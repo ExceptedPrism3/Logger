@@ -32,9 +32,9 @@ public class RCON implements Listener {
         if (Data.isLogToFiles)
             FileHandler.handleFileLog("Files.Server-Side.RCON", placeholders, FileHandler.getRconFile());
 
-        // DiscordManager
-        if (this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
-            this.main.getDiscord().handleDiscordLog("DiscordManager.Server-Side.RCON", placeholders, DiscordChannels.RCON, "RCON", null);
+        // Discord
+        if (this.main.getDiscordFile().get().getBoolean("Discord.Enable"))
+            this.main.getDiscord().handleDiscordLog("Discord.Server-Side.RCON", placeholders, DiscordChannels.RCON, "RCON", null);
 
         // External
         if (Data.isExternal) {

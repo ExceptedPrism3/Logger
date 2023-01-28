@@ -107,15 +107,15 @@ public class OnPlayerDeath implements Listener {
             }
         }
 
-        // DiscordManager
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+        // Discord
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Death-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Death-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Death", placeholders, DiscordChannels.PLAYER_DEATH, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Death", placeholders, DiscordChannels.PLAYER_DEATH, playerName, playerUUID);
             }
         }
 

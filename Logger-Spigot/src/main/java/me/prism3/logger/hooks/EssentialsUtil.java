@@ -21,7 +21,7 @@ public class EssentialsUtil {
         if (essentials != null && Main.getInstance().getConfig().getBoolean("Log-Extras.Essentials-AFK")) {
 
             Main.getInstance().getServer().getPluginManager().registerEvents(new OnAFK(), Main.getInstance());
-            Log.info("Essentials PluginUpdater Detected!");
+            Log.info("Essentials Plugin Detected!");
             isAllowed = true;
             options.setEssentialsEnabled(true);
         }

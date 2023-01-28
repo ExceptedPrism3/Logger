@@ -58,7 +58,7 @@ public class Dump implements SubCommand {
                 sb.append(Files.asCharSource(new File("logs" + File.separator + "latest.log"), StandardCharsets.UTF_8).read());
 
                 final Pastebin.PasteRequest request = new Pastebin.PasteRequest(dotenv.get("PASTEBIN_API"), sb.toString());
-                request.setPasteName("Logger MC PluginUpdater");
+                request.setPasteName("Logger MC Plugin");
                 request.setPasteFormat("yaml");
                 request.setPasteState(1);
                 request.setPasteExpire("10M");

@@ -56,15 +56,15 @@ public class OnGameMode implements Listener {
                 }
             }
 
-            // DiscordManager Integration
-            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+            // Discord Integration
+            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    this.main.getDiscord().handleDiscordLog("DiscordManager.Game-Mode-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                    this.main.getDiscord().handleDiscordLog("Discord.Game-Mode-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                 } else {
 
-                    this.main.getDiscord().handleDiscordLog("DiscordManager.Game-Mode", placeholders, DiscordChannels.GAME_MODE, playerName, playerUUID);
+                    this.main.getDiscord().handleDiscordLog("Discord.Game-Mode", placeholders, DiscordChannels.GAME_MODE, playerName, playerUUID);
                 }
             }
 

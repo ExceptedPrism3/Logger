@@ -1,7 +1,7 @@
-# MessagesManager for Logger PluginUpdater [ Bukkit Version ]
-# Need Support? Join the DiscordManager Server: https://discord.gg/MfR5mcpVfX
+# Messages for Logger Plugin [ Bukkit Version ]
+# Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
 # FileInitializer ${project.version}a
-# PluginUpdater MessagesManager
+# Plugin Messages
 General:
   No-Permission: "%prefix% &c您无权使用此命令。"
   Reload: "%prefix% &a配置重载成功。"
@@ -81,7 +81,7 @@ Files:
   Version-Exceptions:
     Wood-Stripping-Staff: "[%time%] [%world%] [%uuid%] Staff权限组玩家 <%player%> 剥离了原木 %logname% 于 X= %x%, Y= %y%, Z= %z%"
     Wood-Stripping: "[%time%] [%world%] [%uuid%] 玩家 <%player%> 剥离了原木 %logname% 于 X= %x%, Y= %y%, Z= %z%"
-# DiscordManager Instance
+# Discord Instance
 # Emojis can be found here https://emojipedia.org/ or elsewhere. Emojis may not work on > 1.12 Servers.
 Discord:
   Player-Chat-Staff: "**[%time%]** **[%world%]** **%message%**"

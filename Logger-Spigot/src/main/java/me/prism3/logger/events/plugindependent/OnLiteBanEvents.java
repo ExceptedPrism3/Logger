@@ -53,9 +53,9 @@ public class OnLiteBanEvents implements Listener, Runnable {
                 if (Data.isLogToFiles)
                     FileHandler.handleFileLog("Files.Extras.LiteBans", placeholders, FileHandler.getLiteBansFile());
 
-                // DiscordManager Integration
-                if (!player.hasPermission(loggerExemptDiscord) && main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
-                    main.getDiscord().handleDiscordLog("DiscordManager.Primed-TNT", placeholders, DiscordChannels.LITE_BANS, executorName, player.getUniqueId());
+                // Discord Integration
+                if (!player.hasPermission(loggerExemptDiscord) && main.getDiscordFile().get().getBoolean("Discord.Enable"))
+                    main.getDiscord().handleDiscordLog("Discord.Primed-TNT", placeholders, DiscordChannels.LITE_BANS, executorName, player.getUniqueId());
 
                 // External
                 if (Data.isExternal) {

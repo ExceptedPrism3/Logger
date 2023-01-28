@@ -62,15 +62,15 @@ public class OnPlayerKick implements Listener {
             }
         }
 
-        // DiscordManager Integration
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+        // Discord Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Kick-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Kick-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Kick", placeholders, DiscordChannels.PLAYER_KICK, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Kick", placeholders, DiscordChannels.PLAYER_KICK, playerName, playerUUID);
             }
         }
 

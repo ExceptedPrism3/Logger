@@ -77,7 +77,7 @@ public class MessagesManager {
         }
     }
 
-    // Cycle through the MessagesManager Folder and load what's listed in the Array
+    // Cycle through the Messages Folder and load what's listed in the Array
     private void copyLangFiles() {
         for (String l : this.langFiles) {
             final Path filePath = Paths.get(this.langFolderPath + l + fileType);
@@ -108,7 +108,7 @@ public class MessagesManager {
         if (this.compareVersions(currentVersion, jarVersion) < 0) {
             try {
                 FileUpdater.update(this.plugin, "messages/" + selectedLang + fileType, new File(this.plugin.getDataFolder() + "/messages/" + selectedLang + fileType), Collections.singletonList("Messages-Version"));
-                Log.warning("MessagesManager file updated from version " + currentVersion + " to version " + jarVersion);
+                Log.warning("Messages file updated from version " + currentVersion + " to version " + jarVersion);
             } catch (final IOException e) {
                 Log.severe("Error reading the messages file, if the issue persists contact the authors!");
                 this.resetMessages();

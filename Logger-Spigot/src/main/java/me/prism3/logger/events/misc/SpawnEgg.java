@@ -90,15 +90,15 @@ public class SpawnEgg implements Listener {
             }
         }
 
-        // DiscordManager Integration
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+        // Discord Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Spawn-Egg-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Spawn-Egg-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Spawn-Egg", placeholders, DiscordChannels.SPAWN_EGG, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Spawn-Egg", placeholders, DiscordChannels.SPAWN_EGG, playerName, playerUUID);
             }
         }
 

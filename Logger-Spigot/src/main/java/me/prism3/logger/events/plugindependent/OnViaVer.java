@@ -48,15 +48,15 @@ public class OnViaVer {
             }
         }
 
-        // DiscordManager Integration
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+        // Discord Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Extras.ViaVersion-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Extras.ViaVersion-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Extras.ViaVersion", placeholders, DiscordChannels.VIA_VERSION, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Extras.ViaVersion", placeholders, DiscordChannels.VIA_VERSION, playerName, playerUUID);
             }
         }
 

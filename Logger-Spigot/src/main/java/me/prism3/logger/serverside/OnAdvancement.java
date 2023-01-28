@@ -42,15 +42,15 @@ public class OnAdvancement implements Listener {
             }
         }
 
-        // DiscordManager
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+        // Discord
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Server-Side.Advancement-Staff", placeholders, DiscordChannels.STAFF, player.getName(), player.getUniqueId());
+                this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Advancement-Staff", placeholders, DiscordChannels.STAFF, player.getName(), player.getUniqueId());
             } else {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Server-Side.Advancement", placeholders, DiscordChannels.ADVANCEMENT, player.getName(), player.getUniqueId());
+                this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Advancement", placeholders, DiscordChannels.ADVANCEMENT, player.getName(), player.getUniqueId());
             }
         }
     }

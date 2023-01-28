@@ -64,15 +64,15 @@ public class OnCraft implements Listener {
             }
         }
 
-        // DiscordManager Integration
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+        // Discord Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Craft-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Craft-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Craft", placeholders, DiscordChannels.CRAFTING, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Craft", placeholders, DiscordChannels.CRAFTING, playerName, playerUUID);
             }
         }
 

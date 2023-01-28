@@ -43,9 +43,9 @@ public class Console implements Listener {
         if (Data.isLogToFiles)
             FileHandler.handleFileLog("Files.Server-Side.Console-Commands", placeholders, FileHandler.getConsoleLogFile());
 
-        // DiscordManager
-        if (this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
-            this.main.getDiscord().handleDiscordLog("DiscordManager.Server-Side.Console-Commands", placeholders, DiscordChannels.CONSOLE, "Console Commands", null);
+        // Discord
+        if (this.main.getDiscordFile().get().getBoolean("Discord.Enable"))
+            this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Console-Commands", placeholders, DiscordChannels.CONSOLE, "Console Commands", null);
 
         // External
         if (Data.isExternal) {

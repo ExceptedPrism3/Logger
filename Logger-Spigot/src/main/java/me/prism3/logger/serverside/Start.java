@@ -30,9 +30,9 @@ public class Start {
         if (Data.isLogToFiles)
             FileHandler.handleFileLog("Files.Server-Side.Start", placeholders, FileHandler.getServerStartFile());
 
-        // DiscordManager
-        if (this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
-            this.main.getDiscord().handleDiscordLog("DiscordManager.Server-Side.Start", placeholders, DiscordChannels.SERVER_START, "Server Start", null);
+        // Discord
+        if (this.main.getDiscordFile().get().getBoolean("Discord.Enable"))
+            this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Start", placeholders, DiscordChannels.SERVER_START, "Server Start", null);
 
         // External
         if (Data.isExternal) {

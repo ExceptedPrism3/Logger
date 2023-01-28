@@ -30,9 +30,9 @@ public class PlayerCount implements Runnable {
             if (Data.isLogToFiles)
                 FileHandler.handleFileLog("Files.Server-Side.Player-Count", placeholders, FileHandler.getPlayerCountFile());
 
-            // DiscordManager
-            if (this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Server-Side.Player-Count", placeholders, DiscordChannels.PLAYER_COUNT, "Player Count", null);
+            // Discord
+            if (this.main.getDiscordFile().get().getBoolean("Discord.Enable"))
+                this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Player-Count", placeholders, DiscordChannels.PLAYER_COUNT, "Player Count", null);
 
             // External
             if (Data.isExternal) {

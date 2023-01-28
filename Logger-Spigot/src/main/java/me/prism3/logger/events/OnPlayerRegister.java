@@ -46,9 +46,9 @@ public class OnPlayerRegister {
         if (Data.isLogToFiles)
             FileHandler.handleFileLog("Files.Player-Registration", placeholders, FileHandler.getRegistrationFile());
 
-        // DiscordManager Integration
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
-            this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Registration", placeholders, DiscordChannels.REGISTRATION, playerName, playerUUID);
+        // Discord Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable"))
+            this.main.getDiscord().handleDiscordLog("Discord.Player-Registration", placeholders, DiscordChannels.REGISTRATION, playerName, playerUUID);
 
         // External
         if (Data.isExternal) {

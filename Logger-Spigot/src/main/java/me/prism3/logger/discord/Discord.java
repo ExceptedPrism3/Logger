@@ -27,7 +27,7 @@ public class Discord {
     private JDA jda;
 
     public void run() {
-        if (this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+        if (this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
             try {
                 this.jda = connectToBot();
                 this.createChannelsMap(this.jda);
@@ -44,7 +44,7 @@ public class Discord {
     }
 
     private JDA connectToBot() throws LoginException, InterruptedException {
-        final String botToken = this.main.getDiscordFile().get().getString("DiscordManager.Bot-Token");
+        final String botToken = this.main.getDiscordFile().get().getString("Discord.Bot-Token");
         return JDABuilder.createDefault(botToken).build().awaitReady();
     }
 
@@ -63,7 +63,7 @@ public class Discord {
                 final long id = Long.parseLong(channelId);
                 this.channels.put(channel, jda.getTextChannelById(id));
             } catch (final NumberFormatException e) {
-                Log.severe("The channel id for " + channel + " is not a valid DiscordManager ID!");
+                Log.severe("The channel id for " + channel + " is not a valid Discord ID!");
             }
         }
     }
@@ -106,7 +106,7 @@ public class Discord {
             if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Enabled") && this.discordStatus != null)
                 this.discordStatus.shutdownThreadPool();
 
-            Log.info("DiscordManager Bot Bridge has been closed!");
+            Log.info("Discord Bot Bridge has been closed!");
         }
     }
 

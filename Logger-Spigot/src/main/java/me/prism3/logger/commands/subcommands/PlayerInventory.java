@@ -48,34 +48,40 @@ public class PlayerInventory implements Listener, SubCommand {
 
     // Opening the first GUI with all online players and their available backups
     private void stepOne(Player player) {
-
+        // Create an inventory with a size of 27 slots and a title
         final Inventory firstInv = Bukkit.createInventory(null, 27, "Player Inventory Checker");
 
+        // Get the type of material to use for the skull
+        final boolean isNewVersion = Arrays.stream(Material.values()).map(Material::name).collect(Collectors.toList()).contains("PLAYER_HEAD");
+        final Material type = Material.matchMaterial(isNewVersion ? "PLAYER_HEAD" : "SKULL_ITEM");
+
+        // Iterate over all online players
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-
-            final boolean isNewVersion = Arrays.stream(Material.values()).map(Material::name).collect(Collectors.toList()).contains("PLAYER_HEAD");
-
-            final Material type = Material.matchMaterial(isNewVersion ? "PLAYER_HEAD" : "SKULL_ITEM");
-
+            // Create the skull item
             final ItemStack skull = new ItemStack(type, 1);
 
-            if (!isNewVersion) skull.setDurability((short) 3);
+            if (!isNewVersion)
+                skull.setDurability((short) 3);
 
+            // Set the skull's meta data
             final SkullMeta meta = (SkullMeta) skull.getItemMeta();
-
             meta.setOwner(onlinePlayer.getName());
             meta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + onlinePlayer.getName());
-            final ArrayList<String> skullMeta = new ArrayList<>();
+
+            // Add lore to the skull
+            ArrayList<String> skullMeta = new ArrayList<>();
             skullMeta.add(ChatColor.WHITE + "Backups Available: " + ChatColor.AQUA + PlayerFolder.backupCount(onlinePlayer));
             meta.setLore(skullMeta);
+
             skull.setItemMeta(meta);
 
+            // Add the skull to the inventory
             firstInv.addItem(skull);
         }
 
+        // Open the inventory for the player
         player.openInventory(firstInv);
     }
-
 
     @EventHandler
     public void onClick(final InventoryClickEvent event) {
@@ -151,25 +157,21 @@ public class PlayerInventory implements Listener, SubCommand {
         int i = PlayerFolder.backupCount(this.selectedPlayer);
 
         final Inventory secondInv = Bukkit.createInventory(this.selectedBy, 27,  "Backup(s) of " + this.selectedPlayer.getName());
-
         final String[] files = PlayerFolder.fileNames(this.selectedPlayer);
 
         for (int e = 0; e < i; e++) {
 
             final ItemStack chest = new ItemStack(Material.CHEST);
-
             final ItemMeta chestMeta = chest.getItemMeta();
 
-            assert chestMeta != null;
             chestMeta.setDisplayName(files[e]);
-
             chest.setItemMeta(chestMeta);
-
             secondInv.setItem(e, chest);
         }
 
         this.selectedBy.openInventory(secondInv);
     }
+
 
     // Opening the last GUI based on the selected backup from the previous step, and displaying all items
     public void stepThree() {
@@ -177,36 +179,34 @@ public class PlayerInventory implements Listener, SubCommand {
         this.selectedBy.closeInventory();
 
         final Inventory lastInv = Bukkit.createInventory(this.selectedBy, 54, "Inventory of " + this.selectedPlayer.getName());
-
         final FileConfiguration f = YamlConfiguration.loadConfiguration(this.backupFile);
 
         final ItemStack[] invContent = InventoryToBase64.stacksFromBase64(f.getString("inventory"));
         final ItemStack[] armorContent = InventoryToBase64.stacksFromBase64(f.getString("armor"));
+
         final ItemStack backButton = new ItemStack(Material.ENDER_CHEST);
 
         final ItemMeta backButtonMeta = backButton.getItemMeta();
 
-        assert backButtonMeta != null;
         backButtonMeta.setDisplayName(ChatColor.RED + "Back");
-
         backButton.setItemMeta(backButtonMeta);
 
         final ItemStack backupButton = new ItemStack(Material.EMERALD_BLOCK);
 
         final ItemMeta backupButtonMeta = backupButton.getItemMeta();
-        assert backupButtonMeta != null;
+
         backupButtonMeta.setDisplayName(ChatColor.AQUA + "Backup");
+
         final List<String> backupButtonLore = new ArrayList<>();
+
         backupButtonLore.add(ChatColor.RED + "Clears player's current Inventory!");
         backupButtonMeta.setLore(backupButtonLore);
-
         backupButton.setItemMeta(backupButtonMeta);
 
-        for (int i = 0; i < Objects.requireNonNull(invContent).length; i++)
+        for (int i = 0; i < invContent.length; i++)
             lastInv.setItem(i, invContent[i]);
 
         if (armorContent.length != 0) {
-
             lastInv.setItem(36, armorContent[0]);
             lastInv.setItem(37, armorContent[1]);
             lastInv.setItem(38, armorContent[2]);
@@ -215,7 +215,6 @@ public class PlayerInventory implements Listener, SubCommand {
 
         lastInv.setItem(45, backButton);
         lastInv.setItem(49, backupButton);
-
         this.selectedBy.openInventory(lastInv);
     }
 
@@ -223,13 +222,10 @@ public class PlayerInventory implements Listener, SubCommand {
 
         final FileConfiguration f = YamlConfiguration.loadConfiguration(this.backupFile);
 
-        this.selectedPlayer.getInventory().clear();
-
         final ItemStack[] invContent = InventoryToBase64.stacksFromBase64(f.getString("inventory"));
         final ItemStack[] armorContent = InventoryToBase64.stacksFromBase64(f.getString("armor"));
 
-        for (int i = 0; i < Objects.requireNonNull(invContent).length; i++)
-            this.selectedPlayer.getInventory().setItem(i, invContent[i]);
+        this.selectedPlayer.getInventory().setContents(invContent);
 
         this.selectedPlayer.getInventory().setArmorContents(armorContent);
 

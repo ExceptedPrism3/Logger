@@ -33,9 +33,9 @@ public class CommandBlock implements Listener {
             if (Data.isLogToFiles)
                 FileHandler.handleFileLog("Files.Server-Side.Command-Block", placeholders, FileHandler.getCommandBlockFile());
 
-            // DiscordManager
-            if (this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Enchanting", placeholders, DiscordChannels.COMMAND_BLOCK, "Command Block", null);
+            // Discord
+            if (this.main.getDiscordFile().get().getBoolean("Discord.Enable"))
+                this.main.getDiscord().handleDiscordLog("Discord.Enchanting", placeholders, DiscordChannels.COMMAND_BLOCK, "Command Block", null);
 
             // External
             if (Data.isExternal) {

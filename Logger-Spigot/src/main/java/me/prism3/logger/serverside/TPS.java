@@ -40,12 +40,12 @@ public class TPS implements Runnable {
             }
         }
 
-        // DiscordManager
-        if (this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+        // Discord
+        if (this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
             if (this.getTPS() <= Data.tpsMedium) {
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Server-Side.TPS-Medium", placeholders, DiscordChannels.TPS, "TPS Medium", null);
+                this.main.getDiscord().handleDiscordLog("Discord.Server-Side.TPS-Medium", placeholders, DiscordChannels.TPS, "TPS Medium", null);
             } else if (this.getTPS() <= Data.tpsCritical) {
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Server-Side.TPS-Critical", placeholders, DiscordChannels.TPS, "TPS Critical", null);
+                this.main.getDiscord().handleDiscordLog("Discord.Server-Side.TPS-Critical", placeholders, DiscordChannels.TPS, "TPS Critical", null);
             }
         }
 

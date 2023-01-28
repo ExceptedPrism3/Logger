@@ -64,15 +64,15 @@ public class ItemFrameBreak implements Listener {
                 }
             }
 
-            // DiscordManager Integration
-            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+            // Discord Integration
+            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    this.main.getDiscord().handleDiscordLog("DiscordManager.Item-Frame-Break-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                    this.main.getDiscord().handleDiscordLog("Discord.Item-Frame-Break-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                 } else {
 
-                    this.main.getDiscord().handleDiscordLog("DiscordManager.Item-Frame-Break", placeholders, DiscordChannels.ITEM_FRAME_BREAK, playerName, playerUUID);
+                    this.main.getDiscord().handleDiscordLog("Discord.Item-Frame-Break", placeholders, DiscordChannels.ITEM_FRAME_BREAK, playerName, playerUUID);
                 }
             }
 

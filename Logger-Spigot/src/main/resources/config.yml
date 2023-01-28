@@ -1,27 +1,27 @@
 # /////////////////////////////////////////////////////////////
 # /                                                           /
-# /                      Logger PluginUpdater                        /
+# /                      Logger Plugin                        /
 # /                                                           /
 # /                    [ Bukkit Version ]                     /
 # /                                                           /
 # /////////////////////////////////////////////////////////////
 #
-# Thank you for using Logger PluginUpdater! If you are experiencing any issues
+# Thank you for using Logger Plugin! If you are experiencing any issues
 # or have any suggestions / features you want to be implemented into the plugin
-# feel free to join the support DiscordManager Server!
+# feel free to join the support Discord Server!
 #
 # Spigot: Prism3
-# DiscordManager: Prism3#9371 ID: 403667971089760257
-# DiscordManager Server: https://discord.gg/MfR5mcpVfX
+# Discord: Prism3#9371 ID: 403667971089760257
+# Discord Server: https://discord.gg/MfR5mcpVfX
 
 
-# MessagesManager file to use
+# Messages file to use
 Language: en_en
 
 # Server Name
 Server-Name: "Server_Name"
 
-# PluginUpdater's Prefix
+# Plugin's Prefix
 Plugin-Prefix: "&bLogger &8&l|&r "
 
 # Date & Time Formatter

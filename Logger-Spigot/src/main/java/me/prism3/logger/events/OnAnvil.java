@@ -76,15 +76,15 @@ private final Main main = Main.getInstance();
                             }
                         }
 
-                        // DiscordManager
-                        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+                        // Discord
+                        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
                             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                                this.main.getDiscord().handleDiscordLog("DiscordManager.Anvil-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                                this.main.getDiscord().handleDiscordLog("Discord.Anvil-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                             } else {
 
-                                this.main.getDiscord().handleDiscordLog("DiscordManager.Anvil", placeholders, DiscordChannels.ANVIL, playerName, playerUUID);
+                                this.main.getDiscord().handleDiscordLog("Discord.Anvil", placeholders, DiscordChannels.ANVIL, playerName, playerUUID);
                             }
                         }
 

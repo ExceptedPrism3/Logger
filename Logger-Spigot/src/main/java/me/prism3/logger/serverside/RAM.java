@@ -34,9 +34,9 @@ public class RAM implements Runnable {
             if (Data.isLogToFiles)
                 FileHandler.handleFileLog("Files.Server-Side.RAM", placeholders, FileHandler.getRAMLogFile());
 
-            // DiscordManager
-            if (this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Server-Side.RAM", placeholders, DiscordChannels.RAM, "RAM", null);
+            // Discord
+            if (this.main.getDiscordFile().get().getBoolean("Discord.Enable"))
+                this.main.getDiscord().handleDiscordLog("Discord.Server-Side.RAM", placeholders, DiscordChannels.RAM, "RAM", null);
 
             // External
             if (Data.isExternal) {

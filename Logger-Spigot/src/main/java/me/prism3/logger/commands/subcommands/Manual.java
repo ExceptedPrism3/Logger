@@ -54,9 +54,9 @@ public class Manual implements SubCommand {
         if (Data.isLogToFiles)
             FileHandler.handleFileLog("Files.Custom.Manual", placeholders, FileHandler.getManualFile());
 
-        // DiscordManager
-        if (this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
-            this.main.getDiscord().handleDiscordLog("DiscordManager.Custom.Manual", placeholders, DiscordChannels.MANUAL, "Manual Log", null);
+        // Discord
+        if (this.main.getDiscordFile().get().getBoolean("Discord.Enable"))
+            this.main.getDiscord().handleDiscordLog("Discord.Custom.Manual", placeholders, DiscordChannels.MANUAL, "Manual Log", null);
 
         // External
                 /*if (Data.isExternal) { //TODO DB

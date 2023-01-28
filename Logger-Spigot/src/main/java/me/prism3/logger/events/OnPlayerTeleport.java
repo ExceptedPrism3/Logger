@@ -70,15 +70,15 @@ public class OnPlayerTeleport implements Listener {
             }
         }
 
-        // DiscordManager Integration
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+        // Discord Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Teleport-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Teleport-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Teleport", placeholders, DiscordChannels.PLAYER_TELEPORT, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Teleport", placeholders, DiscordChannels.PLAYER_TELEPORT, playerName, playerUUID);
             }
         }
 

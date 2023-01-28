@@ -57,15 +57,15 @@ public class OnPlayerLeave implements Listener {
             }
         }
 
-        // DiscordManager
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+        // Discord
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Leave-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Leave-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Leave", placeholders, DiscordChannels.PLAYER_LEAVE, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Leave", placeholders, DiscordChannels.PLAYER_LEAVE, playerName, playerUUID);
             }
         }
 

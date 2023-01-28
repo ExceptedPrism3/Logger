@@ -83,15 +83,15 @@ public class ArmorStandEndCrystalBreak implements Listener {
                 }
             }
 
-            // DiscordManager Integration
-            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+            // Discord Integration
+            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    this.main.getDiscord().handleDiscordLog("DiscordManager." + path + "-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                    this.main.getDiscord().handleDiscordLog("Discord." + path + "-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                 } else {
 
-                    this.main.getDiscord().handleDiscordLog("DiscordManager." + path, placeholders, discordChannels, playerName, playerUUID);
+                    this.main.getDiscord().handleDiscordLog("Discord." + path, placeholders, discordChannels, playerName, playerUUID);
                 }
             }
 

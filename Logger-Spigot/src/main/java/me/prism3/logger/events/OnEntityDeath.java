@@ -64,15 +64,15 @@ public class OnEntityDeath implements Listener {
             }
         }
 
-        // DiscordManager Integration
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+        // Discord Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Entity-Death-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Entity-Death-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Entity-Death", placeholders, DiscordChannels.ENTITY_DEATH, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Entity-Death", placeholders, DiscordChannels.ENTITY_DEATH, playerName, playerUUID);
             }
         }
 

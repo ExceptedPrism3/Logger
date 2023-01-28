@@ -74,15 +74,15 @@ public class OnItemPickup implements Listener {
                 }
             }
 
-            // DiscordManager Integration
-            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+            // Discord Integration
+            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    this.main.getDiscord().handleDiscordLog("DiscordManager.Item-Pickup-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                    this.main.getDiscord().handleDiscordLog("Discord.Item-Pickup-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                 } else {
 
-                    this.main.getDiscord().handleDiscordLog("DiscordManager.Item-Pickup", placeholders, DiscordChannels.ITEM_PICKUP, playerName, playerUUID);
+                    this.main.getDiscord().handleDiscordLog("Discord.Item-Pickup", placeholders, DiscordChannels.ITEM_PICKUP, playerName, playerUUID);
                 }
             }
 

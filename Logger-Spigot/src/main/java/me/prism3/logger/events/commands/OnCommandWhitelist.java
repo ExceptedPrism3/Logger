@@ -53,15 +53,15 @@ public class OnCommandWhitelist implements Listener {
             }
         }
 
-        // DiscordManager Integration
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+        // Discord Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Commands-Whitelisted-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Commands-Whitelisted-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Commands-Whitelisted", placeholders, DiscordChannels.PLAYER_COMMANDS, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Commands-Whitelisted", placeholders, DiscordChannels.PLAYER_COMMANDS, playerName, playerUUID);
             }
         }
 

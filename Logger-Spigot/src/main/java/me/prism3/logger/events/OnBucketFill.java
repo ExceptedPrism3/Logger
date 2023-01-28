@@ -62,15 +62,15 @@ public class OnBucketFill implements Listener {
             }
         }
 
-        // DiscordManager Integration
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+        // Discord Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Bucket-Fill-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Bucket-Fill-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Bucket-Fill", placeholders, DiscordChannels.BUCKET_FILL, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Bucket-Fill", placeholders, DiscordChannels.BUCKET_FILL, playerName, playerUUID);
             }
         }
 

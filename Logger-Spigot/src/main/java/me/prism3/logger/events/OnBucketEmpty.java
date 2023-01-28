@@ -62,15 +62,15 @@ public class OnBucketEmpty implements Listener {
             }
         }
 
-        // DiscordManager Integration
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+        // Discord Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Bucket-Empty-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Bucket-Empty-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Bucket-Empty", placeholders, DiscordChannels.BUCKET_EMPTY, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Bucket-Empty", placeholders, DiscordChannels.BUCKET_EMPTY, playerName, playerUUID);
             }
         }
 

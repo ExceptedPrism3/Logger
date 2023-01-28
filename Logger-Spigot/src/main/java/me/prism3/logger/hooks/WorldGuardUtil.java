@@ -6,7 +6,7 @@
 //import me.prism3.logger.Main;
 //import me.prism3.logger.events.plugindependent.OnWorldGuard;
 //import me.prism3.logger.utils.Log;
-//import org.bukkit.plugin.PluginUpdater;
+//import org.bukkit.plugin.Plugin;
 //
 //public class WorldGuardUtil {
 //
@@ -21,11 +21,11 @@
 //            final SessionManager sessionManager = WorldGuard.getInstance().getPlatform().getSessionManager();
 //            sessionManager.registerHandler(OnWorldGuard.FACTORY, null);
 //
-//            Log.info("WorldGuard PluginUpdater Detected!");
+//            Log.info("WorldGuard Plugin Detected!");
 //            isAllowed = true;
 //        }
 //    }
 //
-//    private static PluginUpdater getWorldGuardAPI() { return Main.getInstance().getServer().getPluginManager().getPlugin("WorldGuard"); }
+//    private static Plugin getWorldGuardAPI() { return Main.getInstance().getServer().getPluginManager().getPlugin("WorldGuard"); }
 //}
 //*/

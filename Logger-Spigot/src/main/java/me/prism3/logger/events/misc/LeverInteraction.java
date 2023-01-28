@@ -65,15 +65,15 @@ public class LeverInteraction implements Listener {
                 }
             }
 
-            // DiscordManager Integration
-            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+            // Discord Integration
+            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    this.main.getDiscord().handleDiscordLog("DiscordManager.Lever-Interaction-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                    this.main.getDiscord().handleDiscordLog("Discord.Lever-Interaction-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                 } else {
 
-                    this.main.getDiscord().handleDiscordLog("DiscordManager.Lever-Interaction", placeholders, DiscordChannels.LEVER_INTERACTION, playerName, playerUUID);
+                    this.main.getDiscord().handleDiscordLog("Discord.Lever-Interaction", placeholders, DiscordChannels.LEVER_INTERACTION, playerName, playerUUID);
                 }
             }
 

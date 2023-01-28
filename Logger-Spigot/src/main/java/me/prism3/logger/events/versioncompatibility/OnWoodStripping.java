@@ -97,15 +97,15 @@ public class OnWoodStripping implements Listener {
                 }
             }
 
-            // DiscordManager Integration
-            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+            // Discord Integration
+            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
                 if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                    this.main.getDiscord().handleDiscordLog("DiscordManager.Version-Exceptions.Wood-Stripping-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                    this.main.getDiscord().handleDiscordLog("Discord.Version-Exceptions.Wood-Stripping-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                 } else {
 
-                    this.main.getDiscord().handleDiscordLog("DiscordManager.Version-Exceptions.Wood-Stripping", placeholders, DiscordChannels.WOOD_STRIPPING, playerName, playerUUID);
+                    this.main.getDiscord().handleDiscordLog("Discord.Version-Exceptions.Wood-Stripping", placeholders, DiscordChannels.WOOD_STRIPPING, playerName, playerUUID);
                 }
             }
 

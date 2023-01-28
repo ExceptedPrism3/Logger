@@ -80,7 +80,7 @@ public class DiscordManager {
             if (this.compareVersions(currentVersion, jarVersion) < 0) {
                 try {
                     FileUpdater.update(this.plugin, discordFileName, this.discordFile, Collections.singletonList("Discord-Version"));
-                    Log.warning("DiscordManager file updated from version " + currentVersion + " to version " + jarVersion);
+                    Log.warning("Discord file updated from version " + currentVersion + " to version " + jarVersion);
                 } catch (final IOException e) {
                     Log.severe("Error reading the discord file, if the issue persists contact the authors!");
                     this.resetDiscord();

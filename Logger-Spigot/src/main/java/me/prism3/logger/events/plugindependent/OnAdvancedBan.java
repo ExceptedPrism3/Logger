@@ -44,9 +44,9 @@ public class OnAdvancedBan implements Listener {
         if (Data.isLogToFiles)
             FileHandler.handleFileLog("Files.Extras.AdvancedBan", placeholders, FileHandler.getAdvancedBanFile());
 
-        // DiscordManager Integration
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Extras.AdvancedBan", placeholders, DiscordChannels.ADVANCED_BAN, executor, player.getUniqueId());
+        // Discord Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable"))
+                this.main.getDiscord().handleDiscordLog("Discord.Extras.AdvancedBan", placeholders, DiscordChannels.ADVANCED_BAN, executor, player.getUniqueId());
 
         // External
         if (Data.isExternal) {

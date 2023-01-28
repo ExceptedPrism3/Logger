@@ -48,15 +48,15 @@ public class OnAuthMePassword implements Listener {
             }
         }
 
-        // DiscordManager
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+        // Discord
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Extras.Wrong-Password-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Extras.Wrong-Password-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Extras.Wrong-Password", placeholders, DiscordChannels.WRONG_PASSWORD, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Extras.Wrong-Password", placeholders, DiscordChannels.WRONG_PASSWORD, playerName, playerUUID);
             }
         }
 

@@ -81,15 +81,15 @@ public class OnPlayerJoin implements Listener {
             }
         }
 
-        // DiscordManager
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+        // Discord
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
             if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Join-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Join-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
             } else {
 
-                this.main.getDiscord().handleDiscordLog("DiscordManager.Player-Join", placeholders, DiscordChannels.PLAYER_JOIN, playerName, playerUUID);
+                this.main.getDiscord().handleDiscordLog("Discord.Player-Join", placeholders, DiscordChannels.PLAYER_JOIN, playerName, playerUUID);
             }
         }
 

@@ -1,7 +1,7 @@
-# MessagesManager for Logger PluginUpdater [ Bukkit Version ]
-# Need Support? Join the DiscordManager Server: https://discord.gg/MfR5mcpVfX
+# Messages for Logger Plugin [ Bukkit Version ]
+# Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
 # FileInitializer ${project.version}
-# PluginUpdater MessagesManager
+# Plugin Messages
 General:
   No-Permission: "%prefix% &cYou do not have permission to run this command."
   Reload: "%prefix% &aConfigs Reloaded."
@@ -112,7 +112,7 @@ Files:
     Totem-of-Undying: "[%time%] [%world%] [%uuid%] The Player <%player%> has used Totem of Undying at X= %x%, Y= %y%, Z= %z%"
   Custom:
     Manual: "[%time%] %log%"
-# DiscordManager Instance
+# Discord Instance
 # Emojis can be found here https://emojipedia.org/ or elsewhere. Emojis may not work on > 1.12 Servers.
 Discord:
   Player-Chat-Staff: "**[%time%]** **[%world%]** **%message%**"

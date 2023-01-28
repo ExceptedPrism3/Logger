@@ -76,7 +76,7 @@ public class Main extends JavaPlugin {
 
         Log.info(ChatColor.GOLD + "Thanks to everyone's contributions that helped made this project possible!");
 
-        Log.info("PluginUpdater Enabled!");
+        Log.info("Plugin Enabled!");
 
         new Start().run();
     }
@@ -109,7 +109,7 @@ public class Main extends JavaPlugin {
         if (Discord.getInstance() != null)
             Discord.getInstance().disconnect();
 
-        Log.info("PluginUpdater Disabled!");
+        Log.info("Plugin Disabled!");
     }
 
     public void initializer(Data data) {

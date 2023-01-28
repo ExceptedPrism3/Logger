@@ -111,7 +111,7 @@ public class Data {
         fileType = ".yml";
         selectedLang = this.main.getConfig().getString("Language");
         discordSupportServer = "https://discord.gg/MfR5mcpVfX";
-        pluginPrefix = this.main.getConfig().getString("PluginUpdater-Prefix");
+        pluginPrefix = this.main.getConfig().getString("Plugin-Prefix");
         resourceAPIChecker = "https://api.spigotmc.org/legacy/update.php?resource=94236/";
         resourceLink = "https://www.spigotmc.org/resources/logger-1-7-1-19.94236/";
         configVersion = this.main.getConfig().getString("Config-Version", "");

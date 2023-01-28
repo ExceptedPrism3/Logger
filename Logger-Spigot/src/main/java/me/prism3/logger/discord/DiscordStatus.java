@@ -51,7 +51,7 @@ public class DiscordStatus {
             try {
                 Activity.ActivityType.valueOf(activity.get(0).replace("playing", "streaming").toUpperCase());
             } catch (final IllegalArgumentException e) {
-                Log.severe("DiscordManager activity is invalid, disabling...");
+                Log.severe("Discord activity is invalid, disabling...");
                 return;
             }
         }

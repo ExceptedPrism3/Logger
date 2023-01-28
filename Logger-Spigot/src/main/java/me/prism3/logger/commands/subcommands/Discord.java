@@ -24,7 +24,7 @@ public class Discord implements SubCommand {
     @Override
     public void perform(CommandSender commandSender, String[] args) {
 
-        commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix + "DiscordManager Support Server: &b" + discordSupportServer));
+        commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix + "Discord Support Server: &b" + discordSupportServer));
     }
 
     @Override

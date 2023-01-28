@@ -41,7 +41,7 @@ public class VaultUtil {
 
             if (rsp != null) {
                 econ = rsp.getProvider();
-                Log.info("Vault PluginUpdater Detected!");
+                Log.info("Vault Plugin Detected!");
                 return true;
             }
         }

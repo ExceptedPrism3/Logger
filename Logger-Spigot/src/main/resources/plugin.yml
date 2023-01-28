@@ -7,9 +7,9 @@ description: Log all Activities from Players and Server Side!
 softdepend: [Essentials, AuthMe, Vault, PlaceholderAPI, LiteBans, AdvancedBan, PlaceholderAPI, Geyser, Floodgate, ViaVersion, WorldGuard]
 commands:
   logger:
-    description: "PluginUpdater command."
+    description: "Plugin command."
   logger reload:
-    description: "Reloads the PluginUpdater configs."
+    description: "Reloads the Plugin configs."
   logger dump:
     description: "Creates an online pastebin url of the plugin's config and discord."
   logger discord:
@@ -22,7 +22,7 @@ commands:
     description: "Get player messages"
 permissions:
   logger.staff:
-    description: "Allows the Player to execute PluginUpdater Commands, spy on others actions, and view PluginUpdater Updates."
+    description: "Allows the Player to execute Plugin Commands, spy on others actions, and view Plugin Updates."
     children:
       logger.reload: true
       logger.spy: true
@@ -34,7 +34,7 @@ permissions:
   logger.exempt.discord:
     description: "Prevents the Player from getting discord logged."
   logger.reload:
-    description: "Allows to Reload the PluginUpdater."
+    description: "Allows to Reload the Plugin."
     default: op
   logger.spy:
     description: "Ability to see other players' and Staff's actions."
@@ -48,5 +48,5 @@ permissions:
     children:
       logger.exempt: false
   logger.update:
-    description: "Ability to receive PluginUpdater Updates."
+    description: "Ability to receive Plugin Updates."
     default: op

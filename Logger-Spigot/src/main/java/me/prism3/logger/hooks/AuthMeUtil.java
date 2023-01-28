@@ -17,7 +17,7 @@ public class AuthMeUtil {
 
         if (Bukkit.getPluginManager().isPluginEnabled("AuthMe")) {
 
-            Log.info("AuthMe PluginUpdater Detected!");
+            Log.info("AuthMe Plugin Detected!");
 
             final OnAuthMePassword authMePassword = new OnAuthMePassword();
             Main.getInstance().getServer().getPluginManager().registerEvents(authMePassword, Main.getInstance());

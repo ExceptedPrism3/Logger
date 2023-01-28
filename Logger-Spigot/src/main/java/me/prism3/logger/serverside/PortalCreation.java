@@ -35,9 +35,9 @@ public class PortalCreation implements Listener {
         if (Data.isLogToFiles)
             FileHandler.handleFileLog("Files.Server-Side.Portal-Creation", placeholders, FileHandler.getPortalCreateFile());
 
-        // DiscordManager
-        if (this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable"))
-            this.main.getDiscord().handleDiscordLog("DiscordManager.Server-Side.Portal-Creation", placeholders, DiscordChannels.PORTAL_CREATION, "Portal Creation", null);
+        // Discord
+        if (this.main.getDiscordFile().get().getBoolean("Discord.Enable"))
+            this.main.getDiscord().handleDiscordLog("Discord.Server-Side.Portal-Creation", placeholders, DiscordChannels.PORTAL_CREATION, "Portal Creation", null);
 
         // External
         if (Data.isExternal) {

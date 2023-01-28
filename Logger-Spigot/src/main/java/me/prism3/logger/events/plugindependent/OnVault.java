@@ -65,15 +65,15 @@ public class OnVault implements Listener, Runnable {
                         }
                     }
 
-                    // DiscordManager Integration
-                    if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("DiscordManager.Enable")) {
+                    // Discord Integration
+                    if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
 
                         if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
 
-                            this.main.getDiscord().handleDiscordLog("DiscordManager.Extras.Vault-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+                            this.main.getDiscord().handleDiscordLog("Discord.Extras.Vault-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
                         } else {
 
-                            this.main.getDiscord().handleDiscordLog("DiscordManager.Extras.Vault", placeholders, DiscordChannels.VAULT, playerName, playerUUID);
+                            this.main.getDiscord().handleDiscordLog("Discord.Extras.Vault", placeholders, DiscordChannels.VAULT, playerName, playerUUID);
                         }
                     }
 
