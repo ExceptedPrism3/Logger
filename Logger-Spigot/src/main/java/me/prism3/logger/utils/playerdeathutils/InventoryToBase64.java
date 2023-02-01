@@ -1,19 +1,19 @@
 package me.prism3.logger.utils.playerdeathutils;
 
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.io.BukkitObjectInputStream;
-import org.bukkit.util.io.BukkitObjectOutputStream;
-import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Base64;
+
+import me.prism3.logger.utils.Log;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.io.BukkitObjectInputStream;
+import org.bukkit.util.io.BukkitObjectOutputStream;
 
 public class InventoryToBase64 {
-
     private static final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-    public static String toBase64(ItemStack[] contents) {
+    public static String toBase64(final ItemStack[] contents) throws IOException {
 
         try (final BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream)) {
 
@@ -22,28 +22,29 @@ public class InventoryToBase64 {
             for (ItemStack stack : contents)
                 dataOutput.writeObject(stack);
 
-            byte[] byteArr = outputStream.toByteArray();
+            final byte[] byteArr = outputStream.toByteArray();
             outputStream.reset();
-            return Base64Coder.encodeLines(byteArr);
-        } catch (final IOException e) {
-            throw new IllegalStateException("An error has occurred whilst saving the Player Inventory." +
-                    " Does the proper file exists? If the issue persists, contact the Authors!", e);
+
+            return Base64.getEncoder().encodeToString(byteArr);
         }
     }
 
-    public static ItemStack[] stacksFromBase64(String data) {
+    public static ItemStack[] fromBase64(final String data) {
 
-        try (final BukkitObjectInputStream dataInput = new BukkitObjectInputStream(new ByteArrayInputStream(Base64Coder.decodeLines(data)))) {
+        ItemStack[] stacks = null;
 
-            final ItemStack[] stacks = new ItemStack[dataInput.readInt()];
+        try (final BukkitObjectInputStream dataInput = new BukkitObjectInputStream(new ByteArrayInputStream(Base64.getDecoder().decode(data)))) {
+
+            stacks = new ItemStack[dataInput.readInt()];
 
             for (int i = 0; i < stacks.length; i++)
                 stacks[i] = (ItemStack) dataInput.readObject();
 
-            return stacks;
         } catch (final IOException | ClassNotFoundException e) {
-            throw new IllegalStateException("An error has occurred whilst loading the Player Inventory." +
-                    " Does the proper file exists? If the issue persists, contact the Authors!", e);
+            Log.severe("An error has occurred while retrieving data from the backup file. If the issue persists, contact the authors.");
+            e.printStackTrace();
         }
+
+        return stacks;
     }
 }

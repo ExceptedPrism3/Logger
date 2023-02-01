@@ -1,87 +1,78 @@
 package me.prism3.logger.utils.playerdeathutils;
 
 import me.prism3.logger.utils.FileHandler;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.StringJoiner;
 
 import static me.prism3.logger.utils.Data.allowedBackups;
 
 public class PlayerFolder {
 
+    private final SimpleDateFormat filenameDateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
     private File playerFile;
 
     // Create the backup file for the appropriate player
-    public void create(Player player) {
-        final Date date = new Date();
-        final SimpleDateFormat filenameDateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+    public void create(final Player player) {
 
         final File backupFolder = new File(FileHandler.getPlayerDeathBackupLogFolder(), player.getName());
 
-        this.playerFile = new File(backupFolder, filenameDateFormat.format(date) + ".yml");
+        if (!backupFolder.exists() && !backupFolder.mkdir()) return;
 
-        try {
-            if (!backupFolder.exists()) {
-                Files.createDirectories(backupFolder.toPath());
-            }
-            this.playerFile = Files.createFile(this.playerFile.toPath()).toFile();
-            this.fileInput(this.playerFile, player);
+        this.playerFile = new File(backupFolder, this.filenameDateFormat.format(new Date()) + ".yml");
 
-        } catch (final IOException e) { e.printStackTrace(); }
-    }
+        try (final BufferedWriter writer = new BufferedWriter(new FileWriter(playerFile))) {
 
-    // Grabs the file from the above method and writes into it
-    private void fileInput(File file, Player player) {
+            final StringJoiner sj = new StringJoiner(System.lineSeparator());
 
-        try (FileOutputStream fos = new FileOutputStream(file)) {
-
-            final YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
-
-            yaml.set("player-name", player.getName());
-            yaml.set("player-uuid", player.getUniqueId().toString());
-            yaml.set("world", player.getWorld().getName());
-            yaml.set("x", player.getLocation().getBlockX());
-            yaml.set("y", player.getLocation().getBlockY());
-            yaml.set("z", player.getLocation().getBlockZ());
-            yaml.set("xp", player.getLevel());
-            yaml.createSection("inventory");
-            yaml.createSection("armor");
-
-            yaml.save(fos.toString());
+            sj.add("player-name: " + player.getName());
+            sj.add("player-uuid: " + player.getUniqueId());
+            sj.add("world: " + player.getWorld().getName());
+            sj.add("x: " + player.getLocation().getBlockX());
+            sj.add("y: " + player.getLocation().getBlockY());
+            sj.add("z: " + player.getLocation().getBlockZ());
+            sj.add("xp: " + player.getLevel());
+            sj.add("inventory:");
+            sj.add("armor:");
+            writer.write(sj.toString());
 
         } catch (IOException e) { e.printStackTrace(); }
     }
 
     // Counts the total backup files of a player
-    public static int backupCount(Player player) {
+    public static int backupCount(final Player player) {
+
         final File backupFolder = new File(FileHandler.getPlayerDeathBackupLogFolder(), player.getName());
-        return backupFolder.listFiles() == null ? 0 : backupFolder.listFiles().length;
+        final File[] files = backupFolder.listFiles(File::isFile);
+
+        return files == null ? 0 : files.length;
     }
 
     // Stores all backup files names
-    public static String[] fileNames(Player player) {
+    public static String[] fileNames(final Player player) {
+
+        final int backupCount = backupCount(player);
+
+        if (backupCount == 0) return new String[0];
 
         final File dir = new File(FileHandler.getPlayerDeathBackupLogFolder(), player.getName());
-        final String[] fileNames = dir.list((file, name) -> name.endsWith(".yml"));
+        final String[] fileNames = dir.list();
 
-        if (fileNames != null) {
-            for (int i = 0; i < fileNames.length; i++)
-                fileNames[i] = fileNames[i].replace(".yml", "");
+        if (fileNames == null) return new String[0];
 
-        } else { return new String[0]; }
+        final String[] result = new String[backupCount];
 
-        return fileNames;
+        for (int i = 0; i < backupCount; i++)
+            result[i] = fileNames[i].replace(".\\w+", "");
+
+        return result;
     }
 
-
     // Check if it's allowed to make a new backup file
-    public boolean isAllowed(Player player) {
+    public boolean isAllowed(final Player player) {
         return backupCount(player) < allowedBackups; // We did '<' since backCount method starts at 0
     }
 

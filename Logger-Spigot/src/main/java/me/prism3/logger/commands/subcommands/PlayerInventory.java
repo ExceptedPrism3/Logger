@@ -1,5 +1,6 @@
 package me.prism3.logger.commands.subcommands;
 
+import me.prism3.logger.Main;
 import me.prism3.logger.commands.SubCommand;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.playerdeathutils.InventoryToBase64;
@@ -21,7 +22,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.File;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static me.prism3.logger.utils.Data.pluginPrefix;
 
@@ -47,126 +47,119 @@ public class PlayerInventory implements Listener, SubCommand {
     public List<String> getSubCommandsArgs(CommandSender commandSender, String[] args) { return Collections.emptyList(); }
 
     // Opening the first GUI with all online players and their available backups
-    private void stepOne(Player player) {
-        // Create an inventory with a size of 27 slots and a title
-        final Inventory firstInv = Bukkit.createInventory(null, 27, "Player Inventory Checker");
+    private void stepOne(final Player player) {
+        int page = 0;
+        final int itemsPerPage = 27;
+        final int playerCount = Bukkit.getOnlinePlayers().size();
+        final Inventory[] inventories = getInventories(playerCount, itemsPerPage);
+        Main.getInstance().getExecutor().submit(() -> {
+            List<Player> onlinePlayers = new ArrayList<>(Bukkit.getOnlinePlayers());
+            int startIndex = page * itemsPerPage;
+            int endIndex = Math.min(startIndex + itemsPerPage, onlinePlayers.size());
+            List<Player> playersToDisplay = onlinePlayers.subList(startIndex, endIndex);
+            fillInventory(inventories[page], playersToDisplay);
+            player.openInventory(inventories[page]);
+        });
+    }
 
-        // Get the type of material to use for the skull
-        final boolean isNewVersion = Arrays.stream(Material.values()).map(Material::name).collect(Collectors.toList()).contains("PLAYER_HEAD");
+    private Inventory[] getInventories(int playerCount, int itemsPerPage) {
+        int pageCount = (int) Math.ceil((double) playerCount / itemsPerPage);
+        Inventory[] inventories = new Inventory[pageCount];
+        for (int i = 0; i < pageCount; i++) {
+            int inventorySize = (int) Math.ceil((double) Math.min(itemsPerPage, playerCount - i * itemsPerPage) / 9) * 9;
+            inventories[i] = Bukkit.createInventory(null, inventorySize, "Player Inventory Checker (Page " + (i + 1) + ")");
+        }
+        return inventories;
+    }
+
+
+    private void fillInventory(Inventory inventory, List<Player> players) {
+        final boolean isNewVersion = Arrays.stream(Material.values()).anyMatch(material -> material.name().equals("PLAYER_HEAD"));
         final Material type = Material.matchMaterial(isNewVersion ? "PLAYER_HEAD" : "SKULL_ITEM");
-
-        // Iterate over all online players
-        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            // Create the skull item
+        for (Player onlinePlayer : players) {
             final ItemStack skull = new ItemStack(type, 1);
-
-            if (!isNewVersion)
+            if (!isNewVersion) {
                 skull.setDurability((short) 3);
-
-            // Set the skull's meta data
+            }
             final SkullMeta meta = (SkullMeta) skull.getItemMeta();
             meta.setOwner(onlinePlayer.getName());
             meta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + onlinePlayer.getName());
-
-            // Add lore to the skull
-            ArrayList<String> skullMeta = new ArrayList<>();
-            skullMeta.add(ChatColor.WHITE + "Backups Available: " + ChatColor.AQUA + PlayerFolder.backupCount(onlinePlayer));
-            meta.setLore(skullMeta);
-
+            List<String> lore = new ArrayList<>(Collections.singletonList(ChatColor.WHITE + "Backups Available: " + ChatColor.AQUA + PlayerFolder.backupCount(onlinePlayer)));
+            meta.setLore(lore);
             skull.setItemMeta(meta);
-
-            // Add the skull to the inventory
-            firstInv.addItem(skull);
+            inventory.addItem(skull);
         }
-
-        // Open the inventory for the player
-        player.openInventory(firstInv);
     }
 
     @EventHandler
-    public void onClick(final InventoryClickEvent event) {
+    private void onClick(final InventoryClickEvent event) {
 
         if (event.getClickedInventory() == null) return;
 
         final String title = event.getView().getTitle();
+        if (!title.equals("Player Inventory Checker") && !title.startsWith("Inventory") && !title.startsWith("Backup(")) return;
 
-        if (title.equals("Player Inventory Checker") || title.startsWith("Inventory") || title.startsWith("Backup(s)")) {
+        event.setCancelled(true);
 
-            event.setCancelled(true);
+        this.selectedBy = (Player) event.getWhoClicked();
+        if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()) return;
 
-            this.selectedBy = (Player) event.getWhoClicked();
+        final String clickedItem = event.getCurrentItem().getItemMeta().getDisplayName();
+        final ItemStack clickedStack = event.getCurrentItem();
 
-            if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()) return;
-
-            final String clickedItem = Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName();
-
-            boolean isPresent = false;
-
-            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-
-                if (clickedItem.equals(ChatColor.GOLD + "" + ChatColor.BOLD + onlinePlayer.getName())) {
-
-                    this.selectedPlayer = onlinePlayer;
-                    this.stepTwo();
-                    break;
-                }
-
-                if (event.getCurrentItem().getType() == Material.CHEST) {
-
+        switch (clickedStack.getType()) {
+            case CHEST:
+                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                     for (String list : PlayerFolder.fileNames(onlinePlayer)) {
-
                         if (list.equalsIgnoreCase(clickedItem)) {
-
-                            isPresent = true;
+                            this.selectedPlayer = onlinePlayer;
                             this.backupFile = new File(FileHandler.getPlayerDeathBackupLogFolder(), onlinePlayer.getName() + File.separator + list);
                             this.stepThree();
-                            break;
+                            return;
                         }
                     }
-
-                    if (isPresent) break;
                 }
-
-                if (event.getCurrentItem().getType() == Material.ENDER_CHEST)
-                    this.stepTwo();
-
-                if (event.getCurrentItem().getType() == Material.EMERALD_BLOCK) {
-
-                    try {
-
-                        this.addItem();
-
-                    } catch (final Exception except) {
-
-                        this.selectedBy.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix + "An error has occurred whilst restoring " + selectedPlayer + "'s Inventory"));
-                        except.printStackTrace();
+                break;
+            case ENDER_CHEST:
+                this.stepTwo();
+                return;
+            case EMERALD_BLOCK:
+                this.addItem();
+                return;
+            default:
+                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                    if (clickedItem.equals(ChatColor.GOLD + "" + ChatColor.BOLD + onlinePlayer.getName())) {
+                        this.selectedPlayer = onlinePlayer;
+                        this.stepTwo();
+                        return;
                     }
-                    break;
                 }
-            }
         }
     }
 
     // Opening the second GUI after selecting the player and displaying all available backups
     private void stepTwo() {
 
-        if (PlayerFolder.fileNames(this.selectedPlayer) == null || PlayerFolder.backupCount(this.selectedPlayer) == 0) return;
+        final int backupCount = PlayerFolder.backupCount(this.selectedPlayer);
+
+        if (backupCount == 0) return;
 
         this.selectedBy.closeInventory();
 
-        int i = PlayerFolder.backupCount(this.selectedPlayer);
-
-        final Inventory secondInv = Bukkit.createInventory(this.selectedBy, 27,  "Backup(s) of " + this.selectedPlayer.getName());
+        int invSize = 9 * (int) Math.ceil(backupCount / 9.0);
+        invSize = Math.min(invSize, 54);
+        final Inventory secondInv = Bukkit.createInventory(this.selectedBy, invSize, "Backup(s) of " + this.selectedPlayer.getName());
         final String[] files = PlayerFolder.fileNames(this.selectedPlayer);
 
-        for (int e = 0; e < i; e++) {
+        for (int i = 0; i < backupCount; i++) {
 
-            final ItemStack chest = new ItemStack(Material.CHEST);
-            final ItemMeta chestMeta = chest.getItemMeta();
+            final ItemStack item = new ItemStack(Material.CHEST, 1);
+            final ItemMeta meta = item.getItemMeta();
 
-            chestMeta.setDisplayName(files[e]);
-            chest.setItemMeta(chestMeta);
-            secondInv.setItem(e, chest);
+            meta.setDisplayName(files[i]);
+            item.setItemMeta(meta);
+
+            secondInv.addItem(item);
         }
 
         this.selectedBy.openInventory(secondInv);
@@ -174,56 +167,50 @@ public class PlayerInventory implements Listener, SubCommand {
 
 
     // Opening the last GUI based on the selected backup from the previous step, and displaying all items
-    public void stepThree() {
+    private void stepThree() {
 
         this.selectedBy.closeInventory();
 
         final Inventory lastInv = Bukkit.createInventory(this.selectedBy, 54, "Inventory of " + this.selectedPlayer.getName());
+
         final FileConfiguration f = YamlConfiguration.loadConfiguration(this.backupFile);
 
-        final ItemStack[] invContent = InventoryToBase64.stacksFromBase64(f.getString("inventory"));
-        final ItemStack[] armorContent = InventoryToBase64.stacksFromBase64(f.getString("armor"));
+        final ItemStack[] invContent = InventoryToBase64.fromBase64(f.getString("inventory"));
+        final ItemStack[] armorContent = InventoryToBase64.fromBase64(f.getString("armor"));
 
-        final ItemStack backButton = new ItemStack(Material.ENDER_CHEST);
+        for (ItemStack item : invContent)
+            lastInv.addItem(item);
 
-        final ItemMeta backButtonMeta = backButton.getItemMeta();
+        for (ItemStack item : armorContent)
+            lastInv.addItem(item);
 
-        backButtonMeta.setDisplayName(ChatColor.RED + "Back");
-        backButton.setItemMeta(backButtonMeta);
+        lastInv.setItem(45, createItemStack(Material.ENDER_CHEST, ChatColor.RED + "Back", null));
+        lastInv.setItem(49, createItemStack(Material.EMERALD_BLOCK, ChatColor.AQUA + "Backup",
+                Collections.singletonList(ChatColor.RED + "Clears player's current Inventory!")));
 
-        final ItemStack backupButton = new ItemStack(Material.EMERALD_BLOCK);
-
-        final ItemMeta backupButtonMeta = backupButton.getItemMeta();
-
-        backupButtonMeta.setDisplayName(ChatColor.AQUA + "Backup");
-
-        final List<String> backupButtonLore = new ArrayList<>();
-
-        backupButtonLore.add(ChatColor.RED + "Clears player's current Inventory!");
-        backupButtonMeta.setLore(backupButtonLore);
-        backupButton.setItemMeta(backupButtonMeta);
-
-        for (int i = 0; i < invContent.length; i++)
-            lastInv.setItem(i, invContent[i]);
-
-        if (armorContent.length != 0) {
-            lastInv.setItem(36, armorContent[0]);
-            lastInv.setItem(37, armorContent[1]);
-            lastInv.setItem(38, armorContent[2]);
-            lastInv.setItem(39, armorContent[3]);
-        }
-
-        lastInv.setItem(45, backButton);
-        lastInv.setItem(49, backupButton);
         this.selectedBy.openInventory(lastInv);
+    }
+
+    private ItemStack createItemStack(final Material material, final String name, final List<String> lore) {
+
+        final ItemStack item = new ItemStack(material);
+        final ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(name);
+
+        if (lore != null)
+            meta.setLore(lore);
+
+        item.setItemMeta(meta);
+        return item;
     }
 
     private void addItem() {
 
         final FileConfiguration f = YamlConfiguration.loadConfiguration(this.backupFile);
 
-        final ItemStack[] invContent = InventoryToBase64.stacksFromBase64(f.getString("inventory"));
-        final ItemStack[] armorContent = InventoryToBase64.stacksFromBase64(f.getString("armor"));
+        final ItemStack[] invContent = InventoryToBase64.fromBase64(f.getString("inventory"));
+        final ItemStack[] armorContent = InventoryToBase64.fromBase64(f.getString("armor"));
 
         this.selectedPlayer.getInventory().setContents(invContent);
 
