@@ -8,7 +8,7 @@ public enum FriendlyEnchants  {
     ARROW_FIRE("Flame"),
     ARROW_INFINITE("Infinite"),
     ARROW_KNOCKBACK("Punch"),
-    BINDING_CURSE("Curse of Binding",true),
+    BINDING_CURSE("Curse of Binding"),
     CHANNELING("Channeling"),
     DAMAGE_ALL("Sharpness"),
     DAMAGE_ARTHROPODS("Bane of Arthropods"),
@@ -40,16 +40,12 @@ public enum FriendlyEnchants  {
     SOUL_SPEED("Soul Speed"),
     SWEEPING_EDGE("Sweeping Edge"),
     THORNS("Thorns"),
-    VANISHING_CURSE("Curse of Vanishing",true),
+    VANISHING_CURSE("Curse of Vanishing"),
     WATER_WORKER("Aqua Affinity");
 
     private final String friendlyName;
-    private final boolean isCurse;
 
-    FriendlyEnchants(String friendlyName, boolean isCurse) {
-        this.friendlyName = friendlyName;
-        this.isCurse = isCurse;
-    }
+    FriendlyEnchants(String friendlyName, boolean isCurse) { this.friendlyName = friendlyName; }
 
     FriendlyEnchants(String friendlyName) {
         this(friendlyName,false);
@@ -61,6 +57,4 @@ public enum FriendlyEnchants  {
     }
 
     public String getFriendlyName() { return friendlyName; }
-
-    public boolean isCurse() { return isCurse; }
 }

@@ -1,7 +1,7 @@
 package me.prism3.logger.commands.subcommands;
 
-import me.prism3.logger.Main;
 import me.prism3.logger.commands.SubCommand;
+import me.prism3.logger.events.OnPlayerJoin;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.playerdeathutils.InventoryToBase64;
 import me.prism3.logger.utils.playerdeathutils.PlayerFolder;
@@ -21,15 +21,29 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 
 import static me.prism3.logger.utils.Data.pluginPrefix;
 
 public class PlayerInventory implements Listener, SubCommand {
 
-    private Player selectedPlayer;
+    private static final int ITEMS_PER_PAGE = 45;
+    private static final String NEXT_PAGE = ChatColor.GREEN + "Next Page";
+    private static final String PREVIOUS_PAGE = ChatColor.RED + "Previous Page";
     private Player selectedBy;
+    private Player selectedPlayer;
     private File backupFile;
+    private Inventory[] inventories;
+    private List<Player> onlinePlayers;
+    private int pageCount;
 
     @Override
     public String getName() { return "playerinventory"; }
@@ -41,100 +55,161 @@ public class PlayerInventory implements Listener, SubCommand {
     public String getSyntax() { return "/logger playerinventory"; }
 
     @Override
-    public void perform(CommandSender commandSender, String[] args) { this.stepOne((Player) commandSender); }
+    public void perform(CommandSender commandSender, String[] args) { this.stepOne(); }
 
     @Override
     public List<String> getSubCommandsArgs(CommandSender commandSender, String[] args) { return Collections.emptyList(); }
 
     // Opening the first GUI with all online players and their available backups
-    private void stepOne(final Player player) {
-        int page = 0;
-        final int itemsPerPage = 27;
+    private void stepOne() {
+
+        final int itemsPerRow = 9;
         final int playerCount = Bukkit.getOnlinePlayers().size();
-        final Inventory[] inventories = getInventories(playerCount, itemsPerPage);
-        Main.getInstance().getExecutor().submit(() -> {
-            List<Player> onlinePlayers = new ArrayList<>(Bukkit.getOnlinePlayers());
-            int startIndex = page * itemsPerPage;
-            int endIndex = Math.min(startIndex + itemsPerPage, onlinePlayers.size());
-            List<Player> playersToDisplay = onlinePlayers.subList(startIndex, endIndex);
-            fillInventory(inventories[page], playersToDisplay);
-            player.openInventory(inventories[page]);
+        this.pageCount = (int) Math.ceil((double) playerCount / (itemsPerRow * 6));
+
+        CompletableFuture.runAsync(() -> {
+            if (this.inventories == null || this.onlinePlayers == null || this.onlinePlayers.size() != Bukkit.getOnlinePlayers().size()) {
+                this.inventories = IntStream.range(0, this.pageCount)
+                        .mapToObj(i -> Bukkit.createInventory(this.selectedBy,
+                                (int) Math.ceil((double) Math.min(playerCount - i * itemsPerRow * 6, itemsPerRow * 6) / itemsPerRow) * 9,
+                                "Player Inventory Checker (Page " + (i + 1) + ")"))
+                        .toArray(Inventory[]::new);
+
+                this.onlinePlayers = new ArrayList<>(Bukkit.getOnlinePlayers());
+
+                IntStream.range(0, this.pageCount)
+                        .forEach(i -> fillInventory(this.inventories[i], this.onlinePlayers.subList(i * itemsPerRow * 6, Math.min(this.onlinePlayers.size(), (i + 1) * itemsPerRow * 6)), itemsPerRow, i, this.pageCount));
+            }
+
+            this.selectedBy.openInventory(this.inventories[0]);
         });
     }
 
-    private Inventory[] getInventories(int playerCount, int itemsPerPage) {
-        int pageCount = (int) Math.ceil((double) playerCount / itemsPerPage);
-        Inventory[] inventories = new Inventory[pageCount];
-        for (int i = 0; i < pageCount; i++) {
-            int inventorySize = (int) Math.ceil((double) Math.min(itemsPerPage, playerCount - i * itemsPerPage) / 9) * 9;
-            inventories[i] = Bukkit.createInventory(null, inventorySize, "Player Inventory Checker (Page " + (i + 1) + ")");
-        }
-        return inventories;
-    }
+    private void fillInventory(Inventory inventory, List<Player> onlinePlayers, int itemsPerRow, int currentPage, int totalPages) {
 
+        final AtomicInteger count = new AtomicInteger();
 
-    private void fillInventory(Inventory inventory, List<Player> players) {
-        final boolean isNewVersion = Arrays.stream(Material.values()).anyMatch(material -> material.name().equals("PLAYER_HEAD"));
-        final Material type = Material.matchMaterial(isNewVersion ? "PLAYER_HEAD" : "SKULL_ITEM");
-        for (Player onlinePlayer : players) {
-            final ItemStack skull = new ItemStack(type, 1);
-            if (!isNewVersion) {
-                skull.setDurability((short) 3);
+        onlinePlayers.stream()
+                .map(player -> OnPlayerJoin.getHeadCache().get(player))
+                .forEach(skull -> {
+                    inventory.setItem(count.getAndIncrement(), skull);
+                    if (count.get() % itemsPerRow == 0) {
+                        count.addAndGet(itemsPerRow - 9);
+                    }
+                });
+        if (onlinePlayers.size() == itemsPerRow * 6) {
+            // Add Next Page Button
+            if (currentPage < totalPages - 1) {
+                final ItemStack next = this.createItemStack(Material.ARROW, NEXT_PAGE, null);
+                inventory.setItem(inventory.getSize() - 5, next);
             }
-            final SkullMeta meta = (SkullMeta) skull.getItemMeta();
-            meta.setOwner(onlinePlayer.getName());
-            meta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + onlinePlayer.getName());
-            List<String> lore = new ArrayList<>(Collections.singletonList(ChatColor.WHITE + "Backups Available: " + ChatColor.AQUA + PlayerFolder.backupCount(onlinePlayer)));
-            meta.setLore(lore);
-            skull.setItemMeta(meta);
-            inventory.addItem(skull);
+
+            // Add Previous Page Button
+            if (currentPage > 0) {
+                final ItemStack previous = this.createItemStack(Material.ARROW, PREVIOUS_PAGE, null);
+                inventory.setItem(inventory.getSize() - 9, previous);
+            }
         }
     }
 
     @EventHandler
-    private void onClick(final InventoryClickEvent event) {
+    public void onClick(final InventoryClickEvent event) {
 
-        if (event.getClickedInventory() == null) return;
-
-        final String title = event.getView().getTitle();
-        if (!title.equals("Player Inventory Checker") && !title.startsWith("Inventory") && !title.startsWith("Backup(")) return;
+        if (event.getClickedInventory() == null || !event.getView().getTitle().matches("(Player Inventory Checker \\(Page \\d+\\))|(Backup\\(s\\) of .*)|(Inventory of .*)"))
+            return;
 
         event.setCancelled(true);
 
-        this.selectedBy = (Player) event.getWhoClicked();
-        if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()) return;
-
-        final String clickedItem = event.getCurrentItem().getItemMeta().getDisplayName();
         final ItemStack clickedStack = event.getCurrentItem();
+        if (clickedStack == null || !clickedStack.hasItemMeta())
+            return;
 
-        switch (clickedStack.getType()) {
-            case CHEST:
-                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                    for (String list : PlayerFolder.fileNames(onlinePlayer)) {
-                        if (list.equalsIgnoreCase(clickedItem)) {
-                            this.selectedPlayer = onlinePlayer;
-                            this.backupFile = new File(FileHandler.getPlayerDeathBackupLogFolder(), onlinePlayer.getName() + File.separator + list);
-                            this.stepThree();
-                            return;
-                        }
-                    }
+        final String clickedItem = ChatColor.stripColor(clickedStack.getItemMeta().getDisplayName());
+        this.selectedBy = (Player) event.getWhoClicked();
+        int currentPage = this.getCurrentPage(event.getView().getTitle());
+
+        switch (clickedItem) {
+            case "Next Page":
+                if (currentPage + 1 > this.getTotalPages()) {
+                    this.selectedBy.sendMessage("You have reached the last page.");
+                    return;
                 }
+                this.openPage(currentPage + 1);
                 break;
-            case ENDER_CHEST:
+            case "Previous Page":
+                final int previousPage = currentPage - 1;
+                if (previousPage < 1) {
+                    this.selectedBy.sendMessage("You are already on the first page.");
+                    return;
+                }
+                this.openPage(previousPage);
+                break;
+            default:
+                this.handleClick(clickedItem, clickedStack);
+                break;
+        }
+    }
+
+    private void handleClick(String clickedItem, ItemStack clickedStack) {
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            if (clickedItem.equals(onlinePlayer.getName())) {
+                this.selectedPlayer = onlinePlayer;
                 this.stepTwo();
                 return;
-            case EMERALD_BLOCK:
-                this.addItem();
-                return;
-            default:
-                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                    if (clickedItem.equals(ChatColor.GOLD + "" + ChatColor.BOLD + onlinePlayer.getName())) {
+            }
+            if (clickedStack.getType() == Material.CHEST) {
+                for (String list : PlayerFolder.fileNames(onlinePlayer)) {
+                    if (list.equalsIgnoreCase(clickedItem)) {
                         this.selectedPlayer = onlinePlayer;
-                        this.stepTwo();
+                        this.backupFile = new File(FileHandler.getPlayerDeathBackupLogFolder(), onlinePlayer.getName() + File.separator + list);
+                        this.stepThree();
                         return;
                     }
                 }
+            }
+            if (clickedStack.getType() == Material.ENDER_CHEST) {
+                this.stepTwo();
+                return;
+            }
+            if (clickedStack.getType() == Material.EMERALD_BLOCK) {
+                this.addItem();
+                return;
+            }
         }
+    }
+
+    private int getCurrentPage(final String title) {
+        final Pattern pattern = Pattern.compile("(\\d+)");
+        final Matcher matcher = pattern.matcher(title);
+        matcher.find();
+        return Integer.parseInt(matcher.group());
+    }
+
+    private int getTotalPages() {
+        // calculate and return the total number of pages needed to display all players
+        int totalPlayers = Bukkit.getOnlinePlayers().size();
+        return (int) Math.ceil(totalPlayers / (double) ITEMS_PER_PAGE);
+    }
+
+    private void openPage(final int pageNumber) {
+
+        final Inventory inventory = Bukkit.createInventory(this.selectedBy, 54, "Player Inventory Checker (Page " + (pageNumber) + ")");
+
+        int startIndex = (pageNumber - 1) * ITEMS_PER_PAGE;
+        int endIndex = startIndex + ITEMS_PER_PAGE;
+        final List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
+        int totalPlayers = players.size();
+
+        for (int i = startIndex; i < endIndex && i < totalPlayers; i++)
+            inventory.addItem(OnPlayerJoin.getHeadCache().get(players.get(i)));
+
+        final ItemStack next = this.createItemStack(Material.ARROW, NEXT_PAGE, null);
+        inventory.setItem(inventory.getSize() - 5, next);
+
+        final ItemStack back = this.createItemStack(Material.ARROW, PREVIOUS_PAGE, null);
+        inventory.setItem(inventory.getSize() - 9, back);
+
+        this.selectedBy.openInventory(inventory);
     }
 
     // Opening the second GUI after selecting the player and displaying all available backups
@@ -151,12 +226,12 @@ public class PlayerInventory implements Listener, SubCommand {
         final Inventory secondInv = Bukkit.createInventory(this.selectedBy, invSize, "Backup(s) of " + this.selectedPlayer.getName());
         final String[] files = PlayerFolder.fileNames(this.selectedPlayer);
 
-        for (int i = 0; i < backupCount; i++) {
+        final ItemStack item = new ItemStack(Material.CHEST, 1);
+        final ItemMeta meta = item.getItemMeta();
 
-            final ItemStack item = new ItemStack(Material.CHEST, 1);
-            final ItemMeta meta = item.getItemMeta();
+        for (String file : files) {
 
-            meta.setDisplayName(files[i]);
+            meta.setDisplayName(file);
             item.setItemMeta(meta);
 
             secondInv.addItem(item);
@@ -164,7 +239,6 @@ public class PlayerInventory implements Listener, SubCommand {
 
         this.selectedBy.openInventory(secondInv);
     }
-
 
     // Opening the last GUI based on the selected backup from the previous step, and displaying all items
     private void stepThree() {
@@ -176,10 +250,11 @@ public class PlayerInventory implements Listener, SubCommand {
         final FileConfiguration f = YamlConfiguration.loadConfiguration(this.backupFile);
 
         final ItemStack[] invContent = InventoryToBase64.fromBase64(f.getString("inventory"));
-        final ItemStack[] armorContent = InventoryToBase64.fromBase64(f.getString("armor"));
 
         for (ItemStack item : invContent)
             lastInv.addItem(item);
+
+        final ItemStack[] armorContent = InventoryToBase64.fromBase64(f.getString("armor"));
 
         for (ItemStack item : armorContent)
             lastInv.addItem(item);
@@ -191,9 +266,28 @@ public class PlayerInventory implements Listener, SubCommand {
         this.selectedBy.openInventory(lastInv);
     }
 
+    public ItemStack createSkull(Player onlinePlayer) {
+
+        final boolean isNewVersion = Arrays.stream(Material.values()).anyMatch(material -> material.name().equals("PLAYER_HEAD"));
+        final Material type = Material.matchMaterial(isNewVersion ? "PLAYER_HEAD" : "SKULL_ITEM");
+        final ItemStack skull = new ItemStack(type, 1);
+
+        if (!isNewVersion)
+            skull.setDurability((short) 3);
+
+        final SkullMeta meta = (SkullMeta) skull.getItemMeta();
+        meta.setOwner(onlinePlayer.getName());
+        meta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + onlinePlayer.getName());
+        final List<String> lore = new ArrayList<>(Collections.singletonList(ChatColor.WHITE + "Backups Available: " + ChatColor.AQUA + PlayerFolder.backupCount(onlinePlayer)));
+        meta.setLore(lore);
+        skull.setItemMeta(meta);
+
+        return skull;
+    }
+
     private ItemStack createItemStack(final Material material, final String name, final List<String> lore) {
 
-        final ItemStack item = new ItemStack(material);
+        final ItemStack item = new ItemStack(material, 1);
         final ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(name);

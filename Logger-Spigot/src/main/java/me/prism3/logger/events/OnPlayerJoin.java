@@ -1,6 +1,7 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.commands.subcommands.PlayerInventory;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.events.plugindependent.OnViaVer;
@@ -15,18 +16,22 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.net.InetSocketAddress;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static me.prism3.logger.utils.Data.*;
 
 public class OnPlayerJoin implements Listener {
 
     private final Main main = Main.getInstance();
+
+    private static final Map<String, ItemStack> headCache = new ConcurrentHashMap<>();
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(final PlayerJoinEvent event) {
@@ -35,6 +40,13 @@ public class OnPlayerJoin implements Listener {
 
             SQLiteDataRegistration.insertRegistration(event.getPlayer());
             new OnPlayerRegister();
+        }
+
+        if (isPlayerDeathBackup && !headCache.containsKey(event.getPlayer().getName())) {
+            System.out.println("1");
+
+            headCache.put(event.getPlayer().getName(), new PlayerInventory().createSkull(event.getPlayer()));
+
         }
 
         if (Data.isViaVersion && ViaVersionUtil.isAllowed)
@@ -113,4 +125,6 @@ public class OnPlayerJoin implements Listener {
             } catch (final Exception e) { e.printStackTrace(); }
         }
     }
+
+    public static Map<String, ItemStack> getHeadCache() { return headCache; }
 }
