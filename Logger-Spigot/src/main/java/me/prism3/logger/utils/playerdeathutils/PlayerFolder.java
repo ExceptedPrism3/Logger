@@ -13,6 +13,7 @@ import static me.prism3.logger.utils.Data.allowedBackups;
 public class PlayerFolder {
 
     private final SimpleDateFormat filenameDateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+
     private File playerFile;
 
     // Create the backup file for the appropriate player
@@ -43,22 +44,22 @@ public class PlayerFolder {
     }
 
     // Counts the total backup files of a player
-    public static int backupCount(final Player player) {
+    public static int backupCount(final String playerName) {
 
-        final File backupFolder = new File(FileHandler.getPlayerDeathBackupLogFolder(), player.getName());
+        final File backupFolder = new File(FileHandler.getPlayerDeathBackupLogFolder(), playerName);
         final File[] files = backupFolder.listFiles(File::isFile);
 
         return files == null ? 0 : files.length;
     }
 
     // Stores all backup files names
-    public static String[] fileNames(final Player player) {
+    public static String[] fileNames(final String playerName) {
 
-        final int backupCount = backupCount(player);
+        final int backupCount = backupCount(playerName);
 
         if (backupCount == 0) return new String[0];
 
-        final File dir = new File(FileHandler.getPlayerDeathBackupLogFolder(), player.getName());
+        final File dir = new File(FileHandler.getPlayerDeathBackupLogFolder(), playerName);
         final String[] fileNames = dir.list();
 
         if (fileNames == null) return new String[0];
@@ -72,8 +73,8 @@ public class PlayerFolder {
     }
 
     // Check if it's allowed to make a new backup file
-    public boolean isAllowed(final Player player) {
-        return backupCount(player) < allowedBackups; // We did '<' since backCount method starts at 0
+    public boolean isAllowed(final String playerName) {
+        return backupCount(playerName) < allowedBackups; // We did '<' since backCount method starts at 0
     }
 
     public File getPlayerFile() { return this.playerFile; }

@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import static me.prism3.logger.utils.Data.fileDeletion;
+import static me.prism3.logger.utils.Data.version;
 
 public class FileHandler {
 
@@ -460,8 +461,8 @@ public class FileHandler {
 //            if (WorldGuardUtil.isAllowed) worldGuardFolder.mkdir();
 
             // Version Exception Part
-            if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFolder.mkdir();
-            if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_11_R1)) totemUndyingFolder.mkdir();
+            if (version.isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFolder.mkdir();
+            if (version.isAtLeast(NmsVersions.v1_11_R1)) totemUndyingFolder.mkdir();
 
             // Custom Part
             manualFolder.mkdir();
@@ -578,8 +579,8 @@ public class FileHandler {
 //            if (WorldGuardUtil.isAllowed) worldGuardFile.createNewFile();
 
             // Version Exception Part
-            if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFile.createNewFile();
-            if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_11_R1)) totemUndyingFile.createNewFile();
+            if (version.isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFile.createNewFile();
+            if (version.isAtLeast(NmsVersions.v1_11_R1)) totemUndyingFile.createNewFile();
 
             // Custom Part
             manualFile.createNewFile();

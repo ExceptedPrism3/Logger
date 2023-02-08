@@ -7,7 +7,6 @@ import me.prism3.logger.events.*;
 import me.prism3.logger.events.commands.OnCommand;
 import me.prism3.logger.events.inventories.OnChestInteraction;
 import me.prism3.logger.events.inventories.OnCraft;
-import me.prism3.logger.serverside.OnAdvancement;
 import me.prism3.logger.events.inventories.OnFurnace;
 import me.prism3.logger.events.misc.*;
 import me.prism3.logger.events.spy.OnAnvilSpy;
@@ -21,6 +20,8 @@ import me.prism3.logger.serverside.*;
 import me.prism3.logger.utils.enums.NmsVersions;
 import me.prism3.loggercore.database.data.Options;
 import me.prism3.loggercore.database.data.Settings;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -34,8 +35,14 @@ public class Data {
     // Date Format
     public static DateTimeFormatter dateTimeFormatter;
 
-    // String
+    // Version Related
     public static String pluginVersion;
+    public static String configVersion;
+    public static NmsVersions version;
+    public static boolean isNewVersion;
+    public static Material type;
+
+    // String
     public static String serverName;
     public static String gameModeConf;
     public static String langPath;
@@ -45,7 +52,6 @@ public class Data {
     public static String pluginPrefix;
     public static String resourceAPIChecker;
     public static String resourceLink;
-    public static String configVersion;
 
     // List<String>
     public static List<String> commandsToBlock;
@@ -104,7 +110,6 @@ public class Data {
 
     public void initializeStrings() {
 
-        pluginVersion = this.main.getDescription().getVersion();
         serverName = this.main.getConfig().getString("Server-Name");
         gameModeConf = this.main.getConfig().getString("Game-Mode");
         langPath = "messages";
@@ -114,7 +119,6 @@ public class Data {
         pluginPrefix = this.main.getConfig().getString("Plugin-Prefix");
         resourceAPIChecker = "https://api.spigotmc.org/legacy/update.php?resource=94236/";
         resourceLink = "https://www.spigotmc.org/resources/logger-1-7-1-19.94236/";
-        configVersion = this.main.getConfig().getString("Config-Version", "");
     }
 
     public void initializeDatabaseCredentials() {
@@ -196,13 +200,13 @@ public class Data {
         loggerReload = "logger.reload";
     }
 
-    public void commandsInitializer() {
+    public void initializeCommands() {
 
         this.main.getCommand("logger").setExecutor(new CommandManager());
         //this.main.getCommand("loggerget").setExecutor(new Chat());
     }
 
-    public void eventInitializer() {
+    public void initializeEvents() {
 
         if (this.main.getConfig().getBoolean("Log-Player.Chat"))
             this.main.getServer().getPluginManager().registerEvents(new OnPlayerChat(), this.main);
@@ -330,10 +334,10 @@ public class Data {
             this.main.getServer().getPluginManager().registerEvents(new ServerAddress(), this.main);
 
         // Version Exceptions
-        if (this.main.getVersion().isAtLeast(NmsVersions.v1_13_R1) && this.main.getConfig().getBoolean("Log-Version-Exceptions.Wood-Stripping"))
+        if (version.isAtLeast(NmsVersions.v1_13_R1) && this.main.getConfig().getBoolean("Log-Version-Exceptions.Wood-Stripping"))
                 this.main.getServer().getPluginManager().registerEvents(new OnWoodStripping(), this.main);
 
-        if (this.main.getVersion().isAtLeast(NmsVersions.v1_9_R1) && this.main.getConfig().getBoolean("Log-Version-Exceptions.Totem-of-Undying"))
+        if (version.isAtLeast(NmsVersions.v1_9_R1) && this.main.getConfig().getBoolean("Log-Version-Exceptions.Totem-of-Undying"))
             this.main.getServer().getPluginManager().registerEvents(new OnTotemUse(), this.main);
 
         // Spy Features
@@ -349,10 +353,10 @@ public class Data {
         if (this.main.getConfig().getBoolean("Spy-Features.Sign-Spy.Enable"))
             this.main.getServer().getPluginManager().registerEvents(new OnSignSpy(), this.main);
 
-        this.dependentEventInitializer();
+        this.initializeDependentEvents();
     }
 
-    private void dependentEventInitializer() {
+    private void initializeDependentEvents() {
 
         EssentialsUtil.getEssentialsHook();
 
@@ -371,5 +375,23 @@ public class Data {
         ViaVersionUtil.getViaVersionHook();
 
 //        WorldGuardUtil.getWorldGuardHook();
+    }
+
+    public void initializeVersionOptions() {
+
+        pluginVersion = this.main.getDescription().getVersion();
+
+        configVersion = this.main.getConfig().getString("Config-Version", "");
+
+        version = NmsVersions.valueOf(Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3]);
+
+        if (version.isAtLeast(NmsVersions.v1_13_R1)) {
+
+            type = Material.PLAYER_HEAD;
+            isNewVersion = true;
+        } else {
+            type = Material.matchMaterial("SKULL_ITEM");
+            isNewVersion = false;
+        }
     }
 }

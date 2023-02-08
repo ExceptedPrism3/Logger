@@ -44,7 +44,7 @@ public class OnPlayerDeath implements Listener {
 
         // ******
         // Player Inventory Backup Part
-        if (isPlayerDeathBackup && this.playerDeathBackup.isAllowed(player)) {
+        if (isPlayerDeathBackup && this.playerDeathBackup.isAllowed(player.getName())) {
 
             this.playerDeathBackup.create(event.getEntity());
 

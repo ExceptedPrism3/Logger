@@ -6,14 +6,12 @@ import me.prism3.logger.discord.Discord;
 import me.prism3.logger.serverside.Start;
 import me.prism3.logger.serverside.Stop;
 import me.prism3.logger.utils.*;
-import me.prism3.logger.utils.enums.NmsVersions;
 import me.prism3.logger.utils.manager.ConfigManager;
 import me.prism3.logger.utils.manager.DiscordManager;
 import me.prism3.logger.utils.manager.MessagesManager;
 import me.prism3.logger.utils.updater.PluginUpdater;
 import me.prism3.loggercore.database.AbstractDataSource;
 import me.prism3.loggercore.database.datasource.SQLite;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,19 +23,13 @@ import static me.prism3.logger.utils.Data.*;
 
 public class Main extends JavaPlugin {
 
-    private static Main instance;
-
-    private AbstractDataSource database;
-
-    private AbstractDataSource sqLite;
-
-    private SQLiteRegistration sqLiteReg;
-
-    private DiscordManager discordFile;
-
-    private final NmsVersions version = NmsVersions.valueOf(Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3]);
-
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+
+    private static Main instance;
+    private AbstractDataSource database;
+    private AbstractDataSource sqLite;
+    private SQLiteRegistration sqLiteReg;
+    private DiscordManager discordFile;
 
     @Override
     public void onEnable() {
@@ -123,8 +115,9 @@ public class Main extends JavaPlugin {
         data.initializePermissionStrings();
         data.initializeDatabaseCredentials();
         data.initializeOptions();
-        data.eventInitializer();
-        data.commandsInitializer();
+        data.initializeVersionOptions();
+        data.initializeEvents();
+        data.initializeCommands();
     }
 
     private void databaseSetup() {
@@ -159,8 +152,6 @@ public class Main extends JavaPlugin {
     public static Main getInstance() { return instance; }
 
     public SQLiteRegistration getSqLiteReg() { return this.sqLiteReg; }
-
-    public NmsVersions getVersion() { return this.version; }
 
     public Discord getDiscord() { return Discord.getInstance(); }
 

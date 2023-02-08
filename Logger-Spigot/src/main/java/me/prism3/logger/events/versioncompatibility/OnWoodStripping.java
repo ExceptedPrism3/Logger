@@ -49,7 +49,7 @@ public class OnWoodStripping implements Listener {
         axes.add(Material.IRON_AXE);
         axes.add(Material.GOLDEN_AXE);
         axes.add(Material.DIAMOND_AXE);
-        if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_16_R1))
+        if (version.isAtLeast(NmsVersions.v1_16_R1))
             axes.add(Material.NETHERITE_AXE);
     }
 

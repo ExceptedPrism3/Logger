@@ -34,14 +34,14 @@ public class SpawnEgg implements Listener {
 
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.hasItem()) {
 
-            if (this.main.getVersion().isAtLeast(NmsVersions.v1_8_R1) && event.getItem().getType().name().contains("MONSTER_EGG")) {
+            if (version.isAtLeast(NmsVersions.v1_8_R1) && event.getItem().getType().name().contains("MONSTER_EGG")) {
 
                 final SpawnEggMeta mob = (SpawnEggMeta) event.getItem().getItemMeta();
                 final EntityType mobType = mob.getSpawnedType();
 
                 this.initializeLog(event.getPlayer(), mobType.toString(), event.getClickedBlock().getX(), event.getClickedBlock().getY(), event.getClickedBlock().getZ());
 
-            } else if (this.main.getVersion().isAtLeast(NmsVersions.v1_13_R1) && event.getItem().getType().name().contains("SPAWN_EGG")) {
+            } else if (version.isAtLeast(NmsVersions.v1_13_R1) && event.getItem().getType().name().contains("SPAWN_EGG")) {
 
                 final UMaterial u = UMaterial.matchSpawnEgg(event.getItem());
 

@@ -41,12 +41,12 @@ public class OnChestInteraction implements Listener {
                 chestName = "EnderChest";
                 break;
             case SHULKER_BOX:
-                if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_11_R1)) {
+                if (version.isAtLeast(NmsVersions.v1_11_R1)) {
                     chestName = "ShulkerBox";
                 }
                 break;
             case BARREL:
-                if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_14_R1)) {
+                if (version.isAtLeast(NmsVersions.v1_14_R1)) {
                     chestName = "Barrel";
                 }
                 break;
