@@ -54,7 +54,7 @@ public final class Settings {
 
 
     public String getJdbcUrl() {
-        return "jdbc:" + this.dbType + "://" + this.dbHost + ":" + this.dbPort + "/" + this.dbType
+        return "jdbc:" + this.dbType + "://" + this.dbHost + ":" + this.dbPort + "/" + this.dbName
                 + "?AllowPublicKeyRetrieval=true?useSSL=false&jdbcCompliantTruncation=false";
 
     }

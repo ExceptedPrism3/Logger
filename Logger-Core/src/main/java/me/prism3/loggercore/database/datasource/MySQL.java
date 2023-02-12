@@ -19,14 +19,13 @@ public final class MySQL extends AbstractDataSource {
     private final DatabaseQueue databaseQueue;
 
     private final Settings settings;
-    public MySQL(@NotNull Settings settings, @NotNull Options options) {
+    public MySQL(@NotNull Settings settings, @NotNull Options options) throws ClassNotFoundException {
 
         super(options, MySQL.class.getName());
         this.options = options;
         this.settings = settings;
         this.createTables();
         this.databaseQueue = new DatabaseQueue(this);
-        this.logger.info("[LOGGER] MYSQL STARTED!");
     }
 
     public Connection getConnection() throws SQLException {
