@@ -12,6 +12,57 @@ public class Options {
     private boolean isViaVersion;
     private int dataDelete;
     private boolean isPlayerIPEnabled;
+
+    private String databasePassword;
+
+    private String databaseUsername;
+
+    private String databaseName;
+
+    private String databaseHost;
+
+    private int databasePort;
+
+    public String getDatabasePassword() {
+        return databasePassword;
+    }
+
+    public void setDatabasePassword(String databasePassword) {
+        this.databasePassword = databasePassword;
+    }
+
+    public String getDatabaseUsername() {
+        return databaseUsername;
+    }
+
+    public void setDatabaseUsername(String databaseUsername) {
+        this.databaseUsername = databaseUsername;
+    }
+
+    public String getDatabaseName() {
+        return databaseName;
+    }
+
+    public void setDatabaseName(String databaseName) {
+        this.databaseName = databaseName;
+    }
+
+    public String getDatabaseHost() {
+        return databaseHost;
+    }
+
+    public void setDatabaseHost(String databaseHost) {
+        this.databaseHost = databaseHost;
+    }
+
+    public int getDatabasePort() {
+        return databasePort;
+    }
+
+    public void setDatabasePort(int databasePort) {
+        this.databasePort = databasePort;
+    }
+
     private Map<String, Object> enabledLogs;
 
     public Map<String, Object> getEnabledLogs() {
@@ -101,6 +152,11 @@ public class Options {
                 ", isViaVersion=" + isViaVersion +
                 ", dataDelete=" + dataDelete +
                 ", isPlayerIPEnabled=" + isPlayerIPEnabled +
+                ", databasePassword='" + databasePassword + '\'' +
+                ", databaseUsername='" + databaseUsername + '\'' +
+                ", databaseName='" + databaseName + '\'' +
+                ", databaseHost='" + databaseHost + '\'' +
+                ", databasePort=" + databasePort +
                 ", enabledLogs=" + enabledLogs +
                 '}';
     }

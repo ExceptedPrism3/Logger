@@ -11,6 +11,7 @@ import me.prism3.logger.utils.manager.DiscordManager;
 import me.prism3.logger.utils.manager.MessagesManager;
 import me.prism3.logger.utils.updater.PluginUpdater;
 import me.prism3.loggercore.database.AbstractDataSource;
+import me.prism3.loggercore.database.datasource.MySQL;
 import me.prism3.loggercore.database.datasource.SQLite;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -59,7 +60,7 @@ public class Main extends JavaPlugin {
 
         new PluginUpdater(pluginVersion).checkForUpdates();
 
-//        this.databaseSetup();
+        this.databaseSetup();
 
         new ASCIIArt().art();
 
@@ -123,9 +124,16 @@ public class Main extends JavaPlugin {
     private void databaseSetup() {
 
         try {
+            if(isSqlite){
+                this.sqLite = new SQLite(Data.options, this.getDataFolder());
 
-            this.database = new SQLite(Data.options, this.getDataFolder());
-            this.sqLite = this.database;
+            }
+            if(databaseCredentials.isEnabled()){
+                this.database = new MySQL(Data.databaseCredentials, Data.options);
+
+
+            }
+
 
             if (isRegistration) {
 

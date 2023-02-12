@@ -128,7 +128,7 @@ public class OnChestInteraction implements Listener {
 
             try {
 
-//                Main.getInstance().getDatabase().getDatabaseQueue().queueChestInteraction(Data.serverName, playerName, playerUUID.toString(), coordinates, items, player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queueChestInteraction(Data.serverName, playerName, playerUUID.toString(), coordinates, items, player.hasPermission(loggerStaffLog));
 
             } catch (final Exception e) { e.printStackTrace(); }
         }
