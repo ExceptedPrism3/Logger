@@ -129,7 +129,8 @@ public class Data {
                 this.main.getConfig().getString("Database.Password"),
                 this.main.getConfig().getString("Database.Database"),
                 this.main.getConfig().getInt("Database.Port"),
-                true
+                this.main.getConfig().getBoolean("Database.Enable")
+
         );
     }
 

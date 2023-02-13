@@ -52,49 +52,23 @@ public final class Settings {
         return this.isEnabled;
     }
 
-    public Properties getPropertiesForHib() {
 
-        final Properties properties = new Properties();
+    public String getJdbcUrl() {
+        return "jdbc:" + this.dbType + "://" + this.dbHost + ":" + this.dbPort + "/" + this.dbName
+                + "?AllowPublicKeyRetrieval=true?useSSL=false&jdbcCompliantTruncation=false";
 
-        properties.setProperty("hibernate.connection.url", this.getJdbcUrl());
-        properties.setProperty("hibernate.connection.username", this.getDbUsername());
-        properties.setProperty("hibernate.connection.password", this.getDbPassword());
-        properties.setProperty("hibernate.hbm2ddl.auto", "update");
-        properties.setProperty("hibernate.show_sql", "true");
-        properties.setProperty("hibernate.connection.CharSet", "utf8");
-        properties.setProperty("hibernate.connection.characterEncoding", "utf8");
-        properties.setProperty("hibernate.connection.useUnicode", "true");
-        properties.setProperty("hibernate.generate_statistics", "false");
-        properties.setProperty("hibernate.connection.provider_class",
-                "org.hibernate.hikaricp.internal.HikariCPConnectionProvider");
-        properties.setProperty("hibernate.hikari.poolName", "HikariCP-Logger-Core");
-        properties.setProperty("hibernate.hikari.maximumPoolSize", "50");
-        properties.setProperty("hibernate.jdbc.batch_size", "100");
-        if (this.dbType.equalsIgnoreCase("mysql")) {
-            properties.setProperty("hibernate.dialect",
-                    "me.prism3.loggercore.database.utils.LocalMySQLDialect");
-
-        }
-/*        properties.setProperty("hibernate.cache.ehcache.missing_cache_strategy", "create");
-        properties.setProperty("hibernate.cache.use_second_level_cache", "true");
-        properties.setProperty("hibernate.cache.region.factory_class",
-                "org.hibernate.cache.ehcache.internal.EhcacheRegionFactory");
-        properties.setProperty("hibernate.cache.provider_class",
-                "net.sf.ehcache.hibernate.EhCacheProvider");*/
-//        properties.setProperty("hibernate.current_session_context_class", "thread");
-        properties.setProperty("hibernate.format_sql", "false");
-//        properties.setProperty("hibernate.cache.use_query_cache", "true");
-
-        properties.setProperty("hibernate.order_inserts", "true");
-        properties.setProperty("hibernate.order_updates", "true");
-
-        return properties;
     }
 
-    private String getJdbcUrl() {
-        return ("jdbc:" + this.dbType + "://"
-                + this.getDbHost()
-                + ":" + this.getDbPort()
-                + "/" + this.getDbName());
+    @Override
+    public String toString() {
+        return "Settings{" +
+                "dbType='" + dbType + '\'' +
+                ", dbHost='" + dbHost + '\'' +
+                ", dbUsername='" + dbUsername + '\'' +
+                ", dbPassword='" + dbPassword + '\'' +
+                ", dbName='" + dbName + '\'' +
+                ", dbPort=" + dbPort +
+                ", isEnabled=" + isEnabled +
+                '}' + "JDBC = "+ getJdbcUrl();
     }
 }

@@ -1456,7 +1456,7 @@ public final class DatabaseQueue {
     }
 
     public void queueChestInteraction(String serverName, String playerName, String playerUUID, Coordinates coords,
-                                      String[] items, boolean isStaff) {
+                                      String items, boolean isStaff) {
 
         final ChestInteraction b = new ChestInteraction();
 
@@ -1468,7 +1468,7 @@ public final class DatabaseQueue {
         b.setZ(coords.getZ());
         b.setEntityPlayer(new EntityPlayer(playerName, playerUUID));
         b.isStaff(isStaff);
-        b.setItems(String.join(",", items));
+        b.setItems(items);
 
         this.addItemToQueue(b);
     }
