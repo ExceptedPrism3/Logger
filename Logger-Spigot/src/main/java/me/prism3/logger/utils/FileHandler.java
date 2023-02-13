@@ -586,6 +586,8 @@ public class FileHandler {
             manualFile.createNewFile();
 
         } catch (final IOException e) { e.printStackTrace(); }
+
+        this.deleteFiles(dataFolder);
     }
 
     public static File getChatLogFile() { return chatLogFile; }
@@ -727,7 +729,7 @@ public class FileHandler {
         }
     }
 
-    public void deleteFiles(final File dataFolder) {
+    private void deleteFiles(final File dataFolder) {
 
         if (fileDeletion <= 0) return;
 

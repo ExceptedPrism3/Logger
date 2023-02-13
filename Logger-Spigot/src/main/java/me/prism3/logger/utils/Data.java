@@ -164,7 +164,7 @@ public class Data {
         tpsMedium = this.main.getConfig().getInt("TPS.Medium");
         tpsCritical = this.main.getConfig().getInt("TPS.Critical");
         sqliteDataDel = this.main.getConfig().getInt("SQLite.Data-Deletion");
-        allowedBackups = this.main.getConfig().getInt("Player-Death-Backup.Max-Backup");
+        allowedBackups = Math.min(this.main.getConfig().getInt("Player-Death-Backup.Max-Backup"), 53);
         playerCountNumber = this.main.getConfig().getInt("Player-Count");
         playerCountChecker = this.main.getConfig().getInt("Checkers.Player-Count");
     }

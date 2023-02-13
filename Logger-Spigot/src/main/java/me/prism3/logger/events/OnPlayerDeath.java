@@ -33,7 +33,6 @@ import static me.prism3.logger.utils.Data.isStaffEnabled;
 public class OnPlayerDeath implements Listener {
 
     private final Main main = Main.getInstance();
-    private final PlayerFolder playerDeathBackup = new PlayerFolder();
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDeath(final PlayerDeathEvent event) throws IOException, InvalidConfigurationException {
@@ -44,25 +43,28 @@ public class OnPlayerDeath implements Listener {
 
         // ******
         // Player Inventory Backup Part
-        if (isPlayerDeathBackup && this.playerDeathBackup.isAllowed(player.getName())) {
+        if (isPlayerDeathBackup) {
 
-            this.playerDeathBackup.create(event.getEntity());
+            final PlayerFolder playerDeathBackup = new PlayerFolder(player);
 
-            final File f1 = this.playerDeathBackup.getPlayerFile(); // Gets the file location
-            final FileConfiguration f = YamlConfiguration.loadConfiguration(f1); // Loads the file with Yaml functions
-            f.load(f1); // Loads the file for use
+            if (playerDeathBackup.isAllowed()) {
 
-            final ItemStack[] invContent = Arrays.stream(event.getEntity().getInventory().getContents()) // Turn the contents array into a Stream.
-                    .map(i -> i == null ? new ItemStack(Material.AIR) : i) // Map replaces the element with something else, so here if the item is null, we replace it with air, and if it isn't null, we set it to itself.
-                    .toArray(ItemStack[]::new); // Turn it back into an array.
+                final File f1 = playerDeathBackup.getPlayerFile(); // Gets the file location
+                final FileConfiguration f = YamlConfiguration.loadConfiguration(f1); // Loads the file with Yaml functions
+                f.load(f1); // Loads the file for use
 
-            final ItemStack[] armorContent = Arrays.stream(event.getEntity().getInventory().getArmorContents()) // Turn the contents array into a Stream.
-                    .map(i -> i == null ? new ItemStack(Material.AIR) : i) // Map replaces the element with something else, so here if the item is null, we replace it with air, and if it isn't null, we set it to itself.
-                    .toArray(ItemStack[]::new); // Turn it back into an array.
+                final ItemStack[] invContent = Arrays.stream(event.getEntity().getInventory().getContents()) // Turn the contents array into a Stream.
+                        .map(i -> i == null ? new ItemStack(Material.AIR) : i) // Map replaces the element with something else, so here if the item is null, we replace it with air, and if it isn't null, we set it to itself.
+                        .toArray(ItemStack[]::new); // Turn it back into an array.
 
-            f.set("inventory", InventoryToBase64.toBase64(invContent)); // Converts the Player's Inventory into base64
-            f.set("armor", InventoryToBase64.toBase64(armorContent)); // Converts the Player's Armor into base64
-            f.save(f1); // Save and Closes the file after editing
+                final ItemStack[] armorContent = Arrays.stream(event.getEntity().getInventory().getArmorContents()) // Turn the contents array into a Stream.
+                        .map(i -> i == null ? new ItemStack(Material.AIR) : i) // Map replaces the element with something else, so here if the item is null, we replace it with air, and if it isn't null, we set it to itself.
+                        .toArray(ItemStack[]::new); // Turn it back into an array.
+
+                f.set("inventory", InventoryToBase64.toBase64(invContent)); // Converts the Player's Inventory into base64
+                f.set("armor", InventoryToBase64.toBase64(armorContent)); // Converts the Player's Armor into base64
+                f.save(f1); // Save and Closes the file after editing
+            }
         }
         // ******
 

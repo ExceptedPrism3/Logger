@@ -54,8 +54,7 @@ public class Main extends JavaPlugin {
         if (isLogToFiles && isSqlite)
             Log.warning("FileUpdater and SQLite logging are both enabled, this might impact your Server's Performance!");
 
-        final FileHandler fileHandler = new FileHandler(this.getDataFolder());
-        fileHandler.deleteFiles(this.getDataFolder());
+        new FileHandler(this.getDataFolder());
 
         new PluginUpdater(pluginVersion).checkForUpdates();
 
@@ -76,7 +75,7 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
 
-        if (MessagesManager.getInstance() == null)
+        if (MessagesManager.getInstance() == null || MessagesManager.getInstance().get() == null)
             return;
 
         new Stop().run();

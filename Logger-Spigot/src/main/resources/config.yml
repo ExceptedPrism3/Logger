@@ -133,6 +133,7 @@ Player-Level: 100
 Game-Mode: Creative
 
 # Player Death Backup System
+# Max is 53 + the player head that's a full double chests
 Player-Death-Backup:
   Enabled: true
   Max-Backup: 7

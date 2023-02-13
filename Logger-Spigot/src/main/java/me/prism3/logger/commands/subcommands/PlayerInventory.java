@@ -26,6 +26,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static me.prism3.logger.utils.Data.*;
@@ -36,11 +37,11 @@ public class PlayerInventory implements Listener, SubCommand {
     private static final String NEXT_PAGE = ChatColor.GREEN + "Next Page";
     private static final String PREVIOUS_PAGE = ChatColor.RED + "Previous Page";
 
+
     private File backupFile;
     private Inventory[] inventories;
-    private List<Player> onlinePlayers;
-    private int pageCount;
-    private OfflinePlayer offlinePlayer;
+    private List<OfflinePlayer> deadPlayers;
+    private OfflinePlayer selectedPlayer;
 
     @Override
     public String getName() { return "playerinventory"; }
@@ -64,51 +65,51 @@ public class PlayerInventory implements Listener, SubCommand {
 
         if (args.length == 1)
             this.mainMenu(staff);
-        else {
+        /*else {
             final OfflinePlayer selectedHooman = Bukkit.getOfflinePlayer(args[1]);
             this.backupMenu(selectedHooman.getName(), staff);
-            this.offlinePlayer = selectedHooman;
-        }
+        }*/
     }
 
     @Override
     public List<String> getSubCommandsArgs(CommandSender commandSender, String[] args) { return Collections.emptyList(); }
 
-    // Opening the first GUI with all online players and their available backups
+    // Opens the first Main GUI with all players that have died
     private void mainMenu(final Player staff) {
 
         final int itemsPerRow = 9;
-        final int playerCount = Bukkit.getOnlinePlayers().size();
-        this.pageCount = (int) Math.ceil((double) playerCount / (itemsPerRow * 6));
 
         CompletableFuture.runAsync(() -> {
 
-            final List<Player> onlinePlayers = new ArrayList<>(Bukkit.getOnlinePlayers());
+            final List<OfflinePlayer> deadPlayers = Arrays.stream(FileHandler.getPlayerDeathBackupLogFolder().list())
+                    .map(Bukkit::getOfflinePlayer)
+                    .filter(OfflinePlayer::hasPlayedBefore)
+                    .collect(Collectors.toList());
 
-            if (this.inventories == null || this.onlinePlayers == null || this.onlinePlayers.size() != onlinePlayers.size()) {
-                this.inventories = IntStream.range(0, this.pageCount)
+            final int numPages = (int) Math.ceil((double) deadPlayers.size() / (itemsPerRow * 6));
+
+            if (this.inventories == null || this.deadPlayers == null || this.deadPlayers.size() != deadPlayers.size()) {
+                this.inventories = IntStream.range(0, numPages)
                         .mapToObj(i -> Bukkit.createInventory(staff,
-                                (int) Math.ceil((double) Math.min(playerCount - i * itemsPerRow * 6, itemsPerRow * 6) / itemsPerRow) * 9,
+                                (int) Math.ceil((double) Math.min(deadPlayers.size() - i * itemsPerRow * 6, itemsPerRow * 6) / itemsPerRow) * 9,
                                 "Player Inventory Checker (Page " + (i + 1) + ")"))
                         .toArray(Inventory[]::new);
+                this.deadPlayers = deadPlayers;
 
-                this.onlinePlayers = onlinePlayers;
+                IntStream.range(0, numPages)
+                        .forEach(i -> fillInventory(this.inventories[i], this.deadPlayers.subList(i * itemsPerRow * 6, Math.min(this.deadPlayers.size(), (i + 1) * itemsPerRow * 6)), itemsPerRow, i, numPages));
 
-                IntStream.range(0, this.pageCount)
-                        .forEach(i -> fillInventory(this.inventories[i], this.onlinePlayers.subList(i * itemsPerRow * 6, Math.min(this.onlinePlayers.size(), (i + 1) * itemsPerRow * 6)), itemsPerRow, i, this.pageCount));
             }
-
             staff.openInventory(this.inventories[0]);
         });
     }
 
-    private void fillInventory(Inventory inventory, List<Player> onlinePlayers, int itemsPerRow, int currentPage, int totalPages) {
+    private void fillInventory(Inventory inventory, List<OfflinePlayer> onlinePlayers, int itemsPerRow, int currentPage, int totalPages) {
 
         final int[] count = {0};
 
         onlinePlayers.stream()
-                .sequential()
-                .map(this::createSkull)
+                .map(onlinePlayer -> createSkull(onlinePlayer.getName(), null))
                 .forEach(skull -> {
                     inventory.setItem(count[0], skull);
                     count[0]++;
@@ -119,13 +120,13 @@ public class PlayerInventory implements Listener, SubCommand {
         if (onlinePlayers.size() >= itemsPerRow * 6) {
             // Add Next Page Button
             if (currentPage < totalPages - 1) {
-                final ItemStack next = this.createItemStack(Material.ARROW, NEXT_PAGE, null);
+                final ItemStack next = createItemStack(Material.ARROW, NEXT_PAGE, null);
                 inventory.setItem(inventory.getSize() - 5, next);
             }
 
             // Add Previous Page Button
             if (currentPage > 0) {
-                final ItemStack previous = this.createItemStack(Material.ARROW, PREVIOUS_PAGE, null);
+                final ItemStack previous = createItemStack(Material.ARROW, PREVIOUS_PAGE, null);
                 inventory.setItem(inventory.getSize() - 9, previous);
             }
         }
@@ -141,12 +142,13 @@ public class PlayerInventory implements Listener, SubCommand {
         event.setCancelled(true);
 
         final ItemStack clickedStack = event.getCurrentItem();
+
         if (clickedStack == null || !clickedStack.hasItemMeta())
             return;
 
         final String clickedItem = ChatColor.stripColor(clickedStack.getItemMeta().getDisplayName());
         final Player staff = (Player) event.getWhoClicked();
-        int currentPage = this.getCurrentPage(event.getView().getTitle());
+        final int currentPage = this.getCurrentPage(event.getView().getTitle());
 
         switch (clickedItem) {
             case "Next Page":
@@ -172,72 +174,46 @@ public class PlayerInventory implements Listener, SubCommand {
 
     private void handleClick(String clickedItem, ItemStack clickedStack, Player staff) {
 
-        if (!Bukkit.getOnlinePlayers().contains(this.offlinePlayer)) {
-
-            for (String list : PlayerFolder.fileNames(this.offlinePlayer.getName())) {
-                if (list.equalsIgnoreCase(clickedItem)) {
-                    this.backupFile = new File(FileHandler.getPlayerDeathBackupLogFolder(), this.offlinePlayer + File.separator + list);
-                    this.restoreMenu(this.offlinePlayer.getName(), staff);
-                    return;
-                }
-            }
-        }
-
-        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+        boolean isMatched = false;
+        
+        for (String selectedPlayerBackupFolder : FileHandler.getPlayerDeathBackupLogFolder().list()) {
             switch (clickedStack.getType()) {
                 case CHEST:
-                    for (String list : PlayerFolder.fileNames(onlinePlayer.getName())) {
-                        if (list.equalsIgnoreCase(clickedItem)) {
-                            this.backupFile = new File(FileHandler.getPlayerDeathBackupLogFolder(), onlinePlayer.getName() + File.separator + list);
-                            this.restoreMenu(onlinePlayer.getName(), staff);
+                    for (String list : PlayerFolder.fileNames(selectedPlayerBackupFolder)) {
+                        if (PlayerFolder.formatFileName(list).equalsIgnoreCase(clickedItem)) {
+                            this.backupFile = new File(FileHandler.getPlayerDeathBackupLogFolder(), selectedPlayerBackupFolder + File.separator + list);
+                            this.restoreMenu(staff);
+                            isMatched = true;
                             return;
                         }
                     }
                     break;
                 case ENDER_CHEST:
-                    this.backupMenu(onlinePlayer.getName(), staff);
-                    return;
+                    this.backupMenu(this.selectedPlayer.getName(), staff);
+                    isMatched = true;
+                    break;
                 case EMERALD_BLOCK:
-                    this.addItem(onlinePlayer, staff);
-                    return;
+                    this.addItem(staff);
+                    isMatched = true;
+                    break;
+                case REDSTONE_BLOCK:
+                    this.deleteFile(staff);
+                    isMatched = true;
+                    break;
                 default:
-                    if (clickedItem.equals(onlinePlayer.getName())) {
-                        this.backupMenu(onlinePlayer.getName(), staff);
+                    if (clickedItem.equals(selectedPlayerBackupFolder) && !clickedStack.getItemMeta().getLore().get(0).isEmpty()) {
+                        this.backupMenu(selectedPlayerBackupFolder, staff);
+                        this.selectedPlayer = Bukkit.getOfflinePlayer(selectedPlayerBackupFolder);
+                        isMatched = true;
                         return;
                     }
                     break;
             }
+            if (isMatched) {
+                isMatched = false;
+                break;
+            }
         }
-    }
-
-    private int getCurrentPage(final String title) {
-        final Matcher matcher = Pattern.compile("(\\d+)").matcher(title);
-        return matcher.find() ? Integer.parseInt(matcher.group()) : -1;
-    }
-
-    private int getTotalPages() {
-        // calculate and return the total number of pages needed to display all players
-        int totalPlayers = Bukkit.getOnlinePlayers().size();
-        return (int) Math.ceil(totalPlayers / (double) ITEMS_PER_PAGE);
-    }
-
-    private void openPage(final int pageNumber, final Player staff) {
-
-        final Inventory inventory = Bukkit.createInventory(staff, 54, "Player Inventory Checker (Page " + (pageNumber) + ")");
-
-        int startIndex = (pageNumber - 1) * ITEMS_PER_PAGE;
-        int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, Bukkit.getOnlinePlayers().size());
-
-        Bukkit.getOnlinePlayers().stream().skip(startIndex).limit(endIndex - startIndex)
-                .forEach(player -> inventory.addItem(this.createSkull(player)));
-
-        final ItemStack next = this.createItemStack(Material.ARROW, NEXT_PAGE, null);
-        inventory.setItem(inventory.getSize() - 5, next);
-
-        final ItemStack back = this.createItemStack(Material.ARROW, PREVIOUS_PAGE, null);
-        inventory.setItem(inventory.getSize() - 9, back);
-
-        staff.openInventory(inventory);
     }
 
     // Opening the second GUI after selecting the player and displaying all available backups
@@ -262,7 +238,8 @@ public class PlayerInventory implements Listener, SubCommand {
 
         for (String file : files) {
 
-            meta.setDisplayName(file);
+            meta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + PlayerFolder.formatFileName(file));
+            meta.setLore(PlayerFolder.getDetails(selectedPlayer, file));
             item.setItemMeta(meta);
 
             secondInv.addItem(item);
@@ -272,11 +249,11 @@ public class PlayerInventory implements Listener, SubCommand {
     }
 
     // Opening the last GUI based on the selected backup from the previous step, and displaying all items
-    private void restoreMenu(final String selectedPlayerName, final Player staff) {
+    private void restoreMenu(final Player staff) {
 
         staff.closeInventory();
 
-        final Inventory lastInv = Bukkit.createInventory(staff, 54, "Inventory of " + selectedPlayerName);
+        final Inventory lastInv = Bukkit.createInventory(staff, 54, "Inventory of " + this.selectedPlayer.getName());
 
         final FileConfiguration f = YamlConfiguration.loadConfiguration(this.backupFile);
 
@@ -288,14 +265,19 @@ public class PlayerInventory implements Listener, SubCommand {
         for (ItemStack item : armorContent)
             lastInv.addItem(item);
 
-        lastInv.setItem(45, createItemStack(Material.ENDER_CHEST, ChatColor.RED + "Back", null));
+        final String selectedPlayerObjectName = this.selectedPlayer.getName();
+
+        lastInv.setItem(45, createItemStack(Material.ENDER_CHEST, ChatColor.AQUA + "Back", null));
+        lastInv.setItem(47, this.createSkull(selectedPlayerObjectName, PlayerFolder.getDetails(this.selectedPlayer.getName(), this.backupFile.getName())));
         lastInv.setItem(49, createItemStack(Material.EMERALD_BLOCK, ChatColor.AQUA + "Backup",
                 Collections.singletonList(ChatColor.RED + "Clears player's current Inventory!")));
+        lastInv.setItem(53, createItemStack(Material.REDSTONE_BLOCK, ChatColor.AQUA + "Delete",
+                Collections.singletonList(ChatColor.RED + "Delete the Backup file.")));
 
         staff.openInventory(lastInv);
     }
 
-    private ItemStack createSkull(final Player onlinePlayer) {
+    private ItemStack createSkull(final String playerName, final List<String> lores) {
 
         final ItemStack skull = new ItemStack(type, 1);
 
@@ -304,14 +286,9 @@ public class PlayerInventory implements Listener, SubCommand {
 
         final SkullMeta meta = (SkullMeta) skull.getItemMeta();
 
-        meta.setOwner(onlinePlayer.getName());
-
-        meta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + onlinePlayer.getName());
-
-        final List<String> lore = new ArrayList<>(Collections.singletonList(ChatColor.WHITE + "Backups Available: " + ChatColor.AQUA + PlayerFolder.backupCount(onlinePlayer.getName())));
-
-        meta.setLore(lore);
-
+        meta.setOwner(playerName);
+        meta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + playerName);
+        meta.setLore(lores != null ? lores : Collections.singletonList(ChatColor.WHITE + "Backups Available: " + ChatColor.AQUA + PlayerFolder.backupCount(playerName)));
         skull.setItemMeta(meta);
 
         return skull;
@@ -331,17 +308,68 @@ public class PlayerInventory implements Listener, SubCommand {
         return item;
     }
 
-    private void addItem(final Player selectedPlayer, final Player staff) {
+    private int getCurrentPage(final String title) {
+        final Matcher matcher = Pattern.compile("(\\d+)").matcher(title);
+        return matcher.find() ? Integer.parseInt(matcher.group()) : -1;
+    }
+
+    // Calculate and return the total number of pages needed to display all players
+    private int getTotalPages() {
+        return (int) Math.ceil(Arrays.stream(FileHandler.getPlayerDeathBackupLogFolder().list()).count() / (double) ITEMS_PER_PAGE);
+    }
+
+    private void openPage(final int pageNumber, final Player staff) {
+
+        final Inventory inventory = Bukkit.createInventory(staff, 54, "Player Inventory Checker (Page " + pageNumber + ")");
+
+        int startIndex = (pageNumber - 1) * ITEMS_PER_PAGE;
+        int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, FileHandler.getPlayerDeathBackupLogFolder().list().length);
+
+        Arrays.stream(FileHandler.getPlayerDeathBackupLogFolder().list(), startIndex, endIndex)
+                .map(Bukkit::getPlayer)
+                .filter(Objects::nonNull)
+                .forEach(player -> inventory.addItem(this.createSkull(player.getName(), null)));
+
+        final ItemStack next = this.createItemStack(Material.ARROW, NEXT_PAGE, null);
+        inventory.setItem(inventory.getSize() - 5, next);
+
+        final ItemStack back = this.createItemStack(Material.ARROW, PREVIOUS_PAGE, null);
+        inventory.setItem(inventory.getSize() - 9, back);
+
+        staff.openInventory(inventory);
+    }
+
+    private void addItem(final Player staff) {
+
+        if (!this.selectedPlayer.isOnline()) {
+
+            staff.closeInventory();
+            staff.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    pluginPrefix + "&cCould not restore the backup of " + this.selectedPlayer.getName() + " as his offline."));
+            return;
+        }
 
         final FileConfiguration f = YamlConfiguration.loadConfiguration(this.backupFile);
 
+        final Player playerOnline = Bukkit.getPlayer(this.selectedPlayer.getUniqueId());
+
         final ItemStack[] invContent = InventoryToBase64.fromBase64(f.getString("inventory"));
-        selectedPlayer.getInventory().setContents(invContent);
+        playerOnline.getInventory().setContents(invContent);
 
         final ItemStack[] armorContent = InventoryToBase64.fromBase64(f.getString("armor"));
-        selectedPlayer.getInventory().setArmorContents(armorContent);
+        playerOnline.getInventory().setArmorContents(armorContent);
 
         staff.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix + "Inventory Restored."));
-        selectedPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix + "&8&l[ &6&lYour inventory has been restored! &8&l]"));
+        playerOnline.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix + "&8&l[ &6&lYour inventory has been restored! &8&l]"));
+    }
+
+    // Deletes the selected backup file
+    private void deleteFile(final Player staff) {
+
+        if (this.backupFile != null && this.backupFile.exists()) {
+            this.backupFile.delete();
+            staff.closeInventory();
+            staff.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix + "&cThe backup file has been deleted."));
+        }
     }
 }
