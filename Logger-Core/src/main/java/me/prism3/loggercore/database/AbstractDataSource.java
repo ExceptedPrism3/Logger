@@ -31,6 +31,10 @@ public abstract class AbstractDataSource {
 
     protected abstract void createTables();
 
+    public Options getOptions(){
+        return this.options;
+    }
+
     public PreparedStatement getPlayerChatStsm(Connection connection) throws SQLException {
 
         return connection.prepareStatement("INSERT INTO player_chat (server_name, world, player_name, message," +

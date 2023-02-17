@@ -151,6 +151,7 @@ public final class DatabaseQueue {
             itemActionStsm.setString(10, itemAction.getItemActionType().name());
             itemActionStsm.setString(11, DataBaseUtils.formatInstant(itemAction.getDate()));
             itemActionStsm.setInt(12, itemAction.getAmount());
+            itemActionStsm.setString(13, itemAction.getEnchantment());
 
             itemActionStsm.addBatch();
         }
@@ -216,8 +217,7 @@ public final class DatabaseQueue {
             stsm.setInt(4, playerConnection.getX());
             stsm.setInt(5, playerConnection.getY());
             stsm.setInt(6, playerConnection.getZ());
-            if (playerConnection.getIp() != null)
-                stsm.setLong(7, playerConnection.getIp());
+            stsm.setLong(7, playerConnection.getIp());
             stsm.setBoolean(8, playerConnection.isStaff());
             stsm.setString(9, DataBaseUtils.formatInstant(playerConnection.getDate()));
             stsm.setString(10, playerConnection.getPlayerConnectionType().name());
@@ -997,9 +997,11 @@ public final class DatabaseQueue {
         p.setY(coords.getY());
         p.setZ(coords.getZ());
         p.setWorld(coords.getWorldName());
-        //TODO fix player ip
-        if (true) {
-            p.setIp(4L);
+
+
+
+        if (database.getOptions().isPlayerIPEnabled()) {
+            p.setIp(DataBaseUtils.convertIpToLong(ip));
         }
         p.setEntityPlayer(new EntityPlayer(playerName, playerUUID));
         p.isStaff(isStaff);
@@ -1009,13 +1011,16 @@ public final class DatabaseQueue {
     }
 
     public void queuePlayerLeave(String serverName, String playerName, String playerUUID, Coordinates coords,
-                                 boolean isStaff) {
+                                 InetSocketAddress ip,boolean isStaff) {
 
         final PlayerConnection p = new PlayerConnection();
 
         p.setDate(Instant.now());
         p.setServerName(serverName);
         p.setWorld(coords.getWorldName());
+        if (database.getOptions().isPlayerIPEnabled()) {
+            p.setIp(DataBaseUtils.convertIpToLong(ip));
+        }
         p.setX(coords.getX());
         p.setY(coords.getY());
         p.setZ(coords.getZ());
