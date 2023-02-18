@@ -156,6 +156,8 @@ public class FileHandler {
     // Custom Part
     private static File manualFile;
 
+    private static File dbFolder;
+
     public FileHandler(File dataFolder) {
 
         dataFolder.mkdir();
@@ -343,6 +345,9 @@ public class FileHandler {
         manualFolder = new File(logsFolder, "Manual");
         manualFile = new File(manualFolder, filenameDateFormat.format(date) + ".log");
 
+
+        dbFolder = new File(dataFolder, "databases");
+
         try {
 
             // Folder Handling
@@ -467,6 +472,7 @@ public class FileHandler {
             // Custom Part
             manualFolder.mkdir();
 
+            dbFolder.mkdir();
 
             // Files Handling
             // Player Side
@@ -707,6 +713,8 @@ public class FileHandler {
 
     // Custom Part
     public static File getManualFile() { return manualFile; }
+
+    public static File getDatabasesFolder() { return dbFolder; }
 
     public static void handleFileLog(String messagePath, Map<String, String> placeholders, File logFile) {
 

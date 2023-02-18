@@ -1,8 +1,10 @@
 package me.prism3.logger.commands.subcommands;
 
+import me.prism3.logger.Main;
 import me.prism3.logger.commands.SubCommand;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.Log;
+import me.prism3.logger.utils.db.PlayerInventoryDB;
 import me.prism3.logger.utils.playerdeathutils.InventoryToBase64;
 import me.prism3.logger.utils.playerdeathutils.PlayerFolder;
 import org.bukkit.Bukkit;
@@ -74,62 +76,31 @@ public class PlayerInventory implements Listener, SubCommand {
     @Override
     public List<String> getSubCommandsArgs(CommandSender commandSender, String[] args) { return Collections.emptyList(); }
 
-    // Opens the first Main GUI with all players that have died
-    private void mainMenu(final Player staff) {
+    private void mainMenu(Player staff) {
 
-        final int itemsPerRow = 9;
+        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
 
-        CompletableFuture.runAsync(() -> {
+            Inventory inv = Bukkit.createInventory(null, 54, "Player Inventory Checker (Page 1)");
+            Map<String, Integer> playerCounts = PlayerInventoryDB.getPlayerNameCounts();
 
-            final List<OfflinePlayer> deadPlayers = Arrays.stream(FileHandler.getPlayerDeathBackupLogFolder().list())
-                    .map(Bukkit::getOfflinePlayer)
-                    .filter(OfflinePlayer::hasPlayedBefore)
-                    .collect(Collectors.toList());
+            for (Map.Entry<String, Integer> entry : playerCounts.entrySet()) {
+                String playerName = entry.getKey();
+                int count = entry.getValue();
+                ItemStack head = new ItemStack(type, 1);
 
-            final int numPages = (int) Math.ceil((double) deadPlayers.size() / (itemsPerRow * 6));
+                if (!isNewVersion)
+                    head.setDurability((short) 3);
 
-            if (this.inventories == null || this.deadPlayers == null || this.deadPlayers.size() != deadPlayers.size()) {
-                this.inventories = IntStream.range(0, numPages)
-                        .mapToObj(i -> Bukkit.createInventory(staff,
-                                (int) Math.ceil((double) Math.min(deadPlayers.size() - i * itemsPerRow * 6, itemsPerRow * 6) / itemsPerRow) * 9,
-                                "Player Inventory Checker (Page " + (i + 1) + ")"))
-                        .toArray(Inventory[]::new);
-                this.deadPlayers = deadPlayers;
-
-                IntStream.range(0, numPages)
-                        .forEach(i -> fillInventory(this.inventories[i], this.deadPlayers.subList(i * itemsPerRow * 6, Math.min(this.deadPlayers.size(), (i + 1) * itemsPerRow * 6)), itemsPerRow, i, numPages));
-
+                SkullMeta meta = (SkullMeta) head.getItemMeta();
+                meta.setOwningPlayer(Bukkit.getOfflinePlayer(playerName));
+                meta.setDisplayName(playerName);
+                meta.setLore(Collections.singletonList("Count: " + count));
+                head.setItemMeta(meta);
+                inv.addItem(head);
             }
-            staff.openInventory(this.inventories[0]);
+
+            staff.openInventory(inv);
         });
-    }
-
-    private void fillInventory(Inventory inventory, List<OfflinePlayer> onlinePlayers, int itemsPerRow, int currentPage, int totalPages) {
-
-        final int[] count = {0};
-
-        onlinePlayers.stream()
-                .map(onlinePlayer -> createSkull(onlinePlayer.getName(), null))
-                .forEach(skull -> {
-                    inventory.setItem(count[0], skull);
-                    count[0]++;
-                    if (count[0] % itemsPerRow == 0) {
-                        count[0] += itemsPerRow - 9;
-                    }
-                });
-        if (onlinePlayers.size() >= itemsPerRow * 6) {
-            // Add Next Page Button
-            if (currentPage < totalPages - 1) {
-                final ItemStack next = createItemStack(Material.ARROW, NEXT_PAGE, null);
-                inventory.setItem(inventory.getSize() - 5, next);
-            }
-
-            // Add Previous Page Button
-            if (currentPage > 0) {
-                final ItemStack previous = createItemStack(Material.ARROW, PREVIOUS_PAGE, null);
-                inventory.setItem(inventory.getSize() - 9, previous);
-            }
-        }
     }
 
     @EventHandler
@@ -323,7 +294,7 @@ public class PlayerInventory implements Listener, SubCommand {
         final Inventory inventory = Bukkit.createInventory(staff, 54, "Player Inventory Checker (Page " + pageNumber + ")");
 
         int startIndex = (pageNumber - 1) * ITEMS_PER_PAGE;
-        int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, FileHandler.getPlayerDeathBackupLogFolder().list().length);
+        int endIndex = (int) Math.min(startIndex + ITEMS_PER_PAGE, Arrays.stream(FileHandler.getPlayerDeathBackupLogFolder().list()).count());
 
         Arrays.stream(FileHandler.getPlayerDeathBackupLogFolder().list(), startIndex, endIndex)
                 .map(Bukkit::getPlayer)

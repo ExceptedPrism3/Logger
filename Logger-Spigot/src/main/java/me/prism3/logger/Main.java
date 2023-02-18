@@ -6,6 +6,7 @@ import me.prism3.logger.discord.Discord;
 import me.prism3.logger.serverside.Start;
 import me.prism3.logger.serverside.Stop;
 import me.prism3.logger.utils.*;
+import me.prism3.logger.utils.db.PlayerInventoryDB;
 import me.prism3.logger.utils.manager.ConfigManager;
 import me.prism3.logger.utils.manager.DiscordManager;
 import me.prism3.logger.utils.manager.MessagesManager;
@@ -71,6 +72,8 @@ public class Main extends JavaPlugin {
         Log.info("Plugin Enabled!");
 
         new Start().run();
+
+        new PlayerInventoryDB();
     }
 
     @Override

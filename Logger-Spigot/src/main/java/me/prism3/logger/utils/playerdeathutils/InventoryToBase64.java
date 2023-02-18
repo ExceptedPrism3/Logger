@@ -13,7 +13,7 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 public class InventoryToBase64 {
     private static final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-    public static String toBase64(final ItemStack[] contents) throws IOException {
+    public static String toBase64(final ItemStack[] contents) {
 
         try (final BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream)) {
 
@@ -26,7 +26,10 @@ public class InventoryToBase64 {
             outputStream.reset();
 
             return Base64.getEncoder().encodeToString(byteArr);
+        } catch (final IOException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 
     public static ItemStack[] fromBase64(final String data) {
