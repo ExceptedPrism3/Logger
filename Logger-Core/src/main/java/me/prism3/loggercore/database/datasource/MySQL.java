@@ -6,7 +6,6 @@ import me.prism3.loggercore.database.data.Settings;
 import me.prism3.loggercore.database.queue.DatabaseQueue;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -19,7 +18,7 @@ public final class MySQL extends AbstractDataSource {
     private final DatabaseQueue databaseQueue;
 
     private final Settings settings;
-    public MySQL(@NotNull Settings settings, @NotNull Options options) throws ClassNotFoundException {
+    public MySQL(@NotNull Settings settings, @NotNull Options options) {
 
         super(options, MySQL.class.getName());
         this.options = options;
@@ -38,7 +37,7 @@ public final class MySQL extends AbstractDataSource {
     }
 
     @Override
-    protected void createTables() {
+    public void createTables() {
 
         try (final Connection connection = this.getConnection();
              final Statement statement = connection.createStatement()) {
@@ -134,9 +133,9 @@ public final class MySQL extends AbstractDataSource {
                     " item TEXT, amount INTEGER, x INTEGER, y INTEGER, z INTEGER, is_staff BOOLEAN)");
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS registration"
-                    + "(id INTEGER PRIMARY KEY AUTO_INCREMENT, server_name TEXT," +
+                    + "(player_uuid VARCHAR(80) PRIMARY KEY, server_name TEXT," +
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, player_name TEXT," +
-                    " player_uuid VARCHAR(80), join_date TEXT)");
+                    " join_date TEXT)");
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS primed_tnt"
                     + "(id INTEGER PRIMARY KEY AUTO_INCREMENT, server_name TEXT," +
@@ -252,9 +251,7 @@ public final class MySQL extends AbstractDataSource {
                                 " server_name TEXT, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, world TEXT, " +
                                 "uuid TEXT, player_name TEXT, log_name TEXT, x INTEGER, y INTEGER, z INTEGER, is_staff BOOLEAN)");
         } catch (final SQLException e) { e.printStackTrace(); }
-        catch(final Exception e){
-            e.printStackTrace();
-        }
+
     }
 
     @Override

@@ -40,7 +40,7 @@ public final class SQLite extends AbstractDataSource {
     }
 
     @Override
-    protected void createTables() {
+    public void createTables() {
 
         try (final Connection connection = this.getConnection();
              final Statement statement = connection.createStatement()) {

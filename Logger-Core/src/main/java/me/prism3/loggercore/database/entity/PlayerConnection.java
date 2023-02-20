@@ -11,7 +11,7 @@ public class PlayerConnection extends AbstractAction {
     private Integer y;
     private Integer z;
 
-    private Long ip;
+    private Long ip = -1L;
 
     private Boolean isStaff;
 

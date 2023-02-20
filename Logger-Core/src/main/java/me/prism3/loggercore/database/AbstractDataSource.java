@@ -7,6 +7,7 @@ import me.prism3.loggercore.database.queue.DatabaseQueue;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
@@ -29,7 +30,7 @@ public abstract class AbstractDataSource {
 
     public abstract Connection getConnection() throws SQLException;
 
-    protected abstract void createTables();
+    public abstract void createTables();
 
     public Options getOptions(){
         return this.options;
@@ -201,7 +202,7 @@ public abstract class AbstractDataSource {
     public void insertPlayerRegistration(String serverName, String playerName, String playeruuid, String joinDate) {
 
         try (final Connection connection = this.getConnection();
-             final PreparedStatement register = connection.prepareStatement("INSERT INTO registration (server_name," +
+             final PreparedStatement register = connection.prepareStatement("REPLACE INTO registration (server_name," +
                      " player_name, player_uuid, join_date) VALUES(?,?,?,?)")) {
 
             register.setString(1, serverName);
@@ -365,5 +366,20 @@ public abstract class AbstractDataSource {
         } catch (final SQLException e) { e.printStackTrace(); }
     }
 
-    public abstract void disconnect();
+    public void disconnect(){
+        this.getDatabaseQueue().flushQueue();
+    }
+
+    public void dropAllTables() {
+        try (final Connection connection = this.getConnection();
+             final Statement statement = connection.createStatement()) {
+
+            statement.executeUpdate("DROP TABLE IF EXISTS `anvil`, `armorstand_endcrystal`, `armorstand_interaction`, `block_interaction`, `book_editing`, `bucket_action`, `chest_interaction`, `command_block`, `console_commands`, `crafting`, `enchanting`, `entity_death`, `furnace`, `game_mode`, `item_action`, `lever_interaction`, `player_chat`, `player_commands`, `player_connection`, `player_count`, `player_death`, `player_kick`, `player_level`, `player_sign_text`, `player_teleport`, `portal_creation`, `primed_tnt`, `ram`, `rcon`, `registration`, `server_address`, `server_start`, `server_stop`, `tps`;");
+
+
+
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

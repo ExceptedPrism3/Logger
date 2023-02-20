@@ -237,7 +237,6 @@ public final class DatabaseQueue {
         for (int i = 0; i < size; i++) {
 
             final PlayerChat playerChat = queue.poll();
-
             stsm.setString(1, playerChat.getServerName());
             stsm.setString(2, playerChat.getWorld());
             stsm.setString(3, playerChat.getEntityPlayer().getPlayerName());
@@ -1555,7 +1554,6 @@ public final class DatabaseQueue {
 
 
     private void addItemToQueue(Object item) {
-
         if (item instanceof BlockInteraction) {
 
             blockQueue.add((BlockInteraction) item);
