@@ -1,45 +1,36 @@
-package test;
+package me.prism3.logger.test;
 
 import be.seeseemelk.mockbukkit.Coordinate;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
-import be.seeseemelk.mockbukkit.entity.ItemEntityMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import me.prism3.logger.Main;
-
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Item;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerCommandSendEvent;
-import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerCommandEvent;
-import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class TestClass {
@@ -49,14 +40,12 @@ public class TestClass {
 
     private WorldMock world;
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws IOException {
         // Start the mock server
         this.server = MockBukkit.mock();
-
         System.out.println(this.server.getBukkitVersion());
         // Load your plugin
         this.plugin = MockBukkit.load(Main.class);
-
         this.world = new WorldMock(Material.DIRT, 100);
         this.server.setPlayers(2);
         this.playerMock = new PlayerMock(server, "TestPlayer", UUID.randomUUID());

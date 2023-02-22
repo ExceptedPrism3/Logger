@@ -1,8 +1,6 @@
 package me.prism3.logger;
 
 
-import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
-import me.prism3.logger.database.sqlite.global.registration.SQLiteRegistration;
 import me.prism3.logger.discord.Discord;
 import me.prism3.logger.serverside.Start;
 import me.prism3.logger.serverside.Stop;
@@ -35,7 +33,6 @@ public class Main extends JavaPlugin {
     private static Main instance;
     private AbstractDataSource database;
     private AbstractDataSource sqLite;
-    private SQLiteRegistration sqLiteReg;
     private DiscordManager discordFile;
     public Main()
     {
@@ -150,15 +147,6 @@ public class Main extends JavaPlugin {
 
             }
 
-
-            if (isRegistration) {
-
-                this.sqLiteReg = new SQLiteRegistration();
-                this.sqLiteReg.connect();
-                final SQLiteDataRegistration sqLiteDataRegistration = new SQLiteDataRegistration();
-                if (this.sqLiteReg.isConnected())
-                    sqLiteDataRegistration.createTable();
-            }
 
         } catch (final Exception e) { Log.severe(e.getMessage()); }
     }

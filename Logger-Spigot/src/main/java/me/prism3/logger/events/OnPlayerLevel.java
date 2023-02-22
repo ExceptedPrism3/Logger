@@ -68,7 +68,7 @@ public class OnPlayerLevel implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().getDatabaseQueue().queueLevelChange(Data.serverName, playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueLevelChange(Data.serverName, playerName, playerUUID.toString(),(int)playerLevel ,player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
@@ -78,7 +78,7 @@ public class OnPlayerLevel implements Listener {
 
                 try {
 
-                    Main.getInstance().getDatabase().getDatabaseQueue().queueLevelChange(Data.serverName, playerName, playerUUID.toString(), player.hasPermission(loggerStaffLog));
+                    Main.getInstance().getDatabase().getDatabaseQueue().queueLevelChange(Data.serverName, playerName, playerUUID.toString(),(int)playerLevel, player.hasPermission(loggerStaffLog));
 
                 } catch (final Exception e) { e.printStackTrace(); }
             }
