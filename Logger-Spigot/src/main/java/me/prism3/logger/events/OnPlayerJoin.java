@@ -1,7 +1,7 @@
 package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
-import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
+import me.prism3.logger.utils.db.PlayerRegistrationDB;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.events.plugindependent.OnViaVer;
 import me.prism3.logger.hooks.ViaVersionUtil;
@@ -31,9 +31,8 @@ public class OnPlayerJoin implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(final PlayerJoinEvent event) {
 
-        if (Data.isRegistration && this.main.getSqLiteReg() != null && !SQLiteDataRegistration.playerExists(event.getPlayer())) {
-
-            SQLiteDataRegistration.insertRegistration(event.getPlayer());
+        if (isRegistration && PlayerRegistrationDB.getDataSource() != null && !PlayerRegistrationDB.playerExists(event.getPlayer())) {
+            PlayerRegistrationDB.insertRegistration(event.getPlayer());
             new OnPlayerRegister();
         }
 
@@ -44,7 +43,7 @@ public class OnPlayerJoin implements Listener {
 
         if (Data.isCommandsToBlock && Data.isCommandsToLog && player.hasPermission(Data.loggerStaff)) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    "&bLogger &8&l| &cEnabling both Whitelist" +
+                    pluginPrefix + "&cEnabling both Whitelist" +
                             " and Blacklist isn't supported. Disable one of them" +
                             " to continue logging Player Commands."));
         }

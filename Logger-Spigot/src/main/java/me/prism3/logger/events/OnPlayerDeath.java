@@ -8,7 +8,6 @@ import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.Material;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,7 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -31,7 +29,7 @@ public class OnPlayerDeath implements Listener {
     private final Main main = Main.getInstance();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onDeath(final PlayerDeathEvent event) throws IOException, InvalidConfigurationException {
+    public void onDeath(final PlayerDeathEvent event) {
 
         final Player player = event.getEntity();
 
@@ -39,23 +37,15 @@ public class OnPlayerDeath implements Listener {
 
         // ******
         // Player Inventory Backup Part
-        if (isPlayerDeathBackup) {
+        if (isPlayerDeathBackup && PlayerInventoryDB.isAllowed(player.getUniqueId().toString())) {
 
-            /*final PlayerFolder playerDeathBackup = new PlayerFolder(player);
+            final ItemStack[] invContent = Arrays.stream(event.getEntity().getInventory().getContents()) // Turn the contents array into a Stream.
+                    .map(i -> i == null ? new ItemStack(Material.AIR) : i) // Map replaces the element with something else, so here if the item is null, we replace it with air, and if it isn't null, we set it to itself.
+                    .toArray(ItemStack[]::new); // Turn it back into an array.
 
-            if (playerDeathBackup.isAllowed()) {
-
-                final File f1 = playerDeathBackup.getPlayerFile(); // Gets the file location
-                final FileConfiguration f = YamlConfiguration.loadConfiguration(f1); // Loads the file with Yaml functions
-                f.load(f1); // Loads the file for use*/
-
-                final ItemStack[] invContent = Arrays.stream(event.getEntity().getInventory().getContents()) // Turn the contents array into a Stream.
-                        .map(i -> i == null ? new ItemStack(Material.AIR) : i) // Map replaces the element with something else, so here if the item is null, we replace it with air, and if it isn't null, we set it to itself.
-                        .toArray(ItemStack[]::new); // Turn it back into an array.
-
-                final ItemStack[] armorContent = Arrays.stream(event.getEntity().getInventory().getArmorContents()) // Turn the contents array into a Stream.
-                        .map(i -> i == null ? new ItemStack(Material.AIR) : i) // Map replaces the element with something else, so here if the item is null, we replace it with air, and if it isn't null, we set it to itself.
-                        .toArray(ItemStack[]::new); // Turn it back into an array.
+            final ItemStack[] armorContent = Arrays.stream(event.getEntity().getInventory().getArmorContents())
+                    .map(i -> i == null ? new ItemStack(Material.AIR) : i)
+                    .toArray(ItemStack[]::new);
 
             PlayerInventoryDB.insertInventory(player.getUniqueId().toString(),
                     player.getName(),
@@ -67,11 +57,6 @@ public class OnPlayerDeath implements Listener {
                     player.getTotalExperience(),
                     invContent,
                     armorContent);
-
-                /*f.set("inventory", InventoryToBase64.toBase64(invContent)); // Converts the Player's Inventory into base64
-                f.set("armor", InventoryToBase64.toBase64(armorContent)); // Converts the Player's Armor into base64
-                f.save(f1); // Save and Closes the file after editing
-            }*/
         }
         // ******
 

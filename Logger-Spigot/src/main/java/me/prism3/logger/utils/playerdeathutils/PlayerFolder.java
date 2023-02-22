@@ -45,7 +45,7 @@ public class PlayerFolder {
     }
 
     // Stores all backup files names
-    public static String[] fileNames(final String playerName) {
+    /*public static String[] fileNames(final String playerName) {
 
         final int backupCount = backupCount(playerName);
 
@@ -59,7 +59,7 @@ public class PlayerFolder {
         return Arrays.stream(fileNames)
                 .map(name -> name.replace(".\\w+", ""))
                 .toArray(String[]::new);
-    }
+    }*/
 
     // Formats the given the String to better readable date format
     public static String formatFileName(final String fileName) {
@@ -71,34 +71,7 @@ public class PlayerFolder {
         }
     }
 
-    // Counts the total backup files of a player
-    public static int backupCount(final String playerName) {
-        final File backupFolder = new File(FileHandler.getPlayerDeathBackupLogFolder(), playerName);
-        final File[] files = backupFolder.listFiles(File::isFile);
-        return files == null ? 0 : files.length;
-    }
-
-    // Checks if the user's content can be backed up
-    public boolean isAllowed() { return backupCount(this.playerFile.getParentFile().getName()) < allowedBackups; }
-
     public File getPlayerFile() { return this.playerFile; }
-
-    public static List<String> getDetails(final String playerName, final String fileName) {
-
-        final FileConfiguration as = YamlConfiguration.loadConfiguration(new File(FileHandler.getPlayerDeathBackupLogFolder() + File.separator + playerName, fileName));
-
-        final List<String> lores = new ArrayList<>();
-
-        lores.add("");
-        lores.add(ChatColor.WHITE + "Cause: " + ChatColor.AQUA + as.getString("cause"));
-        lores.add(ChatColor.WHITE + "World: " + ChatColor.AQUA + as.getString("world"));
-        lores.add(ChatColor.WHITE + "X: " + ChatColor.AQUA + as.getInt("x"));
-        lores.add(ChatColor.WHITE + "Y: " + ChatColor.AQUA + as.getInt("y"));
-        lores.add(ChatColor.WHITE + "Z: " + ChatColor.AQUA + as.getInt("z"));
-        lores.add(ChatColor.WHITE + "Experience: " + ChatColor.AQUA + as.getInt("xp"));
-
-        return lores;
-    }
 
     public static UUID getUUID(final String playerName, final String fileName) {
 

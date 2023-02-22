@@ -98,20 +98,23 @@ public class Main extends JavaPlugin {
 
         new Stop().run();
 
+//        if (isRegistration && this.sqLiteReg.isConnected()) this.sqLiteReg.disconnect();
+
         // This will stop accepting new tasks, but it will wait for running tasks to complete for a maximum of 5 seconds.
         // If tasks are still running after the 5 seconds, it will cancel them using the shutdownNow() method.
         executor.shutdown();
         try {
-            if (!executor.awaitTermination(5, TimeUnit.SECONDS)) {
+
+            if (!executor.awaitTermination(5, TimeUnit.SECONDS))
                 executor.shutdownNow();
-            }
+
         } catch (InterruptedException e) {
             executor.shutdownNow();
             Thread.currentThread().interrupt();
         }
 
+        this.localDatabaseDisconnect();
         this.disconnectDatabase();
-
         if (Discord.getInstance() != null)
             Discord.getInstance().disconnect();
 
@@ -160,12 +163,23 @@ public class Main extends JavaPlugin {
         } catch (final Exception e) { Log.severe(e.getMessage()); }
     }
 
-    public void disconnectDatabase() {
-        if(this.database != null)
-            this.database.disconnect();
-        if(this.sqLite != null)
-            this.sqLite.disconnect();
+    private void localDatabaseSetup() {
+
+        if (isPlayerDeathBackup)
+            new PlayerInventoryDB();
+
     }
+
+    private void localDatabaseDisconnect() {
+
+        //if (isPlayerDeathBackup)
+        //   PlayerInventoryDB.close();
+
+        //if (isRegistration)
+        //   PlayerInventoryDB.close();
+    }
+
+    public void disconnectDatabase() { this.database.disconnect(); }
 
     private boolean langChecker() {
 
@@ -176,8 +190,6 @@ public class Main extends JavaPlugin {
     }
 
     public static Main getInstance() { return instance; }
-
-    public SQLiteRegistration getSqLiteReg() { return this.sqLiteReg; }
 
     public Discord getDiscord() { return Discord.getInstance(); }
 
