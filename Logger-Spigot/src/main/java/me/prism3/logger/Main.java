@@ -1,5 +1,6 @@
 package me.prism3.logger;
 
+
 import me.prism3.logger.database.sqlite.global.registration.SQLiteDataRegistration;
 import me.prism3.logger.database.sqlite.global.registration.SQLiteRegistration;
 import me.prism3.logger.discord.Discord;
@@ -15,8 +16,12 @@ import me.prism3.loggercore.database.AbstractDataSource;
 import me.prism3.loggercore.database.datasource.MySQL;
 import me.prism3.loggercore.database.datasource.SQLite;
 import org.bukkit.ChatColor;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 
+
+import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -32,6 +37,15 @@ public class Main extends JavaPlugin {
     private AbstractDataSource sqLite;
     private SQLiteRegistration sqLiteReg;
     private DiscordManager discordFile;
+    public Main()
+    {
+        super();
+    }
+
+    protected Main(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file)
+    {
+        super(loader, description, dataFolder, file);
+    }
 
     @Override
     public void onEnable() {
@@ -84,8 +98,6 @@ public class Main extends JavaPlugin {
 
         new Stop().run();
 
-//        if (isRegistration && this.sqLiteReg.isConnected()) this.sqLiteReg.disconnect();
-
         // This will stop accepting new tasks, but it will wait for running tasks to complete for a maximum of 5 seconds.
         // If tasks are still running after the 5 seconds, it will cancel them using the shutdownNow() method.
         executor.shutdown();
@@ -98,8 +110,7 @@ public class Main extends JavaPlugin {
             Thread.currentThread().interrupt();
         }
 
-        if (this.database != null)
-            this.disconnectDatabase();
+        this.disconnectDatabase();
 
         if (Discord.getInstance() != null)
             Discord.getInstance().disconnect();
@@ -149,7 +160,12 @@ public class Main extends JavaPlugin {
         } catch (final Exception e) { Log.severe(e.getMessage()); }
     }
 
-    public void disconnectDatabase() { this.database.disconnect(); }
+    public void disconnectDatabase() {
+        if(this.database != null)
+            this.database.disconnect();
+        if(this.sqLite != null)
+            this.sqLite.disconnect();
+    }
 
     private boolean langChecker() {
 

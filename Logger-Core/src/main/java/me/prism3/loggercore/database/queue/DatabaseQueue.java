@@ -420,6 +420,7 @@ public final class DatabaseQueue {
             stsm.setString(2, playerLevel.getEntityPlayer().getPlayerName());
             stsm.setBoolean(3, playerLevel.isStaff());
             stsm.setString(4, DataBaseUtils.formatInstant(playerLevel.getDate()));
+            stsm.setInt(5, playerLevel.getPlayerLevel());
 
             stsm.addBatch();
         }
@@ -1103,13 +1104,14 @@ public final class DatabaseQueue {
         this.addItemToQueue(p);
     }
 
-    public void queueLevelChange(String serverName, String playerName, String playerUUID, boolean isStaff) {
+    public void queueLevelChange(String serverName, String playerName, String playerUUID,int playerLevel ,boolean isStaff) {
 
         final PlayerLevel p = new PlayerLevel();
 
         p.setDate(Instant.now());
         p.setServerName(serverName);
         p.setEntityPlayer(new EntityPlayer(playerName, playerUUID));
+        p.setPlayerLevel(playerLevel);
         p.isStaff(isStaff);
 
         this.addItemToQueue(p);

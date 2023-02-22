@@ -347,7 +347,7 @@ public abstract class AbstractDataSource {
 
     public PreparedStatement getLevelChangeStsm(Connection connection) throws SQLException {
 
-        return connection.prepareStatement("INSERT INTO player_level (server_name, player_name, is_staff, date) VALUES(?,?,?,?)");
+        return connection.prepareStatement("INSERT INTO player_level (server_name, player_name, is_staff, date, player_level) VALUES(?,?,?,?,?)");
     }
 
     public void insertAnvil(String serverName, String playerName, String newName, boolean isStaff) { //todo Sidna

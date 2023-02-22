@@ -91,7 +91,7 @@ public final class SQLite extends AbstractDataSource {
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS player_level"
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +
                     " date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP," +
-                    "player_name TEXT, is_staff BOOLEAN)");
+                    "player_name TEXT, player_level INTEGER,  is_staff BOOLEAN)");
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS bucket_action"
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, server_name TEXT," +

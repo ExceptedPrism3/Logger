@@ -17,8 +17,7 @@ public class BedrockChecker {
     private static final FloodgateApi floodgateApi = FLOODGATE_API_ENABLED ? FloodgateApi.getInstance() : null;
 
     public static boolean isBedrock(UUID playerUUID) {
-
-        if (!FLOODGATE_API_ENABLED) return false;
+        if (!FLOODGATE_API_ENABLED || floodgateApi == null) return false;
 
         return cache.computeIfAbsent(playerUUID, floodgateApi::isFloodgatePlayer);
     }
