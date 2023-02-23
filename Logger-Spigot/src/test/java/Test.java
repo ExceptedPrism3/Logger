@@ -1,5 +1,3 @@
-package me.prism3.logger.test;
-
 import be.seeseemelk.mockbukkit.Coordinate;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
@@ -24,7 +22,6 @@ import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -33,7 +30,7 @@ import java.util.Random;
 import java.util.UUID;
 
 
-public class TestClass {
+public class Test {
     private ServerMock server;
     private Main plugin;
     private PlayerMock playerMock;
@@ -60,7 +57,7 @@ public class TestClass {
         MockBukkit.unmock();
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void playerChat()
     {
         // generate random string for testing
@@ -72,7 +69,7 @@ public class TestClass {
         }
         this.playerMock.chat(randomString);
     }
-    @Test
+    @org.junit.jupiter.api.Test
     public void blockBreak(){
         Block a = this.world.createBlock(new Coordinate(0, 0, 0));
         this.playerMock.simulateBlockBreak(a);
@@ -81,7 +78,7 @@ public class TestClass {
         });
 
     }
-    @Test
+    @org.junit.jupiter.api.Test
     public void blockPlace(){
         Block a = this.world.createBlock(new Coordinate(0, 0, 0));
         this.playerMock.simulateBlockPlace(Material.ACACIA_LOG, new Location(this.world,0, 0, 1));
@@ -89,10 +86,10 @@ public class TestClass {
             return true;
         });
     }
-    @Test
+    @org.junit.jupiter.api.Test
     public void blockStrip(){    }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void gameMode(){
         this.playerMock.setGameMode(GameMode.SPECTATOR);
         this.playerMock.assertGameMode(GameMode.SPECTATOR);
@@ -101,7 +98,7 @@ public class TestClass {
 
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void playerConnection(){
             PlayerMock testPlayer = new PlayerMock(this.server, "testPlayer" + new Random().nextInt(),  UUID.randomUUID());
             testPlayer.disconnect();
@@ -110,7 +107,7 @@ public class TestClass {
         });
 
     }
-    @Test
+    @org.junit.jupiter.api.Test
     public void itemEvent(){
 
         this.server.getPluginManager().assertEventFired(EntityPickupItemEvent.class, e -> {
@@ -118,7 +115,7 @@ public class TestClass {
         });
 
     }
-    @Test
+    @org.junit.jupiter.api.Test
     public void playerCommand(){
         PlayerCommandPreprocessEvent event = new PlayerCommandPreprocessEvent(playerMock, "/logger discord");
         assert event != null;
@@ -129,7 +126,7 @@ public class TestClass {
 
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void craft(){
         //get me a hash map of enchantements in minecraft
         Map<Enchantment, Integer> enchants = new HashMap<>();
@@ -139,13 +136,13 @@ public class TestClass {
         EnchantItemEvent event = new EnchantItemEvent(this.playerMock, this.playerMock.getOpenInventory(), this.playerMock.simulateBlockPlace(Material.ENCHANTING_TABLE, new Location(this.playerMock.getWorld(),0,0,0)).getBlockPlaced(), new ItemStack(Material.DIAMOND_SWORD, 1), 30, enchants, 3);
         event.callEvent();
     }
-    @Test
+    @org.junit.jupiter.api.Test
     public void xpEvent(){
         this.playerMock.giveExpLevels(10);
         this.playerMock.giveExpLevels(-10);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void console(){
         ServerCommandEvent event = new ServerCommandEvent((CommandSender) this.server.getConsoleSender(), "logger discord");
         assert event != null;
@@ -154,7 +151,7 @@ public class TestClass {
             return true;
         });
     }
-    @Test
+    @org.junit.jupiter.api.Test
     public void sign(){
         Block sign = this.world.createBlock(new Coordinate(10, 20, 10));
         sign.setType(Material.ACACIA_WALL_SIGN);
@@ -165,7 +162,7 @@ public class TestClass {
             return true;
         });
     }
-    @Test
+    @org.junit.jupiter.api.Test
     public void playerDeath(){
         this.server.getPlayer(0).damage(999999, this.server.getPlayer(1));
         this.server.getPluginManager().assertEventFired(PlayerDeathEvent.class, e -> {
@@ -173,7 +170,7 @@ public class TestClass {
         });
 
     }
-    @Test
+    @org.junit.jupiter.api.Test
     public void loggerTest() {
         int i = 1;
 
