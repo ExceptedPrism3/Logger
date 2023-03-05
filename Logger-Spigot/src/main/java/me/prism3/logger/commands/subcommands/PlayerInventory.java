@@ -13,32 +13,24 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.File;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static me.prism3.logger.utils.Data.*;
 
 public class PlayerInventory implements Listener, SubCommand {
 
-    private static final int ITEMS_PER_PAGE = 45;
-    private static final String NEXT_PAGE = ChatColor.GREEN + "Next Page";
-    private static final String PREVIOUS_PAGE = ChatColor.RED + "Previous Page";
-
-
     private File backupFile;
-    private Inventory[] inventories;
-    private List<OfflinePlayer> deadPlayers;
     private OfflinePlayer selectedPlayer;
 
     @Override
@@ -76,24 +68,24 @@ public class PlayerInventory implements Listener, SubCommand {
 
         Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
 
-            final Inventory inv = Bukkit.createInventory(null, 54, "Player Inventory Checker (Page 1)");
             final Map<String, Integer> playerCounts = PlayerInventoryDB.getPlayerNames();
 
-            for (Map.Entry<String, Integer> entry : playerCounts.entrySet()) {
+            // Calculate the number of rows needed based on the number of logs
+            int numLogs = playerCounts.values().stream().reduce(0, Integer::sum);
+            int numRows = (int) Math.ceil((double) numLogs / 9);
+            numRows = Math.min(numRows, 6); // Limit to a maximum of 6 rows (54 slots)
 
+            final Inventory inv = Bukkit.createInventory(null, numRows * 9, "Player Inventory Checker (Page 1)");
+
+            for (Map.Entry<String, Integer> entry : playerCounts.entrySet()) {
                 final String playerName = entry.getKey();
                 final int count = entry.getValue();
-                final ItemStack head = new ItemStack(type, 1);
 
-                if (!isNewVersion)
-                    head.setDurability((short) 3);
+                final ItemStack paper = this.createItemStack(Material.PAPER,
+                        ChatColor.GOLD + "" + ChatColor.BOLD + playerName,
+                        Collections.singletonList(ChatColor.WHITE + "Backup Available: " + ChatColor.AQUA + count));
 
-                final SkullMeta meta = (SkullMeta) head.getItemMeta();
-                meta.setOwningPlayer(Bukkit.getOfflinePlayer(playerName));
-                meta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + playerName);
-                meta.setLore(Collections.singletonList(ChatColor.WHITE + "Backup Available: " + ChatColor.AQUA + count));
-                head.setItemMeta(meta);
-                inv.addItem(head);
+                inv.addItem(paper);
             }
 
             staff.openInventory(inv);
@@ -103,12 +95,11 @@ public class PlayerInventory implements Listener, SubCommand {
     @EventHandler
     public void onClick(final InventoryClickEvent event) {
 
-        if (event.getClickedInventory() == null
-                || !event.getView().getTitle().matches("(Player Inventory Checker \\(Page \\d+\\))|(Backup\\(s\\) of .*)|(Inventory of .*)"))
+        if (event.getClickedInventory() == null ||
+                !event.getView().getTitle().matches("(Player Inventory Checker \\(Page \\d+\\))|(Backup\\(s\\) of .*)|(Inventory of .*)"))
             return;
 
         event.setCancelled(true);
-
         final ItemStack clickedStack = event.getCurrentItem();
 
         if (clickedStack == null || !clickedStack.hasItemMeta())
@@ -116,28 +107,8 @@ public class PlayerInventory implements Listener, SubCommand {
 
         final String clickedItem = ChatColor.stripColor(clickedStack.getItemMeta().getDisplayName());
         final Player staff = (Player) event.getWhoClicked();
-        final int currentPage = this.getCurrentPage(event.getView().getTitle());
 
-        switch (clickedItem) {
-            /*case "Next Page":
-                if (currentPage + 1 > this.getTotalPages()) {
-                    staff.sendMessage("You have reached the last page.");
-                    return;
-                }
-                this.openPage(currentPage + 1, staff);
-                break;
-            case "Previous Page":
-                final int previousPage = currentPage - 1;
-                if (previousPage < 1) {
-                    staff.sendMessage("You are already on the first page.");
-                    return;
-                }
-                this.openPage(previousPage, staff);
-                break;*/
-            default:
-                this.handleClick(clickedItem, clickedStack, staff);
-                break;
-        }
+       this.handleClick(clickedItem, clickedStack, staff);
     }
 
     private void handleClick(String clickedItem, ItemStack clickedStack, Player staff) {
@@ -266,37 +237,6 @@ public class PlayerInventory implements Listener, SubCommand {
         item.setItemMeta(meta);
         return item;
     }
-
-    private int getCurrentPage(final String title) {
-        final Matcher matcher = Pattern.compile("(\\d+)").matcher(title);
-        return matcher.find() ? Integer.parseInt(matcher.group()) : -1;
-    }
-
-    // Calculate and return the total number of pages needed to display all players
-    private int getTotalPages() {
-        return (int) Math.ceil(Arrays.stream(FileHandler.getPlayerDeathBackupLogFolder().list()).count() / (double) ITEMS_PER_PAGE);
-    }
-
-    /*private void openPage(final int pageNumber, final Player staff) {
-
-        final Inventory inventory = Bukkit.createInventory(staff, 54, "Player Inventory Checker (Page " + pageNumber + ")");
-
-        int startIndex = (pageNumber - 1) * ITEMS_PER_PAGE;
-        int endIndex = (int) Math.min(startIndex + ITEMS_PER_PAGE, Arrays.stream(FileHandler.getPlayerDeathBackupLogFolder().list()).count());
-
-        Arrays.stream(FileHandler.getPlayerDeathBackupLogFolder().list(), startIndex, endIndex)
-                .map(Bukkit::getPlayer)
-                .filter(Objects::nonNull)
-                .forEach(player -> inventory.addItem(this.createSkull(player.getName(), null)));
-
-        final ItemStack next = this.createItemStack(Material.ARROW, NEXT_PAGE, null);
-        inventory.setItem(inventory.getSize() - 5, next);
-
-        final ItemStack back = this.createItemStack(Material.ARROW, PREVIOUS_PAGE, null);
-        inventory.setItem(inventory.getSize() - 9, back);
-
-        staff.openInventory(inventory);
-    }*/
 
     private void addItem(final Player staff) {
 

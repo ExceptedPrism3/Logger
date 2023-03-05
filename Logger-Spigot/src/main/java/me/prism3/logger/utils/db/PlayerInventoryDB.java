@@ -15,7 +15,6 @@ import java.util.Map;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import me.prism3.logger.utils.playerdeathutils.InventoryToBase64;
-import me.prism3.loggercore.database.utils.DataBaseUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
@@ -99,9 +98,9 @@ public class PlayerInventoryDB {
         try (final Connection conn = dataSource.getConnection();
              final PreparedStatement stmt = conn.prepareStatement(query)) {
 
-            try (final ResultSet rs = stmt.executeQuery()) {
+            stmt.setString(1, playerUUID);
 
-                stmt.setString(1, playerUUID);
+            try (final ResultSet rs = stmt.executeQuery()) {
 
                 final int numBackups = rs.getInt(1);
 

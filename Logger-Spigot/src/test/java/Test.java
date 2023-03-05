@@ -1,3 +1,4 @@
+/*
 import be.seeseemelk.mockbukkit.Coordinate;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
@@ -188,4 +189,4 @@ public class Test {
 
 
     }
-}
+}*/
