@@ -8,6 +8,7 @@ import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.enums.NmsVersions;
 import org.bukkit.Material;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -31,9 +32,10 @@ public class OnChestInteraction implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryOpenEvent(final InventoryOpenEvent event) {
 
-        if (event.getInventory().getLocation() == null) return;
-
         if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Chest-Interaction")) {
+
+            if (event.getInventory().getHolder() == null && !(event.getInventory().getHolder() instanceof BlockState))
+                return;
 
             final Player player = (Player) event.getPlayer();
 
