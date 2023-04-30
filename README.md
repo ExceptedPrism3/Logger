@@ -16,7 +16,7 @@ This plugin can be found on [Spigot](https://www.spigotmc.org/resources/logger.9
 
 If support is needed or a suggesting that needs to be implemented, feel free to ask on the [Discord](https://discord.gg/MfR5mcpVfX), also do not forget to check out the plugin's **[Wiki](https://prism3.gitbook.io/logger-or-wiki/)**.
 
-# About the Plugin
+## About the Plugin
 Someone Destroyed your favorite painting, Toasted your precious diamond chestplate into the lava, Turned off your server through the console or a Staff abusing his powers?
 
 With more than **20 Features** Checkers, nothing is left without monitoring.
@@ -39,7 +39,7 @@ With more than **20 Features** Checkers, nothing is left without monitoring.
   * **Bucket Fill**
   * **...**
   
-## **More Features and Information can be found in the [Wiki](https://prism3.gitbook.io/logger-or-wiki/)**
+## More Features and Information can be found in the [Wiki](https://prism3.gitbook.io/logger-or-wiki/)
 
 ## Info
 If you use MySQL, the IP that gets stored in the Database when a Player joins

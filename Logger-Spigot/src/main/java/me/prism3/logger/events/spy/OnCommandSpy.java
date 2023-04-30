@@ -10,27 +10,36 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class OnCommandSpy implements Listener {
 
-    private final Main main = Main.getInstance();
+    private final String commandSpyMessage;
+
+    public OnCommandSpy() {
+        this.commandSpyMessage = ChatColor.translateAlternateColorCodes('&',
+                Main.getInstance().getConfig().getString("Spy-Features.Commands-Spy.Message"));
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCmdSpy(final PlayerCommandPreprocessEvent event) {
 
         final Player player = event.getPlayer();
 
-        if (player.hasPermission(Data.loggerExempt) || player.hasPermission(Data.loggerSpyBypass)) return;
+        if (player.hasPermission(Data.loggerExempt) || player.hasPermission(Data.loggerSpyBypass))
+            return;
 
-        for (Player players : Bukkit.getOnlinePlayers()) {
+        final String command = event.getMessage().replace("\\", "\\\\");
 
-            if (players.hasPermission(Data.loggerSpy)) {
+        final List<Player> playersWithSpyPermission = Bukkit.getOnlinePlayers().stream()
+                .filter(p -> p.hasPermission(Data.loggerSpy))
+                .collect(Collectors.toList());
 
-                players.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                                this.main.getConfig().getString("Spy-Features.Commands-Spy.Message")).
-                        replace("%player%", player.getName()).
-                            replace("%cmd%", event.getMessage().replace("\\", "\\\\")));
-
-            }
+        for (Player spyPlayer : playersWithSpyPermission) {
+            spyPlayer.sendMessage(commandSpyMessage
+                    .replace("%player%", player.getName())
+                    .replace("%cmd%", command));
         }
     }
 }

@@ -216,7 +216,7 @@ Fixes
     [!] Error when an AdvancedBan command is executed through console
     [!] LiteBans error when executing a command through console
     [!] LiteBans Discord Integration not working
-    [!] Chest Interaction errors when run on 1.8.8 servers
+    [!] Chest Interaction errors when run on 1.8.8 servers & being run with other plugins
 
 Changes
     [*] Remade permissions which will log OP and NOT OP players until they're permitted with the exempt permission

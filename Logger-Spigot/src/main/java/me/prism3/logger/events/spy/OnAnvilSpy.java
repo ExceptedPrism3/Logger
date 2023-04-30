@@ -15,51 +15,57 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class OnAnvilSpy implements Listener {
 
-    private final Main main = Main.getInstance();
+    private final String anvilSpyMessage;
+
+    public OnAnvilSpy() {
+        this.anvilSpyMessage = ChatColor.translateAlternateColorCodes('&',
+                Main.getInstance().getConfig().getString("Spy-Features.Anvil-Spy.Message"));
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onAnvilSpy(final InventoryClickEvent event) {
 
         final Player player = (Player) event.getWhoClicked();
 
-        if (player.hasPermission(Data.loggerExempt) || player.hasPermission(Data.loggerSpyBypass)) return;
+        if (player.hasPermission(Data.loggerExempt) || player.hasPermission(Data.loggerSpyBypass))
+            return;
 
         final Inventory inv = event.getInventory();
 
-        if (inv instanceof AnvilInventory) {
+        if (!(inv instanceof AnvilInventory))
+            return;
 
-            final InventoryView view = event.getView();
+        final InventoryView view = event.getView();
+        final int rawSlot = event.getRawSlot();
 
-            final int rawSlot = event.getRawSlot();
+        if (rawSlot != view.convertSlot(rawSlot) || rawSlot != 2)
+            return;
 
-            if (rawSlot == view.convertSlot(rawSlot) && (rawSlot == 2)) {
+        final ItemStack item = event.getCurrentItem();
 
-                final ItemStack item = event.getCurrentItem();
+        if (item == null)
+            return;
 
-                if (item != null) {
+        final ItemMeta meta = item.getItemMeta();
 
-                    final ItemMeta meta = item.getItemMeta();
+        if (meta == null || !meta.hasDisplayName())
+            return;
 
-                    if (meta != null && meta.hasDisplayName()) {
+        final String displayName = meta.getDisplayName().replace("\\", "\\\\");
 
-                        final String displayName = meta.getDisplayName().replace("\\", "\\\\");
+        final List<Player> playersWithSpyPermission = Bukkit.getOnlinePlayers().stream()
+                .filter(p -> p.hasPermission(Data.loggerSpy))
+                .collect(Collectors.toList());
 
-                        for (Player players : Bukkit.getOnlinePlayers()) {
-
-                            if (players.hasPermission(Data.loggerSpy)) {
-
-                                players.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                                                this.main.getConfig().getString("Spy-Features.Anvil-Spy.Message")).
-                                        replace("%player%", player.getName()).
-                                            replace("%renamed%", displayName));
-
-                            }
-                        }
-                    }
-                }
-            }
+        for (Player spyPlayer : playersWithSpyPermission) {
+            spyPlayer.sendMessage(this.anvilSpyMessage
+                    .replace("%player%", player.getName())
+                    .replace("%renamed%", displayName));
         }
     }
 }

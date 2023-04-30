@@ -1,15 +1,50 @@
-### 💬 Looking for support?
+# 🤝 Contributing to Logger
 
-Details about support for the project can be found [here, on the Wiki Homepage](https://prism3.gitbook.io/logger/).
+Thank you for considering contributing to Logger! We appreciate your interest and welcome any contributions that can help improve the project. By contributing, you can help make Logger better for everyone.
 
-### 🐛 Reporting bugs?
+## 🚀 How to Contribute
 
-Before reporting a bug or issue, please make sure that the issue is actually being caused by or related to Logger.
+To contribute to Logger, please follow these steps:
 
-Bugs or issues should be reported using the [GitHub Issues tab](https://github.com/ExceptedPrism3/Logger/issues) or via [Discord Support Server](https://discord.gg/MfR5mcpVfX).
+1. 🍴 Fork the repository on GitHub.
+2. 🖥️ Clone your forked repository to your local machine.
+3. 🌿 Create a new branch for your contribution:
+    - Use a descriptive branch name that reflects the nature of your contribution.
+    - For example, if you're working on a bug fix, you can name your branch `fix/issue-description`.
+4. 🛠️ Make your changes and improvements in your local branch.
+5. ✅ Test your changes thoroughly to ensure they don't introduce any issues or errors.
+6. 💬 Commit your changes with clear and descriptive commit messages.
+7. 📤 Push your branch to your forked repository on GitHub.
+8. 🔄 Submit a pull request (PR) to the main repository:
+    - Provide a clear and concise description of your changes in the PR.
+    - Reference any related issues or bug reports in the description.
+    - Be prepared to receive feedback and iterate on your changes if necessary.
 
-### 📝 Want to contribute code?
-#### Pull Requests
-If you make any changes or improvements to the plugin which you think would be beneficial to others, please consider making a pull request to merge your changes back into the upstream project. (especially if your changes are bug fixes!)
+## 📝 Coding Guidelines
 
-If you're considering submitting a substantial pull request, please open an issue, so we can discuss the change before starting work on the contribution. Most pull requests are happily accepted, but larger changes may have an impact on the maintainability of the project, and require more consideration.
+To maintain consistency and readability throughout the Logger codebase, please follow these coding guidelines:
+
+- Use meaningful variable and function names.
+- Write clear and concise comments to explain complex logic or algorithms.
+- Follow the existing code style and formatting.
+- Use appropriate indentation and spacing.
+- Use proper error handling and exception handling techniques.
+- Write unit tests for new features or bug fixes whenever possible.
+
+## 🐛 Bug Reports and Feature Requests
+
+If you encounter a bug or have a feature request, please submit a detailed issue on the GitHub repository. When submitting an issue, provide the following information:
+
+- Description of the issue or requested feature.
+- Steps to reproduce the issue (if applicable).
+- Expected behavior and actual behavior.
+- Any relevant error messages or logs.
+- Any additional information that can help in resolving the issue.
+
+## 📄 License
+
+By contributing to Logger, you agree that your contributions will be licensed under the [MIT License](https://github.com/ExceptedPrism3/Logger/blob/main/LICENSE).
+
+Thank you for your interest in contributing to Logger. We appreciate your time and effort in making this project better for everyone.
+
+Happy contributing! 🎉

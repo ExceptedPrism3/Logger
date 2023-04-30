@@ -26,30 +26,19 @@ public class OnCommand implements Listener {
         if (event.isCancelled())
             return;
 
-        if (isWhitelisted && isBlacklisted) return;
-
-        // Whitelist Commands
-        if (isWhitelisted) {
-
-            new OnCommandWhitelist().onWhitelistedCommand(event);
-            return;
-        }
-
         final Player player = event.getPlayer();
-
-        if (player.hasPermission(loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
-
+        final String command = event.getMessage().replace("\\", "\\\\");
         final List<String> commandParts = Arrays.asList(event.getMessage().split("\\s+"));
-
-        // Blacklisted Commands
-        if (isBlacklisted)
-            for (String m : commandsToBlock)
-                if (commandParts.get(0).equalsIgnoreCase(m)) return;
-
         final String worldName = player.getWorld().getName();
         final UUID playerUUID = player.getUniqueId();
         final String playerName = player.getName();
-        final String command = event.getMessage().replace("\\", "\\\\");
+        final String fileKey = isStaffEnabled && player.hasPermission(loggerStaffLog)
+                ? "Files.Player-Commands-Whitelisted-Staff"
+                : "Files.Player-Commands-Whitelisted";
+
+        final String discordKey = isStaffEnabled && player.hasPermission(loggerStaffLog)
+                ? "Discord.Player-Commands-Whitelisted-Staff"
+                : "Discord.Player-Commands-Whitelisted";
 
         final Map<String, String> placeholders = new HashMap<>();
         placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
@@ -58,44 +47,50 @@ public class OnCommand implements Listener {
         placeholders.put("%player%", playerName);
         placeholders.put("%command%", command);
 
-        if (Data.isLogToFiles) {
-            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                FileHandler.handleFileLog("Files.Player-Commands-Staff", placeholders, FileHandler.getStaffFile());
-            } else {
-                FileHandler.handleFileLog("Files.Player-Commands", placeholders, FileHandler.getPlayerCommandLogFile());
+        // Whitelisted Commands
+        if (isWhitelisted) {
+
+            for (String m : commandsToLog) {
+
+                if (commandParts.get(0).equalsIgnoreCase(m)) {
+                    this.handleCommandLog(fileKey, discordKey, placeholders, player);
+                    return;
+                }
             }
         }
 
-        // Discord Integration
-        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
+        // Check for exempt players or Bedrock clients
+        if (player.hasPermission(loggerExempt) || BedrockChecker.isBedrock(playerUUID))
+            return;
 
-            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+        // Blacklisted Commands
+        if (isBlacklisted && commandsToBlock.contains(commandParts.get(0).toLowerCase()))
+            return;
 
-                this.main.getDiscord().handleDiscordLog("Discord.Player-Commands-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
-            } else {
-
-                this.main.getDiscord().handleDiscordLog("Discord.Player-Commands", placeholders, DiscordChannels.PLAYER_COMMANDS, playerName, playerUUID);
+        // Blacklisted Commands
+        if (isBlacklisted) {
+            for (String m : commandsToBlock) {
+                if (commandParts.get(0).equalsIgnoreCase(m))
+                    return;
             }
         }
 
-        // External
-        if (isExternal) {
+        this.handleCommandLog(fileKey, discordKey, placeholders, player);
 
+        if (isExternal || isSqlite) {
             try {
-
                 Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerCommands(serverName, playerName, playerUUID.toString(), worldName, command, player.hasPermission(loggerStaffLog));
-
-            } catch (final Exception e) { e.printStackTrace(); }
-        }
-
-        // SQLite
-        if (isSqlite) {
-
-            try {
-
-                Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerCommands(serverName, playerName, playerUUID.toString(), worldName, command, player.hasPermission(loggerStaffLog));
-
             } catch (final Exception e) { e.printStackTrace(); }
         }
     }
+
+    private void handleCommandLog(String fileKey, String discordKey, Map<String, String> placeholders, Player player) {
+
+        if (Data.isLogToFiles)
+            FileHandler.handleFileLog(fileKey, placeholders, FileHandler.getPlayerCommandLogFile());
+
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable"))
+            this.main.getDiscord().handleDiscordLog(discordKey, placeholders, DiscordChannels.PLAYER_COMMANDS, player.getName(), player.getUniqueId());
+    }
 }
+
