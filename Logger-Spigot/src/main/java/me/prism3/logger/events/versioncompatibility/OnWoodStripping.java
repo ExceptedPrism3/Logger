@@ -8,6 +8,7 @@ import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.enums.NmsVersions;
 import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,32 +24,20 @@ import static me.prism3.logger.utils.Data.*;
 public class OnWoodStripping implements Listener {
 
     private final Main main = Main.getInstance();
-    private final List<Material> logs;
-    private final List<Material> axes;
 
-    public OnWoodStripping() {
+    private static final EnumSet<Material> logs = EnumSet.of(
+            Material.ACACIA_LOG, Material.BIRCH_LOG, Material.DARK_OAK_LOG,
+            Material.JUNGLE_LOG, Material.SPRUCE_LOG, Material.OAK_LOG,
+            Material.ACACIA_WOOD, Material.BIRCH_WOOD, Material.DARK_OAK_WOOD,
+            Material.JUNGLE_WOOD, Material.SPRUCE_WOOD, Material.OAK_WOOD
+    );
 
-        logs = new ArrayList<>();
-        axes = new ArrayList<>();
+    private static final EnumSet<Material> axes = EnumSet.of(
+            Material.WOODEN_AXE, Material.STONE_AXE, Material.IRON_AXE,
+            Material.GOLDEN_AXE, Material.DIAMOND_AXE
+    );
 
-        logs.add(Material.ACACIA_LOG);
-        logs.add(Material.BIRCH_LOG);
-        logs.add(Material.DARK_OAK_LOG);
-        logs.add(Material.JUNGLE_LOG);
-        logs.add(Material.SPRUCE_LOG);
-        logs.add(Material.OAK_LOG);
-        logs.add(Material.ACACIA_WOOD);
-        logs.add(Material.BIRCH_WOOD);
-        logs.add(Material.DARK_OAK_WOOD);
-        logs.add(Material.JUNGLE_WOOD);
-        logs.add(Material.SPRUCE_WOOD);
-        logs.add(Material.OAK_WOOD);
-
-        axes.add(Material.WOODEN_AXE);
-        axes.add(Material.STONE_AXE);
-        axes.add(Material.IRON_AXE);
-        axes.add(Material.GOLDEN_AXE);
-        axes.add(Material.DIAMOND_AXE);
+    static {
         if (version.isAtLeast(NmsVersions.v1_16_R1))
             axes.add(Material.NETHERITE_AXE);
     }
@@ -56,78 +45,65 @@ public class OnWoodStripping implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onWoodStripped(final PlayerInteractEvent event) {
 
-        if (!event.isCancelled() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+        if (event.isCancelled() || event.getAction() != Action.RIGHT_CLICK_BLOCK ||
+                event.getPlayer().hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(event.getPlayer().getUniqueId()) ||
+                event.getItem() == null || event.getClickedBlock() == null || !logs.contains(event.getClickedBlock().getType()) ||
+                (!axes.contains(event.getPlayer().getInventory().getItemInMainHand().getType()) &&
+                        !axes.contains(event.getPlayer().getInventory().getItemInOffHand().getType())))
+            return;
 
-            final Player player = event.getPlayer();
+        final Player player = event.getPlayer();
 
-            if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId())) return;
+        if (player.hasPermission(Data.loggerExempt) || BedrockChecker.isBedrock(player.getUniqueId()))
+            return;
 
-            if (event.getItem() == null || event.getClickedBlock() == null
-                    || !logs.contains(event.getClickedBlock().getType()) // If The Block Is NOT A Log, Stop
-                    || (!axes.contains(event.getPlayer().getInventory().getItemInMainHand().getType())
-                    && !axes.contains(event.getPlayer().getInventory().getItemInOffHand().getType())))
-                return;
+        final Block clickedBlock = event.getClickedBlock();
 
-            final UUID playerUUID = player.getUniqueId();
-            final String playerName = player.getName();
-            final String worldName = player.getWorld().getName();
-            final int x = event.getClickedBlock().getX();
-            final int y = event.getClickedBlock().getY();
-            final int z = event.getClickedBlock().getZ();
-            final String logName = event.getClickedBlock().getType().name();
+        final UUID playerUUID = player.getUniqueId();
+        final String playerName = player.getName();
+        final String worldName = player.getWorld().getName();
+        final int x = clickedBlock.getX();
+        final int y = clickedBlock.getY();
+        final int z = clickedBlock.getZ();
+        final String logName = clickedBlock.getType().name();
 
-            final Coordinates coordinates = new Coordinates(x, y, z, worldName);
+        final Coordinates coordinates = new Coordinates(x, y, z, worldName);
 
-            final Map<String, String> placeholders = new HashMap<>();
-            placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
-            placeholders.put("%world%", worldName);
-            placeholders.put("%uuid%", playerUUID.toString());
-            placeholders.put("%player%", playerName);
-            placeholders.put("%x%", String.valueOf(x));
-            placeholders.put("%y%", String.valueOf(y));
-            placeholders.put("%z%", String.valueOf(z));
-            placeholders.put("%logname%", logName);
+        final Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()));
+        placeholders.put("%world%", worldName);
+        placeholders.put("%uuid%", playerUUID.toString());
+        placeholders.put("%player%", playerName);
+        placeholders.put("%x%", String.valueOf(x));
+        placeholders.put("%y%", String.valueOf(y));
+        placeholders.put("%z%", String.valueOf(z));
+        placeholders.put("%logname%", logName);
 
-            // Log To Files
-            if (Data.isLogToFiles) {
-                if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                    FileHandler.handleFileLog("Files.Version-Exceptions.Wood-Stripping-Staff", placeholders, FileHandler.getStaffFile());
-                } else {
-                    FileHandler.handleFileLog("Files.Version-Exceptions.Wood-Stripping", placeholders, FileHandler.getWoodStrippingFile());
-                }
-            }
-
-            // Discord Integration
-            if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
-
-                if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-
-                    this.main.getDiscord().handleDiscordLog("Discord.Version-Exceptions.Wood-Stripping-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
-                } else {
-
-                    this.main.getDiscord().handleDiscordLog("Discord.Version-Exceptions.Wood-Stripping", placeholders, DiscordChannels.WOOD_STRIPPING, playerName, playerUUID);
-                }
-            }
-
-            // External
-            if (Data.isExternal) {
-
-                try {
-
-                    Main.getInstance().getDatabase().getDatabaseQueue().queueWoodStripping(Data.serverName, playerName, playerUUID.toString(), logName, coordinates, player.hasPermission(loggerStaffLog));
-
-                } catch (final Exception e) { e.printStackTrace(); }
-            }
-
-            // SQLite
-            if (Data.isSqlite) {
-
-                try {
-
-                    Main.getInstance().getDatabase().getDatabaseQueue().queueWoodStripping(Data.serverName, playerName, playerUUID.toString(), logName, coordinates, player.hasPermission(loggerStaffLog));
-
-                } catch (final Exception e) { e.printStackTrace(); }
+        // Log To Files
+        if (Data.isLogToFiles) {
+            if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                FileHandler.handleFileLog("Files.Version-Exceptions.Wood-Stripping-Staff", placeholders, FileHandler.getStaffFile());
+            } else {
+                FileHandler.handleFileLog("Files.Version-Exceptions.Wood-Stripping", placeholders, FileHandler.getWoodStrippingFile());
             }
         }
+
+        // Discord Integration
+        if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable")) {
+            if (isStaffEnabled && player.hasPermission(loggerStaffLog)) {
+                this.main.getDiscord().handleDiscordLog("Discord.Version-Exceptions.Wood-Stripping-Staff", placeholders, DiscordChannels.STAFF, playerName, playerUUID);
+            } else {
+                this.main.getDiscord().handleDiscordLog("Discord.Version-Exceptions.Wood-Stripping", placeholders, DiscordChannels.WOOD_STRIPPING, playerName, playerUUID);
+            }
+        }
+
+        // External and SQLite Handling
+        if (Data.isExternal || Data.isSqlite)
+            this.handleWoodStripping(playerName, playerUUID.toString(), logName, coordinates, player.hasPermission(loggerStaffLog));
+    }
+
+    private void handleWoodStripping(String playerName, String playerUUID, String logName, Coordinates coordinates, boolean isStaff) {
+
+        this.main.getDatabase().getDatabaseQueue().queueWoodStripping(Data.serverName, playerName, playerUUID, logName, coordinates, isStaff);
     }
 }
