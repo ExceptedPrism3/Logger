@@ -34,7 +34,8 @@ public class OnChestInteraction implements Listener {
 
         if (!event.isCancelled() && this.main.getConfig().getBoolean("Log-Player.Chest-Interaction")) {
 
-            if (event.getInventory().getHolder() == null && !(event.getInventory().getHolder() instanceof BlockState))
+            if ((event.getInventory().getHolder() == null && !(event.getInventory().getHolder() instanceof BlockState)) ||
+                    event.getInventory().getLocation() == null)
                 return;
 
             final Player player = (Player) event.getPlayer();
