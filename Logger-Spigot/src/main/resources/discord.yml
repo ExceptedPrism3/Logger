@@ -6,90 +6,90 @@ Discord:
   Enable: false
   Bot-Token: BOT_KEY
   Staff:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Player-Chat:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Player-Commands:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Player-Sign-Text:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Player-Join:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Player-Leave:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Player-Kick:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Player-Death:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Player-Teleport:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Player-Level:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Block-Place:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Block-Break:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Bucket-Fill:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Bucket-Empty:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Anvil:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Item-Pickup:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Item-Drop:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Enchanting:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Book-Editing:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Furnace:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Game-Mode:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Craft:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Registration:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Primed-TNT:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Chest-Interaction:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Entity-Death:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   # Server Side Checkers
   Server-Side:
     Start:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
     Stop:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
     Console-Commands:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
     RAM:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
     TPS:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
     Portal-Creation:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
     RCON:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
     Command-Block:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
   # Extra Side Checkers
   Extras:
     AFK:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
     Wrong-Password:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
     Vault:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
     LiteBans:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
     AdvancedBan:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
   Version-Exceptions:
     Wood-Stripping:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
 # Bot Activity Status
 # Randomize the shown status
 # First Part must not be different from

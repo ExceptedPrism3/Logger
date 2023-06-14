@@ -6,31 +6,31 @@ Discord:
   Enable: false
   Bot-Token: BOT_KEY
   Staff:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Player-Chat:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Player-Commands:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Player-Login:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Player-Leave:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
   Server-Switch:
-    Channel-ID: 'LINK_HERE'
+    Channel-ID: 'CHANNEL_ID'
 # Server Side
   Server-Side:
     Restart:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
     Start:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
     Stop:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
     RAM:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
 # Extra Side
   Extra:
     LiteBans:
-      Channel-ID: 'LINK_HERE'
+      Channel-ID: 'CHANNEL_ID'
 # Bot Activity Status
 # Randomize the shown status
 # First Part must not be different from

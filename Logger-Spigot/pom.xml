@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Logger-Spigot</artifactId>
-    <version>1.8.0.7</version>
+    <version>1.8.0.8</version>
     <packaging>jar</packaging>
 
     <name>Logger-Spigot</name>
@@ -19,7 +19,7 @@
     <parent>
         <artifactId>Logger</artifactId>
         <groupId>me.prism3</groupId>
-        <version>1.8.0.2</version>
+        <version>1.8.0.8</version>
     </parent>
 
     <build>
@@ -193,7 +193,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.19.3-R0.1-SNAPSHOT</version>
+            <version>1.20-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- Discord JDA -->

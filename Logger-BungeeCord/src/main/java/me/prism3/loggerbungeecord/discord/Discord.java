@@ -145,7 +145,7 @@ public class Discord {
 
         if (channelID == null) return false;
 
-        return (!channelID.isEmpty() && this.main.getConfig().getBoolean(path) && !channelID.equals("LINK_HERE"));
+        return (!channelID.isEmpty() && this.main.getConfig().getBoolean(path) && !channelID.equals("CHANNEL_ID"));
 
     }
 

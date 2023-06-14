@@ -9,7 +9,7 @@ public class ASCIIArt {
 
     public void art() {
 
-        main.getLogger().info(ChatColor.DARK_PURPLE + "|\n" +
+        main.getLogger().info(ChatColor.DARK_PURPLE + "\n|\n" +
                 ChatColor.DARK_PURPLE + "|" + ChatColor.AQUA + "     __                               \n" +
                 ChatColor.DARK_PURPLE + "|" + ChatColor.AQUA + "    / /   ____  ____ _____ ____  _____\n" +
                 ChatColor.DARK_PURPLE + "|" + ChatColor.AQUA + "   / /   / __ \\/ __ `/ __ `/ _ \\/ ___/\n" +
