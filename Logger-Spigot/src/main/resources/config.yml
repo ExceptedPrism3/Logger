@@ -46,6 +46,7 @@ Log-Player:
   Primed-TNT: true
   Chest-Interaction: true
   Entity-Death: true
+  Sign-Change: true
 Log-Server:
   Start: true
   Stop: true

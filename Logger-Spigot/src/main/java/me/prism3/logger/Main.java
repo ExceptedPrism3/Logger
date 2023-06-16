@@ -138,7 +138,7 @@ public class Main extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new OnPlayerChat(), this);
         this.getServer().getPluginManager().registerEvents(new OnCommand(), this);
         this.getServer().getPluginManager().registerEvents(new Console(), this);
-        this.getServer().getPluginManager().registerEvents(new OnSign(), this);
+        this.getServer().getPluginManager().registerEvents(new OnSignPlacing(), this);
         this.getServer().getPluginManager().registerEvents(new OnPlayerJoin(), this);
         this.getServer().getPluginManager().registerEvents(new OnPlayerLeave(), this);
         this.getServer().getPluginManager().registerEvents(new OnPlayerKick(), this);
@@ -162,6 +162,7 @@ public class Main extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new PlayerInventory(), this);
         this.getServer().getPluginManager().registerEvents(new OnCommandBlock(), this);
         this.getServer().getPluginManager().registerEvents(new OnEntityDeath(), this);
+        this.getServer().getPluginManager().registerEvents(new OnSignChange(), this);
 
         this.getServer().getPluginManager().registerEvents(new OnFurnace(), this);
         this.getServer().getPluginManager().registerEvents(new OnCraft(), this);

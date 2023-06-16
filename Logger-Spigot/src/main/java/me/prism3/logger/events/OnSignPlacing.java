@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class OnSign implements Listener {
+public class OnSignPlacing implements Listener {
 
     private final Main main = Main.getInstance();
 
@@ -46,9 +46,9 @@ public class OnSign implements Listener {
             final World world = player.getWorld();
             final List<String> lines = Arrays.asList(event.getLines());
             final String worldName = world.getName();
-            final int x = player.getLocation().getBlockX();
-            final int y = player.getLocation().getBlockY();
-            final int z = player.getLocation().getBlockZ();
+            final int x = event.getBlock().getLocation().getBlockX();
+            final int y = event.getBlock().getLocation().getBlockY();
+            final int z = event.getBlock().getLocation().getBlockZ();
 
             // Log To Files
             if (Data.isLogToFiles) {

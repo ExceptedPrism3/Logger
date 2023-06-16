@@ -26,7 +26,7 @@ public class ExternalData {
             "player_kick", "player_level", "Bucket_fill", "bucket_empty", "anvil", "item_drop", "enchanting",
             "book_editing", "item_pickup", "furnace", "game_mode", "crafting", "registration", "server_start",
             "server_stop", "console_commands", "ram", "tps", "portal_creation", "rcon", "primed_tnt", "command_block",
-            "chest_interaction", "entity_death").collect(Collectors.toCollection(ArrayList::new));
+            "chest_interaction", "entity_death", "sign_change").collect(Collectors.toCollection(ArrayList::new));
 
     public void createTable() {
 
@@ -135,6 +135,10 @@ public class ExternalData {
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS entity_death "
                     + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
                     "player_uuid VARCHAR(80), player_name VARCHAR(100), mob VARCHAR(50), x INT, y INT, z INT, is_staff TINYINT)");
+
+            stsm.executeUpdate("CREATE TABLE IF NOT EXISTS sign_change "
+                    + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
+                    "player_uuid VARCHAR(80), player_name VARCHAR(100), x INT, y INT, z INT, new_text VARCHAR(100), is_staff TINYINT)");
 
             // Server Side Part
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS server_start "
@@ -954,6 +958,27 @@ public class ExternalData {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
+    public static void signChange(String serverName, Player player, int x, int y, int z, String text, boolean staff) {
+
+        try (Connection connection = plugin.getExternal().getHikari().getConnection();
+             final PreparedStatement signChange = connection.prepareStatement("INSERT INTO sign_change" +
+                     " (server_name, world, player_uuid, player_name, x, y, z, new_text, is_staff) VALUES(?,?,?,?,?,?,?,?,?)")) {
+
+            signChange.setString(1, serverName);
+            signChange.setString(2, player.getWorld().getName());
+            signChange.setString(3, player.getUniqueId().toString());
+            signChange.setString(4, player.getName());
+            signChange.setInt(5, x);
+            signChange.setInt(6, y);
+            signChange.setInt(7, z);
+            signChange.setString(8, text);
+            signChange.setBoolean(9, staff);
+
+            signChange.executeUpdate();
+
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+
     public void emptyTable() {
 
         if (externalDataDel <= 0) return;
@@ -1028,6 +1053,8 @@ public class ExternalData {
             stsm.executeUpdate("DELETE FROM rcon WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
             stsm.executeUpdate("DELETE FROM command_block WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
+
+            stsm.executeUpdate("DELETE FROM sign_change WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
             // Extras Side Part
             if (EssentialsUtil.getEssentialsAPI() != null) {

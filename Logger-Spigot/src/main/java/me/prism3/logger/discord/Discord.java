@@ -39,6 +39,7 @@ public class Discord {
     private TextChannel primedTNTChannel;
     private TextChannel chestInteractionChannel;
     private TextChannel entityDeathChannel;
+    private TextChannel signChangeChannel;
 
     private TextChannel serverStartChannel;
     private TextChannel serverStopChannel;
@@ -129,6 +130,8 @@ public class Discord {
             final String chestInteractionChannelID = this.main.getDiscordFile().get().getString("Discord.Chest-Interaction.Channel-ID");
 
             final String entityDeathChannelID = this.main.getDiscordFile().get().getString("Discord.Entity-Death.Channel-ID");
+
+            final String signChangeChannelID = this.main.getDiscordFile().get().getString("Discord.Sign-Change.Channel-ID");
 
             // Server Side Part
             final String serverStartChannelID = this.main.getDiscordFile().get().getString("Discord.Server-Side.Start.Channel-ID");
@@ -321,6 +324,12 @@ public class Discord {
 
                 }
 
+                if (this.isValid(signChangeChannelID, "Log-Player.Sign-Change")) {
+
+                    this.signChangeChannel = this.jda.getTextChannelById(signChangeChannelID);
+
+                }
+
                 // Server Side Part
                 if (this.isValid(serverStartChannelID, "Log-Server.Start")) {
 
@@ -420,8 +429,7 @@ public class Discord {
 
         if (channelID == null) return false;
 
-        return (!channelID.isEmpty() && this.main.getConfig().getBoolean(path) && !channelID.equals("LINK_HERE"));
-
+        return (!channelID.isEmpty() && this.main.getConfig().getBoolean(path) && (!channelID.equals("CHANNEL_ID") && !channelID.equals("LINK_HERE")));
     }
 
     public void staffChat(Player player, String content, boolean contentInAuthorLine) {
@@ -685,6 +693,11 @@ public class Discord {
         this.discordUtil(player, content, contentInAuthorLine, this.entityDeathChannel);
     }
 
+    public void signChange(Player player, String content, boolean contentInAuthorLine) {
+
+        this.discordUtil(player, content, contentInAuthorLine, this.signChangeChannel);
+    }
+
     private void discordUtil(Player player, String content, boolean contentInAuthorLine, TextChannel channel) {
         if (channel == null) return;
 
@@ -716,6 +729,4 @@ public class Discord {
             }
         }
     }
-
-    public JDA getJda() { return this.jda; }
 }

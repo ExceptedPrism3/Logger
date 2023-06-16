@@ -30,7 +30,7 @@ public class SQLiteData {
                 playerDeath, playerTeleport, blockPlace, blockBreak, tps, ram, playerKick, portalCreation, playerLevel,
                 bucketFill, bucketEmpty, anvil, serverStart, serverStop, itemDrop, enchant, bookEditing, afk,
                 wrongPassword, itemPickup, furnace, rCon, gameMode, craft, vault, registration, primedTNT, chestInteraction, liteBans,
-                advancedBan, commandBlock, woodStripping, entityDeath;
+                advancedBan, commandBlock, woodStripping, entityDeath, signChange;
 
         try {
 
@@ -133,6 +133,10 @@ public class SQLiteData {
             entityDeath = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS entity_death" +
                     "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, world TEXT(50), player_uuid INTEGER, " +
                     "player_name TEXT(40), mob TEXT(50), x INTEGER, y INTEGER, z INTEGER, is_staff INTEGER)");
+
+            signChange = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS sign_change" +
+                    "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, world TEXT(50), player_uuid INTEGER, " +
+                    "player_name TEXT(40), x INTEGER, y INTEGER, z INTEGER, new_text TEXT(50), is_staff INTEGER)");
 
             // Server Side Part
             serverStart = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS server_start" +
@@ -273,6 +277,8 @@ public class SQLiteData {
             chestInteraction.close();
             entityDeath.executeUpdate();
             entityDeath.close();
+            signChange.executeUpdate();
+            signChange.close();
 
             serverStart.executeUpdate();
             serverStart.close();
@@ -986,6 +992,26 @@ public class SQLiteData {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
+    public static void insertSignChange(String serverName, Player player, int x, int y, int z, String text, boolean isStaff) {
+        try {
+            final PreparedStatement entityDeathStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO sign_change (server_name, date, world, player_uuid, player_name, x, y, z, new_text, is_staff) VALUES (?,?,?,?,?,?,?,?,?,?)");
+            entityDeathStatement.setString(1, serverName);
+            entityDeathStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
+            entityDeathStatement.setString(3, player.getWorld().getName());
+            entityDeathStatement.setString(4, player.getUniqueId().toString());
+            entityDeathStatement.setString(5, player.getName());
+            entityDeathStatement.setInt(6, x);
+            entityDeathStatement.setInt(7, y);
+            entityDeathStatement.setInt(8, z);
+            entityDeathStatement.setString(9, text);
+            entityDeathStatement.setBoolean(10, isStaff);
+
+            entityDeathStatement.executeUpdate();
+            entityDeathStatement.close();
+
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+
     public void emptyTable() {
 
         if (sqliteDataDel <= 0) return;
@@ -1042,6 +1068,9 @@ public class SQLiteData {
             final PreparedStatement chestInteraction = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM chest_interaction WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
             final PreparedStatement entityDeath = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM entity_death WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
+
+            final PreparedStatement signChange = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM sign_change WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
+
 
             // Server Side Part
             final PreparedStatement serverStart = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM server_start WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
@@ -1165,6 +1194,8 @@ public class SQLiteData {
             chestInteraction.close();
             entityDeath.executeUpdate();
             entityDeath.close();
+            signChange.executeUpdate();
+            signChange.close();
 
             serverStart.executeUpdate();
             serverStart.close();

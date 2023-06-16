@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Logger-Velocity</artifactId>
-    <version>1.8.0.8</version>
+    <version>1.8.0.9</version>
     <packaging>jar</packaging>
 
     <name>Logger-Velocity</name>
@@ -19,7 +19,7 @@
     <parent>
         <artifactId>Logger</artifactId>
         <groupId>me.prism3</groupId>
-        <version>1.8.0.8</version>
+        <version>1.8.0.9</version>
     </parent>
 
     <build>

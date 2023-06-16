@@ -45,6 +45,8 @@ public class FileHandler {
     private static File chestInteractionFolder;
     private static File entityDeathFolder;
 
+    private static File signChangeFolder;
+
     // Server Side
     private static File serverStartFolder;
     private static File serverStopFolder;
@@ -93,6 +95,7 @@ public class FileHandler {
     private static File primedTNTFile;
     private static File chestInteractionFile;
     private static File entityDeathFile;
+    private static File signChangeFile;
 
     // Server Side
     private static File serverStartFile;
@@ -210,6 +213,9 @@ public class FileHandler {
         entityDeathFolder = new File(logsFolder, "Entity Death");
         entityDeathFile = new File(entityDeathFolder, filenameDateFormat.format(date) + ".log");
 
+        signChangeFolder = new File(logsFolder, "Sign Change");
+        signChangeFile = new File(signChangeFolder, filenameDateFormat.format(date) + ".log");
+
         // Server Side Part
         serverStartFolder = new File(logsFolder, "Server Start");
         serverStartFile = new File(serverStartFolder, filenameDateFormat.format(date) + ".log");
@@ -314,6 +320,8 @@ public class FileHandler {
 
             entityDeathFolder.mkdir();
 
+            signChangeFolder.mkdir();
+
             // Server Side Part
             serverStartFolder.mkdir();
 
@@ -399,6 +407,8 @@ public class FileHandler {
             chestInteractionFile.createNewFile();
 
             entityDeathFile.createNewFile();
+
+            signChangeFile.createNewFile();
 
             // Server Side
             serverStartFile.createNewFile();
@@ -487,6 +497,8 @@ public class FileHandler {
     public static File getChestInteractionFile() { return chestInteractionFile; }
 
     public static File getEntityDeathFile() { return entityDeathFile; }
+
+    public static File getSignChangeFile() { return signChangeFile; }
 
     // Server Side Part
     public static File getServerStartFile() { return serverStartFile; }
@@ -721,6 +733,13 @@ public class FileHandler {
         {
 
             deleteFile(entityDeath);
+
+        }
+
+        for (File signChange : Objects.requireNonNull(signChangeFolder.listFiles()))
+        {
+
+            deleteFile(signChange);
 
         }
 

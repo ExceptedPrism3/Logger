@@ -59,6 +59,8 @@ Files:
   Chest-Interaction: "[%time%] [%world%] [%uuid%] The Player <%player%> has opened %chest% at X= %x%, Y= %y%, Z= %z% that contained %items%"
   Entity-Death-Staff: "[%time%] [%world%] [%uuid%] The Staff <%player%> has slain %mob% at X= %x%, Y= %y%, Z= %z%"
   Entity-Death: "[%time%] [%world%] [%uuid%] The Player <%player%> has slain %mob% at X= %x%, Y= %y%, Z= %z%"
+  Sign-Change-Staff: "[%time%] [%world%] [%uuid%] The Staff <%player%> has changed a sign at X= %x%, Y= %y%, Z= %z% with %line1%, %line2%, %line3%, %line4%"
+  Sign-Change: "[%time%] [%world%] [%uuid%] The Player <%player%> has changed a sign at X= %x%, Y= %y%, Z= %z% with %line1%, %line2%, %line3%, %line4%"
   Server-Side:
     Start: "[%time%]"
     Stop: "[%time%]"
@@ -147,6 +149,8 @@ Discord:
     Portal-Creation: "**[%time%]** A portal has been created in **[%time%]** **[%world%]** using **%material%**"
     RCON: "[%time%] This command '**%command%**' has been executed via an RCON"
     Command-Block: "**[%time%]** **%command%**"
+  Sign-Change-Staff: "**[%time%]** **[%world%]** **[%uuid%]** has changed a sign at X= **%x%**, Y= **%y%**, Z= **%z%** with **%line1%** `,` **%line2%**  `,` **%line3%** `,` **%line4%**"
+  Sign-Change: "**[%time%]** **[%world%]** **[%uuid%]** has changed a sign at X= **%x%**, Y= **%y%**, Z= **%z%** with **%line1%** `,` **%line2%**  `,` **%line3%** `,` **%line4%**"
   Extras:
     AFK-Staff: "**[%time%]** **[%world%]*X= **%x%** `|` Y= **%y%** `|` Z= **%z%**"
     AFK: "**[%time%]** **[%world%]** X= **%x%** `|` Y= **%y%** `|` Z= **%z%**"

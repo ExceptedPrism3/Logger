@@ -57,6 +57,8 @@ Discord:
     Channel-ID: 'CHANNEL_ID'
   Entity-Death:
     Channel-ID: 'CHANNEL_ID'
+  Sign-Change:
+    Channel-ID: 'CHANNEL_ID'
   # Server Side Checkers
   Server-Side:
     Start:

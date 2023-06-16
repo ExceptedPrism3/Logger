@@ -186,6 +186,8 @@ Additions
     [+] Plugin Prefix
     [+] 1.7 server versions enums
     [+] 1.19.2 / 1.19.3 Support
+    [+] 1.20.1 Support
+    [+] Sign Change Checker
 
 Fixes
     [!] Plugin not starting up correctly
@@ -197,6 +199,8 @@ Fixes
     [!] LiteBans table not auto deleting on Velocity instance
     [!] Toggle Commands are no longer case sensitive
     [!] Chest Interaction errors when run on 1.8.8 servers & being run with other plugins
+    [!] Discord not working properly due to a mistake by me xD
+    [!] Corrected the exact location of sign placement
 
 Changes
     [*] Remade permissions which will log OP and NOT OP players until they're permitted with the exempt permission
