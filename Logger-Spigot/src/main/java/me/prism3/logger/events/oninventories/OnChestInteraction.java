@@ -31,42 +31,46 @@ public class OnChestInteraction implements Listener {
     private final Main main = Main.getInstance();
 
     private final List<Material> containerMaterials = new ArrayList<>(Arrays.asList(
-            Material.CHEST,
-            Material.TRAPPED_CHEST,
-            Material.ENDER_CHEST,
-            Material.DROPPER,
-            Material.DISPENSER,
-            Material.HOPPER,
-            Material.BREWING_STAND,
-            Material.FURNACE
+            Material.valueOf("CHEST"),
+            Material.valueOf("TRAPPED_CHEST"),
+            Material.valueOf("ENDER_CHEST"),
+            Material.valueOf("DROPPER"),
+            Material.valueOf("DISPENSER"),
+            Material.valueOf("HOPPER"),
+            Material.valueOf("BREWING_STAND"),
+            Material.valueOf("FURNACE")
     ));
 
     private void addAdditionalItems() {
 
         if (this.main.getVersion().isAtLeast(NmsVersions.v1_11_R1)) {
 
-            this.containerMaterials.add(Material.SHULKER_BOX);
-            this.containerMaterials.add(Material.BLACK_SHULKER_BOX);
-            this.containerMaterials.add(Material.BLUE_SHULKER_BOX);
-            this.containerMaterials.add(Material.BROWN_SHULKER_BOX);
-            this.containerMaterials.add(Material.CYAN_SHULKER_BOX);
-            this.containerMaterials.add(Material.GRAY_SHULKER_BOX);
-            this.containerMaterials.add(Material.GREEN_SHULKER_BOX);
-            this.containerMaterials.add(Material.LIGHT_BLUE_SHULKER_BOX);
-            this.containerMaterials.add(Material.LIGHT_GRAY_SHULKER_BOX);
-            this.containerMaterials.add(Material.LIME_SHULKER_BOX);
-            this.containerMaterials.add(Material.MAGENTA_SHULKER_BOX);
-            this.containerMaterials.add(Material.ORANGE_SHULKER_BOX);
-            this.containerMaterials.add(Material.PINK_SHULKER_BOX);
-            this.containerMaterials.add(Material.PURPLE_SHULKER_BOX);
-            this.containerMaterials.add(Material.RED_SHULKER_BOX);
-            this.containerMaterials.add(Material.WHITE_SHULKER_BOX);
-            this.containerMaterials.add(Material.YELLOW_SHULKER_BOX);
+            this.containerMaterials.add(Material.valueOf("BLACK_SHULKER_BOX"));
+            this.containerMaterials.add(Material.valueOf("BLUE_SHULKER_BOX"));
+            this.containerMaterials.add(Material.valueOf("BROWN_SHULKER_BOX"));
+            this.containerMaterials.add(Material.valueOf("CYAN_SHULKER_BOX"));
+            this.containerMaterials.add(Material.valueOf("GRAY_SHULKER_BOX"));
+            this.containerMaterials.add(Material.valueOf("GREEN_SHULKER_BOX"));
+            this.containerMaterials.add(Material.valueOf("LIGHT_BLUE_SHULKER_BOX"));
+            this.containerMaterials.add(Material.valueOf("LIME_SHULKER_BOX"));
+            this.containerMaterials.add(Material.valueOf("MAGENTA_SHULKER_BOX"));
+            this.containerMaterials.add(Material.valueOf("ORANGE_SHULKER_BOX"));
+            this.containerMaterials.add(Material.valueOf("PINK_SHULKER_BOX"));
+            this.containerMaterials.add(Material.valueOf("PURPLE_SHULKER_BOX"));
+            this.containerMaterials.add(Material.valueOf("RED_SHULKER_BOX"));
+            this.containerMaterials.add(Material.valueOf("WHITE_SHULKER_BOX"));
+            this.containerMaterials.add(Material.valueOf("YELLOW_SHULKER_BOX"));
+        }
+
+        if (this.main.getVersion().isAtLeast(NmsVersions.v1_13_R1)) {
+
+            this.containerMaterials.add(Material.valueOf("SHULKER_BOX"));
+            this.containerMaterials.add(Material.valueOf("LIGHT_GRAY_SHULKER_BOX"));
         }
 
         if (this.main.getVersion().isAtLeast(NmsVersions.v1_14_R1)) {
-            this.containerMaterials.add(Material.BARREL);
-            this.containerMaterials.add(Material.BLAST_FURNACE);
+            this.containerMaterials.add(Material.valueOf("BARREL"));
+            this.containerMaterials.add(Material.valueOf("BLAST_FURNACE"));
         }
     }
 
