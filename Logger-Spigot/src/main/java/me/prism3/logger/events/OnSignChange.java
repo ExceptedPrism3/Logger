@@ -16,6 +16,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 public class OnSignChange implements Listener {
 
@@ -81,9 +82,13 @@ public class OnSignChange implements Listener {
                 }
 
                 try {
+                    Data data = new Data();
+
+                    data.initializeDateFormatter();
+
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getSignChangeFile(), true));
 
-                    out.write(main.getMessages().get().getString("Files.Sign-Change")
+                    out.write(Objects.requireNonNull(main.getMessages().get().getString("Files.Sign-Change"))
                             .replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now()))
                             .replace("%world%", worldName)
                             .replace("%player%", player.getName())

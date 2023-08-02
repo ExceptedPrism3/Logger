@@ -3,12 +3,12 @@
   <parent>
     <artifactId>Logger</artifactId>
     <groupId>me.prism3</groupId>
-    <version>1.8.0.9</version>
+    <version>1.8.0.11</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>Logger-Spigot</artifactId>
   <name>Logger-Spigot</name>
-  <version>1.8.0.9</version>
+  <version>1.8.0.11</version>
   <description>Log all Activities from Players or Server Side!</description>
   <build>
     <resources>
@@ -157,6 +157,10 @@
       <id>opencollab-snapshot</id>
       <url>https://repo.opencollab.dev/maven-snapshots/</url>
     </repository>
+    <repository>
+      <id>codemc-public</id>
+      <url>https://repo.codemc.io/repository/maven-public/</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -180,11 +184,11 @@
     <dependency>
       <groupId>fr.xephi</groupId>
       <artifactId>authme</artifactId>
-      <version>5.6.0-SNAPSHOT</version>
+      <version>5.6.0-beta2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>com.GitHub.MilkBowl</groupId>
+      <groupId>net.milkbowl.vault</groupId>
       <artifactId>VaultAPI</artifactId>
       <version>1.7</version>
       <scope>provided</scope>

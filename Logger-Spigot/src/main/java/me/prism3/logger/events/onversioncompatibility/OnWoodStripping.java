@@ -53,9 +53,18 @@ public class OnWoodStripping implements Listener {
         axes.add(Material.IRON_AXE);
         axes.add(Material.GOLDEN_AXE);
         axes.add(Material.DIAMOND_AXE);
-        if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_16_R1))
+        if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_16_R1)) {
             axes.add(Material.NETHERITE_AXE);
-
+            logs.add(Material.WARPED_STEM);
+            logs.add(Material.CRIMSON_STEM);
+        }
+        if(Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_19_R1)) {
+            logs.add(Material.MANGROVE_WOOD);
+        }
+        if(Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_20_R1)) {
+            logs.add(Material.CHERRY_WOOD);
+        }
+            
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
