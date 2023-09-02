@@ -83,15 +83,6 @@ public class Main extends JavaPlugin {
         // bStats
         new Metrics(this, 12036);
 
-        // Update Checker
-        /*if (Data.isUpdateChecker) {
-
-            UpdateChecker.init(this, Data.resource_ID)
-                    .checkEveryXHours(2)
-                    .setChangelogLink(Data.resource_ID)
-                    .setNotifyByPermissionOnJoin(Data.loggerUpdate)
-                    .checkNow();
-        }*/
 
         this.loadPluginDepends();
 
