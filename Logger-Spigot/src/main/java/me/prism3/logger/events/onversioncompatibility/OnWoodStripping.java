@@ -58,10 +58,10 @@ public class OnWoodStripping implements Listener {
             logs.add(Material.WARPED_STEM);
             logs.add(Material.CRIMSON_STEM);
         }
-        if(Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_19_R1)) {
-            logs.add(Material.MANGROVE_WOOD);
+        if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_19_R1)) {
+            logs.add(Material.MANGROVE_LOG);
         }
-        if(Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_20_R1)) {
+        if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_20_R1)) {
             logs.add(Material.CHERRY_WOOD);
         }
             
