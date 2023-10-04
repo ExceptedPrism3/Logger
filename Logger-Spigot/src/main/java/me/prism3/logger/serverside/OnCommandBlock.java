@@ -5,6 +5,7 @@ import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -41,7 +42,7 @@ public class OnCommandBlock implements Listener {
 
                     } catch (IOException e) {
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }

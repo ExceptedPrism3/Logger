@@ -5,6 +5,7 @@ import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -31,7 +32,7 @@ public class Stop {
 
                 } catch (IOException e) {
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }

@@ -1,6 +1,5 @@
 package me.prism3.logger.commands.getting;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -8,10 +7,10 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 @SuppressWarnings("deprecation")
 public class Pager {
-  private int count;
-  private int limit;
-  private int pageLimit;
-  private int currentPage;
+  private final int count;
+  private final int limit;
+  private final int pageLimit;
+  private final int currentPage;
 
   /**
    *

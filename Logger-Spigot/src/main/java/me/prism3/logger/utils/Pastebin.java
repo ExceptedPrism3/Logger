@@ -5,17 +5,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.StringJoiner;
+import java.util.*;
+
 
 public class Pastebin {
-
-    /**
-     *
-     * Special Thanks to Redmoogle#3761 for his help!
-     */
 
     private Pastebin() {}
 
@@ -23,59 +16,66 @@ public class Pastebin {
     private static final String USER_AGENT = "Mozilla/5.0";
     private static final String DEFAULT_INV = "\0";
 
-    public static String postPaste(PasteRequest request) throws IOException {
+    public static String postPaste(final PasteRequest request) {
 
-        final Map<String, String> arguments = new HashMap<>();
+        try {
 
-        arguments.put("api_option", "paste");
-        arguments.put("api_dev_key", request.getDevKey());
-        arguments.put("api_paste_code", request.getPaste());
+            final Map<String, String> arguments = new HashMap<>();
 
-        if (request.hasUserKey())
-            arguments.put("api_user_key", request.getUserKey());
+            arguments.put("api_option", "paste");
+            arguments.put("api_dev_key", request.getDevKey());
+            arguments.put("api_paste_code", request.getPaste());
 
+            if (request.hasUserKey())
+                arguments.put("api_user_key", request.getUserKey());
 
-        if (request.hasPasteName())
-            arguments.put("api_paste_name", request.getPasteName());
+            if (request.hasPasteName())
+                arguments.put("api_paste_name", request.getPasteName());
 
+            if (request.hasPasteFormat())
+                arguments.put("api_paste_format", request.getPasteFormat());
 
-        if (request.hasPasteFormat())
-            arguments.put("api_paste_format", request.getPasteFormat());
+            if (request.hasPasteState())
+                arguments.put("api_paste_private", request.getPasteState() + "");
 
+            if (request.hasPasteExpire())
+                arguments.put("api_paste_expire_date", request.getPasteExpire());
 
-        if (request.hasPasteState())
-            arguments.put("api_paste_private", request.getPasteState() + "");
+            final String postData = postMap(arguments);
+            final byte[] postDataB = postData.getBytes(StandardCharsets.UTF_8);
+            final HttpURLConnection con = (HttpURLConnection) new URL(API_URL).openConnection();
+            con.setDoOutput(true);
+            con.setFixedLengthStreamingMode(postDataB.length);
+            con.setRequestMethod("POST");
+            con.setRequestProperty("User-Agent", USER_AGENT);
+            con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
+            con.connect();
 
-        if (request.hasPasteExpire())
-            arguments.put("api_paste_expire_date", request.getPasteExpire());
+            try (final OutputStream os = con.getOutputStream()) {
+                os.write(postDataB);
+            }
 
+            try (final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+                String inputLine;
+                final StringBuilder response = new StringBuilder();
 
-        final String postData = postMap(arguments);
-        final byte[] postDataB = postData.getBytes(StandardCharsets.UTF_8);
-        final HttpURLConnection con = (HttpURLConnection) new URL(API_URL).openConnection();
-        con.setDoOutput(true);
-        con.setFixedLengthStreamingMode(postDataB.length);
-        con.setRequestMethod("POST");
-        con.setRequestProperty("User-Agent", USER_AGENT);
-        con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
 
-        con.connect();
-        try (OutputStream os = con.getOutputStream()) {
-            os.write(postDataB);
+                return response.toString();
+            }
+        } catch (final IOException e) {
+            // Handle or log the exception here
+            Log.severe("An error has occurred whilst processing request to PasteBin Website.");
+            Log.severe("Does your host allows outgoing connections from your server?");
+            Log.severe("The PasteBin website could be down or on high demand.");
+            Log.severe("This isn't a bug from the Logger plugin side!");
+
+            e.printStackTrace();
+            return null; // You can return an error message or handle it as needed
         }
-
-        final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        final StringBuilder response = new StringBuilder();
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-
-        in.close();
-        con.disconnect();
-        return response.toString();
     }
 
     private static String postMap(Map<String, String> arguments) throws UnsupportedEncodingException {
@@ -103,69 +103,37 @@ public class Pastebin {
             this.paste = paste;
         }
 
-        public String getDevKey() {
-            return devKey;
-        }
+        public String getDevKey() { return this.devKey; }
 
-        public String getPaste() {
-            return paste;
-        }
+        public String getPaste() { return this.paste; }
 
-        public String getUserKey() {
-            return DEFAULT_INV;
-        }
+        public String getUserKey() { return DEFAULT_INV; }
 
-        public String getPasteName() {
-            return pasteName;
-        }
+        public String getPasteName() { return this.pasteName; }
 
-        public String getPasteFormat() {
-            return pasteFormat;
-        }
+        public String getPasteFormat() { return this.pasteFormat; }
 
-        public int getPasteState() {
-            return pasteState;
-        }
+        public int getPasteState() { return this.pasteState; }
 
-        public String getPasteExpire() {
-            return pasteExpire;
-        }
+        public String getPasteExpire() { return this.pasteExpire; }
 
-        public boolean hasUserKey() {
-            return false;
-        }
+        public boolean hasUserKey() { return false; }
 
-        public boolean hasPasteName() {
-            return !Objects.equals(pasteName, DEFAULT_INV);
-        }
+        public boolean hasPasteName() { return !Objects.equals(this.pasteName, DEFAULT_INV); }
 
-        public boolean hasPasteFormat() {
-            return !Objects.equals(pasteFormat, DEFAULT_INV);
-        }
+        public boolean hasPasteFormat() { return !Objects.equals(this.pasteFormat, DEFAULT_INV); }
 
-        public boolean hasPasteState() {
-            return pasteState != -1;
-        }
+        public boolean hasPasteState() { return this.pasteState != -1; }
 
-        public boolean hasPasteExpire() {
-            return !Objects.equals(pasteExpire, DEFAULT_INV);
-        }
+        public boolean hasPasteExpire() { return !Objects.equals(this.pasteExpire, DEFAULT_INV); }
 
-        public void setPasteName(String pasteName) {
-            this.pasteName = pasteName;
-        }
+        public void setPasteName(String pasteName) { this.pasteName = pasteName; }
 
-        public void setPasteFormat(String pasteFormat) {
-            this.pasteFormat = pasteFormat;
-        }
+        public void setPasteFormat(String pasteFormat) { this.pasteFormat = pasteFormat; }
 
-        public void setPasteState(int pasteState) {
-            this.pasteState = pasteState;
-        }
+        public void setPasteState(int pasteState) { this.pasteState = pasteState; }
 
-        public void setPasteExpire(String pasteExpire) {
-            this.pasteExpire = pasteExpire;
-        }
+        public void setPasteExpire(String pasteExpire) { this.pasteExpire = pasteExpire; }
 
         public String postPaste() throws IOException { return Pastebin.postPaste(this); }
     }

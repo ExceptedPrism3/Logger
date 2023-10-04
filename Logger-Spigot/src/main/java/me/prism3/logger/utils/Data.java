@@ -1,6 +1,8 @@
 package me.prism3.logger.utils;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.utils.enums.NmsVersions;
+import org.bukkit.Bukkit;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -8,7 +10,7 @@ import java.util.Objects;
 
 public class Data {
 
-    private final Main main = Main.getInstance();
+    private static final Main main = Main.getInstance();
 
     // Date Format
     public static DateTimeFormatter dateTimeFormatter;
@@ -75,80 +77,88 @@ public class Data {
     public static String loggerSpy;
     public static String loggerReload;
 
-    public void initializeDateFormatter() {
+    public static NmsVersions version;
 
-        dateTimeFormatter = DateTimeFormatter.ofPattern(Objects.requireNonNull(this.main.getConfig().getString("Time-Formatter")));
+    public static void initializer() {
 
+        initializeDateFormatter();
+        initializeStrings();
+        initializeListOfStrings();
+        initializeIntegers();
+        initializeLongs();
+        initializeBooleans();
+        initializePermissionStrings();
     }
 
-    public void initializeStrings() {
+    private static void initializeDateFormatter() {
 
-        configVersion = this.main.getConfig().getString("Config");
-        serverName = this.main.getConfig().getString("Server-Name");
-        gameModeConf = this.main.getConfig().getString("Game-Mode");
-        dbType = this.main.getConfig().getString("Database.Type");
-        dbHost = this.main.getConfig().getString("Database.Host");
-        dbUserName = this.main.getConfig().getString("Database.Username");
-        dbPassword = this.main.getConfig().getString("Database.Password");
-        dbName = this.main.getConfig().getString("Database.Database");
+        dateTimeFormatter = DateTimeFormatter.ofPattern(Objects.requireNonNull(main.getConfig().getString("Time-Formatter")));
+    }
+
+    private static void initializeStrings() {
+
+        configVersion = main.getConfig().getString("Config");
+        serverName = main.getConfig().getString("Server-Name");
+        gameModeConf = main.getConfig().getString("Game-Mode");
+        dbType = main.getConfig().getString("Database.Type");
+        dbHost = main.getConfig().getString("Database.Host");
+        dbUserName = main.getConfig().getString("Database.Username");
+        dbPassword = main.getConfig().getString("Database.Password");
+        dbName = main.getConfig().getString("Database.Database");
         langPath = "messages";
         fileType = ".yml";
-        selectedLang = this.main.getConfig().getString("Language");
+        selectedLang = main.getConfig().getString("Language");
         discordSupportServer = "https://discord.gg/MfR5mcpVfX";
-        pluginPrefix = this.main.getConfig().getString("Plugin-Prefix");
-
+        pluginPrefix = main.getConfig().getString("Plugin-Prefix");
     }
 
-    public void initializeListOfStrings() {
+    private static void initializeListOfStrings() {
 
-        commandsToBlock = this.main.getConfig().getStringList("Player-Commands.Commands-to-Block");
-        commandsToLog = this.main.getConfig().getStringList("Player-Commands.Commands-to-Log");
-        consoleCommandsToBlock = this.main.getConfig().getStringList("Console-Commands.Commands-to-Block");
-
+        commandsToBlock = main.getConfig().getStringList("Player-Commands.Commands-to-Block");
+        commandsToLog = main.getConfig().getStringList("Player-Commands.Commands-to-Log");
+        consoleCommandsToBlock = main.getConfig().getStringList("Console-Commands.Commands-to-Block");
     }
 
-    public void initializeIntegers() {
+    private static void initializeIntegers() {
 
-        pluginVersion = this.main.getDescription().getVersion();
+        pluginVersion = main.getDescription().getVersion();
         resource_ID = 94236;
-        ramTpsChecker = this.main.getConfig().getInt("RAM-TPS-Checker");
-        vaultChecker = this.main.getConfig().getInt("Vault-Checker");
-        abovePlayerLevel = this.main.getConfig().getInt("Player-Level.Log-Above");
-        ramPercent = this.main.getConfig().getInt("RAM.Percent");
-        tpsMedium = this.main.getConfig().getInt("TPS.Value-Medium");
-        tpsCritical = this.main.getConfig().getInt("TPS.Value-Critical");
-        dbPort = this.main.getConfig().getInt("Database.Port");
-        externalDataDel = this.main.getConfig().getInt("Database.Data-Deletion");
-        sqliteDataDel = this.main.getConfig().getInt("SQLite.Data-Deletion");
-        allowedBackups = this.main.getConfig().getInt("Player-Death-Backup.Max-Backup");
-
+        ramTpsChecker = main.getConfig().getInt("RAM-TPS-Checker");
+        vaultChecker = main.getConfig().getInt("Vault-Checker");
+        abovePlayerLevel = main.getConfig().getInt("Player-Level.Log-Above");
+        ramPercent = main.getConfig().getInt("RAM.Percent");
+        tpsMedium = main.getConfig().getInt("TPS.Value-Medium");
+        tpsCritical = main.getConfig().getInt("TPS.Value-Critical");
+        dbPort = main.getConfig().getInt("Database.Port");
+        externalDataDel = main.getConfig().getInt("Database.Data-Deletion");
+        sqliteDataDel = main.getConfig().getInt("SQLite.Data-Deletion");
+        allowedBackups = main.getConfig().getInt("Player-Death-Backup.Max-Backup");
+        version = versionChecker();
     }
 
-    public void initializeLongs() {
+    private static void initializeLongs() {
 
-        fileDeletion = this.main.getConfig().getLong("File-Deletion");
-
+        fileDeletion = main.getConfig().getLong("File-Deletion");
     }
 
-    public void initializeBooleans() {
+    private static void initializeBooleans() {
 
-        isLogToFiles = this.main.getConfig().getBoolean("Log-to-Files");
-        isUpdateChecker = this.main.getConfig().getBoolean("Update-Checker");
-        isExternal = this.main.getConfig().getBoolean("Database.Enable");
-        isSqlite = this.main.getConfig().getBoolean("SQLite.Enable");
-        isStaffEnabled = this.main.getConfig().getBoolean("Staff.Enabled");
-        isWhitelisted = this.main.getConfig().getBoolean("Player-Commands.Whitelist-Commands");
-        isBlacklisted = this.main.getConfig().getBoolean("Player-Commands.Blacklist-Commands");
-        isCommandsToBlock = this.main.getConfig().getBoolean("Player-Commands.Blacklist-Commands");
-        isCommandsToLog = this.main.getConfig().getBoolean("Player-Commands.Whitelist-Commands");
-        isPlayerIP = this.main.getConfig().getBoolean("Player-Join.Player-IP");
-        isConsoleCommands = this.main.getConfig().getBoolean("Console-Commands.Blacklist-Commands");
-        isRegistration = this.main.getConfig().getBoolean("Log-Player.Registration");
-        isPlayerDeathBackup = this.main.getConfig().getBoolean("Player-Death-Backup.Enabled");
-
+        isLogToFiles = main.getConfig().getBoolean("Log-to-Files");
+        isUpdateChecker = main.getConfig().getBoolean("Update-Checker");
+        isExternal = main.getConfig().getBoolean("Database.Enable");
+        isSqlite = main.getConfig().getBoolean("SQLite.Enable");
+        isStaffEnabled = main.getConfig().getBoolean("Staff.Enabled");
+        isWhitelisted = main.getConfig().getBoolean("Player-Commands.Whitelist-Commands");
+        isBlacklisted = main.getConfig().getBoolean("Player-Commands.Blacklist-Commands");
+        isCommandsToBlock = main.getConfig().getBoolean("Player-Commands.Blacklist-Commands");
+        isCommandsToLog = main.getConfig().getBoolean("Player-Commands.Whitelist-Commands");
+        isPlayerIP = main.getConfig().getBoolean("Player-Join.Player-IP");
+        isConsoleCommands = main.getConfig().getBoolean("Console-Commands.Blacklist-Commands");
+        isRegistration = main.getConfig().getBoolean("Log-Player.Registration");
+        isPlayerDeathBackup = main.getConfig().getBoolean("Player-Death-Backup.Enabled");
     }
 
-    public void initializePermissionStrings() {
+    private static void initializePermissionStrings() {
 
         loggerExempt = "logger.exempt";
         loggerExemptDiscord = "logger.exempt.discord";
@@ -157,6 +167,17 @@ public class Data {
         loggerSpyBypass = "logger.spy.bypass";
         loggerSpy = "logger.spy";
         loggerReload = "logger.reload";
+    }
 
+    private static NmsVersions versionChecker() {
+
+        try {
+            return NmsVersions.valueOf(Bukkit.getServer().getClass().getPackage().getName().replace(".",  ",").split(",")[3]);
+
+        } catch (final IllegalArgumentException e) {
+
+            Log.severe("Current version is unknown, using the latest known one.");
+            return NmsVersions.v1_21_R1;
+        }
     }
 }

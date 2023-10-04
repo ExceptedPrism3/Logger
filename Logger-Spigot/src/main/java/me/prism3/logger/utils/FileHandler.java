@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import static me.prism3.logger.utils.Data.version;
+
 public class FileHandler {
 
     // Folders Part
@@ -351,7 +353,7 @@ public class FileHandler {
             if (AdvancedBanUtil.getAdvancedBanAPI() != null) advancedBanFolder.mkdir();
 
             // Version Exception Part
-            if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFolder.mkdir();
+            if (version.isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFolder.mkdir();
 
 
             // Files Handling
@@ -439,7 +441,7 @@ public class FileHandler {
             if (AdvancedBanUtil.getAdvancedBanAPI() != null) advancedBanFile.createNewFile();
 
             // Version Exception Part
-            if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFile.createNewFile();
+            if (version.isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFile.createNewFile();
 
         } catch (IOException e) { e.printStackTrace(); }
     }
@@ -849,7 +851,7 @@ public class FileHandler {
         }
 
         // Version Exception Part
-        if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_13_R1)) {
+        if (version.isAtLeast(NmsVersions.v1_13_R1)) {
             for (File woodStripping : Objects.requireNonNull(woodStrippingFolder.listFiles())) {
 
                 deleteFile(woodStripping);

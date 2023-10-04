@@ -6,6 +6,7 @@ import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import me.prism3.logger.utils.enums.FriendlyEnchants;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
@@ -19,9 +20,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class OnItemDrop implements Listener {
 
@@ -52,13 +53,15 @@ public class OnItemDrop implements Listener {
             final int blockX = event.getItemDrop().getLocation().getBlockX();
             final int blockY = event.getItemDrop().getLocation().getBlockY();
             final int blockZ = event.getItemDrop().getLocation().getBlockZ();
-            final List<String> enchs = new ArrayList<>();
 
-            for (Enchantment ench : event.getItemDrop().getItemStack().getEnchantments().keySet()) {
-
-                enchs.add(FriendlyEnchants.getFriendlyEnchantment(ench).getFriendlyName());
-
-            }
+            final List<String> enchs = event.getItemDrop().getItemStack().getEnchantments().entrySet().stream()
+                    .map(entry -> {
+                        final Enchantment enchantment = entry.getKey();
+                        final int level = entry.getValue();
+                        final String friendlyName = FriendlyEnchants.getFriendlyEnchantment(enchantment).getFriendlyName();
+                        return friendlyName + " " + level;
+                    })
+                    .collect(Collectors.toList());
 
             // Log To Files
             if (Data.isLogToFiles) {
@@ -67,18 +70,18 @@ public class OnItemDrop implements Listener {
 
                     if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Item-Drop-Staff")).isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Item-Drop-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", String.valueOf(itemName)).replace("%enchantment%", String.valueOf(enchs)), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Item-Drop-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName).replace("%enchantment%", enchs.toString()), false);
                     }
 
                     try {
 
                         BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getStaffFile(), true));
-                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Item-Drop-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", String.valueOf(itemName)).replace("%enchantment%", String.valueOf(enchs)) + "\n");
+                        out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Item-Drop-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName).replace("%enchantment%", enchs.toString()) + "\n");
                         out.close();
 
                     } catch (IOException e) {
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
@@ -102,12 +105,12 @@ public class OnItemDrop implements Listener {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getItemDropFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Item-Drop")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", String.valueOf(itemName)).replace("%enchantment%", String.valueOf(enchs)) + "\n");
+                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Item-Drop")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%player%", playerName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName).replace("%enchantment%", String.valueOf(enchs)) + "\n");
                     out.close();
 
                 } catch (IOException e) {
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -120,14 +123,14 @@ public class OnItemDrop implements Listener {
 
                     if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Item-Drop-Staff")).isEmpty()) {
 
-                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Item-Drop-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", String.valueOf(itemName)).replace("%enchantment%", String.valueOf(enchs)), false);
+                        this.main.getDiscord().staffChat(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Item-Drop-Staff")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName).replace("%enchantment%", String.valueOf(enchs)), false);
 
                     }
                 } else {
 
                     if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Item-Drop")).isEmpty()) {
 
-                        this.main.getDiscord().itemDrop(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Item-Drop")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", String.valueOf(itemName)).replace("%enchantment%", String.valueOf(enchs)), false);
+                        this.main.getDiscord().itemDrop(player, Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Item-Drop")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())).replace("%world%", worldName).replace("%item%", item).replace("%amount%", String.valueOf(amount)).replace("%x%", String.valueOf(blockX)).replace("%y%", String.valueOf(blockY)).replace("%z%", String.valueOf(blockZ)).replace("%renamed%", itemName).replace("%enchantment%", String.valueOf(enchs)), false);
                     }
                 }
             }

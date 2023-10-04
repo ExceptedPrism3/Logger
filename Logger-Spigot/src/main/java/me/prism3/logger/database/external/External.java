@@ -3,6 +3,7 @@ package me.prism3.logger.database.external;
 import com.zaxxer.hikari.HikariDataSource;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.Data;
+import me.prism3.logger.utils.Log;
 
 public class External {
 
@@ -42,7 +43,7 @@ public class External {
                 break;
 
             default:
-                this.main.getLogger().severe("Unknown Database Type. Available ones are: MySQL and MariaDB.");
+                Log.severe("Unknown Database Type. Available ones are: MySQL and MariaDB.");
                 return;
 
         }
@@ -54,7 +55,7 @@ public class External {
             hikari.setJdbcUrl(this.getJdbcUrl());
             hikari.addDataSourceProperty("user", USERNAME);
             hikari.addDataSourceProperty("password", PASSWORD);
-            this.main.getLogger().info(this.jdbc + " Connection has been established!");
+            Log.info(this.jdbc + " Connection has been established!");
         }
     }
 
@@ -63,7 +64,7 @@ public class External {
         if (isConnected()) {
 
             this.hikari.close();
-            this.main.getLogger().info(this.jdbc + " Connection has been closed!");
+            Log.info(this.jdbc + " Connection has been closed!");
 
         }
     }

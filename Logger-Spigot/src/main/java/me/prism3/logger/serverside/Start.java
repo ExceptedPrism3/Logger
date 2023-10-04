@@ -5,6 +5,7 @@ import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -31,7 +32,7 @@ public class Start {
 
                 } catch (IOException e) {
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }
@@ -66,7 +67,7 @@ public class Start {
 
         if (Data.isWhitelisted && Data.isBlacklisted) {
 
-            this.main.getLogger().warning("Enabling both Whitelist and Blacklist isn't supported. " +
+            Log.warning("Enabling both Whitelist and Blacklist isn't supported. " +
                     "Disable one of them to continue logging Player Commands.");
 
         }

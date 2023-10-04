@@ -7,6 +7,7 @@ import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -69,7 +70,7 @@ public class OnVault implements Listener, Runnable {
 
                                 } catch (IOException e) {
 
-                                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                                    Log.warning("An error occurred while logging into the appropriate file.");
                                     e.printStackTrace();
 
                                 }
@@ -98,7 +99,7 @@ public class OnVault implements Listener, Runnable {
 
                             } catch (IOException e) {
 
-                                this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                                Log.warning("An error occurred while logging into the appropriate file.");
                                 e.printStackTrace();
 
                             }

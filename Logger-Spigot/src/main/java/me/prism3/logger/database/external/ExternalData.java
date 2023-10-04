@@ -1,14 +1,18 @@
 package me.prism3.logger.database.external;
 
-import me.prism3.logger.api.*;
 import me.prism3.logger.Main;
+import me.prism3.logger.api.*;
+import me.prism3.logger.utils.Log;
 import me.prism3.logger.utils.enums.NmsVersions;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.world.PortalCreateEvent;
 
 import java.net.InetSocketAddress;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static me.prism3.logger.utils.Data.externalDataDel;
+import static me.prism3.logger.utils.Data.version;
 
 public class ExternalData {
 
@@ -92,13 +97,12 @@ public class ExternalData {
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS item_drop "
                     + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), item VARCHAR(50), amount INT, x INT, y INT, z INT, enchantment VARCHAR(50)," +
+                    "player_name VARCHAR(100), item VARCHAR(50), amount INT, x INT, y INT, z INT, enchantments VARCHAR(250)," +
                     "changed_name VARCHAR(50), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS enchanting "
                     + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), x INT, y INT, z INT, enchantment VARCHAR(50), enchantment_level INT, " +
-                    "item VARCHAR(50), cost INT(5), is_staff TINYINT)");
+                    "player_name VARCHAR(100), x INT, y INT, z INT, enchantment VARCHAR(50), item VARCHAR(50), cost INT(5), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS book_editing "
                     + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
@@ -106,7 +110,7 @@ public class ExternalData {
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS item_pickup "
                     + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), item VARCHAR(250), amount INT, x INT, y INT, z INT, changed_name VARCHAR(250), is_staff TINYINT)");
+                    "player_name VARCHAR(100), item VARCHAR(250), amount INT, x INT, y INT, z INT, changed_name VARCHAR(250), enchantments VARCHAR(250), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS furnace "
                     + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
@@ -218,7 +222,7 @@ public class ExternalData {
             }
 
             // Version Exceptions Part
-            if (plugin.getVersion().isAtLeast(NmsVersions.v1_13_R1)) {
+            if (version.isAtLeast(NmsVersions.v1_13_R1)) {
 
                 stsm.executeUpdate("CREATE TABLE IF NOT EXISTS wood_stripping (id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
                         " server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), " +
@@ -611,12 +615,12 @@ public class ExternalData {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    public static void enchant(String serverName, Player player, List<String> enchantment, int enchantmentLevel, String item, int cost ,boolean staff) {
+    public static void enchant(String serverName, Player player, List<String> enchantment, String item, int cost ,boolean staff) {
 
         try (Connection connection = plugin.getExternal().getHikari().getConnection();
              final PreparedStatement enchanting = connection.prepareStatement("INSERT INTO enchanting" +
-                     " (server_name, world, player_name, x, y, z, enchantment, enchantment_level, item, cost, is_staff)" +
-                     " VALUES(?,?,?,?,?,?,?,?,?,?,?)")) {
+                     " (server_name, world, player_name, x, y, z, enchantment, item, cost, is_staff)" +
+                     " VALUES(?,?,?,?,?,?,?,?,?,?)")) {
 
             enchanting.setString(1, serverName);
             enchanting.setString(2, player.getWorld().getName());
@@ -625,10 +629,9 @@ public class ExternalData {
             enchanting.setInt(5, player.getLocation().getBlockY());
             enchanting.setInt(6, player.getLocation().getBlockZ());
             enchanting.setString(7, enchantment.toString());
-            enchanting.setInt(8, enchantmentLevel);
-            enchanting.setString(9, item);
-            enchanting.setInt(10, cost);
-            enchanting.setBoolean(11, staff);
+            enchanting.setString(8, item);
+            enchanting.setInt(9, cost);
+            enchanting.setBoolean(10, staff);
 
             enchanting.executeUpdate();
 
@@ -696,11 +699,11 @@ public class ExternalData {
         }
     }
 
-    public static void itemPickup(String serverName, Player player, Material item, int amount, int x, int y, int z, String changedName, boolean staff) {
+    public static void itemPickup(String serverName, Player player, Material item, int amount, int x, int y, int z, String changedName, List<String> enchants, boolean staff) {
 
         try (Connection connection = plugin.getExternal().getHikari().getConnection();
              final PreparedStatement itemPickup = connection.prepareStatement("INSERT INTO item_pickup" +
-                     " (server_name, world, player_name, item, amount, x, y, z, changed_name, is_staff) VALUES(?,?,?,?,?,?,?,?,?,?)")) {
+                     " (server_name, world, player_name, item, amount, x, y, z, changed_name, enchantments, is_staff) VALUES(?,?,?,?,?,?,?,?,?,?,?)")) {
 
             itemPickup.setString(1, serverName);
             itemPickup.setString(2, player.getWorld().getName());
@@ -711,7 +714,8 @@ public class ExternalData {
             itemPickup.setInt(7, y);
             itemPickup.setInt(8, z);
             itemPickup.setString(9, changedName);
-            itemPickup.setBoolean(10, staff);
+            itemPickup.setString(10, enchants.toString());
+            itemPickup.setBoolean(11, staff);
 
             itemPickup.executeUpdate();
 
@@ -1088,7 +1092,7 @@ public class ExternalData {
             }
 
             // Version Exception Part
-            if (plugin.getVersion().isAtLeast(NmsVersions.v1_13_R1)) {
+            if (version.isAtLeast(NmsVersions.v1_13_R1)) {
 
                 stsm.executeUpdate("DELETE FROM wood_stripping WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 
@@ -1096,7 +1100,7 @@ public class ExternalData {
 
         } catch (SQLException e) {
 
-            plugin.getLogger().severe("An error has occurred while cleaning the tables, if the error persists, contact the Authors!");
+            Log.severe("An error has occurred while cleaning the tables, if the error persists, contact the Authors!");
             e.printStackTrace();
 
         }

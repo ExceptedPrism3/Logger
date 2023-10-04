@@ -1,6 +1,7 @@
 package me.prism3.logger.database.sqlite.registration;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.utils.Log;
 
 import java.io.File;
 import java.sql.Connection;
@@ -30,7 +31,7 @@ public class SQLiteRegistration {
 
             } catch (ClassNotFoundException | SQLException e) {
 
-                this.main.getLogger().severe("Couldn't load Registration Database, if the issue persists contact the Authors!");
+                Log.severe("Couldn't load Registration Database, if the issue persists contact the Authors!");
                 e.printStackTrace();
 
             }
@@ -47,7 +48,7 @@ public class SQLiteRegistration {
 
             } catch (SQLException e) {
 
-                this.main.getLogger().severe("Registration Database couldn't be closed safely, if the issue persists contact the Authors!");
+                Log.severe("Registration Database couldn't be closed safely, if the issue persists contact the Authors!");
                 e.printStackTrace();
 
             }

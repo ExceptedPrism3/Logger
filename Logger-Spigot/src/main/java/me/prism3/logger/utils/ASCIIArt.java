@@ -1,15 +1,12 @@
 package me.prism3.logger.utils;
 
-import me.prism3.logger.Main;
 import org.bukkit.ChatColor;
 
 public class ASCIIArt {
 
-    private final Main main = Main.getInstance();
-
     public void art() {
 
-        main.getLogger().info(ChatColor.DARK_PURPLE + "\n|\n" +
+        Log.info(ChatColor.DARK_PURPLE + "\n|\n" +
                 ChatColor.DARK_PURPLE + "|" + ChatColor.AQUA + "     __                               \n" +
                 ChatColor.DARK_PURPLE + "|" + ChatColor.AQUA + "    / /   ____  ____ _____ ____  _____\n" +
                 ChatColor.DARK_PURPLE + "|" + ChatColor.AQUA + "   / /   / __ \\/ __ `/ __ `/ _ \\/ ___/\n" +

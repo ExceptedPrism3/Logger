@@ -1,7 +1,7 @@
 package me.prism3.logger.commands.subcommands;
 
-import me.prism3.logger.commands.SubCommand;
 import me.prism3.logger.Main;
+import me.prism3.logger.commands.SubCommand;
 import me.prism3.logger.utils.Data;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -36,7 +36,7 @@ public class Reload implements SubCommand {
         this.main.reloadConfig();
         this.main.getMessages().reload();
         this.main.getDiscordFile().reload();
-        this.main.initializer(new Data());
+        Data.initializer();
         commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getMessages().get().getString("General.Reload").replace("%prefix%", pluginPrefix)));
     }
 

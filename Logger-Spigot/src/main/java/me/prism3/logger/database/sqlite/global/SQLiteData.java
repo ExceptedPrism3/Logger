@@ -1,7 +1,8 @@
 package me.prism3.logger.database.sqlite.global;
 
-import me.prism3.logger.api.*;
 import me.prism3.logger.Main;
+import me.prism3.logger.api.*;
+import me.prism3.logger.utils.Log;
 import me.prism3.logger.utils.enums.NmsVersions;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static me.prism3.logger.utils.Data.sqliteDataDel;
+import static me.prism3.logger.utils.Data.version;
 
 public class SQLiteData {
 
@@ -91,11 +93,11 @@ public class SQLiteData {
 
             itemDrop = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS item_drop" +
                     "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, world TEXT(100), player_name TEXT(40)," +
-                    "item TEXT(50), amount INTEGER, x INTEGER, y INTEGER, z INTEGER, enchantment TEXT(50), changed_name TEXT(50), is_staff INTEGER)");
+                    "item TEXT(50), amount INTEGER, x INTEGER, y INTEGER, z INTEGER, enchantments TEXT(100), changed_name TEXT(50), is_staff INTEGER)");
 
             enchant = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS enchanting" +
                     "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, world TEXT(100), player_name TEXT(40)," +
-                    "x INTEGER, y INTEGER, z INTEGER, enchantment TEXT(50), enchantment_level INTEGER, item TEXT(50)," +
+                    "x INTEGER, y INTEGER, z INTEGER, enchantment TEXT(50), item TEXT(50)," +
                     " cost INTEGER, is_staff INTEGER)");
 
             bookEditing = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS book_editing" +
@@ -104,7 +106,7 @@ public class SQLiteData {
 
             itemPickup = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS item_pickup" +
                     "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, world TEXT(100), player_name TEXT(40)," +
-                    "item TEXT(50), amount INTEGER, x INTEGER, y INTEGER, z INTEGER, changed_name TEXT(100), is_staff INTEGER)");
+                    "item TEXT(50), amount INTEGER, x INTEGER, y INTEGER, z INTEGER, changed_name TEXT(100), enchantments TEXT(100), is_staff INTEGER)");
 
             furnace = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS furnace" +
                     "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, world TEXT(100), player_name TEXT(40)," +
@@ -217,7 +219,7 @@ public class SQLiteData {
             }
 
             // Version Exception Part
-            if (plugin.getVersion().isAtLeast(NmsVersions.v1_13_R1)) {
+            if (version.isAtLeast(NmsVersions.v1_13_R1)) {
 
                 woodStripping = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS wood_stripping" +
                         "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, world TEXT(100)," +
@@ -659,9 +661,9 @@ public class SQLiteData {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    public static void insertEnchant(String serverName, Player player, List<String> enchantment, int enchantmentLevel, String item, int cost, boolean isStaff) {
+    public static void insertEnchant(String serverName, Player player, List<String> enchantment, String item, int cost, boolean isStaff) {
         try {
-            final PreparedStatement enchantStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO enchanting (server_name, date, world, player_name, x, y, z, enchantment, enchantment_level, item, cost, is_staff) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+            final PreparedStatement enchantStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO enchanting (server_name, date, world, player_name, x, y, z, enchantment, item, cost, is_staff) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
             enchantStatement.setString(1, serverName);
             enchantStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
             enchantStatement.setString(3, player.getWorld().getName());
@@ -670,10 +672,9 @@ public class SQLiteData {
             enchantStatement.setInt(6, player.getLocation().getBlockY());
             enchantStatement.setInt(7, player.getLocation().getBlockZ());
             enchantStatement.setString(8, enchantment.toString());
-            enchantStatement.setInt(9, enchantmentLevel);
-            enchantStatement.setString(10, item);
-            enchantStatement.setInt(11, cost);
-            enchantStatement.setBoolean(12, isStaff);
+            enchantStatement.setString(9, item);
+            enchantStatement.setInt(10, cost);
+            enchantStatement.setBoolean(11, isStaff);
 
             enchantStatement.executeUpdate();
             enchantStatement.close();
@@ -738,9 +739,9 @@ public class SQLiteData {
 
     }
 
-    public static void insertItemPickup(String serverName, Player player, Material item, int amount, int x, int y, int z, String changed_name, boolean isStaff) {
+    public static void insertItemPickup(String serverName, Player player, Material item, int amount, int x, int y, int z, String changed_name, List<String> enchants, boolean isStaff) {
         try {
-            final PreparedStatement itemPickupStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO item_pickup (server_name, date, world, player_name, item, amount, x, y, z, changed_name, is_staff) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+            final PreparedStatement itemPickupStatement = plugin.getSqLite().getConnection().prepareStatement("INSERT INTO item_pickup (server_name, date, world, player_name, item, amount, x, y, z, changed_name, enchantments, is_staff) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
             itemPickupStatement.setString(1, serverName);
             itemPickupStatement.setString(2, dateTimeFormatter.format(ZonedDateTime.now()));
             itemPickupStatement.setString(3, player.getWorld().getName());
@@ -751,7 +752,8 @@ public class SQLiteData {
             itemPickupStatement.setInt(8, y);
             itemPickupStatement.setInt(9, z);
             itemPickupStatement.setString(10, changed_name);
-            itemPickupStatement.setBoolean(11, isStaff);
+            itemPickupStatement.setString(11, enchants.toString());
+            itemPickupStatement.setBoolean(12, isStaff);
 
             itemPickupStatement.executeUpdate();
             itemPickupStatement.close();
@@ -1135,7 +1137,7 @@ public class SQLiteData {
             }
 
             // Version Exceptions Part
-            if (plugin.getVersion().isAtLeast(NmsVersions.v1_13_R1)) {
+            if (version.isAtLeast(NmsVersions.v1_13_R1)) {
 
                 final PreparedStatement woodStripping = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM wood_stripping WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 
@@ -1216,7 +1218,7 @@ public class SQLiteData {
 
         } catch (SQLException e) {
 
-            plugin.getLogger().severe("An error has occurred while cleaning the tables, if the error persists, contact the Authors!");
+            Log.severe("An error has occurred while cleaning the tables, if the error persists, contact the Authors!");
             e.printStackTrace();
 
         }

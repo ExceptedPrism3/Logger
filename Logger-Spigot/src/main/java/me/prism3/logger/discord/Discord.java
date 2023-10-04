@@ -1,6 +1,7 @@
 package me.prism3.logger.discord;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.utils.Log;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -72,7 +73,7 @@ public class Discord {
 
             } catch (Exception e) {
 
-                this.main.getLogger().severe("An error has occurred whilst connecting to the Bot." +
+                Log.severe("An error has occurred whilst connecting to the Bot." +
                         " Is the Bot Key Valid?");
                 return;
 
@@ -418,7 +419,7 @@ public class Discord {
                 }
             } catch (Exception e) {
 
-                this.main.getLogger().severe("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
+                Log.severe("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
                 e.printStackTrace();
 
             }
@@ -717,11 +718,11 @@ public class Discord {
                 this.jda.shutdown();
                 this.jda = null;
                 if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Enabled")) DiscordStatus.getThreadPool().shutdown();
-                this.main.getLogger().info("Discord Bot Bridge has been closed!");
+                Log.info("Discord Bot Bridge has been closed!");
 
             } catch (Exception e) {
 
-                this.main.getLogger().severe("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
+                Log.severe("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
                         " If this Issue Persists, Contact the Authors!");
 
                 e.printStackTrace();

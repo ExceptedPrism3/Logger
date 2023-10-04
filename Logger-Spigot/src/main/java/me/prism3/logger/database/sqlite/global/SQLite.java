@@ -1,6 +1,7 @@
 package me.prism3.logger.database.sqlite.global;
 
 import me.prism3.logger.Main;
+import me.prism3.logger.utils.Log;
 
 import java.io.File;
 import java.sql.Connection;
@@ -27,11 +28,11 @@ public class SQLite {
 
                 Class.forName("org.sqlite.JDBC");
                 this.connection = DriverManager.getConnection("jdbc:sqlite:" + this.databaseFile.getAbsolutePath());
-                this.main.getLogger().info("SQLite Connection has been established!");
+                Log.info("SQLite Connection has been established!");
 
             } catch (ClassNotFoundException | SQLException e) {
 
-                this.main.getLogger().severe("Couldn't load SQLite Database, if the issue persists contact the Authors!");
+                Log.severe("Couldn't load SQLite Database, if the issue persists contact the Authors!");
                 e.printStackTrace();
 
             }
@@ -45,11 +46,11 @@ public class SQLite {
             try {
 
                 this.connection.close();
-                this.main.getLogger().info("SQLite Database has been closed!");
+                Log.info("SQLite Database has been closed!");
 
             } catch (SQLException e) {
 
-                this.main.getLogger().severe("SQLite Database couldn't be closed safely, if the issue persists contact the Authors!");
+                Log.severe("SQLite Database couldn't be closed safely, if the issue persists contact the Authors!");
                 e.printStackTrace();
 
             }

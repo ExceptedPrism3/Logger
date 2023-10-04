@@ -187,6 +187,22 @@
             <id>opencollab-snapshot</id>
             <url>https://repo.opencollab.dev/maven-snapshots/</url>
         </repository>
+        <!--   CodeMC AKA NBT-TAG   -->
+        <!--<repository>
+            <id>codemc-repo</id>
+            <url>https://repo.codemc.io/repository/maven-public/</url>
+            <layout>default</layout>
+        </repository>
+        &lt;!&ndash;   Crazy Enchantments Repo   &ndash;&gt;
+        <repository>
+            <id>crazycrew-releases</id>
+            <name>CrazyCrew Repository</name>
+            <url>https://repo.crazycrew.us/releases</url>
+        </repository>
+        <repository>
+            <id>bg-repo</id>
+            <url>https://repo.bg-software.com/repository/api/</url>
+        </repository>-->
     </repositories>
 
     <dependencies>
@@ -270,6 +286,23 @@
             <version>2.2.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <!--<dependency>
+            <groupId>de.tr7zw</groupId>
+            <artifactId>item-nbt-api-plugin</artifactId>
+            <version>2.11.3</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.badbones69.crazyenchantments</groupId>
+            <artifactId>crazyenchantments-api</artifactId>
+            <version>1.9.9.4-rc</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bgsoftware</groupId>
+            <artifactId>SuperiorSkyblockAPI</artifactId>
+            <version>LATEST</version>
+            <scope>provided</scope>
+        </dependency>-->
         <!-- DataBases -->
         <dependency>
             <groupId>mysql</groupId>

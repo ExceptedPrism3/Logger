@@ -7,6 +7,7 @@ import me.prism3.logger.events.spy.OnAnvilSpy;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -84,7 +85,7 @@ private final Main main = Main.getInstance();
 
                                     } catch (IOException e) {
 
-                                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                                        Log.warning("An error occurred while logging into the appropriate file.");
                                         e.printStackTrace();
 
                                     }
@@ -113,7 +114,7 @@ private final Main main = Main.getInstance();
 
                                 } catch (IOException e) {
 
-                                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                                    Log.warning("An error occurred while logging into the appropriate file.");
                                     e.printStackTrace();
 
                                 }

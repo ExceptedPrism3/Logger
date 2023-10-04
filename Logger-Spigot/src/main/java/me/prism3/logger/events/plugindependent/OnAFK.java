@@ -6,6 +6,7 @@ import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -57,7 +58,7 @@ public class OnAFK implements Listener {
 
                     } catch (IOException event) {
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Log.warning("An error occurred while logging into the appropriate file.");
                         event.printStackTrace();
 
                     }
@@ -86,7 +87,7 @@ public class OnAFK implements Listener {
 
                 } catch (IOException event) {
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Log.warning("An error occurred while logging into the appropriate file.");
                     event.printStackTrace();
 
                 }

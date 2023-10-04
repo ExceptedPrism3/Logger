@@ -6,6 +6,7 @@ import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import me.prism3.logger.utils.enums.NmsVersions;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
+import static me.prism3.logger.utils.Data.version;
 
 public class OnWoodStripping implements Listener {
 
@@ -53,7 +56,7 @@ public class OnWoodStripping implements Listener {
         axes.add(Material.IRON_AXE);
         axes.add(Material.GOLDEN_AXE);
         axes.add(Material.DIAMOND_AXE);
-        if (Main.getInstance().getVersion().isAtLeast(NmsVersions.v1_16_R1))
+        if (version.isAtLeast(NmsVersions.v1_16_R1))
             axes.add(Material.NETHERITE_AXE);
 
     }
@@ -106,7 +109,7 @@ public class OnWoodStripping implements Listener {
 
                     } catch (IOException e) {
 
-                        this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                        Log.warning("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
@@ -135,7 +138,7 @@ public class OnWoodStripping implements Listener {
 
                 } catch (IOException e) {
 
-                    this.main.getServer().getLogger().warning("An error occurred while logging into the appropriate file.");
+                    Log.warning("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }

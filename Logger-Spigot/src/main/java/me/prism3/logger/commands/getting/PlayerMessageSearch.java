@@ -1,12 +1,13 @@
 package me.prism3.logger.commands.getting;
 
+import me.prism3.logger.Main;
+import net.md_5.bungee.api.ChatColor;
+import org.bukkit.command.CommandSender;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import me.prism3.logger.Main;
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.command.CommandSender;
 
 public class PlayerMessageSearch {
 
@@ -14,10 +15,10 @@ public class PlayerMessageSearch {
     return Main.getInstance().getExternal().getHikari().getConnection();
   }
 
-  private CommandSender sender;
-  private String searchedPlayer;
-  private Pager pager;
-  private String commandLabel;
+  private final CommandSender sender;
+  private final String searchedPlayer;
+  private final Pager pager;
+  private final String commandLabel;
 
   /**
    * @param searchedPlayer player name to search

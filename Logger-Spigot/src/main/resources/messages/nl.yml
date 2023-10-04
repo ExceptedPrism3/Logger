@@ -1,12 +1,13 @@
-# Messages for Logger Plugin [ Bukkit Version ]
-# Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
-# Config 1.8
-# Plugin Messages
+---
+#Messages for Logger Plugin [ Bukkit Version ]
+#Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
+#Config 1.8
+#Plugin Messages
 General:
   No-Permission: "%prefix% &cJe hebt geen toestemming om dit commando uit te voeren."
-  Reload: "%prefix% &aConfiguratie herladen."
-  Invalid-Syntax: "%prefix% &cVerkeerde Syntax."
-# Files Instance
+  Reload: "%prefix% &aConfiguratie bestanden herladen."
+  Invalid-Syntax: "%prefix% &cOngeldige argumenten."
+#Files Instance
 Files:
   Player-Chat-Staff: "[%time%] [%world%] Medewerker <%player%> heeft gezegd => %message%"
   Player-Chat: "[%time%] [%world%] Speler <%player%> heeft gezegd:: => %message%"
@@ -59,6 +60,8 @@ Files:
   Chest-Interaction: "[%time%] [%world%] [%uuid%] De speler <%player%> heeft %chest% at X= %x%, Y= %y%, Z= %z% die de volgende items bevat: %items%"
   Entity-Death-Staff: "[%time%] [%world%] [%uuid%] Medewerker <%player%> heeft %mob% geslagen op: X= %x%, Y= %y%, Z= %z%"
   Entity-Death: "[%time%] [%world%] [%uuid%] De speler <%player%> heeft %mob% geslagen op: X= %x%, Y= %y%, Z= %z%"
+  Sign-Change-Staff: "[%time%] [%world%] [%uuid%] De medewerker %player%> heeft een bord gewijzigd op X= %x%, Y= %y%, Z= %z% met %line1%, %line2%, %line3%, %line4%"
+  Sign-Change: "[%time%] [%world%] [%uuid%] De speler %player%> heeft een bord gewijzigd op X= %x%, Y= %y%, Z= %z% met %line1%, %line2%, %line3%, %line4%"
   Server-Side:
     Start: "[%time%]"
     Stop: "[%time%]"
@@ -67,7 +70,7 @@ Files:
     TPS-Medium: "[%time%] De TPS is teruggevallen naar %TPS%"
     TPS-Critical: "[%time%] De TPS is teruggevallen naar %TPS%"
     Portal-Creation: "[%time%] Er is een portaal aangemaakt in [%world%] met behulp van %material%"
-    RCON: "[%time%] RCON Commando %command% is verzonden via dit IP %IP%"
+    RCON: "[%time%] Dit commando '%command%' is uitgevoerd via RCON"
     Command-Block: "[%time%] %command%"
   Extras:
     AFK-Staff: "[%time%] [%world%] De medewerker <%player%> is AFK gegaan op X= %x%, Y= %y%, Z= %z%"
@@ -81,8 +84,8 @@ Files:
   Version-Exceptions:
     Wood-Stripping-Staff: "[%time%] [%world%] [%uuid%] Medewerker <%player%> heeft %logname% gestript op X= %x%, Y= %y%, Z= %z%"
     Wood-Stripping: "[%time%] [%world%] [%uuid%] De speler <%player%> heeft %logname% gestript op X= %x%, Y= %y%, Z= %z%"
-# Discord Instance
-# Emojis can be found here https://emojipedia.org/ or elsewhere. Emojis may not work on > 1.12 Servers.
+#Discord Instance
+#Emojis can be found here https://emojipedia.org/ or elsewhere. Emojis may not work on > 1.12 Servers.
 Discord:
   Player-Chat-Staff: "**[%time%]** **[%world%]** **%message%**"
   Player-Chat: "**[%time%]** **[%world%]** **%message%**"
@@ -145,8 +148,10 @@ Discord:
     TPS-Medium: "**[%time%]** De TPS is gedaald naar **%TPS%**"
     TPS-Critical: "**[%time%]** WAARSCHUWING! De TPS is gedaald naar **%TPS%**"
     Portal-Creation: "**[%time%] Er is een portaal aangemaakt in [%world%] met behulp van %material%**"
-    RCON: "[%time%] RCON Commando %command% is verzonden via dit IP %IP%****"
+    RCON: "[%time%] Dit commando '%command%' is uitgevoerd via RCON"
     Command-Block: "**[%time%]** **%command%**"
+  Sign-Change-Staff: "**[%time%]** ** **[%world%]**[%uuid%]** heeft een bord op X= **%x%**, Y= **%y%**, Z= **%z%** veranderd met **%line1%** `,` **%line2%** ',` **%line3%** `,` ** `,` **%line4%**"
+  Sign-Change: "**[%time%]** ** **[%world%]**[%uuid%]** heeft een bord op X= **%x%**, Y= **%y%**, Z= **%z%** veranderd met **%line1%** `,` **%line2%** ',` **%line3%** `,` ** `,` **%line4%**"
   Extras:
     AFK-Staff: "**[%time%]** **[%world%]** X= **%x%** `|` Y= **%y%** `|` Z= **%z%**"
     AFK: "**[%time%]** **[%world%]** X= **%x%** `|` Y= **%y%** `|` Z= **%z%**"

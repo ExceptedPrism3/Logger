@@ -1,11 +1,16 @@
 package me.prism3.logger.database.external;
 
-import java.sql.*;
+import me.prism3.logger.Main;
+import me.prism3.logger.utils.Data;
+import me.prism3.logger.utils.Log;
+
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import me.prism3.logger.Main;
-import me.prism3.logger.utils.Data;
 
 public class ExternalUpdater {
 
@@ -117,7 +122,7 @@ public class ExternalUpdater {
         }
 
       } catch (Exception e) {
-        main.getLogger().severe("Unable to update the tables. If the issue persists contact the Authors!");
+        Log.severe("Unable to update the tables. If the issue persists contact the Authors!");
         e.printStackTrace();
       }
     }

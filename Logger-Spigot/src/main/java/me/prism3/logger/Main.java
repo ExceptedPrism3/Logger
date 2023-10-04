@@ -6,33 +6,30 @@ import me.prism3.logger.commands.subcommands.PlayerInventory;
 import me.prism3.logger.database.external.External;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.external.ExternalUpdater;
+import me.prism3.logger.database.sqlite.global.SQLite;
+import me.prism3.logger.database.sqlite.global.SQLiteData;
 import me.prism3.logger.database.sqlite.registration.SQLiteDataRegistration;
 import me.prism3.logger.database.sqlite.registration.SQLiteRegistration;
 import me.prism3.logger.discord.Discord;
 import me.prism3.logger.discord.DiscordFile;
+import me.prism3.logger.events.*;
 import me.prism3.logger.events.misc.OnPrimedTNT;
 import me.prism3.logger.events.oncommands.OnCommand;
 import me.prism3.logger.events.oninventories.OnChestInteraction;
 import me.prism3.logger.events.oninventories.OnCraft;
 import me.prism3.logger.events.oninventories.OnFurnace;
-import me.prism3.logger.events.OnPlayerDeath;
 import me.prism3.logger.events.onversioncompatibility.OnWoodStripping;
 import me.prism3.logger.events.plugindependent.*;
-import me.prism3.logger.database.sqlite.global.SQLite;
-import me.prism3.logger.database.sqlite.global.SQLiteData;
-import me.prism3.logger.events.*;
+import me.prism3.logger.manager.Messages;
 import me.prism3.logger.serverside.*;
 import me.prism3.logger.utils.*;
 import me.prism3.logger.utils.enums.NmsVersions;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import static me.prism3.logger.utils.Data.*;
 
 public class Main extends JavaPlugin {
-
-    private static Main instance;
 
     private Messages messages;
 
@@ -44,18 +41,16 @@ public class Main extends JavaPlugin {
     private Discord discord;
     private DiscordFile discordFile;
 
-    private final NmsVersions version = NmsVersions.valueOf(Bukkit.getServer().getClass().getPackage().getName().replace(".",  ",").split(",")[3]);
-
     @Override
     public void onEnable() {
 
-        instance = this;
-
         this.saveDefaultConfig();
 
-        this.initializer(new Data());
+        Log.setup(this.getLogger());
 
-        if (!this.langChecker()) return;
+        Data.initializer();
+
+        this.messages = new Messages();
 
         new FileUpdater(this.getDataFolder());
 
@@ -67,7 +62,7 @@ public class Main extends JavaPlugin {
         this.discord.run();
 
         if (isLogToFiles && isSqlite)
-            this.getLogger().warning("File and SQLite logging are both enabled, this might impact your Server's Performance!");
+            Log.warning("File and SQLite logging are both enabled, this might impact your Server's Performance!");
 
         final FileHandler fileHandler = new FileHandler(this.getDataFolder());
         fileHandler.deleteFiles();
@@ -95,17 +90,15 @@ public class Main extends JavaPlugin {
 
         this.loadPluginDepends();
 
-        this.getLogger().info(ChatColor.GOLD + "Thanks to everyone's contributions that helped made this project possible!");
+        Log.info(ChatColor.GOLD + "Thanks to everyone's contributions that helped made this project possible!");
 
-        this.getLogger().info("Plugin Enabled!");
+        Log.info("Plugin Enabled!");
 
         new Start().run();
     }
 
     @Override
     public void onDisable() {
-
-        if (!this.messages.getIsValid()) return;
 
         new Stop().run();
 
@@ -117,19 +110,7 @@ public class Main extends JavaPlugin {
 
         this.discord.disconnect();
 
-        this.getLogger().info("Plugin Disabled!");
-
-    }
-
-    public void initializer(Data data) {
-
-        data.initializeDateFormatter();
-        data.initializeStrings();
-        data.initializeListOfStrings();
-        data.initializeIntegers();
-        data.initializeLongs();
-        data.initializeBooleans();
-        data.initializePermissionStrings();
+        Log.info("Plugin Disabled!");
 
     }
 
@@ -172,7 +153,7 @@ public class Main extends JavaPlugin {
         this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new RAM(), 300L, Data.ramTpsChecker);
 
         // Version Exceptions
-        if (this.getVersion().isAtLeast(NmsVersions.v1_13_R1)) {
+        if (version.isAtLeast(NmsVersions.v1_13_R1)) {
 
             this.getServer().getPluginManager().registerEvents(new OnWoodStripping(), this);
 
@@ -226,7 +207,7 @@ public class Main extends JavaPlugin {
 
             this.getServer().getPluginManager().registerEvents(new OnAFK(), this);
 
-            this.getLogger().info("Essentials Plugin Detected!");
+            Log.info("Essentials Plugin Detected!");
 
         }
 
@@ -234,7 +215,7 @@ public class Main extends JavaPlugin {
 
             this.getServer().getPluginManager().registerEvents(new OnAuthMePassword(), this);
 
-            this.getLogger().info("AuthMe Plugin Detected!");
+            Log.info("AuthMe Plugin Detected!");
 
         }
 
@@ -246,55 +227,42 @@ public class Main extends JavaPlugin {
                 this.getServer().getPluginManager().registerEvents(vault, this);
                 this.getServer().getScheduler().scheduleSyncRepeatingTask(this, vault, 10L, Data.vaultChecker);
             }
-            this.getLogger().info("Vault Plugin Detected!");
+            Log.info("Vault Plugin Detected!");
         }
 
         if (LiteBansUtil.getLiteBansAPI() != null) {
 
             this.getServer().getScheduler().scheduleSyncDelayedTask(this, new OnLiteBanEvents(), 10L);
 
-            this.getLogger().info("LiteBans Plugin Detected!");
+            Log.info("LiteBans Plugin Detected!");
         }
 
         if (AdvancedBanUtil.getAdvancedBanAPI() != null) {
 
             this.getServer().getPluginManager().registerEvents(new OnAdvancedBan(), this);
 
-            this.getLogger().info("AdvancedBan Plugin Detected!");
+            Log.info("AdvancedBan Plugin Detected!");
         }
 
         if (PlaceHolderAPIUtil.getPlaceHolderAPI() != null) {
 
-            this.getLogger().info("PlaceHolderAPI Plugin Detected!");
+            Log.info("PlaceHolderAPI Plugin Detected!");
         }
 
         if (GeyserUtil.getGeyserAPI() != null && FloodGateUtil.getFloodGateAPI()) {
 
-            this.getLogger().info("Geyser & FloodGate Plugins Detected!");
-            this.getLogger().warning("Geyser & FloodGate are not fully supported! If any errors occurs, contact the authors.");
+            Log.info("Geyser & FloodGate Plugins Detected!");
+            Log.warning("Geyser & FloodGate are not fully supported! If any errors occurs, contact the authors.");
         }
     }
 
-    private boolean langChecker() {
-
-        this.messages = new Messages();
-
-        if (!this.messages.getIsValid()) {
-
-            this.getServer().getPluginManager().disablePlugin(this);
-            return false;
-        } return true;
-    }
-
-    public static Main getInstance() { return instance; }
+    public static Main getInstance() { return JavaPlugin.getPlugin(Main.class); }
 
     public External getExternal() { return this.external; }
 
     public SQLite getSqLite() { return this.sqLite; }
 
     public SQLiteRegistration getSqLiteReg() { return this.sqLiteReg; }
-
-    public NmsVersions getVersion() { return this.version; }
 
     public Discord getDiscord() { return this.discord; }
 

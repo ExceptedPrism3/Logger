@@ -1,13 +1,16 @@
 package me.prism3.logger.commands.subcommands;
 
-import java.util.Collections;
-import java.util.List;
 import me.prism3.logger.Main;
 import me.prism3.logger.commands.SubCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import static me.prism3.logger.utils.Data.pluginPrefix;
+
 
 public class ToggleSpy implements SubCommand {
 
@@ -15,68 +18,34 @@ public class ToggleSpy implements SubCommand {
 
     public String getDescription() { return "Toggle spy features ON/OFF"; }
 
-    public String getSyntax() { return "/logger toggle spy [Commands | Book | Sign | Anvil]"; }
+    public String getSyntax() { return "/logger " + this.getName() + " spy [Commands | Book | Sign | Anvil]"; }
 
-    public void perform(CommandSender commandSender, String[] args) {
+    public void perform(final CommandSender commandSender, final String[] args) {
 
         final Main main = Main.getInstance();
 
-        if (args.length == 1 && args[0].equalsIgnoreCase("toggle") ||
-                args.length == 2 && args[1].equalsIgnoreCase("spy")) {
-
+        if (args.length < 3 || !args[1].equalsIgnoreCase("spy")) {
             commandSender.sendMessage(this.getSyntax());
             return;
         }
 
-        if (args.length <= 3 && args[1].equalsIgnoreCase("spy")) {
+        final String option = args[2].toLowerCase();
+        final String[] validOptions = {"commands", "book", "sign", "anvil"};
 
-            final String args2 = args[2].toLowerCase();
-
-            boolean isToggled;
-
-            switch (args2) {
-
-                case "commands":
-                    isToggled = main.getConfig().getBoolean("Spy-Features.Commands-Spy.Enable");
-                    isToggled = !isToggled;
-                    main.getConfig().set("Spy-Features.Commands-Spy.Enable", isToggled);
-                    main.saveConfig();
-                    commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix
-                            + "Commands Spy Toggled."));
-                    break;
-
-                case "book":
-                    isToggled = main.getConfig().getBoolean("Spy-Features.Book-Spy.Enable");
-                    isToggled = !isToggled;
-                    main.getConfig().set("Spy-Features.Book-Spy.Enable", isToggled);
-                    main.saveConfig();
-                    commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix
-                            + "Book Spy Toggled."));
-                    break;
-
-                case "sign":
-                    isToggled = main.getConfig().getBoolean("Spy-Features.Sign-Spy.Enable");
-                    isToggled = !isToggled;
-                    main.getConfig().set("Spy-Features.Sign-Spy.Enable", isToggled);
-                    main.saveConfig();
-                    commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix
-                            + "Sign Spy Toggled."));
-                    break;
-
-                case "anvil":
-                    isToggled = main.getConfig().getBoolean("Spy-Features.Anvil-Spy.Enable");
-                    isToggled = !isToggled;
-                    main.getConfig().set("Spy-Features.Anvil-Spy.Enable", isToggled);
-                    main.saveConfig();
-                    commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix
-                            + "Anvil Spy Toggled."));
-                    break;
-
-                default:
-                    commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                            pluginPrefix + "&cInvalid option, correct options are [Commands | Book | Sign | Anvil]"));
-            }
+        if (!Arrays.asList(validOptions).contains(option)) {
+            commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    pluginPrefix + "&cInvalid option, correct options are [Commands | Book | Sign | Anvil]"));
+            return;
         }
+
+        final String path = "Spy-Features." + option + "-Spy.Enable";
+        final boolean isToggled = main.getConfig().getBoolean(path);
+
+        main.getConfig().set(path, !isToggled);
+        main.saveConfig();
+        commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                pluginPrefix + option + " Spy Toggled."));
     }
+
     public List<String> getSubCommandsArgs(CommandSender commandSender, String[] args) { return Collections.emptyList(); }
 }

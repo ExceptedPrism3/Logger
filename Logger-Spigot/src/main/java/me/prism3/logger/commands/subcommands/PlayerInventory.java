@@ -1,8 +1,8 @@
 package me.prism3.logger.commands.subcommands;
 
-import me.prism3.logger.Main;
 import me.prism3.logger.commands.SubCommand;
 import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.Log;
 import me.prism3.logger.utils.playerdeathutils.InventoryToBase64;
 import me.prism3.logger.utils.playerdeathutils.PlayerFolder;
 import org.bukkit.Bukkit;
@@ -39,7 +39,7 @@ public class PlayerInventory implements Listener, SubCommand {
     public String getDescription() { return "Opens a menu with all online players and their available inventory backups"; }
 
     @Override
-    public String getSyntax() { return "/logger playerinventory"; }
+    public String getSyntax() { return "/logger " + this.getName(); }
 
     @Override
     public void perform(CommandSender commandSender, String[] args) { this.stepOne(commandSender); }
@@ -52,7 +52,7 @@ public class PlayerInventory implements Listener, SubCommand {
 
         if (!(commandSender instanceof Player)) {
 
-            Main.getInstance().getLogger().severe("This command can only be executed in game!");
+            Log.severe("This command can only be executed in game!");
             return;
         }
 
