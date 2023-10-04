@@ -1,3 +1,4 @@
 target
 /Logger-Spigot/.env
 Logger-Spigot-Testing
+*.iml
