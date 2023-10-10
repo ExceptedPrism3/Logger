@@ -71,7 +71,7 @@ public class External {
 
     private String getJdbcUrl() {
         return "jdbc:" + this.jdbc + "://" + External.HOST + ":" + External.PORT + "/" + External.DATABASE
-                + "?AllowPublicKeyRetrieval=true?useSSL=false&jdbcCompliantTruncation=false";
+                + "?AllowPublicKeyRetrieval=true&useSSL=false&jdbcCompliantTruncation=false";
 
     }
 
