@@ -595,7 +595,7 @@ public class ExternalData {
 
         try (Connection connection = plugin.getExternal().getHikari().getConnection();
              final PreparedStatement itemDrop = connection.prepareStatement("INSERT INTO item_drop" +
-                     " (server_name, world, player_name, item, amount, x, y, z, enchantment, changed_name, is_staff)" +
+                     " (server_name, world, player_name, item, amount, x, y, z, enchantments, changed_name, is_staff)" +
                      " VALUES(?,?,?,?,?,?,?,?,?,?,?)")) {
 
             itemDrop.setString(1, serverName);
