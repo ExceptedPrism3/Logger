@@ -14,12 +14,8 @@ import me.prism3.loggercore.database.AbstractDataSource;
 import me.prism3.loggercore.database.datasource.MySQL;
 import me.prism3.loggercore.database.datasource.SQLite;
 import org.bukkit.ChatColor;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.JavaPluginLoader;
 
-
-import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -34,15 +30,7 @@ public class Main extends JavaPlugin {
     private AbstractDataSource database;
     private AbstractDataSource sqLite;
     private DiscordManager discordFile;
-    public Main()
-    {
-        super();
-    }
-
-    protected Main(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file)
-    {
-        super(loader, description, dataFolder, file);
-    }
+    private FileHandler2 fileHandler;
 
     @Override
     public void onEnable() {
@@ -67,7 +55,7 @@ public class Main extends JavaPlugin {
         if (isLogToFiles && isSqlite)
             Log.warning("FileUpdater and SQLite logging are both enabled, this might impact your Server's Performance!");
 
-        new FileHandler(this.getDataFolder());
+        this.fileHandler = new FileHandler2(this.getDataFolder());
 
         new PluginUpdater(pluginVersion).checkForUpdates();
 
@@ -190,4 +178,6 @@ public class Main extends JavaPlugin {
     public AbstractDataSource getSqLite() { return this.sqLite; }
 
     public ExecutorService getExecutor() { return this.executor; }
+
+    public FileHandler2 getFileHandler() { return this.fileHandler; }
 }
