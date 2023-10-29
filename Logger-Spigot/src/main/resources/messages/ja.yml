@@ -1,23 +1,24 @@
-# Messages for Logger Plugin [ Bukkit Version ]
-# Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
-# Config 1.8
-# Plugin Messages
+---
+#Messages for Logger Plugin [ Bukkit Version ]
+#Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
+#Config 1.8
+#Plugin Messages
 General:
   No-Permission: "%prefix% &cYou do not have permission to run this command."
   Reload: "%prefix% &aConfigs Reloaded."
   Invalid-Syntax: "%prefix% &cInvalid Syntax."
-# Files Instance
+#Files Instance
 Files:
   Player-Chat-Staff: "[%time%] [%world%] The Staff <%player%> has said => %message%"
-  Player-Chat: "[%time%] [%world%] The Player <%player%> has said => %message%"
-  Player-Commands-Staff: "[%time%] [%world%] The Staff <%player%> has executed => %command%"
-  Player-Commands: "[%time%] [%world%] The Player <%player%> has executed => %command%"
+  Player-Chat: "[%time%] [%world%] プレイヤー <%player%> がチャットを送信しました => %message%"
+  Player-Commands-Staff: "[%time%] [%world%] スタッフ <%player%> がコマンドを実行しました => %command%"
+  Player-Commands: "[%time%] [%world%] プレイヤー <%player%> がコマンドを実行しました => %command%"
   Player-Commands-Whitelisted-Staff: "[%time%] [%world%] The Staff <%player%> has executed a whitelisted command => %command%"
   Player-Commands-Whitelisted: "[%time%] [%world%] The Player <%player%> has executed a whitelisted command => %command%"
   Player-Sign-Text-Staff: "[%time%] [%world%] The Staff <%player%> has placed a sign at X= %x%, Y= %y%, Z= %z% with %line1%, %line2%, %line3%, %line4%"
   Player-Sign-Text: "[%time%] [%world%] The Player <%player%> has placed a sign at X= %x%, Y= %y%, Z= %z% with %line1%, %line2%, %line3%, %line4%"
-  Player-Join-Staff: "[%time%] [%world%] The Staff <%player%> has joined at %x%, %y%, %z% and their IP is %IP%"
-  Player-Join: "[%time%] [%world%] The Player <%player%> has joined at %x%, %y%, %z% and their IP is %IP%"
+  Player-Join-Staff: "[%time%] [%world%] スタッフ <%player%> が %x%, %y%, %z% で参加しました IPアドレスは %IP% です"
+  Player-Join: "[%time%] [%world%] プレイヤー <%player%> が %x%, %y%, %z% で参加しました IPアドレスは %IP% です"
   Player-Leave-Staff: "[%time%] [%world%] The Staff <%player%> has left at %x%, %y%, %z%"
   Player-Leave: "[%time%] [%world%] The Player <%player%> has left at %x%, %y%, %z%"
   Player-Kick-Staff: "[%time%] [%world%] The Staff <%player%> got kicked at X= %x%, Y= %y%, Z= %z% with the reason %reason%"
@@ -38,12 +39,12 @@ Files:
   Bucket-Empty: "[%time%] [%world%] The Player <%player%> has emptied %bucket% at X= %x%, Y= %y%, Z= %z%"
   Anvil-Staff: "[%time%] [%world%] The Staff <%player%> has renamed an item to %renamed%"
   Anvil: "[%time%] [%world%] The Player <%player%> has renamed an item to %renamed%"
-  Item-Pickup-Staff: "[%time%] [%world%] The Staff <%player%> has picked %amount% of %item% at X= %x%, Y= %y%, Z= %z% that had %enchantment% enchantment(s) | %renamed%"
-  Item-Pickup: "[%time%] [%world%] The Player <%player%> has picked %amount% of %item% at X= %x%, Y= %y%, Z= %z% that had %enchantment% enchantment(s) | %renamed%"
+  Item-Pickup-Staff: "[%time%] [%world%] The Staff <%player%> has picked %amount% of %item% at X= %x%, Y= %y%, Z= %z% | %renamed%"
+  Item-Pickup: "[%time%] [%world%] The Player <%player%> has picked %amount% of %item% at X= %x%, Y= %y%, Z= %z% | %renamed%"
   Item-Drop-Staff: "[%time%] [%world%] The Staff <%player%> has dropped %amount% of %item% at X= %x%, Y= %y%, Z= %z% that had %enchantment% enchantment(s) | %renamed%"
   Item-Drop: "[%time%] [%world%] The Player <%player%> has dropped %amount% of %item% at X= %x%, Y= %y%, Z= %z% that had %enchantment% enchantment(s) | %renamed%"
-  Enchanting-Staff: "[%time%] [%world%] The Staff <%player%> has used an enchantment table that's located at X= %x%, Y= %y%, Z= %z% to enchant %item% with %enchantment% enchantment(s) which cost %level% xp level"
-  Enchanting: "[%time%] [%world%] The Player <%player%> has used an enchantment table that's located at X= %x%, Y= %y%, Z= %z% to enchant %item% with %enchantment% enchantment(s) which cost %level% xp level"
+  Enchanting-Staff: "[%time%] [%world%] The Staff <%player%> has used an enchantment table that's located at X= %x%, Y= %y%, Z= %z% to enchant %item% with %enchantment% enchantment(s) that had %enchlevel% level(s) which cost %level% xp level"
+  Enchanting: "[%time%] [%world%] The Player <%player%> has used an enchantment table that's located at X= %x%, Y= %y%, Z= %z% to enchant %item% with %enchantment% enchantment(s) that had %enchlevel% level(s) which cost %level% xp level"
   Book-Editing-Staff: "[%time%] [%world%] The Staff <%player%> has edited a book that consists of %page% page(s), with %content%. The book is signed by %sign%"
   Book-Editing: "[%time%] [%world%] The Player <%player%> has edited a book that consists of %page% page(s), with %content%. The book is signed by %sign%"
   Furnace-Staff: "[%time%] [%world%] The Staff <%player%> has extracted %amount% of %item% from a Furnace that's located at X= %x%, Y= %y%, Z= %z%"
@@ -83,8 +84,8 @@ Files:
   Version-Exceptions:
     Wood-Stripping-Staff: "[%time%] [%world%] [%uuid%] The Staff <%player%> has stripped %logname% at X= %x%, Y= %y%, Z= %z%"
     Wood-Stripping: "[%time%] [%world%] [%uuid%] The Player <%player%> has stripped %logname% at X= %x%, Y= %y%, Z= %z%"
-# Discord Instance
-# Emojis can be found here https://emojipedia.org/ or elsewhere. Emojis may not work on > 1.12 Servers.
+#Discord Instance
+#Emojis can be found here https://emojipedia.org/ or elsewhere. Emojis may not work on > 1.12 Servers.
 Discord:
   Player-Chat-Staff: "**[%time%]** **[%world%]** **%message%**"
   Player-Chat: "**[%time%]** **[%world%]** **%message%**"
@@ -116,12 +117,12 @@ Discord:
   Bucket-Empty: "**[%time%]** **[%world%]** **%bucket%** X= **%x%** `|` Y= **%y%** `|` Z= **%z%**"
   Anvil-Staff: "**[%time%]** has renamed an item to **%renamed%**"
   Anvil: "**[%time%]** has renamed an item to **%renamed%**"
-  Item-Pickup-Staff: "**[%time%]** **[%world%]** has picked up **%amount%** of **%item%** at X= **%x%**, Y= **%y%**, Z= **%z%** that had **%enchantment%** enchantment(s) `|` **%renamed%**"
-  Item-Pickup: "**[%time%]** **[%world%]** has picked up **%amount%** of **%item%** at X= **%x%**, Y= **%y%**, Z= **%z%** that had **%enchantment%** enchantment(s) `|` **%renamed%**"
+  Item-Pickup-Staff: "**[%time%]** **[%world%]** has picked up **%amount%** of **%item%** at X= **%x%**, Y= **%y%**, Z= **%z%** `|` **%renamed%**"
+  Item-Pickup: "**[%time%]** **[%world%]** has picked up **%amount%** of **%item%** at X= **%x%**, Y= **%y%**, Z= **%z%** `|` **%renamed%**"
   Item-Drop-Staff: "**[%time%]** **[%world%]** has dropped **%amount%** of **%item%** at X= **%x%**, Y= **%y%**, Z= **%z%** that had **%enchantment%** enchantment(s) `|` **%renamed%**"
   Item-Drop: "**[%time%]** **[%world%]** has dropped **%amount%** of **%item%** at X= **%x%**, Y= **%y%**, Z= **%z%** that had **%enchantment%** enchantment(s) `|` **%renamed%**"
-  Enchanting-Staff: "**[%time%]** **[%world%]** Has used an Enchantment table that's located at X= **%x%**, Y= **%y%**, Z= **%z%** to Apply **%enchantment%** enchantment(s) on the item **%item%** which cost **%level%** xp Level"
-  Enchanting: "**[%time%]** **[%world%]** Has used an Enchantment table that's located at X= **%x%**, Y= **%y%**, Z= **%z%** to Apply **%enchantment%** enchantment(s) which on the item **%item%** which cost **%level%** xp Level"
+  Enchanting-Staff: "**[%time%]** **[%world%]** Has used an Enchantment table that's located at X= **%x%**, Y= **%y%**, Z= **%z%** to Apply **%enchantment%** enchantment(s) that had %enchlevel% level(s) on the item **%item%** which cost **%level%** xp Level"
+  Enchanting: "**[%time%]** **[%world%]** Has used an Enchantment table that's located at X= **%x%**, Y= **%y%**, Z= **%z%** to Apply **%enchantment%** enchantment(s) that had %enchlevel% level(s) which on the item **%item%** which cost **%level%** xp Level"
   Book-Editing-Staff: "**[%time%]** **[%world%]** has edited a book that consists of **%page%** page(s), with **%content%**. The book is signed by **%sign%**"
   Book-Editing: "**[%time%]** **[%world%]** has edited a book that consists of **%page%** page(s), with **%content%**. The book is signed by **%sign%**"
   AFK-Staff: "**[%time%]** **[%world%]*X= **%x%** `|` Y= **%y%** `|` Z= **%z%**"

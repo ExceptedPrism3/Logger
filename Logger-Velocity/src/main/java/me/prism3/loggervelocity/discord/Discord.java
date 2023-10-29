@@ -1,13 +1,11 @@
 package me.prism3.loggervelocity.discord;
 
+import com.velocitypowered.api.proxy.Player;
 import me.prism3.loggervelocity.Main;
-import me.prism3.loggervelocity.utils.Log;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
-
-import java.util.UUID;
 
 public class Discord {
 
@@ -37,13 +35,14 @@ public class Discord {
             try {
 
                 this.jda = JDABuilder.createDefault(botToken).build().awaitReady();
-                if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Enabled")) new DiscordStatus(this.jda);
+                if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Enabled")) new DiscordStatus();
 
-            } catch (final Exception e) {
+            } catch (Exception e) {
 
-                Log.error("An error has occurred whilst connecting to the Bot." +
+                this.main.getLogger().error("An error has occurred whilst connecting to the Bot." +
                         " Is the Bot Key Valid?");
                 return;
+
             }
 
             final String staffChannelID = this.main.getDiscordFile().getString("Discord.Staff.Channel-ID");
@@ -68,39 +67,69 @@ public class Discord {
 
             try {
 
-                if (this.isValid(staffChannelID, "Staff.Enabled"))
+                if (this.isValid(staffChannelID, "Staff.Enabled")) {
+
                     this.staffChannel = this.jda.getTextChannelById(staffChannelID);
 
-                if (this.isValid(playerChatChannelID, "Log-Player.Chat"))
+                }
+
+                if (this.isValid(playerChatChannelID, "Log-Player.Chat")) {
+
                     this.playerChatChannel = this.jda.getTextChannelById(playerChatChannelID);
 
-                if (this.isValid(playerCommandsChannelID, "Log-Player.Commands"))
+                }
+
+                if (this.isValid(consoleCommandsChannelID, "Log-Player.Commands")) {
+
                     this.playerCommandsChannel = this.jda.getTextChannelById(playerCommandsChannelID);
 
-                if (this.isValid(playerLoginChannelID, "Log-Player.Login"))
+                }
+
+                if (this.isValid(playerLoginChannelID, "Log-Player.Login")) {
+
                     this.playerLoginChannel = this.jda.getTextChannelById(playerLoginChannelID);
 
-                if (this.isValid(playerLeaveChannelID, "Log-Player.Leave"))
+                }
+
+                if (this.isValid(playerLeaveChannelID, "Log-Player.Leave")) {
+
                     this.playerLeaveChannel = this.jda.getTextChannelById(playerLeaveChannelID);
 
-                if (this.isValid(consoleCommandsChannelID, "Log-Server.Console-Commands"))
+                }
+
+                if (this.isValid(consoleCommandsChannelID, "Log-Server.Console-Commands")) {
+
                     this.consoleCommandsChannel = this.jda.getTextChannelById(consoleCommandsChannelID);
 
-                if (this.isValid(serverStartChannelID, "Log-Server.Start"))
+                }
+
+                if (this.isValid(serverStartChannelID, "Log-Server.Start")) {
+
                     this.serverStartChannel = this.jda.getTextChannelById(serverStartChannelID);
 
-                if (this.isValid(serverStopChannelID, "Log-Server.Stop"))
+                }
+
+                if (this.isValid(serverStopChannelID, "Log-Server.Stop")) {
+
                     this.serverStopChannel = this.jda.getTextChannelById(serverStopChannelID);
 
-                if (this.isValid(ramChannelID, "Log-Server.RAM"))
+                }
+
+                if (this.isValid(ramChannelID, "Log-Server.RAM")) {
+
                     this.ramChannel = this.jda.getTextChannelById(ramChannelID);
 
-                if (this.isValid(liteBansChannelID, "Log-Extra.LiteBans"))
+                }
+
+                if (this.isValid(liteBansChannelID, "Log-Extra.LiteBans")) {
+
                     this.liteBansChannel = this.jda.getTextChannelById(liteBansChannelID);
 
-            } catch (final Exception e) {
+                }
+            } catch (Exception e) {
 
-                Log.error("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
+                this.main.getLogger().error("A Discord Channel ID is not Valid. Discord Logging Features has been Disabled.");
+
             }
         }
     }
@@ -110,26 +139,33 @@ public class Discord {
         if (channelID == null) return false;
 
         return (!channelID.isEmpty() && this.main.getConfig().getBoolean(path) && !channelID.equals("LINK_HERE"));
+
     }
 
-    public void staffChat(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.staffChannel);
+    public void staffChat(Player player, String content, boolean contentInAuthorLine) {
+
+        this.discordUtil(player, content, contentInAuthorLine, this.staffChannel);
+
     }
 
-    public void playerChat(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerChatChannel);
+    public void playerChat(Player player, String content, boolean contentInAuthorLine) {
+
+        this.discordUtil(player, content, contentInAuthorLine, this.playerChatChannel);
     }
 
-    public void playerCommands(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerCommandsChannel);
+    public void playerCommands(Player player, String content, boolean contentInAuthorLine) {
+
+        this.discordUtil(player, content, contentInAuthorLine, this.playerCommandsChannel);
     }
 
-    public void playerLogin(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerLoginChannel);
+    public void playerLogin(Player player, String content, boolean contentInAuthorLine) {
+
+        this.discordUtil(player, content, contentInAuthorLine, this.playerLoginChannel);
     }
 
-    public void playerLeave(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine) {
-        this.discordUtil(playerName, playerUUID, content, contentInAuthorLine, this.playerLeaveChannel);
+    public void playerLeave(Player player, String content, boolean contentInAuthorLine) {
+
+        this.discordUtil(player, content, contentInAuthorLine, this.playerLeaveChannel);
     }
 
     public void console(String content, boolean contentInAuthorLine) {
@@ -187,12 +223,11 @@ public class Discord {
         this.liteBansChannel.sendMessage(builder.build()).queue();
     }
 
-    private void discordUtil(String playerName, UUID playerUUID, String content, boolean contentInAuthorLine, TextChannel channel) {
-
+    private void discordUtil(Player player, String content, boolean contentInAuthorLine, TextChannel channel) {
         if (channel == null) return;
 
-        final EmbedBuilder builder = new EmbedBuilder().setAuthor(contentInAuthorLine ? content : playerName,
-                null, "https://crafatar.com/avatars/" + playerUUID + "?overlay=1");
+        final EmbedBuilder builder = new EmbedBuilder().setAuthor(contentInAuthorLine ? content : player.getUsername(),
+                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
 
         if (!contentInAuthorLine) builder.setDescription(content);
 
@@ -202,20 +237,22 @@ public class Discord {
     public void disconnect() {
 
         if (this.jda != null) {
-
             try {
 
                 this.jda.shutdown();
                 this.jda = null;
                 if (this.main.getDiscordFile().get().getBoolean("ActivityCycling.Enabled")) DiscordStatus.getThreadPool().shutdown();
-                Log.info("Discord Bot Bridge has been closed!");
+                this.main.getLogger().info("Discord Bot Bridge has been closed!");
 
-            } catch (final Exception e) {
+            } catch (Exception e) {
 
-                Log.error("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
+                this.main.getLogger().error("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
                         " If this Issue Persists, Contact the Authors!");
+
                 e.printStackTrace();
+
             }
         }
     }
+    public JDA getJda() { return this.jda; }
 }

@@ -84,14 +84,5 @@ public class OnBucketEmpty implements Listener {
             } catch (final Exception e) { e.printStackTrace(); }
         }
 
-        // SQLite
-        if (Data.isSqlite) {
-
-            try {
-
-                Main.getInstance().getDatabase().getDatabaseQueue().queueBucketEmpty(Data.serverName, playerName, playerUUID.toString(), bucket, coordinates, player.hasPermission(loggerStaffLog));
-
-            } catch (final Exception e) { e.printStackTrace(); }
-        }
     }
 }

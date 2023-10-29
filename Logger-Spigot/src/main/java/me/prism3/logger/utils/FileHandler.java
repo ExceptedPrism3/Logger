@@ -749,18 +749,18 @@ public class FileHandler {
                 try {
                     return Files.isRegularFile(path) && Files.getLastModifiedTime(path).to(TimeUnit.MILLISECONDS) < deadLine;
                 } catch (final IOException ex) {
-                    Log.severe("An error occurred while checking file modification time.", ex);
+                    Log.severe("An error occurred while checking file modification time.");
                     return false;
                 }
             }).forEach(path -> {
                 try {
                     Files.deleteIfExists(path);
                 } catch (final IOException ex) {
-                    Log.severe("An error occurred while deleting files.", ex);
+                    Log.severe("An error occurred while deleting files.");
                 }
             });
         } catch (final IOException e) {
-            Log.severe("An error occurred while searching for files to delete.", e);
+            Log.severe("An error occurred while searching for files to delete.");
         }
     }
 }

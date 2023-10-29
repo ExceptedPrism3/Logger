@@ -3,11 +3,17 @@ package me.prism3.logger.utils.enums;
 public enum Languages {
 
     AR("ar"),
-    FR("fr_fr"),
+    DA("da"),
+    DE("de"),
     EN("en_en"),
-    ZH("zh_cn"),
+    EU("eu"),
+    FR("fr_fr"),
+    JA("ja"),
+    NL("nl"),
+    RU("ru"),
+    TR("tr"),
     ZHT("zh_cht"),
-    NL("nl");
+    ZH("zh_cn");
 
     private final String messageFile;
 

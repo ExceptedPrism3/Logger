@@ -74,19 +74,13 @@ public class OnPlayerLeave implements Listener {
 
             try {
 
-                Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerLeave(Data.serverName, playerName, playerUUID.toString(), coordinates, player.getAddress() ,player.hasPermission(loggerStaffLog));
+                Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerLeave(Data.serverName, playerName, playerUUID.toString(), coordinates, player.getAddress(), player.hasPermission(loggerStaffLog));
 
-            } catch (final Exception e) { e.printStackTrace(); }
+            } catch (final Exception e) {
+                e.printStackTrace();
+            }
         }
 
-        // SQLite
-        if (Data.isSqlite) {
 
-            try {
-
-                Main.getInstance().getDatabase().getDatabaseQueue().queuePlayerLeave(Data.serverName, playerName, playerUUID.toString(), coordinates, player.getAddress(),player.hasPermission(loggerStaffLog));
-
-            } catch (final Exception e) { e.printStackTrace(); }
-        }
     }
 }
