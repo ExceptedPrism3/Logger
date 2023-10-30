@@ -4,7 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import me.prism3.logger.utils.enums.FriendlyEnchants;
 import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.enchantments.Enchantment;
@@ -18,6 +18,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 import static me.prism3.logger.utils.Data.*;
+
 
 public class OnEnchant implements Listener {
 
@@ -69,9 +70,9 @@ public class OnEnchant implements Listener {
         // Log To Files
         if (Data.isLogToFiles) {
             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                FileHandler.handleFileLog("Files.Enchanting-Staff", placeholders, FileHandler.getStaffFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.STAFF, "Files.Enchanting-Staff", placeholders);
             } else {
-                FileHandler.handleFileLog("Files.Enchanting", placeholders, FileHandler.getEnchantFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.ENCHANTING, "Files.Enchanting", placeholders);
             }
         }
 

@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import java.io.IOException;
 import java.util.List;
 
+
 public interface SubCommand {
 
     String getName();
@@ -13,7 +14,7 @@ public interface SubCommand {
 
     String getSyntax();
 
-    void perform(CommandSender commandSender, String[] args) throws IOException;
+    void perform(final CommandSender commandSender, final String[] args) throws IOException;
 
-    List<String> getSubCommandsArgs(CommandSender commandSender, String[] args);
+    List<String> getSubCommandsArgs(final CommandSender commandSender, final String[] args);
 }

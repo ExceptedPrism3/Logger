@@ -164,3 +164,5 @@ Discord:
   Version-Exceptions:
     Wood-Stripping-Staff: "**[%time%]** **[%world%]** **[%uuid%]** hat **%logname%** bei X= **%x%**, Y= **%y%**, Z= **%z%** entrindet"
     Wood-Stripping: "**[%time%]** **[%world%]** **[%uuid%]** hat **%logname%** bei X= **%x%**, Y= **%y%**, Z= **%z%** entrindet"
+
+Messages-Version: ${project.version}

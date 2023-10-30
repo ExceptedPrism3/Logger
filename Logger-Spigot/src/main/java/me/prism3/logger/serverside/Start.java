@@ -3,12 +3,13 @@ package me.prism3.logger.serverside;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.Log;
+import me.prism3.logger.utils.enums.LogCategory;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class Start {
 
@@ -28,7 +29,7 @@ public class Start {
 
         // Log To Files
         if (Data.isLogToFiles)
-            FileHandler.handleFileLog("Files.Server-Side.Start", placeholders, FileHandler.getServerStartFile());
+            this.main.getFileHandler().handleFileLog(LogCategory.SERVER_START, "Files.Server-Side.Start", placeholders);
 
         // Discord
         if (this.main.getDiscordFile().get().getBoolean("Discord.Enable"))

@@ -4,7 +4,7 @@ import me.leoko.advancedban.bukkit.event.PunishmentEvent;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static me.prism3.logger.utils.Data.*;
+
 
 public class OnAdvancedBan implements Listener {
 
@@ -42,7 +43,7 @@ public class OnAdvancedBan implements Listener {
 
         // Log To Files
         if (Data.isLogToFiles)
-            FileHandler.handleFileLog("Files.Extras.AdvancedBan", placeholders, FileHandler.getAdvancedBanFile());
+            this.main.getFileHandler().handleFileLog(LogCategory.ADVANCEDBAN, "Files.Extras.AdvancedBan", placeholders);
 
         // Discord Integration
         if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable"))

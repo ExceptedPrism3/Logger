@@ -4,7 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -59,9 +59,9 @@ public class LeverInteraction implements Listener {
             // Log To Files
             if (Data.isLogToFiles) {
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                    FileHandler.handleFileLog("Files.Lever-Interaction-Staff", placeholders, FileHandler.getStaffFile());
+                    this.main.getFileHandler().handleFileLog(LogCategory.STAFF, "Files.Lever-Interaction-Staff", placeholders);
                 } else {
-                    FileHandler.handleFileLog("Files.Lever-Interaction", placeholders, FileHandler.getLeverInteractionFile());
+                    this.main.getFileHandler().handleFileLog(LogCategory.LEVER_INTERACTION, "Files.Lever-Interaction", placeholders);
                 }
             }
 

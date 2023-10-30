@@ -159,3 +159,5 @@ Discord:
   Version-Exceptions:
     Wood-Stripping-Staff: "**[%time%]** **[%world%]** **[%uuid%]** 剥离了原木 **%logname%** 于 X= **%x%**, Y= **%y%**, Z= **%z%**"
     Wood-Stripping: "**[%time%]** **[%world%]** **[%uuid%]** 剥离了原木 **%logname%** 于 X= **%x%**, Y= **%y%**, Z= **%z%**"
+
+Messages-Version: ${project.version}

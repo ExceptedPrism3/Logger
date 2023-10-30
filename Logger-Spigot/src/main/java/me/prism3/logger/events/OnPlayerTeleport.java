@@ -6,7 +6,7 @@ import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.hooks.AuthMeUtil;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.*;
+
 
 public class OnPlayerTeleport implements Listener {
 
@@ -64,9 +65,9 @@ public class OnPlayerTeleport implements Listener {
         // Log To Files
         if (Data.isLogToFiles) {
             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                FileHandler.handleFileLog("Files.Player-Teleport-Staff", placeholders, FileHandler.getStaffFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.STAFF, "Files.Player-Teleport-Staff", placeholders);
             } else {
-                FileHandler.handleFileLog("Files.Player-Teleport", placeholders, FileHandler.getPlayerTeleportLogFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.PLAYER_TELEPORT, "Files.Player-Teleport", placeholders);
             }
         }
 

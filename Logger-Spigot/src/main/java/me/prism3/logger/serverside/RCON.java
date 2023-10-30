@@ -3,7 +3,7 @@ package me.prism3.logger.serverside;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -12,6 +12,7 @@ import org.bukkit.event.server.RemoteServerCommandEvent;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class RCON implements Listener {
 
@@ -30,7 +31,7 @@ public class RCON implements Listener {
 
         // Log To Files
         if (Data.isLogToFiles)
-            FileHandler.handleFileLog("Files.Server-Side.RCON", placeholders, FileHandler.getRconFile());
+            this.main.getFileHandler().handleFileLog(LogCategory.RCON, "Files.Server-Side.RCON", placeholders);
 
         // Discord
         if (this.main.getDiscordFile().get().getBoolean("Discord.Enable"))

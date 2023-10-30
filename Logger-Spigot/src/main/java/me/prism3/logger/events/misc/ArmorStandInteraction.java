@@ -4,7 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,6 +15,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 import static me.prism3.logger.utils.Data.*;
+
 
 public class ArmorStandInteraction implements Listener {
 
@@ -48,9 +49,9 @@ public class ArmorStandInteraction implements Listener {
         // Log To Files
         if (Data.isLogToFiles) {
             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                FileHandler.handleFileLog("Files.ArmorStand-Interaction-Staff", placeholders, FileHandler.getStaffFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.STAFF, "Files.ArmorStand-Interaction-Staff", placeholders);
             } else {
-                FileHandler.handleFileLog("Files.ArmorStand-Interaction", placeholders, FileHandler.getArmorStandInteractionFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.ARMOR_STAND_INTERACTION, "Files.ArmorStand-Interaction", placeholders);
             }
         }
 

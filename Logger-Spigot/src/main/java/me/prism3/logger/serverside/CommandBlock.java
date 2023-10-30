@@ -3,7 +3,7 @@ package me.prism3.logger.serverside;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,6 +13,7 @@ import org.bukkit.event.server.ServerCommandEvent;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class CommandBlock implements Listener {
 
@@ -31,7 +32,7 @@ public class CommandBlock implements Listener {
 
             // Log To Files
             if (Data.isLogToFiles)
-                FileHandler.handleFileLog("Files.Server-Side.Command-Block", placeholders, FileHandler.getCommandBlockFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.COMMAND_BLOCK, "Files.Server-Side.Command-Block", placeholders);
 
             // Discord
             if (this.main.getDiscordFile().get().getBoolean("Discord.Enable"))

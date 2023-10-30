@@ -11,16 +11,17 @@ import java.util.List;
 
 import static me.prism3.logger.utils.Data.pluginPrefix;
 
+
 public class ToggleSpy implements SubCommand {
 
     public String getName() { return "toggle"; }
 
     public String getDescription() { return "Toggle spy features ON/OFF"; }
 
-    public String getSyntax() { return "/logger toggle spy [Commands | Book | Sign | Anvil]"; }
+    public String getSyntax() { return "/logger " + this.getName() + " spy [Commands | Book | Sign | Anvil]"; }
 
 
-    public void perform(CommandSender commandSender, String[] args) {
+    public void perform(final CommandSender commandSender, final String[] args) {
 
         final Main main = Main.getInstance();
 
@@ -47,5 +48,5 @@ public class ToggleSpy implements SubCommand {
                 pluginPrefix + option + " Spy Toggled."));
     }
 
-    public List<String> getSubCommandsArgs(CommandSender commandSender, String[] args) { return Collections.emptyList(); }
+    public List<String> getSubCommandsArgs(final CommandSender commandSender, final String[] args) { return Collections.emptyList(); }
 }

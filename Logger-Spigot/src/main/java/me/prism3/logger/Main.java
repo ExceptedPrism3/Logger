@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 import static me.prism3.logger.utils.Data.*;
 
+
 public class Main extends JavaPlugin {
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -30,7 +31,7 @@ public class Main extends JavaPlugin {
     private AbstractDataSource database;
     private AbstractDataSource sqLite;
     private DiscordManager discordFile;
-    private FileHandler2 fileHandler;
+    private FileHandler fileHandler;
 
     @Override
     public void onEnable() {
@@ -55,7 +56,7 @@ public class Main extends JavaPlugin {
         if (isLogToFiles && isSqlite)
             Log.warning("FileUpdater and SQLite logging are both enabled, this might impact your Server's Performance!");
 
-        this.fileHandler = new FileHandler2(this.getDataFolder());
+        this.fileHandler = new FileHandler(this.getDataFolder());
 
         new PluginUpdater(pluginVersion).checkForUpdates();
 
@@ -179,5 +180,5 @@ public class Main extends JavaPlugin {
 
     public ExecutorService getExecutor() { return this.executor; }
 
-    public FileHandler2 getFileHandler() { return this.fileHandler; }
+    public FileHandler getFileHandler() { return this.fileHandler; }
 }

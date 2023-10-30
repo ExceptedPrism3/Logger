@@ -3,7 +3,7 @@ package me.prism3.logger.events.plugindependent;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.hooks.VaultUtil;
 import net.milkbowl.vault.economy.Economy;
@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.*;
+
 
 public class OnVault implements Listener, Runnable {
 
@@ -79,8 +80,8 @@ public class OnVault implements Listener, Runnable {
 
     private void logToFile(Map<String, String> placeholders, Player player) {
         if (Data.isLogToFiles) {
-            String fileKey = Data.isStaffEnabled && player.hasPermission(loggerStaffLog) ? "Files.Extras.Vault-Staff" : "Files.Extras.Vault";
-            FileHandler.handleFileLog(fileKey, placeholders, FileHandler.getVaultFile());
+            final String fileKey = Data.isStaffEnabled && player.hasPermission(loggerStaffLog) ? "Files.Extras.Vault-Staff" : "Files.Extras.Vault";
+            this.main.getFileHandler().handleFileLog(LogCategory.VAULT, fileKey, placeholders);
         }
     }
 

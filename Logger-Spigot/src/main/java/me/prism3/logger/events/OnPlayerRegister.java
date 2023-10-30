@@ -3,7 +3,7 @@ package me.prism3.logger.events;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.*;
+
 
 public class OnPlayerRegister {
 
@@ -44,7 +45,7 @@ public class OnPlayerRegister {
 
         // Log To Files
         if (Data.isLogToFiles)
-            FileHandler.handleFileLog("Files.Player-Registration", placeholders, FileHandler.getRegistrationFile());
+            this.main.getFileHandler().handleFileLog(LogCategory.REGISTRATION, "Files.Player-Registration", placeholders);
 
         // Discord Integration
         if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable"))

@@ -4,7 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import me.prism3.logger.utils.enums.NmsVersions;
 import me.prism3.logger.utils.enums.UMaterial;
 import org.bukkit.entity.EntityType;
@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.*;
+
 
 public class SpawnEgg implements Listener {
 
@@ -84,9 +85,9 @@ public class SpawnEgg implements Listener {
         // Log To Files
         if (Data.isLogToFiles) {
             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                FileHandler.handleFileLog("Files.Spawn-Egg-Staff", placeholders, FileHandler.getStaffFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.STAFF, "Files.Spawn-Egg-Staff", placeholders);
             } else {
-                FileHandler.handleFileLog("Files.Spawn-Egg", placeholders, FileHandler.getSpawnEggFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.SPAWN_EGG, "Files.Spawn-Egg", placeholders);
             }
         }
 

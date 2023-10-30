@@ -5,7 +5,7 @@ import me.prism3.logger.utils.db.PlayerInventoryDB;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.*;
 import static me.prism3.logger.utils.Data.isStaffEnabled;
+
 
 public class OnPlayerDeath implements Listener {
 
@@ -95,9 +96,9 @@ public class OnPlayerDeath implements Listener {
         // Log To Files
         if (Data.isLogToFiles) {
             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                FileHandler.handleFileLog("Files.Player-Death-Staff", placeholders, FileHandler.getStaffFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.STAFF, "Files.Player-Death-Staff", placeholders);
             } else {
-                FileHandler.handleFileLog("Files.Player-Death", placeholders, FileHandler.getPlayerDeathLogFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.PLAYER_DEATH,  "Files.Player-Death", placeholders);
             }
         }
 

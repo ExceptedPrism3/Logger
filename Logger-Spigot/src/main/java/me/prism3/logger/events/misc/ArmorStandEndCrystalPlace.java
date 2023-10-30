@@ -4,7 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import me.prism3.loggercore.database.entity.enums.ArmorStandActionType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,13 +14,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.io.File;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.*;
+
 
 public class ArmorStandEndCrystalPlace implements Listener {
 
@@ -53,16 +53,16 @@ public class ArmorStandEndCrystalPlace implements Listener {
             final int z = event.getClickedBlock().getLocation().getBlockZ();
 
             final String path;
-            final File getter;
+            final LogCategory logCategory;
             final DiscordChannels discordChannels;
 
             if (entity.equals(Material.ARMOR_STAND)) {
                 path = "ArmorStand-Place";
-                getter = FileHandler.getArmorStandPlaceFile();
+                logCategory = LogCategory.ARMOR_STAND_PLACE;
                 discordChannels = DiscordChannels.ARMOR_STAND_PLACE;
             } else {
                 path = "EndCrystal-Place";
-                getter = FileHandler.getEndCrystalPlaceFile();
+                logCategory = LogCategory.END_CRYSTAL_PLACE;
                 discordChannels = DiscordChannels.END_CRYSTAL_PLACE;
             }
 
@@ -78,9 +78,9 @@ public class ArmorStandEndCrystalPlace implements Listener {
             // Log To Files
             if (Data.isLogToFiles) {
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                    FileHandler.handleFileLog("Files." + path + "-Staff", placeholders, FileHandler.getStaffFile());
+                    this.main.getFileHandler().handleFileLog(logCategory, "Files." + path + "-Staff", placeholders);
                 } else {
-                    FileHandler.handleFileLog("Files." + path, placeholders, getter);
+                    this.main.getFileHandler().handleFileLog(logCategory, "Files." + path, placeholders);
                 }
             }
 

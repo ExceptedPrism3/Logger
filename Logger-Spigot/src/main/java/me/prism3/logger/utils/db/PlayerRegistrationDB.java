@@ -1,12 +1,11 @@
 package me.prism3.logger.utils.db;
 
-import me.prism3.logger.utils.FileHandler;
-
 import java.io.File;
 import java.sql.*;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import me.prism3.logger.utils.enums.LogCategory;
 import org.bukkit.entity.Player;
 
 public class PlayerRegistrationDB {
@@ -22,7 +21,7 @@ public class PlayerRegistrationDB {
     public PlayerRegistrationDB() {
 
         final HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:sqlite:" + FileHandler.getDatabasesFolder() + File.separator + "registration.db");
+        config.setJdbcUrl("jdbc:sqlite:" + LogCategory.DATABASE + File.separator + "registration.db");
 
         dataSource = new HikariDataSource(config);
 

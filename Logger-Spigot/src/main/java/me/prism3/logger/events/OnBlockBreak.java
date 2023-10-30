@@ -4,7 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import me.prism3.loggercore.database.data.Coordinates;
 import me.prism3.loggercore.database.entity.enums.InteractionType;
 import org.bukkit.Material;
@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.*;
+
 
 public class OnBlockBreak implements Listener {
 
@@ -58,9 +59,9 @@ public class OnBlockBreak implements Listener {
         // Log To Files
         if (Data.isLogToFiles) {
             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                FileHandler.handleFileLog("Files.Block-Break-Staff", placeholders, FileHandler.getStaffFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.STAFF, "Files.Block-Break-Staff", placeholders);
             } else {
-                FileHandler.handleFileLog("Files.Block-Break", placeholders, FileHandler.getBlockBreakLogFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.BLOCK_BREAK, "Files.Block-Break", placeholders);
             }
         }
 

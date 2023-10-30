@@ -15,6 +15,7 @@ import com.sk89q.worldguard.session.handler.Handler;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
+import me.prism3.logger.utils.enums.LogCategory;
 import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.Log;
 import org.bukkit.entity.Player;

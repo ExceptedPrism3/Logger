@@ -4,7 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -17,6 +17,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 import static me.prism3.logger.utils.Data.*;
+
 
 public class OnSign implements Listener {
 
@@ -59,9 +60,9 @@ public class OnSign implements Listener {
         // Log To Files
         if (Data.isLogToFiles) {
             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                FileHandler.handleFileLog("Files.Player-Sign-Text-Staff", placeholders, FileHandler.getStaffFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.STAFF, "Files.Player-Sign-Text-Staff", placeholders);
             } else {
-                FileHandler.handleFileLog("Files.Player-Sign-Text", placeholders, FileHandler.getSignLogFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.PLAYER_SIGN_TEXT, "Files.Player-Sign-Text", placeholders);
             }
         }
 

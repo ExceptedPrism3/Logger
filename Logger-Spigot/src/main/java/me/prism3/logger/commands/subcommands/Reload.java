@@ -11,27 +11,22 @@ import java.util.List;
 
 import static me.prism3.logger.utils.Data.pluginPrefix;
 
+
 public class Reload implements SubCommand {
 
     private final Main main = Main.getInstance();
 
     @Override
-    public String getName() {
-        return "reload";
-    }
+    public String getName() { return "reload"; }
 
     @Override
-    public String getDescription() {
-        return "Reloads the plugin files.";
-    }
+    public String getDescription() { return "Reloads the plugin files."; }
 
     @Override
-    public String getSyntax() {
-        return "/logger reload";
-    }
+    public String getSyntax() { return "/logger " + this.getName(); }
 
     @Override
-    public void perform(CommandSender commandSender, String[] args) {
+    public void perform(final CommandSender commandSender, final String[] args) {
 
         this.main.reloadConfig();
         this.main.getMessagesFile().reload();
@@ -42,5 +37,5 @@ public class Reload implements SubCommand {
     }
 
     @Override
-    public List<String> getSubCommandsArgs(CommandSender commandSender, String[] args) { return Collections.emptyList(); }
+    public List<String> getSubCommandsArgs(final CommandSender commandSender, final String[] args) { return Collections.emptyList(); }
 }

@@ -2,9 +2,9 @@ package me.prism3.logger.commands.subcommands;
 
 import me.prism3.logger.Main;
 import me.prism3.logger.commands.SubCommand;
-import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.Log;
 import me.prism3.logger.utils.db.PlayerInventoryDB;
+import me.prism3.logger.utils.enums.LogCategory;
 import me.prism3.logger.utils.playerdeathutils.InventoryToBase64;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,13 +13,11 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -40,7 +38,7 @@ public class PlayerInventory implements Listener, SubCommand {
     public String getDescription() { return "Opens a menu with all online players and their available inventory backups."; }
 
     @Override
-    public String getSyntax() { return "/logger playerinventory"; }
+    public String getSyntax() { return "/logger " + this.getName(); }
 
     @Override
     public void perform(CommandSender commandSender, String[] args) {
@@ -118,7 +116,7 @@ public class PlayerInventory implements Listener, SubCommand {
                 case CHEST:
                     for (String list : PlayerInventoryDB.getAllPlayerBackup(selectedPlayerBackup)) {
                         if (list.equalsIgnoreCase(clickedItem)) {
-                            this.backupFile = new File(FileHandler.getPlayerDeathBackupLogFolder(), selectedPlayerBackup + File.separator + list);
+                            this.backupFile = new File(LogCategory.PLAYER_DEATH.getFolderName(), selectedPlayerBackup + File.separator + list);
                             this.restoreMenu(staff, list);
                             return;
                         }

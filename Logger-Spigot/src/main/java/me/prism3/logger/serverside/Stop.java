@@ -3,11 +3,12 @@ package me.prism3.logger.serverside;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class Stop {
 
@@ -23,7 +24,7 @@ public class Stop {
 
         // Log To Files
         if (Data.isLogToFiles)
-            FileHandler.handleFileLog("Files.Server-Side.Stop", placeholders, FileHandler.getServerStopFile());
+            this.main.getFileHandler().handleFileLog(LogCategory.SERVER_STOP, "Files.Server-Side.Stop", placeholders);
 
         // Discord
         if (this.main.getDiscordFile().get().getBoolean("Discord.Enable"))

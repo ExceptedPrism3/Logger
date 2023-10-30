@@ -3,7 +3,7 @@ package me.prism3.logger.serverside;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import org.bukkit.Bukkit;
 
 import java.time.ZonedDateTime;
@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static me.prism3.logger.utils.Data.playerCountNumber;
+
 
 public class PlayerCount implements Runnable {
 
@@ -28,7 +29,7 @@ public class PlayerCount implements Runnable {
 
             // Log To Files
             if (Data.isLogToFiles)
-                FileHandler.handleFileLog("Files.Server-Side.Player-Count", placeholders, FileHandler.getPlayerCountFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.PLAYER_COUNT, "Files.Server-Side.Player-Count", placeholders);
 
             // Discord
             if (this.main.getDiscordFile().get().getBoolean("Discord.Enable"))

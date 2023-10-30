@@ -4,8 +4,8 @@ import me.prism3.logger.Main;
 import me.prism3.logger.commands.SubCommand;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.Log;
+import me.prism3.logger.utils.enums.LogCategory;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 public class Manual implements SubCommand {
 
@@ -27,7 +28,7 @@ public class Manual implements SubCommand {
     public String getDescription() { return "Manually save the log in it's separated file."; }
 
     @Override
-    public String getSyntax() { return "logger manual <your_log>"; }
+    public String getSyntax() { return "logger " + this.getName() + " <your_log>"; }
 
     @Override
     public void perform(CommandSender commandSender, String[] args) {
@@ -52,7 +53,7 @@ public class Manual implements SubCommand {
 
         // Log To Files
         if (Data.isLogToFiles)
-            FileHandler.handleFileLog("Files.Custom.Manual", placeholders, FileHandler.getManualFile());
+            this.main.getFileHandler().handleFileLog(LogCategory.MANUAL, "Files.Custom.Manual", placeholders);
 
         // Discord
         if (this.main.getDiscordFile().get().getBoolean("Discord.Enable"))

@@ -1,10 +1,10 @@
-package me.prism3.logger.serverside;
+package me.prism3.logger.events;
 
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static me.prism3.logger.utils.Data.*;
+
 
 public class OnAdvancement implements Listener {
 
@@ -36,9 +37,9 @@ public class OnAdvancement implements Listener {
 
         if (Data.isLogToFiles) {
             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                FileHandler.handleFileLog("Files.Server-Side.Advancement-Staff", placeholders, FileHandler.getStaffFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.STAFF, "Files.Server-Side.Advancement-Staff", placeholders);
             } else {
-                FileHandler.handleFileLog("Files.Server-Side.Advancement", placeholders, FileHandler.getAdvancementFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.ADVANCEMENTS, "Files.Server-Side.Advancement", placeholders);
             }
         }
 

@@ -4,7 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,6 +16,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 import static me.prism3.logger.utils.Data.*;
+
 
 public class OnBook implements Listener {
 
@@ -53,9 +54,9 @@ public class OnBook implements Listener {
         // Log to Files
         if (Data.isLogToFiles) {
             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                FileHandler.handleFileLog("Files.Book-Editing-Staff", placeholders, FileHandler.getStaffFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.STAFF, "Files.Book-Editing-Staff", placeholders);
             } else {
-                FileHandler.handleFileLog("Files.Book-Editing", placeholders, FileHandler.getBookEditingFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.BOOK_EDITING, "Files.Book-Editing", placeholders);
             }
         }
 

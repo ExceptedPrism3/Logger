@@ -5,7 +5,7 @@ import litebans.api.Events;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import me.prism3.logger.utils.liteban.UsernameFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static me.prism3.logger.utils.Data.*;
+
 
 public class OnLiteBanEvents implements Listener, Runnable {
 
@@ -51,11 +52,11 @@ public class OnLiteBanEvents implements Listener, Runnable {
 
                 // Log To Files
                 if (Data.isLogToFiles)
-                    FileHandler.handleFileLog("Files.Extras.LiteBans", placeholders, FileHandler.getLiteBansFile());
+                    main.getFileHandler().handleFileLog(LogCategory.LITEBANS, "Files.Extras.LiteBans", placeholders);
 
                 // Discord Integration
                 if (!player.hasPermission(loggerExemptDiscord) && main.getDiscordFile().get().getBoolean("Discord.Enable"))
-                    main.getDiscord().handleDiscordLog("Discord.Primed-TNT", placeholders, DiscordChannels.LITE_BANS, executorName, player.getUniqueId());
+                    main.getDiscord().handleDiscordLog("Discord.Extra.LiteBans", placeholders, DiscordChannels.LITE_BANS, executorName, player.getUniqueId());
 
                 // External
                 if (Data.isExternal) {

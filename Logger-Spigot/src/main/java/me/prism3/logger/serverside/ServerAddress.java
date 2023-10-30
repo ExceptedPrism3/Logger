@@ -4,7 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.*;
+
 
 public class ServerAddress implements Listener {
 
@@ -42,9 +43,9 @@ public class ServerAddress implements Listener {
         // Log To Files
         if (Data.isLogToFiles) {
             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                FileHandler.handleFileLog("Files.Server-Side.Server-Address-Staff", placeholders, FileHandler.getStaffFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.STAFF, "Files.Server-Side.Server-Address-Staff", placeholders);
             } else {
-                FileHandler.handleFileLog("Files.Server-Side.Server-Address", placeholders, FileHandler.getServerAddressFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.SERVER_ADDRESS, "Files.Server-Side.Server-Address", placeholders);
             }
         }
 

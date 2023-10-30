@@ -4,7 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.*;
+
 
 public class OnPlayerLevel implements Listener {
 
@@ -45,9 +46,9 @@ public class OnPlayerLevel implements Listener {
             // Log To Files
             if (Data.isLogToFiles) {
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                    FileHandler.handleFileLog("Files.Player-Level-Staff", placeholders, FileHandler.getStaffFile());
+                    this.main.getFileHandler().handleFileLog(LogCategory.STAFF, "Files.Player-Level-Staff", placeholders);
                 } else {
-                    FileHandler.handleFileLog("Files.Player-Level", placeholders, FileHandler.getPlayerLevelFile());
+                    this.main.getFileHandler().handleFileLog(LogCategory.PLAYER_LEVEL, "Files.Player-Level", placeholders);
                 }
             }
 

@@ -4,7 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.*;
+
 
 public class OnFurnace implements Listener {
 
@@ -56,9 +57,9 @@ public class OnFurnace implements Listener {
         //Log To Files Handling
         if (Data.isLogToFiles) {
             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                FileHandler.handleFileLog("Files.Furnace-Staff", placeholders, FileHandler.getStaffFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.STAFF, "Files.Furnace-Staff", placeholders);
             } else {
-                FileHandler.handleFileLog("Files.Furnace", placeholders, FileHandler.getFurnaceFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.FURNACE, "Files.Furnace", placeholders);
             }
         }
 

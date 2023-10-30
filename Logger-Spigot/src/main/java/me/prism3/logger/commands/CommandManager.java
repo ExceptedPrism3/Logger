@@ -17,6 +17,7 @@ import java.util.List;
 import static me.prism3.logger.utils.Data.loggerStaff;
 import static me.prism3.logger.utils.Data.pluginPrefix;
 
+
 public class CommandManager implements TabExecutor {
 
     private final ArrayList<SubCommand> subCommands = new ArrayList<>();
@@ -32,7 +33,7 @@ public class CommandManager implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, @NotNull final String[] args) {
 
         final Main main = Main.getInstance();
 
@@ -52,8 +53,7 @@ public class CommandManager implements TabExecutor {
                     } catch (final IOException e) { e.printStackTrace(); }
                 }
             }
-        }
-        else {
+        }  else {
             if (sender.hasPermission(loggerStaff)) {
                 sender.sendMessage("--------------------------------------------");
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "Running Logger: &a&l" + Data.pluginVersion));
@@ -62,6 +62,7 @@ public class CommandManager implements TabExecutor {
                 sender.sendMessage("--------------------------------------------");
             }
         }
+
         return true;
     }
 
@@ -69,7 +70,7 @@ public class CommandManager implements TabExecutor {
 
     @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, @NotNull final String[] args) {
 
         if (args.length == 1) {
 

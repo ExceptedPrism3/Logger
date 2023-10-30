@@ -10,6 +10,7 @@ import java.util.List;
 import static me.prism3.logger.utils.Data.discordSupportServer;
 import static me.prism3.logger.utils.Data.pluginPrefix;
 
+
 public class Discord implements SubCommand {
 
     @Override
@@ -19,14 +20,14 @@ public class Discord implements SubCommand {
     public String getDescription() { return "Display the discord support server link"; }
 
     @Override
-    public String getSyntax() { return "/logger discord"; }
+    public String getSyntax() { return "/logger " + this.getName(); }
 
     @Override
-    public void perform(CommandSender commandSender, String[] args) {
+    public void perform(final CommandSender commandSender, final String[] args) {
 
         commandSender.sendMessage(ChatColor.translateAlternateColorCodes('&', pluginPrefix + "Discord Support Server: &b" + discordSupportServer));
     }
 
     @Override
-    public List<String> getSubCommandsArgs(CommandSender commandSender, String[] args) { return Collections.emptyList(); }
+    public List<String> getSubCommandsArgs(final CommandSender commandSender, final String[] args) { return Collections.emptyList(); }
 }

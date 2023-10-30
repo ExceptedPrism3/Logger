@@ -1,7 +1,5 @@
 package me.prism3.logger.utils.db;
 
-import me.prism3.logger.utils.FileHandler;
-
 import java.io.File;
 import java.sql.*;
 import java.text.DateFormat;
@@ -14,6 +12,7 @@ import java.util.Map;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import me.prism3.logger.utils.enums.LogCategory;
 import me.prism3.logger.utils.playerdeathutils.InventoryToBase64;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
@@ -41,7 +40,7 @@ public class PlayerInventoryDB {
     public PlayerInventoryDB() {
 
         final HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:sqlite:" + FileHandler.getDatabasesFolder() + File.separator + "player_inventories.db");
+        config.setJdbcUrl("jdbc:sqlite:" + LogCategory.DATABASE + File.separator + "player_inventories.db");
 
         dataSource = new HikariDataSource(config);
 

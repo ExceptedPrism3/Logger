@@ -10,6 +10,7 @@
     <name>Logger-Spigot</name>
 
     <description>Log all Activities from Players or Server Side!</description>
+
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -123,10 +124,6 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
-        <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/groups/public/</url>
-        </repository>
         <!-- Discord JDA Repo-->
         <repository>
             <id>dv8tion</id>
@@ -171,18 +168,6 @@
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.9.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.seeseemelk</groupId>
-            <artifactId>MockBukkit-v1.19</artifactId>
-            <version>2.138.0</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -297,6 +282,5 @@
             <artifactId>jackson-dataformat-yaml</artifactId>
             <version>2.11.3</version>
         </dependency>
-
     </dependencies>
 </project>

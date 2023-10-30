@@ -4,7 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static me.prism3.logger.utils.Data.*;
+
 
 public class OnBucketEmpty implements Listener {
 
@@ -56,9 +57,9 @@ public class OnBucketEmpty implements Listener {
         // Log To Files
         if (Data.isLogToFiles) {
             if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                FileHandler.handleFileLog("Files.Bucket-Empty-Staff", placeholders, FileHandler.getStaffFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.STAFF, "Files.Bucket-Empty-Staff", placeholders);
             } else {
-                FileHandler.handleFileLog("Files.Bucket-Empty", placeholders, FileHandler.getBucketEmptyFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.BUCKET_EMPTY, "Files.Bucket-Empty", placeholders);
             }
         }
 

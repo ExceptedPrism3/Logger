@@ -4,7 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -87,7 +87,7 @@ public class OnCommand implements Listener {
     private void handleCommandLog(String fileKey, String discordKey, Map<String, String> placeholders, Player player) {
 
         if (Data.isLogToFiles)
-            FileHandler.handleFileLog(fileKey, placeholders, FileHandler.getPlayerCommandLogFile());
+            main.getFileHandler().handleFileLog(LogCategory.PLAYER_COMMANDS, fileKey, placeholders);
 
         if (!player.hasPermission(loggerExemptDiscord) && this.main.getDiscordFile().get().getBoolean("Discord.Enable"))
             this.main.getDiscord().handleDiscordLog(discordKey, placeholders, DiscordChannels.PLAYER_COMMANDS, player.getName(), player.getUniqueId());

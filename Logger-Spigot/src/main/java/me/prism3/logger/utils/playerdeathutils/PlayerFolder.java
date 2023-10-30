@@ -5,13 +5,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import me.prism3.logger.utils.FileHandler;
-import org.bukkit.ChatColor;
+import me.prism3.logger.utils.enums.LogCategory;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-
-import static me.prism3.logger.utils.Data.allowedBackups;
 
 public class PlayerFolder {
     private static final SimpleDateFormat FILENAME_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
@@ -21,7 +18,7 @@ public class PlayerFolder {
 
     public PlayerFolder(final Player player) {
 
-        final File backupFolder = new File(FileHandler.getPlayerDeathBackupLogFolder(), player.getName());
+        final File backupFolder = new File(LogCategory.PLAYER_DEATH.getFolderName(), player.getName());
 
         if (!backupFolder.exists() && !backupFolder.mkdir()) {
             this.playerFile = null;
@@ -75,7 +72,7 @@ public class PlayerFolder {
 
     public static UUID getUUID(final String playerName, final String fileName) {
 
-        final FileConfiguration as = YamlConfiguration.loadConfiguration(new File(FileHandler.getPlayerDeathBackupLogFolder() + File.separator + playerName, fileName));
+        final FileConfiguration as = YamlConfiguration.loadConfiguration(new File(LogCategory.PLAYER_DEATH.getFolderName() + File.separator + playerName, fileName));
 
         return UUID.fromString(as.getString("player-uuid"));
     }

@@ -3,7 +3,7 @@ package me.prism3.logger.events.inventories;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import me.prism3.logger.utils.enums.NmsVersions;
 import me.prism3.loggercore.database.data.Coordinates;
 import org.bukkit.DyeColor;
@@ -135,9 +135,9 @@ public class OnChestInteraction implements Listener {
             // Log To Files
             if (Data.isLogToFiles) {
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                    FileHandler.handleFileLog("Files.Chest-Interaction-Staff", placeholders, FileHandler.getStaffFile());
+                    this.main.getFileHandler().handleFileLog(LogCategory.STAFF,  "Files.Chest-Interaction-Staff", placeholders);
                 } else {
-                    FileHandler.handleFileLog("Files.Chest-Interaction", placeholders, FileHandler.getChestInteractionFile());
+                    this.main.getFileHandler().handleFileLog(LogCategory.CHEST_INTERACTION, "Files.Chest-Interaction", placeholders);
                 }
             }
 

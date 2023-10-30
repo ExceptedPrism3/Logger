@@ -3,11 +3,12 @@ package me.prism3.logger.serverside;
 import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class TPS implements Runnable {
 
@@ -34,9 +35,9 @@ public class TPS implements Runnable {
         // Log To Files
         if (Data.isLogToFiles) {
             if (this.getTPS() <= Data.tpsMedium) {
-                FileHandler.handleFileLog("Files.Server-Side.TPS-Medium", placeholders, FileHandler.getTPSLogFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.TPS, "Files.Server-Side.TPS-Medium", placeholders);
             } else if (this.getTPS() <= Data.tpsCritical) {
-                FileHandler.handleFileLog("Files.Server-Side.TPS-Critical", placeholders, FileHandler.getTPSLogFile());
+                this.main.getFileHandler().handleFileLog(LogCategory.TPS, "Files.Server-Side.TPS-Critical", placeholders);
             }
         }
 

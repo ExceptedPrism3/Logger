@@ -4,7 +4,7 @@ import me.prism3.logger.Main;
 import me.prism3.logger.utils.enums.DiscordChannels;
 import me.prism3.logger.utils.BedrockChecker;
 import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
+import me.prism3.logger.utils.enums.LogCategory;
 import me.prism3.loggercore.database.entity.enums.ArmorStandActionType;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EnderCrystal;
@@ -15,7 +15,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import java.io.File;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,16 +51,16 @@ public class ArmorStandEndCrystalBreak implements Listener {
             final int z = entity.getLocation().getBlockZ();
 
             final String path;
-            final File getter;
+            final LogCategory logCategory;
             final DiscordChannels discordChannels;
 
             if (entity instanceof ArmorStand) {
                 path = "ArmorStand-Break";
-                getter = FileHandler.getArmorStandBreakFile();
+                logCategory = LogCategory.ARMOR_STAND_BREAK;
                 discordChannels = DiscordChannels.ARMOR_STAND_BREAK;
             } else {
                 path = "EndCrystal-Break";
-                getter = FileHandler.getEndCrystalBreakFile();
+                logCategory = LogCategory.END_CRYSTAL_BREAK;
                 discordChannels = DiscordChannels.END_CRYSTAL_BREAK;
             }
 
@@ -77,9 +76,9 @@ public class ArmorStandEndCrystalBreak implements Listener {
             // Log To Files
             if (Data.isLogToFiles) {
                 if (Data.isStaffEnabled && player.hasPermission(loggerStaffLog)) {
-                    FileHandler.handleFileLog("Files." + path + "-Staff", placeholders, FileHandler.getStaffFile());
+                    this.main.getFileHandler().handleFileLog(logCategory, "Files." + path + "-Staff", placeholders);
                 } else {
-                    FileHandler.handleFileLog("Files." + path, placeholders, getter);
+                    this.main.getFileHandler().handleFileLog(logCategory, "Files." + path, placeholders);
                 }
             }
 
