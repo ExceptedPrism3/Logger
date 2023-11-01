@@ -73,7 +73,7 @@ public class Main extends JavaPlugin {
 
         new Start().run();
 
-        new PlayerInventoryDB();
+        this.localDatabaseSetup();
     }
 
     @Override
@@ -143,7 +143,7 @@ public class Main extends JavaPlugin {
     private void localDatabaseSetup() {
 
         if (isPlayerDeathBackup)
-            new PlayerInventoryDB();
+            new PlayerInventoryDB(this.fileHandler);
 
     }
 

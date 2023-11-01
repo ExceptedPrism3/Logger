@@ -42,6 +42,7 @@ public class FileHandler {
         dataFolder.mkdirs(); // Ensure the data folder exists
         this.createLogFiles(); // Create log files for each category
         this.createPlayerDeathBackupFolder(); // Create a separate folder for player death backups
+        this.createDatabaseFolder();
         this.deleteFiles(this.dataFolder);
     }
 
@@ -149,6 +150,19 @@ public class FileHandler {
     }
 
     /**
+     * Creates a folder for the given log category.
+     *
+     * @param category The log category for which to create a folder.
+     */
+    private void createCategoryFolder(final LogCategory category) {
+        new File(dataFolder, category.getFolderName());
+    }
+
+    private void createDatabaseFolder() {
+        this.createCategoryFolder(LogCategory.DATABASE);
+    }
+
+    /**
      * Generates the current log file name based on the date.
      *
      * @return The formatted current log file name.
@@ -156,6 +170,16 @@ public class FileHandler {
     private String getCurrentLogFileName() {
         final LocalDate currentDate = LocalDate.now();
         return currentDate.format(DATE_FORMAT) + ".log";
+    }
+
+    /**
+     * Gets the folder for a specific log category.
+     *
+     * @param category The log category for which to retrieve the folder.
+     * @return The folder for the specified category.
+     */
+    public File getCategoryFolder(final LogCategory category) {
+        return this.createFolder(LOGS_FOLDER_NAME, category.getFolderName());
     }
 
     /**

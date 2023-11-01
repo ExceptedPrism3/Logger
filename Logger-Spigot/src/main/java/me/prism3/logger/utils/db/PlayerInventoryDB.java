@@ -12,12 +12,14 @@ import java.util.Map;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import me.prism3.logger.utils.FileHandler;
 import me.prism3.logger.utils.enums.LogCategory;
 import me.prism3.logger.utils.playerdeathutils.InventoryToBase64;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 import static me.prism3.logger.utils.Data.allowedBackups;
+
 
 public class PlayerInventoryDB {
 
@@ -37,17 +39,26 @@ public class PlayerInventoryDB {
 
     private static HikariDataSource dataSource;
 
-    public PlayerInventoryDB() {
+    public PlayerInventoryDB(final FileHandler fileHandler) {
+
+        // Get the database folder path from the FileHandler
+        final File databaseFolder = fileHandler.getCategoryFolder(LogCategory.DATABASE);
+
+        // Set the path to the database file inside the database folder
+        final String databaseFilePath = new File(databaseFolder, "player_inventories.db").getAbsolutePath();
 
         final HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:sqlite:" + LogCategory.DATABASE + File.separator + "player_inventories.db");
+        config.setJdbcUrl("jdbc:sqlite:" + databaseFilePath);
 
         dataSource = new HikariDataSource(config);
 
         try (final Connection conn = dataSource.getConnection()) {
-            try (final Statement stmt = conn.createStatement()) { stmt.executeUpdate(CREATE_TABLE_QUERY); }
+            try (final Statement stmt = conn.createStatement()) {
+                stmt.executeUpdate(CREATE_TABLE_QUERY);
+            }
         } catch (SQLException e) { e.printStackTrace(); }
     }
+
 
     public static void insertInventory(String playerUUID, String playerName, String world, String cause, int x, int y, int z, int xp, ItemStack[] inventory, ItemStack[] armor) {
 
