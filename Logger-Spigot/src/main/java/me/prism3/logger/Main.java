@@ -127,11 +127,11 @@ public class Main extends JavaPlugin {
 
         try {
             if(isSqlite){
-                this.sqLite = new SQLite(Data.options, this.getDataFolder());
+                this.sqLite = new SQLite(Data.options, this.getDataFolder(), "logger");
 
             }
             if(databaseCredentials.isEnabled()){
-                this.database = new MySQL(Data.databaseCredentials, Data.options);
+                this.database = new MySQL(Data.databaseCredentials, Data.options, "logger");
 
 
             }

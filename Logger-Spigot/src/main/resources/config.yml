@@ -199,12 +199,14 @@ Database:
   Password: PassworD
   Database: database
   Data-Deletion: 7
+  table_prefix: "logger"
 
 # SQLite Feature
 # Data-Deletion Value in Days, Set it -1 to cancel
 SQLite:
   Enable: false
   Data-Deletion: 7
+  table_prefix: "logger"
 
 # Updates Settings
 Updater:

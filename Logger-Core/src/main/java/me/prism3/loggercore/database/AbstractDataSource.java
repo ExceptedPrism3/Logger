@@ -18,10 +18,13 @@ public abstract class AbstractDataSource {
     protected final Options options;
     private final String className;
 
-    protected AbstractDataSource(Options options, String className) {
+    protected final String prefix;
+
+    protected AbstractDataSource(Options options, String className, String prefix) {
 
         this.className = className;
         this.options = options;
+        this.prefix = prefix;
     }
 
     abstract public DatabaseQueue getDatabaseQueue();

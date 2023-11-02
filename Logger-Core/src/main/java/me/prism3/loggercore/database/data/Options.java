@@ -23,6 +23,8 @@ public class Options {
 
     private int databasePort;
 
+    private String tablePrefix;
+
     public String getDatabasePassword() {
         return databasePassword;
     }
@@ -141,6 +143,14 @@ public class Options {
         return ((Boolean) this.enabledLogs.get(key));
     }
 
+    public String getTablePrefix() {
+        return tablePrefix;
+    }
+
+    public void setTablePrefix(String tablePrefix) {
+        this.tablePrefix = tablePrefix;
+    }
+
     @Override
     public String toString() {
         return "Options{" +
@@ -157,6 +167,7 @@ public class Options {
                 ", databaseName='" + databaseName + '\'' +
                 ", databaseHost='" + databaseHost + '\'' +
                 ", databasePort=" + databasePort +
+                ", tablePrefix='" + tablePrefix + '\'' +
                 ", enabledLogs=" + enabledLogs +
                 '}';
     }

@@ -145,6 +145,7 @@ public class Data {
         options.setPlayerIPEnabled(this.main.getConfig().getBoolean("Player-Join.Player-IP"));
 //        options.putAll(main.getConfig().getConfigurationSection("Log-Version-Exceptions").getValues(false));
         options.setEnabledLogs(optionS);
+        options.setTablePrefix(this.main.getConfig().getString("Database.table_prefix"));
     }
 
     public void initializeListOfStrings() {
