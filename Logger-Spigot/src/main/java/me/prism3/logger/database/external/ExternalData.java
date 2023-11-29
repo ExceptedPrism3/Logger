@@ -49,7 +49,7 @@ public class ExternalData {
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS player_sign_text "
                     + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "x INT, y INT, z INT, player_name VARCHAR(100), line VARCHAR(60), is_staff TINYINT)");
+                    "x INT, y INT, z INT, player_name VARCHAR(100), line TEXT, is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS player_death "
                     + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
