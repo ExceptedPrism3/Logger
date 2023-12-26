@@ -703,7 +703,7 @@ public class Discord {
         if (channel == null) return;
 
         final EmbedBuilder builder = new EmbedBuilder().setAuthor(contentInAuthorLine ? content : player.getName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
+                null, "https://visage.surgeplay.com/face/" + player.getUniqueId() + ".png?no=cape,ears,shadow");
 
         if (!contentInAuthorLine) builder.setDescription(content);
 
