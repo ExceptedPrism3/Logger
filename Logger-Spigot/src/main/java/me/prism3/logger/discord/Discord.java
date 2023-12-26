@@ -90,7 +90,11 @@ public class Discord {
         final EmbedBuilder builder = new EmbedBuilder().setAuthor(author);
 
         if (playerUUID != null)
-            builder.setAuthor(author, null, "https://crafatar.com/avatars/" + playerUUID + "?overlay=1");
+            builder.setAuthor(
+                    author,
+                    null,
+                    "https://visage.surgeplay.com/face/" + playerUUID + ".png?no=cape,ears,shadow"
+            );
 
         builder.setDescription(discordMessage);
 
