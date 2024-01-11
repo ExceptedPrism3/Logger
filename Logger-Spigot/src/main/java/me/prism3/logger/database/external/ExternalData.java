@@ -97,7 +97,7 @@ public class ExternalData {
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS item_drop "
                     + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), item VARCHAR(50), amount INT, x INT, y INT, z INT, enchantments VARCHAR(250)," +
+                    "player_name VARCHAR(100), item TEXT, amount INT, x INT, y INT, z INT, enchantments VARCHAR(250)," +
                     "changed_name VARCHAR(50), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS enchanting "
@@ -106,11 +106,11 @@ public class ExternalData {
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS book_editing "
                     + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), page_count INT, page_content VARCHAR(250), signed_by VARCHAR(25), is_staff TINYINT)");
+                    "player_name VARCHAR(100), page_count INT, page_content TEXT, signed_by VARCHAR(25), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS item_pickup "
                     + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
-                    "player_name VARCHAR(100), item VARCHAR(250), amount INT, x INT, y INT, z INT, changed_name VARCHAR(250), enchantments VARCHAR(250), is_staff TINYINT)");
+                    "player_name VARCHAR(100), item TEXT, amount INT, x INT, y INT, z INT, changed_name VARCHAR(250), enchantments VARCHAR(250), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS furnace "
                     + "(id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100)," +
