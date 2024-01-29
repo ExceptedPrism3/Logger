@@ -1,9 +1,5 @@
-/*
-import be.seeseemelk.mockbukkit.Coordinate;
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.WorldMock;
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
+
+
 import me.prism3.logger.Main;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -37,7 +33,7 @@ public class Test {
     private PlayerMock playerMock;
 
     private WorldMock world;
-    @BeforeEach
+    @org.junit.jupiter.api.BeforeEach
     public void setUp() throws IOException {
         // Start the mock server
         this.server = MockBukkit.mock();
@@ -189,4 +185,4 @@ public class Test {
 
 
     }
-}*/
+}

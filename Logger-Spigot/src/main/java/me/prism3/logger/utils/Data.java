@@ -335,6 +335,7 @@ public class Data {
         if (this.main.getConfig().getBoolean("Log-Server.Server-Address"))
             this.main.getServer().getPluginManager().registerEvents(new ServerAddress(), this.main);
 
+
         // Version Exceptions
         if (version.isAtLeast(NmsVersions.v1_13_R1) && this.main.getConfig().getBoolean("Log-Version-Exceptions.Wood-Stripping"))
                 this.main.getServer().getPluginManager().registerEvents(new OnWoodStripping(), this.main);

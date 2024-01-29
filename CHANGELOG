@@ -185,21 +185,9 @@ Changes
 Additions
     [+] Plugin Prefix
     [+] 1.7 server versions enums
-    [+] Item Frame Place & Break Checkers
-    [+] ArmorStand Place & Break Checkers
-    [+] EndCrystal Place & Break Checkers
-    [+] 1.19.2 Support
-    [+] Server Switch Checker on BungeeCord Instance
-    [+] PartyAndFriend Plugin Support on BungeeCord Instance
-    [+] NL Language file
-    [+] Lever Interaction & Spawn Egg Checkers
-    [+] Config and Discord Auto Updater
-    [+] Plugin Auto Updater
-    [+] ViaVersion Support which logs player's version
-    [+] ArmorStand Interaction Checker
-    [+] ServerAddress Checker which checks what IP/Domain the player used to join the server
-    [+] Totem of Undying Usage Checker
-    [+] Discord Status [ online, idle, dnd, invisible ]
+    [+] 1.19.2 / 1.19.3 Support
+    [+] 1.20.1 Support
+    [+] Sign Change Checker
 
 Fixes
     [!] Plugin not starting up correctly
@@ -209,26 +197,14 @@ Fixes
     [!] Reload command not reloading from the config
     [!] Commands not working in console
     [!] LiteBans table not auto deleting on Velocity instance
-    [!] RCON not logging into Files
-    [!] PlayerCommands Checker not sending over Discord for Velocity Servers
-    [!] Null Error when a player dies from /kill that's executed from the console
-    [!] An issue when both Blacklisted and whitelisted commands are enabled
-    [!] Error when an AdvancedBan command is executed through console
-    [!] LiteBans error when executing a command through console
-    [!] LiteBans Discord Integration not working
+    [!] Toggle Commands are no longer case sensitive
     [!] Chest Interaction errors when run on 1.8.8 servers & being run with other plugins
+    [!] Discord not working properly due to a mistake by me xD
+    [!] Corrected the exact location of sign placement
 
 Changes
     [*] Remade permissions which will log OP and NOT OP players until they're permitted with the exempt permission
     [*] Inventory Restore Menu Title names to eliminate conflicts between other plugins
     [*] Minor messages changes
-    [*] Huge Code improvements
-    [*] Changed BungeeCord commands to /loggerb and Velocity to /loggerv
-    [*] Fixed OP or players that have * permissions not being logged by default
-    [*] Improved the accuracy of File Deletion
-    [*] Slight AdvancedBan typo in the messages file
-    [*] /logger dump will not print out specific errors rather than an error spam
-
-Removed
-    [-] IP Column from RCON checher
+    [*] Minor Velocity & Bungee Code improvements
 

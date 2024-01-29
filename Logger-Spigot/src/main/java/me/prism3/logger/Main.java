@@ -136,7 +136,7 @@ public class Main extends JavaPlugin {
 
             }
 
-
+            System.out.println(databaseCredentials);
         } catch (final Exception e) { Log.severe(e.getMessage()); }
     }
 
