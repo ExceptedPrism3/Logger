@@ -34,7 +34,7 @@ public class ExternalData {
                     + "(server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), player_name VARCHAR(100), command VARCHAR(200), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS player_login_proxy "
-                    + "(server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), player_name VARCHAR(100), ip INT UNSIGNED, is_staff TINYINT)");
+                    + "(server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), player_name VARCHAR(100), ip VARCHAR(100), is_staff TINYINT)");
 
             stsm.executeUpdate("CREATE TABLE IF NOT EXISTS player_leave_proxy "
                     + "(server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), player_name VARCHAR(100), is_staff TINYINT)");
