@@ -1,5 +1,10 @@
 
 
+import be.seeseemelk.mockbukkit.Coordinate;
+import be.seeseemelk.mockbukkit.MockBukkit;
+import be.seeseemelk.mockbukkit.ServerMock;
+import be.seeseemelk.mockbukkit.WorldMock;
+import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import me.prism3.logger.Main;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -57,7 +62,6 @@ public class Test {
     @org.junit.jupiter.api.Test
     public void playerChat()
     {
-        // generate random string for testing
         Random rand = new Random();
         String randomString = "";
         for(int i = 0; i < 10; i++)
@@ -88,8 +92,8 @@ public class Test {
 
     @org.junit.jupiter.api.Test
     public void gameMode(){
-        this.playerMock.setGameMode(GameMode.SPECTATOR);
-        this.playerMock.assertGameMode(GameMode.SPECTATOR);
+        this.playerMock.setGameMode(GameMode.CREATIVE);
+        this.playerMock.assertGameMode(GameMode.CREATIVE);
 
 
 
@@ -125,14 +129,15 @@ public class Test {
 
     @org.junit.jupiter.api.Test
     public void craft(){
+
         //get me a hash map of enchantements in minecraft
         Map<Enchantment, Integer> enchants = new HashMap<>();
         enchants.put(Enchantment.KNOCKBACK, 1);
-        enchants.put(Enchantment.DAMAGE_ALL, 5);
         enchants.put(Enchantment.BINDING_CURSE, 1);
-        EnchantItemEvent event = new EnchantItemEvent(this.playerMock, this.playerMock.getOpenInventory(), this.playerMock.simulateBlockPlace(Material.ENCHANTING_TABLE, new Location(this.playerMock.getWorld(),0,0,0)).getBlockPlaced(), new ItemStack(Material.DIAMOND_SWORD, 1), 30, enchants, 3);
+        EnchantItemEvent event = new EnchantItemEvent(this.playerMock, null, null, new ItemStack(Material.DIAMOND_SWORD), 1, enchants, Enchantment.MENDING, 5, 1);
         event.callEvent();
-    }
+
+         }
     @org.junit.jupiter.api.Test
     public void xpEvent(){
         this.playerMock.giveExpLevels(10);
@@ -176,8 +181,11 @@ public class Test {
             this.blockPlace();
             this.blockBreak();
             this.playerChat();
-            // this.gameMode();
+            this.gameMode();
             this.console();
+            this.craft();
+            this.playerCommand();
+            this.sign();
 
         }
         this.playerConnection();

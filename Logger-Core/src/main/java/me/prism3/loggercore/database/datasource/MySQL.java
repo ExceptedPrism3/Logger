@@ -19,7 +19,7 @@ public final class MySQL extends AbstractDataSource {
 
     private final Settings settings;
     
-    public MySQL(@NotNull Settings settings, @NotNull Options options, String prefix) {
+    public MySQL(@NotNull Settings settings, @NotNull Options options, @NotNull String prefix) {
 
         super(options, MySQL.class.getName(), prefix);
         this.options = options;
