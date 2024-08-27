@@ -41,8 +41,10 @@ public enum FriendlyEnchants  {
     SWEEPING_EDGE("Sweeping Edge"),
     THORNS("Thorns"),
     VANISHING_CURSE("Curse of Vanishing",true),
-    WATER_WORKER("Aqua Affinity");
-
+    WATER_WORKER("Aqua Affinity"),
+    BREACH("Breach"),
+    DENSITY("Density"),
+    WIND_BURST("Wind Burst");
     private final String friendlyName;
     private final boolean isCurse;
 
