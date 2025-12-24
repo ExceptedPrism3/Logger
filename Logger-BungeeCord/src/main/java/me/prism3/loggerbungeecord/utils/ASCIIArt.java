@@ -1,11 +1,11 @@
 package me.prism3.loggerbungeecord.utils;
 
-import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.Logger;
 import net.md_5.bungee.api.ChatColor;
 
 public class ASCIIArt {
 
-    private final Main main = Main.getInstance();
+    private final Logger main = Logger.getInstance();
 
     public void art() {
 

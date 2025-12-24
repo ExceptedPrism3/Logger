@@ -1,6 +1,6 @@
 package me.prism3.loggerbungeecord.serverside;
 
-import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.Logger;
 import me.prism3.loggerbungeecord.database.external.ExternalData;
 import me.prism3.loggerbungeecord.database.sqlite.SQLiteData;
 import me.prism3.loggerbungeecord.utils.Data;
@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
 
 public class Start {
 
-    private final Main main = Main.getInstance();
+    private final Logger main = Logger.getInstance();
 
     public void run() {
 
@@ -30,7 +30,7 @@ public class Start {
 
                 } catch (IOException e) {
 
-                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                    Logger.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }

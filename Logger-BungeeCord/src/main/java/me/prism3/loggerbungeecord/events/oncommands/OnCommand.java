@@ -1,6 +1,6 @@
 package me.prism3.loggerbungeecord.events.oncommands;
 
-import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.Logger;
 import me.prism3.loggerbungeecord.database.external.ExternalData;
 import me.prism3.loggerbungeecord.database.sqlite.SQLiteData;
 import me.prism3.loggerbungeecord.utils.Data;
@@ -20,7 +20,7 @@ import java.util.Objects;
 
 public class OnCommand implements Listener {
 
-    private final Main main = Main.getInstance();
+    private final Logger main = Logger.getInstance();
 
     @EventHandler
     public void onCmd(final ChatEvent event) {
@@ -74,7 +74,7 @@ public class OnCommand implements Listener {
 
                     } catch (IOException e) {
 
-                        Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                        Logger.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
@@ -104,7 +104,7 @@ public class OnCommand implements Listener {
 
                 } catch (IOException e) {
 
-                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                    Logger.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }

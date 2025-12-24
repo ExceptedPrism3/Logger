@@ -79,14 +79,16 @@ public class Main extends JavaPlugin {
         new Metrics(this, 12036);
 
         // Update Checker
-        /*if (Data.isUpdateChecker) {
-
-            UpdateChecker.init(this, Data.resource_ID)
-                    .checkEveryXHours(2)
-                    .setChangelogLink(Data.resource_ID)
-                    .setNotifyByPermissionOnJoin(Data.loggerUpdate)
-                    .checkNow();
-        }*/
+        /*
+         * if (Data.isUpdateChecker) {
+         * 
+         * UpdateChecker.init(this, Data.resource_ID)
+         * .checkEveryXHours(2)
+         * .setChangelogLink(Data.resource_ID)
+         * .setNotifyByPermissionOnJoin(Data.loggerUpdate)
+         * .checkNow();
+         * }
+         */
 
         this.loadPluginDepends();
 
@@ -102,11 +104,14 @@ public class Main extends JavaPlugin {
 
         new Stop().run();
 
-        if (isExternal && this.external.isConnected()) this.external.disconnect();
+        if (isExternal && this.external.isConnected())
+            this.external.disconnect();
 
-        if (isSqlite && this.sqLite.isConnected()) this.sqLite.disconnect();
+        if (isSqlite && this.sqLite.isConnected())
+            this.sqLite.disconnect();
 
-        if (isRegistration && this.sqLiteReg.isConnected()) this.sqLiteReg.disconnect();
+        if (isRegistration && this.sqLiteReg.isConnected())
+            this.sqLiteReg.disconnect();
 
         this.discord.disconnect();
 
@@ -139,7 +144,7 @@ public class Main extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new RCON(), this);
         this.getServer().getPluginManager().registerEvents(new OnGameMode(), this);
         this.getServer().getPluginManager().registerEvents(new OnPrimedTNT(), this);
-//        this.getServer().getPluginManager().registerEvents(new OnSpawnEgg(), this);
+        // this.getServer().getPluginManager().registerEvents(new OnSpawnEgg(), this);
         this.getServer().getPluginManager().registerEvents(new PlayerInventory(), this);
         this.getServer().getPluginManager().registerEvents(new OnCommandBlock(), this);
         this.getServer().getPluginManager().registerEvents(new OnEntityDeath(), this);
@@ -163,7 +168,7 @@ public class Main extends JavaPlugin {
     private void commandsInitializer() {
 
         this.getCommand("logger").setExecutor(new CommandManager());
-//        this.getCommand("loggerget").setExecutor(new Chat());
+        // this.getCommand("loggerget").setExecutor(new Chat());
 
     }
 
@@ -197,7 +202,8 @@ public class Main extends JavaPlugin {
             this.sqLiteReg = new SQLiteRegistration();
             this.sqLiteReg.connect();
             final SQLiteDataRegistration sqLiteDataRegistration = new SQLiteDataRegistration();
-            if (this.sqLiteReg.isConnected()) sqLiteDataRegistration.createTable();
+            if (this.sqLiteReg.isConnected())
+                sqLiteDataRegistration.createTable();
         }
     }
 
@@ -254,19 +260,40 @@ public class Main extends JavaPlugin {
             Log.info("Geyser & FloodGate Plugins Detected!");
             Log.warning("Geyser & FloodGate are not fully supported! If any errors occurs, contact the authors.");
         }
+
+        if (SuperiorSkyblockUtil.getSuperiorSkyblockAPI() != null) {
+
+            Log.info("SuperiorSkyblock Plugin Detected!");
+
+            this.getServer().getPluginManager().registerEvents(new OnSuperiorSkyblock(), this);
+        }
     }
 
-    public static Main getInstance() { return JavaPlugin.getPlugin(Main.class); }
+    public static Main getInstance() {
+        return JavaPlugin.getPlugin(Main.class);
+    }
 
-    public External getExternal() { return this.external; }
+    public External getExternal() {
+        return this.external;
+    }
 
-    public SQLite getSqLite() { return this.sqLite; }
+    public SQLite getSqLite() {
+        return this.sqLite;
+    }
 
-    public SQLiteRegistration getSqLiteReg() { return this.sqLiteReg; }
+    public SQLiteRegistration getSqLiteReg() {
+        return this.sqLiteReg;
+    }
 
-    public Discord getDiscord() { return this.discord; }
+    public Discord getDiscord() {
+        return this.discord;
+    }
 
-    public DiscordFile getDiscordFile() { return this.discordFile; }
+    public DiscordFile getDiscordFile() {
+        return this.discordFile;
+    }
 
-    public Messages getMessages() { return this.messages; }
+    public Messages getMessages() {
+        return this.messages;
+    }
 }

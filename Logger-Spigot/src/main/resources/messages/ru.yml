@@ -1,13 +1,12 @@
----
-#Messages for Logger Plugin [ Bukkit Version ]
-#Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
-#Config 1.8
-#Plugin Messages
+# Messages for Logger Plugin [ Bukkit Version ]
+# Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
+# Config: 1.8.0.15
+# Plugin Messages
 General:
   No-Permission: "%prefix% &cУ вас нет разрешения на выполнение этой команды."
   Reload: "%prefix% &aКонфигурации Перезагружены."
   Invalid-Syntax: "%prefix% &cНеверный синтаксис."
-#Files Instance
+# Files Instance
 Files:
   Player-Chat-Staff: "[%time%] [%world%] Администратор <%player%> написал => %message%"
   Player-Chat: "[%time%] [%world%] Игрок <%player%> написал => %message%"
@@ -84,7 +83,7 @@ Files:
   Version-Exceptions:
     Wood-Stripping-Staff: "[%time%] [%world%] [%uuid%] Администратор <%player%> снял кору с %logname% на X= %x%, Y= %y%, Z= %z%"
     Wood-Stripping: "[%time%] [%world%] [%uuid%] Игрок <%player%> снял кору с %logname% на X= %x%, Y= %y%, Z= %z%"
-#Discord Instance
+# Discord Instance
 #Emojis can be found here https://emojipedia.org/ or elsewhere. Emojis may not work on > 1.12 Servers.
 Discord:
   Player-Chat-Staff: "**[%time%]** **[%world%]** **%message%**"

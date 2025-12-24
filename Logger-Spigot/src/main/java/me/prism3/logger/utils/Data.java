@@ -92,7 +92,8 @@ public class Data {
 
     private static void initializeDateFormatter() {
 
-        dateTimeFormatter = DateTimeFormatter.ofPattern(Objects.requireNonNull(main.getConfig().getString("Time-Formatter")));
+        dateTimeFormatter = DateTimeFormatter
+                .ofPattern(Objects.requireNonNull(main.getConfig().getString("Time-Formatter")));
     }
 
     private static void initializeStrings() {
@@ -166,5 +167,24 @@ public class Data {
         loggerSpyBypass = "logger.spy.bypass";
         loggerSpy = "logger.spy";
         loggerReload = "logger.reload";
+    }
+
+    private static NmsVersions versionChecker() {
+
+        try {
+
+            final String bukkitVersion = Bukkit.getBukkitVersion();
+
+            if (bukkitVersion.equals("1.20.6-R0.1-SNAPSHOT"))
+                return NmsVersions.v1_20_R4;
+
+            return NmsVersions
+                    .valueOf(Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3]);
+
+        } catch (final Exception e) {
+
+            main.getLogger().warning("Could not determine the seve version is unknown, using the latest known one.");
+            return NmsVersions.v1_20_R4;
+        }
     }
 }

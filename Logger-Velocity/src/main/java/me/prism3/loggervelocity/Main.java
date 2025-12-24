@@ -29,19 +29,17 @@ import me.prism3.loggervelocity.utils.Data;
 import me.prism3.loggervelocity.utils.FileHandler;
 import me.prism3.loggervelocity.utils.Messages;
 import org.bstats.velocity.Metrics;
-import org.slf4j.Logger;
 
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
 import static me.prism3.loggervelocity.utils.Data.*;
 
-
-@Plugin(id = "logger-velocity", name = "Logger", version = "1.8.0.16", authors = {"prism3 & thelooter & sidna"})
-public class Main{
+@Plugin(id = "logger-velocity", name = "Logger", version = "1.8.0.16", authors = { "prism3 & thelooter & sidna" })
+public class Main {
 
     private static ProxyServer server;
-    private final Logger logger;
+    private final org.slf4j.Logger logger;
     private final Metrics.Factory metricsFactory;
 
     private static Main instance;
@@ -61,7 +59,7 @@ public class Main{
     private Path folder;
 
     @Inject
-    public Main(ProxyServer server, Logger logger, Metrics.Factory metricsFactory) {
+    public Main(ProxyServer server, org.slf4j.Logger logger, Metrics.Factory metricsFactory) {
 
         Main.server = server;
         this.logger = logger;
@@ -96,7 +94,8 @@ public class Main{
         server.getEventManager().register(this, new OnLogin());
         server.getEventManager().register(this, new OnLeave());
 
-        server.getScheduler().buildTask(this, new RAM()).repeat(ramChecker, TimeUnit.SECONDS).delay(10, TimeUnit.SECONDS).schedule();
+        server.getScheduler().buildTask(this, new RAM()).repeat(ramChecker, TimeUnit.SECONDS)
+                .delay(10, TimeUnit.SECONDS).schedule();
 
         server.getCommandManager().register("loggerproxy", new LoggerProxyCommands());
 
@@ -106,7 +105,7 @@ public class Main{
 
         new Start().run();
 
-//        new ASCIIArt().Art();
+        // new ASCIIArt().Art();
 
         this.logger.info("Thanks to everyone's contributions that helped made this project possible!");
 
@@ -119,9 +118,11 @@ public class Main{
 
         new Stop().run();
 
-        if (isExternal && this.external.isConnected()) this.external.disconnect();
+        if (isExternal && this.external.isConnected())
+            this.external.disconnect();
 
-        if (isSqlite && this.sqLite.isConnected()) this.sqLite.disconnect();
+        if (isSqlite && this.sqLite.isConnected())
+            this.sqLite.disconnect();
 
         this.discord.disconnect();
 
@@ -177,23 +178,43 @@ public class Main{
         }
     }
 
-    public static Main getInstance() { return instance; }
+    public static Main getInstance() {
+        return instance;
+    }
 
-    public static ProxyServer getServer() { return server; }
+    public static ProxyServer getServer() {
+        return server;
+    }
 
-    public Logger getLogger() { return this.logger; }
+    public org.slf4j.Logger getLogger() {
+        return this.logger;
+    }
 
-    public Path getFolder() { return this.folder; }
+    public Path getFolder() {
+        return this.folder;
+    }
 
-    public ConfigManager getConfig() { return this.config; }
+    public ConfigManager getConfig() {
+        return this.config;
+    }
 
-    public DiscordFile getDiscordFile() { return this.discordFile; }
+    public DiscordFile getDiscordFile() {
+        return this.discordFile;
+    }
 
-    public Discord getDiscord() { return this.discord; }
+    public Discord getDiscord() {
+        return this.discord;
+    }
 
-    public Messages getMessages() { return this.messages; }
+    public Messages getMessages() {
+        return this.messages;
+    }
 
-    public External getExternal() { return this.external; }
+    public External getExternal() {
+        return this.external;
+    }
 
-    public SQLite getSqLite() { return this.sqLite; }
+    public SQLite getSqLite() {
+        return this.sqLite;
+    }
 }

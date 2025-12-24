@@ -1,6 +1,6 @@
 package me.prism3.loggerbungeecord.discord;
 
-import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.Logger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -9,7 +9,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class Discord {
 
-    private final Main main = Main.getInstance();
+    private final Logger main = Logger.getInstance();
 
     private JDA jda;
 
@@ -40,7 +40,7 @@ public class Discord {
 
             } catch (Exception e) {
 
-                Main.getInstance().getLogger().severe("An error has occurred whilst connecting to the Bot." +
+                Logger.getInstance().getLogger().severe("An error has occurred whilst connecting to the Bot." +
                         " Is the Bot Key Valid?");
                 return;
 
@@ -239,7 +239,7 @@ public class Discord {
         if (channel == null) return;
 
         final EmbedBuilder builder = new EmbedBuilder().setAuthor(contentInAuthorLine ? content : player.getName(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
+                null, "https://visage.surgeplay.com/face/\" + player.getUniqueId() + \".png?no=cape,ears,shadow");
 
         if (!contentInAuthorLine) builder.setDescription(content);
 
@@ -254,11 +254,11 @@ public class Discord {
                 this.jda.shutdown();
                 this.jda = null;
                 if (this.main.getDiscordFile().getBoolean("ActivityCycling.Enabled")) DiscordStatus.getThreadPool().shutdown();
-                Main.getInstance().getLogger().info("Discord Bot Bridge has been closed!");
+                Logger.getInstance().getLogger().info("Discord Bot Bridge has been closed!");
 
             } catch (Exception e) {
 
-                Main.getInstance().getLogger().severe("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
+                Logger.getInstance().getLogger().severe("The Connection between the Server and the Discord Bot didn't Shutdown down Safely." +
                         " If this Issue Persists, Contact the Authors!");
                 e.printStackTrace();
 

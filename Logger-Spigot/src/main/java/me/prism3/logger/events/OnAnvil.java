@@ -29,6 +29,9 @@ public class OnAnvil implements Listener {
 
 private final Main main = Main.getInstance();
 
+
+
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClick(final InventoryClickEvent event) {
 
@@ -49,6 +52,9 @@ private final Main main = Main.getInstance();
             final Inventory inv = event.getInventory();
 
             if (inv instanceof AnvilInventory) {
+
+                if (player.getLevel() < ((AnvilInventory) inv).getRepairCost())
+                    return; // Fixes the case where the player has no xp but still can trigger the log
 
                 final InventoryView view = event.getView();
 

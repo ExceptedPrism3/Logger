@@ -1,6 +1,6 @@
 # Messages for Logger Plugin [ Velocity Version ]
 # Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
-# Config 1.8
+# Config 1.8.0.15
 # Plugin Messages
 General:
   No-Permission: "%prefix% &cYou do not have permission to run this command."

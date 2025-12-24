@@ -1,8 +1,8 @@
 name: Logger-BungeeCord
 version: '${project.version}'
-main: me.prism3.loggerbungeecord.Main
+main: me.prism3.loggerbungeecord.Logger
 description: Log all Activities from Players and Server Side!
-author: Prism3 & theloother & Sidna
+author: Prism3 & Sidna
 softdepends: [LiteBans, PartyAndFriends]
 commands:
   loggerb reload:

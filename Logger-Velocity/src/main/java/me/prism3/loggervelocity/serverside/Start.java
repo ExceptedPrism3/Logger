@@ -1,6 +1,6 @@
 package me.prism3.loggervelocity.serverside;
 
-import me.prism3.loggervelocity.Main;
+import me.prism3.loggervelocity.Logger;
 import me.prism3.loggervelocity.database.external.ExternalData;
 import me.prism3.loggervelocity.database.sqlite.SQLiteData;
 import me.prism3.loggervelocity.utils.FileHandler;
@@ -16,7 +16,7 @@ public class Start {
 
     public void run() {
 
-        final Main main = Main.getInstance();
+        final Logger main = Logger.getInstance();
 
         if (main.getConfig().getBoolean("Log-Server.Start")) {
 

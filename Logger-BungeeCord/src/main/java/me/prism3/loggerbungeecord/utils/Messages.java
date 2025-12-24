@@ -1,7 +1,7 @@
 package me.prism3.loggerbungeecord.utils;
 
 import com.google.common.io.ByteStreams;
-import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.Logger;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -38,12 +38,12 @@ public class Messages {
     }
 
     public File getFile() {
-        return new File(Main.getInstance().getDataFolder(), "messages - Bungee.yml");
+        return new File(Logger.getInstance().getDataFolder(), "messages - Bungee.yml");
     }
 
     private void saveDefaultConfig() {
 
-        if (!Main.getInstance().getDataFolder().exists()) Main.getInstance().getDataFolder().mkdir();
+        if (!Logger.getInstance().getDataFolder().exists()) Logger.getInstance().getDataFolder().mkdir();
 
         final File file = getFile();
 
@@ -53,7 +53,7 @@ public class Messages {
 
                 file.createNewFile();
 
-                try (final InputStream is = Main.getInstance().getResourceAsStream("messages - Bungee.yml")) {
+                try (final InputStream is = Logger.getInstance().getResourceAsStream("messages - Bungee.yml")) {
 
                     final OutputStream os = new FileOutputStream(file);
                     ByteStreams.copy(is, os);

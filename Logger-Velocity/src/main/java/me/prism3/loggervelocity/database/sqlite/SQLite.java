@@ -1,7 +1,6 @@
 package me.prism3.loggervelocity.database.sqlite;
 
-import me.prism3.loggervelocity.Main;
-import org.slf4j.Logger;
+import me.prism3.loggervelocity.Logger;
 
 import java.io.File;
 import java.sql.Connection;
@@ -10,11 +9,11 @@ import java.sql.SQLException;
 
 public class SQLite {
 
-    private final Logger logger = Main.getInstance().getLogger();
+    private final org.slf4j.Logger logger = Logger.getInstance().getLogger();
 
     private Connection connection;
 
-    private final File databaseFile = new File(Main.getInstance().getFolder().toFile(), "LoggerData - Velocity.db");
+    private final File databaseFile = new File(Logger.getInstance().getFolder().toFile(), "LoggerData - Velocity.db");
 
     public void connect() {
 

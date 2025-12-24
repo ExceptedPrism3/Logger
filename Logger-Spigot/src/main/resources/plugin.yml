@@ -1,10 +1,10 @@
 name: Logger
 version: ${project.version}
-main: me.prism3.logger.Main
+main: me.prism3.logger.Logger
 api-version: 1.13
-authors: [ Prism3, thelooter, Sidna ]
+authors: [ Prism3, Sidna ]
 description: Log all Activities from Players and Server Side!
-softdepend: [Essentials, AuthMe, Vault, PlaceholderAPI, LiteBans, AdvancedBan, PlaceholderAPI, Geyser, Floodgate, ViaVersion]
+softdepend: [Essentials, AuthMe, Vault, PlaceholderAPI, LiteBans, AdvancedBan, PlaceholderAPI, Geyser, Floodgate, ViaVersion, SuperiorSkyblock2]
 commands:
   logger:
     description: "Plugin command."

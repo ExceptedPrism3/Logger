@@ -1,6 +1,6 @@
 package me.prism3.loggervelocity.serverside;
 
-import me.prism3.loggervelocity.Main;
+import me.prism3.loggervelocity.Logger;
 import me.prism3.loggervelocity.database.external.ExternalData;
 import me.prism3.loggervelocity.database.sqlite.SQLiteData;
 import me.prism3.loggervelocity.utils.FileHandler;
@@ -14,7 +14,7 @@ import static me.prism3.loggervelocity.utils.Data.*;
 
 public class RAM implements Runnable {
 
-    final Main main = Main.getInstance();
+    final Logger main = Logger.getInstance();
 
     public void run() {
 

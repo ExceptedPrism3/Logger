@@ -1,7 +1,7 @@
 package me.prism3.loggervelocity.discord;
 
 import com.velocitypowered.api.proxy.Player;
-import me.prism3.loggervelocity.Main;
+import me.prism3.loggervelocity.Logger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -11,7 +11,7 @@ public class Discord {
 
     private JDA jda;
 
-    private final Main main = Main.getInstance();
+    private final Logger main = Logger.getInstance();
 
     private TextChannel staffChannel;
     private TextChannel playerChatChannel;
@@ -227,7 +227,7 @@ public class Discord {
         if (channel == null) return;
 
         final EmbedBuilder builder = new EmbedBuilder().setAuthor(contentInAuthorLine ? content : player.getUsername(),
-                null, "https://crafatar.com/avatars/" + player.getUniqueId() + "?overlay=1");
+                null, "https://visage.surgeplay.com/face/" + player.getUniqueId() + ".png?no=cape,ears,shadow");
 
         if (!contentInAuthorLine) builder.setDescription(content);
 

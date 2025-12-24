@@ -1,7 +1,7 @@
 package me.prism3.loggervelocity.utils;
 
 import com.google.common.io.ByteStreams;
-import me.prism3.loggervelocity.Main;
+import me.prism3.loggervelocity.Logger;
 import me.prism3.loggervelocity.utils.config.Configuration;
 import me.prism3.loggervelocity.utils.config.ConfigurationProvider;
 import me.prism3.loggervelocity.utils.config.StringUtils;
@@ -14,7 +14,7 @@ public class Messages {
     private File file;
     private Configuration configuration;
 
-    private final File dataFolder = Main.getInstance().getFolder().toFile();
+    private final File dataFolder = Logger.getInstance().getFolder().toFile();
 
     public Messages() {
 

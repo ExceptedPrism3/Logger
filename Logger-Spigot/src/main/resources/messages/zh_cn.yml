@@ -1,6 +1,6 @@
 # Messages for Logger Plugin [ Bukkit Version ]
 # Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
-# Config 1.8
+# Config: 1.8.0.15
 # Plugin Messages
 General:
   No-Permission: "%prefix% &c您无权使用此命令。"
@@ -16,12 +16,12 @@ Files:
   Player-Commands-Whitelisted: "[%time%] [%world%] <%player%> 运行白名单命令 => %command%"
   Player-Sign-Text-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 将一个告示牌放在了 X= %x%, Y= %y%, Z= %z% 并写下了 %line1%, %line2%, %line3%, %line4%"
   Player-Sign-Text: "[%time%] [%world%] <%player%> 将一个告示牌放在了 X= %x%, Y= %y%, Z= %z% 并写下了 %line1%, %line2%, %line3%, %line4%"
-  Player-Join-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 加入服务器于坐标 %x%, %y%, %z% 且他的登录IP为: %IP%"
-  Player-Join: "[%time%] [%world%] <%player%> 加入服务器于坐标 %x%, %y%, %z% 且他的登录IP为: %IP%"
+  Player-Join-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 加入服务器于坐标 %x%, %y%, %z% ，其登录IP为: %IP%"
+  Player-Join: "[%time%] [%world%] <%player%> 加入服务器于坐标 %x%, %y%, %z% ，其登录IP为: %IP%"
   Player-Leave-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 离开服务器于坐标 %x%, %y%, %z%"
   Player-Leave: "[%time%] [%world%] <%player%> 离开服务器于坐标 %x%, %y%, %z%"
-  Player-Kick-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 已被踢出服务器于坐标 X= %x%, Y= %y%, Z= %z% 原因为 %reason%"
-  Player-Kick: "[%time%] [%world%] <%player%> 已被踢出服务器于坐标 X= %x%, Y= %y%, Z= %z% 原因为 %reason%"
+  Player-Kick-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 已被踢出服务器于坐标 X= %x%, Y= %y%, Z= %z% ，原因为 %reason%"
+  Player-Kick: "[%time%] [%world%] <%player%> 已被踢出服务器于坐标 X= %x%, Y= %y%, Z= %z% ，原因为 %reason%"
   Player-Death-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 死于 X= %x%, Y= %y%, Z= %z% 等级为 %level% | 由于 %cause% | %killer%"
   Player-Death: "[%time%] [%world%] <%player%> 死于 X= %x%, Y= %y%, Z= %z% 等级为 %level% | 由于 by %cause% | %killer%"
   Player-Teleport-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 使用TP从 %oldX%, %oldY%, %oldZ% 到 %newX%, %newY%, %newZ%"
@@ -40,14 +40,14 @@ Files:
   Anvil: "[%time%] [%world%] <%player%> 将一个物品命名为 %renamed%"
   Item-Pickup-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 捡起了 %amount% 数量的 %item% 于 X= %x%, Y= %y%, Z= %z% | %renamed%"
   Item-Pickup: "[%time%] [%world%] <%player%> 捡起了 %amount% 数量的 %item% 于 X= %x%, Y= %y%, Z= %z% | %renamed%"
-  Item-Drop-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 丢掉了 %amount% 数量的 %item% 于 X= %x%, Y= %y%, Z= %z% 附魔为 %enchantment% 的物品 | %renamed%"
-  Item-Drop: "[%time%] [%world%] <%player%> 丢掉了 %amount% 数量的 %item% 于 X= %x%, Y= %y%, Z= %z% 附魔为 %enchantment% 的物品 | %renamed%"
+  Item-Drop-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 丢弃了 %amount% 数量的 %item% 于 X= %x%, Y= %y%, Z= %z% 附魔为 %enchantment% 的物品 | %renamed%"
+  Item-Drop: "[%time%] [%world%] <%player%> 丢弃了 %amount% 数量的 %item% 于 X= %x%, Y= %y%, Z= %z% 附魔为 %enchantment% 的物品 | %renamed%"
   Enchanting-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 使用附魔台于 X= %x%, Y= %y%, Z= %z% 附魔了带有 %enchantment% %enchlevel% 的 %item% 并花费等级 %level%"
   Enchanting: "[%time%] [%world%] <%player%> 使用附魔台于 X= %x%, Y= %y%, Z= %z% 附魔了带有 %enchantment% %enchlevel% 的 %item% 并花费等级 %level%"
   Book-Editing-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 制作出一本书, 页数为 %page%, 内容为 %content%. 署名为 %sign%"
   Book-Editing: "[%time%] [%world%] <%player%> 制作出一本书, 页数为 %page%, 内容为 %content%. 署名为 %sign%"
-  Furnace-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 从熔炉中烧制出 %amount% 数量的 %item% 于 X= %x%, Y= %y%, Z= %z% 位置"
-  Furnace: "[%time%] [%world%] <%player%> 从熔炉中烧制出 %amount% 数量的 %item% 于 X= %x%, Y= %y%, Z= %z% 位置"
+  Furnace-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 从熔炉中烧制出 %amount% 数量的 %item% 于 X= %x%, Y= %y%, Z= %z%"
+  Furnace: "[%time%] [%world%] <%player%> 从熔炉中烧制出 %amount% 数量的 %item% 于 X= %x%, Y= %y%, Z= %z%"
   Game-Mode-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 改变了游戏模式为 %game-mode%"
   Game-Mode: "[%time%] [%world%] <%player%> 改变了游戏模式为 %game-mode%"
   Player-Craft-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 合成了 %amount% 数量的 %item% 于 X= %x%, Y= %y%, Z= %z%"
@@ -70,8 +70,8 @@ Files:
     RCON: "[%time%] RCON 命令 %command% 已通过此 IP 发送: %IP%"
     Command-Block: "[%time%] %command%"
   Extras:
-    AFK-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 挂机于 X= %x%, Y= %y%, Z= %z%"
-    AFK: "[%time%] [%world%] <%player%> 挂机于 X= %x%, Y= %y%, Z= %z%"
+    AFK-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 挂机了，坐标 X= %x%, Y= %y%, Z= %z%"
+    AFK: "[%time%] [%world%] <%player%> 挂机了，坐标 X= %x%, Y= %y%, Z= %z%"
     Wrong-Password-Staff: "[%time%] [%world%] Staff权限组玩家 <%player%> 输入了错误密码"
     Wrong-Password: "[%time%] [%world%] <%player%> 输入了错误密码"
     Vault-Staff: "[%time%] <%player%> 金钱发生改变： %oldbal% 变化至 %newbal%"

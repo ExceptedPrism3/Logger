@@ -7,10 +7,10 @@ import me.prism3.logger.utils.VersionUtil;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * Friendly names for all vanilla enchants in MC 1.21.5.
- * Includes a fast lookup map keyed by the enchantment's NamespacedKey or legacy name.
+ * Includes a fast lookup map keyed by the enchantment's NamespacedKey or legacy
+ * name.
  */
 public enum FriendlyEnchants {
 

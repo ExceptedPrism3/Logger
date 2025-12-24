@@ -1,6 +1,6 @@
 package me.prism3.loggerbungeecord.database.external;
 
-import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.Logger;
 import me.prism3.loggerbungeecord.api.LiteBansUtil;
 
 import java.net.InetSocketAddress;
@@ -17,7 +17,7 @@ import static me.prism3.loggerbungeecord.utils.Data.externalDataDel;
 
 public class ExternalData {
 
-    private static final Main plugin = Main.getInstance();
+    private static final Logger plugin = Logger.getInstance();
 
     private static final List<String> tablesNames = Stream.of("player_chat_proxy", "player_commands_proxy", "player_login_proxy",
             "player_leave_proxy", "server_reload_proxy", "server_start_proxy", "server_stop_proxy", "ram_proxy").collect(Collectors.toCollection(ArrayList::new));

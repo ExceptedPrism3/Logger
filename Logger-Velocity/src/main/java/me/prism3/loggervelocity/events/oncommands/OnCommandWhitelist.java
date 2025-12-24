@@ -3,7 +3,7 @@ package me.prism3.loggervelocity.events.oncommands;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.command.CommandExecuteEvent;
 import com.velocitypowered.api.proxy.Player;
-import me.prism3.loggervelocity.Main;
+import me.prism3.loggervelocity.Logger;
 import me.prism3.loggervelocity.database.external.ExternalData;
 import me.prism3.loggervelocity.database.sqlite.SQLiteData;
 import me.prism3.loggervelocity.utils.FileHandler;
@@ -22,7 +22,7 @@ public class OnCommandWhitelist {
     @Subscribe
     public void onWhitelistedCommand(final CommandExecuteEvent event) {
 
-        final Main main = Main.getInstance();
+        final Logger main = Logger.getInstance();
         final Player player = (Player) event.getCommandSource();
 
         final String playerName = player.getUsername();

@@ -1,6 +1,6 @@
 package me.prism3.loggerbungeecord.utils;
 
-import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.Logger;
 import me.prism3.loggerbungeecord.api.LiteBansUtil;
 
 import java.io.File;
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public class FileHandler {
 
-    private final Main main = Main.getInstance();
+    private final Logger main = Logger.getInstance();
 
     private static File staffLogFolder;
     private static File chatLogFolder;

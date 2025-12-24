@@ -1,6 +1,6 @@
 package me.prism3.loggerbungeecord.database.sqlite;
 
-import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.Logger;
 import me.prism3.loggerbungeecord.api.LiteBansUtil;
 
 import java.net.InetSocketAddress;
@@ -13,7 +13,7 @@ import static me.prism3.loggerbungeecord.utils.Data.sqliteDataDel;
 
 public class SQLiteData {
 
-    private static final Main plugin = Main.getInstance();
+    private static final Logger plugin = Logger.getInstance();
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss:SSSXXX");
 
     public void createTable() {

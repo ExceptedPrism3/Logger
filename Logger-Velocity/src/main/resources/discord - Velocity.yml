@@ -1,6 +1,6 @@
 # Discord Bridge Configuration for Logger Plugin [ Velocity Version ]
 # Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
-# Config 1.8
+# Config 1.8.0.15
 # Leaving Channel-ID empty will disable the Channel
 Discord:
   Enable: false

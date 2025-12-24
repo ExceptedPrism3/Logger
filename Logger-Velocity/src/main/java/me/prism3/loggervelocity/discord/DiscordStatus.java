@@ -1,6 +1,6 @@
 package me.prism3.loggervelocity.discord;
 
-import me.prism3.loggervelocity.Main;
+import me.prism3.loggervelocity.Logger;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 
@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DiscordStatus {
 
-    private final Main main = Main.getInstance();
+    private final Logger main = Logger.getInstance();
     private final JDA jda = new Discord().getJda();
 
     private int currentIndex = 0;
@@ -30,7 +30,7 @@ public class DiscordStatus {
 
         } catch (Exception exception) {
 
-            Main.getInstance().getLogger().error("Discord Status Activity is invalid. It has been disabled.");
+            Logger.getInstance().getLogger().error("Discord Status Activity is invalid. It has been disabled.");
             return;
 
         }

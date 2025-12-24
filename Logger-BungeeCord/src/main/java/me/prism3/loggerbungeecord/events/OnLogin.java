@@ -1,6 +1,6 @@
 package me.prism3.loggerbungeecord.events;
 
-import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.Logger;
 import me.prism3.loggerbungeecord.database.external.ExternalData;
 import me.prism3.loggerbungeecord.database.sqlite.SQLiteData;
 import me.prism3.loggerbungeecord.utils.Data;
@@ -19,7 +19,7 @@ import java.util.Objects;
 
 public class OnLogin implements Listener {
 
-    private final Main main = Main.getInstance();
+    private final Logger main = Logger.getInstance();
 
     @EventHandler
     public void onLogging(final PostLoginEvent event) {
@@ -54,7 +54,7 @@ public class OnLogin implements Listener {
 
                     } catch (IOException e) {
 
-                        Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                        Logger.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
                         e.printStackTrace();
 
                     }
@@ -83,7 +83,7 @@ public class OnLogin implements Listener {
 
                 } catch (IOException e) {
 
-                    Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                    Logger.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
                     e.printStackTrace();
 
                 }

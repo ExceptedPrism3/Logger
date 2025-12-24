@@ -1,6 +1,6 @@
 package me.prism3.loggervelocity.database.sqlite;
 
-import me.prism3.loggervelocity.Main;
+import me.prism3.loggervelocity.Logger;
 import me.prism3.loggervelocity.api.LiteBansUtil;
 
 import java.net.InetSocketAddress;
@@ -14,7 +14,7 @@ import static me.prism3.loggervelocity.utils.Data.sqliteDataDel;
 
 public class SQLiteData {
 
-    private static final Main plugin = Main.getInstance();
+    private static final Logger plugin = Logger.getInstance();
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss:SSSXXX");
 
     public void createTable() {

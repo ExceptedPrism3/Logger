@@ -4,7 +4,7 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.command.CommandExecuteEvent;
 import com.velocitypowered.api.proxy.Player;
-import me.prism3.loggervelocity.Main;
+import me.prism3.loggervelocity.Logger;
 import me.prism3.loggervelocity.database.external.ExternalData;
 import me.prism3.loggervelocity.database.sqlite.SQLiteData;
 import me.prism3.loggervelocity.serverside.Console;
@@ -24,7 +24,7 @@ public class OnCommand {
     @Subscribe
     public void onCmd(final CommandExecuteEvent event) {
 
-        final Main main = Main.getInstance();
+        final Logger main = Logger.getInstance();
 
         final CommandSource commandSource = event.getCommandSource();
 

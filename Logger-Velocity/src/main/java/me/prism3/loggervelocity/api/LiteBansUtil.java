@@ -1,7 +1,7 @@
 package me.prism3.loggervelocity.api;
 
 import com.velocitypowered.api.plugin.PluginContainer;
-import me.prism3.loggervelocity.Main;
+import me.prism3.loggervelocity.Logger;
 
 import java.util.Optional;
 
@@ -11,6 +11,6 @@ public class LiteBansUtil {
 
     public static Optional<PluginContainer> getLiteBansAPI() {
 
-        return Main.getServer().getPluginManager().getPlugin("LiteBans");
+        return Logger.getServer().getPluginManager().getPlugin("LiteBans");
     }
 }

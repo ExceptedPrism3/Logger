@@ -3,7 +3,7 @@ package me.prism3.loggervelocity.events;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.proxy.Player;
-import me.prism3.loggervelocity.Main;
+import me.prism3.loggervelocity.Logger;
 import me.prism3.loggervelocity.database.external.ExternalData;
 import me.prism3.loggervelocity.database.sqlite.SQLiteData;
 import me.prism3.loggervelocity.utils.FileHandler;
@@ -20,7 +20,7 @@ public class OnChat{
     @Subscribe
     public void onChat(final PlayerChatEvent event) {
 
-        final Main main = Main.getInstance();
+        final Logger main = Logger.getInstance();
         final Player player = event.getPlayer();
 
         if (main.getConfig().getBoolean("Log-Player.Chat") && player.getCurrentServer().isPresent()) {

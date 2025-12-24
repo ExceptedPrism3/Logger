@@ -3,7 +3,7 @@ package me.prism3.loggervelocity.events.plugindependent.litebans;
 import com.mysql.cj.Messages;
 import litebans.api.Entry;
 import litebans.api.Events;
-import me.prism3.loggervelocity.Main;
+import me.prism3.loggervelocity.Logger;
 import me.prism3.loggervelocity.database.external.ExternalData;
 import me.prism3.loggervelocity.database.sqlite.SQLiteData;
 import me.prism3.loggervelocity.utils.litebansutil.UsernameFetcher;
@@ -28,7 +28,7 @@ public class OnLiteBanEvents implements Runnable {
             @Override
             public void entryAdded(Entry entry) {
 
-                final Main main = Main.getInstance();
+                final Logger main = Logger.getInstance();
 
                 if (main.getConfig().getBoolean("Log-Extra.LiteBans")) {
 

@@ -1,6 +1,6 @@
 package me.prism3.loggervelocity.database.external;
 
-import me.prism3.loggervelocity.Main;
+import me.prism3.loggervelocity.Logger;
 import me.prism3.loggervelocity.utils.Data;
 
 import java.sql.Connection;
@@ -15,7 +15,7 @@ public class ExternalUpdater {
 
     public static void updater() {
 
-        final Main main = Main.getInstance();
+        final Logger main = Logger.getInstance();
 
         int i = 0;
         boolean keys = false;

@@ -1,6 +1,6 @@
 package me.prism3.loggervelocity.database.external;
 
-import me.prism3.loggervelocity.Main;
+import me.prism3.loggervelocity.Logger;
 import me.prism3.loggervelocity.api.LiteBansUtil;
 
 import java.net.InetSocketAddress;
@@ -18,7 +18,7 @@ import static me.prism3.loggervelocity.utils.Data.isPlayerIP;
 
 public class ExternalData {
 
-    private static final Main plugin = Main.getInstance();
+    private static final Logger plugin = Logger.getInstance();
 
     private static final List<String> tablesNames = Stream.of("player_chat_velocity", "player_commands_velocity",
             "player_login_velocity", "player_leave_velocity", "console_commands_velocity", "server_start_velocity",

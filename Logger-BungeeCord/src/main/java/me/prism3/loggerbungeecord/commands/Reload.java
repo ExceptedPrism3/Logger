@@ -1,6 +1,6 @@
 package me.prism3.loggerbungeecord.commands;
 
-import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.Logger;
 import me.prism3.loggerbungeecord.utils.Data;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -16,7 +16,7 @@ public class Reload extends Command {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
-        final Main main = Main.getInstance();
+        final Logger main = Logger.getInstance();
 
         if (sender.hasPermission(Data.loggerStaff) || sender.hasPermission(Data.loggerReload)) {
 

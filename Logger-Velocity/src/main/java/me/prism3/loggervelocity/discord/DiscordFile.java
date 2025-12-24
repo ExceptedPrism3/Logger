@@ -1,7 +1,7 @@
 package me.prism3.loggervelocity.discord;
 
 import com.google.common.io.ByteStreams;
-import me.prism3.loggervelocity.Main;
+import me.prism3.loggervelocity.Logger;
 import me.prism3.loggervelocity.utils.ConfigManager;
 import me.prism3.loggervelocity.utils.config.Configuration;
 import me.prism3.loggervelocity.utils.config.ConfigurationProvider;
@@ -17,7 +17,7 @@ public class DiscordFile {
 
     public DiscordFile() {
 
-        final File dataFolder = Main.getInstance().getFolder().toFile();
+        final File dataFolder = Logger.getInstance().getFolder().toFile();
         this.file = new File(dataFolder, "discord - Velocity.yml");
 
         try {

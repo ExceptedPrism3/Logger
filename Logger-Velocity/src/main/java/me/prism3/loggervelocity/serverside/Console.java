@@ -2,7 +2,7 @@ package me.prism3.loggervelocity.serverside;
 
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.command.CommandExecuteEvent;
-import me.prism3.loggervelocity.Main;
+import me.prism3.loggervelocity.Logger;
 import me.prism3.loggervelocity.database.external.ExternalData;
 import me.prism3.loggervelocity.database.sqlite.SQLiteData;
 import me.prism3.loggervelocity.utils.FileHandler;
@@ -19,7 +19,7 @@ public class Console {
     @Subscribe
     public void onConsole(final CommandExecuteEvent event) {
 
-        final Main main = Main.getInstance();
+        final Logger main = Logger.getInstance();
 
         if (main.getConfig().getBoolean("Log-Server.Console-Commands")) {
 

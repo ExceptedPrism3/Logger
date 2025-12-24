@@ -11,6 +11,7 @@
     <name>Logger-Velocity</name>
 
     <description>Log all Activities from Players or Server Side!</description>
+
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,7 +20,7 @@
     <parent>
         <artifactId>Logger</artifactId>
         <groupId>me.prism3</groupId>
-        <version>1.8.0.11</version>
+        <version>1.8.0.15</version>
     </parent>
 
     <build>
@@ -133,7 +134,7 @@
         <dependency>
             <groupId>com.velocitypowered</groupId>
             <artifactId>velocity-api</artifactId>
-            <version>3.0.1</version>
+            <version>3.1.1</version>
             <scope>provided</scope>
         </dependency>
         <!-- Lombok Extension -->

@@ -1,6 +1,6 @@
 package me.prism3.loggerbungeecord.utils;
 
-import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.Logger;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 
@@ -17,7 +17,7 @@ public class UpdateChecker {
 
     public void checkUpdates() {
 
-        ProxyServer.getInstance().getScheduler().runAsync(Main.getInstance(), () -> {
+        ProxyServer.getInstance().getScheduler().runAsync(Logger.getInstance(), () -> {
 
             final String httpsUrl = "https://api.spigotmc.org/legacy/update.php?resource=94236/";
 
@@ -37,8 +37,8 @@ public class UpdateChecker {
 
                             if (!input.trim().equalsIgnoreCase(VERSION.trim())) {
 
-                                Main.getInstance().getLogger().info(ChatColor.GOLD + "A new version is available for download " + ChatColor.GREEN + VERSION);
-                                Main.getInstance().getLogger().info(ChatColor.GOLD + "Download Link: " + ChatColor.GREEN + DOWNLOAD_URL);
+                                Logger.getInstance().getLogger().info(ChatColor.GOLD + "A new version is available for download " + ChatColor.GREEN + VERSION);
+                                Logger.getInstance().getLogger().info(ChatColor.GOLD + "Download Link: " + ChatColor.GREEN + DOWNLOAD_URL);
 
                             }
                         }
@@ -47,7 +47,7 @@ public class UpdateChecker {
 
                     } catch (IOException e) {
 
-                        Main.getInstance().getLogger().warning("Could not check for Updates, if the issue persists contact the Authors!");
+                        Logger.getInstance().getLogger().warning("Could not check for Updates, if the issue persists contact the Authors!");
 
                         e.printStackTrace();
 
@@ -56,7 +56,7 @@ public class UpdateChecker {
 
             } catch (IOException e) {
 
-                Main.getInstance().getLogger().warning("Could not check for Updates, if the issue persists contact the Authors!");
+                Logger.getInstance().getLogger().warning("Could not check for Updates, if the issue persists contact the Authors!");
 
                 e.printStackTrace();
 

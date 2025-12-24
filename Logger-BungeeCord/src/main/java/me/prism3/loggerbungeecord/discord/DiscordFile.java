@@ -1,7 +1,7 @@
 package me.prism3.loggerbungeecord.discord;
 
 import com.google.common.io.ByteStreams;
-import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.Logger;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -38,14 +38,14 @@ public class DiscordFile {
     }
 
     public File getFile() {
-        return new File(Main.getInstance().getDataFolder(), "discord - Bungee.yml");
+        return new File(Logger.getInstance().getDataFolder(), "discord - Bungee.yml");
     }
 
     public Configuration get() { return this.discord; }
 
     private void saveDefaultConfig() {
 
-        if (!Main.getInstance().getDataFolder().exists()) Main.getInstance().getDataFolder().mkdir();
+        if (!Logger.getInstance().getDataFolder().exists()) Logger.getInstance().getDataFolder().mkdir();
 
         final File file = getFile();
 
@@ -55,7 +55,7 @@ public class DiscordFile {
 
                 file.createNewFile();
 
-                try (InputStream is = Main.getInstance().getResourceAsStream("discord - Bungee.yml")) {
+                try (InputStream is = Logger.getInstance().getResourceAsStream("discord - Bungee.yml")) {
 
                     OutputStream os = new FileOutputStream(file);
                     ByteStreams.copy(is, os);

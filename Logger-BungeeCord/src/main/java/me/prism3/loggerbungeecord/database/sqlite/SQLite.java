@@ -1,6 +1,6 @@
 package me.prism3.loggerbungeecord.database.sqlite;
 
-import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.Logger;
 
 import java.io.File;
 import java.sql.Connection;
@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class SQLite {
 
-    private final Main main = Main.getInstance();
+    private final Logger main = Logger.getInstance();
 
     private Connection connection;
 

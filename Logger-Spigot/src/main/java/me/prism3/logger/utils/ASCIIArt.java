@@ -1,22 +1,28 @@
 package me.prism3.logger.utils;
 
-import org.bukkit.ChatColor;
-
 public class ASCIIArt {
 
     public void art() {
 
-        Log.info(ChatColor.DARK_PURPLE + "\n|\n" +
-                ChatColor.DARK_PURPLE + "|" + ChatColor.AQUA + "     __                               \n" +
-                ChatColor.DARK_PURPLE + "|" + ChatColor.AQUA + "    / /   ____  ____ _____ ____  _____\n" +
-                ChatColor.DARK_PURPLE + "|" + ChatColor.AQUA + "   / /   / __ \\/ __ `/ __ `/ _ \\/ ___/\n" +
-                ChatColor.DARK_PURPLE + "|" + ChatColor.AQUA + "  / /___/ /_/ / /_/ / /_/ /  __/ /    \n" +
-                ChatColor.DARK_PURPLE + "|" + ChatColor.AQUA + " /_____/\\____/\\__, /\\__, /\\___/_/     \n" +
-                ChatColor.DARK_PURPLE + "|" + ChatColor.AQUA + "             /____//____/     " + ChatColor.RED + Data.pluginVersion + ChatColor.YELLOW + " [ Bukkit Version ]        \n" +
-                ChatColor.DARK_PURPLE + "|\n" +
-                ChatColor.DARK_PURPLE + "|" + ChatColor.GOLD + " This is a DEV Build, please report any issues!\n" + ChatColor.DARK_PURPLE + "|\n" +
-                ChatColor.DARK_PURPLE + "|" + ChatColor.WHITE + " Discord " + ChatColor.BLUE + "https://discord.gg/MfR5mcpVfX\n" +
-                ChatColor.DARK_PURPLE + "|");
+        final String reset = "\u001B[0m";
+        final String purple = "\u001B[35m";
+        final String aqua = "\u001B[36m";
+        final String red = "\u001B[31m";
+        final String yellow = "\u001B[33m";
+        final String gold = "\u001B[33m";
+        final String white = "\u001B[37m";
+        final String blue = "\u001B[34m";
 
+        Log.info(purple + "\n|\n" +
+                purple + "|" + aqua + "     __                               \n" +
+                purple + "|" + aqua + "    / /   ____  ____ _____ ____  _____\n" +
+                purple + "|" + aqua + "   / /   / __ \\/ __ `/ __ `/ _ \\/ ___/\n" +
+                purple + "|" + aqua + "  / /___/ /_/ / /_/ / /_/ /  __/ /    \n" +
+                purple + "|" + aqua + " /_____/\\____/\\__, /\\__, /\\___/_/     \n" +
+                purple + "|" + aqua + "             /____//____/     " + red + Data.pluginVersion + yellow + " [ Bukkit Version ]        \n" +
+                purple + "|\n" +
+                purple + "|" + gold + " This is a DEV Build, please report any issues!\n" + purple + "|\n" +
+                purple + "|" + white + " Discord " + blue + "https://discord.gg/MfR5mcpVfX\n" +
+                purple + "|"+ reset);
     }
 }

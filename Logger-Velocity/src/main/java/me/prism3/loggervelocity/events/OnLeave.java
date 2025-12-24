@@ -3,7 +3,7 @@ package me.prism3.loggervelocity.events;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.proxy.Player;
-import me.prism3.loggervelocity.Main;
+import me.prism3.loggervelocity.Logger;
 import me.prism3.loggervelocity.database.external.ExternalData;
 import me.prism3.loggervelocity.database.sqlite.SQLiteData;
 import me.prism3.loggervelocity.utils.FileHandler;
@@ -20,7 +20,7 @@ public class OnLeave {
     @Subscribe
     public void onQuit(final DisconnectEvent event) {
 
-        final Main main = Main.getInstance();
+        final Logger main = Logger.getInstance();
 
         if (main.getConfig().getBoolean("Log-Player.Leave")) {
 

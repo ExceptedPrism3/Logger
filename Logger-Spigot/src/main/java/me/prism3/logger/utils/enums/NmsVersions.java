@@ -29,7 +29,8 @@ public enum NmsVersions {
     v1_19_R3,
     v1_20_R1,
     v1_20_R2,
-    v1_21_R1;
+    v1_20_R3,
+    v1_20_R4;
 
     public boolean isAtLeast(NmsVersions version) {
         return this.ordinal() >= version.ordinal();

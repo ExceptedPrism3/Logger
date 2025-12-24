@@ -2,7 +2,7 @@ package me.prism3.loggerbungeecord.events.plugindependent.litebans;
 
 import litebans.api.Entry;
 import litebans.api.Events;
-import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.Logger;
 import me.prism3.loggerbungeecord.database.external.ExternalData;
 import me.prism3.loggerbungeecord.database.sqlite.SQLiteData;
 import me.prism3.loggerbungeecord.utils.litebanutil.UsernameFetcher;
@@ -20,7 +20,7 @@ import static me.prism3.loggerbungeecord.utils.Data.*;
 
 public class OnLiteBanEvents implements Listener, Runnable {
 
-    private final Main main = Main.getInstance();
+    private final Logger main = Logger.getInstance();
 
     @Override
     public void run() {
@@ -92,7 +92,7 @@ public class OnLiteBanEvents implements Listener, Runnable {
 
                         } catch (IOException e) {
 
-                            Main.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
+                            Logger.getInstance().getLogger().severe("An error occurred while logging into the appropriate file.");
                             e.printStackTrace();
 
                         }

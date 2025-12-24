@@ -1,12 +1,12 @@
 package me.prism3.loggerbungeecord.database.external;
 
 import com.zaxxer.hikari.HikariDataSource;
-import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.Logger;
 import me.prism3.loggerbungeecord.utils.Data;
 
 public class External {
 
-    private final Main main = Main.getInstance();
+    private final Logger main = Logger.getInstance();
 
     private String jdbc;
     private static final String DATATYPE = Data.dbType.toLowerCase();

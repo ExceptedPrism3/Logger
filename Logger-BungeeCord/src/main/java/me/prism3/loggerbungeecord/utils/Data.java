@@ -1,6 +1,6 @@
 package me.prism3.loggerbungeecord.utils;
 
-import me.prism3.loggerbungeecord.Main;
+import me.prism3.loggerbungeecord.Logger;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class Data {
 
-    private final Main main = Main.getInstance();
+    private final Logger main = Logger.getInstance();
     private final ConfigManager config = main.getConfig();
 
     // Date Format
