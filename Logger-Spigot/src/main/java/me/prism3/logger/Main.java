@@ -153,7 +153,7 @@ public class Main extends JavaPlugin {
         this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new RAM(), 300L, Data.ramTpsChecker);
 
         // Version Exceptions
-        if (version.isAtLeast(NmsVersions.v1_13_R1)) {
+        if (VersionUtil.SERVER_VERSION.isAtLeast(NmsVersions.v1_13_R1)) {
 
             this.getServer().getPluginManager().registerEvents(new OnWoodStripping(), this);
 

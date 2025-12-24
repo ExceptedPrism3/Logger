@@ -3,10 +3,7 @@ package me.prism3.logger.events.oninventories;
 import me.prism3.logger.Main;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
-import me.prism3.logger.utils.BedrockChecker;
-import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
+import me.prism3.logger.utils.*;
 import me.prism3.logger.utils.enums.NmsVersions;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -49,7 +46,7 @@ public class OnChestInteraction implements Listener {
 
     private void addAdditionalItems() {
 
-        if (version.isAtLeast(NmsVersions.v1_11_R1)) {
+        if (VersionUtil.SERVER_VERSION.isAtLeast(NmsVersions.v1_11_R1)) {
 
             this.containerMaterials.add(Material.valueOf("BLACK_SHULKER_BOX"));
             this.containerMaterials.add(Material.valueOf("BLUE_SHULKER_BOX"));
@@ -68,13 +65,13 @@ public class OnChestInteraction implements Listener {
             this.containerMaterials.add(Material.valueOf("YELLOW_SHULKER_BOX"));
         }
 
-        if (version.isAtLeast(NmsVersions.v1_13_R1)) {
+        if (VersionUtil.SERVER_VERSION.isAtLeast(NmsVersions.v1_13_R1)) {
 
             this.containerMaterials.add(Material.valueOf("SHULKER_BOX"));
             this.containerMaterials.add(Material.valueOf("LIGHT_GRAY_SHULKER_BOX"));
         }
 
-        if (version.isAtLeast(NmsVersions.v1_14_R1)) {
+        if (VersionUtil.SERVER_VERSION.isAtLeast(NmsVersions.v1_14_R1)) {
             this.containerMaterials.add(Material.valueOf("BARREL"));
             this.containerMaterials.add(Material.valueOf("BLAST_FURNACE"));
         }
@@ -234,7 +231,7 @@ public class OnChestInteraction implements Listener {
             if (containerMaterial == material)
                 return true;
 
-        if (version.isAtLeast(NmsVersions.v1_11_R1))
+        if (VersionUtil.SERVER_VERSION.isAtLeast(NmsVersions.v1_11_R1))
             return material.name().endsWith("_SHULKER_BOX") || material == Material.SHULKER_BOX;
 
         return false;
@@ -252,9 +249,9 @@ public class OnChestInteraction implements Listener {
             return "Ender Chest";
         } else if (material == Material.TRAPPED_CHEST) {
             return "Trapped Chest";
-        } else if (version.isAtLeast(NmsVersions.v1_14_R1) && material == Material.BARREL) {
+        } else if (VersionUtil.SERVER_VERSION.isAtLeast(NmsVersions.v1_14_R1) && material == Material.BARREL) {
             return "Barrel";
-        } else if (version.isAtLeast(NmsVersions.v1_11_R1) && (material.name().endsWith("_SHULKER_BOX") || material == Material.SHULKER_BOX)) {
+        } else if (VersionUtil.SERVER_VERSION.isAtLeast(NmsVersions.v1_11_R1) && (material.name().endsWith("_SHULKER_BOX") || material == Material.SHULKER_BOX)) {
             return this.getShulkerBoxType(block);
         } else if (material == Material.DROPPER) {
             return "Dropper";
@@ -266,7 +263,7 @@ public class OnChestInteraction implements Listener {
             return "Brewing Stand";
         } else if (material == Material.FURNACE) {
             return "Furnace";
-        } else if (version.isAtLeast(NmsVersions.v1_14_R1) && material == Material.BLAST_FURNACE) {
+        } else if (VersionUtil.SERVER_VERSION.isAtLeast(NmsVersions.v1_14_R1) && material == Material.BLAST_FURNACE) {
             return "Blast Furnace";
         }
 

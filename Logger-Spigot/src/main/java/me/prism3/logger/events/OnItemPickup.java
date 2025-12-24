@@ -3,10 +3,7 @@ package me.prism3.logger.events;
 import me.prism3.logger.Main;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
-import me.prism3.logger.utils.BedrockChecker;
-import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
+import me.prism3.logger.utils.*;
 import me.prism3.logger.utils.enums.FriendlyEnchants;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -21,6 +18,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -55,14 +53,7 @@ public class OnItemPickup implements Listener {
             final int blockY = event.getItem().getLocation().getBlockY();
             final int blockZ = event.getItem().getLocation().getBlockZ();
 
-            final List<String> enchs = event.getItem().getItemStack().getEnchantments().entrySet().stream()
-                    .map(entry -> {
-                        final Enchantment enchantment = entry.getKey();
-                        final int level = entry.getValue();
-                        final String friendlyName = FriendlyEnchants.getFriendlyEnchantment(enchantment).getFriendlyName();
-                        return friendlyName + " " + level;
-                    })
-                    .collect(Collectors.toList());
+            final List<String> enchs = Collections.singletonList(EnchantFormatter.format(event.getItem().getItemStack()));
 
             // Log To Files
             if (Data.isLogToFiles) {

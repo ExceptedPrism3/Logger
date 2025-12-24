@@ -1,0 +1,284 @@
+
+F
+java:S3010©"(Remove this assignment of "staffFolder".(”•ªë8åÙ¼Ëİ0
+I
+java:S3010ª"&Remove this assignment of "staffFile".(Œº™Íûÿÿÿÿ8èÙ¼Ëİ0
+G
+java:S3010¬"*Remove this assignment of "chatLogFolder".(Äú58éÙ¼Ëİ0
+K
+java:S3010­"(Remove this assignment of "chatLogFile".(”¯äêıÿÿÿÿ8éÙ¼Ëİ0
+V
+java:S3010¯"3Remove this assignment of "playerCommandLogFolder".(ü¯­ÿÿÿÿÿ8éÙ¼Ëİ0
+N
+java:S3010°"+Remove this assignment of "commandLogFile".(—¹éíùÿÿÿÿ8éÙ¼Ëİ0
+M
+java:S3010²"*Remove this assignment of "signLogFolder".(Œó§ãıÿÿÿÿ8êÙ¼Ëİ0
+K
+java:S3010³"(Remove this assignment of "signLogFile".(ïâ®Ãÿÿÿÿÿ8êÙ¼Ëİ0
+N
+java:S3010µ"0Remove this assignment of "playerJoinLogFolder".(÷î¶Ç8êÙ¼Ëİ0
+Q
+java:S3010¶".Remove this assignment of "playerJoinLogFile".(¿Ç‰ÿÿÿÿÿ8êÙ¼Ëİ0
+T
+java:S3010¸"1Remove this assignment of "playerLeaveLogFolder".(Í«“Ëüÿÿÿÿ8êÙ¼Ëİ0
+M
+java:S3010¹"/Remove this assignment of "playerLeaveLogFile".(èÅ8ëÙ¼Ëİ0
+O
+java:S3010»"1Remove this assignment of "playerDeathLogFolder".(‘Ü¯‘8îÙ¼Ëİ0
+M
+java:S3010¼"/Remove this assignment of "playerDeathLogFile".(®óÑ8ïÙ¼Ëİ0
+Z
+java:S3010¾"7Remove this assignment of "playerDeathBackupLogFolder".(µ¿ûÅúÿÿÿÿ8ïÙ¼Ëİ0
+W
+java:S3010À"4Remove this assignment of "playerTeleportLogFolder".(Ãàë‡úÿÿÿÿ8ğÙ¼Ëİ0
+U
+java:S3010Á"2Remove this assignment of "playerTeleportLogFile".(„ÔüËøÿÿÿÿ8ğÙ¼Ëİ0
+S
+java:S3010Ã"0Remove this assignment of "blockPlaceLogFolder".(¯½Éùÿÿÿÿ8ğÙ¼Ëİ0
+Q
+java:S3010Ä".Remove this assignment of "blockPlaceLogFile".(É¦Èˆûÿÿÿÿ8ğÙ¼Ëİ0
+N
+java:S3010Æ"0Remove this assignment of "blockBreakLogFolder".(ßá÷î8ğÙ¼Ëİ0
+Q
+java:S3010Ç".Remove this assignment of "blockBreakLogFile".(ñÃ°Îıÿÿÿÿ8ğÙ¼Ëİ0
+S
+java:S3010É"0Remove this assignment of "playerKickLogFolder".(»ÎÉéÿÿÿÿÿ8ğÙ¼Ëİ0
+L
+java:S3010Ê".Remove this assignment of "playerKickLogFile".(Ñ©ò8ñÙ¼Ëİ0
+Q
+java:S3010Ì".Remove this assignment of "playerLevelFolder".(£½©ÿşÿÿÿÿ8ñÙ¼Ëİ0
+O
+java:S3010Í",Remove this assignment of "playerLevelFile".(‘“ê»ûÿÿÿÿ8ñÙ¼Ëİ0
+P
+java:S3010Ï"-Remove this assignment of "bucketFillFolder".(†íşûÿÿÿÿ8ñÙ¼Ëİ0
+N
+java:S3010Ğ"+Remove this assignment of "bucketFillFile".(Û‡µ„ûÿÿÿÿ8ñÙ¼Ëİ0
+Q
+java:S3010Ò".Remove this assignment of "bucketEmptyFolder".(¶³“Ûÿÿÿÿÿ8ñÙ¼Ëİ0
+O
+java:S3010Ó",Remove this assignment of "bucketEmptyFile".(›ã»Éûÿÿÿÿ8ñÙ¼Ëİ0
+F
+java:S3010Õ"(Remove this assignment of "anvilFolder".(Ş¶Ô¼8òÙ¼Ëİ0
+I
+java:S3010Ö"&Remove this assignment of "anvilFile".(ÁÏú±şÿÿÿÿ8òÙ¼Ëİ0
+N
+java:S3010Ø"+Remove this assignment of "itemDropFolder".(Û‚Áúúÿÿÿÿ8òÙ¼Ëİ0
+L
+java:S3010Ù")Remove this assignment of "itemDropFile".(Œ¤¨´üÿÿÿÿ8òÙ¼Ëİ0
+M
+java:S3010Û"*Remove this assignment of "enchantFolder".(Óç”şÿÿÿÿ8òÙ¼Ëİ0
+F
+java:S3010Ü"(Remove this assignment of "enchantFile".(ê°¯×8òÙ¼Ëİ0
+Q
+java:S3010Ş".Remove this assignment of "bookEditingFolder".( …§ÿÿÿÿÿ8òÙ¼Ëİ0
+J
+java:S3010ß",Remove this assignment of "bookEditingFile".(ê¤º8óÙ¼Ëİ0
+P
+java:S3010á"-Remove this assignment of "itemPickupFolder".(“¸ğßüÿÿÿÿ8óÙ¼Ëİ0
+N
+java:S3010â"+Remove this assignment of "itemPickupFile".(ìœŠ£üÿÿÿÿ8óÙ¼Ëİ0
+M
+java:S3010ä"*Remove this assignment of "furnaceFolder".(½÷Ô¿ùÿÿÿÿ8óÙ¼Ëİ0
+K
+java:S3010å"(Remove this assignment of "furnaceFile".(÷Ñæıÿÿÿÿ8ôÙ¼Ëİ0
+I
+java:S3010ç"+Remove this assignment of "gameModeFolder".(â‹Ë“8ôÙ¼Ëİ0
+G
+java:S3010è")Remove this assignment of "gameModeFile".(å³›„8ôÙ¼Ëİ0
+K
+java:S3010ê"(Remove this assignment of "craftFolder".(Éå¤½ÿÿÿÿÿ8ôÙ¼Ëİ0
+I
+java:S3010ë"&Remove this assignment of "craftFile".(ˆÊäšûÿÿÿÿ8ôÙ¼Ëİ0
+L
+java:S3010í"/Remove this assignment of "registrationFolder".(×é88ôÙ¼Ëİ0
+P
+java:S3010î"-Remove this assignment of "registrationFile".(×˜È«øÿÿÿÿ8ôÙ¼Ëİ0
+I
+java:S3010ò",Remove this assignment of "primedTNTFolder".(±²çD8ôÙ¼Ëİ0
+H
+java:S3010ó"*Remove this assignment of "primedTNTFile".(„ÕÌ8õÙ¼Ëİ0
+Q
+java:S3010õ"3Remove this assignment of "chestInteractionFolder".(Ì¬À8õÙ¼Ëİ0
+T
+java:S3010ö"1Remove this assignment of "chestInteractionFile".(¡¢±øÿÿÿÿ8õÙ¼Ëİ0
+J
+java:S3010ø".Remove this assignment of "entityDeathFolder".(²¯>8õÙ¼Ëİ0
+O
+java:S3010ù",Remove this assignment of "entityDeathFile".(ÕñÏ†ÿÿÿÿÿ8÷Ù¼Ëİ0
+O
+java:S3010û"1Remove this assignment of "itemFramePlaceFolder".(—ßûÏ8÷Ù¼Ëİ0
+M
+java:S3010ü"/Remove this assignment of "itemFramePlaceFile".(´Û—û8÷Ù¼Ëİ0
+O
+java:S3010ş"1Remove this assignment of "itemFrameBreakFolder".(è£àİ8÷Ù¼Ëİ0
+R
+java:S3010ÿ"/Remove this assignment of "itemFrameBreakFile".(§Çıèıÿÿÿÿ8øÙ¼Ëİ0
+P
+java:S3010"2Remove this assignment of "armorStandPlaceFolder".(Ã„¤8øÙ¼Ëİ0
+N
+java:S3010‚"0Remove this assignment of "armorStandPlaceFile".(—íñİ8øÙ¼Ëİ0
+P
+java:S3010„"2Remove this assignment of "armorStandBreakFolder".(™Ù‘´8øÙ¼Ëİ0
+S
+java:S3010…"0Remove this assignment of "armorStandBreakFile".(½İÖùÿÿÿÿ8øÙ¼Ëİ0
+P
+java:S3010‡"2Remove this assignment of "endCrystalPlaceFolder".( ¢çû8øÙ¼Ëİ0
+S
+java:S3010ˆ"0Remove this assignment of "endCrystalPlaceFile".(ÿÂ½Óúÿÿÿÿ8øÙ¼Ëİ0
+U
+java:S3010Š"2Remove this assignment of "endCrystalBreakFolder".(¦®¡úÿÿÿÿ8ùÙ¼Ëİ0
+N
+java:S3010‹"0Remove this assignment of "endCrystalBreakFile".(¹ÙÚ”8ùÙ¼Ëİ0
+[
+java:S3010"8Remove this assignment of "armorStandInteractionFolder".(Í÷îÈúÿÿÿÿ8ùÙ¼Ëİ0
+T
+java:S3010"6Remove this assignment of "armorStandInteractionFile".(µÄûê8ùÙ¼Ëİ0
+V
+java:S3010"3Remove this assignment of "leverInteractionFolder".(±×Éßúÿÿÿÿ8ùÙ¼Ëİ0
+T
+java:S3010‘"1Remove this assignment of "leverInteractionFile".(ÅËœûÿÿÿÿ8ùÙ¼Ëİ0
+N
+java:S3010“"+Remove this assignment of "spawnEggFolder".(öÌîËúÿÿÿÿ8ùÙ¼Ëİ0
+L
+java:S3010”")Remove this assignment of "spawnEggFile".(Ì÷ô½ùÿÿÿÿ8úÙ¼Ëİ0
+L
+java:S3010—".Remove this assignment of "serverStartFolder".(Ë“ºÌ8úÙ¼Ëİ0
+J
+java:S3010˜",Remove this assignment of "serverStartFile".(À×û®8úÙ¼Ëİ0
+P
+java:S3010š"-Remove this assignment of "serverStopFolder".(¸ÕæŠıÿÿÿÿ8üÙ¼Ëİ0
+N
+java:S3010›"+Remove this assignment of "serverStopFile".(¶„‰«øÿÿÿÿ8ıÙ¼Ëİ0
+P
+java:S3010"-Remove this assignment of "consoleLogFolder".(ÜùáŠıÿÿÿÿ8ıÙ¼Ëİ0
+N
+java:S3010"+Remove this assignment of "consoleLogFile".(Òıÿÿÿÿ8ıÙ¼Ëİ0
+I
+java:S3010 "&Remove this assignment of "ramFolder".(”Î†ıÿÿÿÿ8ıÙ¼Ëİ0
+G
+java:S3010¡"$Remove this assignment of "ramFile".(Ş²ñ¦ÿÿÿÿÿ8şÙ¼Ëİ0
+D
+java:S3010£"&Remove this assignment of "tpsFolder".(êÏÕ€8şÙ¼Ëİ0
+G
+java:S3010¤"$Remove this assignment of "tpsFile".(¾½Ï›úÿÿÿÿ8şÙ¼Ëİ0
+M
+java:S3010¦"/Remove this assignment of "portalCreateFolder".(ÍÊ³³8şÙ¼Ëİ0
+P
+java:S3010§"-Remove this assignment of "portalCreateFile".(æªÓÿÿÿÿÿ8şÙ¼Ëİ0
+E
+java:S3010©"'Remove this assignment of "rConFolder".(¶˜ö¬8şÙ¼Ëİ0
+H
+java:S3010ª"%Remove this assignment of "rConFile".(íÇïÀÿÿÿÿÿ8şÙ¼Ëİ0
+M
+java:S3010¬"/Remove this assignment of "commandBlockFolder".(ëû8şÙ¼Ëİ0
+K
+java:S3010­"-Remove this assignment of "commandBlockFile".(ê¢ˆ8ÿÙ¼Ëİ0
+Q
+java:S3010¯".Remove this assignment of "playerCountFolder".(Î­Ğãûÿÿÿÿ8ÿÙ¼Ëİ0
+J
+java:S3010°",Remove this assignment of "playerCountFile".(Æ¨’†8ÿÙ¼Ëİ0
+N
+java:S3010²"0Remove this assignment of "serverAddressFolder".(ú¨»·8ÿÙ¼Ëİ0
+L
+java:S3010³".Remove this assignment of "serverAddressFile".(Üõ§Ö8ÿÙ¼Ëİ0
+L
+java:S3010µ".Remove this assignment of "advancementFolder".(İãŞ8ÿÙ¼Ëİ0
+O
+java:S3010¶",Remove this assignment of "advancementFile".(í¨âüÿÿÿÿ8ÿÙ¼Ëİ0
+D
+java:S3010¹"&Remove this assignment of "afkFolder".(ÛÚÚ“8ÿÙ¼Ëİ0
+G
+java:S3010º"$Remove this assignment of "afkFile".(†Äİıùÿÿÿÿ8ÿÙ¼Ëİ0
+M
+java:S3010¼"0Remove this assignment of "wrongPasswordFolder".(åĞön8€Ú¼Ëİ0
+Q
+java:S3010½".Remove this assignment of "wrongPasswordFile".(ÙëĞúıÿÿÿÿ8€Ú¼Ëİ0
+K
+java:S3010¿"(Remove this assignment of "vaultFolder".(ıÛŸûÿÿÿÿ8€Ú¼Ëİ0
+D
+java:S3010À"&Remove this assignment of "vaultFile".(Æ’½8€Ú¼Ëİ0
+N
+java:S3010Â"+Remove this assignment of "liteBansFolder".(Ï‹è§ùÿÿÿÿ8€Ú¼Ëİ0
+L
+java:S3010Ã")Remove this assignment of "liteBansFile".(±ñëïøÿÿÿÿ8€Ú¼Ëİ0
+L
+java:S3010Å".Remove this assignment of "advancedBanFolder".(³ÄÉÆ8€Ú¼Ëİ0
+J
+java:S3010Æ",Remove this assignment of "advancedBanFile".(ÛŸŸñ8€Ú¼Ëİ0
+K
+java:S3010È"-Remove this assignment of "viaVersionFolder".(ÌƒÜ¿8Ú¼Ëİ0
+I
+java:S3010É"+Remove this assignment of "viaVersionFile".(Ì¸†ù8Ú¼Ëİ0
+P
+java:S3010Ë"-Remove this assignment of "worldGuardFolder".(ƒÂ ¤ùÿÿÿÿ8Ú¼Ëİ0
+I
+java:S3010Ì"+Remove this assignment of "worldGuardFile".(®é”í8Ú¼Ëİ0
+S
+java:S3010Ï"0Remove this assignment of "woodStrippingFolder".(˜–€ßıÿÿÿÿ8Ú¼Ëİ0
+Q
+java:S3010Ğ".Remove this assignment of "woodStrippingFile".(Î¼ÿ¿üÿÿÿÿ8‚Ú¼Ëİ0
+R
+java:S3010Ò"/Remove this assignment of "totemUndyingFolder".(æ‰ü˜üÿÿÿÿ8‚Ú¼Ëİ0
+P
+java:S3010Ó"-Remove this assignment of "totemUndyingFile".(†„€–ûÿÿÿÿ8‚Ú¼Ëİ0
+L
+java:S3010Ö")Remove this assignment of "manualFolder".(ûõŠ©üÿÿÿÿ8‚Ú¼Ëİ0
+J
+java:S3010×"'Remove this assignment of "manualFile".(ìèÈøÿÿÿÿ8‚Ú¼Ëİ0
+X	java:S125Ì"<This block of commented-out lines of code should be removed.(ù³’8ÈÚ¼Ëİ0
+_	java:S899Ø"BDo something with the "boolean" value returned by "createNewFile".(‘“¬¯8ÎÚ¼Ëİ0
+_	java:S899Ú"BDo something with the "boolean" value returned by "createNewFile".(’óÌÙ8ÔÚ¼Ëİ0
+_	java:S899Ü"BDo something with the "boolean" value returned by "createNewFile".(À•ú˜8ÔÚ¼Ëİ0
+d	java:S899Ş"BDo something with the "boolean" value returned by "createNewFile".(ÂÛ•‡úÿÿÿÿ8ÕÚ¼Ëİ0
+_	java:S899à"BDo something with the "boolean" value returned by "createNewFile".(Ù´á«8ÖÚ¼Ëİ0
+_	java:S899â"BDo something with the "boolean" value returned by "createNewFile".(˜ÀçÓ8ÖÚ¼Ëİ0
+_	java:S899ä"BDo something with the "boolean" value returned by "createNewFile".(Ø”ÒÃ8ÖÚ¼Ëİ0
+_	java:S899æ"BDo something with the "boolean" value returned by "createNewFile".(µïÆØ8ÖÚ¼Ëİ0
+d	java:S899è"BDo something with the "boolean" value returned by "createNewFile".(Ìø½ùÿÿÿÿ8ÖÚ¼Ëİ0
+d	java:S899ê"BDo something with the "boolean" value returned by "createNewFile".(¹è•üÿÿÿÿ8×Ú¼Ëİ0
+d	java:S899ì"BDo something with the "boolean" value returned by "createNewFile".(ğú»ıúÿÿÿÿ8×Ú¼Ëİ0
+d	java:S899î"BDo something with the "boolean" value returned by "createNewFile".(‡˜Å şÿÿÿÿ8×Ú¼Ëİ0
+d	java:S899ğ"BDo something with the "boolean" value returned by "createNewFile".(«æÙüÿÿÿÿ8×Ú¼Ëİ0
+_	java:S899ò"BDo something with the "boolean" value returned by "createNewFile".(Œ¤îå8×Ú¼Ëİ0
+_	java:S899ô"BDo something with the "boolean" value returned by "createNewFile".(ë•áº8ØÚ¼Ëİ0
+d	java:S899ö"BDo something with the "boolean" value returned by "createNewFile".(ºÇÂÖüÿÿÿÿ8ØÚ¼Ëİ0
+_	java:S899ø"BDo something with the "boolean" value returned by "createNewFile".(ŒĞ‰ß8ÙÚ¼Ëİ0
+d	java:S899ú"BDo something with the "boolean" value returned by "createNewFile".(Ê¸…Òøÿÿÿÿ8ÛÚ¼Ëİ0
+_	java:S899ü"BDo something with the "boolean" value returned by "createNewFile".(šóà8ÛÚ¼Ëİ0
+_	java:S899ş"BDo something with the "boolean" value returned by "createNewFile".(ÈŠ‚ä8ÛÚ¼Ëİ0
+_	java:S899€"BDo something with the "boolean" value returned by "createNewFile".(º“äŠ8ÜÚ¼Ëİ0
+_	java:S899‚"BDo something with the "boolean" value returned by "createNewFile".(¤×¡ç8ÜÚ¼Ëİ0
+d	java:S899„"BDo something with the "boolean" value returned by "createNewFile".(ÊÅÖÄúÿÿÿÿ8ÜÚ¼Ëİ0
+_	java:S899†"BDo something with the "boolean" value returned by "createNewFile".(±­ÕÆ8ÜÚ¼Ëİ0
+_	java:S899ˆ"BDo something with the "boolean" value returned by "createNewFile".(èï³ç8ÜÚ¼Ëİ0
+d	java:S899Š"BDo something with the "boolean" value returned by "createNewFile".(´îªìúÿÿÿÿ8ÜÚ¼Ëİ0
+_	java:S899Œ"BDo something with the "boolean" value returned by "createNewFile".(¶ö8İÚ¼Ëİ0
+_	java:S899"BDo something with the "boolean" value returned by "createNewFile".(½öå¯8İÚ¼Ëİ0
+^	java:S899"BDo something with the "boolean" value returned by "createNewFile".(«†`8İÚ¼Ëİ0
+d	java:S899’"BDo something with the "boolean" value returned by "createNewFile".(¹ö™¡üÿÿÿÿ8İÚ¼Ëİ0
+d	java:S899”"BDo something with the "boolean" value returned by "createNewFile".(“Îûÿÿÿÿ8İÚ¼Ëİ0
+_	java:S899–"BDo something with the "boolean" value returned by "createNewFile".(š±¡8ŞÚ¼Ëİ0
+d	java:S899˜"BDo something with the "boolean" value returned by "createNewFile".(âÕÉúÿÿÿÿ8ŞÚ¼Ëİ0
+_	java:S899š"BDo something with the "boolean" value returned by "createNewFile".(¬·¨û8ŞÚ¼Ëİ0
+d	java:S899œ"BDo something with the "boolean" value returned by "createNewFile".(äÓÓ¡üÿÿÿÿ8ŞÚ¼Ëİ0
+d	java:S899Ÿ"BDo something with the "boolean" value returned by "createNewFile".(—ûÜ™ùÿÿÿÿ8ŞÚ¼Ëİ0
+d	java:S899¡"BDo something with the "boolean" value returned by "createNewFile".(—ûÜ™ùÿÿÿÿ8ßÚ¼Ëİ0
+d	java:S899£"BDo something with the "boolean" value returned by "createNewFile".(çÃ†úûÿÿÿÿ8ßÚ¼Ëİ0
+_	java:S899¥"BDo something with the "boolean" value returned by "createNewFile".(ÉéúÀ8ßÚ¼Ëİ0
+_	java:S899§"BDo something with the "boolean" value returned by "createNewFile".(¬ñëº8ãÚ¼Ëİ0
+d	java:S899©"BDo something with the "boolean" value returned by "createNewFile".(”±İôÿÿÿÿÿ8äÚ¼Ëİ0
+d	java:S899«"BDo something with the "boolean" value returned by "createNewFile".(€‡ÀÃúÿÿÿÿ8äÚ¼Ëİ0
+d	java:S899­"BDo something with the "boolean" value returned by "createNewFile".(É„‘ùÿÿÿÿ8åÚ¼Ëİ0
+d	java:S899¯"BDo something with the "boolean" value returned by "createNewFile".(®ÓÉşÿÿÿÿ8åÚ¼Ëİ0
+_	java:S899±"BDo something with the "boolean" value returned by "createNewFile".(Îª­Í8åÚ¼Ëİ0
+_	java:S899³"BDo something with the "boolean" value returned by "createNewFile".(óÚº­8åÚ¼Ëİ0
+_	java:S899¶"BDo something with the "boolean" value returned by "createNewFile".(ïÅ¶ù8èÚ¼Ëİ0
+d	java:S899¸"BDo something with the "boolean" value returned by "createNewFile".(ÊùúŸıÿÿÿÿ8èÚ¼Ëİ0
+_	java:S899º"BDo something with the "boolean" value returned by "createNewFile".(Â°—˜8éÚ¼Ëİ0
+_	java:S899¼"BDo something with the "boolean" value returned by "createNewFile".(±¢Œì8êÚ¼Ëİ0
+d	java:S899¾"BDo something with the "boolean" value returned by "createNewFile".(²ÀëÕşÿÿÿÿ8êÚ¼Ëİ0
+d	java:S899À"BDo something with the "boolean" value returned by "createNewFile".(Ùäğ‰şÿÿÿÿ8êÚ¼Ëİ0
+Y	java:S125Â"<This block of commented-out lines of code should be removed.(é¤È£8ëÚ¼Ëİ0
+_	java:S899Å"BDo something with the "boolean" value returned by "createNewFile".(Ó¤÷à8ëÚ¼Ëİ0
+d	java:S899Æ"BDo something with the "boolean" value returned by "createNewFile".(ÄÂªşÿÿÿÿ8ìÚ¼Ëİ0
+_	java:S899É"BDo something with the "boolean" value returned by "createNewFile".(’¹•ß8ìÚ¼Ëİ0

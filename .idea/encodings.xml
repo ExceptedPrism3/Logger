@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/Logger-BungeeCord/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Logger-BungeeCord/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Logger-Core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Logger-Core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Logger-Shaded/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Logger-Shaded/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Logger-Spigot/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Logger-Spigot/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Logger-Velocity/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Logger-Velocity/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

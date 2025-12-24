@@ -3,6 +3,7 @@ package me.prism3.logger.database.external;
 import me.prism3.logger.Main;
 import me.prism3.logger.api.*;
 import me.prism3.logger.utils.Log;
+import me.prism3.logger.utils.VersionUtil;
 import me.prism3.logger.utils.enums.NmsVersions;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -222,7 +223,7 @@ public class ExternalData {
             }
 
             // Version Exceptions Part
-            if (version.isAtLeast(NmsVersions.v1_13_R1)) {
+            if (VersionUtil.SERVER_VERSION.isAtLeast(NmsVersions.v1_13_R1)) {
 
                 stsm.executeUpdate("CREATE TABLE IF NOT EXISTS wood_stripping (id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
                         " server_name VARCHAR(30), date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(), world VARCHAR(100), " +
@@ -1092,7 +1093,7 @@ public class ExternalData {
             }
 
             // Version Exception Part
-            if (version.isAtLeast(NmsVersions.v1_13_R1)) {
+            if (VersionUtil.SERVER_VERSION.isAtLeast(NmsVersions.v1_13_R1)) {
 
                 stsm.executeUpdate("DELETE FROM wood_stripping WHERE date < NOW() - INTERVAL " + externalDataDel + " DAY");
 

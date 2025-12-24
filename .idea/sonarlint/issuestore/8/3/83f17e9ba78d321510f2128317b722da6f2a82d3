@@ -1,0 +1,11 @@
+
+s
+java:S1450."XRemove the "pageCount" field and declare it as a local variable in the relevant methods.(—Şä¡ÿÿÿÿÿ
+j
+java:S2175]"HA "Map<String, ItemStack>" cannot contain a "Player" in a "String" type.(…¿©Òıÿÿÿÿ8ğ¾ áâ0
+k
+java:S2175Ì"HA "Map<String, ItemStack>" cannot contain a "Player" in a "String" type.(ïÅ”½øÿÿÿÿ8Ø¿ áâ0
+L
+java:S1874”"5Remove this use of "setDurability"; it is deprecated.(³¡Ö
+G
+java:S1874—"0Remove this use of "setOwner"; it is deprecated.(úÎø‡

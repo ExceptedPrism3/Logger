@@ -353,7 +353,8 @@ public class FileHandler {
             if (AdvancedBanUtil.getAdvancedBanAPI() != null) advancedBanFolder.mkdir();
 
             // Version Exception Part
-            if (version.isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFolder.mkdir();
+
+            if (VersionUtil.SERVER_VERSION.isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFolder.mkdir();
 
 
             // Files Handling
@@ -441,7 +442,7 @@ public class FileHandler {
             if (AdvancedBanUtil.getAdvancedBanAPI() != null) advancedBanFile.createNewFile();
 
             // Version Exception Part
-            if (version.isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFile.createNewFile();
+            if (VersionUtil.SERVER_VERSION.isAtLeast(NmsVersions.v1_13_R1)) woodStrippingFile.createNewFile();
 
         } catch (IOException e) { e.printStackTrace(); }
     }
@@ -851,7 +852,7 @@ public class FileHandler {
         }
 
         // Version Exception Part
-        if (version.isAtLeast(NmsVersions.v1_13_R1)) {
+        if (VersionUtil.SERVER_VERSION.isAtLeast(NmsVersions.v1_13_R1)) {
             for (File woodStripping : Objects.requireNonNull(woodStrippingFolder.listFiles())) {
 
                 deleteFile(woodStripping);

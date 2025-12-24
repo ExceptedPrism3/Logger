@@ -3,6 +3,7 @@ package me.prism3.logger.database.sqlite.global;
 import me.prism3.logger.Main;
 import me.prism3.logger.api.*;
 import me.prism3.logger.utils.Log;
+import me.prism3.logger.utils.VersionUtil;
 import me.prism3.logger.utils.enums.NmsVersions;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -219,7 +220,7 @@ public class SQLiteData {
             }
 
             // Version Exception Part
-            if (version.isAtLeast(NmsVersions.v1_13_R1)) {
+            if (VersionUtil.SERVER_VERSION.isAtLeast(NmsVersions.v1_13_R1)) {
 
                 woodStripping = plugin.getSqLite().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS wood_stripping" +
                         "(server_name TEXT(30), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP PRIMARY KEY, world TEXT(100)," +
@@ -1137,7 +1138,7 @@ public class SQLiteData {
             }
 
             // Version Exceptions Part
-            if (version.isAtLeast(NmsVersions.v1_13_R1)) {
+            if (VersionUtil.SERVER_VERSION.isAtLeast(NmsVersions.v1_13_R1)) {
 
                 final PreparedStatement woodStripping = plugin.getSqLite().getConnection().prepareStatement("DELETE FROM wood_stripping WHERE date <= datetime('now','-" + sqliteDataDel + " day')");
 

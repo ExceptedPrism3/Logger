@@ -3,10 +3,7 @@ package me.prism3.logger.events.onversioncompatibility;
 import me.prism3.logger.Main;
 import me.prism3.logger.database.external.ExternalData;
 import me.prism3.logger.database.sqlite.global.SQLiteData;
-import me.prism3.logger.utils.BedrockChecker;
-import me.prism3.logger.utils.Data;
-import me.prism3.logger.utils.FileHandler;
-import me.prism3.logger.utils.Log;
+import me.prism3.logger.utils.*;
 import me.prism3.logger.utils.enums.NmsVersions;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -56,7 +53,7 @@ public class OnWoodStripping implements Listener {
         axes.add(Material.IRON_AXE);
         axes.add(Material.GOLDEN_AXE);
         axes.add(Material.DIAMOND_AXE);
-        if (version.isAtLeast(NmsVersions.v1_16_R1))
+        if (VersionUtil.SERVER_VERSION.isAtLeast(NmsVersions.v1_16_R1))
             axes.add(Material.NETHERITE_AXE);
 
     }

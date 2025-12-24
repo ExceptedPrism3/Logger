@@ -79,7 +79,7 @@ public class Discord {
 
                 }
 
-                if (this.isValid(consoleCommandsChannelID, "Log-Player.Commands")) {
+                if (this.isValid(playerCommandsChannelID, "Log-Player.Commands")) {
 
                     this.playerCommandsChannel = this.jda.getTextChannelById(playerCommandsChannelID);
 

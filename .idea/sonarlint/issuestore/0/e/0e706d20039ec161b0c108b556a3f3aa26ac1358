@@ -1,0 +1,13 @@
+
+]
+java:S1192+"GDefine a constant instead of duplicating this literal "%time%" 4 times.(ÿ˜¿
+\
+java:S1192+"FDefine a constant instead of duplicating this literal "%msg%" 4 times.(ÿ˜¿
+_
+java:S1192+"IDefine a constant instead of duplicating this literal "%server%" 4 times.(ÿ˜¿
+b
+java:S20958"LUse try-with-resources or close this "BufferedWriter" in a "finally" clause.(¾çÏÿ
+b
+java:S2095*"LUse try-with-resources or close this "BufferedWriter" in a "finally" clause.(šÇ®
+R
+java:S3655 "7Call "Optional#isPresent()" before accessing the value.(ªÑ­ùÿÿÿÿ

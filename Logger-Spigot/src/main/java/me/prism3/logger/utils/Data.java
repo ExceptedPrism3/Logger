@@ -133,7 +133,6 @@ public class Data {
         externalDataDel = main.getConfig().getInt("Database.Data-Deletion");
         sqliteDataDel = main.getConfig().getInt("SQLite.Data-Deletion");
         allowedBackups = main.getConfig().getInt("Player-Death-Backup.Max-Backup");
-        version = versionChecker();
     }
 
     private static void initializeLongs() {
@@ -167,17 +166,5 @@ public class Data {
         loggerSpyBypass = "logger.spy.bypass";
         loggerSpy = "logger.spy";
         loggerReload = "logger.reload";
-    }
-
-    private static NmsVersions versionChecker() {
-
-        try {
-            return NmsVersions.valueOf(Bukkit.getServer().getClass().getPackage().getName().replace(".",  ",").split(",")[3]);
-
-        } catch (final IllegalArgumentException e) {
-
-            Log.severe("Current version is unknown, using the latest known one.");
-            return NmsVersions.v1_21_R1;
-        }
     }
 }

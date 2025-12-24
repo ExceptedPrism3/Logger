@@ -1,47 +1,81 @@
 package me.prism3.logger.utils.enums;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
+import me.prism3.logger.utils.VersionUtil;
 
-public enum FriendlyEnchants  {
+import java.util.HashMap;
+import java.util.Map;
 
+
+/**
+ * Friendly names for all vanilla enchants in MC 1.21.5.
+ * Includes a fast lookup map keyed by the enchantment's NamespacedKey or legacy name.
+ */
+public enum FriendlyEnchants {
+
+    // ===== BOW =====
     ARROW_DAMAGE("Power"),
     ARROW_FIRE("Flame"),
     ARROW_INFINITE("Infinite"),
     ARROW_KNOCKBACK("Punch"),
-    BINDING_CURSE("Curse of Binding",true),
-    CHANNELING("Channeling"),
-    DAMAGE_ALL("Sharpness"),
-    DAMAGE_ARTHROPODS("Bane of Arthropods"),
-    DAMAGE_UNDEAD("Smite"),
-    DEPTH_STRIDER("Depth Strider"),
-    DIG_SPEED("Efficiency"),
-    DURABILITY("Unbreaking"),
-    FIRE_ASPECT("Fire Aspect"),
-    FROST_WALKER("Frost Walker"),
-    IMPALING("Impaling"),
-    KNOCKBACK("Knockback"),
-    LOOT_BONUS_BLOCKS("Fortune"),
-    LOOT_BONUS_MOBS("Looting"),
-    LOYALTY("Loyalty"),
-    LUCK("Luck of the Sea"),
-    LURE("Lure"),
-    MENDING("Mending"),
+
+    // ===== CROSSBOW =====
     MULTISHOT("Multishot"),
-    OXYGEN("Respiration"),
     PIERCING("Piercing"),
+    QUICK_CHARGE("Quick Charge"),
+
+    // ===== SWORD/AXE =====
+    DAMAGE_ALL("Sharpness"),
+    DAMAGE_UNDEAD("Smite"),
+    DAMAGE_ARTHROPODS("Bane of Arthropods"),
+    FIRE_ASPECT("Fire Aspect"),
+    KNOCKBACK("Knockback"),
+    LOOT_BONUS_MOBS("Looting"),
+    SWEEPING_EDGE("Sweeping Edge"),
+    CLEAVING("Cleaving"), // Axe‑only
+
+    // ===== MACE (Tricky Trials) =====
+    BREACH("Breach"),
+    DENSITY("Density"),
+    WIND_BURST("Wind Burst"),
+
+    // ===== ARMOR =====
     PROTECTION_ENVIRONMENTAL("Protection"),
-    PROTECTION_EXPLOSIONS("Blast Protection"),
     PROTECTION_FALL("Feather Falling"),
     PROTECTION_FIRE("Fire Protection"),
+    PROTECTION_EXPLOSIONS("Blast Protection"),
     PROTECTION_PROJECTILE("Projectile Protection"),
-    QUICK_CHARGE("Quick Charge"),
-    RIPTIDE("Riptide"),
-    SILK_TOUCH("Silk Touch"),
-    SOUL_SPEED("Soul Speed"),
-    SWEEPING_EDGE("Sweeping Edge"),
     THORNS("Thorns"),
-    VANISHING_CURSE("Curse of Vanishing",true),
-    WATER_WORKER("Aqua Affinity");
+    DEPTH_STRIDER("Depth Strider"),
+    FROST_WALKER("Frost Walker"),
+    OXYGEN("Respiration"),
+    WATER_WORKER("Aqua Affinity"),
+    SOUL_SPEED("Soul Speed"),
+    SWIFT_SNEAK("Swift Sneak"), // 1.19+
+
+    // ===== TOOLS =====
+    DIG_SPEED("Efficiency"),
+    SILK_TOUCH("Silk Touch"),
+    LOOT_BONUS_BLOCKS("Fortune"),
+
+    // ===== TRIDENT =====
+    IMPALING("Impaling"),
+    CHANNELING("Channeling"),
+    RIPTIDE("Riptide"),
+    LOYALTY("Loyalty"),
+
+    // ===== FISHING =====
+    LUCK("Luck of the Sea"),
+    LURE("Lure"),
+
+    // ===== MISC =====
+    DURABILITY("Unbreaking"),
+    MENDING("Mending"),
+
+    // ===== CURSES =====
+    BINDING_CURSE("Curse of Binding", true),
+    VANISHING_CURSE("Curse of Vanishing", true);
 
     private final String friendlyName;
     private final boolean isCurse;
@@ -52,15 +86,48 @@ public enum FriendlyEnchants  {
     }
 
     FriendlyEnchants(String friendlyName) {
-        this(friendlyName,false);
+        this(friendlyName, false);
     }
 
-    @SuppressWarnings("deprecation")
-    public static FriendlyEnchants getFriendlyEnchantment(Enchantment ench) {
-        return FriendlyEnchants.valueOf(ench.getName());
+    /** Friendly name getter */
+    public String getFriendlyName() {
+        return friendlyName;
     }
 
-    public String getFriendlyName() { return friendlyName; }
+    /** Curse flag */
+    public boolean isCurse() {
+        return isCurse;
+    }
 
-    public boolean isCurse() { return isCurse; }
+    // ------------------------------------------------------------------------
+    // STATIC LOOKUP
+    // ------------------------------------------------------------------------
+
+    private static final Map<String, FriendlyEnchants> LOOKUP = new HashMap<>();
+
+    static {
+        for (FriendlyEnchants fe : values()) {
+            // map by enum name (legacy getName())
+            LOOKUP.put(fe.name(), fe);
+            // map by NamespacedKey (modern key)
+            Enchantment ench = Enchantment.getByName(fe.name());
+            if (ench != null && VersionUtil.isModern()) {
+                NamespacedKey key = ench.getKey();
+                LOOKUP.put(key.getKey().toUpperCase(), fe);
+            }
+        }
+    }
+
+    /**
+     * Looks up a friendly enchant by its Bukkit Enchantment.
+     * Falls back to raw key (upper‑cased) if not found.
+     */
+    public static String friendlyNameFor(Enchantment ench) {
+        String raw = VersionUtil.isModern()
+                ? ench.getKey().getKey().toUpperCase()
+                : ench.getName().toUpperCase();
+
+        FriendlyEnchants fe = LOOKUP.get(raw);
+        return fe != null ? fe.getFriendlyName() : raw;
+    }
 }

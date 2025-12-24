@@ -1,0 +1,11 @@
+
+\	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(£¿û
+\	java:S112æ"FDefine and throw a dedicated exception instead of using a generic one.(ÍúÕî
+a
+java:S1192."KDefine a constant instead of duplicating this literal "serverUuid" 3 times.(×‡¶–
+D
+java:S18746".Remove this use of "header"; it is deprecated.(Ú‘ø†
+J	java:S108=")Either remove or fill this block of code.(õ÷£ğúÿÿÿÿ8šËğÌİ0
+]	java:S107ª"BConstructor has 13 parameters, which is greater than 7 authorized.(üå»ıÿÿÿÿ
+K
+java:S1068"/Remove this unused "metricsBase" private field.(Àš^8¯ÍğÌİ0

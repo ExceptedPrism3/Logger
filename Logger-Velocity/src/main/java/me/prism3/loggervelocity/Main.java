@@ -8,8 +8,7 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import me.prism3.loggervelocity.api.LiteBansUtil;
-import me.prism3.loggervelocity.commands.DiscordCMD;
-import me.prism3.loggervelocity.commands.Reload;
+import me.prism3.loggervelocity.commands.LoggerProxyCommands;
 import me.prism3.loggervelocity.database.external.External;
 import me.prism3.loggervelocity.database.external.ExternalData;
 import me.prism3.loggervelocity.database.external.ExternalUpdater;
@@ -37,7 +36,8 @@ import java.util.concurrent.TimeUnit;
 
 import static me.prism3.loggervelocity.utils.Data.*;
 
-@Plugin(id = "logger-velocity", name = "Logger", version = "1.7.5", authors = {"prism3 & thelooter & sidna"})
+
+@Plugin(id = "logger-velocity", name = "Logger", version = "1.8.0.16", authors = {"prism3 & thelooter & sidna"})
 public class Main{
 
     private static ProxyServer server;
@@ -98,8 +98,7 @@ public class Main{
 
         server.getScheduler().buildTask(this, new RAM()).repeat(ramChecker, TimeUnit.SECONDS).delay(10, TimeUnit.SECONDS).schedule();
 
-        server.getCommandManager().register("loggerproxy", new Reload());
-        server.getCommandManager().register("loggerproxy", new DiscordCMD());
+        server.getCommandManager().register("loggerproxy", new LoggerProxyCommands());
 
         this.dataBaseSetup();
 
