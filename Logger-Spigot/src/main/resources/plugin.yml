@@ -1,6 +1,6 @@
 name: Logger
 version: ${project.version}
-main: me.prism3.logger.Logger
+main: me.prism3.logger.Main
 api-version: 1.13
 authors: [ Prism3, Sidna ]
 description: Log all Activities from Players and Server Side!

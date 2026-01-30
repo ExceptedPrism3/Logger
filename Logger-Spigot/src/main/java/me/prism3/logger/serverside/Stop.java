@@ -27,7 +27,10 @@ public class Stop {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStopFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.Stop")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())) + "\n");
+                    String stopMessage = this.main.getMessages().get().getString("Files.Server-Side.Stop");
+                    if (stopMessage == null)
+                        stopMessage = "Server Stopped at %time%";
+                    out.write(stopMessage.replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -39,9 +42,12 @@ public class Stop {
             }
 
             // Discord
-            if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Stop")).isEmpty()) {
+            String discordStopMsg = this.main.getMessages().get().getString("Discord.Server-Side.Stop");
+            if (discordStopMsg != null && !discordStopMsg.isEmpty()) {
 
-                this.main.getDiscord().serverStop(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Stop")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())), false);
+                this.main.getDiscord()
+                        .serverStop(discordStopMsg
+                                .replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())), false);
             }
 
             // External
@@ -51,7 +57,9 @@ public class Stop {
 
                     ExternalData.serverStop(Data.serverName);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             // SQLite
@@ -61,7 +69,9 @@ public class Stop {
 
                     SQLiteData.insertServerStop(Data.serverName);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

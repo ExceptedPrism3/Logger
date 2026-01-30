@@ -27,7 +27,11 @@ public class Start {
                 try {
 
                     BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getServerStartFile(), true));
-                    out.write(Objects.requireNonNull(this.main.getMessages().get().getString("Files.Server-Side.Start")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())) + "\n");
+                    String startMessage = this.main.getMessages().get().getString("Files.Server-Side.Start");
+                    if (startMessage == null)
+                        startMessage = "Server Started at %time%";
+                    out.write(
+                            startMessage.replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())) + "\n");
                     out.close();
 
                 } catch (IOException e) {
@@ -39,9 +43,12 @@ public class Start {
             }
 
             // Discord
-            if (!Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Start")).isEmpty()) {
+            String discordStartMsg = this.main.getMessages().get().getString("Discord.Server-Side.Start");
+            if (discordStartMsg != null && !discordStartMsg.isEmpty()) {
 
-                this.main.getDiscord().serverStart(Objects.requireNonNull(this.main.getMessages().get().getString("Discord.Server-Side.Start")).replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())), false);
+                this.main.getDiscord()
+                        .serverStart(discordStartMsg
+                                .replace("%time%", Data.dateTimeFormatter.format(ZonedDateTime.now())), false);
             }
 
             // External
@@ -51,7 +58,9 @@ public class Start {
 
                     ExternalData.serverStart(Data.serverName);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             // SQLite
@@ -61,7 +70,9 @@ public class Start {
 
                     SQLiteData.insertServerStart(Data.serverName);
 
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
 

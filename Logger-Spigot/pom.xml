@@ -165,7 +165,7 @@
         </repository>
         <repository>
             <id>papermc</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
         <!-- Discord JDA Repo-->
         <repository>
@@ -179,10 +179,7 @@
             <url>https://repo.essentialsx.net/releases/</url>
         </repository>
         <!-- Update Checker -->
-        <repository>
-            <id>jeff-media-public</id>
-            <url>https://repo.jeff-media.com/public/</url>
-        </repository>
+
         <!-- Extra Plugin Dependent API Repo -->
         <repository>
             <id>jitpack.io</id>
@@ -223,7 +220,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.20.6-R0.1-SNAPSHOT</version>
+            <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- Discord JDA -->
@@ -244,12 +241,7 @@
             <version>1.7.32</version>
         </dependency>
         <!-- Update Checker -->
-        <dependency>
-            <groupId>com.jeff_media</groupId>
-            <artifactId>SpigotUpdateChecker</artifactId>
-            <version>3.0.4</version>
-            <scope>compile</scope>
-        </dependency>
+
         <!-- Plugin Dependencies -->
         <dependency>
             <groupId>net.essentialsx</groupId>

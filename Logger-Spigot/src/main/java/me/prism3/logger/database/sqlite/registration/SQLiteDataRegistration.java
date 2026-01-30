@@ -11,22 +11,26 @@ import java.time.format.DateTimeFormatter;
 
 public class SQLiteDataRegistration {
 
-    private static final Logger plugin = Main.getInstance();
+    private static final Main plugin = Main.getInstance();
 
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss:SSSXXX");
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd'T'HH:mm:ss:SSSXXX");
 
     public void createTable() {
 
         try {
 
-            final PreparedStatement registration = plugin.getSqLiteReg().getConnection().prepareStatement("CREATE TABLE" +
+            final PreparedStatement registration = plugin.getSqLiteReg().getConnection().prepareStatement("CREATE TABLE"
+                    +
                     " IF NOT EXISTS registration (date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, player_name TEXT(20)," +
                     "player_uuid INTEGER(70))");
 
             registration.executeUpdate();
             registration.close();
 
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void insertRegistration(Player player) {
@@ -43,7 +47,9 @@ public class SQLiteDataRegistration {
             register.executeUpdate();
             register.close();
 
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static boolean playerExists(Player player) {
@@ -56,9 +62,12 @@ public class SQLiteDataRegistration {
             statement.setString(1, String.valueOf(player.getUniqueId()));
             final ResultSet results = statement.executeQuery();
 
-            if (results.next()) return true;
+            if (results.next())
+                return true;
 
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return false;
     }

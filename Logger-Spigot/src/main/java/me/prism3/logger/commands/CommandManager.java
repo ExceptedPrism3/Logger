@@ -28,10 +28,14 @@ public class CommandManager implements TabExecutor {
         this.subCommands.add(new ToggleSpy());
         this.subCommands.add(new Discord());
         this.subCommands.add(new Dump());
+        this.subCommands.add(new Spy());
+
+        me.prism3.logger.utils.SpyManager.load();
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command,
+            @NotNull final String label, @NotNull final String[] args) {
 
         final Main main = Main.getInstance();
 
@@ -48,43 +52,51 @@ public class CommandManager implements TabExecutor {
             for (int i = 0; i < getSubCommands().size(); i++) {
                 if (args[0].equalsIgnoreCase(getSubCommands().get(i).getName())) {
                     try {
-                        getSubCommands().get(i).perform(sender, args);
-                    } catch (IOException e) { e.printStackTrace(); }
+                        this.getSubCommands().get(i).perform(sender, args);
+                    } catch (final IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         } else {
 
             if (sender.hasPermission(loggerStaff)) {
                 sender.sendMessage("--------------------------------------------");
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "Running Logger: &a&l" + Data.pluginVersion));
-                for (int i = 0; i < getSubCommands().size(); i++)
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&9&l" + getSubCommands().get(i).getSyntax() + " &8&l| &r" + getSubCommands().get(i).getDescription()));
+                sender.sendMessage(
+                        ChatColor.translateAlternateColorCodes('&', "Running Logger: &a&l" + Data.pluginVersion));
+                for (int i = 0; i < this.getSubCommands().size(); i++)
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                            "&9&l" + this.getSubCommands().get(i).getSyntax() + " &8&l| &r"
+                                    + this.getSubCommands().get(i).getDescription()));
                 sender.sendMessage("--------------------------------------------");
             }
         }
         return true;
     }
 
-    public List<SubCommand> getSubCommands() { return this.subCommands; }
+    public List<SubCommand> getSubCommands() {
+        return this.subCommands;
+    }
 
     @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull final CommandSender sender, @NotNull final Command command,
+            @NotNull final String label, @NotNull final String[] args) {
 
         if (args.length == 1) {
 
             final ArrayList<String> subCommandsArgs = new ArrayList<>();
 
-            for (int i = 0; i < getSubCommands().size(); i++)
-                subCommandsArgs.add(getSubCommands().get(i).getName());
+            for (int i = 0; i < this.getSubCommands().size(); i++)
+                subCommandsArgs.add(this.getSubCommands().get(i).getName());
 
             return subCommandsArgs;
         } else if (args.length >= 2) {
 
-            for (int i = 0; i < getSubCommands().size(); i++)
-                if (args[0].equalsIgnoreCase(getSubCommands().get(i).getName()))
-                    return getSubCommands().get(i).getSubCommandsArgs(sender, args);
-
-        } return null;
+            for (int i = 0; i < this.getSubCommands().size(); i++)
+                if (args[0].equalsIgnoreCase(this.getSubCommands().get(i).getName()))
+                    return this.getSubCommands().get(i).getSubCommandsArgs(sender, args);
+        }
+        return null;
     }
 }
