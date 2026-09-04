@@ -7,10 +7,10 @@ import me.prism3.logger.utils.VersionUtil;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /**
  * Friendly names for all vanilla enchants in MC 1.21.5.
- * Includes a fast lookup map keyed by the enchantment's NamespacedKey or legacy
- * name.
+ * Includes a fast lookup map keyed by the enchantment's NamespacedKey or legacy name.
  */
 public enum FriendlyEnchants {
 
@@ -110,9 +110,9 @@ public enum FriendlyEnchants {
             // map by enum name (legacy getName())
             LOOKUP.put(fe.name(), fe);
             // map by NamespacedKey (modern key)
-            Enchantment ench = Enchantment.getByName(fe.name());
-            if (ench != null && VersionUtil.isModern()) {
-                NamespacedKey key = ench.getKey();
+            final Enchantment ench = Enchantment.getByName(fe.name());
+            if (ench != null && VersionUtil.CURRENT.isModern()) {
+                final NamespacedKey key = ench.getKey();
                 LOOKUP.put(key.getKey().toUpperCase(), fe);
             }
         }
@@ -122,12 +122,21 @@ public enum FriendlyEnchants {
      * Looks up a friendly enchant by its Bukkit Enchantment.
      * Falls back to raw key (upper‑cased) if not found.
      */
-    public static String friendlyNameFor(Enchantment ench) {
-        String raw = VersionUtil.isModern()
-                ? ench.getKey().getKey().toUpperCase()
-                : ench.getName().toUpperCase();
+    public static String friendlyNameFor(final Enchantment ench) {
+        if (ench == null) return "Unknown";
+        try {
+            final String raw = (VersionUtil.CURRENT != null && VersionUtil.CURRENT.isModern() && ench.getKey() != null)
+                    ? ench.getKey().getKey().toUpperCase()
+                    : (ench.getName() != null ? ench.getName().toUpperCase() : "UNKNOWN");
 
-        FriendlyEnchants fe = LOOKUP.get(raw);
-        return fe != null ? fe.getFriendlyName() : raw;
+            final FriendlyEnchants fe = LOOKUP.get(raw);
+            return fe != null ? fe.getFriendlyName() : raw;
+        } catch (Throwable e) {
+            try {
+                return ench.getName() != null ? ench.getName() : "Unknown";
+            } catch (Throwable ignored) {
+                return "Unknown";
+            }
+        }
     }
 }

@@ -1,0 +1,78 @@
+# /////////////////////////////////////////////////////////////
+# /                                                           /
+# /                      Logger Plugin                        /
+# /                                                           /
+# /                   [ Velocity Version ]                    /
+# /                                                           /
+# /////////////////////////////////////////////////////////////
+#
+# Thank you for using Logger Plugin! If you are experiencing any issues
+# or have any suggestions / features you want to be implemented into the plugin
+# feel free to join the support Discord Server!
+#
+# Spigot: Prism3
+# Discord: Prism3#9371 | ID: 403667971089760257
+# Discord Server: https://discord.gg/MfR5mcpVfX
+# 
+# Config 1.8.3
+
+# Language (Available: en_US, fr_FR, es_ES, de_DE, it_IT, pt_BR, ru_RU, zh_CN, ja_JP, ko_KR, ar_SA)
+Language: "en_US"
+
+# Server Name
+Server-Name: "Server_Name"
+
+# Date & Time Formatter
+Time-Formatter: "yyyy-MM-dd HH:mm:ss"
+
+# Plugin Prefix
+Plugin-Prefix: "&b[Logger] "
+
+# If true the plugin will log every command on the server
+# Otherwise only commands that you have set in the blacklist/whitelist commands will be logged
+Log-All-Commands: true
+
+# Check for Updates
+Check-For-Updates: true
+
+# Delete old logs automatically
+# How many days should the plugin keep the logs for? (In Days)
+Delete-Old-Logs: 30
+
+# File Logging
+Files:
+  Enabled: true
+
+# Server Logging options
+Log-Server:
+  Console-Commands: true
+  Start: true
+  Stop: true
+  RAM: true
+  Manual-Log: true
+
+# SQLite Database
+SQLite:
+  Enable: true
+  Data-Deletion: 30
+
+# Database Settings
+Database:
+  Enable: false
+  Type: "MySQL"
+  Host: "localhost"
+  Port: 3306
+  Database: "logger"
+  Username: "root"
+  Password: ""
+  Data-Deletion: 30
+
+# RAM Checker
+RAM-Checker:
+  Threshold: 90
+  Interval: 60
+
+# Proxy Whitelist & Blacklist Commands
+Proxy-Whitelisted-Commands:
+  - "/login"
+  - "/register"

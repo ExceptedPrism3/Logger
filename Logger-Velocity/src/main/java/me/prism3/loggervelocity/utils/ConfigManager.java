@@ -20,7 +20,7 @@ public class ConfigManager {
 
     public ConfigManager() {
 
-        this.file = new File(this.dataFolder, "config - Velocity.yml");
+        this.file = new File(this.dataFolder, "config.yml");
 
         try {
 
@@ -30,12 +30,34 @@ public class ConfigManager {
 
                 this.file.createNewFile();
 
-                try (final InputStream is = ConfigManager.class.getResourceAsStream("/config - Velocity.yml");
-                     final OutputStream os = new FileOutputStream(this.file)) {
-                    assert is != null;
-                    ByteStreams.copy(is, os);
+                InputStream is = ConfigManager.class.getResourceAsStream("/velocity-config.yml");
+                if (is == null) is = ConfigManager.class.getResourceAsStream("/config.yml");
+
+                if (is != null) {
+                    try (final InputStream in = is;
+                         final OutputStream os = new FileOutputStream(this.file)) {
+                        ByteStreams.copy(in, os);
+                    }
+                }
+            } else {
+                InputStream is = ConfigManager.class.getResourceAsStream("/velocity-config.yml");
+                if (is != null) {
+                    YamlMigrator.syncDefaults(this.file, "/velocity-config.yml");
+                } else {
+                    YamlMigrator.syncDefaults(this.file, "/config.yml");
                 }
             }
+
+            File discordFile = new File(this.dataFolder, "discord.yml");
+            if (discordFile.exists()) {
+                InputStream is = ConfigManager.class.getResourceAsStream("/velocity-discord.yml");
+                if (is != null) {
+                    YamlMigrator.syncDefaults(discordFile, "/velocity-discord.yml");
+                } else {
+                    YamlMigrator.syncDefaults(discordFile, "/discord.yml");
+                }
+            }
+
             this.configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(this.file);
         }
         catch (IOException e) { e.printStackTrace(); }
@@ -54,17 +76,13 @@ public class ConfigManager {
         } return 0;
     }
 
-    public int getLong(final String path) {
+    public long getLong(final String path) {
 
         if (this.configuration.get(path) != null) {
 
-            return (int) this.configuration.getLong(path);
+            return this.configuration.getLong(path);
 
-        } return 0;
-    }
-
-    public Object get(final String path) {
-        return this.configuration.get(path);
+        } return 0L;
     }
 
     public boolean getBoolean(final String path) {
@@ -100,7 +118,7 @@ public class ConfigManager {
 
     private void load() {
 
-        this.file = new File(this.dataFolder, "config - Velocity.yml");
+        this.file = new File(this.dataFolder, "config.yml");
 
         try {
 

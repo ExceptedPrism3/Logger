@@ -1,0 +1,56 @@
+# Messages for Logger Plugin [ Proxy Version ]
+# Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
+# Config 1.8.3
+# Plugin Messages
+General:
+  No-Permission: "&cليس لديك إذن لتشغيل هذا الأمر."
+  Reload: "&aتمت إعادة تحميل الإعدادات بنجاح."
+  Invalid-Syntax: "&cصيغة غير صحيحة."
+# Files Instance
+Files:
+  Player-Chat-Staff: "[%time%] [%server%] الإداري <%player%>: %msg%"
+  Player-Chat: "[%time%] [%server%] اللاعب <%player%>: %msg%"
+  Player-Command-Staff: "[%time%] [%server%] الإداري <%player%> نفذ: %command%"
+  Player-Command: "[%time%] [%server%] اللاعب <%player%> نفذ: %command%"
+  Player-Login-Staff: "[%time%] [%server%] الإداري <%player%> انضم بـ IP -> %IP%"
+  Player-Login: "[%time%] [%server%] اللاعب <%player%> انضم بـ IP -> %IP%"
+  Player-Leave-Staff: "[%time%] [%server%] الإداري <%player%> غادر السيرفر"
+  Player-Leave: "[%time%] [%server%] اللاعب <%player%> غادر السيرفر"
+  Player-Switch-Staff: "[%time%] [%server%] الإداري <%player%> انتقل من %from% إلى %to%"
+  Player-Switch: "[%time%] [%server%] اللاعب <%player%> انتقل من %from% إلى %to%"
+  Player-Kick-Staff: "[%time%] [%server%] تم طرد الإداري <%player%> من %server% السبب: %reason%"
+  Player-Kick: "[%time%] [%server%] تم طرد اللاعب <%player%> من %server% السبب: %reason%"
+# Server Side Part
+  Server-Side:
+    Reload-Console: "[%time%] [%server%] تمت إعادة تحميل السيرفر"
+    Server-Commands: "[%time%] [%server%] %command%"
+    Console-Commands: "[%time%] [%server%] %command%"
+    Start: "[%time%] [%server%] تم تشغيل السيرفر"
+    Stop: "[%time%] [%server%] تم إيقاف السيرفر"
+    RAM: "[%time%] [%server%] تحذير الذاكرة! الإجمالي: %max% | المستخدم: %used% | المتوفر: %free%"
+    Manual-Log: "[%time%] [%server%] تم تسجيل سجل يدوي => %log%"
+# Discord Instance
+# Emojis can be found here https://emojipedia.org/ or elsewhere. Emojis may not work on >1.12 Servers.
+Discord:
+  Player-Chat-Staff: "**[%time%]** **[%server%]** **%msg%**"
+  Player-Chat: "**[%time%]** **[%server%]** **%msg%**"
+  Player-Command-Staff: "**[%time%]** **[%server%]** **%command%**"
+  Player-Command: "**[%time%]** **[%server%]** **%command%**"
+  Player-Login-Staff: "**[%time%]** ||**%IP%**||"
+  Player-Login: "**[%time%]** ||**%IP%**||"
+  Player-Leave-Staff: "**[%time%]** **[%server%]** Left the server"
+  Player-Leave: "**[%time%]** **[%server%]** Left the server"
+  Player-Switch-Staff: "**[%time%]** Switched from **%from%** to **%to%**"
+  Player-Switch: "**[%time%]** Switched from **%from%** to **%to%**"
+  Player-Kick-Staff: "**[%time%]** **[%server%]** Kicked from **%server%** for **%reason%**"
+  Player-Kick: "**[%time%]** **[%server%]** Kicked from **%server%** for **%reason%**"
+# Server Side Part
+  Server-Side:
+    Reload-Console: "**[%time%]** The server has been reloaded"
+    Restart-Console: "**[%time%]** The server has been reloaded"
+    Server-Commands: "**[%time%]** %command%"
+    Console-Commands: "**[%time%]** %command%"
+    Start: "**[%time%]**"
+    Stop: "**[%time%]**"
+    RAM: "**[%time%]** The Server has exceeded the set amount of percentage of RAM Usage! Total Memory: **%max%** `|` Used Memory: **%used%** `|` Free Memory: **%free%**"
+    Manual-Log: "**[%time%]** Manual log: **%log%**"

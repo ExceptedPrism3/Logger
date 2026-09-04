@@ -1,0 +1,5 @@
+name: LoggerBungee
+version: '1.8.3'
+main: me.prism3.logger_bungee.LoggerBungee
+author: Prism3
+description: High-performance BungeeCord logging plugin

@@ -1,0 +1,9 @@
+name: LoggerDiscordAddon
+version: '1.8.3'
+main: me.prism3.logger_discord_addon.LoggerDiscordAddon
+api-version: '1.13'
+authors: [ Prism3 ]
+description: Log all Activities from Players or Server Side!
+depend: [Logger]
+folia-supported: true
+website: https://prism3.me

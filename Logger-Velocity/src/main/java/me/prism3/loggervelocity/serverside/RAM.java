@@ -1,14 +1,9 @@
 package me.prism3.loggervelocity.serverside;
 
 import me.prism3.loggervelocity.Logger;
-import me.prism3.loggervelocity.database.external.ExternalData;
-import me.prism3.loggervelocity.database.sqlite.SQLiteData;
-import me.prism3.loggervelocity.utils.FileHandler;
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import static me.prism3.loggervelocity.utils.Data.*;
 
@@ -29,49 +24,13 @@ public class RAM implements Runnable {
 
             if (ramPercent <= percentUsed) {
 
-                // Log To Files
-                if (isLogToFiles) {
+                Map<String, String> placeholders = new HashMap<>();
+                placeholders.put("time", dateTimeFormatter.format(ZonedDateTime.now()));
+                placeholders.put("max", String.valueOf(maxMemory));
+                placeholders.put("used", String.valueOf(usedMemory));
+                placeholders.put("free", String.valueOf(freeMemory));
 
-                    try {
-
-                        final BufferedWriter out = new BufferedWriter(new FileWriter(FileHandler.getRamLogFile(), true));
-                        out.write(main.getMessages().getString("Files.Server-Side.RAM").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)) + "\n");
-                        out.close();
-
-                    } catch (IOException e) {
-
-                        main.getLogger().error("An error occurred while logging into the appropriate file.");
-                        e.printStackTrace();
-
-                    }
-                }
-
-                // Discord
-                if (!main.getMessages().getString("Discord.Server-Side.RAM").isEmpty()) {
-
-                    main.getDiscord().ram(main.getMessages().getString("Discord.Server-Side.RAM").replace("%time%", dateTimeFormatter.format(ZonedDateTime.now())).replace("%max%", String.valueOf(maxMemory)).replace("%used%", String.valueOf(usedMemory)).replace("%free%", String.valueOf(freeMemory)), false);
-
-                }
-
-                // External
-                if (isExternal && main.getExternal().isConnected()) {
-
-                    try {
-
-                        ExternalData.ram(serverName, maxMemory, usedMemory, freeMemory);
-
-                    } catch (Exception e) { e.printStackTrace(); }
-                }
-
-                // SQLite
-                if (isSqlite && main.getSqLite().isConnected()) {
-
-                    try {
-
-                        SQLiteData.insertRAM(serverName, maxMemory, usedMemory, freeMemory);
-
-                    } catch (Exception e) { e.printStackTrace(); }
-                }
+                main.getLogManager().logServerEvent("Server-Side.RAM", placeholders);
             }
         }
     }

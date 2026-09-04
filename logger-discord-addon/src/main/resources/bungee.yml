@@ -1,0 +1,6 @@
+name: LoggerDiscordAddon
+version: '1.8.3'
+main: me.prism3.logger_discord_addon.bungee.LoggerDiscordAddonBungee
+author: Prism3
+depends: [LoggerBungee]
+description: Discord Bot and Webhook Addon for Logger Plugin on BungeeCord

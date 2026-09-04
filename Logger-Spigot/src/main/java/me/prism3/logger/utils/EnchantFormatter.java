@@ -3,7 +3,6 @@ package me.prism3.logger.utils;
 import me.prism3.logger.utils.enums.FriendlyEnchants;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.Map;
 import java.util.stream.Collectors;
 

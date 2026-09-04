@@ -1,0 +1,31 @@
+name: Logger
+version: 1.8.3
+main: me.prism3.logger.Logger
+api-version: '1.13'
+authors: [ Prism3, Sidna ]
+description: Log all Activities from Players or Server Side!
+website: https://prism3.me
+softdepend: [LoggerDiscordAddon]
+folia-supported: true
+commands:
+  logger:
+    description: Plugin command
+    usage: /logger
+    permission: logger.use
+    permission-message: You do not have permission to use this command.
+permissions:
+  logger.use:
+    description: Allows the user to use the Logger command
+    default: op
+  logger.reload:
+    description: Allows the user to reload the Logger plugin
+    default: op
+  logger.view:
+    description: Allows the user to view log entries
+    default: op
+  logger.exempt:
+    description: Exempts the user from being logged
+    default: false
+  logger.exempt.discord:
+    description: Exempts the user from being logged to Discord
+    default: false

@@ -1,0 +1,85 @@
+# Discord Bridge Configuration for Logger Plugin [ Proxy Version ]
+# Need Support Join the Discord Server: https://discord.gg/MfR5mcpVfX
+# Version: 1.8.3
+
+
+# Configuration for the Discord Feature
+# Enable or disable this feature
+# Mode is either BOT or WEBHOOK
+# Token of the bot
+# Channel_ID if BOT mode is being used
+# Webhook if WEBHOOK mode is being used
+Discord:
+  Enabled: false
+  Mode: 'BOT'
+  Bot-Token: "your-bot-token-here"
+  Staff:
+    Channel-ID: 'CHANNEL_ID'
+    Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"
+  Player-Chat:
+    Channel-ID: 'CHANNEL_ID'
+    Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"
+  Player-Command:
+    Channel-ID: 'CHANNEL_ID'
+    Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"
+  Player-Join:
+    Channel-ID: 'CHANNEL_ID'
+    Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"
+  Player-Leave:
+    Channel-ID: 'CHANNEL_ID'
+    Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"
+  Player-Switch:
+    Channel-ID: 'CHANNEL_ID'
+    Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"
+  Player-Kick:
+    Channel-ID: 'CHANNEL_ID'
+    Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"
+  
+  # Server Side Checkers
+  Server-Side:
+    Start:
+      Channel-ID: 'CHANNEL_ID'
+      Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"
+    Stop:
+      Channel-ID: 'CHANNEL_ID'
+      Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"
+    Reload:
+      Channel-ID: 'CHANNEL_ID'
+      Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"
+    Console-Commands:
+      Channel-ID: 'CHANNEL_ID'
+      Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"
+    RAM:
+      Channel-ID: 'CHANNEL_ID'
+      Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"
+    Manual-Log:
+      Channel-ID: 'CHANNEL_ID'
+      Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"
+
+
+# Settings for the logs
+# "normal" for regular messages, "embed" for embed messages
+Message-Type: "normal"
+
+Embed-Settings:
+  Title: "Server Notification"  # Fallback title (used if event type is unknown)
+  Color: "#FF5733"  # The hex color for the embed (optional)
+  Footer: "Sent by Logger Proxy"
+  Timestamp: true  # Whether to include the current timestamp in the embed
+
+# Bot Activity Status
+# Randomize the shown status
+# Change the Status of the Bot [ online , idle , dnd , invisible ]
+ActivityCycling:
+  Enabled: true
+  Random: false
+  Status: idle
+  Activities:
+    - ["watching", "Minecraft Movie"]
+    - ["playing", "Minecraft 1.7"]
+    - ["listening", "Dragon's Heart Beats"]
+    - ["streaming", "Minecraft Gameplay"]
+  Time: 30
+
+# Do not touch unless you want to reset it's content
+Discord-Version: 1.8.3

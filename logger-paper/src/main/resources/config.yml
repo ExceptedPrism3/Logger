@@ -1,0 +1,166 @@
+# /////////////////////////////////////////////////////////////
+# /                                                           /
+# /                      Logger Plugin                        /
+# /                                                           /
+# /                    [ Bukkit Version ]                     /
+# /                                                           /
+# /////////////////////////////////////////////////////////////
+#
+# Thank you for using Logger Plugin! If you are experiencing any issues
+# or have any suggestions / features you want to be implemented into the plugin
+# feel free to join the support Discord Server!
+#
+# Spigot: Prism3
+# Discord: Prism3#9371 | ID: 403667971089760257
+# Discord Server: https://discord.gg/MfR5mcpVfX
+# 
+# Config 1.8.3
+
+
+# Language (Available: en_US, fr_FR, es_ES, de_DE, it_IT, pt_BR, ru_RU, zh_CN, ja_JP, ko_KR)
+Language: "en_en"
+
+# Server Name
+Server-Name: "Server_Name"
+
+# Plugin's Prefix
+Plugin-Prefix: "&bLogger &8&l|&r "
+
+# Date & Time Formatter
+Time-Formatter: "yyyy-MM-dd HH:mm:ss"
+
+# How many Days for the logs to be deleted
+# Set it to -1 to cancel the Deletion
+File-Deletion: 7
+
+# Log to Files
+Log-to-Files: true
+
+# This will log players with the "logger.staff.log" permission node in their own folder / file
+Staff:
+  Enabled: true
+
+# Logging features
+Log-Player:
+  Chat: true
+  Command: true
+  Sign-Interaction: true
+  Join: true
+  Leave: true
+  Kick: true
+  Death: true
+  Teleport: true
+  Level: true
+  Block-Place: true
+  Block-Break: true
+  Bucket-Fill: true
+  Bucket-Empty: true
+  Anvil-Interaction: true
+  Item-Pickup: true
+  Item-Drop: true
+  Item-Enchant: true
+  Book-Interaction: true
+  Furnace-Interaction: true
+  Game-Mode: true
+  Item-Craft: true
+  Prime-TNT: true
+  Container-Interaction: true
+  Entity-Death: true
+  Lever-Interaction: true
+  Spawn-Egg: true
+  Portal-Creation: true
+  Advancement: true
+  Totem-of-Undying: true
+  Wood-Strip: true
+  Villager-Trade: true
+
+# Registration requires Player-Join to be enabled
+Log-Server:
+  Start: true
+  Stop: true
+  Console-Command: true
+  RAM: true
+  TPS: true
+  RCON: true
+  Command-Block: true
+  Player-Count: true
+  Registration: true
+  Manual-Log: true
+
+# Only Log Specified Commands
+# Block Commands from getting Logged
+Player-Commands:
+  Whitelist-Commands: false
+  Commands-to-Log:
+    - /msg
+    - /sell
+    - /plugins
+    - /pl
+    - /about
+  Blacklist-Commands: true
+  Commands-to-Block:
+    - /login
+    - /changepassword
+    - /register
+
+# Enable to display Player's IPs
+Player-Join-IP: false
+
+# Log players if their level exceeds the set amount
+Player-Level: 100
+
+# Which Game-Mode to get log?
+Game-Mode: Creative
+
+# Log when a player crafts a specific item
+Crafted-Items:
+  - NETHERITE_SWORD
+  - DIAMOND_SWORD
+  - STICK
+
+# Log when entity dies
+Entities:
+  - ENDER_DRAGON
+  - WITHER
+  - VILLAGER
+
+# How often should the Checkers run
+# It's better to have it above 1 min to avoid any complications
+# Value in Minutes
+Checker-Interval:
+  RAM: 30
+  TPS: 30
+  Player-Count: 30
+
+# Log when the RAM uses the set amount
+# Value in MB
+Used-RAM: 6144
+
+# Log when the TPS reaches the wanted value
+TPS: 15
+
+# Log when set amount of players are online
+Player-Count: 50
+
+# External Database Feature
+# Available Types are MySQL, MariaDB, PostGreSQL and SQLite
+# Data-Deletion Value in Days, Set it -1 to cancel
+Database:
+  Enable: false
+  Type: MySQL
+  Host: localhost
+  Port: 3306
+  Username: username
+  Password: PassworD
+  Database: database
+  Data-Deletion: 7
+  Table-Prefix: "logger_"
+
+# Updates Settings
+Updater:
+  Checker: true
+  Auto-Download: true
+  Auto-Config-Updater: true
+
+# Do not touch unless you want to reset it's content
+Config-Version: 1.8.3

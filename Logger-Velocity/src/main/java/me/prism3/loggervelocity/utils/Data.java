@@ -47,13 +47,9 @@ public class Data {
     public static boolean isCommandsToBlock;
     public static boolean isCommandsToLog;
     public static boolean isPlayerIP;
-    public static boolean isLiteBansBan;
-    public static boolean isLiteBansTempBan;
-    public static boolean isLiteBansIpBan;
-    public static boolean isLiteBansTempIpBan;
-    public static boolean isLiteBansMute;
-    public static boolean isLiteBansTempMute;
-    public static boolean isLiteBansKick;
+    public static boolean isServerSwitch;
+    public static boolean isKick;
+
 
     // Permission String
     public static String loggerStaff;
@@ -78,8 +74,8 @@ public class Data {
 
     public void initializeListOfStrings() {
 
-        commandsToBlock = this.main.getConfig().getStringList("Player-Commands.Commands-to-Block");
-        commandsToLog = this.main.getConfig().getStringList("Player-Commands.Commands-to-Log");
+        commandsToBlock = this.main.getConfig().getStringList("Player-Command.Commands-to-Block");
+        commandsToLog = this.main.getConfig().getStringList("Player-Command.Commands-to-Log");
         dbType = this.main.getConfig().getString("Database.Type");
         dbHost = this.main.getConfig().getString("Database.Host");
         dbUserName = this.main.getConfig().getString("Database.Username");
@@ -110,18 +106,14 @@ public class Data {
         isSqlite = this.main.getConfig().getBoolean("SQLite.Enable");
         isLogToFiles = this.main.getConfig().getBoolean("Log-to-Files");
         isStaffEnabled = this.main.getConfig().getBoolean("Staff.Enabled");
-        isWhitelisted = this.main.getConfig().getBoolean("Player-Commands.Whitelist-Commands");
-        isBlacklisted = this.main.getConfig().getBoolean("Player-Commands.Blacklist-Commands");
-        isCommandsToBlock = this.main.getConfig().getBoolean("Player-Commands.Blacklist-Commands");
-        isCommandsToLog = this.main.getConfig().getBoolean("Player-Commands.Whitelist-Commands");
+        isWhitelisted = this.main.getConfig().getBoolean("Player-Command.Whitelist-Commands");
+        isBlacklisted = this.main.getConfig().getBoolean("Player-Command.Blacklist-Commands");
+        isCommandsToBlock = this.main.getConfig().getBoolean("Player-Command.Blacklist-Commands");
+        isCommandsToLog = this.main.getConfig().getBoolean("Player-Command.Whitelist-Commands");
         isPlayerIP = this.main.getConfig().getBoolean("Player-Login.Player-IP");
-        isLiteBansIpBan = this.main.getConfig().getBoolean("LiteBans.IP-Ban");
-        isLiteBansTempIpBan = this.main.getConfig().getBoolean("LiteBans.Temp-IP-Ban");
-        isLiteBansBan = this.main.getConfig().getBoolean("LiteBans.Ban");
-        isLiteBansTempBan = this.main.getConfig().getBoolean("LiteBans.Temp-Ban");
-        isLiteBansMute = this.main.getConfig().getBoolean("LiteBans.Mute");
-        isLiteBansTempMute = this.main.getConfig().getBoolean("LiteBans.Temp-Mute");
-        isLiteBansKick = this.main.getConfig().getBoolean("LiteBans.Kick");
+        isServerSwitch = this.main.getConfig().getBoolean("Log-Player.Server-Switch");
+        isKick = this.main.getConfig().getBoolean("Log-Player.Kick");
+
 
     }
 

@@ -87,6 +87,39 @@ public final class Configuration {
         return ( defaults == null ) ? null : defaults.get( path );
     }
 
+    public void set(String path, Object value)
+    {
+        if ( value instanceof Map )
+        {
+            value = new Configuration( (Map) value, ( defaults == null ) ? null : defaults.getSection( path ) );
+        }
+
+        Configuration section = getSectionFor( path );
+        if ( section == this )
+        {
+            if ( value == null )
+            {
+                self.remove( path );
+            } else
+            {
+                self.put( path, value );
+            }
+        } else
+        {
+            section.set( getChild( path ), value );
+        }
+    }
+
+    public Collection<String> getKeys()
+    {
+        return new LinkedHashSet<>( self.keySet() );
+    }
+
+    public boolean contains(String path)
+    {
+        return get( path, null ) != null;
+    }
+
     /*------------------------------------------------------------------------*/
     public Configuration getSection(String path)
     {

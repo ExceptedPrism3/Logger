@@ -1,2 +1,31 @@
-target
-/Logger-Spigot/.env
+# Build Artifacts & Maven
+target/
+**/target/
+dependency-reduced-pom.xml
+**/dependency-reduced-pom.xml
+releases/
+
+# Personal Scripts & Sensitive Files
+ssh.command
+*.command
+*.key
+.env
+**/.env
+*.log
+**/*.log
+
+# IDE & OS Metadata
+.DS_Store
+**/.DS_Store
+.idea/
+**/.idea/
+.vscode/
+**/.vscode/
+*.iml
+**/*.iml
+
+# Legacy
+old/
+
+# Paid / Private Addons
+logger-web-panel/

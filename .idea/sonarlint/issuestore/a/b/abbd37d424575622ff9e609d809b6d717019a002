@@ -1,9 +1,0 @@
-
-]
-java:S11925"GDefine a constant instead of duplicating this literal "%time%" 4 times.(ÇÖ¦Î
-^
-java:S11925"HDefine a constant instead of duplicating this literal "%world%" 4 times.(ÇÖ¦Î
-g
-java:S2095B"LUse try-with-resources or close this "BufferedWriter" in a "finally" clause.(ÀŒÇðûÿÿÿÿ
-g
-java:S20954"LUse try-with-resources or close this "BufferedWriter" in a "finally" clause.(©®ó½ýÿÿÿÿ

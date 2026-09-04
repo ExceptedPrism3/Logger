@@ -1,0 +1,56 @@
+# Messages for Logger Plugin [ Proxy Version ]
+# Need Support? Join the Discord Server: https://discord.gg/MfR5mcpVfX
+# Config 1.8.3
+# Plugin Messages
+General:
+  No-Permission: "&c你没有权限执行此命令。"
+  Reload: "&a配置文件已重新加载。"
+  Invalid-Syntax: "&c无效的语法。"
+# Files Instance
+Files:
+  Player-Chat-Staff: "[%time%] [%server%] 管理员 <%player%>: %msg%"
+  Player-Chat: "[%time%] [%server%] 玩家 <%player%>: %msg%"
+  Player-Command-Staff: "[%time%] [%server%] 管理员 <%player%> 执行了: %command%"
+  Player-Command: "[%time%] [%server%] 玩家 <%player%> 执行了: %command%"
+  Player-Login-Staff: "[%time%] [%server%] 管理员 <%player%> 加入服务器，IP -> %IP%"
+  Player-Login: "[%time%] [%server%] 玩家 <%player%> 加入服务器，IP -> %IP%"
+  Player-Leave-Staff: "[%time%] [%server%] 管理员 <%player%> 离开了服务器"
+  Player-Leave: "[%time%] [%server%] 玩家 <%player%> 离开了服务器"
+  Player-Switch-Staff: "[%time%] [%server%] 管理员 <%player%> 从 %from% 切换到 %to%"
+  Player-Switch: "[%time%] [%server%] 玩家 <%player%> 从 %from% 切换到 %to%"
+  Player-Kick-Staff: "[%time%] [%server%] 管理员 <%player%> 被 %server% 踢出 原因: %reason%"
+  Player-Kick: "[%time%] [%server%] 玩家 <%player%> 被 %server% 踢出 原因: %reason%"
+# Server Side Part
+  Server-Side:
+    Reload-Console: "[%time%] [%server%] 服务器已重载"
+    Server-Commands: "[%time%] [%server%] %command%"
+    Console-Commands: "[%time%] [%server%] %command%"
+    Start: "[%time%] [%server%] 服务器已启动"
+    Stop: "[%time%] [%server%] 服务器已停止"
+    RAM: "[%time%] [%server%] 内存警告！总计: %max% | 已用: %used% | 空闲: %free%"
+    Manual-Log: "[%time%] [%server%] 手动日志已记录 => %log%"
+# Discord Instance
+# Emojis can be found here https://emojipedia.org/ or elsewhere. Emojis may not work on >1.12 Servers.
+Discord:
+  Player-Chat-Staff: "**[%time%]** **[%server%]** **%msg%**"
+  Player-Chat: "**[%time%]** **[%server%]** **%msg%**"
+  Player-Command-Staff: "**[%time%]** **[%server%]** **%command%**"
+  Player-Command: "**[%time%]** **[%server%]** **%command%**"
+  Player-Login-Staff: "**[%time%]** ||**%IP%**||"
+  Player-Login: "**[%time%]** ||**%IP%**||"
+  Player-Leave-Staff: "**[%time%]** **[%server%]** Left the server"
+  Player-Leave: "**[%time%]** **[%server%]** Left the server"
+  Player-Switch-Staff: "**[%time%]** Switched from **%from%** to **%to%**"
+  Player-Switch: "**[%time%]** Switched from **%from%** to **%to%**"
+  Player-Kick-Staff: "**[%time%]** **[%server%]** Kicked from **%server%** for **%reason%**"
+  Player-Kick: "**[%time%]** **[%server%]** Kicked from **%server%** for **%reason%**"
+# Server Side Part
+  Server-Side:
+    Reload-Console: "**[%time%]** The server has been reloaded"
+    Restart-Console: "**[%time%]** The server has been reloaded"
+    Server-Commands: "**[%time%]** %command%"
+    Console-Commands: "**[%time%]** %command%"
+    Start: "**[%time%]**"
+    Stop: "**[%time%]**"
+    RAM: "**[%time%]** The Server has exceeded the set amount of percentage of RAM Usage! Total Memory: **%max%** `|` Used Memory: **%used%** `|` Free Memory: **%free%**"
+    Manual-Log: "**[%time%]** Manual log: **%log%**"

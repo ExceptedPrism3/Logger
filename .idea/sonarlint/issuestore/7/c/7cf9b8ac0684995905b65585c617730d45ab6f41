@@ -1,17 +1,0 @@
-
-b
-java:S11929"GDefine a constant instead of duplicating this literal "%time%" 4 times.(ùÜÿ©ıÿÿÿÿ
-b
-java:S11929"GDefine a constant instead of duplicating this literal "%uuid%" 4 times.(ùÜÿ©ıÿÿÿÿ
-c
-java:S11929"HDefine a constant instead of duplicating this literal "%world%" 4 times.(ùÜÿ©ıÿÿÿÿ
-a
-java:S11929"FDefine a constant instead of duplicating this literal "%mob%" 4 times.(ùÜÿ©ıÿÿÿÿ
-d
-java:S11929"IDefine a constant instead of duplicating this literal "%player%" 4 times.(ùÜÿ©ıÿÿÿÿ
-g
-java:S20958"LUse try-with-resources or close this "BufferedWriter" in a "finally" clause.(©®ó½ıÿÿÿÿ
-g
-java:S2095E"LUse try-with-resources or close this "BufferedWriter" in a "finally" clause.(şœ¤şÿÿÿÿ
-d
-java:S4201"IRemove this unnecessary null check; "instanceof" returns false for nulls.(­Áø­ıÿÿÿÿ

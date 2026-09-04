@@ -1,5 +1,6 @@
 package me.prism3.logger.utils;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -41,4 +42,14 @@ public final class Log {
      * @param message The message to be logged.
      */
     public static void severe(final String message) { logger.severe(message); }
+
+    /**
+     * Logs a severe level message.
+     *
+     * @param message The message to be logged.
+     * @param thrown the exception message.
+     */
+    public static void severe(final String message, final Throwable thrown) {
+        logger.log(Level.SEVERE, message, thrown);
+    }
 }
