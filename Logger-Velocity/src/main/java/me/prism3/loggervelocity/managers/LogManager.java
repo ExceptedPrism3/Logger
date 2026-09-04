@@ -139,15 +139,6 @@ public class LogManager {
         template = template.replace("%time%", formattedTime);
         template = template.replace("%date%", formattedTime);
 
-        String serverName = "Velocity";
-        if (plugin.getConfig() != null) {
-            String cfgServer = plugin.getConfig().getString("Server-Name");
-            if (cfgServer != null && !cfgServer.isEmpty() && !cfgServer.startsWith("String at path")) {
-                serverName = cfgServer;
-            }
-        }
-        template = template.replace("%server%", serverName);
-
         if (placeholders != null) {
             for (Map.Entry<String, String> entry : placeholders.entrySet()) {
                 final String key = entry.getKey();
@@ -161,6 +152,16 @@ public class LogManager {
                 }
             }
         }
+
+        String serverName = "Velocity";
+        if (plugin.getConfig() != null) {
+            String cfgServer = plugin.getConfig().getString("Server-Name");
+            if (cfgServer != null && !cfgServer.isEmpty() && !cfgServer.startsWith("String at path")) {
+                serverName = cfgServer;
+            }
+        }
+        template = template.replace("%proxy%", serverName);
+        template = template.replace("%server%", serverName);
         return template;
     }
 }

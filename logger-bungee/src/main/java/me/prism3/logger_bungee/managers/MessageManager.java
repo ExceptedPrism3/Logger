@@ -178,12 +178,6 @@ public class MessageManager {
         text = text.replace("%time%", formattedTime);
         text = text.replace("%date%", formattedTime);
 
-        String serverName = "BungeeCord";
-        if (plugin.getConfigManager() != null && plugin.getConfigManager().getConfig() != null) {
-            serverName = plugin.getConfigManager().getConfig().getString("Server-Name", "BungeeCord");
-        }
-        text = text.replace("%server%", serverName);
-
         if (placeholders != null) {
             for (Map.Entry<String, String> entry : placeholders.entrySet()) {
                 final String key = entry.getKey();
@@ -193,6 +187,13 @@ public class MessageManager {
                 text = text.replace("%" + key.toUpperCase() + "%", val);
             }
         }
+
+        String serverName = "BungeeCord";
+        if (plugin.getConfigManager() != null && plugin.getConfigManager().getConfig() != null) {
+            serverName = plugin.getConfigManager().getConfig().getString("Server-Name", "BungeeCord");
+        }
+        text = text.replace("%proxy%", serverName);
+        text = text.replace("%server%", serverName);
         return text;
     }
 
