@@ -1,4 +1,4 @@
-<-!------------------------------------------ v1.8.3 ------------------------------------------!->
+<-!------------------------------------------ v1.8.4 ------------------------------------------!->
 
 Fixes & Improvements
     [+] Full Folia Native Support (PaperMC Folia Engine):
@@ -8,6 +8,14 @@ Fixes & Improvements
         [+] Rerouted all server-side timed tasks (Server Start delay, RAM/TPS/Player Count monitors, File retention cleanup, SpawnEgg pending cleaner) to Folia GlobalRegionScheduler.
         [+] Completely eliminated UnsupportedOperationException (Bukkit scheduler disabled) on Folia while maintaining 100% backward compatibility with Spigot/Paper/Purpur.
         [+] Replaced BukkitRunnable in server performance monitors with thread-safe Runnable implementations.
+    [+] Velocity & BungeeCord Server Placeholder Priority:
+        [+] Fixed placeholder evaluation order in LogManager and MessageManager so `%server%` accurately displays the player connected backend server (e.g. lobby, hub, survival) instead of defaulting to the proxy name.
+        [+] Added `%proxy%` placeholder support for explicitly referencing the Velocity/BungeeCord proxy network name.
+        [+] Hardened Velocity OnLogin event with safe optional server extraction (player.getCurrentServer().map(...)).
+
+<-!------------------------------------------ v1.8.3 ------------------------------------------!->
+
+Fixes & Improvements
     [+] Discord Addon Routing Engine Overhaul:
         [+] Completely eliminated the fallback bug (getFirstChannel / getFirstWebhook) that dumped unassigned or unconfigured events (such as Command Blocks with 'CHANNEL_ID') into the first active channel (e.g. PlayerChat).
         [+] Added a canonical, case-insensitive channel resolution engine supporting 100% of event names across Spigot, Paper, BungeeCord, and Velocity.
