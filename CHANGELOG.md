@@ -21,6 +21,19 @@ Fixes & Improvements
         [+] Implemented universal `server_status` heartbeat schema in `DatabaseManager` across Spigot, Paper, Folia, BungeeCord, and Velocity.
         [+] Added automatic live status detection on the Web Panel for Logger Core plugin and LoggerDiscordAddon.
         [+] Added connected servers breakdown card on Web Panel dashboard displaying online/offline status, plugin version, Discord addon presence, and last ping.
+    [+] File & Folder Generation Suppression for Disabled Logs:
+        [+] Converted file and folder generation to be purely on-demand across Spigot/Paper, BungeeCord, and Velocity, eliminating startup creation of empty directories and empty `.log` files.
+        [+] Fully suppressed all file/folder creation when `Log-to-Files: false` (or `Files.Enabled: false` on Velocity) is configured.
+        [+] Hardened Velocity file retention cleaner (`deleteFiles()`) with null-safety checks to prevent `NullPointerException` on uncreated or missing directories.
+    [+] Database Security & Connector Hardening:
+        [+] Upgraded `org.postgresql:postgresql` to `42.7.13` (resolving SCRAM authentication CPU exhaustion DoS - CVE-2026-42198 / Dependabot Alert #23).
+        [+] Upgraded `org.mariadb.jdbc:mariadb-java-client` to `3.3.5` (resolving CVE-2026-55856, CVE-2026-55857, CVE-2026-55858 / PR #72).
+        [+] Migrated `mysql:mysql-connector-java` to modern `com.mysql:mysql-connector-j` `8.2.0` (resolving CVE-2023-22102).
+        [+] Cleaned up POM version definitions to enforce root `<dependencyManagement>`.
+    [+] Complete GitBook Documentation Suite:
+        [+] Added complete 26-page documentation overhaul in `docs/` with `.gitbook.yaml` for instant GitBook Git Sync.
+        [+] Added dedicated Updating & Upgrading Guide covering Java 17/21 requirements, database auto-migrations, and Discord addon setup.
+        [+] Added official Logger Web Panel setup guide with requirements, deployment steps, and server status monitor configuration.
 
 <-!------------------------------------------ v1.8.3 ------------------------------------------!->
 
