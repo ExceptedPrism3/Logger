@@ -20,3 +20,11 @@ Logger natively supports **MySQL**, **MariaDB**, **PostgreSQL**, and **SQLite** 
 
 ## I need help or found a bug!
 Join our [**Discord Server**](https://discord.gg/MfR5mcpVfX), run `/logger dump` on your server to create a sanitized configuration paste, and open a ticket!
+
+## Why do I get "Host <IP> is not allowed to connect to this MariaDB/MySQL server" (Error 1130)?
+The IP shown in the error is **the Web Panel's outgoing IP address**. MySQL/MariaDB rejects remote connections if your database user is restricted to `localhost`. Run this SQL command on your database server to grant remote access:
+```sql
+GRANT ALL PRIVILEGES ON logger.* TO 'your_user'@'WEB_PANEL_IP' IDENTIFIED BY 'your_password';
+FLUSH PRIVILEGES;
+```
+*(Or use `'your_user'@'%'` to allow remote connections from any host).*

@@ -39,3 +39,33 @@ The **Logger Web Panel (v1.0.1)** is the official web application for Logger, al
 
 ## Acquiring the Web Panel
 The Web Panel is a private companion addon. To obtain a license or source access, join our [**Discord Server**](https://discord.gg/MfR5mcpVfX) and open a ticket!
+
+---
+
+## Troubleshooting & Common Errors
+
+### "Host 'xxx.xxx.xxx.xxx' is not allowed to connect to this MariaDB/MySQL server" (Error 1130)
+
+#### Why this happens:
+The IP address shown in the error message is **the outgoing IP address of your Web Panel server**, not the target database host. By default, MySQL and MariaDB user accounts only permit connections originating from `localhost`. When the Web Panel server attempts to query your remote database, MariaDB/MySQL refuses the connection.
+
+#### How to fix:
+Grant your database user remote connection privileges for the Web Panel's IP address:
+
+**Option 1: Allow the Web Panel's specific IP (Recommended)**
+Run this query in phpMyAdmin, MySQL Workbench, or your database shell:
+```sql
+GRANT ALL PRIVILEGES ON logger.* TO 'your_user'@'WEB_PANEL_IP' IDENTIFIED BY 'your_password';
+FLUSH PRIVILEGES;
+```
+*(Replace `WEB_PANEL_IP` with the IP address shown in the error, and adjust `logger`, `your_user`, and `your_password` to match your setup).*
+
+**Option 2: Allow remote connections from any host (`%`)**
+If your Web Panel uses a dynamic IP, Docker bridge, or shared hosting:
+```sql
+GRANT ALL PRIVILEGES ON logger.* TO 'your_user'@'%' IDENTIFIED BY 'your_password';
+FLUSH PRIVILEGES;
+```
+
+**Option 3: Web Panel and Database on the same machine**
+If the Web Panel and MariaDB/MySQL are hosted on the exact same server/VPS, set the **Host** field in the Web Panel settings to `127.0.0.1` or `localhost`.
