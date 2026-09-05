@@ -9,6 +9,7 @@ Logger provides comprehensive auditing capabilities across all platforms.
 * **Block & World Actions**: Block Place, Block Break, Bucket Fill, Bucket Empty, Primed TNT, Entity Deaths.
 * **Inventory & Items**: Chest / Container Interactions, Item Pickups, Item Drops, Crafting, Anvil usage, Book edits, Enchanting (including 1.21+ Mace & Wind Burst enchantments), Furnace smelting.
 * **Modern 1.21+ Mechanics**: Auto-Crafter interactions, Mace combat, Trial Vault unlocks, Sculk Shrieker activations.
+* **Server Administration**: Server Start/Stop, Console Commands, RCON Commands, Command Blocks, Server Whitelist (`/whitelist add`, `remove`, `on`, `off`, `reload`), RAM & TPS performance monitors.
 * **Staff Tools**: In-game live Spy monitors (`/logger toggle spy`), interactive Inventory Rollback GUI (`/logger playerinventory`), sanitized online diagnostic dump (`/logger dump`).
 
 ---

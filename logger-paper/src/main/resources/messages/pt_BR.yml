@@ -92,6 +92,7 @@ File:
     Command-Block: "Comando executado por Bloco de Comando: %command%"
     Manual-Log: "Registro manual registrado: %log%"
     Player-Count: "A meta de jogadores online foi atingida."
+    Whitelist: "%executor% executou whitelist %action% em %target%"
 
 Discord:
   Player:
@@ -179,5 +180,6 @@ Discord:
     Command-Block: "Bloco de comando: **%command%**"
     Manual-Log: "Registro manual: **%log%**"
     Player-Count: "**Meta de jogadores online atingida.**"
+    Whitelist: "**%executor%** executou whitelist **%action%** em **%target%**"
 
 Messages-Version: 1.8.4

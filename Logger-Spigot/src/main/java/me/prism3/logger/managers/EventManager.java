@@ -119,6 +119,9 @@ public final class EventManager {
         if (data.isEnabled(LogType.SERVER_CONSOLE_COMMAND))
             register(new ConsoleCommandListener(plugin), plugin);
 
+        if (data.isEnabled(LogType.SERVER_WHITELIST))
+            register(new WhitelistListener(plugin), plugin);
+
         if (data.isEnabled(LogType.SERVER_RAM))
             SchedulerAdapter.runTimer(plugin, new RAMListener(plugin), 100L, plugin.getData().getCheckerIntervalRAM());
 

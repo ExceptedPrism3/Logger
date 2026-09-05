@@ -86,6 +86,7 @@ Log-Server:
   Player-Count: true
   Registration: true
   Manual-Log: true
+  Whitelist: true
 
 # Only Log Specified Commands
 # Block Commands from getting Logged

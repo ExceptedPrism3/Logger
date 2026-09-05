@@ -92,6 +92,7 @@ File:
     Command-Block: "명령 블록이 명령어를 실행했습니다: %command%"
     Manual-Log: "수동 로그가 기록되었습니다: %log%"
     Player-Count: "온라인 플레이어 목표 인원에 도달했습니다."
+    Whitelist: "%executor% 님이 %target% 에 대해 화이트리스트 %action% 명령을 실행했습니다"
 
 Discord:
   Player:
@@ -179,5 +180,6 @@ Discord:
     Command-Block: "명령 블록: **%command%**"
     Manual-Log: "수동 로그: **%log%**"
     Player-Count: "**온라인 플레이어 목표 인원 도달.**"
+    Whitelist: "**%executor%** 님이 **%target%** 에 대해 화이트리스트 **%action%** 명령을 실행했습니다"
 
 Messages-Version: 1.8.4

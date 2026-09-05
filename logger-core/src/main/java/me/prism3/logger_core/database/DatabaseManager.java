@@ -52,6 +52,7 @@ public class DatabaseManager {
         // Server tables
         tempTables.put("server_start", getCommonFields());
         tempTables.put("server_stop", getCommonFields());
+        tempTables.put("server_whitelist", getCommonFields() + ", executor VARCHAR(100), action VARCHAR(20), target_player VARCHAR(100)");
         
         // Proxy tables (Unified Bungee & Velocity)
         tempTables.put("player_events", autoInc + ", server_name VARCHAR(100), player_name VARCHAR(100), event_type VARCHAR(50), message TEXT, date " + dateType);

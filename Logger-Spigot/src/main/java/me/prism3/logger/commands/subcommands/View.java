@@ -366,8 +366,13 @@ public class View implements SubCommand {
             return ChatColor.WHITE + r.data.get("message");
         if (r.data.containsKey("command"))
             return ChatColor.WHITE + r.data.get("command");
-        if (r.data.containsKey("action"))
-            return ChatColor.YELLOW + r.data.get("action");
+        if (r.data.containsKey("action")) {
+            String act = r.data.get("action");
+            if (r.data.containsKey("target_player") && r.data.get("target_player") != null) {
+                act += " " + r.data.get("target_player");
+            }
+            return ChatColor.YELLOW + act;
+        }
         if (r.data.containsKey("item_type"))
             return ChatColor.AQUA + r.data.get("item_type");
 
@@ -440,6 +445,7 @@ public class View implements SubCommand {
             case SERVER_COMMAND_BLOCK: return "server_command_block";
             case SERVER_MANUAL_LOG: return "server_manual_log";
             case SERVER_RCON_COMMAND: return "server_rcon_command";
+            case SERVER_WHITELIST: return "server_whitelist";
             default: return type.name().toLowerCase();
         }
     }

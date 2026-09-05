@@ -30,6 +30,12 @@ Fixes & Improvements
         [+] Upgraded `org.mariadb.jdbc:mariadb-java-client` to `3.3.5` (resolving CVE-2026-55856, CVE-2026-55857, CVE-2026-55858 / PR #72).
         [+] Migrated `mysql:mysql-connector-java` to modern `com.mysql:mysql-connector-j` `8.2.0` (resolving CVE-2023-22102).
         [+] Cleaned up POM version definitions to enforce root `<dependencyManagement>`.
+    [+] Server Whitelist Logging Support:
+        [+] Added dedicated Server Whitelist logging (`SERVER_WHITELIST`, `Log-Server.Whitelist`) tracking when players are added to or removed from the server whitelist (`/whitelist add <player>`, `/whitelist remove <player>`), as well as whitelist status toggles (`/whitelist on`, `/whitelist off`, `/whitelist reload`).
+        [+] Multi-channel delivery support: routed to local log files (`logs/Server Whitelist/`), Discord Addon (`Server-Side.Whitelist` channel/webhook with embed author & avatar), and database (`server_whitelist` table).
+        [+] Integrated with `/logger view` database inspector with custom action & target summary formatting.
+        [+] Added complete localization entries across all 11 bundled language files (`en_US`, `de_DE`, `fr_fr`, `es_ES`, `it_IT`, `pt_BR`, `ru_RU`, `zh_cn`, `ja_JP`, `ko_KR`, `ar`).
+        [+] Web Panel support: added `server_whitelist` definition into `logs.php` for seamless log browsing and filtering.
     [+] Complete GitBook Documentation Suite:
         [+] Added complete 26-page documentation overhaul in `docs/` with `.gitbook.yaml` for instant GitBook Git Sync.
         [+] Added dedicated Updating & Upgrading Guide covering Java 17/21 requirements, database auto-migrations, and Discord addon setup.

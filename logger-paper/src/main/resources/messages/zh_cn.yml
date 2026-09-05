@@ -92,6 +92,7 @@ File:
     Command-Block: "命令方块执行了命令: %command%"
     Manual-Log: "手动记录的日志: %log%"
     Player-Count: "在线玩家数已达到设定目标。"
+    Whitelist: "%executor% 对 %target% 执行了白名单 %action%"
 
 Discord:
   Player:
@@ -179,5 +180,6 @@ Discord:
     Command-Block: "命令方块: **%command%**"
     Manual-Log: "手动日志: **%log%**"
     Player-Count: "**在线玩家数已达成目标。**"
+    Whitelist: "**%executor%** 对 **%target%** 执行了白名单 **%action%**"
 
 Messages-Version: 1.8.4

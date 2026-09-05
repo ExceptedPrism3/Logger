@@ -309,6 +309,11 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
         List<String> list = new ArrayList<>();
         if (norm == null || norm.isEmpty()) return list;
 
+        if (norm.contains("whitelist")) {
+            list.add("whitelist");
+            list.add("serverwhitelist");
+            list.add("serversidewhitelist");
+        }
         if (norm.contains("commandblock")) {
             list.add("commandblock");
             list.add("servercommandblock");
@@ -653,6 +658,7 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
 
         String norm = normalizeKey(target);
         if ("staff".equals(norm)) return "Staff Notification";
+        if (norm.contains("whitelist")) return "Server Whitelist";
         if (norm.contains("commandblock")) return "Command Block";
         if (norm.contains("playerchat") || "chat".equals(norm)) return "Player Chat";
         if (norm.contains("playercommand") || "command".equals(norm)) return "Player Command";

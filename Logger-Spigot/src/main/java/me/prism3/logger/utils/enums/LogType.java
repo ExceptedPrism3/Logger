@@ -83,7 +83,8 @@ public enum LogType {
             "Discord.Server-Side.Command-Block"),
     SERVER_PLAYER_COUNT("Server Player Count", "Log-Server.Player-Count", "Server.Player-Count",
             "Discord.Server-Side.Player-Count"),
-    SERVER_MANUAL_LOG("Server Manual Log", "Log-Server.Manual-Log", "Server.Manual-Log", "Discord.Custom.Manual");
+    SERVER_MANUAL_LOG("Server Manual Log", "Log-Server.Manual-Log", "Server.Manual-Log", "Discord.Custom.Manual"),
+    SERVER_WHITELIST("Server Whitelist", "Log-Server.Whitelist", "Server.Whitelist", "Discord.Server-Side.Whitelist");
 
     private final String folderName;
     private final String configPath;
@@ -116,7 +117,7 @@ public enum LogType {
     }
 
     public String getMessagePath(final boolean isStaff) {
-        return isStaff ? messagePath + "-Staff" : messagePath; // Append "-Staff" dynamically
+        return (isStaff && isPlayerSide()) ? messagePath + "-Staff" : messagePath; // Append "-Staff" dynamically for player events
     }
 
     /**

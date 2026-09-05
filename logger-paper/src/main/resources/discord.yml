@@ -150,6 +150,9 @@ Discord:
     Player-Count:
       Channel-ID: 'CHANNEL_ID'
       Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"
+    Whitelist:
+      Channel-ID: 'CHANNEL_ID'
+      Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"
 
   # Extras, Version Exceptions, Custom (Implemented as LogTypes if applicable or placeholders)
   Version-Exceptions:

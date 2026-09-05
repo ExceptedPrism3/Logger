@@ -92,6 +92,7 @@ File:
     Command-Block: "Командный блок выполнил команду: %command%"
     Manual-Log: "Ручной лог: %log%"
     Player-Count: "Целевое количество онлайн-игроков достигнуто."
+    Whitelist: "%executor% выполнил whitelist %action% для %target%"
 
 Discord:
   Player:
@@ -179,5 +180,6 @@ Discord:
     Command-Block: "Командный блок: **%command%**"
     Manual-Log: "Ручной лог: **%log%**"
     Player-Count: "**Цель по онлайн-игрокам достигнута.**"
+    Whitelist: "**%executor%** выполнил whitelist **%action%** для **%target%**"
 
 Messages-Version: 1.8.4

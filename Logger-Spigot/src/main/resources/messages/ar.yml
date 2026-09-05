@@ -92,6 +92,7 @@ File:
     Command-Block: "تم تنفيذ أمر عبر كوماند بلوك: %command%"
     Manual-Log: "سجل يدوي مسجل: %log%"
     Player-Count: "وصل عدد اللاعبين المتصلين إلى الهدف المحدد."
+    Whitelist: "قام %executor% بتنفيذ أمر القائمة البيضاء %action% على %target%"
 
 Discord:
   Player:
@@ -179,5 +180,6 @@ Discord:
     Command-Block: "أمر كوماند بلوك: **%command%**"
     Manual-Log: "سجل يدوي: **%log%**"
     Player-Count: "**تم الوصول إلى هدف عدد اللاعبين.**"
+    Whitelist: "قام **%executor%** بتنفيذ أمر القائمة البيضاء **%action%** على **%target%**"
 
 Messages-Version: 1.8.4

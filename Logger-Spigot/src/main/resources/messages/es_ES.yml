@@ -92,6 +92,7 @@ File:
     Command-Block: "Comando ejecutado por Bloque de Comandos: %command%"
     Manual-Log: "Registro manual registrado: %log%"
     Player-Count: "El recuento de jugadores conectados ha alcanzado el objetivo."
+    Whitelist: "%executor% ejecutó whitelist %action% en %target%"
 
 Discord:
   Player:
@@ -179,5 +180,6 @@ Discord:
     Command-Block: "Comando bloque de comandos: **%command%**"
     Manual-Log: "Registro manual: **%log%**"
     Player-Count: "**Objetivo de jugadores conectados alcanzado.**"
+    Whitelist: "**%executor%** ejecutó whitelist **%action%** en **%target%**"
 
 Messages-Version: 1.8.4

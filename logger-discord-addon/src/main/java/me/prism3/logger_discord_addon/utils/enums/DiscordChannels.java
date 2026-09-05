@@ -58,7 +58,8 @@ public enum DiscordChannels {
     SERVER_RCON_COMMAND("Discord.Server-Side.RCON.Channel-ID"),
     SERVER_COMMAND_BLOCK("Discord.Server-Side.Command-Block.Channel-ID"),
     SERVER_PLAYER_COUNT("Discord.Server-Side.Player-Count.Channel-ID"),
-    SERVER_MANUAL_LOG("Discord.Custom.Manual.Channel-ID");
+    SERVER_MANUAL_LOG("Discord.Custom.Manual.Channel-ID"),
+    SERVER_WHITELIST("Discord.Server-Side.Whitelist.Channel-ID");
 
     private final String key;
 

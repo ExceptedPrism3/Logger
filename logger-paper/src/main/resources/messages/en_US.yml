@@ -95,6 +95,7 @@ File:
     Command-Block: "This Command '%command%' has been executed via a Command Block"
     Manual-Log: "This Command '%log%' has been executed manually"
     Player-Count: "The Server the total desired online players"
+    Whitelist: "%executor% executed whitelist %action% on %target%"
 
 
 
@@ -189,5 +190,6 @@ Discord:
     Command-Block: "A command has been sent via the Command Block: **%command%**"
     Manual-Log: "The following log has been registered manually: **%log%**"
     Player-Count: "**The Server the total desired online players**"
+    Whitelist: "**%executor%** executed whitelist **%action%** on **%target%**"
 
 Messages-Version: 1.8.4

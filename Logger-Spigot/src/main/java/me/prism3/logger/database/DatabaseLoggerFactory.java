@@ -129,6 +129,8 @@ public class DatabaseLoggerFactory {
                 return new SculkShriekerLogger(plugin);
             case SERVER_MANUAL_LOG:
                 return new ManualLogLogger(plugin);
+            case SERVER_WHITELIST:
+                return new WhitelistLogger(plugin);
 
             default:
                 throw new IllegalArgumentException("Unknown LogType: " + logType);
