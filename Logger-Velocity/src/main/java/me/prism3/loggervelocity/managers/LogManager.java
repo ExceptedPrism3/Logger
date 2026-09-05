@@ -3,6 +3,7 @@ package me.prism3.loggervelocity.managers;
 import com.velocitypowered.api.proxy.Player;
 import me.prism3.logger_core.objects.LogPlayer;
 import me.prism3.loggervelocity.Logger;
+import me.prism3.loggervelocity.utils.Data;
 import me.prism3.loggervelocity.utils.FileHandler;
 
 import java.sql.Connection;
@@ -21,6 +22,9 @@ public class LogManager {
     }
 
     public void logPlayerEvent(String eventType, Player player, Map<String, String> placeholders, boolean isStaff) {
+        if (player != null && (player.hasPermission(Data.loggerExempt) || player.hasPermission("logger.exempt"))) {
+            return;
+        }
         String fileTemplate = plugin.getMessages().getString("Files." + (isStaff ? eventType + "-Staff" : eventType));
         if (fileTemplate == null || fileTemplate.startsWith("String at path")) {
             fileTemplate = plugin.getMessages().getString("Files." + eventType);
@@ -31,18 +35,21 @@ public class LogManager {
         FileHandler.logToFile(eventType, fileMessage);
 
         if (plugin.getDiscordManager() != null && plugin.getDiscordManager().isEnabled()) {
-            String discordTemplate = plugin.getMessages().getString("Discord." + (isStaff ? eventType + "-Staff" : eventType));
-            if (discordTemplate == null || discordTemplate.startsWith("String at path")) {
-                discordTemplate = plugin.getMessages().getString("Discord." + eventType);
-            }
+            boolean isDiscordExempt = player != null && (player.hasPermission(Data.loggerExemptDiscord) || player.hasPermission("logger.exempt.discord"));
+            if (!isDiscordExempt) {
+                String discordTemplate = plugin.getMessages().getString("Discord." + (isStaff ? eventType + "-Staff" : eventType));
+                if (discordTemplate == null || discordTemplate.startsWith("String at path")) {
+                    discordTemplate = plugin.getMessages().getString("Discord." + eventType);
+                }
 
-            if (discordTemplate != null && !discordTemplate.startsWith("String at path")) {
-                String discordMessage = format(discordTemplate, placeholders);
-                
-                String serverName = placeholders.getOrDefault("server", "unknown");
-                LogPlayer logPlayer = new LogPlayer(player.getUsername(), player.getUniqueId(), serverName);
-                
-                plugin.getDiscordManager().sendMessage(eventType, discordMessage, logPlayer, eventType);
+                if (discordTemplate != null && !discordTemplate.startsWith("String at path")) {
+                    String discordMessage = format(discordTemplate, placeholders);
+                    
+                    String serverName = placeholders.getOrDefault("server", "unknown");
+                    LogPlayer logPlayer = new LogPlayer(player.getUsername(), player.getUniqueId(), serverName);
+                    
+                    plugin.getDiscordManager().sendMessage(eventType, discordMessage, logPlayer, eventType);
+                }
             }
         }
 

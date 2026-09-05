@@ -1,5 +1,5 @@
 name: LoggerDiscordAddon
-version: '1.8.3'
+version: '1.8.4'
 main: me.prism3.logger_discord_addon.bungee.LoggerDiscordAddonBungee
 author: Prism3
 depends: [LoggerBungee]

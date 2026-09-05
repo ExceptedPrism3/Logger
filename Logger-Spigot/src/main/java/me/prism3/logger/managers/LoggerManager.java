@@ -55,7 +55,12 @@ public class LoggerManager {
     }
 
     public void logEvent(final LogType logType, final Player player, final Map<String, String> placeholders) {
-        boolean isStaff = player != null && PermissionManager.canLogStaff(player);
+        if (player != null && PermissionManager.isExempt(player)) {
+            return;
+        }
+
+        boolean staffEnabled = plugin.getData().isStaffEnabled();
+        boolean isStaff = player != null && staffEnabled && PermissionManager.canLogStaff(player);
         if (!logType.isEnabled(plugin.getConfig()))
             return;
 
@@ -68,20 +73,22 @@ public class LoggerManager {
         // Async Discord
         me.prism3.logger_core.discord.DiscordManager discordManager = plugin.getDiscordManager();
         if (discordManager != null && discordManager.isEnabled()) {
-            String discordMsg = plugin.getMessageManager().getMessage(logType, isStaff, placeholders, 'D', player);
-            final String eventType = (isStaff && plugin.getConfig().getBoolean("Staff.Enabled", false)) ? "STAFF" : logType.name();
-            discordExecutor.submit(() -> {
-                try {
-                    me.prism3.logger_core.objects.LogPlayer corePlayer = null;
-                    if (player != null) {
-                        corePlayer = new me.prism3.logger_core.objects.LogPlayer(player.getName(), player.getUniqueId(),
-                                plugin.getData().getServerName());
+            if (player == null || !PermissionManager.isExemptDiscord(player)) {
+                String discordMsg = plugin.getMessageManager().getMessage(logType, isStaff, placeholders, 'D', player);
+                final String eventType = isStaff ? "STAFF" : logType.name();
+                discordExecutor.submit(() -> {
+                    try {
+                        me.prism3.logger_core.objects.LogPlayer corePlayer = null;
+                        if (player != null) {
+                            corePlayer = new me.prism3.logger_core.objects.LogPlayer(player.getName(), player.getUniqueId(),
+                                    plugin.getData().getServerName());
+                        }
+                        discordManager.sendMessage(eventType, discordMsg, corePlayer, logType.name());
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    discordManager.sendMessage(eventType, discordMsg, corePlayer, logType.name());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
+                });
+            }
         }
 
         // Async Database

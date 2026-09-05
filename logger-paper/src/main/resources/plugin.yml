@@ -1,5 +1,5 @@
 name: Logger
-version: 1.8.3
+version: 1.8.4
 main: me.prism3.logger.Logger
 api-version: '1.13'
 authors: [ Prism3, Sidna ]

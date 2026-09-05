@@ -36,17 +36,29 @@ public class LoggerDiscordAddon extends JavaPlugin {
             return;
         }
 
-        File configFile = new File(getDataFolder(), "discord.yml");
+        File configFile = new File(this.loggerPlugin.getDataFolder(), "discord.yml");
+        File legacyFolder = getDataFolder();
+        File legacyAddonFile = new File(legacyFolder, "discord.yml");
+
         if (!configFile.exists()) {
-            File hostDiscord = new File(this.loggerPlugin.getDataFolder(), "discord.yml");
-            if (hostDiscord.exists()) {
-                configFile = hostDiscord;
+            if (legacyAddonFile.exists()) {
+                try {
+                    this.loggerPlugin.getDataFolder().mkdirs();
+                    Files.copy(legacyAddonFile.toPath(), configFile.toPath());
+                    Log.info("Migrated discord.yml from legacy addon folder to " + configFile.getPath());
+                } catch (Exception e) {
+                    configFile = legacyAddonFile;
+                }
             } else {
-                getDataFolder().mkdirs();
+                this.loggerPlugin.getDataFolder().mkdirs();
                 try (InputStream in = getResource("discord.yml")) {
                     if (in != null) Files.copy(in, configFile.toPath());
                 } catch (Exception ignored) {}
             }
+        }
+
+        if (configFile.exists() && !configFile.equals(legacyAddonFile)) {
+            cleanupLegacyFolder(legacyFolder, this.loggerPlugin.getDataFolder());
         }
 
         this.api = new LoggerDiscordAPI(this);
@@ -97,5 +109,24 @@ public class LoggerDiscordAddon extends JavaPlugin {
         if (this.discordManager != null) {
             this.discordManager.reload();
         }
+    }
+
+    private void cleanupLegacyFolder(File legacyFolder, File hostFolder) {
+        if (legacyFolder == null || !legacyFolder.exists()) return;
+        try {
+            if (legacyFolder.getCanonicalPath().equals(hostFolder.getCanonicalPath())) return;
+            if (!legacyFolder.getName().toLowerCase().contains("discord")) return;
+            File[] files = legacyFolder.listFiles();
+            if (files != null) {
+                for (File f : files) {
+                    if (f.isFile()) {
+                        f.delete();
+                    }
+                }
+            }
+            if (legacyFolder.delete()) {
+                Log.info("Removed legacy " + legacyFolder.getName() + " directory.");
+            }
+        } catch (Exception ignored) {}
     }
 }

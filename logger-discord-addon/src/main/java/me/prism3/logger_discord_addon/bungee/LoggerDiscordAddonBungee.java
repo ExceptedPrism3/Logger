@@ -31,16 +31,24 @@ public class LoggerDiscordAddonBungee extends Plugin {
 
         LoggerBungee loggerBungee = (LoggerBungee) host;
 
-        File addonConfig = new File(getDataFolder(), "discord.yml");
         File hostConfig = new File(loggerBungee.getDataFolder(), "discord.yml");
+        File addonFolder = getDataFolder();
+        File addonConfig = new File(addonFolder, "discord.yml");
 
-        if (addonConfig.exists()) {
-            this.activeConfigFile = addonConfig;
-        } else if (hostConfig.exists()) {
+        if (hostConfig.exists()) {
             this.activeConfigFile = hostConfig;
+        } else if (addonConfig.exists()) {
+            try {
+                loggerBungee.getDataFolder().mkdirs();
+                Files.copy(addonConfig.toPath(), hostConfig.toPath());
+                this.activeConfigFile = hostConfig;
+                getLogger().info("Migrated discord.yml from legacy addon folder to " + hostConfig.getPath());
+            } catch (Exception e) {
+                this.activeConfigFile = addonConfig;
+            }
         } else {
-            getDataFolder().mkdirs();
-            this.activeConfigFile = addonConfig;
+            loggerBungee.getDataFolder().mkdirs();
+            this.activeConfigFile = hostConfig;
             InputStream in = getResourceAsStream("bungee-discord.yml");
             if (in == null) in = getResourceAsStream("discord.yml");
             if (in != null) {
@@ -48,6 +56,10 @@ public class LoggerDiscordAddonBungee extends Plugin {
                     Files.copy(input, this.activeConfigFile.toPath());
                 } catch (Exception ignored) {}
             }
+        }
+
+        if (this.activeConfigFile.equals(hostConfig)) {
+            cleanupLegacyFolder(addonFolder, loggerBungee.getDataFolder());
         }
 
         this.initManager();
@@ -85,5 +97,24 @@ public class LoggerDiscordAddonBungee extends Plugin {
 
     public DiscordManager getDiscordManager() {
         return this.discordManager;
+    }
+
+    private void cleanupLegacyFolder(File legacyFolder, File hostFolder) {
+        if (legacyFolder == null || !legacyFolder.exists()) return;
+        try {
+            if (legacyFolder.getCanonicalPath().equals(hostFolder.getCanonicalPath())) return;
+            if (!legacyFolder.getName().toLowerCase().contains("discord")) return;
+            File[] files = legacyFolder.listFiles();
+            if (files != null) {
+                for (File f : files) {
+                    if (f.isFile()) {
+                        f.delete();
+                    }
+                }
+            }
+            if (legacyFolder.delete()) {
+                getLogger().info("Removed legacy " + legacyFolder.getName() + " directory.");
+            }
+        } catch (Exception ignored) {}
     }
 }

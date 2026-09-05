@@ -53,6 +53,18 @@ public class Logger extends LoggerAPI {
                     db.dataDeletion);
             setDatabaseManager(new me.prism3.logger_core.database.DatabaseManager(this, dbConfig));
             getDatabaseManager().initialize();
+
+            String sName = this.data != null ? this.data.getServerName() : "default";
+            String ver = getDescription() != null ? getDescription().getVersion() : "1.8.4";
+            boolean hasDiscord = getDiscordManager() != null && getDiscordManager().isEnabled();
+            getDatabaseManager().updateServerStatus(sName, ver, hasDiscord);
+
+            me.prism3.logger.utils.SchedulerAdapter.runAsyncTimer(this, () -> {
+                if (getDatabaseManager() != null) {
+                    boolean discordActive = getDiscordManager() != null && getDiscordManager().isEnabled();
+                    getDatabaseManager().updateServerStatus(sName, ver, discordActive);
+                }
+            }, 60L * 20L, 60L * 20L);
         }
 
         this.loggerManager = new LoggerManager(this);
@@ -110,8 +122,12 @@ public class Logger extends LoggerAPI {
             new StopListener(this);
         }
         getLogger().info("Logger has been disabled!");
-        if (getDatabaseManager() != null)
+        if (getDatabaseManager() != null) {
+            String sName = this.data != null ? this.data.getServerName() : "default";
+            String ver = getDescription() != null ? getDescription().getVersion() : "1.8.4";
+            getDatabaseManager().markServerOffline(sName, ver);
             getDatabaseManager().shutdown();
+        }
         if (this.loggerManager != null)
             this.loggerManager.shutdown();
         me.prism3.logger.utils.SchedulerAdapter.cancelAllTasks(this);

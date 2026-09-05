@@ -1,6 +1,6 @@
 # Discord Bridge Configuration for Logger Plugin [ Bukkit Version ]
 # Need Support Join the Discord Server: https://discord.gg/MfR5mcpVfX
-# Version: 1.8.3
+# Version: 1.8.4
 
 
 # Configuration for the Discord Feature
@@ -191,4 +191,4 @@ ActivityCycling:
   Time: 30
 
 # Do not touch unless you want to reset it's content
-Discord-Version: 1.8.3
+Discord-Version: 1.8.4

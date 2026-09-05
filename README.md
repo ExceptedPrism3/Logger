@@ -1,15 +1,23 @@
 # Logger
 ### High-Performance Asynchronous Minecraft Server & Proxy Auditing Suite
 
+[![Version](https://img.shields.io/badge/Version-1.8.4-brightgreen)](https://github.com/ExceptedPrism3/Logger/releases)
 ![Java](https://img.shields.io/badge/Java-8%20|%2017%20|%2021-orange)
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.8%20--%201.21+-green)
+![Folia](https://img.shields.io/badge/Folia-Supported-00D26A?logo=papermc&logoColor=white)
 ![Velocity](https://img.shields.io/badge/Velocity-3.x+-blue)
 ![BungeeCord](https://img.shields.io/badge/BungeeCord-Supported-yellow)
 ![Build](https://img.shields.io/badge/Build-Maven-purple)
 
+[![Discord](https://img.shields.io/badge/Discord-Join%20Community-5865F2?logo=discord&logoColor=white)](https://discord.gg/MfR5mcpVfX)
+[![Docs](https://img.shields.io/badge/Docs-GitBook-3884FF?logo=gitbook&logoColor=white)](https://prism3.gitbook.io/logger/)
+[![SpigotMC](https://img.shields.io/badge/SpigotMC-Resource-ed8106?logo=spigotmc&logoColor=white)](https://www.spigotmc.org/resources/logger.82729/)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-00457C?logo=paypal&logoColor=white)](https://paypal.me/carpour)
+[![License](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
+
 **Logger** is a modular, high-throughput logging and server auditing suite designed for Spigot, Paper, Purpur, BungeeCord, Waterfall, FlameCord, and Velocity networks.
 
-Packaged as a **Universal 3-in-1 Multi-Platform JAR**, a single file (`Logger-1.8.3.jar`) runs natively on any backend Minecraft server or proxy network without separate builds or dependencies.
+Packaged as a **Universal 3-in-1 Multi-Platform JAR**, a single file (`Logger-1.8.4.jar`) runs natively on any backend Minecraft server or proxy network without separate builds or dependencies.
 
 All logging operations are executed asynchronously off the main server thread using HikariCP connection pooling, ensuring 0.00 TPS impact even on high-capacity servers.
 
@@ -18,7 +26,7 @@ All logging operations are executed asynchronously off the main server thread us
 ## ⚡ Features
 
 ### 🌐 Universal 3-in-1 Single JAR
-* **Universal Multi-Platform**: Drop `Logger-1.8.3.jar` into Spigot, Paper, Purpur, BungeeCord, Waterfall, FlameCord, or Velocity 3.x+ — each platform automatically detects its native plugin descriptor (`plugin.yml`, `bungee.yml`, `velocity-plugin.json`).
+* **Universal Multi-Platform**: Drop `Logger-1.8.4.jar` into Spigot, Paper, Purpur, BungeeCord, Waterfall, FlameCord, or Velocity 3.x+, each platform automatically detects its native plugin descriptor (`plugin.yml`, `bungee.yml`, `velocity-plugin.json`).
 * **Isolated Configurations**: Dedicated configuration and message files are extracted per platform without namespace collisions or config pollution.
 
 ### 🎮 Player Auditing (35+ Event Types)
@@ -58,6 +66,9 @@ All logging operations are executed asynchronously off the main server thread us
 * **Database Maintenance**: 1-Click database schema sync and self-repair tool.
 * **Export**: Direct export of log tables to CSV and JSON formats.
 
+> 💼 **Interested in the Web Control Panel?**  
+> If you want to purchase a license or obtain the source code, open a ticket on our [Discord Server](https://discord.gg/MfR5mcpVfX).
+
 ---
 
 ## 🧩 Project Modules
@@ -79,7 +90,7 @@ All logging operations are executed asynchronously off the main server thread us
 
 ### Server Commands (Spigot / Paper / Purpur)
 ```
-/logger view <type|player> [<page>]  - In-game interactive log browser with clickable pagination
+/logger view <type|player> [<page>] - In-game interactive log browser with clickable pagination
 /logger reload                       - Reloads configurations, messages, and database pools
 /logger manual <message...>          - Logs custom server/admin messages
 /logger dump                         - Generates a secure online diagnostic dump for support
@@ -128,8 +139,17 @@ mvn clean package -DskipTests
 ```
 
 The compiled release artifacts will be placed in `releases/`:
-* `releases/Logger-1.8.3.jar` *(Universal JAR for Spigot, Paper, Purpur, BungeeCord, and Velocity)*
-* `releases/LoggerDiscordAddon-1.8.3.jar` *(Universal Discord Addon for Spigot, BungeeCord, and Velocity)*
+* `releases/Logger-1.8.4.jar` *(Universal JAR for Spigot, Paper, Purpur, BungeeCord, and Velocity)*
+* `releases/LoggerDiscordAddon-1.8.4.jar` *(Universal Discord Addon for Spigot, BungeeCord, and Velocity)*
+
+---
+
+## ☕ Support the Project
+
+If you find **Logger** helpful for your server or network and want to support its ongoing development, consider buying me a coffee! Any donation is greatly appreciated:
+
+[![Donate with PayPal](https://img.shields.io/badge/Donate-PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/carpour)  
+👉 **[paypal.me/carpour](https://paypal.me/carpour)**
 
 ---
 
@@ -138,6 +158,7 @@ The compiled release artifacts will be placed in `releases/`:
 * **SpigotMC Resource**: [spigotmc.org/resources/logger.82729](https://www.spigotmc.org/resources/logger.82729/)
 * **Official Documentation**: [prism3.gitbook.io/logger](https://prism3.gitbook.io/logger/)
 * **Discord Community**: [discord.gg/MfR5mcpVfX](https://discord.gg/MfR5mcpVfX)
+* **Donate / Buy Me a Coffee**: [paypal.me/carpour](https://paypal.me/carpour)
 
 ---
 

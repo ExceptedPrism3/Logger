@@ -80,7 +80,20 @@ public class Dump implements SubCommand {
     private void pastebinExecution(final CommandSender sender) throws IOException {
 
         final File dataFolder = plugin.getDataFolder();
-        final Dotenv dotenv = Dotenv.load();
+        Dotenv dotenv = null;
+        try {
+            dotenv = Dotenv.configure().ignoreIfMissing().load();
+        } catch (final Exception ignored) {}
+
+        String apiKey = dotenv != null ? dotenv.get("PASTEBIN_API") : null;
+        if (apiKey == null || apiKey.trim().isEmpty()) {
+            apiKey = System.getenv("PASTEBIN_API");
+        }
+
+        if (apiKey == null || apiKey.trim().isEmpty()) {
+            sender.sendMessage(ChatColor.RED + "Pastebin API key not configured. Set PASTEBIN_API in environment variables or .env file.");
+            return;
+        }
 
         File discordFile = new File(dataFolder, "discord.yml");
         if (!discordFile.exists()) {
@@ -99,7 +112,7 @@ public class Dump implements SubCommand {
                         + plugin.getData().getLanguage() + ".yml")),
                 readFile(new File("logs" + File.separator + "latest.log")));
 
-        final PasteBin.PasteRequest request = new PasteBin.PasteRequest(dotenv.get("PASTEBIN_API"), combinedContent);
+        final PasteBin.PasteRequest request = new PasteBin.PasteRequest(apiKey, combinedContent);
         request.setPasteName("Logger MC Plugin Dump");
         request.setPasteFormat("yaml");
         request.setPasteState(1);

@@ -52,6 +52,15 @@ public class LoggerBungee extends Plugin implements LoggerPlatform {
         }
 
         Log.info("LoggerBungee has been enabled!");
+
+        getProxy().getScheduler().schedule(this, () -> {
+            if (this.databaseManager != null) {
+                String sName = this.configManager != null ? this.configManager.getServerName() : "BungeeCord";
+                String ver = getDescription() != null ? getDescription().getVersion() : "1.8.4";
+                boolean hasDiscord = this.discordManager != null && this.discordManager.isEnabled();
+                this.databaseManager.updateServerStatus(sName, ver, hasDiscord);
+            }
+        }, 60, 60, java.util.concurrent.TimeUnit.SECONDS);
     }
 
     @Override
@@ -67,6 +76,9 @@ public class LoggerBungee extends Plugin implements LoggerPlatform {
             this.discordManager.shutdown();
         }
         if (this.databaseManager != null) {
+            String sName = this.configManager != null ? this.configManager.getServerName() : "BungeeCord";
+            String ver = getDescription() != null ? getDescription().getVersion() : "1.8.4";
+            this.databaseManager.markServerOffline(sName, ver);
             this.databaseManager.shutdown();
         }
         if (this.fileManager != null) {
@@ -143,6 +155,12 @@ public class LoggerBungee extends Plugin implements LoggerPlatform {
 
     public void setDiscordManager(me.prism3.logger_core.discord.DiscordManager discordManager) {
         this.discordManager = discordManager;
+        if (this.databaseManager != null) {
+            String serverName = this.configManager != null ? this.configManager.getServerName() : "BungeeCord";
+            String version = getDescription() != null ? getDescription().getVersion() : "1.8.4";
+            boolean isDiscordActive = discordManager != null && discordManager.isEnabled();
+            this.databaseManager.updateServerStatus(serverName, version, isDiscordActive);
+        }
     }
 
     public me.prism3.logger_core.discord.DiscordManager getDiscordManager() {

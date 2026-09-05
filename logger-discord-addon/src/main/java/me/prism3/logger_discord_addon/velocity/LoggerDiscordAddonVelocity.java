@@ -18,7 +18,7 @@ import java.nio.file.Path;
 @Plugin(
     id = "loggerdiscordaddon",
     name = "LoggerDiscordAddon",
-    version = "1.8.3",
+    version = "1.8.4",
     authors = {"Prism3"},
     dependencies = {
         @Dependency(id = "logger-velocity", optional = true),
@@ -53,16 +53,24 @@ public class LoggerDiscordAddonVelocity {
             return;
         }
 
-        File addonConfig = new File(this.dataDirectory.toFile(), "discord.yml");
         File hostConfig = new File(host.getFolder().toFile(), "discord.yml");
+        File addonFolder = this.dataDirectory.toFile();
+        File addonConfig = new File(addonFolder, "discord.yml");
 
-        if (addonConfig.exists()) {
-            this.activeConfigFile = addonConfig;
-        } else if (hostConfig.exists()) {
+        if (hostConfig.exists()) {
             this.activeConfigFile = hostConfig;
+        } else if (addonConfig.exists()) {
+            try {
+                host.getFolder().toFile().mkdirs();
+                Files.copy(addonConfig.toPath(), hostConfig.toPath());
+                this.activeConfigFile = hostConfig;
+                this.logger.info("Migrated discord.yml from legacy addon folder to " + hostConfig.getPath());
+            } catch (Exception e) {
+                this.activeConfigFile = addonConfig;
+            }
         } else {
-            this.dataDirectory.toFile().mkdirs();
-            this.activeConfigFile = addonConfig;
+            host.getFolder().toFile().mkdirs();
+            this.activeConfigFile = hostConfig;
             InputStream in = getClass().getResourceAsStream("/velocity-discord.yml");
             if (in == null) in = getClass().getResourceAsStream("/discord.yml");
             if (in != null) {
@@ -70,6 +78,10 @@ public class LoggerDiscordAddonVelocity {
                     Files.copy(input, this.activeConfigFile.toPath());
                 } catch (Exception ignored) {}
             }
+        }
+
+        if (this.activeConfigFile.equals(hostConfig)) {
+            cleanupLegacyFolder(addonFolder, host.getFolder().toFile());
         }
 
         this.initManager();
@@ -107,5 +119,24 @@ public class LoggerDiscordAddonVelocity {
 
     public DiscordManager getDiscordManager() {
         return this.discordManager;
+    }
+
+    private void cleanupLegacyFolder(File legacyFolder, File hostFolder) {
+        if (legacyFolder == null || !legacyFolder.exists()) return;
+        try {
+            if (legacyFolder.getCanonicalPath().equals(hostFolder.getCanonicalPath())) return;
+            if (!legacyFolder.getName().toLowerCase().contains("discord")) return;
+            File[] files = legacyFolder.listFiles();
+            if (files != null) {
+                for (File f : files) {
+                    if (f.isFile()) {
+                        f.delete();
+                    }
+                }
+            }
+            if (legacyFolder.delete()) {
+                this.logger.info("Removed legacy " + legacyFolder.getName() + " directory.");
+            }
+        } catch (Exception ignored) {}
     }
 }

@@ -33,8 +33,16 @@ public class PermissionManager {
     }
 
     public boolean isExempt(ProxiedPlayer player) {
+        if (player == null) return false;
         return player.hasPermission(Constants.Permissions.EXEMPT.getValue())
                 || player.hasPermission("logger.exempt");
+    }
+
+    public boolean isExemptDiscord(ProxiedPlayer player) {
+        if (player == null) return false;
+        return player.hasPermission(Constants.Permissions.EXEMPT_DISCORD.getValue())
+                || player.hasPermission("loggerproxy.exempt.discord")
+                || player.hasPermission("logger.exempt.discord");
     }
 
     public boolean canReload(CommandSender sender) {

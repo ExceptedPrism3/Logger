@@ -36,6 +36,7 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
 
     private final Map<String, TextChannel> channelMap = new ConcurrentHashMap<>();
     private final Map<String, String> webhookMap = new ConcurrentHashMap<>();
+    private final Map<String, String> titleMap = new ConcurrentHashMap<>();
     private ScheduledExecutorService activityScheduler;
 
     private String messageType = "normal";
@@ -151,6 +152,7 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
     private void cacheChannels(Map<String, Object> discordSection) {
         if (this.jda == null || discordSection == null) return;
         this.channelMap.clear();
+        this.titleMap.clear();
 
         collectChannelsRecursively(discordSection, "");
     }
@@ -164,6 +166,13 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
             if (value instanceof Map) {
                 Map<String, Object> sub = (Map<String, Object>) value;
                 String fullKey = prefix.isEmpty() ? key : prefix + "." + key;
+
+                if (sub.containsKey("Title")) {
+                    String customTitle = String.valueOf(sub.get("Title")).trim();
+                    if (!customTitle.isEmpty()) {
+                        registerKeyVariants(fullKey, key, norm -> this.titleMap.put(norm, customTitle));
+                    }
+                }
 
                 if (sub.containsKey("Channel-ID")) {
                     String channelIdStr = String.valueOf(sub.get("Channel-ID")).trim();
@@ -199,6 +208,7 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
     private void initWebhooks(Map<String, Object> discordSection) {
         if (discordSection == null) return;
         this.webhookMap.clear();
+        this.titleMap.clear();
 
         collectWebhooksRecursively(discordSection, "");
     }
@@ -212,6 +222,13 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
             if (value instanceof Map) {
                 Map<String, Object> sub = (Map<String, Object>) value;
                 String fullKey = prefix.isEmpty() ? key : prefix + "." + key;
+
+                if (sub.containsKey("Title")) {
+                    String customTitle = String.valueOf(sub.get("Title")).trim();
+                    if (!customTitle.isEmpty()) {
+                        registerKeyVariants(fullKey, key, norm -> this.titleMap.put(norm, customTitle));
+                    }
+                }
 
                 if (sub.containsKey("Webhook")) {
                     String webhookUrl = String.valueOf(sub.get("Webhook")).trim();
@@ -521,7 +538,7 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
 
         if (this.isBotMode) {
             TextChannel channel = resolveChannel(type);
-            if (channel == null && logType != null && !logType.equalsIgnoreCase(type)) {
+            if (channel == null && logType != null && !logType.equalsIgnoreCase(type) && !"STAFF".equalsIgnoreCase(type)) {
                 channel = resolveChannel(logType);
             }
             if (channel == null) {
@@ -565,7 +582,7 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
             }
         } else {
             String webhookUrl = resolveWebhook(type);
-            if (webhookUrl == null && logType != null && !logType.equalsIgnoreCase(type)) {
+            if (webhookUrl == null && logType != null && !logType.equalsIgnoreCase(type) && !"STAFF".equalsIgnoreCase(type)) {
                 webhookUrl = resolveWebhook(logType);
             }
             if (webhookUrl == null) {
@@ -619,11 +636,19 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
     }
 
     private String getEventTitle(String type, String logType) {
+        String target = (type != null && !type.isEmpty()) ? type : logType;
+        if (target != null) {
+            String norm = normalizeKey(target);
+            String custom = this.titleMap.get(norm);
+            if (custom != null && !custom.isEmpty()) {
+                return custom;
+            }
+        }
+
         if (this.embedTitle != null && !this.embedTitle.isEmpty() && !this.embedTitle.equals("Server Notification")) {
             return this.embedTitle;
         }
 
-        String target = (type != null && !type.isEmpty()) ? type : logType;
         if (target == null) return "Server Notification";
 
         String norm = normalizeKey(target);
@@ -740,7 +765,7 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-            conn.setRequestProperty("User-Agent", "LoggerDiscordAddon/1.8.3");
+            conn.setRequestProperty("User-Agent", "LoggerDiscordAddon/1.8.4");
             conn.setConnectTimeout(4000);
             conn.setReadTimeout(4000);
             conn.setDoOutput(true);
@@ -809,6 +834,7 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
         }
         this.channelMap.clear();
         this.webhookMap.clear();
+        this.titleMap.clear();
         this.isEnabled = false;
     }
 

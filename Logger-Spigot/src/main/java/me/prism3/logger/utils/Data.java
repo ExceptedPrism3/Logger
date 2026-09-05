@@ -25,6 +25,7 @@ public class Data {
     private String gameModeToLog;
     private String pluginVersion;
     private boolean logToFile;
+    private boolean staffEnabled;
     private boolean showIP;
     private int levelToLog;
     private long checkerIntervalRAM;
@@ -83,6 +84,7 @@ public class Data {
         this.timeFormatter = cfg.getString("Time-Formatter", "yyyy-MM-dd HH:mm:ss");
         this.gameModeToLog = cfg.getString("Game-Mode", "CREATIVE");
         this.logToFile = cfg.getBoolean("Log-to-Files", true);
+        this.staffEnabled = cfg.getBoolean("Staff.Enabled", false);
         this.showIP = cfg.getBoolean("Player-Join-IP", false);
         this.levelToLog = cfg.getInt("Player-Level", 100);
         this.tpsToLog = cfg.getInt("TPS", 15);
@@ -120,6 +122,10 @@ public class Data {
 
     public boolean isLogToFile() {
         return this.logToFile;
+    }
+
+    public boolean isStaffEnabled() {
+        return this.staffEnabled;
     }
 
     public boolean isShowIP() {

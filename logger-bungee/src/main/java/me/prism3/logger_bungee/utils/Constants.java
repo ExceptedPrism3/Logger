@@ -49,6 +49,7 @@ public final class Constants {
         STAFF_ALERTS("loggerproxy.staff.alerts"),
         STAFF_NOTIFICATIONS("loggerproxy.staff.notifications"),
         EXEMPT("loggerproxy.exempt"),
+        EXEMPT_DISCORD("loggerproxy.exempt.discord"),
         RELOAD("loggerproxy.reload"),
         ADMIN("loggerproxy.admin");
 

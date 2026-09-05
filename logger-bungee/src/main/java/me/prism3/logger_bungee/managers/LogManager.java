@@ -23,6 +23,9 @@ public class LogManager {
     public void logPlayerEvent(me.prism3.logger_bungee.utils.Constants.Events event, ProxiedPlayer player,
             Map<String, String> placeholders,
             boolean isStaff) {
+        if (player != null && this.plugin.getPermissionManager().isExempt(player)) {
+            return;
+        }
         String eventType = event.getConfigKey();
         String folderName = event.getFolderName();
 
@@ -36,14 +39,16 @@ public class LogManager {
 
         // Log to Discord if enabled
         if (this.plugin.getDiscordManager() != null && this.plugin.getDiscordManager().isEnabled()) {
-            String discordMessage = this.plugin.getMessageManager().formatDiscordMessage(
-                    isStaff ? eventType + "-Staff" : eventType,
-                    placeholders);
+            if (!this.plugin.getPermissionManager().isExemptDiscord(player)) {
+                String discordMessage = this.plugin.getMessageManager().formatDiscordMessage(
+                        isStaff ? eventType + "-Staff" : eventType,
+                        placeholders);
 
-            // Convert ProxiedPlayer to LogPlayer
-            LogPlayer logPlayer = new LogPlayer(player.getName(), player.getUniqueId(),
-                    player.getServer() != null ? player.getServer().getInfo().getName() : "unknown");
-            this.plugin.getDiscordManager().sendMessage(eventType, discordMessage, logPlayer, eventType);
+                // Convert ProxiedPlayer to LogPlayer
+                LogPlayer logPlayer = new LogPlayer(player.getName(), player.getUniqueId(),
+                        player.getServer() != null ? player.getServer().getInfo().getName() : "unknown");
+                this.plugin.getDiscordManager().sendMessage(eventType, discordMessage, logPlayer, eventType);
+            }
         }
 
         // Log to database if enabled

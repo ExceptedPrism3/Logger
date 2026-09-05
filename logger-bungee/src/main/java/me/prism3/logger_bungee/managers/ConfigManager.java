@@ -80,6 +80,13 @@ public class ConfigManager {
         }
     }
 
+    public String getServerName() {
+        if (this.config != null) {
+            return this.config.getString("Server-Name", "BungeeCord");
+        }
+        return "BungeeCord";
+    }
+
     public Configuration getConfig() {
         return this.config;
     }

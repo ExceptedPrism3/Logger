@@ -9,8 +9,10 @@ mvn clean package -DskipTests -o
 
 echo "📦 Copying artifacts to releases/..."
 mkdir -p releases
-cp logger-paper/target/logger-paper-1.8.3.jar releases/Logger-1.8.3.jar
-cp logger-discord-addon/target/logger-discord-addon-1.8.3.jar releases/LoggerDiscordAddon-1.8.3.jar
+cp logger-paper/target/logger-paper-1.8.4.jar releases/Logger-1.8.4.jar
+cp logger-discord-addon/target/logger-discord-addon-1.8.4.jar releases/LoggerDiscordAddon-1.8.4.jar
 
-echo "✅ Build Complete! JARs ready in releases/:"
+(cd logger-web-panel && zip -q -r ../releases/LoggerWebPanel-1.0.1.zip index.html INSTALL.md api assets -x "*.DS_Store*")
+
+echo "✅ Build Complete! Release artifacts ready in releases/:"
 ls -lh releases/

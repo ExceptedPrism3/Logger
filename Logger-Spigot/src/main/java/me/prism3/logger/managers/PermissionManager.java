@@ -38,7 +38,7 @@ public class PermissionManager {
      * @param player The player to check.
      * @return true if the player has the exempt permission, false otherwise.
      */
-    public static boolean isExempt(final Player player) { return hasPermission(player, LOGGER_EXEMPT); }
+    public static boolean isExempt(final Player player) { return player != null && hasPermission(player, LOGGER_EXEMPT); }
 
     /**
      * Checks if a player has the Discord exempt permission (prevents Discord logging).
@@ -46,7 +46,7 @@ public class PermissionManager {
      * @param player The player to check.
      * @return true if the player has the Discord exempt permission, false otherwise.
      */
-    public static boolean isExemptDiscord(final Player player) { return hasPermission(player, LOGGER_EXEMPT_DISCORD); }
+    public static boolean isExemptDiscord(final Player player) { return player != null && hasPermission(player, LOGGER_EXEMPT_DISCORD); }
 
     /**
      * Checks if a player is considered staff.

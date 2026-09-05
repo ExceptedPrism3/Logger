@@ -7,6 +7,7 @@ import me.prism3.logger_core.platform.LoggerPlatform;
 import me.prism3.logger_core.utils.Log;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -55,6 +56,9 @@ public class DatabaseManager {
         // Proxy tables (Unified Bungee & Velocity)
         tempTables.put("player_events", autoInc + ", server_name VARCHAR(100), player_name VARCHAR(100), event_type VARCHAR(50), message TEXT, date " + dateType);
         tempTables.put("server_events", autoInc + ", server_name VARCHAR(100), event_type VARCHAR(50), message TEXT, date " + dateType);
+        
+        // Server & Addon Status Table
+        tempTables.put("server_status", "server_name VARCHAR(100) PRIMARY KEY, plugin_version VARCHAR(20), discord_addon TINYINT(1) DEFAULT 0, last_seen " + dateType);
         
         this.tables = Collections.unmodifiableMap(tempTables);
     }
@@ -192,6 +196,56 @@ public class DatabaseManager {
                 Log.severe("Failed to purge old logs from database: " + e.getMessage());
             }
         });
+    }
+
+
+    public void updateServerStatus(String serverName, String pluginVersion, boolean discordAddon) {
+        if (!config.enabled || isShutdown) return;
+        submit(() -> {
+            try (Connection conn = getConnection()) {
+                String tableName = config.tablePrefix + "server_status";
+                boolean isSqlite = "sqlite".equalsIgnoreCase(config.type);
+                String sql;
+                if (isSqlite) {
+                    sql = "INSERT INTO " + tableName + " (server_name, plugin_version, discord_addon, last_seen) " +
+                          "VALUES (?, ?, ?, CURRENT_TIMESTAMP) " +
+                          "ON CONFLICT(server_name) DO UPDATE SET " +
+                          "plugin_version = excluded.plugin_version, " +
+                          "discord_addon = excluded.discord_addon, " +
+                          "last_seen = CURRENT_TIMESTAMP";
+                } else {
+                    sql = "INSERT INTO " + tableName + " (server_name, plugin_version, discord_addon, last_seen) " +
+                          "VALUES (?, ?, ?, NOW()) " +
+                          "ON DUPLICATE KEY UPDATE " +
+                          "plugin_version = VALUES(plugin_version), " +
+                          "discord_addon = VALUES(discord_addon), " +
+                          "last_seen = NOW()";
+                }
+                try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                    ps.setString(1, (serverName != null && !serverName.isEmpty()) ? serverName : "default");
+                    ps.setString(2, (pluginVersion != null && !pluginVersion.isEmpty()) ? pluginVersion : "1.8.4");
+                    ps.setInt(3, discordAddon ? 1 : 0);
+                    ps.executeUpdate();
+                }
+            } catch (SQLException e) {
+                if (platform.isDebug()) {
+                    platform.debug("Failed to update server status: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    public void markServerOffline(String serverName, String pluginVersion) {
+        if (!config.enabled) return;
+        try (Connection conn = provider != null ? provider.getConnection() : null) {
+            if (conn == null) return;
+            String tableName = config.tablePrefix + "server_status";
+            String sql = "UPDATE " + tableName + " SET discord_addon = 0 WHERE server_name = ?";
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, (serverName != null && !serverName.isEmpty()) ? serverName : "default");
+                ps.executeUpdate();
+            }
+        } catch (Exception ignored) {}
     }
 
     public void shutdown() {

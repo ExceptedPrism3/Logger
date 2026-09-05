@@ -1,7 +1,7 @@
 {
   "id": "loggerdiscordaddon",
   "name": "LoggerDiscordAddon",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "description": "Discord Bot and Webhook Addon for Logger Plugin on Velocity",
   "authors": ["Prism3"],
   "main": "me.prism3.logger_discord_addon.velocity.LoggerDiscordAddonVelocity",

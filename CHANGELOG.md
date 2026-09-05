@@ -8,6 +8,19 @@ Fixes & Improvements
     [+] EnchantItemEvent Null-Safety & 1.21+ Enchantments (#68):
         [+] Added comprehensive null-safety checks in ItemEnchantListener for enchanting tables, item stacks, and added enchants to prevent listener exceptions.
         [+] Hardened FriendlyEnchants lookup with robust fallback handling and support for 1.21+ vanilla enchantments (including Mace enchantments: Density, Breach, Wind Burst) and custom/modded enchantments.
+    [+] Permission Exemption & Staff Discord Segregation Fixes:
+        [+] Implemented missing `logger.exempt.discord` (`loggerproxy.exempt.discord`) permission check across Spigot, Paper, BungeeCord, and Velocity, properly exempting designated players from Discord logging while preserving file and database logs.
+        [+] Centralized `logger.exempt` evaluation at the entry of `LoggerManager` and proxy managers to guarantee that exempt players are never written to files, Discord, or database.
+        [+] Harmonized Staff logging between the filesystem and Discord: `isStaff` evaluation now strictly respects `Staff.Enabled` across both destinations.
+        [+] Fixed Discord Addon leaking `STAFF` notifications into general player channels: prevented fallback from `STAFF` to public player channels when a dedicated Staff Discord channel is not configured.
+    [+] Discord Configuration Location & Migration:
+        [+] Restored `discord.yml` canonical location directly inside the main `plugins/Logger/` folder (`plugins/LoggerBungee/` on BungeeCord) instead of creating an isolated `plugins/LoggerDiscordAddon/` directory.
+        [+] Added automatic seamless migration of existing `discord.yml` from `plugins/LoggerDiscordAddon/` to `plugins/Logger/`.
+        [+] Added optional custom `Title` configuration per Discord channel/webhook route.
+    [+] Web Panel Integration & Real-Time Status Detection:
+        [+] Implemented universal `server_status` heartbeat schema in `DatabaseManager` across Spigot, Paper, Folia, BungeeCord, and Velocity.
+        [+] Added automatic live status detection on the Web Panel for Logger Core plugin and LoggerDiscordAddon.
+        [+] Added connected servers breakdown card on Web Panel dashboard displaying online/offline status, plugin version, Discord addon presence, and last ping.
 
 <-!------------------------------------------ v1.8.3 ------------------------------------------!->
 

@@ -63,6 +63,13 @@ public class ConfigManager {
         catch (IOException e) { e.printStackTrace(); }
     }
 
+    public String getServerName() {
+        if (this.configuration != null && this.configuration.get("Server-Name") != null) {
+            return this.configuration.getString("Server-Name");
+        }
+        return "Velocity";
+    }
+
     public File getFile() {
         return this.file;
     }
