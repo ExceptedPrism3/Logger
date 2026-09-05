@@ -93,9 +93,18 @@ public class ConfigManager {
     }
 
     public boolean getBoolean(final String path) {
-
         return this.configuration.get(path) != null && this.configuration.getBoolean(path);
+    }
 
+    public boolean getBoolean(final String path, final boolean def) {
+        if (this.configuration != null && this.configuration.get(path) != null) {
+            return this.configuration.getBoolean(path);
+        }
+        return def;
+    }
+
+    public Object get(final String path) {
+        return this.configuration != null ? this.configuration.get(path) : null;
     }
 
     public String getString(final String path) {

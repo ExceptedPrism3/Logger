@@ -31,8 +31,9 @@ public class LogManager {
         }
 
         String fileMessage = format(fileTemplate, placeholders);
-
-        FileHandler.logToFile(eventType, fileMessage);
+        if (Data.isLogToFiles) {
+            FileHandler.logToFile(eventType, fileMessage);
+        }
 
         if (plugin.getDiscordManager() != null && plugin.getDiscordManager().isEnabled()) {
             boolean isDiscordExempt = player != null && (player.hasPermission(Data.loggerExemptDiscord) || player.hasPermission("logger.exempt.discord"));
@@ -79,23 +80,25 @@ public class LogManager {
         String fileTemplate = plugin.getMessages().getString("Files." + eventType);
         String fileMessage = format(fileTemplate, placeholders);
 
-        switch (eventType) {
-            case "Server-Side.Start":
-                FileHandler.logToFile("Server-Side.Start", fileMessage);
-                break;
-            case "Server-Side.Stop":
-                FileHandler.logToFile("Server-Side.Stop", fileMessage);
-                break;
-            case "Server-Side.Server-Commands":
-            case "Server-Side.Console-Commands":
-                FileHandler.logToFile("Server-Side.Console-Commands", fileMessage);
-                break;
-            case "Server-Side.RAM":
-                FileHandler.logToFile("Server-Side.RAM", fileMessage);
-                break;
-            case "Server-Side.Manual-Log":
-                FileHandler.logToFile("Manual Log", fileMessage);
-                break;
+        if (Data.isLogToFiles) {
+            switch (eventType) {
+                case "Server-Side.Start":
+                    FileHandler.logToFile("Server-Side.Start", fileMessage);
+                    break;
+                case "Server-Side.Stop":
+                    FileHandler.logToFile("Server-Side.Stop", fileMessage);
+                    break;
+                case "Server-Side.Server-Commands":
+                case "Server-Side.Console-Commands":
+                    FileHandler.logToFile("Server-Side.Console-Commands", fileMessage);
+                    break;
+                case "Server-Side.RAM":
+                    FileHandler.logToFile("Server-Side.RAM", fileMessage);
+                    break;
+                case "Server-Side.Manual-Log":
+                    FileHandler.logToFile("Manual Log", fileMessage);
+                    break;
+            }
         }
 
         if (plugin.getDiscordManager() != null && plugin.getDiscordManager().isEnabled()) {

@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.attribute.FileTime;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static me.prism3.loggervelocity.utils.Data.fileDeletion;
@@ -35,69 +34,38 @@ public class FileHandler {
     private static File ramLogFile;
 
     public FileHandler(File dataFolder) {
-
-        dataFolder.mkdir();
-
         final File logsFolder = new File(dataFolder, "Logs");
-        logsFolder.mkdirs();
 
         final Date date = new Date();
         final SimpleDateFormat filenameDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        final String dateStr = filenameDateFormat.format(date);
 
         staffLogFolder = new File(logsFolder, "Staff");
-        staffLogFile = new File(staffLogFolder, filenameDateFormat.format(date) + ".log");
+        staffLogFile = new File(staffLogFolder, dateStr + ".log");
 
         chatLogFolder = new File(logsFolder, "Player Chat");
-        chatLogFile = new File(chatLogFolder, filenameDateFormat.format(date) + ".log");
+        chatLogFile = new File(chatLogFolder, dateStr + ".log");
 
         playerCommandLogFolder = new File(logsFolder, "Player Command");
-        playerCommandLogFile = new File(playerCommandLogFolder, filenameDateFormat.format(date) + ".log");
+        playerCommandLogFile = new File(playerCommandLogFolder, dateStr + ".log");
 
         loginLogFolder = new File(logsFolder, "Player Login");
-        loginLogFile = new File(loginLogFolder, filenameDateFormat.format(date) + ".log");
+        loginLogFile = new File(loginLogFolder, dateStr + ".log");
 
         leaveLogFolder = new File(logsFolder, "Player Leave");
-        leaveLogFile = new File(leaveLogFolder, filenameDateFormat.format(date) + ".log");
+        leaveLogFile = new File(leaveLogFolder, dateStr + ".log");
 
         consoleCommandLogFolder = new File(logsFolder, "Server Commands");
-        consoleCommandLogFile = new File(consoleCommandLogFolder, filenameDateFormat.format(date) + ".log");
+        consoleCommandLogFile = new File(consoleCommandLogFolder, dateStr + ".log");
 
         serverStartLogFolder = new File(logsFolder, "Server Start");
-        serverStartLogFile = new File(serverStartLogFolder, filenameDateFormat.format(date) + ".log");
+        serverStartLogFile = new File(serverStartLogFolder, dateStr + ".log");
 
         serverStopLogFolder = new File(logsFolder, "Server Stop");
-        serverStopLogFile = new File(serverStopLogFolder, filenameDateFormat.format(date) + ".log");
+        serverStopLogFile = new File(serverStopLogFolder, dateStr + ".log");
 
         ramLogFolder = new File(logsFolder, "RAM");
-        ramLogFile = new File(ramLogFolder, filenameDateFormat.format(date) + ".log");
-
-        try {
-
-            if (isStaffEnabled)
-                staffLogFolder.mkdir();
-            chatLogFolder.mkdir();
-            playerCommandLogFolder.mkdir();
-            loginLogFolder.mkdir();
-            leaveLogFolder.mkdir();
-            consoleCommandLogFolder.mkdir();
-            serverStartLogFolder.mkdir();
-            serverStopLogFolder.mkdir();
-            ramLogFolder.mkdir();
-
-            if (isStaffEnabled)
-                staffLogFile.createNewFile();
-            chatLogFile.createNewFile();
-            playerCommandLogFile.createNewFile();
-            loginLogFile.createNewFile();
-            leaveLogFile.createNewFile();
-            consoleCommandLogFile.createNewFile();
-            serverStartLogFile.createNewFile();
-            serverStopLogFile.createNewFile();
-            ramLogFile.createNewFile();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ramLogFile = new File(ramLogFolder, dateStr + ".log");
     }
 
     public static File getStaffLogFile() {
@@ -137,95 +105,58 @@ public class FileHandler {
     }
 
     private void deleteFile(File file) {
-
-        if (fileDeletion <= 0) {
+        if (fileDeletion <= 0 || file == null || !file.exists()) {
             return;
         }
 
-        FileTime creationTime = null;
-
         try {
-
-            creationTime = (FileTime) Files.getAttribute(file.toPath(), "creationTime");
-
+            FileTime creationTime = (FileTime) Files.getAttribute(file.toPath(), "creationTime");
+            if (creationTime != null) {
+                final long offset = System.currentTimeMillis() - creationTime.toMillis();
+                final long maxAge = TimeUnit.DAYS.toMillis(fileDeletion);
+                if (offset > maxAge) {
+                    file.delete();
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
-        assert creationTime != null;
-        final long offset = System.currentTimeMillis() - creationTime.toMillis();
-        final long fileDeletionDays = fileDeletion;
-        final long maxAge = TimeUnit.DAYS.toMillis(fileDeletionDays);
-
-        if (offset > maxAge)
-            file.delete();
-
+    private void deleteFilesInFolder(File folder) {
+        if (folder != null && folder.exists() && folder.isDirectory()) {
+            File[] files = folder.listFiles();
+            if (files != null) {
+                for (File f : files) {
+                    this.deleteFile(f);
+                }
+            }
+        }
     }
 
     public void deleteFiles() {
-
         if (fileDeletion <= 0)
             return;
 
         if (isStaffEnabled) {
-
-            for (File staffLog : Objects.requireNonNull(staffLogFolder.listFiles())) {
-
-                this.deleteFile(staffLog);
-
-            }
+            deleteFilesInFolder(staffLogFolder);
         }
 
-        for (File chatLog : Objects.requireNonNull(chatLogFolder.listFiles())) {
-
-            this.deleteFile(chatLog);
-
-        }
-
-        for (File commandsLog : Objects.requireNonNull(playerCommandLogFolder.listFiles())) {
-
-            this.deleteFile(commandsLog);
-
-        }
-
-        for (File loginLog : Objects.requireNonNull(loginLogFolder.listFiles())) {
-
-            this.deleteFile(loginLog);
-
-        }
-
-        for (File leaveLog : Objects.requireNonNull(leaveLogFolder.listFiles())) {
-
-            this.deleteFile(leaveLog);
-
-        }
-
-        for (File consoleCommandsLog : Objects.requireNonNull(consoleCommandLogFolder.listFiles())) {
-
-            this.deleteFile(consoleCommandsLog);
-
-        }
-
-        for (File serverStartLog : Objects.requireNonNull(serverStartLogFolder.listFiles())) {
-
-            this.deleteFile(serverStartLog);
-
-        }
-
-        for (File serverStopLog : Objects.requireNonNull(serverStopLogFolder.listFiles())) {
-
-            this.deleteFile(serverStopLog);
-
-        }
-
-        for (File ramLog : Objects.requireNonNull(ramLogFolder.listFiles())) {
-
-            this.deleteFile(ramLog);
-
-        }
+        deleteFilesInFolder(chatLogFolder);
+        deleteFilesInFolder(playerCommandLogFolder);
+        deleteFilesInFolder(loginLogFolder);
+        deleteFilesInFolder(leaveLogFolder);
+        deleteFilesInFolder(consoleCommandLogFolder);
+        deleteFilesInFolder(serverStartLogFolder);
+        deleteFilesInFolder(serverStopLogFolder);
+        deleteFilesInFolder(ramLogFolder);
     }
 
     public static void logToFile(String eventType, String message) {
+        if (!Data.isLogToFiles) {
+            return;
+        }
+
         File file;
         switch (eventType) {
             case "Player-Chat":
@@ -266,17 +197,19 @@ public class FileHandler {
                 file = ramLogFile;
                 break;
             default:
-                file = chatLogFolder; // fallback?
                 return;
         }
 
         if (file == null)
             return;
 
-        try {
-            java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.FileWriter(file, true));
-            out.write(message + "\n");
-            out.close();
+        if (file.getParentFile() != null && !file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
+
+        try (java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.FileWriter(file, true))) {
+            out.write(message);
+            out.newLine();
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }

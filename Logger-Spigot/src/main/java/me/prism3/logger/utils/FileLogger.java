@@ -30,7 +30,6 @@ public class FileLogger {
         this.plugin = plugin;
         this.retentionDays = plugin.getData().getFileDeletionSettings().days;
         this.currentDate = dateFormat.format(new Date());
-        createFolders();
 
         // Schedule daily async cleanup
         if (retentionDays >= 0) {

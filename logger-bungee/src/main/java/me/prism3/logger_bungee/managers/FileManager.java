@@ -33,37 +33,13 @@ public class FileManager {
     }
 
     private void initialize() {
-        if (!this.logFolder.exists()) {
-            this.logFolder.mkdirs();
-        }
-
         Configuration config = plugin.getConfigManager().getConfig();
         if (!config.getBoolean("Log-to-Files", true)) {
             return;
         }
 
-        // Pre-create folders ONLY for enabled categories
-        for (Constants.Events event : Constants.Events.values()) {
-            if (config.getBoolean(event.getEnablePath(), true)) {
-                File folder = new File(this.logFolder, event.getFolderName());
-                if (!folder.exists()) {
-                    folder.mkdirs();
-                }
-            }
-        }
-
-        if (config.getBoolean("Staff.Enabled", false)) {
-            File staffFolder = new File(this.logFolder, "Staff");
-            if (!staffFolder.exists()) {
-                staffFolder.mkdirs();
-            }
-        }
-
-        if (config.getBoolean("Log-Server.RAM", true)) {
-            File ramFolder = new File(this.logFolder, "RAM");
-            if (!ramFolder.exists()) {
-                ramFolder.mkdirs();
-            }
+        if (!this.logFolder.exists()) {
+            this.logFolder.mkdirs();
         }
     }
 

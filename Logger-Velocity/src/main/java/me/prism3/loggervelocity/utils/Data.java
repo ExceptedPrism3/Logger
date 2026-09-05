@@ -104,7 +104,13 @@ public class Data {
 
         isExternal = this.main.getConfig().getBoolean("Database.Enable");
         isSqlite = this.main.getConfig().getBoolean("SQLite.Enable");
-        isLogToFiles = this.main.getConfig().getBoolean("Log-to-Files");
+        if (this.main.getConfig().get("Files.Enabled") != null) {
+            isLogToFiles = this.main.getConfig().getBoolean("Files.Enabled", true);
+        } else if (this.main.getConfig().get("Log-to-Files") != null) {
+            isLogToFiles = this.main.getConfig().getBoolean("Log-to-Files", true);
+        } else {
+            isLogToFiles = true;
+        }
         isStaffEnabled = this.main.getConfig().getBoolean("Staff.Enabled");
         isWhitelisted = this.main.getConfig().getBoolean("Player-Command.Whitelist-Commands");
         isBlacklisted = this.main.getConfig().getBoolean("Player-Command.Blacklist-Commands");
