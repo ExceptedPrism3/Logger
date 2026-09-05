@@ -36,6 +36,8 @@ Fixes & Improvements
         [+] Integrated with `/logger view` database inspector with custom action & target summary formatting.
         [+] Added complete localization entries across all 11 bundled language files (`en_US`, `de_DE`, `fr_fr`, `es_ES`, `it_IT`, `pt_BR`, `ru_RU`, `zh_cn`, `ja_JP`, `ko_KR`, `ar`).
         [+] Web Panel support: added `server_whitelist` definition into `logs.php` for seamless log browsing and filtering.
+    [+] Codebase Optimization & Unused Import Cleanup:
+        [+] Removed redundant and unused imports across all submodules (Spigot, Paper, Folia, BungeeCord, Velocity, and 1.21 Adapter), eliminating IDE compiler warnings and duplicate import statements.
     [+] Complete GitBook Documentation Suite:
         [+] Added complete 26-page documentation overhaul in `docs/` with `.gitbook.yaml` for instant GitBook Git Sync.
         [+] Added dedicated Updating & Upgrading Guide covering Java 17/21 requirements, database auto-migrations, and Discord addon setup.

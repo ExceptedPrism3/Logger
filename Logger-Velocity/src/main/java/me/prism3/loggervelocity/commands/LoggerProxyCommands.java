@@ -3,7 +3,6 @@ package me.prism3.loggervelocity.commands;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import me.prism3.loggervelocity.Logger;
-import me.prism3.loggervelocity.utils.Messages;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;

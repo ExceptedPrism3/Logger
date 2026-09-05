@@ -2,9 +2,7 @@ package me.prism3.logger.v1_21.listeners;
 
 import me.prism3.logger.LoggerAPI;
 import me.prism3.logger.utils.enums.LogType;
-import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.block.Crafter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.CrafterCraftEvent;

@@ -9,8 +9,6 @@ import me.prism3.logger.utils.Log;
 import me.prism3.logger.utils.enums.LogType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
-
 public class Logger extends LoggerAPI {
 
     private Data data;

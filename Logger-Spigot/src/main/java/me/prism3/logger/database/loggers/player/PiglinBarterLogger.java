@@ -3,7 +3,6 @@ package me.prism3.logger.database.loggers.player;
 import me.prism3.logger.LoggerAPI;
 import me.prism3.logger.database.DatabasePlayerLogger;
 import me.prism3.logger.database.loggers.AbstractLogger;
-import me.prism3.logger.managers.PermissionManager;
 import org.bukkit.entity.Player;
 
 import java.util.Map;

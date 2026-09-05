@@ -1,7 +1,6 @@
 package me.prism3.logger_bungee.managers;
 
 import me.prism3.logger_bungee.LoggerBungee;
-import me.prism3.logger_bungee.utils.Constants;
 import me.prism3.logger_bungee.utils.Log;
 import net.md_5.bungee.config.Configuration;
 

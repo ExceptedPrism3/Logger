@@ -1,11 +1,7 @@
 package me.prism3.logger.events.player;
 
 import me.prism3.logger.LoggerAPI;
-import me.prism3.logger.managers.PermissionManager;
-import me.prism3.logger.managers.PlayerManager;
 import me.prism3.logger.utils.enums.LogType;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PiglinBarterEvent;

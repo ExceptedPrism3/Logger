@@ -1,7 +1,6 @@
 package me.prism3.logger;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.JavaPlugin;
 import me.prism3.logger.managers.MessageManager;
 import me.prism3.logger.managers.LoggerManager;
 import me.prism3.logger.utils.Data;
