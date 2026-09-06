@@ -1,54 +1,44 @@
 <-!------------------------------------------ v1.8.5 ------------------------------------------!->
 
 Fixes & Improvements
-    [+] Server Whitelist Logging Support:
-        [+] Added dedicated Server Whitelist logging (`SERVER_WHITELIST`, `Log-Server.Whitelist`) tracking when players are added to or removed from the server whitelist (`/whitelist add <player>`, `/whitelist remove <player>`), as well as whitelist status toggles (`/whitelist on`, `/whitelist off`, `/whitelist reload`).
-        [+] Multi-channel delivery support: routed to local log files (`logs/Server Whitelist/`), Discord Addon (`Server-Side.Whitelist` channel/webhook with embed author & avatar), and database (`server_whitelist` table).
-        [+] Integrated with `/logger view` database inspector with custom action & target summary formatting.
-        [+] Added complete localization entries across all 11 bundled language files (`en_US`, `de_DE`, `fr_fr`, `es_ES`, `it_IT`, `pt_BR`, `ru_RU`, `zh_cn`, `ja_JP`, `ko_KR`, `ar`).
-        [+] Web Panel support: added `server_whitelist` definition into `logs.php` for seamless log browsing and filtering.
     [+] Spear LUNGE Enchantment & Korean Localization (#73):
         [+] Added vanilla `LUNGE` ("Lunge") enchantment support to `FriendlyEnchants` for spear weapons (Mounts of Mayhem).
         [+] Updated `ko_KR.yml` to align Korean terminology with official Minecraft localization (instant movement, enchanting spacing, spawn eggs, portals, and crafter).
-    [+] File & Folder Generation Suppression for Disabled Logs:
-        [+] Converted file and folder generation to be purely on-demand across Spigot/Paper, BungeeCord, and Velocity, eliminating startup creation of empty directories and empty `.log` files.
-        [+] Fully suppressed all file/folder creation when `Log-to-Files: false` (or `Files.Enabled: false` on Velocity) is configured.
-        [+] Hardened Velocity file retention cleaner (`deleteFiles()`) with null-safety checks to prevent `NullPointerException` on uncreated or missing directories.
-    [+] Database Security & Connector Hardening:
-        [+] Upgraded `org.postgresql:postgresql` to `42.7.13` (resolving SCRAM authentication CPU exhaustion DoS - CVE-2026-42198 / Dependabot Alert #23).
-        [+] Upgraded `org.mariadb.jdbc:mariadb-java-client` to `3.3.5` (resolving CVE-2026-55856, CVE-2026-55857, CVE-2026-55858 / PR #72).
-        [+] Migrated `mysql:mysql-connector-java` to modern `com.mysql:mysql-connector-j` `8.2.0` (resolving CVE-2023-22102).
-        [+] Documented MariaDB/MySQL Error 1130 fix in Web Panel setup guide and FAQ.
-    [+] Codebase Optimization & Unused Import Cleanup:
-        [+] Removed redundant and unused imports across all submodules (Spigot, Paper, Folia, BungeeCord, Velocity, and 1.21 Adapter), eliminating IDE compiler warnings and duplicate import statements.
-    [+] Complete GitBook Documentation Suite:
-        [+] Added complete 26-page documentation overhaul in `docs/` with `.gitbook.yaml` for instant GitBook Git Sync.
-        [+] Added dedicated Updating & Upgrading Guide covering Java 17/21 requirements, database auto-migrations, and Discord addon setup.
-        [+] Added official Logger Web Panel setup guide with requirements, deployment steps, and server status monitor configuration.
+    [+] Web Panel & Database Connection Documentation:
+        [+] Documented MariaDB/MySQL Error 1130 fix ("Host ... is not allowed to connect") in Web Panel setup guide and FAQ.
 
 <-!------------------------------------------ v1.8.4 ------------------------------------------!->
 
 Fixes & Improvements
-    [+] Velocity & BungeeCord Server Placeholder Priority (#47):
-        [+] Fixed placeholder evaluation order in LogManager and MessageManager so `%server%` accurately displays the player connected backend server (e.g. lobby, hub, survival) instead of defaulting to the proxy name.
-        [+] Added `%proxy%` placeholder support across files and Discord messages for explicitly referencing the Velocity/BungeeCord proxy network name.
-        [+] Hardened Velocity OnLogin event with safe optional server extraction (player.getCurrentServer().map(...)).
-    [+] EnchantItemEvent Null-Safety & 1.21+ Enchantments (#68):
-        [+] Added comprehensive null-safety checks in ItemEnchantListener for enchanting tables, item stacks, and added enchants to prevent listener exceptions.
-        [+] Hardened FriendlyEnchants lookup with robust fallback handling and support for 1.21+ vanilla enchantments (including Mace enchantments: Density, Breach, Wind Burst) and custom/modded enchantments.
-    [+] Permission Exemption & Staff Discord Segregation Fixes:
-        [+] Implemented missing `logger.exempt.discord` (`loggerproxy.exempt.discord`) permission check across Spigot, Paper, BungeeCord, and Velocity, properly exempting designated players from Discord logging while preserving file and database logs.
-        [+] Centralized `logger.exempt` evaluation at the entry of `LoggerManager` and proxy managers to guarantee that exempt players are never written to files, Discord, or database.
-        [+] Harmonized Staff logging between the filesystem and Discord: `isStaff` evaluation now strictly respects `Staff.Enabled` across both destinations.
-        [+] Fixed Discord Addon leaking `STAFF` notifications into general player channels: prevented fallback from `STAFF` to public player channels when a dedicated Staff Discord channel is not configured.
-    [+] Discord Configuration Location & Migration:
-        [+] Restored `discord.yml` canonical location directly inside the main `plugins/Logger/` folder (`plugins/LoggerBungee/` on BungeeCord) instead of creating an isolated `plugins/LoggerDiscordAddon/` directory.
-        [+] Added automatic seamless migration of existing `discord.yml` from `plugins/LoggerDiscordAddon/` to `plugins/Logger/`.
+    [+] Server Whitelist Logging:
+        [+] Added dedicated Server Whitelist logging (`SERVER_WHITELIST`, `Log-Server.Whitelist`) capturing `/whitelist add <player>`, `/whitelist remove <player>`, `/whitelist on`, `/whitelist off`, and `/whitelist reload` (including `/minecraft:whitelist ...` and console commands).
+        [+] Multi-Channel Delivery: Logged directly to files (`logs/Server Whitelist/<date>.log`), Discord Addon (`Discord.Server-Side.Whitelist` channel/webhook with executor avatar and name in embeds), and database (`server_whitelist` table with auto-schema migration and index acceleration).
+        [+] In-Game Inspector: Fully integrated into `/logger view SERVER_WHITELIST`.
+        [+] Web Panel Integration: Added `server_whitelist` definition in `logs.php`.
+        [+] Full Localization: Translated across all 11 bundled language files (`en_US`, `de_DE`, `fr_fr`, `es_ES`, `it_IT`, `pt_BR`, `ru_RU`, `zh_cn`, `ja_JP`, `ko_KR`, `ar`).
+    [+] On-Demand File & Folder Generation:
+        [+] Directories and `.log` files are now created strictly on-demand when an event actually occurs, eliminating empty folders and 0-byte log files on boot across Spigot, Paper, BungeeCord, and Velocity.
+        [+] Completely halts file/folder generation when `Log-to-Files: false` (or `Files.Enabled: false` on Velocity) is configured.
+        [+] Added null-safety checks in the retention cleaner (`deleteFiles()`) to prevent `NullPointerException` on uncreated folders.
+    [+] Database Security & Driver Hardening:
+        [+] Upgraded `org.postgresql:postgresql` to `42.7.13` (resolves SCRAM auth CPU exhaustion DoS - CVE-2026-42198 / Dependabot #23).
+        [+] Upgraded `org.mariadb.jdbc:mariadb-java-client` to `3.3.5` (resolves CVE-2026-55856, CVE-2026-55857, CVE-2026-55858 / PR #72).
+        [+] Migrated `mysql:mysql-connector-java` to modern `com.mysql:mysql-connector-j` `8.2.0` (resolves CVE-2023-22102).
+    [+] Proxy Placeholder & Event Fixes (Velocity & BungeeCord):
+        [+] Fixed placeholder evaluation order so `%server%` accurately reflects the connected backend server (e.g. lobby, survival) instead of falling back to the proxy name (#47).
+        [+] Added `%proxy%` across file logs and Discord messages to explicitly reference the proxy network name.
+        [+] Safe optional server extraction (`player.getCurrentServer().map(...)`) on Velocity `OnLogin`.
+    [+] Discord Addon & Staff Segregation:
+        [+] Implemented `logger.exempt.discord` (`loggerproxy.exempt.discord`) to exempt designated players from Discord alerts while keeping local/database logs intact.
+        [+] Centralized `logger.exempt` at the entry point of `LoggerManager` and proxy managers.
+        [+] Prevented fallback from `STAFF` notifications to public player channels when a dedicated staff channel is omitted.
+        [+] Canonical `discord.yml` is now situated inside `plugins/Logger/` (`plugins/LoggerBungee/` on BungeeCord) with automatic migration from `plugins/LoggerDiscordAddon/`.
         [+] Added optional custom `Title` configuration per Discord channel/webhook route.
-    [+] Web Panel Integration & Real-Time Status Detection:
-        [+] Implemented universal `server_status` heartbeat schema in `DatabaseManager` across Spigot, Paper, Folia, BungeeCord, and Velocity.
-        [+] Added automatic live status detection on the Web Panel for Logger Core plugin and LoggerDiscordAddon.
-        [+] Added connected servers breakdown card on Web Panel dashboard displaying online/offline status, plugin version, Discord addon presence, and last ping.
+    [+] Performance & Stability:
+        [+] Guarded against null enchantments, item stacks, and tables in `ItemEnchantListener` (#68). Added support for 1.21+ vanilla enchantments (Density, Breach, Wind Burst) and custom enchantments.
+        [+] Removed all 15 unused and duplicate import statements across all 189 source files.
+        [+] Added universal `server_status` schema with live status detection cards for Logger Core and Discord Addon on the Web Panel.
+        [+] Added 26-page documentation overhaul in `docs/` with `.gitbook.yaml` for instant GitBook Git Sync.
 
 <-!------------------------------------------ v1.8.3 ------------------------------------------!->
 
