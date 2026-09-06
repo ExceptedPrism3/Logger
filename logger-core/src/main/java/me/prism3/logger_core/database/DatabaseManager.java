@@ -42,19 +42,59 @@ public class DatabaseManager {
 
         // Initialize Schema definitions
         Map<String, String> tempTables = new HashMap<>();
+        // Player Tables
         tempTables.put("player_chat", getPlayerSideFields() + "message TEXT, is_staff TINYINT(1)");
         tempTables.put("player_command", getPlayerSideFields() + "command TEXT, is_staff TINYINT(1)");
+        tempTables.put("player_block_break", getPlayerSideFields() + "block VARCHAR(100), block_x INT, block_y INT, block_z INT, is_staff TINYINT(1)");
+        tempTables.put("player_block_place", getPlayerSideFields() + "block VARCHAR(100), block_x INT, block_y INT, block_z INT, is_staff TINYINT(1)");
+        tempTables.put("player_death", getPlayerSideFields() + "level INT, inventory TEXT, armor TEXT, killer VARCHAR(100), killer_weapon VARCHAR(100), death_cause VARCHAR(100), is_staff TINYINT(1)");
+        tempTables.put("player_join", getPlayerSideFields() + "ip_address VARCHAR(100), is_staff TINYINT(1)");
+        tempTables.put("player_leave", getPlayerSideFields() + "is_staff TINYINT(1)");
         tempTables.put("player_kick", getPlayerSideFields() + "reason TEXT, is_staff TINYINT(1)");
         tempTables.put("player_login", getPlayerSideFields() + "ip_address VARCHAR(45), is_staff TINYINT(1)");
         tempTables.put("player_quit", getPlayerSideFields() + "is_staff TINYINT(1)");
         tempTables.put("player_server_switch", getPlayerSideFields() + "from_server VARCHAR(50), to_server VARCHAR(50), is_staff TINYINT(1)");
+        tempTables.put("player_teleport", getPlayerSideFields() + "to_x INT, to_y INT, to_z INT, cause VARCHAR(100), is_staff TINYINT(1)");
+        tempTables.put("player_level", getPlayerSideFields() + "is_staff TINYINT(1)");
+        tempTables.put("player_gamemode", getPlayerSideFields() + "is_staff TINYINT(1)");
+        tempTables.put("player_anvil", getPlayerSideFields() + "item_type VARCHAR(100), action VARCHAR(100), old_name VARCHAR(100), new_name VARCHAR(100), anvil_x INT, anvil_y INT, anvil_z INT, is_staff TINYINT(1)");
+        tempTables.put("player_item_craft", getPlayerSideFields() + "item_type VARCHAR(100), item_amount INT, is_staff TINYINT(1)");
+        tempTables.put("player_item_pickup", getPlayerSideFields() + "item_type VARCHAR(100), item_amount INT, enchants TEXT, is_staff TINYINT(1)");
+        tempTables.put("player_item_drop", getPlayerSideFields() + "item_type VARCHAR(100), item_amount INT, enchants TEXT, is_staff TINYINT(1)");
+        tempTables.put("player_item_enchant", getPlayerSideFields() + "item VARCHAR(100), enchantments TEXT, level_cost INT, enchanting_table_x INT, enchanting_table_y INT, enchanting_table_z INT, is_staff TINYINT(1)");
+        tempTables.put("player_container_interaction", getPlayerSideFields() + "container_type VARCHAR(100), container_x INT, container_y INT, container_z INT, added_items TEXT, removed_items TEXT, is_staff TINYINT(1)");
+        tempTables.put("player_furnace_interaction", getPlayerSideFields() + "item_type VARCHAR(100), amount INT, furnace_x INT, furnace_y INT, furnace_z INT, is_staff TINYINT(1)");
+        tempTables.put("player_advancement_unlock", getPlayerSideFields() + "advancement VARCHAR(255), is_staff TINYINT(1)");
+        tempTables.put("player_book_interaction", getPlayerSideFields() + "book_title VARCHAR(255), author VARCHAR(100), page_count INT, first_page_snippet TEXT, is_staff TINYINT(1)");
+        tempTables.put("player_bucket_empty", getPlayerSideFields() + "bucket_type VARCHAR(100), is_staff TINYINT(1)");
+        tempTables.put("player_bucket_fill", getPlayerSideFields() + "bucket_type VARCHAR(100), is_staff TINYINT(1)");
+        tempTables.put("player_prime_tnt", getPlayerSideFields() + "tnt_location_x INT, tnt_location_y INT, tnt_location_z INT, is_staff TINYINT(1)");
+        tempTables.put("player_registration", getPlayerSideFields() + "is_staff TINYINT(1)");
+        tempTables.put("player_sign_interaction", getPlayerSideFields() + "sign_x INT, sign_y INT, sign_z INT, sign_text TEXT, is_staff TINYINT(1)");
+        tempTables.put("player_spawn_egg", getPlayerSideFields() + "mob_type VARCHAR(100), mob_x INT, mob_y INT, mob_z INT, is_staff TINYINT(1)");
+        tempTables.put("player_totem_of_undying", getPlayerSideFields() + "is_staff TINYINT(1)");
+        tempTables.put("player_wood_strip", getPlayerSideFields() + "used_tool VARCHAR(100), is_staff TINYINT(1)");
+        tempTables.put("player_entity_death", getPlayerSideFields() + "entity_type VARCHAR(100), is_staff TINYINT(1)");
+        tempTables.put("player_lever_interaction", getPlayerSideFields() + "lever_x INT, lever_y INT, lever_z INT, lever_state VARCHAR(20), is_staff TINYINT(1)");
+        tempTables.put("player_crafter_craft", getPlayerSideFields() + "item VARCHAR(100), is_staff TINYINT(1)");
+        tempTables.put("player_sculk_shrieker", getPlayerSideFields() + "level INT, is_staff TINYINT(1)");
+        tempTables.put("player_villager_trade", getPlayerSideFields() + "villager_profession VARCHAR(100), villager_level INT, cost_1 VARCHAR(100), cost_2 VARCHAR(100), result VARCHAR(100), is_staff TINYINT(1)");
+        tempTables.put("player_piglin_barter", getPlayerSideFields() + "input VARCHAR(100), output VARCHAR(100), is_staff TINYINT(1)");
+        tempTables.put("player_respawn_anchor", getPlayerSideFields() + "action VARCHAR(50), charges INT, is_staff TINYINT(1)");
         
-        // Server tables
+        // Server Tables
         tempTables.put("server_start", getCommonFields());
         tempTables.put("server_stop", getCommonFields());
         tempTables.put("server_whitelist", getCommonFields() + ", executor VARCHAR(100), action VARCHAR(20), target_player VARCHAR(100)");
+        tempTables.put("server_console_command", getCommonFields() + ", command TEXT");
+        tempTables.put("server_manual_log", getCommonFields() + ", log TEXT");
+        tempTables.put("server_command_block", getCommonFields() + ", command TEXT");
+        tempTables.put("server_rcon_command", getCommonFields() + ", command TEXT, sender VARCHAR(100)");
+        tempTables.put("server_tps", getCommonFields() + ", tps DOUBLE");
+        tempTables.put("server_ram", getCommonFields() + ", total_ram BIGINT, used_ram BIGINT, free_ram BIGINT");
+        tempTables.put("server_player_count", getCommonFields());
         
-        // Proxy tables (Unified Bungee & Velocity)
+        // Proxy Tables (Unified Bungee & Velocity)
         tempTables.put("player_events", autoInc + ", server_name VARCHAR(100), player_name VARCHAR(100), event_type VARCHAR(50), message TEXT, date " + dateType);
         tempTables.put("server_events", autoInc + ", server_name VARCHAR(100), event_type VARCHAR(50), message TEXT, date " + dateType);
         
@@ -268,6 +308,14 @@ public class DatabaseManager {
 
     public boolean isEnabled() {
         return config.enabled && provider != null;
+    }
+
+    public DatabaseConfig getConfig() {
+        return config;
+    }
+
+    public String getTablePrefix() {
+        return config != null ? config.tablePrefix : "";
     }
 
     public String getTableName(String table) {

@@ -26,9 +26,16 @@ public abstract class AbstractLogger {
      * connection and PreparedStatement.
      */
     protected void executeUpdate(final String sql, final StatementSetter setter) {
+        String targetSql = sql;
+        if (this.plugin.getDatabaseManager() != null) {
+            final String prefix = this.plugin.getDatabaseManager().getTablePrefix();
+            if (prefix != null && !prefix.isEmpty() && !targetSql.contains(" " + prefix)) {
+                targetSql = targetSql.replaceFirst("(?i)INSERT INTO\\s+(player_|server_)", "INSERT INTO " + prefix + "$1");
+            }
+        }
 
         try (final Connection connection = this.plugin.getDatabaseManager().getConnection();
-             final PreparedStatement ps = connection.prepareStatement(sql)) {
+             final PreparedStatement ps = connection.prepareStatement(targetSql)) {
 
             setter.setValues(ps);
             ps.executeUpdate();
