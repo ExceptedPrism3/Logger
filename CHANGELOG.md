@@ -8,6 +8,9 @@ Fixes & Improvements
     [+] EnchantItemEvent Null-Safety & 1.21+ Enchantments (#68):
         [+] Added comprehensive null-safety checks in ItemEnchantListener for enchanting tables, item stacks, and added enchants to prevent listener exceptions.
         [+] Hardened FriendlyEnchants lookup with robust fallback handling and support for 1.21+ vanilla enchantments (including Mace enchantments: Density, Breach, Wind Burst) and custom/modded enchantments.
+    [+] Spear LUNGE Enchantment & Korean Localization (#73):
+        [+] Added vanilla `LUNGE` ("Lunge") enchantment support to `FriendlyEnchants` for spear weapons (Mounts of Mayhem).
+        [+] Updated `ko_KR.yml` to align Korean terminology with official Minecraft localization (instant movement, enchanting spacing, spawn eggs, portals, and crafter).
     [+] Permission Exemption & Staff Discord Segregation Fixes:
         [+] Implemented missing `logger.exempt.discord` (`loggerproxy.exempt.discord`) permission check across Spigot, Paper, BungeeCord, and Velocity, properly exempting designated players from Discord logging while preserving file and database logs.
         [+] Centralized `logger.exempt` evaluation at the entry of `LoggerManager` and proxy managers to guarantee that exempt players are never written to files, Discord, or database.
