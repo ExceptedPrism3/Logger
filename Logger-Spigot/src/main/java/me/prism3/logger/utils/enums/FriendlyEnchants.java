@@ -40,6 +40,9 @@ public enum FriendlyEnchants {
     DENSITY("Density"),
     WIND_BURST("Wind Burst"),
 
+    // ===== SPEAR (Mounts of Mayhem) =====
+    LUNGE("Lunge"),
+
     // ===== ARMOR =====
     PROTECTION_ENVIRONMENTAL("Protection"),
     PROTECTION_FALL("Feather Falling"),
