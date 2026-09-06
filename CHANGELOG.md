@@ -6,6 +6,10 @@ Fixes & Improvements
         [+] Updated `ko_KR.yml` to align Korean terminology with official Minecraft localization (instant movement, enchanting spacing, spawn eggs, portals, and crafter).
     [+] Web Panel & Database Connection Documentation:
         [+] Documented MariaDB/MySQL Error 1130 fix ("Host ... is not allowed to connect") in Web Panel setup guide and FAQ.
+    [+] Automatic Database Table Creation & Prefix Resolution:
+        [+] Expanded `DatabaseManager` to auto-create all 40+ log tables on server startup, eliminating the need to manually sync or repair schema via the Web Panel.
+        [+] Added dynamic table prefix resolution in `AbstractLogger` so all database loggers seamlessly respect `Table-Prefix` (e.g. `logger_` or custom prefixes).
+        [+] Updated Web Panel dashboard (`data.php`) and log viewer (`logs.php`) to dynamically discover and count prefixed tables and refresh empty caches automatically.
 
 <-!------------------------------------------ v1.8.4 ------------------------------------------!->
 
