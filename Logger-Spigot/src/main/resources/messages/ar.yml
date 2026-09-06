@@ -182,4 +182,4 @@ Discord:
     Player-Count: "**تم الوصول إلى هدف عدد اللاعبين.**"
     Whitelist: "قام **%executor%** بتنفيذ أمر القائمة البيضاء **%action%** على **%target%**"
 
-Messages-Version: 1.8.4
+Messages-Version: 1.8.5
