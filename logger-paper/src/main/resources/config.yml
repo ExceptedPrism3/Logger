@@ -14,7 +14,7 @@
 # Discord: Prism3#9371 | ID: 403667971089760257
 # Discord Server: https://discord.gg/MfR5mcpVfX
 # 
-# Config 1.8.5
+# Config 1.8.4.1
 
 
 # Language (Available: en_US, fr_FR, es_ES, de_DE, it_IT, pt_BR, ru_RU, zh_CN, ja_JP, ko_KR)
@@ -164,4 +164,4 @@ Updater:
   Auto-Config-Updater: true
 
 # Do not touch unless you want to reset it's content
-Config-Version: 1.8.5
+Config-Version: 1.8.4.1
