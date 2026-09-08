@@ -2,15 +2,19 @@
 set -e
 
 # Set Java 21 Home
-export JAVA_HOME="/Users/pixo/Library/Java/JavaVirtualMachines/corretto-21.0.4/Contents/Home"
+export JAVA_HOME="$(/usr/libexec/java_home -v 21 2>/dev/null || echo "/Users/pixo/Library/Java/JavaVirtualMachines/corretto-21.0.4/Contents/Home")"
+export PATH="$JAVA_HOME/bin:$PATH"
 
-echo "🔨 Building Logger multi-module project..."
-mvn clean package -DskipTests -o
+# Extract version dynamically from root pom.xml
+VERSION=$(grep -m 1 "<version>" pom.xml | sed -E "s/.*<version>([^<]+)<\/version>.*/\1/" | tr -d "[:space:]")
+
+echo "🔨 Building Logger (v${VERSION}) multi-module project with Java 21..."
+mvn clean package -DskipTests
 
 echo "📦 Copying artifacts to releases/..."
 mkdir -p releases
-cp logger-paper/target/logger-paper-1.8.4.jar releases/Logger-1.8.4.jar
-cp logger-discord-addon/target/logger-discord-addon-1.8.4.jar releases/LoggerDiscordAddon-1.8.4.jar
+cp "logger-paper/target/logger-paper-${VERSION}.jar" "releases/Logger-${VERSION}.jar"
+cp "logger-discord-addon/target/logger-discord-addon-${VERSION}.jar" "releases/LoggerDiscordAddon-${VERSION}.jar"
 
 (cd logger-web-panel && zip -q -r ../releases/LoggerWebPanel-1.0.1.zip index.html INSTALL.md api assets -x "*.DS_Store*")
 
