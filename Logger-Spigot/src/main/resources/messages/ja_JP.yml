@@ -182,4 +182,4 @@ Discord:
     Player-Count: "**目標オンラインプレイヤー数達成。**"
     Whitelist: "**%executor%** が **%target%** に対してホワイトリスト **%action%** を実行しました"
 
-Messages-Version: 1.8.4.1
+Messages-Version: 1.8.5
