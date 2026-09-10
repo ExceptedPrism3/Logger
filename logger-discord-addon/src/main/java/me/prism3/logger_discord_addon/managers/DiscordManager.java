@@ -37,6 +37,8 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
     private final Map<String, TextChannel> channelMap = new ConcurrentHashMap<>();
     private final Map<String, String> webhookMap = new ConcurrentHashMap<>();
     private final Map<String, String> titleMap = new ConcurrentHashMap<>();
+    private String defaultWebhookUrl = null;
+    private TextChannel defaultChannel = null;
     private ScheduledExecutorService activityScheduler;
 
     private String messageType = "normal";
@@ -123,9 +125,9 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
             }
         } else {
             this.initWebhooks(discordSection);
-            this.isEnabled = !this.webhookMap.isEmpty();
+            this.isEnabled = !this.webhookMap.isEmpty() || this.defaultWebhookUrl != null;
             if (this.isEnabled) {
-                System.out.println("[LoggerDiscordAddon] Discord Webhook mode active with " + this.webhookMap.size() + " route endpoints.");
+                System.out.println("[LoggerDiscordAddon] Discord Webhook mode active with " + this.webhookMap.size() + " route endpoints" + (this.defaultWebhookUrl != null ? " (fallback enabled)" : "") + ".");
             } else {
                 System.out.println("[LoggerDiscordAddon] Discord is enabled in webhook mode, but no valid webhooks are configured.");
             }
@@ -153,8 +155,34 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
         if (this.jda == null || discordSection == null) return;
         this.channelMap.clear();
         this.titleMap.clear();
+        this.defaultChannel = null;
+
+        if (discordSection.containsKey("Channel-ID")) {
+            String topId = String.valueOf(discordSection.get("Channel-ID")).trim();
+            if (isValidChannelId(topId)) {
+                try {
+                    this.defaultChannel = this.jda.getTextChannelById(topId);
+                } catch (Exception ignored) {}
+            }
+        }
+        Map<String, Object> defaultSec = getSection(discordSection, "Default");
+        if (defaultSec != null && defaultSec.containsKey("Channel-ID")) {
+            String defId = String.valueOf(defaultSec.get("Channel-ID")).trim();
+            if (isValidChannelId(defId)) {
+                try {
+                    this.defaultChannel = this.jda.getTextChannelById(defId);
+                } catch (Exception ignored) {}
+            }
+        }
 
         collectChannelsRecursively(discordSection, "");
+
+        if (this.defaultChannel == null && !this.channelMap.isEmpty()) {
+            Set<TextChannel> uniqueChannels = new HashSet<>(this.channelMap.values());
+            if (uniqueChannels.size() == 1) {
+                this.defaultChannel = uniqueChannels.iterator().next();
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -209,8 +237,30 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
         if (discordSection == null) return;
         this.webhookMap.clear();
         this.titleMap.clear();
+        this.defaultWebhookUrl = null;
+
+        if (discordSection.containsKey("Webhook")) {
+            String topUrl = String.valueOf(discordSection.get("Webhook")).trim();
+            if (isValidWebhookUrl(topUrl)) {
+                this.defaultWebhookUrl = topUrl;
+            }
+        }
+        Map<String, Object> defaultSec = getSection(discordSection, "Default");
+        if (defaultSec != null && defaultSec.containsKey("Webhook")) {
+            String defUrl = String.valueOf(defaultSec.get("Webhook")).trim();
+            if (isValidWebhookUrl(defUrl)) {
+                this.defaultWebhookUrl = defUrl;
+            }
+        }
 
         collectWebhooksRecursively(discordSection, "");
+
+        if (this.defaultWebhookUrl == null && !this.webhookMap.isEmpty()) {
+            Set<String> uniqueUrls = new HashSet<>(this.webhookMap.values());
+            if (uniqueUrls.size() == 1) {
+                this.defaultWebhookUrl = uniqueUrls.iterator().next();
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -248,7 +298,10 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
         if (trimmed.isEmpty() || trimmed.contains("XXXX") || trimmed.contains("YOUR_WEBHOOK")) {
             return false;
         }
-        return trimmed.startsWith("https://discord.com/api/webhooks/") || trimmed.startsWith("https://canary.discord.com/api/webhooks/");
+        return trimmed.startsWith("https://discord.com/api/webhooks/")
+                || trimmed.startsWith("https://discordapp.com/api/webhooks/")
+                || trimmed.startsWith("https://canary.discord.com/api/webhooks/")
+                || trimmed.startsWith("https://ptb.discord.com/api/webhooks/");
     }
 
     public static String normalizeKey(String key) {
@@ -450,6 +503,17 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
             list.add("playercommandwhitelisted");
             list.add("playercommand");
         }
+        if (norm.contains("rcon")) {
+            list.add("rcon");
+            list.add("serverrcon");
+            list.add("rconcommand");
+            list.add("serverrconcommand");
+        }
+        if (norm.contains("reload")) {
+            list.add("reload");
+            list.add("serverreload");
+            list.add("reloadconsole");
+        }
 
         return list;
     }
@@ -542,10 +606,7 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
         String cleanMessage = stripMinecraftColors(message);
 
         if (this.isBotMode) {
-            TextChannel channel = resolveChannel(type);
-            if (channel == null && logType != null && !logType.equalsIgnoreCase(type) && !"STAFF".equalsIgnoreCase(type)) {
-                channel = resolveChannel(logType);
-            }
+            TextChannel channel = resolveChannelForEvent(type, logType);
             if (channel == null) {
                 // Channel is not configured or left as default placeholder. Do not send!
                 return;
@@ -586,10 +647,7 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
                 }
             }
         } else {
-            String webhookUrl = resolveWebhook(type);
-            if (webhookUrl == null && logType != null && !logType.equalsIgnoreCase(type) && !"STAFF".equalsIgnoreCase(type)) {
-                webhookUrl = resolveWebhook(logType);
-            }
+            String webhookUrl = resolveWebhookForEvent(type, logType);
             if (webhookUrl == null) {
                 // Webhook is not configured or left as placeholder. Do not send!
                 return;
@@ -602,6 +660,62 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
                 sendWebhookAsync(webhookUrl, payloadJson);
             }
         }
+    }
+
+    private TextChannel resolveChannelForEvent(String type, String logType) {
+        // 1. If a specific Minecraft event exists and is not STAFF, check its specific channel first
+        String specific = (type != null && !"STAFF".equalsIgnoreCase(type)) ? type : logType;
+        if (specific != null && !"STAFF".equalsIgnoreCase(specific)) {
+            TextChannel tc = resolveChannel(specific);
+            if (tc != null) return tc;
+        }
+
+        // 2. If one of type/logType is STAFF, check staff channel
+        if ("STAFF".equalsIgnoreCase(type) || "STAFF".equalsIgnoreCase(logType)) {
+            TextChannel tc = resolveChannel("STAFF");
+            if (tc != null) return tc;
+        }
+
+        // 3. Check remaining identifiers
+        if (type != null) {
+            TextChannel tc = resolveChannel(type);
+            if (tc != null) return tc;
+        }
+        if (logType != null) {
+            TextChannel tc = resolveChannel(logType);
+            if (tc != null) return tc;
+        }
+
+        // 4. Fallback to default channel
+        return this.defaultChannel;
+    }
+
+    private String resolveWebhookForEvent(String type, String logType) {
+        // 1. If a specific Minecraft event exists and is not STAFF, check its specific webhook first
+        String specific = (type != null && !"STAFF".equalsIgnoreCase(type)) ? type : logType;
+        if (specific != null && !"STAFF".equalsIgnoreCase(specific)) {
+            String url = resolveWebhook(specific);
+            if (url != null) return url;
+        }
+
+        // 2. If one of type/logType is STAFF, check staff webhook
+        if ("STAFF".equalsIgnoreCase(type) || "STAFF".equalsIgnoreCase(logType)) {
+            String url = resolveWebhook("STAFF");
+            if (url != null) return url;
+        }
+
+        // 3. Check remaining identifiers
+        if (type != null) {
+            String url = resolveWebhook(type);
+            if (url != null) return url;
+        }
+        if (logType != null) {
+            String url = resolveWebhook(logType);
+            if (url != null) return url;
+        }
+
+        // 4. Fallback to default webhook
+        return this.defaultWebhookUrl;
     }
 
     private TextChannel resolveChannel(String type) {
@@ -819,7 +933,7 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
         if (this.isBotMode) {
             return this.jda != null && this.jda.getStatus() == JDA.Status.CONNECTED;
         }
-        return !this.webhookMap.isEmpty();
+        return !this.webhookMap.isEmpty() || this.defaultWebhookUrl != null;
     }
 
     @Override
@@ -841,6 +955,8 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
         this.channelMap.clear();
         this.webhookMap.clear();
         this.titleMap.clear();
+        this.defaultWebhookUrl = null;
+        this.defaultChannel = null;
         this.isEnabled = false;
     }
 

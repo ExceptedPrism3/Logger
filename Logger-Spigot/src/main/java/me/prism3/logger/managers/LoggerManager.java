@@ -73,7 +73,8 @@ public class LoggerManager {
         if (discordManager != null && discordManager.isEnabled()) {
             if (player == null || !PermissionManager.isExemptDiscord(player)) {
                 String discordMsg = plugin.getMessageManager().getMessage(logType, isStaff, placeholders, 'D', player);
-                final String eventType = isStaff ? "STAFF" : logType.name();
+                final String eventType = logType.name();
+                final String staffContext = isStaff ? "STAFF" : logType.name();
                 discordExecutor.submit(() -> {
                     try {
                         me.prism3.logger_core.objects.LogPlayer corePlayer = null;
@@ -81,7 +82,7 @@ public class LoggerManager {
                             corePlayer = new me.prism3.logger_core.objects.LogPlayer(player.getName(), player.getUniqueId(),
                                     plugin.getData().getServerName());
                         }
-                        discordManager.sendMessage(eventType, discordMsg, corePlayer, logType.name());
+                        discordManager.sendMessage(eventType, discordMsg, corePlayer, staffContext);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
