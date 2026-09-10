@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 import static me.prism3.loggervelocity.utils.Data.ramChecker;
 
-@Plugin(id = "logger-velocity", name = "Logger", version = "1.8.4", authors = { "prism3 & thelooter & sidna" })
+@Plugin(id = "logger-velocity", name = "Logger", version = "1.8.4.1", authors = { "prism3 & thelooter & sidna" })
 public class Logger implements LoggerPlatform {
 
     private static ProxyServer server;
@@ -194,6 +194,15 @@ public class Logger implements LoggerPlatform {
         return this.folder.toFile();
     }
 
+    public String getVersion() {
+        if (server != null) {
+            return server.getPluginManager().getPlugin("logger-velocity")
+                    .flatMap(c -> c.getDescription().getVersion())
+                    .orElse("1.8.4.1");
+        }
+        return "1.8.4.1";
+    }
+
     public ConfigManager getConfig() {
         return this.config;
     }
@@ -203,7 +212,7 @@ public class Logger implements LoggerPlatform {
         if (this.databaseManager != null) {
             String serverName = this.config != null ? this.config.getServerName() : "Velocity";
             boolean isDiscordActive = discordManager != null && discordManager.isEnabled();
-            this.databaseManager.updateServerStatus(serverName, "1.8.4", isDiscordActive);
+            this.databaseManager.updateServerStatus(serverName, getVersion(), isDiscordActive);
         }
     }
 
