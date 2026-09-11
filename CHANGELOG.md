@@ -1,7 +1,14 @@
 <-!------------------------------------------ v1.8.4.2 [ DEV ] ------------------------------------------!->
 
 Fixes & Improvements
-    [+] 
+    [+] Pastebin API Key & Environment Configuration (.env):
+        [+] Restored and bundled `.env` containing `PASTEBIN_API` key for reliable `/logger dump` debug log uploads.
+        [+] Implemented multi-tier key resolution in `Dump`: system environment variables -> local plugin data folder `.env` (automatically extracting bundled `.env` if missing) -> server root `.env` -> bundled jar resource stream -> internal fallback.
+    [+] Discord Multi-Channel & Webhook Routing:
+        [+] Fixed multi-channel Discord webhook and bot routing (`resolveWebhookForEvent` / `resolveChannelForEvent`) to properly route specific log events to dedicated webhooks while maintaining staff and default fallback delivery.
+        [+] Added alias normalization for `rcon` (`rconcommand`, `serverrcon`, `serverrconcommand`) and `reload` (`serverreload`, `reloadconsole`) events.
+        [+] Extended webhook URL validation to support Discord Canary, PTB, and legacy `discordapp.com` endpoints.
+        [+] Corrected `isOnline()` status detection in webhook mode to verify default webhook URLs alongside mapped route endpoints.
 
 <-!------------------------------------------ v1.8.4.1 ------------------------------------------!->
 
