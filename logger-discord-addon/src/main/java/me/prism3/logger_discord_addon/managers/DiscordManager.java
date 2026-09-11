@@ -885,7 +885,7 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-            conn.setRequestProperty("User-Agent", "LoggerDiscordAddon/1.8.4");
+            conn.setRequestProperty("User-Agent", "LoggerDiscordAddon/1.8.4.1");
             conn.setConnectTimeout(4000);
             conn.setReadTimeout(4000);
             conn.setDoOutput(true);

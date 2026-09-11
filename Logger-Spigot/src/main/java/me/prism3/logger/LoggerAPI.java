@@ -33,7 +33,7 @@ public abstract class LoggerAPI extends JavaPlugin implements me.prism3.logger_c
         this.discordManager = discordManager;
         if (this.databaseManager != null) {
             String serverName = getData() != null ? getData().getServerName() : "default";
-            String version = getDescription() != null ? getDescription().getVersion() : "1.8.4";
+            String version = getDescription() != null ? getDescription().getVersion() : "1.8.4.1";
             boolean isDiscordActive = discordManager != null && discordManager.isEnabled();
             this.databaseManager.updateServerStatus(serverName, version, isDiscordActive);
         }
