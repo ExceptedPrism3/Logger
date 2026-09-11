@@ -15,7 +15,8 @@ public class ASCIIArt {
     private void printArt() {
         String version = this.plugin.getData().getPluginVersion();
         String devMsg = "";
-        if (version.toUpperCase().contains("SNAPSHOT") || version.toUpperCase().contains("DEV")) {
+        boolean isDevBuild = true;
+        if (isDevBuild || version.toUpperCase().contains("SNAPSHOT") || version.toUpperCase().contains("DEV")) {
             devMsg = ChatColor.DARK_PURPLE + "|" + ChatColor.GOLD + " This is a DEV Build, please report any issues!\n"
                     +
                     ChatColor.DARK_PURPLE + "|\n";
