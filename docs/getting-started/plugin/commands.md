@@ -5,7 +5,9 @@
 | Command | Permission | Description |
 | :--- | :--- | :--- |
 | `/loggerproxy` | `loggerproxy.staff` | Displays the proxy plugin help menu. |
-| `/loggerproxy reload` | `loggerproxy.staff` \| `loggerproxy.reload` | Hot-reloads proxy configuration files. |
+| `/loggerproxy reload` | `loggerproxy.staff` \| `loggerproxy.reload` | Hot-reloads proxy configuration files, Discord bot, and database pools. |
+| `/loggerproxy manual <msg>` | `loggerproxy.staff` \| `loggerproxy.reload` | Records a custom administrative log across proxy files, Discord, and database. |
+| `/loggerproxy dump` | `loggerproxy.staff` \| `loggerproxy.reload` | Generates a safe online diagnostic Pastebin dump of proxy configs and logs. |
 | `/loggerproxy discord` | `loggerproxy.staff` | Displays the official Discord support link. |
 
 ---

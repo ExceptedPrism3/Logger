@@ -4,10 +4,12 @@
 
 | Permission | Description |
 | :--- | :--- |
-| `loggerproxy.staff` | Grants access to `/loggerproxy` command suite and excludes user from basic staff logging. |
-| `loggerproxy.reload` | Ability to hot-reload proxy configurations via `/loggerproxy reload`. |
-| `loggerbungee.staff.log` | Specifically enables logging for players with staff rank. |
-| `loggerbungee.exempt` | Fully excludes the player from all proxy-level logging. |
+| `loggerproxy.staff` | Grants access to the `/loggerproxy` command suite. |
+| `loggerproxy.reload` | Allows `/loggerproxy reload`, `/loggerproxy manual`, and `/loggerproxy dump`. |
+| `loggerproxy.staff.log` | Enables dedicated proxy logging for players with staff permissions. |
+| `loggerproxy.exempt` | Fully excludes the player from all proxy-level logging (chat, commands, switches). |
+| `loggerbungee.staff.log` | Legacy alias for proxy staff logging on BungeeCord. |
+| `loggerbungee.exempt` | Legacy alias for proxy logging exemption on BungeeCord. |
 
 ---
 

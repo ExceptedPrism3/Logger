@@ -17,6 +17,10 @@ Logger provides comprehensive auditing capabilities across all platforms.
 ## Proxy (Velocity & BungeeCord)
 * Network-wide player chat and command monitoring.
 * Server switching and proxy connect/disconnect logs.
+* Diagnostic online dump: `/loggerproxy dump` with multi-tier Pastebin key resolution.
+* Custom administrative logging: `/loggerproxy manual <msg...>`.
+* Real-time Web Panel server status heartbeat synchronization (60s).
+* Dynamic daily log rollover (`dd-MM-yyyy.log`) and UTF-8 encoding across all proxy files.
 * Custom proxy placeholders: `%proxy%` and `%server%`.
 * Centralized database logging across your entire network.
 
