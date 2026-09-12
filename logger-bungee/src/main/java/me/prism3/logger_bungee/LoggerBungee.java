@@ -72,6 +72,16 @@ public class LoggerBungee extends Plugin implements LoggerPlatform {
                     new java.util.HashMap<>());
         }
 
+        // Cancel scheduled tasks
+        getProxy().getScheduler().cancel(this);
+
+        // Unregister listeners & restore hooks cleanly
+        if (this.eventManager != null) {
+            this.eventManager.cleanup();
+        }
+        getProxy().getPluginManager().unregisterListeners(this);
+        getProxy().getPluginManager().unregisterCommands(this);
+
         if (this.discordManager != null) {
             this.discordManager.shutdown();
         }
@@ -132,6 +142,14 @@ public class LoggerBungee extends Plugin implements LoggerPlatform {
     public void reload() {
         this.configManager.reload();
         this.messageManager.reload();
+
+        if (this.fileManager != null) {
+            this.fileManager.reload();
+        }
+
+        if (this.eventManager != null) {
+            this.eventManager.reload();
+        }
 
         if (this.discordManager != null) {
             this.discordManager.reload();

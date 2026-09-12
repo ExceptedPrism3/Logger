@@ -9,6 +9,10 @@ Fixes & Improvements
         [+] Added alias normalization for `rcon` (`rconcommand`, `serverrcon`, `serverrconcommand`) and `reload` (`serverreload`, `reloadconsole`) events.
         [+] Extended webhook URL validation to support Discord Canary, PTB, and legacy `discordapp.com` endpoints.
         [+] Corrected `isOnline()` status detection in webhook mode to verify default webhook URLs alongside mapped route endpoints.
+    [+] BungeeCord Asynchronous Logging & Netty Thread Resilience:
+        [+] Resolved `RejectedExecutionException` in BungeeCord `FileManager`: implemented self-healing executor with dedicated daemon worker threads (`LoggerBungee-File-Worker`) and guarded task submission to prevent terminated pool exceptions from bubbling into Netty IO workers (`UpstreamBridge`).
+        [+] Clean lifecycle handling in `LoggerBungee.onDisable()` and `reload()`: automatically unregisters all proxy listeners, cancels scheduler tasks, unregisters commands, detaches console log filters, and restores proxy command maps.
+        [+] Exception isolation in `BaseListener` and `LogManager`: ensures logging errors (file, Discord, database) are safely trapped as warnings and never disconnect players or disrupt proxy packet pipelines.
 
 <-!------------------------------------------ v1.8.4.1 ------------------------------------------!->
 

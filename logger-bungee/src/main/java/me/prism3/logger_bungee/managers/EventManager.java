@@ -64,14 +64,26 @@ public class EventManager {
         this.registeredListeners.put(eventType, listener);
     }
 
-    public void reload() {
-        // Unregister all current listeners
+    public void cleanup() {
         for (Listener listener : this.registeredListeners.values()) {
-            this.plugin.getProxy().getPluginManager().unregisterListener(listener);
+            try {
+                this.plugin.getProxy().getPluginManager().unregisterListener(listener);
+            } catch (Throwable ignored) {}
         }
         this.registeredListeners.clear();
 
-        // Register listeners based on current configuration
+        if (this.consoleCommandListener != null) {
+            this.consoleCommandListener.cleanup();
+            this.consoleCommandListener = null;
+        }
+        if (this.serverCommandInterceptor != null) {
+            this.serverCommandInterceptor.cleanup();
+            this.serverCommandInterceptor = null;
+        }
+    }
+
+    public void reload() {
+        cleanup();
         registerListeners();
     }
 

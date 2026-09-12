@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 public class ConsoleCommandListener {
     private final LoggerBungee plugin;
+    private Filter oldFilter;
 
     public ConsoleCommandListener(LoggerBungee plugin) {
         this.plugin = plugin;
@@ -21,7 +22,7 @@ public class ConsoleCommandListener {
         Logger rootLogger = plugin.getProxy().getLogger();
         if (rootLogger == null) return;
 
-        Filter oldFilter = rootLogger.getFilter();
+        this.oldFilter = rootLogger.getFilter();
         rootLogger.setFilter(new Filter() {
             @Override
             public boolean isLoggable(LogRecord record) {
@@ -31,6 +32,15 @@ public class ConsoleCommandListener {
                 return oldFilter == null || oldFilter.isLoggable(record);
             }
         });
+    }
+
+    public void cleanup() {
+        try {
+            Logger rootLogger = plugin.getProxy().getLogger();
+            if (rootLogger != null && this.oldFilter != null) {
+                rootLogger.setFilter(this.oldFilter);
+            }
+        } catch (Throwable ignored) {}
     }
 
     private void processMessage(String message) {

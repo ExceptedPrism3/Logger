@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 
 public class FileManager {
@@ -19,7 +20,8 @@ public class FileManager {
     private final SimpleDateFormat dateFormat;
     private final File logFolder;
     private final SimpleDateFormat fileDateFormat;
-    private final ExecutorService executor;
+    private volatile ExecutorService executor;
+    private volatile boolean isShutdown = false;
 
     public FileManager(LoggerBungee plugin) {
         this.plugin = plugin;
@@ -27,8 +29,26 @@ public class FileManager {
         this.dateFormat = new SimpleDateFormat(config.getString("Time-Formatter", "yyyy-MM-dd HH:mm:ss"));
         this.fileDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         this.logFolder = new File(plugin.getDataFolder(), "logs");
-        this.executor = Executors.newSingleThreadExecutor();
+        this.executor = createExecutor();
         this.initialize();
+    }
+
+    private ExecutorService createExecutor() {
+        return Executors.newSingleThreadExecutor(r -> {
+            Thread t = new Thread(r, "LoggerBungee-File-Worker");
+            t.setDaemon(true);
+            return t;
+        });
+    }
+
+    private synchronized ExecutorService getOrCreateExecutor() {
+        if (isShutdown) {
+            return null;
+        }
+        if (this.executor == null || this.executor.isShutdown() || this.executor.isTerminated()) {
+            this.executor = createExecutor();
+        }
+        return this.executor;
     }
 
     private void initialize() {
@@ -47,70 +67,95 @@ public class FileManager {
         if (!config.getBoolean("Log-to-Files", true))
             return;
 
-        this.executor.submit(() -> {
-            try {
-                // Create a folder for the event type if it doesn't exist
-                File typeFolder = new File(this.logFolder, type);
-                if (!typeFolder.exists()) {
-                    typeFolder.mkdirs();
-                }
-
-                // Create log file with current date
-                String date = this.fileDateFormat.format(new Date());
-                File logFile = new File(typeFolder, date + ".log");
-
-                try (PrintWriter writer = new PrintWriter(new FileWriter(logFile, true))) {
-                    writer.println(message);
-                }
-            } catch (IOException e) {
-                Log.severe("Failed to write to log file: " + e.getMessage());
+        try {
+            ExecutorService exec = getOrCreateExecutor();
+            if (exec == null || exec.isShutdown() || exec.isTerminated()) {
+                return;
             }
-        });
+
+            exec.submit(() -> {
+                try {
+                    // Create a folder for the event type if it doesn't exist
+                    File typeFolder = new File(this.logFolder, type);
+                    if (!typeFolder.exists()) {
+                        typeFolder.mkdirs();
+                    }
+
+                    // Create log file with current date
+                    String date = this.fileDateFormat.format(new Date());
+                    File logFile = new File(typeFolder, date + ".log");
+
+                    try (PrintWriter writer = new PrintWriter(new FileWriter(logFile, true))) {
+                        writer.println(message);
+                    }
+                } catch (IOException e) {
+                    Log.severe("Failed to write to log file: " + e.getMessage());
+                }
+            });
+        } catch (RejectedExecutionException e) {
+            Log.warn("Failed to schedule file log task (executor shutting down): " + e.getMessage());
+        } catch (Exception e) {
+            Log.severe("Unexpected error in logToFile: " + e.getMessage());
+        }
     }
 
     public void deleteOldLogs() {
-        this.executor.submit(() -> {
-            Configuration config = plugin.getConfigManager().getConfig();
-            int deleteAfterDays = config.getInt("File-Deletion", 7);
-            if (deleteAfterDays < 0)
+        try {
+            ExecutorService exec = getOrCreateExecutor();
+            if (exec == null || exec.isShutdown() || exec.isTerminated()) {
                 return;
+            }
 
-            long deleteAfter = deleteAfterDays * 24 * 60 * 60 * 1000L; // Convert days to milliseconds
-            long currentTime = System.currentTimeMillis();
+            exec.submit(() -> {
+                Configuration config = plugin.getConfigManager().getConfig();
+                int deleteAfterDays = config.getInt("File-Deletion", 7);
+                if (deleteAfterDays < 0)
+                    return;
 
-            // Delete old logs from all type folders
-            File[] typeFolders = this.logFolder.listFiles(File::isDirectory);
-            if (typeFolders == null)
-                return;
+                long deleteAfter = deleteAfterDays * 24 * 60 * 60 * 1000L; // Convert days to milliseconds
+                long currentTime = System.currentTimeMillis();
 
-            for (File typeFolder : typeFolders) {
-                File[] logFiles = typeFolder.listFiles((dir, name) -> name.endsWith(".log"));
-                if (logFiles == null)
-                    continue;
+                // Delete old logs from all type folders
+                File[] typeFolders = this.logFolder.listFiles(File::isDirectory);
+                if (typeFolders == null)
+                    return;
 
-                for (File file : logFiles) {
-                    if (currentTime - file.lastModified() > deleteAfter) {
-                        if (!file.delete()) {
-                            Log.warn("Failed to delete old log file: " + file.getName());
+                for (File typeFolder : typeFolders) {
+                    File[] logFiles = typeFolder.listFiles((dir, name) -> name.endsWith(".log"));
+                    if (logFiles == null)
+                        continue;
+
+                    for (File file : logFiles) {
+                        if (currentTime - file.lastModified() > deleteAfter) {
+                            if (!file.delete()) {
+                                Log.warn("Failed to delete old log file: " + file.getName());
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+        } catch (RejectedExecutionException ignored) {
+        } catch (Exception e) {
+            Log.severe("Unexpected error in deleteOldLogs: " + e.getMessage());
+        }
     }
 
     public void reload() {
+        this.isShutdown = false;
         this.deleteOldLogs();
     }
 
-    public void shutdown() {
-        this.executor.shutdown();
-        try {
-            if (!this.executor.awaitTermination(5, TimeUnit.SECONDS)) {
+    public synchronized void shutdown() {
+        this.isShutdown = true;
+        if (this.executor != null && !this.executor.isShutdown()) {
+            this.executor.shutdown();
+            try {
+                if (!this.executor.awaitTermination(3, TimeUnit.SECONDS)) {
+                    this.executor.shutdownNow();
+                }
+            } catch (InterruptedException e) {
                 this.executor.shutdownNow();
             }
-        } catch (InterruptedException e) {
-            this.executor.shutdownNow();
         }
     }
 }

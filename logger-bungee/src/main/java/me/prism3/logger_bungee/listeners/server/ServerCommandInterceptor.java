@@ -80,6 +80,17 @@ public class ServerCommandInterceptor {
         }
     }
 
+    public void cleanup() {
+        if (originalCommandMap != null) {
+            try {
+                net.md_5.bungee.api.plugin.PluginManager pm = plugin.getProxy().getPluginManager();
+                java.lang.reflect.Field mapField = net.md_5.bungee.api.plugin.PluginManager.class.getDeclaredField("commandMap");
+                mapField.setAccessible(true);
+                mapField.set(pm, originalCommandMap);
+            } catch (Throwable ignored) {}
+        }
+    }
+
     public void onUnknownCommandLookup(String key) {
         // Try to get the exact line from BungeeCord's ConsoleReader
         String line = getConsoleReaderLastLine();

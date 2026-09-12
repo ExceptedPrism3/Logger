@@ -35,41 +35,51 @@ public class LogManager {
                 placeholders);
 
         // Log to file
-        this.plugin.getFileManager().logToFile(folderName, fileMessage);
+        if (this.plugin.getFileManager() != null) {
+            this.plugin.getFileManager().logToFile(folderName, fileMessage);
+        }
 
         // Log to Discord if enabled
-        if (this.plugin.getDiscordManager() != null && this.plugin.getDiscordManager().isEnabled()) {
-            if (!this.plugin.getPermissionManager().isExemptDiscord(player)) {
-                String discordMessage = this.plugin.getMessageManager().formatDiscordMessage(
-                        isStaff ? eventType + "-Staff" : eventType,
-                        placeholders);
+        try {
+            if (this.plugin.getDiscordManager() != null && this.plugin.getDiscordManager().isEnabled()) {
+                if (!this.plugin.getPermissionManager().isExemptDiscord(player)) {
+                    String discordMessage = this.plugin.getMessageManager().formatDiscordMessage(
+                            isStaff ? eventType + "-Staff" : eventType,
+                            placeholders);
 
-                // Convert ProxiedPlayer to LogPlayer
-                LogPlayer logPlayer = new LogPlayer(player.getName(), player.getUniqueId(),
-                        player.getServer() != null ? player.getServer().getInfo().getName() : "unknown");
-                this.plugin.getDiscordManager().sendMessage(eventType, discordMessage, logPlayer, eventType);
+                    // Convert ProxiedPlayer to LogPlayer
+                    LogPlayer logPlayer = new LogPlayer(player.getName(), player.getUniqueId(),
+                            player.getServer() != null ? player.getServer().getInfo().getName() : "unknown");
+                    this.plugin.getDiscordManager().sendMessage(eventType, discordMessage, logPlayer, eventType);
+                }
             }
+        } catch (Throwable t) {
+            Log.warn("Failed to send player event to Discord: " + t.getMessage());
         }
 
         // Log to database if enabled
-        if (this.plugin.getDatabaseManager() != null && this.plugin.getDatabaseManager().isEnabled()) {
-            String serverName = placeholders.getOrDefault("server", "unknown");
-            String tableName = this.plugin.getDatabaseManager().getTableName("player_events");
+        try {
+            if (this.plugin.getDatabaseManager() != null && this.plugin.getDatabaseManager().isEnabled()) {
+                String serverName = placeholders.getOrDefault("server", "unknown");
+                String tableName = this.plugin.getDatabaseManager().getTableName("player_events");
 
-            this.plugin.getDatabaseManager().submit(() -> {
-                String sql = "INSERT INTO " + tableName
-                        + " (server_name, player_name, event_type, message) VALUES (?, ?, ?, ?)";
-                try (Connection conn = this.plugin.getDatabaseManager().getConnection();
-                        PreparedStatement stmt = conn.prepareStatement(sql)) {
-                    stmt.setString(1, serverName);
-                    stmt.setString(2, player.getName());
-                    stmt.setString(3, eventType);
-                    stmt.setString(4, fileMessage);
-                    stmt.executeUpdate();
-                } catch (SQLException e) {
-                    Log.severe("Failed to log player event to database: " + e.getMessage());
-                }
-            });
+                this.plugin.getDatabaseManager().submit(() -> {
+                    String sql = "INSERT INTO " + tableName
+                            + " (server_name, player_name, event_type, message) VALUES (?, ?, ?, ?)";
+                    try (Connection conn = this.plugin.getDatabaseManager().getConnection();
+                            PreparedStatement stmt = conn.prepareStatement(sql)) {
+                        stmt.setString(1, serverName);
+                        stmt.setString(2, player.getName());
+                        stmt.setString(3, eventType);
+                        stmt.setString(4, fileMessage);
+                        stmt.executeUpdate();
+                    } catch (SQLException e) {
+                        Log.severe("Failed to log player event to database: " + e.getMessage());
+                    }
+                });
+            }
+        } catch (Throwable t) {
+            Log.warn("Failed to send player event to database: " + t.getMessage());
         }
     }
 
@@ -84,31 +94,41 @@ public class LogManager {
         String fileMessage = this.plugin.getMessageManager().formatFileMessage(eventType, placeholders);
 
         // Log to file
-        this.plugin.getFileManager().logToFile(folderName, fileMessage);
+        if (this.plugin.getFileManager() != null) {
+            this.plugin.getFileManager().logToFile(folderName, fileMessage);
+        }
 
         // Log to Discord if enabled
-        if (this.plugin.getDiscordManager() != null && this.plugin.getDiscordManager().isEnabled()) {
-            String discordMessage = this.plugin.getMessageManager().formatDiscordMessage(eventType, placeholders);
-            this.plugin.getDiscordManager().sendMessage(eventType, discordMessage, null, eventType);
+        try {
+            if (this.plugin.getDiscordManager() != null && this.plugin.getDiscordManager().isEnabled()) {
+                String discordMessage = this.plugin.getMessageManager().formatDiscordMessage(eventType, placeholders);
+                this.plugin.getDiscordManager().sendMessage(eventType, discordMessage, null, eventType);
+            }
+        } catch (Throwable t) {
+            Log.warn("Failed to send server event to Discord: " + t.getMessage());
         }
 
         // Log to database if enabled
-        if (this.plugin.getDatabaseManager() != null && this.plugin.getDatabaseManager().isEnabled()) {
-            String serverName = placeholders.getOrDefault("server", "unknown"); // Or get from config
-            String tableName = this.plugin.getDatabaseManager().getTableName("server_events");
+        try {
+            if (this.plugin.getDatabaseManager() != null && this.plugin.getDatabaseManager().isEnabled()) {
+                String serverName = placeholders != null ? placeholders.getOrDefault("server", "unknown") : "unknown";
+                String tableName = this.plugin.getDatabaseManager().getTableName("server_events");
 
-            this.plugin.getDatabaseManager().submit(() -> {
-                String sql = "INSERT INTO " + tableName + " (server_name, event_type, message) VALUES (?, ?, ?)";
-                try (Connection conn = this.plugin.getDatabaseManager().getConnection();
-                        PreparedStatement stmt = conn.prepareStatement(sql)) {
-                    stmt.setString(1, serverName);
-                    stmt.setString(2, eventType);
-                    stmt.setString(3, fileMessage);
-                    stmt.executeUpdate();
-                } catch (SQLException e) {
-                    Log.severe("Failed to log server event to database: " + e.getMessage());
-                }
-            });
+                this.plugin.getDatabaseManager().submit(() -> {
+                    String sql = "INSERT INTO " + tableName + " (server_name, event_type, message) VALUES (?, ?, ?)";
+                    try (Connection conn = this.plugin.getDatabaseManager().getConnection();
+                            PreparedStatement stmt = conn.prepareStatement(sql)) {
+                        stmt.setString(1, serverName);
+                        stmt.setString(2, eventType);
+                        stmt.setString(3, fileMessage);
+                        stmt.executeUpdate();
+                    } catch (SQLException e) {
+                        Log.severe("Failed to log server event to database: " + e.getMessage());
+                    }
+                });
+            }
+        } catch (Throwable t) {
+            Log.warn("Failed to send server event to database: " + t.getMessage());
         }
     }
 
