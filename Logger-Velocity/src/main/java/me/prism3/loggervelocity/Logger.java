@@ -106,8 +106,11 @@ public class Logger implements LoggerPlatform {
 
         if (this.discordManager != null)
             this.discordManager.shutdown();
-        if (this.databaseManager != null)
+        if (this.databaseManager != null) {
+            String sName = this.config != null ? this.config.getServerName() : "Velocity";
+            this.databaseManager.markServerOffline(sName, getVersion());
             this.databaseManager.shutdown();
+        }
 
         this.logger.info("Plugin has been disabled");
     }
