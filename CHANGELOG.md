@@ -15,6 +15,10 @@ Fixes & Improvements
         [+] Exception isolation in `BaseListener` and `LogManager`: ensures logging errors (file, Discord, database) are safely trapped as warnings and never disconnect players or disrupt proxy packet pipelines.
     [+] Velocity Proxy Status Synchronization:
         [+] Added automatic offline status reporting (`markServerOffline`) upon proxy shutdown in Velocity `Logger.java`, keeping Web Panel server status cards in immediate sync when Velocity proxy instances stop.
+    [+] Proxy Dump Subcommand (/loggerproxy dump):
+        [+] Added `/loggerproxy dump` on both BungeeCord and Velocity: asynchronously generates an online Pastebin dump of proxy configuration files, Discord configs, active language bundles, and proxy server logs (`proxy.log` / `velocity.log`).
+        [+] Centralized `DumpHelper` and `PasteBin` in `logger-core`: shared across all platforms with multi-tier API key resolution and safe tail-truncation to prevent exceeding Pastebin payload limits.
+        [+] Added tab-completion suggestions and usage information for `dump` on both BungeeCord and Velocity.
 
 <-!------------------------------------------ v1.8.4.1 ------------------------------------------!->
 
