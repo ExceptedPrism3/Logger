@@ -92,6 +92,15 @@ public class Logger implements LoggerPlatform {
 
         server.getCommandManager().register("loggerproxy", new LoggerProxyCommands());
 
+        // Periodic server status synchronization for Web Panel
+        server.getScheduler().buildTask(this, () -> {
+            if (this.databaseManager != null) {
+                String sName = this.config != null ? this.config.getServerName() : "Velocity";
+                boolean isDiscordActive = this.discordManager != null && this.discordManager.isEnabled();
+                this.databaseManager.updateServerStatus(sName, getVersion(), isDiscordActive);
+            }
+        }).repeat(60, TimeUnit.SECONDS).delay(60, TimeUnit.SECONDS).schedule();
+
         new Start().run();
 
         this.logger.info("Thanks to everyone's contributions that helped made this project possible!");
@@ -121,6 +130,11 @@ public class Logger implements LoggerPlatform {
             this.databaseManager = null;
         }
 
+        String tablePrefix = this.config.getString("Database.Table-Prefix");
+        if (tablePrefix == null || tablePrefix.trim().isEmpty()) {
+            tablePrefix = "logger_";
+        }
+
         if (this.config.getBoolean("Database.Enable")) {
             DatabaseConfig dbConfig = new DatabaseConfig(
                     true,
@@ -130,7 +144,7 @@ public class Logger implements LoggerPlatform {
                     this.config.getString("Database.Database"),
                     this.config.getString("Database.Username"),
                     this.config.getString("Database.Password"),
-                    "logger_",
+                    tablePrefix,
                     this.config.getInt("Database.Data-Deletion"));
             this.databaseManager = new DatabaseManager(this, dbConfig);
             this.databaseManager.initialize();
@@ -143,7 +157,7 @@ public class Logger implements LoggerPlatform {
                     "logger",
                     "root",
                     "",
-                    "logger_",
+                    tablePrefix,
                     this.config.getInt("SQLite.Data-Deletion"));
             this.databaseManager = new DatabaseManager(this, dbConfig);
             this.databaseManager.initialize();

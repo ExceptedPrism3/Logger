@@ -29,10 +29,16 @@ public class SQLiteDatabaseProvider implements DatabaseProvider {
         config.setDriverClassName("org.sqlite.JDBC");
         config.setPoolName("LoggerSQLitePool");
         config.setJdbcUrl("jdbc:sqlite:" + dbFile.getAbsolutePath());
+        config.setMaximumPoolSize(1);
         config.setConnectionTimeout(30000);
         config.setIdleTimeout(600000);
         config.setMaxLifetime(1800000);
         config.setLeakDetectionThreshold(30000);
+
+        // Enable WAL mode & busy timeout to prevent database locks under concurrent load
+        config.addDataSourceProperty("journal_mode", "WAL");
+        config.addDataSourceProperty("busy_timeout", "5000");
+        config.addDataSourceProperty("synchronous", "NORMAL");
 
         this.dataSource = new HikariDataSource(config);
 

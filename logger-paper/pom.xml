@@ -80,10 +80,6 @@
                                     <pattern>io.github.cdimascio.dotenv</pattern>
                                     <shadedPattern>me.prism3.logger.libs.dotenv</shadedPattern>
                                 </relocation>
-                                <relocation>
-                                    <pattern>com.github.benmanes.caffeine</pattern>
-                                    <shadedPattern>me.prism3.logger.libs.caffeine</shadedPattern>
-                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>

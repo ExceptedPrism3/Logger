@@ -118,6 +118,15 @@ public class LoggerManager {
             discordExecutor.shutdownNow();
         }
 
+        // Flush any remaining file log tasks before terminating worker
+        java.util.List<LogTask> remaining = new java.util.ArrayList<>();
+        queue.drainTo(remaining);
+        for (LogTask task : remaining) {
+            try {
+                plugin.getFileLogger().log(task.logType, task.message);
+            } catch (Exception ignored) {}
+        }
+
         // Shutdown file worker
         if (fileWorkerThread != null) {
             fileWorkerThread.interrupt();

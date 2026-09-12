@@ -9,16 +9,28 @@ Fixes & Improvements
         [+] Added alias normalization for `rcon` (`rconcommand`, `serverrcon`, `serverrconcommand`) and `reload` (`serverreload`, `reloadconsole`) events.
         [+] Extended webhook URL validation to support Discord Canary, PTB, and legacy `discordapp.com` endpoints.
         [+] Corrected `isOnline()` status detection in webhook mode to verify default webhook URLs alongside mapped route endpoints.
+        [+] Resource Cleanup: Added explicit `conn.disconnect()` handling in `DiscordManager` webhook delivery to prevent socket and connection leaks under high event volume.
     [+] BungeeCord Asynchronous Logging & Netty Thread Resilience:
         [+] Resolved `RejectedExecutionException` in BungeeCord `FileManager`: implemented self-healing executor with dedicated daemon worker threads (`LoggerBungee-File-Worker`) and guarded task submission to prevent terminated pool exceptions from bubbling into Netty IO workers (`UpstreamBridge`).
         [+] Clean lifecycle handling in `LoggerBungee.onDisable()` and `reload()`: automatically unregisters all proxy listeners, cancels scheduler tasks, unregisters commands, detaches console log filters, and restores proxy command maps.
         [+] Exception isolation in `BaseListener` and `LogManager`: ensures logging errors (file, Discord, database) are safely trapped as warnings and never disconnect players or disrupt proxy packet pipelines.
-    [+] Velocity Proxy Status Synchronization:
+    [+] Velocity Proxy Robustness & Synchronization:
         [+] Added automatic offline status reporting (`markServerOffline`) upon proxy shutdown in Velocity `Logger.java`, keeping Web Panel server status cards in immediate sync when Velocity proxy instances stop.
+        [+] Added automatic 60-second periodic status heartbeat in Velocity, ensuring running Velocity proxies maintain active `last_seen` timestamps on the Web Panel without timing out.
+        [+] Added dynamic `Table-Prefix` support in `velocity-config.yml` (defaulting to `logger_`), unifying table prefix behavior across Spigot, BungeeCord, and Velocity.
+        [+] Daily Log Rollover: Refactored Velocity `FileHandler` to dynamically resolve daily log files (`dd-MM-yyyy.log`), fixing an issue where proxy logs would remain locked to the initial startup date indefinitely.
+        [+] Cross-Platform Retention & Encoding: Replaced filesystem `creationTime` checks with standard `lastModified()` for reliable log file retention deletion on Linux ext4 filesystems, and enforced explicit UTF-8 encoding on disk writes.
     [+] Proxy Dump Subcommand (/loggerproxy dump):
         [+] Added `/loggerproxy dump` on both BungeeCord and Velocity: asynchronously generates an online Pastebin dump of proxy configuration files, Discord configs, active language bundles, and proxy server logs (`proxy.log` / `velocity.log`).
         [+] Centralized `DumpHelper` and `PasteBin` in `logger-core`: shared across all platforms with multi-tier API key resolution and safe tail-truncation to prevent exceeding Pastebin payload limits.
+        [+] Unified Spigot's `/logger dump` to utilize the centralized `DumpHelper`, eliminating duplicate code and adding tail-truncation to protect against out-of-memory errors on massive `latest.log` files.
         [+] Added tab-completion suggestions and usage information for `dump` on both BungeeCord and Velocity.
+    [+] Database Concurrency & Shutdown Resilience:
+        [+] SQLite Concurrency: Configured HikariCP pool size to 1 (`config.setMaximumPoolSize(1)`) and enabled Write-Ahead Logging (`journal_mode=WAL`), `busy_timeout=5000`ms, and `synchronous=NORMAL` to eliminate `SQLITE_BUSY` database file lock exceptions.
+        [+] Instant Web Panel Offline Status: Enhanced `markServerOffline()` to update `last_seen` to a past timestamp immediately on shutdown, eliminating the 3-minute delay where stopped servers appeared "Online".
+        [+] Shutdown Task Flushing: Added graceful queue draining in `DatabaseManager` and Spigot's `LoggerManager` upon shutdown, ensuring all pending log events (including `SERVER_STOP`) are committed to disk and database before worker threads terminate.
+        [+] Schema Cleanup: Removed unused zombie table declarations `player_quit` and `player_login` from schema creation.
+        [+] Removed unused legacy `caffeine` dependency and shade relocation, shaving ~800KB from the universal binary.
 
 <-!------------------------------------------ v1.8.4.1 ------------------------------------------!->
 

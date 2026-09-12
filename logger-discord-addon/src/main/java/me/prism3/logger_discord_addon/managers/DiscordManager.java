@@ -880,9 +880,10 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
     }
 
     private void sendWebhookSync(String webhookUrl, String jsonPayload) {
+        HttpURLConnection conn = null;
         try {
             URL url = new URL(webhookUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
             conn.setRequestProperty("User-Agent", "LoggerDiscordAddon/1.8.4.2");
@@ -913,6 +914,12 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
             }
         } catch (Exception e) {
             System.err.println("[LoggerDiscordAddon] Failed to deliver webhook: " + e.getMessage());
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.disconnect();
+                } catch (Exception ignored) {}
+            }
         }
     }
 

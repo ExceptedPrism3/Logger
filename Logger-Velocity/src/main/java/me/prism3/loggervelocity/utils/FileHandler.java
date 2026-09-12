@@ -1,9 +1,10 @@
 package me.prism3.loggervelocity.utils;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.attribute.FileTime;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.BufferedWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -23,85 +24,65 @@ public class FileHandler {
     private static File serverStopLogFolder;
     private static File ramLogFolder;
 
-    private static File staffLogFile;
-    private static File chatLogFile;
-    private static File playerCommandLogFile;
-    private static File loginLogFile;
-    private static File leaveLogFile;
-    private static File consoleCommandLogFile;
-    private static File serverStartLogFile;
-    private static File serverStopLogFile;
-    private static File ramLogFile;
-
     public FileHandler(File dataFolder) {
         final File logsFolder = new File(dataFolder, "Logs");
 
-        final Date date = new Date();
-        final SimpleDateFormat filenameDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        final String dateStr = filenameDateFormat.format(date);
-
         staffLogFolder = new File(logsFolder, "Staff");
-        staffLogFile = new File(staffLogFolder, dateStr + ".log");
-
         chatLogFolder = new File(logsFolder, "Player Chat");
-        chatLogFile = new File(chatLogFolder, dateStr + ".log");
-
         playerCommandLogFolder = new File(logsFolder, "Player Command");
-        playerCommandLogFile = new File(playerCommandLogFolder, dateStr + ".log");
-
         loginLogFolder = new File(logsFolder, "Player Login");
-        loginLogFile = new File(loginLogFolder, dateStr + ".log");
-
         leaveLogFolder = new File(logsFolder, "Player Leave");
-        leaveLogFile = new File(leaveLogFolder, dateStr + ".log");
-
         consoleCommandLogFolder = new File(logsFolder, "Server Commands");
-        consoleCommandLogFile = new File(consoleCommandLogFolder, dateStr + ".log");
-
         serverStartLogFolder = new File(logsFolder, "Server Start");
-        serverStartLogFile = new File(serverStartLogFolder, dateStr + ".log");
-
         serverStopLogFolder = new File(logsFolder, "Server Stop");
-        serverStopLogFile = new File(serverStopLogFolder, dateStr + ".log");
-
         ramLogFolder = new File(logsFolder, "RAM");
-        ramLogFile = new File(ramLogFolder, dateStr + ".log");
+    }
+
+    private static String getTodayDateString() {
+        return new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+    }
+
+    private static File getDailyFile(File folder) {
+        if (folder != null && !folder.exists()) {
+            folder.mkdirs();
+        }
+        return new File(folder, getTodayDateString() + ".log");
     }
 
     public static File getStaffLogFile() {
-        return staffLogFile;
+        return getDailyFile(staffLogFolder);
     }
 
     public static File getChatLogFile() {
-        return chatLogFile;
+        return getDailyFile(chatLogFolder);
     }
 
     public static File getPlayerCommandLogFile() {
-        return playerCommandLogFile;
+        return getDailyFile(playerCommandLogFolder);
     }
 
     public static File getLoginLogFile() {
-        return loginLogFile;
+        return getDailyFile(loginLogFolder);
     }
 
     public static File getLeaveLogFile() {
-        return leaveLogFile;
+        return getDailyFile(leaveLogFolder);
     }
 
     public static File getConsoleCommandLogFile() {
-        return consoleCommandLogFile;
+        return getDailyFile(consoleCommandLogFolder);
     }
 
     public static File getServerStartLogFile() {
-        return serverStartLogFile;
+        return getDailyFile(serverStartLogFolder);
     }
 
     public static File getServerStopLogFile() {
-        return serverStopLogFile;
+        return getDailyFile(serverStopLogFolder);
     }
 
     public static File getRamLogFile() {
-        return ramLogFile;
+        return getDailyFile(ramLogFolder);
     }
 
     private void deleteFile(File file) {
@@ -109,17 +90,10 @@ public class FileHandler {
             return;
         }
 
-        try {
-            FileTime creationTime = (FileTime) Files.getAttribute(file.toPath(), "creationTime");
-            if (creationTime != null) {
-                final long offset = System.currentTimeMillis() - creationTime.toMillis();
-                final long maxAge = TimeUnit.DAYS.toMillis(fileDeletion);
-                if (offset > maxAge) {
-                    file.delete();
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        final long offset = System.currentTimeMillis() - file.lastModified();
+        final long maxAge = TimeUnit.DAYS.toMillis(fileDeletion);
+        if (offset > maxAge) {
+            file.delete();
         }
     }
 
@@ -160,41 +134,41 @@ public class FileHandler {
         File file;
         switch (eventType) {
             case "Player-Chat":
-                file = chatLogFile;
+                file = getChatLogFile();
                 break;
             case "Player-Chat-Staff":
-                file = staffLogFile;
+                file = getStaffLogFile();
                 break;
             case "Player-Command":
-                file = playerCommandLogFile;
+                file = getPlayerCommandLogFile();
                 break;
             case "Player-Command-Staff":
-                file = staffLogFile;
+                file = getStaffLogFile();
                 break;
             case "Player-Login":
-                file = loginLogFile;
+                file = getLoginLogFile();
                 break;
             case "Player-Login-Staff":
-                file = staffLogFile;
+                file = getStaffLogFile();
                 break;
             case "Player-Leave":
-                file = leaveLogFile;
+                file = getLeaveLogFile();
                 break;
             case "Player-Leave-Staff":
-                file = staffLogFile;
+                file = getStaffLogFile();
                 break;
             case "Server-Side.Console-Commands":
             case "Server-Side.Manual-Log":
-                file = consoleCommandLogFile;
+                file = getConsoleCommandLogFile();
                 break;
             case "Server-Side.Start":
-                file = serverStartLogFile;
+                file = getServerStartLogFile();
                 break;
             case "Server-Side.Stop":
-                file = serverStopLogFile;
+                file = getServerStopLogFile();
                 break;
             case "Server-Side.RAM":
-                file = ramLogFile;
+                file = getRamLogFile();
                 break;
             default:
                 return;
@@ -207,10 +181,10 @@ public class FileHandler {
             file.getParentFile().mkdirs();
         }
 
-        try (java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.FileWriter(file, true))) {
+        try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8))) {
             out.write(message);
             out.newLine();
-        } catch (java.io.IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

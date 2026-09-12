@@ -65,6 +65,7 @@ Database:
   Database: "logger"
   Username: "root"
   Password: ""
+  Table-Prefix: "logger_"
   Data-Deletion: 30
 
 # RAM Checker

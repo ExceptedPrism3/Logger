@@ -51,8 +51,6 @@ public class DatabaseManager {
         tempTables.put("player_join", getPlayerSideFields() + "ip_address VARCHAR(100), is_staff TINYINT(1)");
         tempTables.put("player_leave", getPlayerSideFields() + "is_staff TINYINT(1)");
         tempTables.put("player_kick", getPlayerSideFields() + "reason TEXT, is_staff TINYINT(1)");
-        tempTables.put("player_login", getPlayerSideFields() + "ip_address VARCHAR(45), is_staff TINYINT(1)");
-        tempTables.put("player_quit", getPlayerSideFields() + "is_staff TINYINT(1)");
         tempTables.put("player_server_switch", getPlayerSideFields() + "from_server VARCHAR(50), to_server VARCHAR(50), is_staff TINYINT(1)");
         tempTables.put("player_teleport", getPlayerSideFields() + "to_x INT, to_y INT, to_z INT, cause VARCHAR(100), is_staff TINYINT(1)");
         tempTables.put("player_level", getPlayerSideFields() + "is_staff TINYINT(1)");
@@ -281,7 +279,10 @@ public class DatabaseManager {
         try (Connection conn = provider != null ? provider.getConnection() : null) {
             if (conn == null) return;
             String tableName = config.tablePrefix + "server_status";
-            String sql = "UPDATE " + tableName + " SET discord_addon = 0 WHERE server_name = ?";
+            boolean isSqlite = "sqlite".equalsIgnoreCase(config.type);
+            String sql = isSqlite
+                    ? "UPDATE " + tableName + " SET discord_addon = 0, last_seen = '2000-01-01 00:00:00' WHERE server_name = ?"
+                    : "UPDATE " + tableName + " SET discord_addon = 0, last_seen = DATE_SUB(NOW(), INTERVAL 1 DAY) WHERE server_name = ?";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, (serverName != null && !serverName.isEmpty()) ? serverName : "default");
                 ps.executeUpdate();
@@ -296,6 +297,24 @@ public class DatabaseManager {
             try {
                 workerThread.join(1000);
             } catch (InterruptedException ignored) {}
+        }
+        // Drain and flush pending tasks before closing database provider
+        List<Runnable> remaining = new ArrayList<>();
+        taskQueue.drainTo(remaining);
+        if (!remaining.isEmpty() && provider != null) {
+            try (Connection conn = provider.getConnection()) {
+                conn.setAutoCommit(false);
+                currentTransaction.set(conn);
+                for (Runnable task : remaining) {
+                    try {
+                        task.run();
+                    } catch (Exception ignored) {}
+                }
+                conn.commit();
+            } catch (Exception ignored) {
+            } finally {
+                currentTransaction.remove();
+            }
         }
         if (provider != null) {
             try {
