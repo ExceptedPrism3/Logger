@@ -121,7 +121,13 @@ public class LoggerProxyCommands implements SimpleCommand {
                     files.put("velocity-discord.yml", discord);
 
                     // Messages
-                    String lang = this.main.getConfig().getString("Language", "en_US");
+                    String lang = "en_US";
+                    if (this.main.getConfig() != null) {
+                        String val = this.main.getConfig().getString("Language");
+                        if (val != null && !val.isEmpty() && !val.startsWith("String at path")) {
+                            lang = val;
+                        }
+                    }
                     File msgFile = new File(dataFolder, "messages/" + lang + ".yml");
                     if (!msgFile.exists()) msgFile = new File(dataFolder, "messages.yml");
                     files.put("messages/" + lang + ".yml", msgFile);
