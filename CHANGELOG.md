@@ -13,6 +13,8 @@ Fixes & Improvements
         [+] Resolved `RejectedExecutionException` in BungeeCord `FileManager`: implemented self-healing executor with dedicated daemon worker threads (`LoggerBungee-File-Worker`) and guarded task submission to prevent terminated pool exceptions from bubbling into Netty IO workers (`UpstreamBridge`).
         [+] Clean lifecycle handling in `LoggerBungee.onDisable()` and `reload()`: automatically unregisters all proxy listeners, cancels scheduler tasks, unregisters commands, detaches console log filters, and restores proxy command maps.
         [+] Exception isolation in `BaseListener` and `LogManager`: ensures logging errors (file, Discord, database) are safely trapped as warnings and never disconnect players or disrupt proxy packet pipelines.
+    [+] Velocity Proxy Status Synchronization:
+        [+] Added automatic offline status reporting (`markServerOffline`) upon proxy shutdown in Velocity `Logger.java`, keeping Web Panel server status cards in immediate sync when Velocity proxy instances stop.
 
 <-!------------------------------------------ v1.8.4.1 ------------------------------------------!->
 
