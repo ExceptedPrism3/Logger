@@ -56,7 +56,7 @@ public class LoggerBungee extends Plugin implements LoggerPlatform {
         getProxy().getScheduler().schedule(this, () -> {
             if (this.databaseManager != null) {
                 String sName = this.configManager != null ? this.configManager.getServerName() : "BungeeCord";
-                String ver = getDescription() != null ? getDescription().getVersion() : "1.8.4.2";
+                String ver = getDescription() != null ? getDescription().getVersion() : "1.8.5";
                 boolean hasDiscord = this.discordManager != null && this.discordManager.isEnabled();
                 this.databaseManager.updateServerStatus(sName, ver, hasDiscord);
             }
@@ -87,7 +87,7 @@ public class LoggerBungee extends Plugin implements LoggerPlatform {
         }
         if (this.databaseManager != null) {
             String sName = this.configManager != null ? this.configManager.getServerName() : "BungeeCord";
-            String ver = getDescription() != null ? getDescription().getVersion() : "1.8.4.2";
+            String ver = getDescription() != null ? getDescription().getVersion() : "1.8.5";
             this.databaseManager.markServerOffline(sName, ver);
             this.databaseManager.shutdown();
         }
@@ -175,7 +175,7 @@ public class LoggerBungee extends Plugin implements LoggerPlatform {
         this.discordManager = discordManager;
         if (this.databaseManager != null) {
             String serverName = this.configManager != null ? this.configManager.getServerName() : "BungeeCord";
-            String version = getDescription() != null ? getDescription().getVersion() : "1.8.4.2";
+            String version = getDescription() != null ? getDescription().getVersion() : "1.8.5";
             boolean isDiscordActive = discordManager != null && discordManager.isEnabled();
             this.databaseManager.updateServerStatus(serverName, version, isDiscordActive);
         }

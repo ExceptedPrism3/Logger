@@ -36,41 +36,56 @@ public class MessageManager {
         this.loadMessages();
     }
 
+    private String normalizeLanguage(String lang) {
+        if (lang == null || lang.trim().isEmpty()) return "en_US";
+        String l = lang.trim();
+        if (l.equalsIgnoreCase("en") || l.equalsIgnoreCase("en_en") || l.equalsIgnoreCase("en_us") || l.equalsIgnoreCase("en_US") || l.equalsIgnoreCase("english")) {
+            return "en_US";
+        } else if (l.equalsIgnoreCase("fr") || l.equalsIgnoreCase("fr_fr") || l.equalsIgnoreCase("fr_FR") || l.equalsIgnoreCase("french")) {
+            return "fr_fr";
+        } else if (l.equalsIgnoreCase("zh") || l.equalsIgnoreCase("zh_cn") || l.equalsIgnoreCase("zh_CN") || l.equalsIgnoreCase("chinese")) {
+            return "zh_cn";
+        } else if (l.equalsIgnoreCase("ar") || l.equalsIgnoreCase("ar_sa") || l.equalsIgnoreCase("ar_SA") || l.equalsIgnoreCase("arabic")) {
+            return "ar";
+        } else if (l.equalsIgnoreCase("de") || l.equalsIgnoreCase("de_de") || l.equalsIgnoreCase("de_DE") || l.equalsIgnoreCase("german")) {
+            return "de_DE";
+        } else if (l.equalsIgnoreCase("es") || l.equalsIgnoreCase("es_es") || l.equalsIgnoreCase("es_ES") || l.equalsIgnoreCase("spanish")) {
+            return "es_ES";
+        } else if (l.equalsIgnoreCase("it") || l.equalsIgnoreCase("it_it") || l.equalsIgnoreCase("it_IT") || l.equalsIgnoreCase("italian")) {
+            return "it_IT";
+        } else if (l.equalsIgnoreCase("ja") || l.equalsIgnoreCase("ja_jp") || l.equalsIgnoreCase("ja_JP") || l.equalsIgnoreCase("japanese")) {
+            return "ja_JP";
+        } else if (l.equalsIgnoreCase("ko") || l.equalsIgnoreCase("ko_kr") || l.equalsIgnoreCase("ko_KR") || l.equalsIgnoreCase("korean")) {
+            return "ko_KR";
+        } else if (l.equalsIgnoreCase("pt") || l.equalsIgnoreCase("pt_br") || l.equalsIgnoreCase("pt_BR") || l.equalsIgnoreCase("portuguese")) {
+            return "pt_BR";
+        } else if (l.equalsIgnoreCase("ru") || l.equalsIgnoreCase("ru_ru") || l.equalsIgnoreCase("ru_RU") || l.equalsIgnoreCase("russian")) {
+            return "ru_RU";
+        }
+        return l;
+    }
+
     private File resolveLanguageFile(String lang) {
-        if (lang == null || lang.isEmpty()) {
-            return new File(this.messagesDir, "en_US.yml");
-        }
-
-        File file = new File(this.messagesDir, lang + ".yml");
-        if (file.exists()) return file;
-
-        file = new File(this.messagesDir, lang.toLowerCase() + ".yml");
-        if (file.exists()) return file;
-
-        if (lang.equalsIgnoreCase("fr") || lang.equalsIgnoreCase("fr_FR") || lang.equalsIgnoreCase("fr_fr")) {
-            file = new File(this.messagesDir, "fr_fr.yml");
-            if (file.exists()) return file;
-        } else if (lang.equalsIgnoreCase("zh") || lang.equalsIgnoreCase("zh_CN") || lang.equalsIgnoreCase("zh_cn")) {
-            file = new File(this.messagesDir, "zh_cn.yml");
-            if (file.exists()) return file;
-        } else if (lang.equalsIgnoreCase("ar") || lang.equalsIgnoreCase("ar_SA") || lang.equalsIgnoreCase("ar_sa")) {
-            file = new File(this.messagesDir, "ar.yml");
-            if (file.exists()) return file;
-        } else if (lang.equalsIgnoreCase("en") || lang.equalsIgnoreCase("en_US") || lang.equalsIgnoreCase("en_en")) {
-            file = new File(this.messagesDir, "en_US.yml");
-            if (file.exists()) return file;
-        }
+        String normalized = normalizeLanguage(lang);
 
         for (String bundled : BUNDLED_LANGUAGES) {
-            if (bundled.equalsIgnoreCase(lang)) {
+            if (bundled.equalsIgnoreCase(normalized)) {
+                File file = new File(this.messagesDir, bundled + ".yml");
+                if (file.exists()) return file;
                 try {
                     this.plugin.saveResource("messages/" + bundled + ".yml", false);
-                    file = new File(this.messagesDir, bundled + ".yml");
                     if (file.exists()) return file;
                 } catch (Exception ignored) {}
             }
         }
 
+        File file = new File(this.messagesDir, normalized + ".yml");
+        if (file.exists()) return file;
+
+        file = new File(this.messagesDir, normalized.toLowerCase() + ".yml");
+        if (file.exists()) return file;
+
+        // Fallback default
         return new File(this.messagesDir, "en_US.yml");
     }
 
@@ -106,9 +121,33 @@ public class MessageManager {
 
         if (!chosen.exists()) {
             chosen = new File(this.messagesDir, "en_US.yml");
+            if (!chosen.exists()) {
+                try {
+                    this.plugin.saveResource("messages/en_US.yml", false);
+                } catch (Exception ignored) {}
+            }
+        }
+
+        // Sync missing defaults directly into chosen file if it is custom or older version
+        if (chosen.exists()) {
+            String resourceName = "messages/" + chosen.getName();
+            if (this.plugin.getResource(resourceName) != null) {
+                YamlMigrator.syncDefaults(this.plugin, chosen, resourceName);
+            } else {
+                YamlMigrator.syncDefaults(this.plugin, chosen, "messages/en_US.yml");
+            }
         }
 
         final FileConfiguration messagesConfig = YamlConfiguration.loadConfiguration(chosen);
+
+        // Attach bundled en_US.yml as default fallback so NO key ever evaluates to missing
+        try (java.io.InputStream defaultStream = this.plugin.getResource("messages/en_US.yml")) {
+            if (defaultStream != null) {
+                try (java.io.InputStreamReader reader = new java.io.InputStreamReader(defaultStream, java.nio.charset.StandardCharsets.UTF_8)) {
+                    messagesConfig.setDefaults(YamlConfiguration.loadConfiguration(reader));
+                }
+            }
+        } catch (Exception ignored) {}
 
         this.generalCache.clear();
         this.templateCache.clear();
@@ -131,9 +170,14 @@ public class MessageManager {
 
                     final String parent = (channel == 'F') ? "File" : "Discord";
                     final String key = parent + ":" + type.name() + ":" + staff;
-                    final String tpl = messagesConfig.getString(
-                            parent + "." + type.getMessagePath(staff),
-                            "Message not found: " + parent + "." + type.getMessagePath(staff));
+                    String tpl = messagesConfig.getString(parent + "." + type.getMessagePath(staff));
+                    if (tpl == null || tpl.trim().isEmpty()) {
+                        // Try un-staffed variant fallback
+                        tpl = messagesConfig.getString(parent + "." + type.getMessagePath(false));
+                    }
+                    if (tpl == null || tpl.trim().isEmpty()) {
+                        tpl = "[" + parent + "] Event: " + type.name();
+                    }
 
                     this.templateCache.put(key, tpl);
                 }

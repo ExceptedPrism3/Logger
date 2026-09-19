@@ -1,13 +1,13 @@
 # Updating & Upgrading Guide
 
-This guide covers everything you need to know when upgrading Logger from an older version (v1.7.x or v1.8.0–v1.8.3) to **v1.8.4.2**.
+This guide covers everything you need to know when upgrading Logger from an older version (v1.7.x or v1.8.0–v1.8.3) to **v1.8.5**.
 
 ---
 
 ## 1. Java Runtime Environment
 
 {% hint style="warning" %}
-**Minimum Java Version**: Logger v1.8.4.2 requires **Java 17 or higher** (Java 21 is strongly recommended).
+**Minimum Java Version**: Logger v1.8.5 requires **Java 17 or higher** (Java 21 is strongly recommended).
 {% endhint %}
 
 * **Legacy Minecraft Servers (1.8.8 – 1.16.5)**: 
@@ -21,7 +21,7 @@ This guide covers everything you need to know when upgrading Logger from an olde
 
 1. Stop your server or proxy safely (`stop` / `end`).
 2. Delete the old `Logger-*.jar` from your `plugins/` folder.
-3. Place [`Logger-1.8.4.2.jar`](https://github.com/ExceptedPrism3/Logger/releases) into `plugins/`.
+3. Place [`Logger-1.8.5.jar`](https://github.com/ExceptedPrism3/Logger/releases) into `plugins/`.
 4. Start your server.
 
 ---
@@ -30,11 +30,11 @@ This guide covers everything you need to know when upgrading Logger from an olde
 
 In earlier versions, Discord was integrated into the main plugin jar. In v1.8+, Discord functionality is provided via the standalone companion addon:
 
-1. Download [`LoggerDiscordAddon-1.8.4.2.jar`](https://github.com/ExceptedPrism3/Logger/releases).
-2. Place `LoggerDiscordAddon-1.8.4.2.jar` directly into your `plugins/` folder.
+1. Download [`LoggerDiscordAddon-1.8.5.jar`](https://github.com/ExceptedPrism3/Logger/releases).
+2. Place `LoggerDiscordAddon-1.8.5.jar` directly into your `plugins/` folder.
 3. **Configuration Path**:
    * The Discord config is located at `plugins/Logger/discord.yml`.
-   * **Automatic Migration**: If you previously had configuration inside `plugins/LoggerDiscordAddon/discord.yml`, Logger v1.8.4.2 will automatically detect, migrate, and cleanly remove the legacy directory on startup!
+   * **Automatic Migration**: If you previously had configuration inside `plugins/LoggerDiscordAddon/discord.yml`, Logger v1.8.5 will automatically detect, migrate, and cleanly remove the legacy directory on startup!
 
 ---
 
@@ -43,7 +43,7 @@ In earlier versions, Discord was integrated into the main plugin jar. In v1.8+, 
 Logger features a zero-downtime, safe schema migration engine:
 
 * **MySQL / MariaDB / PostgreSQL / SQLite**:
-  * When starting v1.8.4.2, Logger automatically detects existing database tables and applies any schema updates (such as adding index optimizations and the new `server_status` heartbeat table for Web Panel integration).
+  * When starting v1.8.5, Logger automatically detects existing database tables and applies any schema updates (such as adding index optimizations and the new `server_status` heartbeat table for Web Panel integration).
   * **No manual SQL scripts or database drops are required.** Your existing log history is completely preserved.
 
 ---
@@ -51,5 +51,5 @@ Logger features a zero-downtime, safe schema migration engine:
 ## 5. New Permission Exemption
 
 * **`logger.exempt.discord`**:
-  * In v1.8.4.2, you can now exempt specific staff members or VIPs from sending Discord alerts while still recording their actions in local logs/database!
+  * In v1.8.5, you can now exempt specific staff members or VIPs from sending Discord alerts while still recording their actions in local logs/database!
   * Simply assign `logger.exempt.discord` to players or groups you wish to mute on Discord.

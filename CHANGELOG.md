@@ -1,6 +1,10 @@
-<-!------------------------------------------ v1.8.4.2 [ DEV ] ------------------------------------------!->
+<-!------------------------------------------ v1.8.5 ------------------------------------------!->
 
 Fixes & Improvements
+    [+] Language Configuration & Missing Key Fallback Resolution:
+        [+] Resolved "Message not found: File.Player.<event>" errors when upgrading from legacy versions (e.g. v1.8.0.x with legacy `en_en`): enhanced `MessageManager` to normalize legacy language codes (`en_en` -> `en_US`) before filesystem lookup, preventing outdated unmigrated files from hijacking message formatting.
+        [+] Universal Fallback Defaults: Attached bundled `en_US.yml` defaults directly to `YamlConfiguration` in `MessageManager`, guaranteeing that any custom, outdated, or incomplete language translation seamlessly falls back to standard templates instead of throwing missing-message errors.
+        [+] Active Synchronization: Added automatic missing-key synchronization via `YamlMigrator` for the actively selected language file on server boot.
     [+] Discord Webhook Rate Limiting & Paper Nag Fix:
         [+] Webhook Rate Limiting & Auto-Retry Backoff: Implemented a dedicated single-threaded queue worker (`Logger-Discord-Webhook`) with automatic HTTP 429 (`retry_after`) rate-limit backoff and retry handling (up to 3 retries) in `DiscordManager`. Webhooks are now paced sequentially, respecting proactive Discord rate-limit headers (`X-RateLimit-Remaining: 0` / `X-RateLimit-Reset-After`) and eliminating HTTP 429 console spam and message loss during event bursts.
         [+] Paper Nag Warning Fix: Replaced all legacy `System.out.println` and `System.err.println` occurrences in `DiscordManager` with proper plugin `Log` calls (`JavaPlugin#getLogger()`), permanently resolving Paper's nag warning about direct stdout/stderr usage.

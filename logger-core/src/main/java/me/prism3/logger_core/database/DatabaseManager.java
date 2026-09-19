@@ -262,7 +262,7 @@ public class DatabaseManager {
                 }
                 try (PreparedStatement ps = conn.prepareStatement(sql)) {
                     ps.setString(1, (serverName != null && !serverName.isEmpty()) ? serverName : "default");
-                    ps.setString(2, (pluginVersion != null && !pluginVersion.isEmpty()) ? pluginVersion : "1.8.4.2");
+                    ps.setString(2, (pluginVersion != null && !pluginVersion.isEmpty()) ? pluginVersion : "1.8.5");
                     ps.setInt(3, discordAddon ? 1 : 0);
                     ps.executeUpdate();
                 }

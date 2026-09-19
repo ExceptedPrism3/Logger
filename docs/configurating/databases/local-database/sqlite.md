@@ -12,9 +12,9 @@ Local SQLite files are stored inside `plugins/Logger/logs.db` (or proxy data fol
 
 ---
 
-## ⚡ Concurrency & Performance (v1.8.4.2+)
+## ⚡ Concurrency & Performance (v1.8.5+)
 
-In **v1.8.4.2**, SQLite has been optimized for high-throughput server workloads:
+In **v1.8.5**, SQLite has been optimized for high-throughput server workloads:
 
 * **WAL Mode (Write-Ahead Logging)**: Automatically enabled (`journal_mode=WAL`), allowing concurrent non-blocking reads (e.g. `/logger view` or Web Panel queries) while background logging tasks write to disk.
 * **Busy Timeout (5000ms)**: Eliminates `SQLITE_BUSY` ("database is locked") exceptions by automatically awaiting locks during brief disk flushes.

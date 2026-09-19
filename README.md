@@ -1,7 +1,7 @@
 # Logger
 ### High-Performance Asynchronous Minecraft Server & Proxy Auditing Suite
 
-[![Version](https://img.shields.io/badge/Version-1.8.4.2-brightgreen)](https://github.com/ExceptedPrism3/Logger/releases)
+[![Version](https://img.shields.io/badge/Version-1.8.5-brightgreen)](https://github.com/ExceptedPrism3/Logger/releases)
 ![Java](https://img.shields.io/badge/Java-8%20|%2017%20|%2021-orange)
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.8%20--%201.21+-green)
 ![Folia](https://img.shields.io/badge/Folia-Supported-00D26A?logo=papermc&logoColor=white)
@@ -17,7 +17,7 @@
 
 **Logger** is a modular, high-throughput logging and server auditing suite designed for Spigot, Paper, Purpur, BungeeCord, Waterfall, FlameCord, and Velocity networks.
 
-Packaged as a **Universal 3-in-1 Multi-Platform JAR**, a single file (`Logger-1.8.4.2.jar`) runs natively on any backend Minecraft server or proxy network without separate builds or dependencies.
+Packaged as a **Universal 3-in-1 Multi-Platform JAR**, a single file (`Logger-1.8.5.jar`) runs natively on any backend Minecraft server or proxy network without separate builds or dependencies.
 
 All logging operations are executed asynchronously off the main server thread using HikariCP connection pooling, ensuring 0.00 TPS impact even on high-capacity servers.
 
@@ -26,7 +26,7 @@ All logging operations are executed asynchronously off the main server thread us
 ## ⚡ Features
 
 ### 🌐 Universal 3-in-1 Single JAR
-* **Universal Multi-Platform**: Drop `Logger-1.8.4.2.jar` into Spigot, Paper, Purpur, BungeeCord, Waterfall, FlameCord, or Velocity 3.x+, each platform automatically detects its native plugin descriptor (`plugin.yml`, `bungee.yml`, `velocity-plugin.json`).
+* **Universal Multi-Platform**: Drop `Logger-1.8.5.jar` into Spigot, Paper, Purpur, BungeeCord, Waterfall, FlameCord, or Velocity 3.x+, each platform automatically detects its native plugin descriptor (`plugin.yml`, `bungee.yml`, `velocity-plugin.json`).
 * **Isolated Configurations**: Dedicated configuration and message files are extracted per platform without namespace collisions or config pollution.
 
 ### 🎮 Player Auditing (35+ Event Types)
@@ -140,8 +140,8 @@ mvn clean package -DskipTests
 ```
 
 The compiled release artifacts will be placed in `releases/`:
-* `releases/Logger-1.8.4.2.jar` *(Universal JAR for Spigot, Paper, Purpur, BungeeCord, and Velocity)*
-* `releases/LoggerDiscordAddon-1.8.4.2.jar` *(Universal Discord Addon for Spigot, BungeeCord, and Velocity)*
+* `releases/Logger-1.8.5.jar` *(Universal JAR for Spigot, Paper, Purpur, BungeeCord, and Velocity)*
+* `releases/LoggerDiscordAddon-1.8.5.jar` *(Universal Discord Addon for Spigot, BungeeCord, and Velocity)*
 
 ---
 
