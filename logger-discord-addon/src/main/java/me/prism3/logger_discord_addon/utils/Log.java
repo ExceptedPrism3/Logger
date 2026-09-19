@@ -3,7 +3,6 @@ package me.prism3.logger_discord_addon.utils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 /**
  * The Log class is a utility class that provides a simple interface for logging messages using the Java Logging API.
  * The class is final and contains only static methods, which cannot be overridden or instantiated,
@@ -22,26 +21,33 @@ public final class Log {
      */
     public static void setup(final Logger log) { Log.logger = log; }
 
+    private static Logger getLogger() {
+        if (logger == null) {
+            logger = Logger.getLogger("LoggerDiscordAddon");
+        }
+        return logger;
+    }
+
     /**
      * Logs an info level message.
      *
      * @param message The message to be logged.
      */
-    public static void info(final String message) { logger.info(message); }
+    public static void info(final String message) { getLogger().info(message); }
 
     /**
      * Logs a warning level message.
      *
      * @param message The message to be logged.
      */
-    public static void warning(final String message) { logger.warning(message); }
+    public static void warning(final String message) { getLogger().warning(message); }
 
     /**
      * Logs a severe level message.
      *
      * @param message The message to be logged.
      */
-    public static void severe(final String message) { logger.severe(message); }
+    public static void severe(final String message) { getLogger().severe(message); }
 
     /**
      * Logs a severe level message.
@@ -50,6 +56,6 @@ public final class Log {
      * @param thrown the exception message.
      */
     public static void severe(final String message, final Throwable thrown) {
-        logger.log(Level.SEVERE, message, thrown);
+        getLogger().log(Level.SEVERE, message, thrown);
     }
 }

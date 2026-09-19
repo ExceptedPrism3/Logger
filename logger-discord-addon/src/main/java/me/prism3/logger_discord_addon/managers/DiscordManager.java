@@ -24,7 +24,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import me.prism3.logger_discord_addon.utils.Log;
 
 public class DiscordManager extends ListenerAdapter implements me.prism3.logger_core.discord.DiscordManager {
 
@@ -40,6 +42,8 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
     private String defaultWebhookUrl = null;
     private TextChannel defaultChannel = null;
     private ScheduledExecutorService activityScheduler;
+    private ExecutorService webhookExecutor;
+    private static final Pattern RETRY_AFTER_PATTERN = Pattern.compile("\"retry_after\"\\s*:\\s*([0-9.]+)");
 
     private String messageType = "normal";
     private String embedTitle = "Server Notification";
@@ -71,7 +75,7 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
         boolean enabled = getBoolean(discordSection, "Enabled", false);
         if (!enabled) {
             this.isEnabled = false;
-            System.out.println("[LoggerDiscordAddon] Discord integration is disabled in discord.yml. Addon is idle.");
+            Log.info("Discord integration is disabled in discord.yml. Addon is idle.");
             return;
         }
 
@@ -96,7 +100,7 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
             String botToken = getString(discordSection, "Bot-Token", "");
             if (botToken == null || botToken.trim().isEmpty() || botToken.equals("your-bot-token-here") || botToken.equals("BOT_KEY")) {
                 this.isEnabled = false;
-                System.out.println("[LoggerDiscordAddon] Discord is enabled in discord.yml, but Bot-Token is missing or set to placeholder. Addon is idle until a valid Bot-Token is configured.");
+                Log.info("Discord is enabled in discord.yml, but Bot-Token is missing or set to placeholder. Addon is idle until a valid Bot-Token is configured.");
                 return;
             }
 
@@ -118,18 +122,18 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
                 this.cacheChannels(discordSection);
                 this.startActivityCycling(activities);
                 this.isEnabled = true;
-                System.out.println("[LoggerDiscordAddon] JDA Bot successfully connected and " + this.channelMap.size() + " channel routes cached!");
+                Log.info("JDA Bot successfully connected and " + this.channelMap.size() + " channel routes cached!");
             } catch (Exception e) {
-                System.err.println("[LoggerDiscordAddon] Failed to initialize JDA: " + e.getMessage());
+                Log.severe("Failed to initialize JDA: " + e.getMessage());
                 this.isEnabled = false;
             }
         } else {
             this.initWebhooks(discordSection);
             this.isEnabled = !this.webhookMap.isEmpty() || this.defaultWebhookUrl != null;
             if (this.isEnabled) {
-                System.out.println("[LoggerDiscordAddon] Discord Webhook mode active with " + this.webhookMap.size() + " route endpoints" + (this.defaultWebhookUrl != null ? " (fallback enabled)" : "") + ".");
+                Log.info("Discord Webhook mode active with " + this.webhookMap.size() + " route endpoints" + (this.defaultWebhookUrl != null ? " (fallback enabled)" : "") + ".");
             } else {
-                System.out.println("[LoggerDiscordAddon] Discord is enabled in webhook mode, but no valid webhooks are configured.");
+                Log.info("Discord is enabled in webhook mode, but no valid webhooks are configured.");
             }
         }
     }
@@ -140,7 +144,7 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
             Yaml yaml = new Yaml();
             this.configData = yaml.load(in);
         } catch (Exception e) {
-            System.err.println("[LoggerDiscordAddon] Failed to load config " + this.configFile.getName() + ": " + e.getMessage());
+            Log.severe("Failed to load config " + this.configFile.getName() + ": " + e.getMessage());
         }
     }
 
@@ -210,10 +214,10 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
                             if (tc != null) {
                                 registerChannel(fullKey, key, tc);
                             } else {
-                                System.err.println("[LoggerDiscordAddon] Channel ID " + channelIdStr + " for '" + fullKey + "' was not found by the bot (check bot permissions and channel existence).");
+                                Log.warning("Channel ID " + channelIdStr + " for '" + fullKey + "' was not found by the bot (check bot permissions and channel existence).");
                             }
                         } catch (Exception e) {
-                            System.err.println("[LoggerDiscordAddon] Invalid Channel ID " + channelIdStr + " for '" + fullKey + "': " + e.getMessage());
+                            Log.warning("Invalid Channel ID " + channelIdStr + " for '" + fullKey + "': " + e.getMessage());
                         }
                     }
                 }
@@ -879,52 +883,136 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
         return input.substring(0, Math.max(0, maxLen - 3)) + "...";
     }
 
+    private synchronized void initExecutor() {
+        if (this.webhookExecutor == null || this.webhookExecutor.isShutdown()) {
+            this.webhookExecutor = new ThreadPoolExecutor(
+                    1, 1,
+                    0L, TimeUnit.MILLISECONDS,
+                    new LinkedBlockingQueue<>(5000),
+                    r -> {
+                        Thread t = new Thread(r, "Logger-Discord-Webhook");
+                        t.setDaemon(true);
+                        return t;
+                    },
+                    new ThreadPoolExecutor.DiscardOldestPolicy()
+            );
+        }
+    }
+
     private void sendWebhookSync(String webhookUrl, String jsonPayload) {
-        HttpURLConnection conn = null;
-        try {
-            URL url = new URL(webhookUrl);
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-            conn.setRequestProperty("User-Agent", "LoggerDiscordAddon/1.8.4.2");
-            conn.setConnectTimeout(4000);
-            conn.setReadTimeout(4000);
-            conn.setDoOutput(true);
+        int maxRetries = 3;
+        for (int attempt = 0; attempt <= maxRetries; attempt++) {
+            HttpURLConnection conn = null;
+            try {
+                URL url = new URL(webhookUrl);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+                conn.setRequestProperty("User-Agent", "LoggerDiscordAddon/1.8.4.2");
+                conn.setConnectTimeout(4000);
+                conn.setReadTimeout(4000);
+                conn.setDoOutput(true);
 
-            byte[] bytes = jsonPayload.getBytes(StandardCharsets.UTF_8);
-            conn.setFixedLengthStreamingMode(bytes.length);
+                byte[] bytes = jsonPayload.getBytes(StandardCharsets.UTF_8);
+                conn.setFixedLengthStreamingMode(bytes.length);
 
-            try (OutputStream os = conn.getOutputStream()) {
-                os.write(bytes);
-                os.flush();
-            }
+                try (OutputStream os = conn.getOutputStream()) {
+                    os.write(bytes);
+                    os.flush();
+                }
 
-            int responseCode = conn.getResponseCode();
-            if (responseCode >= 400) {
-                try (InputStream err = conn.getErrorStream()) {
-                    if (err != null) {
-                        byte[] buf = new byte[256];
-                        int read = err.read(buf);
-                        if (read > 0) {
-                            String errResp = new String(buf, 0, read, StandardCharsets.UTF_8);
-                            System.err.println("[LoggerDiscordAddon] Webhook returned HTTP " + responseCode + ": " + errResp);
+                int responseCode = conn.getResponseCode();
+
+                if (responseCode == 429) {
+                    long waitMillis = 1000L;
+                    String headerRetry = conn.getHeaderField("Retry-After");
+                    if (headerRetry != null && !headerRetry.trim().isEmpty()) {
+                        try {
+                            double secs = Double.parseDouble(headerRetry.trim());
+                            waitMillis = (long) (secs * 1000.0) + 50L;
+                        } catch (NumberFormatException ignored) {}
+                    }
+
+                    try (InputStream err = conn.getErrorStream()) {
+                        if (err != null) {
+                            byte[] buf = new byte[512];
+                            int read = err.read(buf);
+                            if (read > 0) {
+                                String errResp = new String(buf, 0, read, StandardCharsets.UTF_8);
+                                Matcher m = RETRY_AFTER_PATTERN.matcher(errResp);
+                                if (m.find()) {
+                                    try {
+                                        double secs = Double.parseDouble(m.group(1));
+                                        waitMillis = Math.max(waitMillis, (long) (secs * 1000.0) + 50L);
+                                    } catch (NumberFormatException ignored) {}
+                                }
+                            }
                         }
                     }
+
+                    if (attempt < maxRetries) {
+                        try {
+                            Thread.sleep(Math.min(Math.max(waitMillis, 200L), 15000L));
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                            return;
+                        }
+                        continue;
+                    } else {
+                        Log.warning("Discord webhook rate limit exceeded after " + maxRetries + " retries. Dropping message.");
+                        return;
+                    }
                 }
-            }
-        } catch (Exception e) {
-            System.err.println("[LoggerDiscordAddon] Failed to deliver webhook: " + e.getMessage());
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.disconnect();
-                } catch (Exception ignored) {}
+
+                if (responseCode >= 400) {
+                    try (InputStream err = conn.getErrorStream()) {
+                        if (err != null) {
+                            byte[] buf = new byte[256];
+                            int read = err.read(buf);
+                            if (read > 0) {
+                                String errResp = new String(buf, 0, read, StandardCharsets.UTF_8);
+                                Log.warning("Webhook returned HTTP " + responseCode + ": " + errResp);
+                            }
+                        }
+                    }
+                    return;
+                }
+
+                // Proactively respect rate limit resets for following requests
+                String remaining = conn.getHeaderField("X-RateLimit-Remaining");
+                if ("0".equals(remaining)) {
+                    String resetAfter = conn.getHeaderField("X-RateLimit-Reset-After");
+                    if (resetAfter != null) {
+                        try {
+                            double secs = Double.parseDouble(resetAfter.trim());
+                            long sleepMs = (long) (secs * 1000.0) + 25L;
+                            if (sleepMs > 0 && sleepMs <= 5000L) {
+                                Thread.sleep(sleepMs);
+                            }
+                        } catch (Exception ignored) {}
+                    }
+                }
+
+                return;
+            } catch (Exception e) {
+                if (attempt == maxRetries) {
+                    Log.warning("Failed to deliver webhook: " + e.getMessage());
+                }
+            } finally {
+                if (conn != null) {
+                    try {
+                        conn.disconnect();
+                    } catch (Exception ignored) {}
+                }
             }
         }
     }
 
     private void sendWebhookAsync(String webhookUrl, String content) {
-        CompletableFuture.runAsync(() -> sendWebhookSync(webhookUrl, content));
+        initExecutor();
+        try {
+            this.webhookExecutor.submit(() -> sendWebhookSync(webhookUrl, content));
+        } catch (RejectedExecutionException ignored) {}
     }
 
     public boolean isConfigEnabled() {
@@ -948,6 +1036,17 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
         if (this.activityScheduler != null) {
             this.activityScheduler.shutdownNow();
         }
+        if (this.webhookExecutor != null) {
+            this.webhookExecutor.shutdown();
+            try {
+                if (!this.webhookExecutor.awaitTermination(2, TimeUnit.SECONDS)) {
+                    this.webhookExecutor.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                this.webhookExecutor.shutdownNow();
+            }
+            this.webhookExecutor = null;
+        }
         if (this.jda != null) {
             try {
                 this.jda.shutdown();
@@ -968,7 +1067,7 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
     }
 
     public void reload() {
-        System.out.println("[LoggerDiscordAddon] Reloading Discord configuration...");
+        Log.info("Reloading Discord configuration...");
         shutdown();
         this.activityScheduler = Executors.newScheduledThreadPool(1);
         init();

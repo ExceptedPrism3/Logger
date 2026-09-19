@@ -1,6 +1,10 @@
 <-!------------------------------------------ v1.8.4.2 [ DEV ] ------------------------------------------!->
 
 Fixes & Improvements
+    [+] Discord Webhook Rate Limiting & Paper Nag Fix:
+        [+] Webhook Rate Limiting & Auto-Retry Backoff: Implemented a dedicated single-threaded queue worker (`Logger-Discord-Webhook`) with automatic HTTP 429 (`retry_after`) rate-limit backoff and retry handling (up to 3 retries) in `DiscordManager`. Webhooks are now paced sequentially, respecting proactive Discord rate-limit headers (`X-RateLimit-Remaining: 0` / `X-RateLimit-Reset-After`) and eliminating HTTP 429 console spam and message loss during event bursts.
+        [+] Paper Nag Warning Fix: Replaced all legacy `System.out.println` and `System.err.println` occurrences in `DiscordManager` with proper plugin `Log` calls (`JavaPlugin#getLogger()`), permanently resolving Paper's nag warning about direct stdout/stderr usage.
+        [+] Discord %player% Placeholder Support: Updated default Discord message templates for `Item-Pickup`, `Item-Pickup-Staff`, `Item-Drop`, and `Item-Drop-Staff` across all 11 supported languages in `messages/*.yml` to include the `**%player%**` placeholder, ensuring player identities are clearly visible in both embed and normal text message formats.
     [+] Pastebin API Key & Environment Configuration (.env):
         [+] Restored and bundled `.env` containing `PASTEBIN_API` key for reliable `/logger dump` debug log uploads.
         [+] Implemented multi-tier key resolution in `Dump`: system environment variables -> local plugin data folder `.env` (automatically extracting bundled `.env` if missing) -> server root `.env` -> bundled jar resource stream -> internal fallback.

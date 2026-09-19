@@ -17,6 +17,7 @@ public class LoggerDiscordAddonBungee extends Plugin {
     @Override
     public void onEnable() {
         instance = this;
+        me.prism3.logger_discord_addon.utils.Log.setup(this.getLogger());
         getLogger().info("Initializing Logger Discord Addon for BungeeCord...");
 
         Plugin host = getProxy().getPluginManager().getPlugin("LoggerBungee");
