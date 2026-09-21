@@ -1,6 +1,12 @@
 <-!------------------------------------------ v1.8.5 ------------------------------------------!->
 
 Fixes & Improvements
+    [+] Player Horse & Mount Interaction Logging (Anti-Theft System):
+        [+] Comprehensive Mount Tracking: Added dedicated `PLAYER_HORSE_INTERACTION` event tracking player interactions with all `AbstractHorse` variants (Horse, Donkey, Mule, Skeleton Horse, Zombie Horse, Llama, Trader Llama, and Camel).
+        [+] Anti-Theft Ownership Resolution: Captures the legal owner via `horse.getOwner()` (`AnimalTamer` name and UUID), enabling server admins to instantly trace unauthorized players mounting and riding off with another player's tamed mounts.
+        [+] Action & State Auditing: Hooks `VehicleEnterEvent` (Mount), `VehicleExitEvent` (Dismount), and `InventoryOpenEvent` (Mount inventory/chest access), logging coordinates, horse UUID, custom nametag, saddle status, horse armor type, and chest status.
+        [+] Full Multi-Platform & Discord Bridge Support: Added formatted file logging, dedicated Discord channel/webhook routing (`Discord.Horse-Interaction`), automated database table creation (`player_horse_interaction`), and translations across all 11 supported languages.
+
     [+] Language Configuration & Missing Key Fallback Resolution:
         [+] Resolved "Message not found: File.Player.<event>" errors when upgrading from legacy versions (e.g. v1.8.0.x with legacy `en_en`): enhanced `MessageManager` to normalize legacy language codes (`en_en` -> `en_US`) before filesystem lookup, preventing outdated unmigrated files from hijacking message formatting.
         [+] Universal Fallback Defaults: Attached bundled `en_US.yml` defaults directly to `YamlConfiguration` in `MessageManager`, guaranteeing that any custom, outdated, or incomplete language translation seamlessly falls back to standard templates instead of throwing missing-message errors.
@@ -39,12 +45,6 @@ Fixes & Improvements
         [+] Shutdown Task Flushing: Added graceful queue draining in `DatabaseManager` and Spigot's `LoggerManager` upon shutdown, ensuring all pending log events (including `SERVER_STOP`) are committed to disk and database before worker threads terminate.
         [+] Schema Cleanup: Removed unused zombie table declarations `player_quit` and `player_login` from schema creation.
         [+] Removed unused legacy `caffeine` dependency and shade relocation, shaving ~800KB from the universal binary.
-
-    [+] Player Horse & Mount Interaction Logging (Anti-Theft System):
-        [+] Comprehensive Mount Tracking: Added dedicated `PLAYER_HORSE_INTERACTION` event tracking player interactions with all `AbstractHorse` variants (Horse, Donkey, Mule, Skeleton Horse, Zombie Horse, Llama, Trader Llama, and Camel).
-        [+] Anti-Theft Ownership Resolution: Captures the legal owner via `horse.getOwner()` (`AnimalTamer` name and UUID), enabling server admins to instantly trace unauthorized players mounting and riding off with another player's tamed mounts.
-        [+] Action & State Auditing: Hooks `VehicleEnterEvent` (Mount), `VehicleExitEvent` (Dismount), and `InventoryOpenEvent` (Mount inventory/chest access), logging coordinates, horse UUID, custom nametag, saddle status, horse armor type, and chest status.
-        [+] Full Multi-Platform & Discord Bridge Support: Added formatted file logging, dedicated Discord channel/webhook routing (`Discord.Horse-Interaction`), automated database table creation (`player_horse_interaction`), and translations across all 11 supported languages.
 
     [+] Web Panel Performance Overhaul (Logger Web Panel v1.0.1):
         [+] Instant First-Paint & CDN Preconnecting: Added `preconnect` and `dns-prefetch` resource hints in `index.html` for Tailwind and external CDNs, and marked `chart.umd.min.js` with `defer`, preventing render-blocking network halts and ensuring the License Verification modal paints instantly even on slower network connections.
