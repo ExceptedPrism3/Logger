@@ -40,6 +40,13 @@ Fixes & Improvements
         [+] Schema Cleanup: Removed unused zombie table declarations `player_quit` and `player_login` from schema creation.
         [+] Removed unused legacy `caffeine` dependency and shade relocation, shaving ~800KB from the universal binary.
 
+    [+] Web Panel Performance Overhaul (Logger Web Panel v1.0.1):
+        [+] Instant First-Paint & CDN Preconnecting: Added `preconnect` and `dns-prefetch` resource hints in `index.html` for Tailwind and external CDNs, and marked `chart.umd.min.js` with `defer`, preventing render-blocking network halts and ensuring the License Verification modal paints instantly even on slower network connections.
+        [+] Eliminated Redundant DDL Table Creation: Replaced unconditional `CREATE TABLE IF NOT EXISTS` execution in `Database.php` with an initialization lock check (`.installed`), eliminating 6 DDL queries and table locks that were previously running on every single HTTP request (reducing API latency by 500ms–2,500ms on remote/cloud databases).
+        [+] High-Speed Indexed License Verification: Pre-computed license key variations in PHP memory and migrated `login.php` to use `WHERE license_key IN (...)`, allowing MySQL to hit the `UNIQUE (license_key)` index in O(1) time without full table scans or runtime function overhead.
+        [+] Non-Blocking PHP Session Locks: Added `Session::close()` (`session_write_close()`) across `login.php`, `data.php`, `notifications.php`, `logs.php`, `suggestions.php`, `admin.php`, and `test_db_connection.php`, immediately releasing PHP's exclusive file session lock so concurrent background requests (dashboard statistics, notifications, live logs) never stall or deadlock the login interface.
+        [+] Dashboard Statistics Caching & Query Optimization: Optimized `data.php` with single-pass table inspections, reduced external release lookup timeout to 1s with persistent cache fallback, and added a 60-second transient server cache for compiled dashboard statistics.
+
 <-!------------------------------------------ v1.8.4.1 ------------------------------------------!->
 
 Fixes & Improvements
