@@ -73,6 +73,7 @@ Log-Player:
   Totem-of-Undying: true
   Wood-Strip: true
   Villager-Trade: true
+  Horse-Interaction: true
 
 # Registration requires Player-Join to be enabled
 Log-Server:

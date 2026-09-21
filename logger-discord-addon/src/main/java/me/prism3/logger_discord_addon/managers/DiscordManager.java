@@ -792,6 +792,7 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
         if (norm.contains("tnt")) return "Primed TNT";
         if (norm.contains("anvil")) return "Anvil Interaction";
         if (norm.contains("chest") || norm.contains("container")) return "Chest Interaction";
+        if (norm.contains("horse") || norm.contains("vehicle")) return "Player Horse Interaction";
         if (norm.contains("sign")) return "Sign Interaction";
         if (norm.contains("craft")) return "Crafting";
         if (norm.contains("enchant")) return "Enchanting";

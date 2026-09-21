@@ -123,6 +123,8 @@ public class DatabaseLoggerFactory {
                 return new PiglinBarterLogger(plugin);
             case PLAYER_RESPAWN_ANCHOR:
                 return new RespawnAnchorLogger(plugin);
+            case PLAYER_HORSE_INTERACTION:
+                return new HorseInteractionLogger(plugin);
             case PLAYER_CRAFTER_CRAFT:
                 return new CrafterCraftLogger(plugin);
             case PLAYER_SCULK_SHRIEKER:

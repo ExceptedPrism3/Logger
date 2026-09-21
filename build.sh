@@ -3,7 +3,7 @@ set -e
 
 # Set Java 21 Home
 export JAVA_HOME="$(/usr/libexec/java_home -v 21 2>/dev/null || echo "/Users/pixo/Library/Java/JavaVirtualMachines/corretto-21.0.4/Contents/Home")"
-export PATH="$JAVA_HOME/bin:$PATH"
+export PATH="$JAVA_HOME/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
 
 # Extract version dynamically from root pom.xml
 VERSION=$(grep -m 1 "<version>" pom.xml | sed -E "s/.*<version>([^<]+)<\/version>.*/\1/" | tr -d "[:space:]")

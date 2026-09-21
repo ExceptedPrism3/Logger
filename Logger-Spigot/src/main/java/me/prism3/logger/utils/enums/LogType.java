@@ -66,6 +66,8 @@ public enum LogType {
             "Discord.Piglin-Barter"),
     PLAYER_RESPAWN_ANCHOR("Player Respawn Anchor", "Log-Player.Respawn-Anchor", "Player.Respawn-Anchor",
             "Discord.Respawn-Anchor"),
+    PLAYER_HORSE_INTERACTION("Player Horse Interaction", "Log-Player.Horse-Interaction", "Player.Horse-Interaction",
+            "Discord.Horse-Interaction"),
     PLAYER_CRAFTER_CRAFT("Player Crafter Craft", "Log-Player.Crafter-Craft", "Player.Crafter-Craft",
             "Discord.Crafter-Craft"),
     PLAYER_SCULK_SHRIEKER("Player Sculk Shrieker", "Log-Player.Sculk-Shrieker", "Player.Sculk-Shrieker",

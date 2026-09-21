@@ -79,6 +79,7 @@ public class DatabaseManager {
         tempTables.put("player_villager_trade", getPlayerSideFields() + "villager_profession VARCHAR(100), villager_level INT, cost_1 VARCHAR(100), cost_2 VARCHAR(100), result VARCHAR(100), is_staff TINYINT(1)");
         tempTables.put("player_piglin_barter", getPlayerSideFields() + "input VARCHAR(100), output VARCHAR(100), is_staff TINYINT(1)");
         tempTables.put("player_respawn_anchor", getPlayerSideFields() + "action VARCHAR(50), charges INT, is_staff TINYINT(1)");
+        tempTables.put("player_horse_interaction", getPlayerSideFields() + "action VARCHAR(50), horse_type VARCHAR(50), horse_uuid VARCHAR(36), horse_name VARCHAR(100), horse_owner_uuid VARCHAR(36), horse_owner_name VARCHAR(100), is_tamed TINYINT(1), has_saddle TINYINT(1), armor_type VARCHAR(100), details TEXT, is_staff TINYINT(1)");
         
         // Server Tables
         tempTables.put("server_start", getCommonFields());

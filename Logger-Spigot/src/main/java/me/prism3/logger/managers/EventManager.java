@@ -67,6 +67,8 @@ public final class EventManager {
             register(new EntityDeathListener(plugin), plugin);
         if (data.isEnabled(LogType.PLAYER_LEVER_INTERACTION))
             register(new LeverInteractionListener(plugin), plugin);
+        if (data.isEnabled(LogType.PLAYER_HORSE_INTERACTION))
+            register(new HorseInteractionListener(plugin), plugin);
         if (data.isEnabled(LogType.PLAYER_PLAYER_SPAWN_EGG))
             register(new SpawnEggListener(plugin), plugin);
         if (data.isEnabled(LogType.PLAYER_PORTAL_CREATION))

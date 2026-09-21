@@ -117,6 +117,9 @@ Discord:
   Respawn-Anchor:
     Channel-ID: 'CHANNEL_ID'
     Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"
+  Horse-Interaction:
+    Channel-ID: 'CHANNEL_ID'
+    Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"
   Crafter-Craft:
     Channel-ID: 'CHANNEL_ID'
     Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"

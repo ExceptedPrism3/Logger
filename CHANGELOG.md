@@ -40,6 +40,12 @@ Fixes & Improvements
         [+] Schema Cleanup: Removed unused zombie table declarations `player_quit` and `player_login` from schema creation.
         [+] Removed unused legacy `caffeine` dependency and shade relocation, shaving ~800KB from the universal binary.
 
+    [+] Player Horse & Mount Interaction Logging (Anti-Theft System):
+        [+] Comprehensive Mount Tracking: Added dedicated `PLAYER_HORSE_INTERACTION` event tracking player interactions with all `AbstractHorse` variants (Horse, Donkey, Mule, Skeleton Horse, Zombie Horse, Llama, Trader Llama, and Camel).
+        [+] Anti-Theft Ownership Resolution: Captures the legal owner via `horse.getOwner()` (`AnimalTamer` name and UUID), enabling server admins to instantly trace unauthorized players mounting and riding off with another player's tamed mounts.
+        [+] Action & State Auditing: Hooks `VehicleEnterEvent` (Mount), `VehicleExitEvent` (Dismount), and `InventoryOpenEvent` (Mount inventory/chest access), logging coordinates, horse UUID, custom nametag, saddle status, horse armor type, and chest status.
+        [+] Full Multi-Platform & Discord Bridge Support: Added formatted file logging, dedicated Discord channel/webhook routing (`Discord.Horse-Interaction`), automated database table creation (`player_horse_interaction`), and translations across all 11 supported languages.
+
     [+] Web Panel Performance Overhaul (Logger Web Panel v1.0.1):
         [+] Instant First-Paint & CDN Preconnecting: Added `preconnect` and `dns-prefetch` resource hints in `index.html` for Tailwind and external CDNs, and marked `chart.umd.min.js` with `defer`, preventing render-blocking network halts and ensuring the License Verification modal paints instantly even on slower network connections.
         [+] Eliminated Redundant DDL Table Creation: Replaced unconditional `CREATE TABLE IF NOT EXISTS` execution in `Database.php` with an initialization lock check (`.installed`), eliminating 6 DDL queries and table locks that were previously running on every single HTTP request (reducing API latency by 500ms–2,500ms on remote/cloud databases).
