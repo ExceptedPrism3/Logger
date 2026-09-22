@@ -28,20 +28,33 @@ public final class VersionUtil implements Comparable<VersionUtil> {
         this.revision = revision;
     }
 
-    /** Parse from the CraftBukkit/CraftServer package suffix. */
+    /** Parse from the CraftBukkit/CraftServer package suffix or Bukkit version. */
     private static VersionUtil parseFromPackage() {
+        try {
+            String pkg = Bukkit.getServer().getClass().getPackage().getName();
+            String suffix = pkg.substring(pkg.lastIndexOf('.') + 1); // e.g. "v1_19_R3"
+            Matcher m = VERSION_PATTERN.matcher(suffix);
 
-        String pkg = Bukkit.getServer().getClass().getPackage().getName();
-        String suffix = pkg.substring(pkg.lastIndexOf('.') + 1); // e.g. "v1_19_R3"
-        Matcher m = VERSION_PATTERN.matcher(suffix);
+            if (m.matches()) {
+                int ma = Integer.parseInt(m.group(1));
+                int mi = Integer.parseInt(m.group(2));
+                int rv = Integer.parseInt(m.group(3));
+                return new VersionUtil(ma, mi, rv);
+            }
 
-        if (m.matches()) {
-            int ma = Integer.parseInt(m.group(1));
-            int mi = Integer.parseInt(m.group(2));
-            int rv = Integer.parseInt(m.group(3));
-            return new VersionUtil(ma, mi, rv);
-        }
-        // Fallback: assume latest known
+            // Secondary check: parse Bukkit.getBukkitVersion() e.g. "26.3-R0.1-SNAPSHOT" or "1.21.1-R0.1-SNAPSHOT"
+            String bv = Bukkit.getBukkitVersion();
+            if (bv != null) {
+                Matcher numMatcher = Pattern.compile("(\\d+)\\.(\\d+)(?:\\.(\\d+))?").matcher(bv);
+                if (numMatcher.find()) {
+                    int ma = Integer.parseInt(numMatcher.group(1));
+                    int mi = Integer.parseInt(numMatcher.group(2));
+                    int rv = (numMatcher.group(3) != null) ? Integer.parseInt(numMatcher.group(3)) : 0;
+                    return new VersionUtil(ma, mi, rv);
+                }
+            }
+        } catch (Throwable ignored) {}
+        // Fallback: assume latest known modern version
         return new VersionUtil( Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE );
     }
 

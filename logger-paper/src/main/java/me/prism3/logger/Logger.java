@@ -76,18 +76,19 @@ public class Logger extends LoggerAPI {
     }
 
     private void loadVersionAdapter() {
-        String version = getServer().getBukkitVersion();
-        getLogger().info("Detected server version: " + version);
+        String bukkitVersion = getServer().getBukkitVersion();
+        String serverVersion = getServer().getVersion();
+        getLogger().info("Detected server version: " + bukkitVersion + " (" + serverVersion + ")");
 
-        if (isSupportedVersion(version)) {
+        if (isSupportedVersion(bukkitVersion) || isSupportedVersion(serverVersion)) {
             try {
                 Class<?> clazz = Class.forName("me.prism3.logger.v1_21.VersionAdapterImpl");
                 me.prism3.logger.utils.VersionAdapter adapter = (me.prism3.logger.utils.VersionAdapter) clazz
-                        .newInstance();
+                        .getDeclaredConstructor().newInstance();
                 adapter.registerListeners(this);
-                getLogger().info("Successfully loaded 1.21+ adapter.");
+                getLogger().info("Successfully loaded modern (1.21+ / 26.x) version adapter.");
             } catch (Exception e) {
-                getLogger().warning("Could not load 1.21+ adapter: " + e.getMessage());
+                getLogger().warning("Could not load version adapter: " + e.getMessage());
             }
         }
     }
@@ -97,20 +98,16 @@ public class Logger extends LoggerAPI {
         if (version.contains("1.21") || version.contains("1.22") || version.contains("1.23") || version.contains("26.")) {
             return true;
         }
-        try {
-            String cleanVersion = version.split("-")[0];
-            String[] parts = cleanVersion.split("\\.");
-            if (parts.length > 0) {
-                int first = Integer.parseInt(parts[0]);
-                if (first > 1) {
-                    return true;
-                }
-                if (first == 1 && parts.length > 1) {
-                    int second = Integer.parseInt(parts[1]);
-                    return second >= 21;
-                }
-            }
-        } catch (Exception ignored) {}
+        java.util.regex.Matcher matcher = java.util.regex.Pattern.compile("(\\d+)\\.(\\d+)").matcher(version);
+        while (matcher.find()) {
+            try {
+                int major = Integer.parseInt(matcher.group(1));
+                int minor = Integer.parseInt(matcher.group(2));
+                if (major >= 26) return true;
+                if (major > 1) return true;
+                if (major == 1 && minor >= 21) return true;
+            } catch (NumberFormatException ignored) {}
+        }
         return false;
     }
 

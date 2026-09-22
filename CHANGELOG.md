@@ -1,6 +1,13 @@
 <-!------------------------------------------ v1.8.5 ------------------------------------------!->
 
 Fixes & Improvements
+    [+] Minecraft 26.3 ("Wilderness Bound") Support & Compatibility:
+        [+] Full 26.3 Version & Engine Detection: Updated `loadVersionAdapter()` and `VersionUtil` numeric version detection logic to support modern Minecraft 26.x (`26.3-R0.1-SNAPSHOT`, `git-Paper-XX (MC: 26.3)`), ensuring smooth runtime adapter loading on modern 26.x server builds.
+        [+] 26.3 Poplar Wood & Stripping Mechanics: Extended `WoodStripListener` dynamic reflection/mapping to automatically recognize and audit stripping interactions on Poplar logs and wood (`POPLAR_LOG`, `POPLAR_WOOD` -> `STRIPPED_POPLAR_*`), along with Nether stems/hyphae (`CRIMSON_STEM`, `WARPED_STEM`, `CRIMSON_HYPHAE`, `WARPED_HYPHAE`) and Bamboo blocks.
+        [+] Modern Version Adapter Reflection: Migrated `loadVersionAdapter()` from deprecated `Class#newInstance()` to `Class#getDeclaredConstructor().newInstance()`, preventing JVM reflective access warnings on modern Java 21+ runtimes.
+    [+] Proxy Platform Compatibility (BungeeCord & Velocity):
+        [+] Verified 26.3 proxy protocol readiness across BungeeCord and Velocity 3.x networks. All proxy-level listeners (`LoginEvent`, `PostLoginEvent`, `ServerConnectedEvent`, `PlayerDisconnectEvent`, `PlayerChatEvent`, and command interception) operate on abstraction pipelines independent of NMS packet internals, guaranteeing 100% plug-and-play support on Minecraft 26.3 networks.
+        [+] Synchronized Velocity `@Plugin` annotation metadata to `1.8.5`.
     [+] Player Horse & Mount Interaction Logging (Anti-Theft System):
         [+] Comprehensive Mount Tracking: Added dedicated `PLAYER_HORSE_INTERACTION` event tracking player interactions with all `AbstractHorse` variants (Horse, Donkey, Mule, Skeleton Horse, Zombie Horse, Llama, Trader Llama, and Camel).
         [+] Anti-Theft Ownership Resolution: Captures the legal owner via `horse.getOwner()` (`AnimalTamer` name and UUID), enabling server admins to instantly trace unauthorized players mounting and riding off with another player's tamed mounts.

@@ -13,7 +13,7 @@ We are more than welcome to help you further on our [**Discord Server**](https:/
 ## Key Highlights in v1.8.5
 
 * **Universal Deployment**: Drop `Logger-1.8.5.jar` on Spigot, Paper, Purpur, Folia, BungeeCord, Waterfall, FlameCord, or Velocity 3.x+.
-* **Modern Platform Compatibility**: Supports **Minecraft 1.8.8 through 1.21+** (Paper, Folia, Spigot).
+* **Modern Platform Compatibility**: Supports **Minecraft 1.8.8 through 26.3+** (Paper, Folia, Spigot).
 * **Multi-DBMS Native Support**: SQLite, MySQL, MariaDB, and PostgreSQL with HikariCP connection pooling and automated schema migration.
 * **Modular Discord Companion Addon**: Companion `LoggerDiscordAddon-1.8.5.jar` with automatic configuration migration and per-player exemption (`logger.exempt.discord`).
 * **Official Web Panel**: Real-time web panel featuring live server heartbeat monitoring, real-time analytics, and Discord addon health checks.

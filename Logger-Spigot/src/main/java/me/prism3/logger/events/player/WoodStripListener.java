@@ -26,17 +26,17 @@ public class WoodStripListener implements Listener { //TODO TO TEST
 
     static {
         for (Material m : Material.values()) {
-
             final String name = m.name();
 
-            if (name.endsWith("_LOG") || name.endsWith("_WOOD")) {
-                // try the straightforward stripped_<name> first
+            if (name.endsWith("_LOG") || name.endsWith("_WOOD") || name.endsWith("_STEM") || name.endsWith("_HYPHAE") || name.equals("BAMBOO_BLOCK")) {
                 try {
                     STRIP_MAP.put(m, Material.valueOf("STRIPPED_" + name));
                 } catch (final IllegalArgumentException ex) {
-                    // handle stems in Nether & Warped
-                    if (m == Material.CRIMSON_STEM)     STRIP_MAP.put(m, Material.STRIPPED_CRIMSON_STEM);
-                    else if (m == Material.WARPED_STEM) STRIP_MAP.put(m, Material.STRIPPED_WARPED_STEM);
+                    if (name.equals("BAMBOO_BLOCK")) {
+                        try {
+                            STRIP_MAP.put(m, Material.valueOf("STRIPPED_BAMBOO_BLOCK"));
+                        } catch (final IllegalArgumentException ignored) {}
+                    }
                 }
             }
         }

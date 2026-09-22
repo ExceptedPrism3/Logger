@@ -3,7 +3,7 @@
 
 [![Version](https://img.shields.io/badge/Version-1.8.5-brightgreen)](https://github.com/ExceptedPrism3/Logger/releases)
 ![Java](https://img.shields.io/badge/Java-8%20|%2017%20|%2021-orange)
-![Minecraft](https://img.shields.io/badge/Minecraft-1.8%20--%201.21+-green)
+![Minecraft](https://img.shields.io/badge/Minecraft-1.8%20--%2026.3+-green)
 ![Folia](https://img.shields.io/badge/Folia-Supported-00D26A?logo=papermc&logoColor=white)
 ![Velocity](https://img.shields.io/badge/Velocity-3.x+-blue)
 ![BungeeCord](https://img.shields.io/badge/BungeeCord-Supported-yellow)

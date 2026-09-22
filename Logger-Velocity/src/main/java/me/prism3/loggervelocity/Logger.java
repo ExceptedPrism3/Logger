@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 import static me.prism3.loggervelocity.utils.Data.ramChecker;
 
-@Plugin(id = "logger-velocity", name = "Logger", version = "1.8.4.2", authors = { "prism3 & thelooter & sidna" })
+@Plugin(id = "logger-velocity", name = "Logger", version = "1.8.5", authors = { "prism3 & thelooter & sidna" })
 public class Logger implements LoggerPlatform {
 
     private static ProxyServer server;

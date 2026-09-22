@@ -1,6 +1,6 @@
 # Discord Setup & Addon
 
-The Discord integration runs through the companion **`LoggerDiscordAddon-1.8.4.jar`** alongside the main Logger plugin.
+The Discord integration runs through the companion **`LoggerDiscordAddon-1.8.5.jar`** alongside the main Logger plugin.
 
 ---
 
@@ -23,7 +23,7 @@ The Discord integration runs through the companion **`LoggerDiscordAddon-1.8.4.j
 
 ## Step 2: Install the Addon
 
-1. Download [`LoggerDiscordAddon-1.8.4.jar`](https://github.com/ExceptedPrism3/Logger/releases).
+1. Download [`LoggerDiscordAddon-1.8.5.jar`](https://github.com/ExceptedPrism3/Logger/releases).
 2. Place it inside your server's `plugins/` directory.
 3. Start or restart your server to generate `plugins/Logger/discord.yml`.
 

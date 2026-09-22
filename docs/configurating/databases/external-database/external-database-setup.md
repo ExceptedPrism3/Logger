@@ -1,6 +1,6 @@
 # External Database Setup (MySQL, MariaDB, PostgreSQL)
 
-Logger v1.8.4 features native multi-DBMS support with built-in connection pooling (HikariCP) and automatic schema migration.
+Logger v1.8.5 features native multi-DBMS support with built-in connection pooling (HikariCP) and automatic schema migration.
 
 ---
 

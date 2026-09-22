@@ -11,7 +11,7 @@ This guide covers everything you need to know when upgrading Logger from an olde
 {% endhint %}
 
 * **Legacy Minecraft Servers (1.8.8 – 1.16.5)**: 
-  * Logger's core logging and listeners are 100% compatible with Minecraft 1.8.8 through 1.21+.
+  * Logger's core logging and listeners are 100% compatible with Minecraft 1.8.8 through 26.3+.
   * However, because the jar bundles modern cross-platform libraries (Caffeine cache, modern JDBC connectors, Velocity proxy classes), your host container/JVM must be running **Java 17+**.
   * Modern server hosts and panels (like Pterodactyl, Apex, Bisect) allow selecting Java 17 with a single click in their panel settings.
 
