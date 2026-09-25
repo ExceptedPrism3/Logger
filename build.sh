@@ -16,8 +16,9 @@ mkdir -p releases
 cp "logger-paper/target/logger-paper-${VERSION}.jar" "releases/Logger-${VERSION}.jar"
 cp "logger-discord-addon/target/logger-discord-addon-${VERSION}.jar" "releases/LoggerDiscordAddon-${VERSION}.jar"
 
-(cd logger-web-panel && zip -q -r ../releases/LoggerWebPanel-1.0.2.zip index.html INSTALL.md CHANGELOG.md api assets -x "*.DS_Store*")
-cp releases/LoggerWebPanel-1.0.2.zip releases/LoggerWebPanel-1.0.1.zip
+(cd logger-web-panel && zip -q -r ../releases/LoggerWebPanel-1.0.3.zip index.html INSTALL.md CHANGELOG.md api assets -x "*.DS_Store*")
+cp releases/LoggerWebPanel-1.0.3.zip releases/LoggerWebPanel-1.0.2.zip
+cp releases/LoggerWebPanel-1.0.3.zip releases/LoggerWebPanel-1.0.1.zip
 
 echo "✅ Build Complete! Release artifacts ready in releases/:"
 ls -lh releases/
