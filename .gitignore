@@ -28,6 +28,10 @@ ssh.command
 # Legacy
 old/
 
-# Paid / Private Addons
-logger-web-panel/
+# Paid / Private Modules (Web Panels)
+logger-web-client/
+logger-web-master/
 folia.jar
+
+# AI Context
+GEMINI.md

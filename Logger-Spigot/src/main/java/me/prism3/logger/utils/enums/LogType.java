@@ -33,6 +33,8 @@ public enum LogType {
     PLAYER_PRIME_TNT("Player Prime TNT", "Log-Player.Prime-TNT", "Player.Prime-TNT", "Discord.Primed-TNT"),
     PLAYER_ANVIL_INTERACTION("Player Anvil Interaction", "Log-Player.Anvil-Interaction", "Player.Anvil-Interaction",
             "Discord.Anvil"),
+    PLAYER_CREATIVE_ITEM("Player Creative Item", "Log-Player.Creative-Item", "Player.Creative-Item",
+            "Discord.Creative-Item"),
     PLAYER_ITEM_PICKUP("Player Item Pickup", "Log-Player.Item-Pickup", "Player.Item-Pickup", "Discord.Item-Pickup"),
     PLAYER_ITEM_DROP("Player Item Drop", "Log-Player.Item-Drop", "Player.Item-Drop", "Discord.Item-Drop"),
     PLAYER_ITEM_ENCHANTING("Player Item Enchant", "Log-Player.Item-Enchant", "Player.Item-Enchant",

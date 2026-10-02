@@ -33,6 +33,8 @@ All logging operations are executed asynchronously off the main server thread us
 * **Chat & Commands**: Public chat, private whispers, command blocks, and executed commands with whitelist/blacklist filtering.
 * **Signs & Books**: Sign placements, live sign text edits, and Book & Quill contents.
 * **Inventories & Containers**: Chests, Barrels, Hoppers, Furnaces, and Anvil item renaming.
+* **Creative & NBT**: Creative menu item spawns with full NBT, lore, and custom gear capture.
+* **Mount Auditing**: Horse, Llama, and Camel interactions including ownership tracking and inventory access.
 * **Combat & Deaths**: PvP kills, death locations, killer weapons, and full inventory backups.
 * **Proxy Events**: Player connect/disconnect, server switching, kicks with reasons, and command interception.
 * **1.21+ Mechanics**: Crafter auto-crafting (`Crafter-Craft`), Mace smash attacks, Trial Chamber Vaults, Sculk Shriekers, Villager Trades, and Piglin Bartering.
@@ -65,6 +67,11 @@ All logging operations are executed asynchronously off the main server thread us
 * **Search & Filter**: Multi-criteria search across event categories, player UUIDs, dates, and staff tags.
 * **Database Maintenance**: 1-Click database schema sync and self-repair tool.
 * **Export**: Direct export of log tables to CSV and JSON formats.
+
+> 🌟 **Test the Live Demo!**  
+> Experience the Web Panel in action before you buy.  
+> 🔗 **Live Demo:** [https://prism3.me/logger/](https://prism3.me/logger/)  
+> 🔑 **Demo License Key:** `ABCDEFGHIJKLMNOP`  
 
 > 💼 **Interested in the Web Control Panel?**  
 > If you want to purchase a license or obtain the source code, open a ticket on our [Discord Server](https://discord.gg/MfR5mcpVfX).

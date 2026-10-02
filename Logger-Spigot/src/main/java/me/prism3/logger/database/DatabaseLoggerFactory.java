@@ -49,6 +49,8 @@ public class DatabaseLoggerFactory {
                 return new JoinLogger(plugin);
             case PLAYER_ITEM_ENCHANTING:
                 return new ItemEnchantLogger(plugin);
+            case PLAYER_CREATIVE_ITEM:
+                return new CreativeItemLogger(plugin);
             case SERVER_CONSOLE_COMMAND:
                 return new ConsoleCommandLogger(plugin);
             case PLAYER_BLOCK_PLACE:

@@ -46,6 +46,8 @@ public final class EventManager {
         if (data.isEnabled(LogType.PLAYER_ANVIL_INTERACTION))
             register(new AnvilInteractionListener(plugin), plugin);
         if (data.isEnabled(LogType.PLAYER_ITEM_PICKUP))
+        if (data.isEnabled(LogType.PLAYER_CREATIVE_ITEM))
+            register(new CreativeItemListener(plugin), plugin);
             register(new ItemPickupListener(plugin), plugin);
         if (data.isEnabled(LogType.PLAYER_ITEM_DROP))
             register(new ItemDropListener(plugin), plugin);

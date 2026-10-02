@@ -80,6 +80,7 @@ public class DatabaseManager {
         tempTables.put("player_piglin_barter", getPlayerSideFields() + "input VARCHAR(100), output VARCHAR(100), is_staff TINYINT(1)");
         tempTables.put("player_respawn_anchor", getPlayerSideFields() + "action VARCHAR(50), charges INT, is_staff TINYINT(1)");
         tempTables.put("player_horse_interaction", getPlayerSideFields() + "action VARCHAR(50), horse_type VARCHAR(50), horse_uuid VARCHAR(36), horse_name VARCHAR(100), horse_owner_uuid VARCHAR(36), horse_owner_name VARCHAR(100), is_tamed TINYINT(1), has_saddle TINYINT(1), armor_type VARCHAR(100), details TEXT, is_staff TINYINT(1)");
+        tempTables.put("player_creative_item", getPlayerSideFields() + "item_type VARCHAR(100), amount INT, has_nbt TINYINT(1), nbt_data TEXT, is_staff TINYINT(1)");
         
         // Server Tables
         tempTables.put("server_start", getCommonFields());
@@ -118,6 +119,7 @@ public class DatabaseManager {
             Log.info("Database initialized successfully (" + config.type.toUpperCase() + ").");
         } catch (Exception e) {
             Log.severe("Failed to initialize database: " + e.getMessage(), e);
+            this.isShutdown = true;
         }
     }
 
@@ -162,7 +164,7 @@ public class DatabaseManager {
     }
 
     public void submit(Runnable job) {
-        if (isShutdown) return;
+        if (isShutdown || !config.enabled) return;
         taskQueue.offer(job);
     }
     

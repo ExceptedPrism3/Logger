@@ -52,6 +52,9 @@ public class MySQLDatabaseProvider implements DatabaseProvider {
 
     @Override
     public Connection getConnection() throws SQLException {
+        if (this.dataSource == null) {
+            throw new SQLException("DataSource is not initialized (Database connection failed on startup).");
+        }
         return this.dataSource.getConnection();
     }
 

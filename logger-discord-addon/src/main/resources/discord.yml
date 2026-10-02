@@ -61,6 +61,8 @@ Discord:
   Anvil:
     Channel-ID: 'CHANNEL_ID'
     Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"
+  Creative-Item:
+    Channel-ID: ''
   Item-Pickup:
     Channel-ID: 'CHANNEL_ID'
     Webhook: "https://discord.com/api/webhooks/XXXX/XXXX"

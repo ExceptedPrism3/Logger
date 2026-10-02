@@ -27,6 +27,7 @@ public enum DiscordChannels {
     PLAYER_BUCKET_EMPTY("Discord.Bucket-Empty.Channel-ID"),
     PLAYER_PRIME_TNT("Discord.Primed-TNT.Channel-ID"),
     PLAYER_ANVIL_INTERACTION("Discord.Anvil.Channel-ID"),
+    PLAYER_CREATIVE_ITEM("Discord.Creative-Item.Channel-ID"),
     PLAYER_ITEM_PICKUP("Discord.Item-Pickup.Channel-ID"),
     PLAYER_ITEM_DROP("Discord.Item-Drop.Channel-ID"),
     PLAYER_ITEM_ENCHANTING("Discord.Enchanting.Channel-ID"),

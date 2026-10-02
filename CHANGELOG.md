@@ -1,64 +1,36 @@
 <-!------------------------------------------ v1.8.5 ------------------------------------------!->
 
-Fixes & Improvements
-    [+] Minecraft 26.3 ("Wilderness Bound") Support & Compatibility:
-        [+] Full 26.3 Version & Engine Detection: Updated `loadVersionAdapter()` and `VersionUtil` numeric version detection logic to support modern Minecraft 26.x (`26.3-R0.1-SNAPSHOT`, `git-Paper-XX (MC: 26.3)`), ensuring smooth runtime adapter loading on modern 26.x server builds.
-        [+] 26.3 Poplar Wood & Stripping Mechanics: Extended `WoodStripListener` dynamic reflection/mapping to automatically recognize and audit stripping interactions on Poplar logs and wood (`POPLAR_LOG`, `POPLAR_WOOD` -> `STRIPPED_POPLAR_*`), along with Nether stems/hyphae (`CRIMSON_STEM`, `WARPED_STEM`, `CRIMSON_HYPHAE`, `WARPED_HYPHAE`) and Bamboo blocks.
-        [+] Modern Version Adapter Reflection: Migrated `loadVersionAdapter()` from deprecated `Class#newInstance()` to `Class#getDeclaredConstructor().newInstance()`, preventing JVM reflective access warnings on modern Java 21+ runtimes.
-    [+] Proxy Platform Compatibility (BungeeCord & Velocity):
-        [+] Verified 26.3 proxy protocol readiness across BungeeCord and Velocity 3.x networks. All proxy-level listeners (`LoginEvent`, `PostLoginEvent`, `ServerConnectedEvent`, `PlayerDisconnectEvent`, `PlayerChatEvent`, and command interception) operate on abstraction pipelines independent of NMS packet internals, guaranteeing 100% plug-and-play support on Minecraft 26.3 networks.
-        [+] Synchronized Velocity `@Plugin` annotation metadata to `1.8.5`.
-    [+] Player Horse & Mount Interaction Logging (Anti-Theft System):
-        [+] Comprehensive Mount Tracking: Added dedicated `PLAYER_HORSE_INTERACTION` event tracking player interactions with all `AbstractHorse` variants (Horse, Donkey, Mule, Skeleton Horse, Zombie Horse, Llama, Trader Llama, and Camel).
-        [+] Anti-Theft Ownership Resolution: Captures the legal owner via `horse.getOwner()` (`AnimalTamer` name and UUID), enabling server admins to instantly trace unauthorized players mounting and riding off with another player's tamed mounts.
-        [+] Action & State Auditing: Hooks `VehicleEnterEvent` (Mount), `VehicleExitEvent` (Dismount), and `InventoryOpenEvent` (Mount inventory/chest access), logging coordinates, horse UUID, custom nametag, saddle status, horse armor type, and chest status.
-        [+] Full Multi-Platform & Discord Bridge Support: Added formatted file logging, dedicated Discord channel/webhook routing (`Discord.Horse-Interaction`), automated database table creation (`player_horse_interaction`), and translations across all 11 supported languages.
+Additions
+    [+] Minecraft 26.3 ("Wilderness Bound") support and adapter loading for modern 26.x server builds.
+    [+] Player Creative Item & Menu logging tracking material, amount, and NBT data.
+    [+] Player Horse & Mount Interaction logging tracking ownership, mounting, and inventory access.
+    [+] Proxy Dump Tool (/loggerproxy dump) for generating Bungee and Velocity Pastebin debug logs.
+    [+] Added logging for stripping Poplar, Nether Stems, and Bamboo blocks.
 
-    [+] Language Configuration & Missing Key Fallback Resolution:
-        [+] Resolved "Message not found: File.Player.<event>" errors when upgrading from legacy versions (e.g. v1.8.0.x with legacy `en_en`): enhanced `MessageManager` to normalize legacy language codes (`en_en` -> `en_US`) before filesystem lookup, preventing outdated unmigrated files from hijacking message formatting.
-        [+] Universal Fallback Defaults: Attached bundled `en_US.yml` defaults directly to `YamlConfiguration` in `MessageManager`, guaranteeing that any custom, outdated, or incomplete language translation seamlessly falls back to standard templates instead of throwing missing-message errors.
-        [+] Active Synchronization: Added automatic missing-key synchronization via `YamlMigrator` for the actively selected language file on server boot.
-    [+] Discord Webhook Rate Limiting & Paper Nag Fix:
-        [+] Webhook Rate Limiting & Auto-Retry Backoff: Implemented a dedicated single-threaded queue worker (`Logger-Discord-Webhook`) with automatic HTTP 429 (`retry_after`) rate-limit backoff and retry handling (up to 3 retries) in `DiscordManager`. Webhooks are now paced sequentially, respecting proactive Discord rate-limit headers (`X-RateLimit-Remaining: 0` / `X-RateLimit-Reset-After`) and eliminating HTTP 429 console spam and message loss during event bursts.
-        [+] Paper Nag Warning Fix: Replaced all legacy `System.out.println` and `System.err.println` occurrences in `DiscordManager` with proper plugin `Log` calls (`JavaPlugin#getLogger()`), permanently resolving Paper's nag warning about direct stdout/stderr usage.
-        [+] Discord %player% Placeholder Support: Updated default Discord message templates for `Item-Pickup`, `Item-Pickup-Staff`, `Item-Drop`, and `Item-Drop-Staff` across all 11 supported languages in `messages/*.yml` to include the `**%player%**` placeholder, ensuring player identities are clearly visible in both embed and normal text message formats.
-    [+] Pastebin API Key & Environment Configuration (.env):
-        [+] Restored and bundled `.env` containing `PASTEBIN_API` key for reliable `/logger dump` debug log uploads.
-        [+] Implemented multi-tier key resolution in `Dump`: system environment variables -> local plugin data folder `.env` (automatically extracting bundled `.env` if missing) -> server root `.env` -> bundled jar resource stream -> internal fallback.
-    [+] Discord Multi-Channel & Webhook Routing:
-        [+] Fixed multi-channel Discord webhook and bot routing (`resolveWebhookForEvent` / `resolveChannelForEvent`) to properly route specific log events to dedicated webhooks while maintaining staff and default fallback delivery.
-        [+] Added alias normalization for `rcon` (`rconcommand`, `serverrcon`, `serverrconcommand`) and `reload` (`serverreload`, `reloadconsole`) events.
-        [+] Extended webhook URL validation to support Discord Canary, PTB, and legacy `discordapp.com` endpoints.
-        [+] Corrected `isOnline()` status detection in webhook mode to verify default webhook URLs alongside mapped route endpoints.
-        [+] Resource Cleanup: Added explicit `conn.disconnect()` handling in `DiscordManager` webhook delivery to prevent socket and connection leaks under high event volume.
-    [+] BungeeCord Asynchronous Logging & Netty Thread Resilience:
-        [+] Resolved `RejectedExecutionException` in BungeeCord `FileManager`: implemented self-healing executor with dedicated daemon worker threads (`LoggerBungee-File-Worker`) and guarded task submission to prevent terminated pool exceptions from bubbling into Netty IO workers (`UpstreamBridge`).
-        [+] Clean lifecycle handling in `LoggerBungee.onDisable()` and `reload()`: automatically unregisters all proxy listeners, cancels scheduler tasks, unregisters commands, detaches console log filters, and restores proxy command maps.
-        [+] Exception isolation in `BaseListener` and `LogManager`: ensures logging errors (file, Discord, database) are safely trapped as warnings and never disconnect players or disrupt proxy packet pipelines.
-    [+] Velocity Proxy Robustness & Synchronization:
-        [+] Added automatic offline status reporting (`markServerOffline`) upon proxy shutdown in Velocity `Logger.java`, keeping Web Panel server status cards in immediate sync when Velocity proxy instances stop.
-        [+] Added automatic 60-second periodic status heartbeat in Velocity, ensuring running Velocity proxies maintain active `last_seen` timestamps on the Web Panel without timing out.
-        [+] Added dynamic `Table-Prefix` support in `velocity-config.yml` (defaulting to `logger_`), unifying table prefix behavior across Spigot, BungeeCord, and Velocity.
-        [+] Daily Log Rollover: Refactored Velocity `FileHandler` to dynamically resolve daily log files (`dd-MM-yyyy.log`), fixing an issue where proxy logs would remain locked to the initial startup date indefinitely.
-        [+] Cross-Platform Retention & Encoding: Replaced filesystem `creationTime` checks with standard `lastModified()` for reliable log file retention deletion on Linux ext4 filesystems, and enforced explicit UTF-8 encoding on disk writes.
-    [+] Proxy Dump Subcommand (/loggerproxy dump):
-        [+] Added `/loggerproxy dump` on both BungeeCord and Velocity: asynchronously generates an online Pastebin dump of proxy configuration files, Discord configs, active language bundles, and proxy server logs (`proxy.log` / `velocity.log`).
-        [+] Centralized `DumpHelper` and `PasteBin` in `logger-core`: shared across all platforms with multi-tier API key resolution and safe tail-truncation to prevent exceeding Pastebin payload limits.
-        [+] Unified Spigot's `/logger dump` to utilize the centralized `DumpHelper`, eliminating duplicate code and adding tail-truncation to protect against out-of-memory errors on massive `latest.log` files.
-        [+] Added tab-completion suggestions and usage information for `dump` on both BungeeCord and Velocity.
-    [+] Database Concurrency & Shutdown Resilience:
-        [+] SQLite Concurrency: Configured HikariCP pool size to 1 (`config.setMaximumPoolSize(1)`) and enabled Write-Ahead Logging (`journal_mode=WAL`), `busy_timeout=5000`ms, and `synchronous=NORMAL` to eliminate `SQLITE_BUSY` database file lock exceptions.
-        [+] Instant Web Panel Offline Status: Enhanced `markServerOffline()` to update `last_seen` to a past timestamp immediately on shutdown, eliminating the 3-minute delay where stopped servers appeared "Online".
-        [+] Shutdown Task Flushing: Added graceful queue draining in `DatabaseManager` and Spigot's `LoggerManager` upon shutdown, ensuring all pending log events (including `SERVER_STOP`) are committed to disk and database before worker threads terminate.
-        [+] Schema Cleanup: Removed unused zombie table declarations `player_quit` and `player_login` from schema creation.
-        [+] Removed unused legacy `caffeine` dependency and shade relocation, shaving ~800KB from the universal binary.
+Changes
+    [+] Centralized multi-module architecture by merging duplicate config, language, and .env files into a single source of truth.
+    [+] Velocity proxies now automatically heartbeat to keep Web Panel online/offline status in perfect sync.
+    [+] Optimized database concurrency in SQLite to eliminate file lock exceptions (SQLITE_BUSY).
+    [+] Overhauled Web Panel performance by eliminating redundant database table queries on every page load.
+    [+] Modernized JVM reflection to prevent access warnings on newer Java 21 environments.
 
-    [+] Web Panel Performance Overhaul (Logger Web Panel v1.0.1):
-        [+] Instant First-Paint & CDN Preconnecting: Added `preconnect` and `dns-prefetch` resource hints in `index.html` for Tailwind and external CDNs, and marked `chart.umd.min.js` with `defer`, preventing render-blocking network halts and ensuring the License Verification modal paints instantly even on slower network connections.
-        [+] Eliminated Redundant DDL Table Creation: Replaced unconditional `CREATE TABLE IF NOT EXISTS` execution in `Database.php` with an initialization lock check (`.installed`), eliminating 6 DDL queries and table locks that were previously running on every single HTTP request (reducing API latency by 500ms–2,500ms on remote/cloud databases).
-        [+] High-Speed Indexed License Verification: Pre-computed license key variations in PHP memory and migrated `login.php` to use `WHERE license_key IN (...)`, allowing MySQL to hit the `UNIQUE (license_key)` index in O(1) time without full table scans or runtime function overhead.
-        [+] Non-Blocking PHP Session Locks: Added `Session::close()` (`session_write_close()`) across `login.php`, `data.php`, `notifications.php`, `logs.php`, `suggestions.php`, `admin.php`, and `test_db_connection.php`, immediately releasing PHP's exclusive file session lock so concurrent background requests (dashboard statistics, notifications, live logs) never stall or deadlock the login interface.
-        [+] Dashboard Statistics Caching & Query Optimization: Optimized `data.php` with single-pass table inspections, reduced external release lookup timeout to 1s with persistent cache fallback, and added a 60-second transient server cache for compiled dashboard statistics.
+Fixes
+    [+] Fixed Discord rate limiting by implementing a smart auto-retry system, eliminating HTTP 429 errors.
+    [+] Fixed Discord multi-channel routing to ensure specific log events reach their dedicated webhooks.
+    [+] Fixed Paper nag warnings by removing direct System.out.println console calls.
+    [+] Fixed BungeeCord RejectedExecutionException crashes under heavy proxy load by rewriting the asynchronous logger.
+    [+] Fixed missing language translations throwing errors by automatically falling back to default English keys and syncing.
+    [+] Fixed a critical NullPointerException (dataSource is null) when the database fails to connect on boot, by gracefully disabling the logger.
+
+Web Panel (v1.0.5)
+    [+] Stack Upgrades: Fully migrated panel logic to PHP 8 and Vanilla JS for maximum backend efficiency.
+    [+] Premium Dark Theme: Redesigned the entire UI with a modern, glassmorphism-inspired dark mode aesthetic and responsive utility classes.
+    [+] Discord OAuth2 Integration: Added a complete OAuth2 login flow allowing users to securely link their Discord accounts; avatars and usernames are now seamlessly pulled into the dashboard.
+    [+] Instant First-Paint & CDN Preconnecting: Added preconnect and dns-prefetch resource hints to prevent render-blocking.
+    [+] Eliminated Redundant DDL Table Creation: Eliminated 6 DDL queries from running on every HTTP request by using an initialization lock check.
+    [+] High-Speed Indexed License Verification: Refactored login to allow MySQL to hit the UNIQUE (license_key) index in O(1) time.
+    [+] Non-Blocking PHP Session Locks: Added session_write_close() to release exclusive file locks so concurrent requests never deadlock.
+    [+] Dashboard Statistics Caching & Query Optimization: Optimized data.php with single-pass table inspections and a 60-second persistent cache fallback.
 
 <-!------------------------------------------ v1.8.4.1 ------------------------------------------!->
 

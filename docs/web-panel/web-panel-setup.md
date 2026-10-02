@@ -37,7 +37,14 @@ The **Logger Web Panel (v1.0.1)** is the official web application for Logger, al
 
 ---
 
-## Acquiring the Web Panel
+## 🌟 Test the Live Demo
+Experience the Web Panel in action before you buy!
+* **🔗 Live Demo:** [https://prism3.me/logger/](https://prism3.me/logger/)
+* **🔑 Demo License Key:** `ABCDEFGHIJKLMNOP`
+
+---
+
+## 💼 Acquiring the Web Panel
 The Web Panel is a private companion addon. To obtain a license or source access, join our [**Discord Server**](https://discord.gg/MfR5mcpVfX) and open a ticket!
 
 ---
