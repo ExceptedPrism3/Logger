@@ -46,9 +46,9 @@ public final class EventManager {
         if (data.isEnabled(LogType.PLAYER_ANVIL_INTERACTION))
             register(new AnvilInteractionListener(plugin), plugin);
         if (data.isEnabled(LogType.PLAYER_ITEM_PICKUP))
+            register(new ItemPickupListener(plugin), plugin);
         if (data.isEnabled(LogType.PLAYER_CREATIVE_ITEM))
             register(new CreativeItemListener(plugin), plugin);
-            register(new ItemPickupListener(plugin), plugin);
         if (data.isEnabled(LogType.PLAYER_ITEM_DROP))
             register(new ItemDropListener(plugin), plugin);
         if (data.isEnabled(LogType.PLAYER_ITEM_ENCHANTING))
@@ -59,6 +59,10 @@ public final class EventManager {
             register(new FurnaceInteractionListener(plugin), plugin);
         if (data.isEnabled(LogType.PLAYER_GAME_MODE))
             register(new GameModeListener(plugin), plugin);
+        if (data.isEnabled(LogType.PLAYER_TELEPORT))
+            register(new TeleportListener(plugin), plugin);
+        if (data.isEnabled(LogType.PLAYER_LEVEL))
+            register(new LevelListener(plugin), plugin);
         if (data.isEnabled(LogType.PLAYER_ITEM_CRAFT))
             register(new ItemCraftListener(plugin), plugin);
         if (data.isEnabled(LogType.PLAYER_PRIME_TNT))
@@ -77,7 +81,7 @@ public final class EventManager {
             register(new PortalCreationListener(plugin), plugin);
         if (data.isEnabled(LogType.PLAYER_ADVANCEMENTS))
             register(new AdvancementUnlockListener(plugin), plugin);
-        if (VersionUtil.CURRENT.isLegacy() && data.isEnabled(LogType.PLAYER_TOTEM_OF_UNDYING))
+        if (VersionUtil.CURRENT.isAtLeast(1, 11, 0) && data.isEnabled(LogType.PLAYER_TOTEM_OF_UNDYING))
             register(new TotemUseListener(plugin), plugin);
         if (VersionUtil.CURRENT.isModern() && data.isEnabled(LogType.PLAYER_WOOD_STRIP))
             register(new WoodStripListener(plugin), plugin);

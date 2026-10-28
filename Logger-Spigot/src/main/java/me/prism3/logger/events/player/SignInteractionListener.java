@@ -41,7 +41,11 @@ public class SignInteractionListener implements Listener {
         placeholders.put("sign_x", String.valueOf(event.getBlock().getLocation().getBlockX()));
         placeholders.put("sign_y", String.valueOf(event.getBlock().getLocation().getBlockY()));
         placeholders.put("sign_z", String.valueOf(event.getBlock().getLocation().getBlockZ()));
-        placeholders.put("lines", String.join(" | ", event.getLines()));
+        final String[] signLines = event.getLines();
+        placeholders.put("lines", String.join(" | ", signLines));
+        for (int i = 0; i < 4; i++) {
+            placeholders.put("line" + (i + 1), (signLines != null && i < signLines.length && signLines[i] != null) ? signLines[i] : "");
+        }
 
         this.plugin.getLoggerManager().logEvent(LogType.PLAYER_SIGN_INTERACTION, player, placeholders);
     }

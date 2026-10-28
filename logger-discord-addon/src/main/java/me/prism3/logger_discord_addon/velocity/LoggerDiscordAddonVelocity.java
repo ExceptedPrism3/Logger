@@ -18,7 +18,7 @@ import java.nio.file.Path;
 @Plugin(
     id = "loggerdiscordaddon",
     name = "LoggerDiscordAddon",
-    version = "1.8.5",
+    version = "1.8.6",
     authors = {"Prism3"},
     dependencies = {
         @Dependency(id = "logger-velocity", optional = true),

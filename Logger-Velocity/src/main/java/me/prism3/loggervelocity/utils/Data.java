@@ -86,8 +86,12 @@ public class Data {
 
     public void initializeIntegers() {
 
-        fileDeletion = this.main.getConfig().getInt("File-Deletion");
-        ramPercent = this.main.getConfig().getInt("RAM.Percent");
+        fileDeletion = this.main.getConfig().get("File-Deletion") != null
+                ? this.main.getConfig().getInt("File-Deletion")
+                : (this.main.getConfig().get("Delete-Old-Logs") != null ? this.main.getConfig().getInt("Delete-Old-Logs") : 30);
+        ramPercent = this.main.getConfig().get("RAM.Percent") != null
+                ? this.main.getConfig().getInt("RAM.Percent")
+                : (this.main.getConfig().get("RAM-Checker.Threshold") != null ? this.main.getConfig().getInt("RAM-Checker.Threshold") : 90);
         dbPort = this.main.getConfig().getInt("Database.Port");
         externalDataDel = this.main.getConfig().getInt("Database.Data-Deletion");
         sqliteDataDel = this.main.getConfig().getInt("SQLite.Data-Deletion");
@@ -96,7 +100,10 @@ public class Data {
 
     public void initializeLongs() {
 
-        ramChecker = this.main.getConfig().getLong("RAM.Checker");
+        long interval = this.main.getConfig().get("RAM.Checker") != null
+                ? this.main.getConfig().getLong("RAM.Checker")
+                : (this.main.getConfig().get("RAM-Checker.Interval") != null ? this.main.getConfig().getLong("RAM-Checker.Interval") : 60L);
+        ramChecker = interval > 0 ? interval : 60L;
 
     }
 
@@ -117,9 +124,10 @@ public class Data {
         isCommandsToBlock = this.main.getConfig().getBoolean("Player-Command.Blacklist-Commands");
         isCommandsToLog = this.main.getConfig().getBoolean("Player-Command.Whitelist-Commands");
         isPlayerIP = this.main.getConfig().getBoolean("Player-Login.Player-IP");
-        isServerSwitch = this.main.getConfig().getBoolean("Log-Player.Server-Switch");
-        isKick = this.main.getConfig().getBoolean("Log-Player.Kick");
-
+        isServerSwitch = this.main.getConfig().get("Log-Player.Server-Switch") != null
+                ? this.main.getConfig().getBoolean("Log-Player.Server-Switch")
+                : this.main.getConfig().getBoolean("Log-Player.Switch", true);
+        isKick = this.main.getConfig().getBoolean("Log-Player.Kick", true);
 
     }
 

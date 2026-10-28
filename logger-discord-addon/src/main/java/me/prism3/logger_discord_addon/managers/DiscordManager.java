@@ -180,13 +180,6 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
         }
 
         collectChannelsRecursively(discordSection, "");
-
-        if (this.defaultChannel == null && !this.channelMap.isEmpty()) {
-            Set<TextChannel> uniqueChannels = new HashSet<>(this.channelMap.values());
-            if (uniqueChannels.size() == 1) {
-                this.defaultChannel = uniqueChannels.iterator().next();
-            }
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -198,6 +191,10 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
             if (value instanceof Map) {
                 Map<String, Object> sub = (Map<String, Object>) value;
                 String fullKey = prefix.isEmpty() ? key : prefix + "." + key;
+
+                if (isEventDisabled(sub)) {
+                    continue;
+                }
 
                 if (sub.containsKey("Title")) {
                     String customTitle = String.valueOf(sub.get("Title")).trim();
@@ -225,6 +222,16 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
                 collectChannelsRecursively(sub, fullKey);
             }
         }
+    }
+
+    private boolean isEventDisabled(Map<String, Object> sub) {
+        if (sub.containsKey("Enable") && !getBoolean(sub, "Enable", true)) {
+            return true;
+        }
+        if (sub.containsKey("Enabled") && !getBoolean(sub, "Enabled", true)) {
+            return true;
+        }
+        return false;
     }
 
     private boolean isValidChannelId(String id) {
@@ -258,13 +265,6 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
         }
 
         collectWebhooksRecursively(discordSection, "");
-
-        if (this.defaultWebhookUrl == null && !this.webhookMap.isEmpty()) {
-            Set<String> uniqueUrls = new HashSet<>(this.webhookMap.values());
-            if (uniqueUrls.size() == 1) {
-                this.defaultWebhookUrl = uniqueUrls.iterator().next();
-            }
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -276,6 +276,10 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
             if (value instanceof Map) {
                 Map<String, Object> sub = (Map<String, Object>) value;
                 String fullKey = prefix.isEmpty() ? key : prefix + "." + key;
+
+                if (isEventDisabled(sub)) {
+                    continue;
+                }
 
                 if (sub.containsKey("Title")) {
                     String customTitle = String.valueOf(sub.get("Title")).trim();
@@ -667,16 +671,16 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
     }
 
     private TextChannel resolveChannelForEvent(String type, String logType) {
-        // 1. If a specific Minecraft event exists and is not STAFF, check its specific channel first
-        String specific = (type != null && !"STAFF".equalsIgnoreCase(type)) ? type : logType;
-        if (specific != null && !"STAFF".equalsIgnoreCase(specific)) {
-            TextChannel tc = resolveChannel(specific);
+        // 1. If one of type/logType is STAFF, check staff channel first (if configured)
+        if ("STAFF".equalsIgnoreCase(type) || "STAFF".equalsIgnoreCase(logType)) {
+            TextChannel tc = resolveChannel("STAFF");
             if (tc != null) return tc;
         }
 
-        // 2. If one of type/logType is STAFF, check staff channel
-        if ("STAFF".equalsIgnoreCase(type) || "STAFF".equalsIgnoreCase(logType)) {
-            TextChannel tc = resolveChannel("STAFF");
+        // 2. Check specific Minecraft event channel
+        String specific = (type != null && !"STAFF".equalsIgnoreCase(type)) ? type : logType;
+        if (specific != null && !"STAFF".equalsIgnoreCase(specific)) {
+            TextChannel tc = resolveChannel(specific);
             if (tc != null) return tc;
         }
 
@@ -695,16 +699,16 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
     }
 
     private String resolveWebhookForEvent(String type, String logType) {
-        // 1. If a specific Minecraft event exists and is not STAFF, check its specific webhook first
-        String specific = (type != null && !"STAFF".equalsIgnoreCase(type)) ? type : logType;
-        if (specific != null && !"STAFF".equalsIgnoreCase(specific)) {
-            String url = resolveWebhook(specific);
+        // 1. If one of type/logType is STAFF, check staff webhook first (if configured)
+        if ("STAFF".equalsIgnoreCase(type) || "STAFF".equalsIgnoreCase(logType)) {
+            String url = resolveWebhook("STAFF");
             if (url != null) return url;
         }
 
-        // 2. If one of type/logType is STAFF, check staff webhook
-        if ("STAFF".equalsIgnoreCase(type) || "STAFF".equalsIgnoreCase(logType)) {
-            String url = resolveWebhook("STAFF");
+        // 2. Check specific Minecraft event webhook
+        String specific = (type != null && !"STAFF".equalsIgnoreCase(type)) ? type : logType;
+        if (specific != null && !"STAFF".equalsIgnoreCase(specific)) {
+            String url = resolveWebhook(specific);
             if (url != null) return url;
         }
 
@@ -909,7 +913,7 @@ public class DiscordManager extends ListenerAdapter implements me.prism3.logger_
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-                conn.setRequestProperty("User-Agent", "LoggerDiscordAddon/1.8.5");
+                conn.setRequestProperty("User-Agent", "LoggerDiscordAddon/1.8.6");
                 conn.setConnectTimeout(4000);
                 conn.setReadTimeout(4000);
                 conn.setDoOutput(true);

@@ -30,6 +30,8 @@ public class OnSwitch {
             
             Map<String, String> placeholders = new HashMap<>();
             placeholders.put("player", playerName);
+            placeholders.put("to", toServer);
+            placeholders.put("from", fromServer);
             placeholders.put("toServer", toServer);
             placeholders.put("fromServer", fromServer);
             placeholders.put("server", toServer); // Current server for context
@@ -38,7 +40,7 @@ public class OnSwitch {
             boolean isStaff = isStaffEnabled && player.hasPermission(loggerStaffLog);
 
             if (!player.hasPermission(loggerExempt)) {
-                main.getLogManager().logPlayerEvent("Player-Server-Switch", player, placeholders, isStaff);
+                main.getLogManager().logPlayerEvent("Player-Switch", player, placeholders, isStaff);
             }
         }
     }

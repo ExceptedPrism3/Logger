@@ -60,22 +60,25 @@ public class DatabaseManager {
         tempTables.put("player_item_pickup", getPlayerSideFields() + "item_type VARCHAR(100), item_amount INT, enchants TEXT, is_staff TINYINT(1)");
         tempTables.put("player_item_drop", getPlayerSideFields() + "item_type VARCHAR(100), item_amount INT, enchants TEXT, is_staff TINYINT(1)");
         tempTables.put("player_item_enchant", getPlayerSideFields() + "item VARCHAR(100), enchantments TEXT, level_cost INT, enchanting_table_x INT, enchanting_table_y INT, enchanting_table_z INT, is_staff TINYINT(1)");
-        tempTables.put("player_container_interaction", getPlayerSideFields() + "container_type VARCHAR(100), container_x INT, container_y INT, container_z INT, added_items TEXT, removed_items TEXT, is_staff TINYINT(1)");
+        tempTables.put("player_container_interaction", getPlayerSideFields() + "container_type VARCHAR(100), container_x INT, container_y INT, container_z INT, added_items TEXT, removed_items TEXT, original_content TEXT, modified_content TEXT, is_staff TINYINT(1)");
         tempTables.put("player_furnace_interaction", getPlayerSideFields() + "item_type VARCHAR(100), amount INT, furnace_x INT, furnace_y INT, furnace_z INT, is_staff TINYINT(1)");
         tempTables.put("player_advancement_unlock", getPlayerSideFields() + "advancement VARCHAR(255), is_staff TINYINT(1)");
         tempTables.put("player_book_interaction", getPlayerSideFields() + "book_title VARCHAR(255), author VARCHAR(100), page_count INT, first_page_snippet TEXT, is_staff TINYINT(1)");
-        tempTables.put("player_bucket_empty", getPlayerSideFields() + "bucket_type VARCHAR(100), is_staff TINYINT(1)");
-        tempTables.put("player_bucket_fill", getPlayerSideFields() + "bucket_type VARCHAR(100), is_staff TINYINT(1)");
+        tempTables.put("player_bucket_empty", getPlayerSideFields() + "bucket_type VARCHAR(100), bucket_x INT, bucket_y INT, bucket_z INT, is_staff TINYINT(1)");
+        tempTables.put("player_bucket_fill", getPlayerSideFields() + "bucket_type VARCHAR(100), bucket_x INT, bucket_y INT, bucket_z INT, is_staff TINYINT(1)");
         tempTables.put("player_prime_tnt", getPlayerSideFields() + "tnt_location_x INT, tnt_location_y INT, tnt_location_z INT, is_staff TINYINT(1)");
         tempTables.put("player_registration", getPlayerSideFields() + "is_staff TINYINT(1)");
         tempTables.put("player_sign_interaction", getPlayerSideFields() + "sign_x INT, sign_y INT, sign_z INT, sign_text TEXT, is_staff TINYINT(1)");
         tempTables.put("player_spawn_egg", getPlayerSideFields() + "mob_type VARCHAR(100), mob_x INT, mob_y INT, mob_z INT, is_staff TINYINT(1)");
+        tempTables.put("player_portal_creation", getPlayerSideFields() + "is_staff TINYINT(1)");
         tempTables.put("player_totem_of_undying", getPlayerSideFields() + "is_staff TINYINT(1)");
-        tempTables.put("player_wood_strip", getPlayerSideFields() + "used_tool VARCHAR(100), is_staff TINYINT(1)");
-        tempTables.put("player_entity_death", getPlayerSideFields() + "entity_type VARCHAR(100), is_staff TINYINT(1)");
+        tempTables.put("player_wood_strip", getPlayerSideFields() + "block_before VARCHAR(100), block_after VARCHAR(100), used_tool VARCHAR(100), block_x INT, block_y INT, block_z INT, is_staff TINYINT(1)");
+        tempTables.put("player_entity_death", getPlayerSideFields() + "entity_type VARCHAR(100), entity_x INT, entity_y INT, entity_z INT, is_staff TINYINT(1)");
         tempTables.put("player_lever_interaction", getPlayerSideFields() + "lever_x INT, lever_y INT, lever_z INT, lever_state VARCHAR(20), is_staff TINYINT(1)");
         tempTables.put("player_crafter_craft", getPlayerSideFields() + "item VARCHAR(100), is_staff TINYINT(1)");
         tempTables.put("player_sculk_shrieker", getPlayerSideFields() + "level INT, is_staff TINYINT(1)");
+        tempTables.put("player_mace_smash", getPlayerSideFields() + "victim VARCHAR(100), fall_distance DOUBLE, damage DOUBLE, is_staff TINYINT(1)");
+        tempTables.put("player_vault_unlock", getPlayerSideFields() + "vault_x INT, vault_y INT, vault_z INT, items TEXT, is_staff TINYINT(1)");
         tempTables.put("player_villager_trade", getPlayerSideFields() + "villager_profession VARCHAR(100), villager_level INT, cost_1 VARCHAR(100), cost_2 VARCHAR(100), result VARCHAR(100), is_staff TINYINT(1)");
         tempTables.put("player_piglin_barter", getPlayerSideFields() + "input VARCHAR(100), output VARCHAR(100), is_staff TINYINT(1)");
         tempTables.put("player_respawn_anchor", getPlayerSideFields() + "action VARCHAR(50), charges INT, is_staff TINYINT(1)");
@@ -265,7 +268,7 @@ public class DatabaseManager {
                 }
                 try (PreparedStatement ps = conn.prepareStatement(sql)) {
                     ps.setString(1, (serverName != null && !serverName.isEmpty()) ? serverName : "default");
-                    ps.setString(2, (pluginVersion != null && !pluginVersion.isEmpty()) ? pluginVersion : "1.8.5");
+                    ps.setString(2, (pluginVersion != null && !pluginVersion.isEmpty()) ? pluginVersion : "1.8.6");
                     ps.setInt(3, discordAddon ? 1 : 0);
                     ps.executeUpdate();
                 }

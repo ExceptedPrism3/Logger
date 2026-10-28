@@ -23,7 +23,10 @@ public class SculkShriekerListener implements Listener {
 
     @EventHandler
     public void onShriek(BlockReceiveGameEvent event) {
-        if (event.getEvent() != GameEvent.SHRIEK) return;
+        if (event.getEvent() == null || event.getEvent().getKey() == null
+                || !"shriek".equalsIgnoreCase(event.getEvent().getKey().getKey())) {
+            return;
+        }
         if (!(event.getEntity() instanceof Player)) return;
         
         Player player = (Player) event.getEntity();
@@ -35,11 +38,18 @@ public class SculkShriekerListener implements Listener {
         // Usually game events are sync.
         // We'll just log the location.
 
+        String warningLevel = "0";
+        try {
+            if (block.getState() instanceof org.bukkit.block.SculkShrieker) {
+                warningLevel = String.valueOf(((org.bukkit.block.SculkShrieker) block.getState()).getWarningLevel());
+            }
+        } catch (Throwable ignored) {}
+
         Map<String, String> placeholders = PlayerManager.getPlayerManager(player).populatePlaceholders(player);
         placeholders.put("x", String.valueOf(block.getX()));
         placeholders.put("y", String.valueOf(block.getY()));
         placeholders.put("z", String.valueOf(block.getZ()));
-        placeholders.put("level", "Unknown"); // Warning level not available here
+        placeholders.put("level", warningLevel);
 
         plugin.getLoggerManager().logEvent(LogType.PLAYER_SCULK_SHRIEKER, player, placeholders);
     }

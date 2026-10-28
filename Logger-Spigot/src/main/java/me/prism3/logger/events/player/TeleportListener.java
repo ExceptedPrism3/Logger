@@ -52,9 +52,21 @@ public class TeleportListener implements Listener {
             return;
 
         final Map<String, String> placeholders = PlayerManager.getPlayerManager(player).populatePlaceholders(player);
-        placeholders.put("to_x",    String.valueOf(event.getTo().getBlockX()));
-        placeholders.put("to_y",    String.valueOf(event.getTo().getBlockY()));
-        placeholders.put("to_z",    String.valueOf(event.getTo().getBlockZ()));
+        final String fromX = String.valueOf(event.getFrom().getBlockX());
+        final String fromY = String.valueOf(event.getFrom().getBlockY());
+        final String fromZ = String.valueOf(event.getFrom().getBlockZ());
+        final String toX = String.valueOf(event.getTo() != null ? event.getTo().getBlockX() : 0);
+        final String toY = String.valueOf(event.getTo() != null ? event.getTo().getBlockY() : 0);
+        final String toZ = String.valueOf(event.getTo() != null ? event.getTo().getBlockZ() : 0);
+        placeholders.put("to_x",    toX);
+        placeholders.put("to_y",    toY);
+        placeholders.put("to_z",    toZ);
+        placeholders.put("oldX",    fromX);
+        placeholders.put("oldY",    fromY);
+        placeholders.put("oldZ",    fromZ);
+        placeholders.put("newX",    toX);
+        placeholders.put("newY",    toY);
+        placeholders.put("newZ",    toZ);
         placeholders.put("cause",   cause.name());
 
         this.plugin.getLoggerManager().logEvent(LogType.PLAYER_TELEPORT, player, placeholders);

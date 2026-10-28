@@ -16,14 +16,18 @@ public class SculkShriekerLogger extends AbstractLogger implements DatabasePlaye
 
     @Override
     public void logEvent(Player player, Map<String, String> placeholders) {
-        final String level = placeholders.get("level");
+        int parsedLevel = 0;
+        try {
+            parsedLevel = Integer.parseInt(placeholders.getOrDefault("level", "0"));
+        } catch (NumberFormatException ignored) {}
+        final int finalLevel = parsedLevel;
 
         final String sql = "INSERT INTO player_sculk_shrieker (date, server_name, player_uuid, player_name, world_name, location_x, location_y, location_z, level, is_staff) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         executeUpdate(sql, ps -> {
             setPlayerFields(ps, player);
-            ps.setString(9, level);
+            ps.setInt(9, finalLevel);
             ps.setBoolean(10, PermissionManager.isStaff(player));
         });
     }

@@ -23,10 +23,22 @@ public abstract class BaseListener implements Listener {
         Map<String, String> placeholders = new HashMap<>();
         placeholders.put("player", player.getName());
         placeholders.put("uuid", player.getUniqueId().toString());
-        if (player.getAddress() != null && player.getAddress().getAddress() != null) {
-            placeholders.put("IP", player.getAddress().getAddress().getHostAddress());
+        String currentServer = (player.getServer() != null && player.getServer().getInfo() != null)
+                ? player.getServer().getInfo().getName()
+                : (this.plugin.getConfigManager() != null ? this.plugin.getConfigManager().getServerName() : "BungeeCord");
+        placeholders.put("server", currentServer);
+
+        boolean logIp = this.plugin.getConfigManager() != null
+                && this.plugin.getConfigManager().getConfig() != null
+                && this.plugin.getConfigManager().getConfig().getBoolean("Player-Login.Player-IP", false);
+        if (logIp) {
+            if (player.getAddress() != null && player.getAddress().getAddress() != null) {
+                placeholders.put("IP", player.getAddress().getAddress().getHostAddress());
+            } else {
+                placeholders.put("IP", "127.0.0.1");
+            }
         } else {
-            placeholders.put("IP", "127.0.0.1");
+            placeholders.put("IP", "");
         }
         return placeholders;
     }
@@ -35,7 +47,10 @@ public abstract class BaseListener implements Listener {
      * Checks if a player has staff logging permission
      */
     protected boolean isStaff(ProxiedPlayer player) {
-        return this.plugin.getPermissionManager().isStaff(player);
+        boolean staffEnabled = this.plugin.getConfigManager() != null
+                && this.plugin.getConfigManager().getConfig() != null
+                && this.plugin.getConfigManager().getConfig().getBoolean("Staff.Enabled", false);
+        return staffEnabled && this.plugin.getPermissionManager().isStaff(player);
     }
 
     /**

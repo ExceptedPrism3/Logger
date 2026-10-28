@@ -25,8 +25,9 @@ ssh.command
 *.iml
 **/*.iml
 
-# Legacy
+# Legacy & Backups
 old/
+backups/
 
 # Paid / Private Modules (Web Panels)
 logger-web-client/

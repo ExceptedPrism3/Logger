@@ -12,8 +12,8 @@ Logger fully supports Minecraft 1.8.8/1.8.9 gameplay and logging! Simply ensure 
 
 ## Installation Steps
 
-1. Download [`Logger-1.8.5.jar`](https://github.com/ExceptedPrism3/Logger/releases).
-2. Drop `Logger-1.8.5.jar` directly into your server's `plugins/` directory.
-3. *(Optional)* If you want Discord notifications, also place [`LoggerDiscordAddon-1.8.5.jar`](../discord-integration/discord.md) into the `plugins/` folder.
+1. Download [`Logger-1.8.6.jar`](https://github.com/ExceptedPrism3/Logger/releases).
+2. Drop `Logger-1.8.6.jar` directly into your server's `plugins/` directory.
+3. *(Optional)* If you want Discord notifications, also place [`LoggerDiscordAddon-1.8.6.jar`](../discord-integration/discord.md) into the `plugins/` folder.
 4. Start or restart your server.
 5. Configuration files will be generated under `plugins/Logger/`.

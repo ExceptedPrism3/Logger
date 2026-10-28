@@ -157,7 +157,10 @@ public class MessageManager {
 
             final String path = key.getPath();
             String raw = messagesConfig.getString(path, "Message not found: " + path);
-            raw = raw.replace("%prefix%", this.plugin.getData().getPluginPrefix());
+            String prefix = (this.plugin.getData() != null && this.plugin.getData().getPluginPrefix() != null)
+                    ? this.plugin.getData().getPluginPrefix()
+                    : "";
+            raw = raw.replace("%prefix%", prefix);
             this.generalCache.put(path, ChatColor.translateAlternateColorCodes('&', raw));
         }
 
@@ -200,11 +203,22 @@ public class MessageManager {
 
         if (placeholders != null) {
             for (Map.Entry<String, String> e : placeholders.entrySet()) {
-                msg = msg.replace("%" + e.getKey() + "%", e.getValue());
+                if (e.getValue() != null) {
+                    msg = msg.replace("%" + e.getKey() + "%", e.getValue());
+                }
             }
         }
 
-        if (org.bukkit.Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+        if (msg.contains("%date%") || msg.contains("%time%")) {
+            final String nowStr = (this.plugin != null && this.plugin.getData() != null
+                    && this.plugin.getData().getTimeFormatter() != null)
+                            ? this.plugin.getData().getTimeFormatter()
+                            : java.time.LocalDateTime.now().toString();
+            msg = msg.replace("%date%", nowStr).replace("%time%", nowStr);
+        }
+
+        if (org.bukkit.Bukkit.getServer() != null && org.bukkit.Bukkit.getPluginManager() != null
+                && org.bukkit.Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             msg = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, msg);
         }
 

@@ -51,10 +51,29 @@ public class SchemaMigrator {
                 }
 
                 // 2. Check 'is_staff'
-                if (isPlayerTable && !existingColumns.contains("is_staff")) {
+                if (isPlayerTable && !rawTableName.equals("player_events") && !existingColumns.contains("is_staff")) {
                     String colType = isSqlite ? "INTEGER DEFAULT 0" : "TINYINT(1) DEFAULT 0";
                     if (addColumn(conn, fullTableName, "is_staff", colType)) {
                         columnsAdded++;
+                    }
+                }
+
+                // 2b. Ensure all columns declared in table definition exist
+                String tableDef = tables.get(rawTableName);
+                if (tableDef != null) {
+                    for (String part : tableDef.split(",")) {
+                        String trimmed = part.trim();
+                        int spaceIdx = trimmed.indexOf(' ');
+                        if (spaceIdx > 0) {
+                            String colName = trimmed.substring(0, spaceIdx).trim().toLowerCase();
+                            String colDef = trimmed.substring(spaceIdx + 1).trim();
+                            if (!colName.equals("id") && !existingColumns.contains(colName) && !colDef.toUpperCase().contains("PRIMARY KEY")) {
+                                if (addColumn(conn, fullTableName, colName, colDef)) {
+                                    existingColumns.add(colName);
+                                    columnsAdded++;
+                                }
+                            }
+                        }
                     }
                 }
 

@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 import static me.prism3.loggervelocity.utils.Data.ramChecker;
 
-@Plugin(id = "logger-velocity", name = "Logger", version = "1.8.5", authors = { "prism3 & thelooter & sidna" })
+@Plugin(id = "logger-velocity", name = "Logger", version = "1.8.6", authors = { "prism3 & thelooter & sidna" })
 public class Logger implements LoggerPlatform {
 
     private static ProxyServer server;
@@ -91,6 +91,12 @@ public class Logger implements LoggerPlatform {
                 .delay(10, TimeUnit.SECONDS).schedule();
 
         server.getCommandManager().register("loggerproxy", new LoggerProxyCommands());
+
+        if (this.databaseManager != null) {
+            String sName = this.config != null ? this.config.getServerName() : "Velocity";
+            boolean isDiscordActive = this.discordManager != null && this.discordManager.isEnabled();
+            this.databaseManager.updateServerStatus(sName, getVersion(), isDiscordActive);
+        }
 
         // Periodic server status synchronization for Web Panel
         server.getScheduler().buildTask(this, () -> {
@@ -167,6 +173,8 @@ public class Logger implements LoggerPlatform {
     public void reload() {
         this.config.reload();
         this.messages.reload();
+        this.initializer(new Data());
+        new FileHandler(this.folder.toFile()).deleteFiles();
 
         if (this.discordManager != null) {
             this.discordManager.reload();
@@ -215,9 +223,9 @@ public class Logger implements LoggerPlatform {
         if (server != null) {
             return server.getPluginManager().getPlugin("logger-velocity")
                     .flatMap(c -> c.getDescription().getVersion())
-                    .orElse("1.8.4.2");
+                    .orElse("1.8.6");
         }
-        return "1.8.4.2";
+        return "1.8.6";
     }
 
     public ConfigManager getConfig() {

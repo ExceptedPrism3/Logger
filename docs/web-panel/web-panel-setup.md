@@ -1,6 +1,6 @@
 # Logger Web Panel Setup
 
-The **Logger Web Panel (v1.0.1)** is the official web application for Logger, allowing server administrators and staff teams to search, filter, and inspect logs in real time from any browser.
+The **Logger Web Panel (v1.0.6)** is the official web application for Logger, allowing server administrators and staff teams to search, filter, and inspect logs in real time from any browser.
 
 ---
 
@@ -8,32 +8,32 @@ The **Logger Web Panel (v1.0.1)** is the official web application for Logger, al
 * 📊 **Real-Time Analytics**: Live charts showing daily log activity, commands, chat, and player actions.
 * 🖥️ **Server Heartbeat Monitor**: Live status cards for every connected Minecraft server and proxy backed by the database `server_status` table.
 * 🤖 **Discord Addon Health Check**: Live indicator showing whether the companion Discord Bot is online and syncing.
-* 🔍 **Advanced Filtering**: Search by player UUID/username, date range, action type, server instance, or keyword.
-* 🛡️ **Role-Based Access**: Multi-account support with Admin and Staff permissions.
+* 🔍 **Advanced Filtering**: Search by player UUID/username, date range, action type, server instance, or keyword across all Spigot, 1.21+/26.x, and Proxy tables.
+* 🔧 **1-Click Schema Repair**: Built-in Database Maintenance tool to automatically align and index all 53+ Logger tables.
+* 🛡️ **Role-Based Access**: Multi-account license management with interactive Dark Mode and mobile-responsive layout.
 
 ---
 
 ## Requirements
 * Web server: **Apache** or **Nginx**
-* PHP: **PHP 8.0 or higher** with `pdo_mysql`, `pdo_pgsql`, or `pdo_sqlite` extension enabled
-* Database: MySQL, MariaDB, or PostgreSQL (same database as your Minecraft servers)
+* PHP: **PHP 8.0 or higher** with `pdo_mysql` extension enabled
+* Database: MySQL or MariaDB (for internal Web Panel credentials and your Minecraft server logs)
 
 ---
 
-## Installation Walkthrough
+## Installation Walkthrough (3-Step Setup Wizard)
 
-1. Unzip `LoggerWebPanel-1.0.1.zip` into your web server root (e.g. `/var/www/html/logger` or `/var/www/logger-web-panel`).
-2. Copy `api/v1/config.example.php` to `api/v1/config.php`:
+1. Unzip `LoggerWebPanel-1.0.6.zip` into your web server root (e.g. `/var/www/html/logger` or `/var/www/logger-web-client`).
+2. Ensure correct file permissions so the web server can write `api/config/db.php` and `api/config/.installed`:
    ```bash
-   cp api/v1/config.example.php api/v1/config.php
+   chown -R www-data:www-data /var/www/logger-web-client
+   chmod -R 755 /var/www/logger-web-client
    ```
-3. Edit `api/v1/config.php` and set your database connection details to match your Minecraft server's `config.yml`.
-4. Ensure correct file permissions:
-   ```bash
-   chown -R www-data:www-data /var/www/logger-web-panel
-   chmod -R 755 /var/www/logger-web-panel
-   ```
-5. Open your browser at `https://your-domain.com/logger/` and log in!
+3. Open your browser at `https://your-domain.com/logger/install.php` and follow the **3-Step Setup Wizard**:
+   * **Step 1**: Enter your Web Panel MySQL/MariaDB database credentials and click **Test & Continue**.
+   * **Step 2**: Choose your Administrator username and generate your Admin License Key (`XXXX-XXXX-XXXX-XXXX`).
+   * **Step 3**: Copy your generated license key and click **Launch Web Panel** (`index.php`).
+4. Once logged in, navigate to **Settings -> Database Configuration** to connect your Minecraft server's Logger database (and optional Table Prefix).
 
 ---
 

@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -44,7 +45,7 @@ public class WoodStripListener implements Listener { //TODO TO TEST
 
     public WoodStripListener(final LoggerAPI plugin) { this.plugin = plugin; }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWoodStripped(final PlayerInteractEvent event) {
 
         // only RIGHT‑CLICK_BLOCK with an axe
@@ -75,11 +76,9 @@ public class WoodStripListener implements Listener { //TODO TO TEST
         if (after == null)
             return;
 
-        // change the block (no physics update)
-        block.setType(after, false);
-
         final Map<String,String> placeholders = PlayerManager.getPlayerManager(player).populatePlaceholders(player);
 
+        placeholders.put("logname",      before.name());
         placeholders.put("block_before", before.name());
         placeholders.put("block_after",  after.name());
         placeholders.put("used_tool",   tool.name());

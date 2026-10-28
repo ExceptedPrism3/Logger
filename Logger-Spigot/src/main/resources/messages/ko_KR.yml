@@ -58,6 +58,7 @@ File:
     Prime-TNT: "[%world%] 플레이어 <%player%> 님이 TNT를 점화하여 X= %tnt_location_x%, Y= %tnt_location_y%, Z= %tnt_location_z% 에서 폭발했습니다"
     Container-Interaction-Staff: "[%world%] 스태프 <%player%> 님이 %container% (X= %container_x%, Y= %container_y%, Z= %container_z%) 을(를) 열었습니다 | 꺼냄: %removed_items% | 넣음: %added_items%"
     Container-Interaction: "[%world%] 플레이어 <%player%> 님이 %container% (X= %container_x%, Y= %container_y%, Z= %container_z%) 을(를) 열었습니다 | 꺼냄: %removed_items% | 넣음: %added_items%"
+    Registration-Staff: "[%world%] 플레이어 <%player%> 님이 %date% 에 서버에 가입했습니다"
     Registration: "[%world%] 플레이어 <%player%> 님이 %date% 에 서버에 가입했습니다"
     Totem-of-Undying-Staff: "[%world%] 스태프 <%player%> 님이 X= %x%, Y= %y%, Z= %z% 에서 불사의 토템을 사용하여 죽음을 모면했습니다"
     Totem-of-Undying: "[%world%] 플레이어 <%player%> 님이 X= %x%, Y= %y%, Z= %z% 에서 불사의 토템을 사용하여 죽음을 모면했습니다"
@@ -83,6 +84,12 @@ File:
     Portal-Creation: "[%world%] 플레이어 <%player%> 님이 X= %x%, Y= %y%, Z= %z% 에 포탈을 생성했습니다"
     Advancement-Staff: "[%world%] 스태프 <%player%> 님이 발전 과제를 달성했습니다: %advancement%"
     Advancement: "[%world%] 플레이어 <%player%> 님이 발전 과제를 달성했습니다: %advancement%"
+    Creative-Item-Staff: "[%world%] [%uuid%] The Staff <%player%> took %amount%x %item% from creative menu at X= %x%, Y= %y%, Z= %z% [NBT: %has_nbt%]"
+    Creative-Item: "[%world%] [%uuid%] The Player <%player%> took %amount%x %item% from creative menu at X= %x%, Y= %y%, Z= %z% [NBT: %has_nbt%]"
+    Mace-Smash-Staff: "[%world%] [%uuid%] The Staff <%player%> performed a Mace Smash Attack on %victim% at X= %x%, Y= %y%, Z= %z% (Fall: %fall_distance% blocks, Damage: %damage%)"
+    Mace-Smash: "[%world%] [%uuid%] The Player <%player%> performed a Mace Smash Attack on %victim% at X= %x%, Y= %y%, Z= %z% (Fall: %fall_distance% blocks, Damage: %damage%)"
+    Vault-Unlock-Staff: "[%world%] [%uuid%] The Staff <%player%> unlocked a Trial Vault at X= %vault_x%, Y= %vault_y%, Z= %vault_z% and received: %items%"
+    Vault-Unlock: "[%world%] [%uuid%] The Player <%player%> unlocked a Trial Vault at X= %vault_x%, Y= %vault_y%, Z= %vault_z% and received: %items%"
 
   Server:
     Start: "서버가 성공적으로 시작되었습니다."
@@ -148,6 +155,7 @@ Discord:
     Prime-TNT: "**[%world%]** TNT 점화 (X= **%tnt_location_x%**, Y= **%tnt_location_y%**, Z= **%tnt_location_z%** 에서 폭발)"
     Container-Interaction-Staff: "**[%world%]** 보관함 열림: **%container%** (X= **%container_x%**, Y= **%container_y%**, Z= **%container_z%**) | 꺼냄: **%removed_items%** | 넣음: **%added_items%**"
     Container-Interaction: "**[%world%]** 보관함 열림: **%container%** (X= **%container_x%**, Y= **%container_y%**, Z= **%container_z%**) | 꺼냄: **%removed_items%** | 넣음: **%added_items%**"
+    Registration-Staff: "**%date%** 에 서버에 가입했습니다"
     Registration: "**%date%** 에 서버에 가입했습니다"
     Totem-of-Undying-Staff: "**[%world%]** 불사의 토템 사용 (X= **%x%**, Y= **%y%**, Z= **%z%**)"
     Totem-of-Undying: "**[%world%]** 불사의 토템 사용 (X= **%x%**, Y= **%y%**, Z= **%z%**)"
@@ -173,6 +181,12 @@ Discord:
     Portal-Creation: "**[%world%]** 포탈 생성 (X= **%x%**, Y= **%y%**, Z= **%z%**)"
     Advancement-Staff: "**[%world%]** 발전 과제 달성: **%advancement%**"
     Advancement: "**[%world%]** 발전 과제 달성: **%advancement%**"
+    Creative-Item-Staff: "**[%world%]** Has taken **%amount%x %item%** from creative menu at X= **%x%**, Y= **%y%**, Z= **%z%** [NBT: **%has_nbt%**]"
+    Creative-Item: "**[%world%]** Has taken **%amount%x %item%** from creative menu at X= **%x%**, Y= **%y%**, Z= **%z%** [NBT: **%has_nbt%**]"
+    Mace-Smash-Staff: "**[%world%]** **[%uuid%]** Staff **%player%** performed a Mace Smash Attack on **%victim%** at X= **%x%**, Y= **%y%**, Z= **%z%** (Fall: **%fall_distance%** blocks, Damage: **%damage%**)"
+    Mace-Smash: "**[%world%]** **[%uuid%]** Player **%player%** performed a Mace Smash Attack on **%victim%** at X= **%x%**, Y= **%y%**, Z= **%z%** (Fall: **%fall_distance%** blocks, Damage: **%damage%**)"
+    Vault-Unlock-Staff: "**[%world%]** **[%uuid%]** Staff **%player%** unlocked a Trial Vault at X= **%vault_x%**, Y= **%vault_y%**, Z= **%vault_z%** and received: **%items%**"
+    Vault-Unlock: "**[%world%]** **[%uuid%]** Player **%player%** unlocked a Trial Vault at X= **%vault_x%**, Y= **%vault_y%**, Z= **%vault_z%** and received: **%items%**"
 
   Server:
     Start: "**서버가 시작되었습니다.**"
@@ -186,4 +200,4 @@ Discord:
     Player-Count: "**온라인 플레이어 목표 인원 도달.**"
     Whitelist: "**%executor%** 님이 **%target%** 에 대해 화이트리스트 **%action%** 명령을 실행했습니다"
 
-Messages-Version: 1.8.5
+Messages-Version: 1.8.6

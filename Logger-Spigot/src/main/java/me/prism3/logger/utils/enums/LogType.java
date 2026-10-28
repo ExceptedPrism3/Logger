@@ -74,6 +74,10 @@ public enum LogType {
             "Discord.Crafter-Craft"),
     PLAYER_SCULK_SHRIEKER("Player Sculk Shrieker", "Log-Player.Sculk-Shrieker", "Player.Sculk-Shrieker",
             "Discord.Sculk-Shrieker"),
+    PLAYER_MACE_SMASH("Player Mace Smash", "Log-Player.Mace-Smash", "Player.Mace-Smash",
+            "Discord.Mace-Smash"),
+    PLAYER_VAULT_UNLOCK("Player Vault Unlock", "Log-Player.Vault-Unlock", "Player.Vault-Unlock",
+            "Discord.Vault-Unlock"),
 
     // Server events
     SERVER_START("Server Start", "Log-Server.Start", "Server.Start", "Discord.Server-Side.Start"),
@@ -128,6 +132,9 @@ public enum LogType {
      * True if this type’s enabled‑flag in config is on.
      */
     public boolean isEnabled(FileConfiguration cfg) {
+        if (this == PLAYER_REGISTRATION && !cfg.contains(configPath)) {
+            return cfg.getBoolean("Log-Server.Registration", false);
+        }
         return cfg.getBoolean(configPath, false);
     }
 

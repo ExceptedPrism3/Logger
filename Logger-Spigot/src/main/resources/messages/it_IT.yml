@@ -58,6 +58,7 @@ File:
     Prime-TNT: "[%world%] Il Giocatore <%player%> ha innescato una TNT esplosa a X= %tnt_location_x%, Y= %tnt_location_y%, Z= %tnt_location_z%"
     Container-Interaction-Staff: "[%world%] Lo Staff <%player%> ha aperto %container% a X= %container_x%, Y= %container_y%, Z= %container_z% | Rimosso: %removed_items% | Aggiunto: %added_items%"
     Container-Interaction: "[%world%] Il Giocatore <%player%> ha aperto %container% a X= %container_x%, Y= %container_y%, Z= %container_z% | Rimosso: %removed_items% | Aggiunto: %added_items%"
+    Registration-Staff: "[%world%] Il Giocatore <%player%> registrato il %date%"
     Registration: "[%world%] Il Giocatore <%player%> registrato il %date%"
     Totem-of-Undying-Staff: "[%world%] Lo Staff <%player%> ha usato un Totem dell'Immortalità a X= %x%, Y= %y%, Z= %z%"
     Totem-of-Undying: "[%world%] Il Giocatore <%player%> ha usato un Totem dell'Immortalità a X= %x%, Y= %y%, Z= %z%"
@@ -83,6 +84,12 @@ File:
     Portal-Creation: "[%world%] Il Giocatore <%player%> ha creato un portale a X= %x%, Y= %y%, Z= %z%"
     Advancement-Staff: "[%world%] Lo Staff <%player%> ha sbloccato il progresso: %advancement%"
     Advancement: "[%world%] Il Giocatore <%player%> ha sbloccato il progresso: %advancement%"
+    Creative-Item-Staff: "[%world%] [%uuid%] The Staff <%player%> took %amount%x %item% from creative menu at X= %x%, Y= %y%, Z= %z% [NBT: %has_nbt%]"
+    Creative-Item: "[%world%] [%uuid%] The Player <%player%> took %amount%x %item% from creative menu at X= %x%, Y= %y%, Z= %z% [NBT: %has_nbt%]"
+    Mace-Smash-Staff: "[%world%] [%uuid%] The Staff <%player%> performed a Mace Smash Attack on %victim% at X= %x%, Y= %y%, Z= %z% (Fall: %fall_distance% blocks, Damage: %damage%)"
+    Mace-Smash: "[%world%] [%uuid%] The Player <%player%> performed a Mace Smash Attack on %victim% at X= %x%, Y= %y%, Z= %z% (Fall: %fall_distance% blocks, Damage: %damage%)"
+    Vault-Unlock-Staff: "[%world%] [%uuid%] The Staff <%player%> unlocked a Trial Vault at X= %vault_x%, Y= %vault_y%, Z= %vault_z% and received: %items%"
+    Vault-Unlock: "[%world%] [%uuid%] The Player <%player%> unlocked a Trial Vault at X= %vault_x%, Y= %vault_y%, Z= %vault_z% and received: %items%"
 
   Server:
     Start: "Il server è stato avviato correttamente."
@@ -148,6 +155,7 @@ Discord:
     Prime-TNT: "**[%world%]** Ha innescato TNT esplosa a X= **%tnt_location_x%**, Y= **%tnt_location_y%**, Z= **%tnt_location_z%**"
     Container-Interaction-Staff: "**[%world%]** Ha aperto **%container%** (X= **%container_x%**, Y= **%container_y%**, Z= **%container_z%**) | Rimosso: **%removed_items%** | Aggiunto: **%added_items%**"
     Container-Interaction: "**[%world%]** Ha aperto **%container%** (X= **%container_x%**, Y= **%container_y%**, Z= **%container_z%**) | Rimosso: **%removed_items%** | Aggiunto: **%added_items%**"
+    Registration-Staff: "Entrato nel server il **%date%**"
     Registration: "Entrato nel server il **%date%**"
     Totem-of-Undying-Staff: "**[%world%]** Ha usato un Totem dell'Immortalità a X= **%x%**, Y= **%y%**, Z= **%z%**"
     Totem-of-Undying: "**[%world%]** Ha usato un Totem dell'Immortalità a X= **%x%**, Y= **%y%**, Z= **%z%**"
@@ -173,6 +181,12 @@ Discord:
     Portal-Creation: "**[%world%]** Portale creato a X= **%x%**, Y= **%y%**, Z= **%z%**"
     Advancement-Staff: "**[%world%]** Progresso sbloccato: **%advancement%**"
     Advancement: "**[%world%]** Progresso sbloccato: **%advancement%**"
+    Creative-Item-Staff: "**[%world%]** Has taken **%amount%x %item%** from creative menu at X= **%x%**, Y= **%y%**, Z= **%z%** [NBT: **%has_nbt%**]"
+    Creative-Item: "**[%world%]** Has taken **%amount%x %item%** from creative menu at X= **%x%**, Y= **%y%**, Z= **%z%** [NBT: **%has_nbt%**]"
+    Mace-Smash-Staff: "**[%world%]** **[%uuid%]** Staff **%player%** performed a Mace Smash Attack on **%victim%** at X= **%x%**, Y= **%y%**, Z= **%z%** (Fall: **%fall_distance%** blocks, Damage: **%damage%**)"
+    Mace-Smash: "**[%world%]** **[%uuid%]** Player **%player%** performed a Mace Smash Attack on **%victim%** at X= **%x%**, Y= **%y%**, Z= **%z%** (Fall: **%fall_distance%** blocks, Damage: **%damage%**)"
+    Vault-Unlock-Staff: "**[%world%]** **[%uuid%]** Staff **%player%** unlocked a Trial Vault at X= **%vault_x%**, Y= **%vault_y%**, Z= **%vault_z%** and received: **%items%**"
+    Vault-Unlock: "**[%world%]** **[%uuid%]** Player **%player%** unlocked a Trial Vault at X= **%vault_x%**, Y= **%vault_y%**, Z= **%vault_z%** and received: **%items%**"
 
   Server:
     Start: "**Server avviato.**"
@@ -186,4 +200,4 @@ Discord:
     Player-Count: "**Obiettivo giocatori online raggiunto.**"
     Whitelist: "**%executor%** ha eseguito whitelist **%action%** su **%target%**"
 
-Messages-Version: 1.8.5
+Messages-Version: 1.8.6

@@ -53,7 +53,7 @@ public class Logger extends LoggerAPI {
             getDatabaseManager().initialize();
 
             String sName = this.data != null ? this.data.getServerName() : "default";
-            String ver = getDescription() != null ? getDescription().getVersion() : "1.8.5";
+            String ver = getDescription() != null ? getDescription().getVersion() : "1.8.6";
             boolean hasDiscord = getDiscordManager() != null && getDiscordManager().isEnabled();
             getDatabaseManager().updateServerStatus(sName, ver, hasDiscord);
 
@@ -119,7 +119,7 @@ public class Logger extends LoggerAPI {
         getLogger().info("Logger has been disabled!");
         if (getDatabaseManager() != null) {
             String sName = this.data != null ? this.data.getServerName() : "default";
-            String ver = getDescription() != null ? getDescription().getVersion() : "1.8.5";
+            String ver = getDescription() != null ? getDescription().getVersion() : "1.8.6";
             getDatabaseManager().markServerOffline(sName, ver);
             getDatabaseManager().shutdown();
         }

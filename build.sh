@@ -13,12 +13,12 @@ mvn clean install -DskipTests
 
 echo "📦 Copying artifacts to releases/..."
 mkdir -p releases
+# Delete old release artifacts to ensure removed versions don't linger
+rm -f releases/Logger-*.jar releases/LoggerDiscordAddon-*.jar releases/LoggerWebPanel-*.zip
 cp "logger-paper/target/logger-paper-${VERSION}.jar" "releases/Logger-${VERSION}.jar"
 cp "logger-discord-addon/target/logger-discord-addon-${VERSION}.jar" "releases/LoggerDiscordAddon-${VERSION}.jar"
 
-# Delete the old zip file to ensure removed files don't linger in the archive
-rm -f releases/LoggerWebPanel-1.0.5.zip
-(cd logger-web-client && zip -q -r ../releases/LoggerWebPanel-1.0.5.zip index.php install.php INSTALL.md CHANGELOG.md LICENSE.md api assets -x "*.DS_Store*")
+(cd logger-web-client && zip -q -r ../releases/LoggerWebPanel-1.0.6.zip index.php install.php INSTALL.md CHANGELOG.md LICENSE.md api assets -x "*.DS_Store*")
 
 echo "✅ Build Complete! Release artifacts ready in releases/:"
 ls -lh releases/

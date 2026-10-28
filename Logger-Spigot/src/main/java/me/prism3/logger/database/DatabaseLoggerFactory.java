@@ -42,6 +42,7 @@ public class DatabaseLoggerFactory {
             case PLAYER_CHAT:
                 return new ChatLogger(plugin);
             case PLAYER_COMMAND:
+            case PLAYER_COMMAND_WHITELISTED:
                 return new CommandLogger(plugin);
             case PLAYER_DEATH:
                 return new DeathLogger(plugin);
@@ -131,6 +132,10 @@ public class DatabaseLoggerFactory {
                 return new CrafterCraftLogger(plugin);
             case PLAYER_SCULK_SHRIEKER:
                 return new SculkShriekerLogger(plugin);
+            case PLAYER_MACE_SMASH:
+                return new MaceSmashLogger(plugin);
+            case PLAYER_VAULT_UNLOCK:
+                return new VaultUnlockLogger(plugin);
             case SERVER_MANUAL_LOG:
                 return new ManualLogLogger(plugin);
             case SERVER_WHITELIST:

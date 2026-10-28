@@ -19,9 +19,13 @@ public class FileHandler {
     private static File playerCommandLogFolder;
     private static File loginLogFolder;
     private static File leaveLogFolder;
+    private static File switchLogFolder;
+    private static File kickLogFolder;
     private static File consoleCommandLogFolder;
     private static File serverStartLogFolder;
     private static File serverStopLogFolder;
+    private static File serverReloadLogFolder;
+    private static File manualLogFolder;
     private static File ramLogFolder;
 
     public FileHandler(File dataFolder) {
@@ -32,9 +36,13 @@ public class FileHandler {
         playerCommandLogFolder = new File(logsFolder, "Player Command");
         loginLogFolder = new File(logsFolder, "Player Login");
         leaveLogFolder = new File(logsFolder, "Player Leave");
+        switchLogFolder = new File(logsFolder, "Player Switch");
+        kickLogFolder = new File(logsFolder, "Player Kick");
         consoleCommandLogFolder = new File(logsFolder, "Server Commands");
         serverStartLogFolder = new File(logsFolder, "Server Start");
         serverStopLogFolder = new File(logsFolder, "Server Stop");
+        serverReloadLogFolder = new File(logsFolder, "Server Reload");
+        manualLogFolder = new File(logsFolder, "Manual Log");
         ramLogFolder = new File(logsFolder, "RAM");
     }
 
@@ -69,6 +77,14 @@ public class FileHandler {
         return getDailyFile(leaveLogFolder);
     }
 
+    public static File getSwitchLogFile() {
+        return getDailyFile(switchLogFolder);
+    }
+
+    public static File getKickLogFile() {
+        return getDailyFile(kickLogFolder);
+    }
+
     public static File getConsoleCommandLogFile() {
         return getDailyFile(consoleCommandLogFolder);
     }
@@ -79,6 +95,14 @@ public class FileHandler {
 
     public static File getServerStopLogFile() {
         return getDailyFile(serverStopLogFolder);
+    }
+
+    public static File getServerReloadLogFile() {
+        return getDailyFile(serverReloadLogFolder);
+    }
+
+    public static File getManualLogFile() {
+        return getDailyFile(manualLogFolder);
     }
 
     public static File getRamLogFile() {
@@ -120,9 +144,13 @@ public class FileHandler {
         deleteFilesInFolder(playerCommandLogFolder);
         deleteFilesInFolder(loginLogFolder);
         deleteFilesInFolder(leaveLogFolder);
+        deleteFilesInFolder(switchLogFolder);
+        deleteFilesInFolder(kickLogFolder);
         deleteFilesInFolder(consoleCommandLogFolder);
         deleteFilesInFolder(serverStartLogFolder);
         deleteFilesInFolder(serverStopLogFolder);
+        deleteFilesInFolder(serverReloadLogFolder);
+        deleteFilesInFolder(manualLogFolder);
         deleteFilesInFolder(ramLogFolder);
     }
 
@@ -137,29 +165,48 @@ public class FileHandler {
                 file = getChatLogFile();
                 break;
             case "Player-Chat-Staff":
-                file = getStaffLogFile();
+                file = isStaffEnabled ? getStaffLogFile() : getChatLogFile();
                 break;
             case "Player-Command":
                 file = getPlayerCommandLogFile();
                 break;
             case "Player-Command-Staff":
-                file = getStaffLogFile();
+                file = isStaffEnabled ? getStaffLogFile() : getPlayerCommandLogFile();
                 break;
             case "Player-Login":
                 file = getLoginLogFile();
                 break;
             case "Player-Login-Staff":
-                file = getStaffLogFile();
+                file = isStaffEnabled ? getStaffLogFile() : getLoginLogFile();
                 break;
             case "Player-Leave":
                 file = getLeaveLogFile();
                 break;
             case "Player-Leave-Staff":
-                file = getStaffLogFile();
+                file = isStaffEnabled ? getStaffLogFile() : getLeaveLogFile();
                 break;
+            case "Player-Switch":
+                file = getSwitchLogFile();
+                break;
+            case "Player-Switch-Staff":
+                file = isStaffEnabled ? getStaffLogFile() : getSwitchLogFile();
+                break;
+            case "Player-Kick":
+                file = getKickLogFile();
+                break;
+            case "Player-Kick-Staff":
+                file = isStaffEnabled ? getStaffLogFile() : getKickLogFile();
+                break;
+            case "Server-Side.Server-Commands":
             case "Server-Side.Console-Commands":
-            case "Server-Side.Manual-Log":
                 file = getConsoleCommandLogFile();
+                break;
+            case "Server-Side.Reload-Console":
+                file = getServerReloadLogFile();
+                break;
+            case "Manual Log":
+            case "Server-Side.Manual-Log":
+                file = getManualLogFile();
                 break;
             case "Server-Side.Start":
                 file = getServerStartLogFile();

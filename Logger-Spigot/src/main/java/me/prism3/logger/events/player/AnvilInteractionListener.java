@@ -102,6 +102,7 @@ public class AnvilInteractionListener implements Listener {
         placeholders.put("action", action);
         placeholders.put("old_name", oldName != null ? oldName : "");
         placeholders.put("new_name", isRename ? outputName : "");
+        placeholders.put("renamed", isRename ? outputName : "");
         placeholders.put("anvil_x", String.valueOf(anvil.getLocation().getBlockX()));
         placeholders.put("anvil_y", String.valueOf(anvil.getLocation().getBlockY()));
         placeholders.put("anvil_z", String.valueOf(anvil.getLocation().getBlockZ()));

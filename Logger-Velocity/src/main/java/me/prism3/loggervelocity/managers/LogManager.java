@@ -32,7 +32,7 @@ public class LogManager {
 
         String fileMessage = format(fileTemplate, placeholders);
         if (Data.isLogToFiles) {
-            FileHandler.logToFile(eventType, fileMessage);
+            FileHandler.logToFile(isStaff ? eventType + "-Staff" : eventType, fileMessage);
         }
 
         if (plugin.getDiscordManager() != null && plugin.getDiscordManager().isEnabled()) {
@@ -49,7 +49,7 @@ public class LogManager {
                     String serverName = placeholders.getOrDefault("server", "unknown");
                     LogPlayer logPlayer = new LogPlayer(player.getUsername(), player.getUniqueId(), serverName);
                     
-                    plugin.getDiscordManager().sendMessage(eventType, discordMessage, logPlayer, eventType);
+                    plugin.getDiscordManager().sendMessage(eventType, discordMessage, logPlayer, isStaff ? "STAFF" : eventType);
                 }
             }
         }
@@ -91,6 +91,9 @@ public class LogManager {
                 case "Server-Side.Server-Commands":
                 case "Server-Side.Console-Commands":
                     FileHandler.logToFile("Server-Side.Console-Commands", fileMessage);
+                    break;
+                case "Server-Side.Reload-Console":
+                    FileHandler.logToFile("Server-Side.Reload-Console", fileMessage);
                     break;
                 case "Server-Side.RAM":
                     FileHandler.logToFile("Server-Side.RAM", fileMessage);

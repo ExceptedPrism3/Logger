@@ -17,10 +17,20 @@ public class PlayerSwitchListener extends BaseListener {
 
     @EventHandler
     public void onServerSwitch(ServerSwitchEvent event) {
+        if (event.getFrom() == null) {
+            return; // Initial proxy join is handled by PlayerLoginListener
+        }
         ProxiedPlayer player = event.getPlayer();
+        String fromServer = event.getFrom().getName();
+        String toServer = player.getServer() != null && player.getServer().getInfo() != null
+                ? player.getServer().getInfo().getName()
+                : "unknown";
         Map<String, String> placeholders = createPlayerPlaceholders(player);
-        placeholders.put("from", event.getFrom() != null ? event.getFrom().getName() : "unknown");
-        placeholders.put("to", player.getServer().getInfo().getName());
+        placeholders.put("from", fromServer);
+        placeholders.put("to", toServer);
+        placeholders.put("fromServer", fromServer);
+        placeholders.put("toServer", toServer);
+        placeholders.put("server", toServer);
         logEvent(Constants.Events.PLAYER_SWITCH, player, placeholders);
     }
 } 

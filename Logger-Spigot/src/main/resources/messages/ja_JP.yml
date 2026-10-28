@@ -58,6 +58,7 @@ File:
     Prime-TNT: "[%world%] プレイヤー <%player%> が TNT を点火し、X= %tnt_location_x%, Y= %tnt_location_y%, Z= %tnt_location_z% で爆発しました"
     Container-Interaction-Staff: "[%world%] スタッフ <%player%> が %container% (X= %container_x%, Y= %container_y%, Z= %container_z%) を開きました | 取り出し: %removed_items% | 追加: %added_items%"
     Container-Interaction: "[%world%] プレイヤー <%player%> が %container% (X= %container_x%, Y= %container_y%, Z= %container_z%) を開きました | 取り出し: %removed_items% | 追加: %added_items%"
+    Registration-Staff: "[%world%] プレイヤー <%player%> が %date% にサーバーに登録されました"
     Registration: "[%world%] プレイヤー <%player%> が %date% にサーバーに登録されました"
     Totem-of-Undying-Staff: "[%world%] スタッフ <%player%> が X= %x%, Y= %y%, Z= %z% で不死のトーテムを使用しました"
     Totem-of-Undying: "[%world%] プレイヤー <%player%> が X= %x%, Y= %y%, Z= %z% で不死のトーテムを使用しました"
@@ -83,6 +84,12 @@ File:
     Portal-Creation: "[%world%] プレイヤー <%player%> が X= %x%, Y= %y%, Z= %z% でポータルを作成しました"
     Advancement-Staff: "[%world%] スタッフ <%player%> が進捗を達成しました: %advancement%"
     Advancement: "[%world%] プレイヤー <%player%> が進捗を達成しました: %advancement%"
+    Creative-Item-Staff: "[%world%] [%uuid%] The Staff <%player%> took %amount%x %item% from creative menu at X= %x%, Y= %y%, Z= %z% [NBT: %has_nbt%]"
+    Creative-Item: "[%world%] [%uuid%] The Player <%player%> took %amount%x %item% from creative menu at X= %x%, Y= %y%, Z= %z% [NBT: %has_nbt%]"
+    Mace-Smash-Staff: "[%world%] [%uuid%] The Staff <%player%> performed a Mace Smash Attack on %victim% at X= %x%, Y= %y%, Z= %z% (Fall: %fall_distance% blocks, Damage: %damage%)"
+    Mace-Smash: "[%world%] [%uuid%] The Player <%player%> performed a Mace Smash Attack on %victim% at X= %x%, Y= %y%, Z= %z% (Fall: %fall_distance% blocks, Damage: %damage%)"
+    Vault-Unlock-Staff: "[%world%] [%uuid%] The Staff <%player%> unlocked a Trial Vault at X= %vault_x%, Y= %vault_y%, Z= %vault_z% and received: %items%"
+    Vault-Unlock: "[%world%] [%uuid%] The Player <%player%> unlocked a Trial Vault at X= %vault_x%, Y= %vault_y%, Z= %vault_z% and received: %items%"
 
   Server:
     Start: "サーバーが正常に起動しました。"
@@ -148,6 +155,7 @@ Discord:
     Prime-TNT: "**[%world%]** TNT 点火 (X= **%tnt_location_x%**, Y= **%tnt_location_y%**, Z= **%tnt_location_z%** で爆発)"
     Container-Interaction-Staff: "**[%world%]** コンテナ開放: **%container%** (X= **%container_x%**, Y= **%container_y%**, Z= **%container_z%**) | 取り出し: **%removed_items%** | 追加: **%added_items%**"
     Container-Interaction: "**[%world%]** コンテナ開放: **%container%** (X= **%container_x%**, Y= **%container_y%**, Z= **%container_z%**) | 取り出し: **%removed_items%** | 追加: **%added_items%**"
+    Registration-Staff: "**%date%** にサーバーに参加登録しました"
     Registration: "**%date%** にサーバーに参加登録しました"
     Totem-of-Undying-Staff: "**[%world%]** 不死のトーテム使用 (X= **%x%**, Y= **%y%**, Z= **%z%**)"
     Totem-of-Undying: "**[%world%]** 不死のトーテム使用 (X= **%x%**, Y= **%y%**, Z= **%z%**)"
@@ -173,6 +181,12 @@ Discord:
     Portal-Creation: "**[%world%]** ポータル作成 (X= **%x%**, Y= **%y%**, Z= **%z%**)"
     Advancement-Staff: "**[%world%]** 進捗達成: **%advancement%**"
     Advancement: "**[%world%]** 進捗達成: **%advancement%**"
+    Creative-Item-Staff: "**[%world%]** Has taken **%amount%x %item%** from creative menu at X= **%x%**, Y= **%y%**, Z= **%z%** [NBT: **%has_nbt%**]"
+    Creative-Item: "**[%world%]** Has taken **%amount%x %item%** from creative menu at X= **%x%**, Y= **%y%**, Z= **%z%** [NBT: **%has_nbt%**]"
+    Mace-Smash-Staff: "**[%world%]** **[%uuid%]** Staff **%player%** performed a Mace Smash Attack on **%victim%** at X= **%x%**, Y= **%y%**, Z= **%z%** (Fall: **%fall_distance%** blocks, Damage: **%damage%**)"
+    Mace-Smash: "**[%world%]** **[%uuid%]** Player **%player%** performed a Mace Smash Attack on **%victim%** at X= **%x%**, Y= **%y%**, Z= **%z%** (Fall: **%fall_distance%** blocks, Damage: **%damage%**)"
+    Vault-Unlock-Staff: "**[%world%]** **[%uuid%]** Staff **%player%** unlocked a Trial Vault at X= **%vault_x%**, Y= **%vault_y%**, Z= **%vault_z%** and received: **%items%**"
+    Vault-Unlock: "**[%world%]** **[%uuid%]** Player **%player%** unlocked a Trial Vault at X= **%vault_x%**, Y= **%vault_y%**, Z= **%vault_z%** and received: **%items%**"
 
   Server:
     Start: "**サーバーが起動しました。**"
@@ -186,4 +200,4 @@ Discord:
     Player-Count: "**目標オンラインプレイヤー数達成。**"
     Whitelist: "**%executor%** が **%target%** に対してホワイトリスト **%action%** を実行しました"
 
-Messages-Version: 1.8.5
+Messages-Version: 1.8.6

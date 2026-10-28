@@ -54,6 +54,12 @@ public class JoinListener implements Listener {
         if (player.hasPlayedBefore())
             return;
 
-        this.plugin.getLoggerManager().logEvent(LogType.PLAYER_REGISTRATION, player, null);
+        final Map<String, String> placeholders = PlayerManager.getPlayerManager(player).populatePlaceholders(player);
+        if (this.plugin.getData() != null && this.plugin.getData().getTimeFormatter() != null) {
+            placeholders.put("date", this.plugin.getData().getTimeFormatter());
+        } else {
+            placeholders.put("date", java.time.LocalDateTime.now().toString());
+        }
+        this.plugin.getLoggerManager().logEvent(LogType.PLAYER_REGISTRATION, player, placeholders);
     }
 }

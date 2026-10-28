@@ -133,6 +133,7 @@ public class DeathListener implements Listener {
                     lastDamage.getCause().name().toLowerCase().replace('_', ' '));
 
             placeholders.put("death_cause", cause);
+            placeholders.put("cause", cause);
         } else {
             // no entity killer: environmental death
             placeholders.put("killer", "None");
@@ -144,6 +145,7 @@ public class DeathListener implements Listener {
                     : "Unknown";
 
             placeholders.put("death_cause", cause);
+            placeholders.put("cause", cause);
         }
 
         // fire off the log

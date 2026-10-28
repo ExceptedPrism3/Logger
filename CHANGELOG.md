@@ -1,3 +1,35 @@
+<-!------------------------------------------ v1.8.6 ------------------------------------------!->
+
+Additions
+    [+] Player Mace Smash Attack Logging (`PLAYER_MACE_SMASH`): Full multi-channel tracking (File, Database `player_mace_smash`, Discord Addon, and Web Panel) capturing victim, fall distance, and damage dealt on 1.21+ and 26.x servers.
+    [+] Player Trial Vault Unlock Logging (`PLAYER_VAULT_UNLOCK`): Full multi-channel tracking (File, Database `player_vault_unlock`, Discord Addon, and Web Panel) capturing vault coordinates and dispensed loot items on 1.21+ and 26.x servers.
+    [+] Added default configuration toggles in `config.yml` for `Mace-Smash`, `Vault-Unlock`, `Crafter-Craft`, `Sculk-Shrieker`, `Piglin-Barter`, and `Respawn-Anchor`, plus `Log-Player`, `Staff`, and `Player-Login` sections in `velocity-config.yml`.
+
+Fixes
+    [+] Fixed Discord Addon sending all server log events to a single Discord channel/webhook when only a subset of events were configured to use that channel. Unconfigured events (`CHANNEL_ID`) now stay strictly silent unless a global default channel is explicitly set.
+    [+] Fixed Discord Addon ignoring per-event `Enable: false` / `Enabled: false` flags in `discord.yml`.
+    [+] Fixed `TotemUseListener` (`PLAYER_TOTEM_OF_UNDYING`) failing to register on modern servers (1.13 through 26.3+) due to an inverted legacy version check in `EventManager`.
+    [+] Fixed `WoodStripListener` (`PLAYER_WOOD_STRIP`) resetting horizontal log axis orientation and bypassing high-priority protection plugins by removing manual block mutation and listening at `MONITOR` priority.
+    [+] Fixed `%logname%` placeholder not resolving in `WoodStripListener` file and Discord messages.
+    [+] Fixed `%line1%`–`%line4%`, `%cause%`, `%oldX/Y/Z%`, `%newX/Y/Z%`, and `%renamed%` placeholders not resolving across all 10 non-English language files (`pt_BR`, `es_ES`, `fr_fr`, `de_DE`, `it_IT`, `ru_RU`, `zh_cn`, `ja_JP`, `ko_KR`, `ar` — including PR #75 by @httphypixelnet), and fixed `Discord.Player.Item-Enchant` key name in `en_US.yml`.
+    [+] Fixed missing `TeleportListener` (`PLAYER_TELEPORT`) and `LevelListener` (`PLAYER_LEVEL`) registration in Spigot `EventManager`.
+    [+] Fixed `ItemPickupListener` and `CreativeItemListener` conditional registration bug in `EventManager` where `Item-Pickup` registered unconditionally.
+    [+] Fixed missing `player_portal_creation` table creation in `DatabaseManager` on fresh database setups, and added missing columns (`bucket_x/y/z`, `original_content`/`modified_content`, `entity_x/y/z`, `block_before`/`block_after`/`block_x/y/z`) to `player_bucket_empty`, `player_bucket_fill`, `player_container_interaction`, `player_entity_death`, and `player_wood_strip` in `DatabaseManager` and `SchemaMigrator`.
+    [+] Fixed `PLAYER_REGISTRATION` (`JoinListener`) passing `null` placeholders, added `Log-Player.Registration` to `config.yml`, added `PLAYER_COMMAND_WHITELISTED` to `DatabaseLoggerFactory`, and made `SculkShriekerLogger` parse `level` safely as an integer.
+    [+] Added a full JUnit 5 + Mockito + SQLite automated test suite verifying 100% of `LogType` events, all 53 database tables, all 11 language files (2,244 templates), Discord Addon routing, and Web Panel SQL definitions.
+    [+] Fixed Velocity `Data.java` config key resolution (`Delete-Old-Logs`, `RAM-Checker`, `Log-Player`), `/loggerproxy reload` state refresh, `Player-Switch` (`%from%` / `%to%`) template lookup, and missing file logging for `Player-Switch`, `Player-Kick`, `Manual-Log`, and `Staff` folders.
+    [+] Fixed BungeeCord `PlayerSwitchListener` firing a false server-switch log on initial proxy join, respected `Player-Login.Player-IP` and `Staff.Enabled` config flags in `BaseListener`, and routed staff logs to the `Staff` file/Discord channels.
+    [+] Fixed Spigot and BungeeCord startup banners always printing the `DEV Build` notice on release builds.
+
+Web Panel (v1.0.6)
+    [+] Added full support for `MACE_SMASH` (`player_mace_smash`) and `VAULT_UNLOCK` (`player_vault_unlock`) in the log viewer (`logs.php`), schema repair tool (`data.php`), and log retention pruner (`admin.php`).
+    [+] Normalized BungeeCord & Velocity unified proxy tables (`player_events` and `server_events`) in `logs.php` so proxy logs populate category badge counts (`CHAT`, `COMMAND`, `JOIN`, `LEAVE`, `SERVER_SWITCH`, `KICK`, etc.) and filter accurately by category.
+    [+] Fixed `player_horse_interaction` column query (`horse_owner_name` / `details`) in `logs.php` and added all 1.21+ and proxy tables to `data.php` schema repair.
+    [+] Fixed HTTP 500 database error (`Unknown column 'l.discord_username'`) on fresh client installations by removing master-only Discord OAuth columns from client `data.php` and `login.php`.
+    [+] Fixed external database password key resolution (`pass` vs `password`) in `test_db_connection.php` and `admin.php` log pruning.
+    [+] Aligned `admin.php` log pruning table names with current schema (`player_anvil`, `player_item_enchant`, `player_gamemode`, `player_spawn_egg`, `player_advancement_unlock`, `player_creative_item`, `player_horse_interaction`, `server_whitelist`).
+    [+] Cleaned up User Management table header alignment (`Type` column mismatch) and removed master-only UI cards/dropdowns from `logger-web-client/index.php`.
+
 <-!------------------------------------------ v1.8.5 ------------------------------------------!->
 
 Additions

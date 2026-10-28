@@ -36,7 +36,7 @@ public class LogManager {
 
         // Log to file
         if (this.plugin.getFileManager() != null) {
-            this.plugin.getFileManager().logToFile(folderName, fileMessage);
+            this.plugin.getFileManager().logToFile(isStaff ? "Staff" : folderName, fileMessage);
         }
 
         // Log to Discord if enabled
@@ -50,7 +50,7 @@ public class LogManager {
                     // Convert ProxiedPlayer to LogPlayer
                     LogPlayer logPlayer = new LogPlayer(player.getName(), player.getUniqueId(),
                             player.getServer() != null ? player.getServer().getInfo().getName() : "unknown");
-                    this.plugin.getDiscordManager().sendMessage(eventType, discordMessage, logPlayer, eventType);
+                    this.plugin.getDiscordManager().sendMessage(eventType, discordMessage, logPlayer, isStaff ? "STAFF" : eventType);
                 }
             }
         } catch (Throwable t) {
