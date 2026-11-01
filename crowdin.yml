@@ -1,0 +1,100 @@
+# ==============================================================================
+# Crowdin Configuration for Logger
+# Project: https://crowdin.com/project/logger (ID: 504410)
+# ==============================================================================
+
+project_id: "504410"
+
+# Preserves the directory hierarchy in Crowdin
+preserve_hierarchy: true
+
+files:
+  # ----------------------------------------------------------------------------
+  # Spigot / Bukkit / Paper Messages
+  # ----------------------------------------------------------------------------
+  - source: /Logger-Spigot/src/main/resources/messages/en_US.yml
+    dest: /Bukkit Instance/en.yml
+    translation: /Logger-Spigot/src/main/resources/messages/%locale_with_underscore%.yml
+    languages_mapping:
+      locale_with_underscore:
+        ar: ar
+        fr: fr_fr
+        zh-CN: zh_cn
+        es-ES: es_ES
+        de: de_DE
+        it: it_IT
+        ja: ja_JP
+        ko: ko_KR
+        pt-BR: pt_BR
+        pt-PT: pt_PT
+        ru: ru_RU
+        nl: nl_NL
+        da: da_DK
+        zh-TW: zh_TW
+        vi: vi_VN
+        eu: eu_ES
+        tr: tr_TR
+        sv-SE: sv_SE
+        lt: lt_LT
+        ro: ro_RO
+        fa: fa_IR
+
+  # ----------------------------------------------------------------------------
+  # BungeeCord Proxy Messages
+  # ----------------------------------------------------------------------------
+  - source: /logger-bungee/src/main/resources/bungee-messages/en_US.yml
+    dest: /BungeeCord Instance/messages - Bungee.yml
+    translation: /logger-bungee/src/main/resources/bungee-messages/%locale_with_underscore%.yml
+    languages_mapping:
+      locale_with_underscore:
+        ar: ar_SA
+        fr: fr_FR
+        zh-CN: zh_CN
+        es-ES: es_ES
+        de: de_DE
+        it: it_IT
+        ja: ja_JP
+        ko: ko_KR
+        pt-BR: pt_BR
+        pt-PT: pt_PT
+        ru: ru_RU
+        nl: nl_NL
+        da: da_DK
+        zh-TW: zh_TW
+        vi: vi_VN
+        eu: eu_ES
+        tr: tr_TR
+        sv-SE: sv_SE
+        lt: lt_LT
+        ro: ro_RO
+        fa: fa_IR
+
+  # ----------------------------------------------------------------------------
+  # Velocity Proxy Messages
+  # ----------------------------------------------------------------------------
+  - source: /Logger-Velocity/src/main/resources/velocity-messages/en_US.yml
+    dest: /Velocity Instance/messages - Velocity.yml
+    translation: /Logger-Velocity/src/main/resources/velocity-messages/%locale_with_underscore%.yml
+    languages_mapping:
+      locale_with_underscore:
+        ar: ar_SA
+        fr: fr_FR
+        zh-CN: zh_CN
+        es-ES: es_ES
+        de: de_DE
+        it: it_IT
+        ja: ja_JP
+        ko: ko_KR
+        pt-BR: pt_BR
+        pt-PT: pt_PT
+        ru: ru_RU
+        nl: nl_NL
+        da: da_DK
+        zh-TW: zh_TW
+        vi: vi_VN
+        eu: eu_ES
+        tr: tr_TR
+        sv-SE: sv_SE
+        lt: lt_LT
+        ro: ro_RO
+        fa: fa_IR
