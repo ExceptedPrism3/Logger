@@ -11,6 +11,7 @@
 
 [![Discord](https://img.shields.io/badge/Discord-Join%20Community-5865F2?logo=discord&logoColor=white)](https://discord.gg/MfR5mcpVfX)
 [![Docs](https://img.shields.io/badge/Docs-GitBook-3884FF?logo=gitbook&logoColor=white)](https://prism3.gitbook.io/logger/)
+[![Crowdin](https://badges.crowdin.net/logger/localized.svg)](https://crowdin.com/project/logger)
 [![SpigotMC](https://img.shields.io/badge/SpigotMC-Resource-ed8106?logo=spigotmc&logoColor=white)](https://www.spigotmc.org/resources/logger.82729/)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-00457C?logo=paypal&logoColor=white)](https://paypal.me/carpour)
 [![License](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
